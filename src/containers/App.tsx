@@ -13,7 +13,6 @@ import DepositPage from './pages/depositPage';
 import LimitsPage from './pages/limitsPage';
 import SettingsPage from './pages/settingsPage';
 import WithdrawalPage from './pages/withdrawalPage';
-import { useConfig } from '../hooks/useConfig';
 import ErrorBoundary from './ErrorBoundary';
 import ProtectedRoute from './ProtectedRoute';
 
@@ -22,12 +21,9 @@ const LoadableLoginPage = loadable(() => import('./pages/loginPage'));
 const LoadableRegisterPage = loadable(() => import('./pages/registerPage'));
 
 const App = () => {
-  const config = useConfig();
   return (
     <BrowserRouter>
-      <Helmet>
-        <link href={`/static/css/${config.theme}.css`} rel="stylesheet" />
-      </Helmet>
+      <Helmet></Helmet>
       <ErrorBoundary>
         <PageLayout>
           <Switch>

@@ -1,0 +1,11 @@
+{
+  "franchises": [
+    {
+      "name": "bnl",
+      "domain": "bnl.local",
+      "theme": "tonybet",
+      "api": "https://bnl-dev.tglab.dev"
+    }
+  ],
+  "port": 3800
+}

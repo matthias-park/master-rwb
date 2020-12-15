@@ -1,5 +1,7 @@
-import { API_URL } from '../constants';
 import fetch from 'isomorphic-unfetch';
+
+//@ts-ignore
+const API_URL = window.API_URL;
 
 export const formatUrl = (
   url: string,

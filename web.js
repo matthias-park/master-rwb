@@ -1,15 +1,22 @@
+const config = require('config');
 const express = require('express');
 const path = require('path');
 
 const app = express();
 
+const domainsToName = config.get('franchises').reduce((obj, fr) => {
+  obj[fr.domain] = fr.name;
+  return obj;
+}, {});
+
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/build/index.html'));
+  const name = domainsToName[req.hostname];
+  res.sendFile(path.join(__dirname, `/build/${name}.html`));
 });
 
-const port = process.env.PORT || 3800;
+const port = config.get('port') || 3800;
 app.listen(port, err => {
   if (err) {
     return console.log(err);

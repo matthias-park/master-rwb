@@ -5,9 +5,17 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link rel="stylesheet" href="%PUBLIC_URL%/<%= htmlWebpackPlugin.options.franchiseTheme %>">
     <script>
-      window.API_URL =  '<%= htmlWebpackPlugin.options.apiUrl %>';
+      var franchises = JSON.parse('<%= htmlWebpackPlugin.options.franchises %>');
+      var domain = window.location.hostname;
+      var franchise = franchises.find(fr => fr.domain === domain);
+      var head = document.head;
+      var link = document.createElement("link");
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.href = '/static/css/' + franchise.theme + '.css';
+      head.appendChild(link);
+      window.API_URL = '/rails';
     </script>
     <title></title>
   </head>

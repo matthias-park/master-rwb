@@ -11,7 +11,7 @@ process.on('unhandledRejection', err => {
 
 // Ensure environment variables are read.
 require('../webpack/env');
-
+const config = require('config');
 const fs = require('fs');
 const chalk = require('react-dev-utils/chalk');
 const webpack = require('webpack');
@@ -35,12 +35,12 @@ const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
 const isInteractive = process.stdout.isTTY;
 
 // Warn and crash if required files are missing
-if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
+if (!checkRequiredFiles([paths.appDevHtml, paths.appIndexJs])) {
   process.exit(1);
 }
 
 // Tools like Cloud9 rely on this.
-const DEFAULT_PORT = 3800;
+const DEFAULT_PORT = config.get('port') || 3800;
 const HOST = process.env.HOST || '0.0.0.0';
 
 if (process.env.HOST) {
@@ -126,7 +126,7 @@ checkBrowsers(paths.appPath, isInteractive)
         // clearConsole();
       }
 
-      if (env.raw.FAST_REFRESH && semver.lt(react.version, '16.10.0')) {
+      if (semver.lt(react.version, '16.10.0')) {
         console.log(
           chalk.yellow(
             `Fast Refresh requires React 16.10 or higher. You are using React ${react.version}.`,

@@ -1,5 +1,3 @@
-export const API_URL =
-  process.env.NODE_ENV !== 'production' ? '' : 'https://bnl-dev.tglab.dev';
 export const HEADER_ROUTES = [
   {
     link: '/sports',
