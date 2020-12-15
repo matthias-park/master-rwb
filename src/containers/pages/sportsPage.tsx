@@ -1,6 +1,14 @@
 import React from 'react';
+import { useConfig } from '../../hooks/useConfig';
+import { formatUrl } from '../../utils/apiUtils';
 
 const SportsPage = () => {
+  const config = useConfig();
+  const params = {
+    locale: 'en',
+    playerId: config.user.id ? config.user.id : '',
+    ticket: '',
+  };
   return (
     <iframe
       title="iframe"
@@ -9,11 +17,9 @@ const SportsPage = () => {
       frameBorder="0"
       id="tonysportsbookiframe"
       name="tonysportsbookiframe"
-      src="/iframe/tonybetSB.html"
+      src={formatUrl('/iframe/kambiSB.html', params)}
     />
   );
 };
-export async function getStaticProps() {
-  return { props: {} };
-}
+
 export default SportsPage;

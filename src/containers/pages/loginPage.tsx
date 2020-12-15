@@ -1,5 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useConfig } from '../../hooks/useConfig';
+import { postApi } from '../../utils/apiUtils';
+import { Link } from 'react-router-dom';
 const LoginPage = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const { mutateUser } = useConfig();
+
+  const handleLogin = async () => {
+    await postApi('/players/login.json', {
+      login: username,
+      password,
+    });
+    mutateUser();
+  };
   return (
     <div className="center-container">
       <div className="login">
@@ -37,11 +51,12 @@ const LoginPage = () => {
               type="text"
               name="login"
               id="input_username"
-              value=""
+              value={username}
+              onChange={e => setUsername(e.target.value)}
               className="form-control"
             />
             <span>
-              <a href="/players/forgot_login">Forgot your username?</a>
+              <Link to="/players/forgot_login">Forgot your username?</Link>
             </span>
           </div>
           <div className="form-group">
@@ -52,9 +67,11 @@ const LoginPage = () => {
               name="password"
               id="input_password"
               className="form-control password_field"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
             />
             <span>
-              <a href="/players/forgot_password">Reset your password?</a>
+              <Link to="/players/forgot_password">Reset your password?</Link>
             </span>
           </div>
           <div className="form-group" style={{ display: 'none' }}>
@@ -73,6 +90,7 @@ const LoginPage = () => {
               type="submit"
               id="button_confirm_login"
               className="btn btn-violet mb-3 mb-md-0 mr-md-3"
+              onClick={handleLogin}
             >
               Login
             </button>{' '}
@@ -110,9 +128,5 @@ const LoginPage = () => {
     </div>
   );
 };
-
-export async function getStaticProps() {
-  return { props: {} };
-}
 
 export default LoginPage;

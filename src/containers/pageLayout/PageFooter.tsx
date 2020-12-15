@@ -274,7 +274,7 @@ const FooterMenu = () => (
             <div className="col-12 col-md-6">
               <ul>
                 <li>
-                  <a href="/sport">Sports</a>
+                  <a href="/sports">Sports</a>
                 </li>
                 <li>
                   <a href="/in-play">In-Play</a>

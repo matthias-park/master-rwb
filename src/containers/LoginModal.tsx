@@ -1,21 +1,27 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { postApi } from '../utils/apiUtils';
-
-// import { useConfig } from '../hooks/useConfig';
+import { useConfig } from '../hooks/useConfig';
 import { Link } from 'react-router-dom';
+import useOnClickOutside from '../hooks/useOnClickOutside';
 
-const LoginModal = () => {
+interface Props {
+  handleClose: () => void;
+}
+
+const LoginModal = ({ handleClose }: Props) => {
+  const ref = useRef<HTMLDivElement | null>(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  // const { mutateUser } = useConfig();
+  useOnClickOutside(ref, handleClose);
+  const { mutateUser } = useConfig();
 
   const handleLogin = async () => {
-    const data = await postApi('/players/login.json', {
+    await postApi('/players/login.json', {
       login: username,
       password,
     });
-    console.log(data);
-    // mutateUser(data || { id: 0 });
+    mutateUser();
+    handleClose();
   };
 
   return (
@@ -29,6 +35,7 @@ const LoginModal = () => {
       style={{ display: 'block' }}
     >
       <div
+        ref={ref}
         className="modal-dialog modal-sm modal-dialog-centered"
         role="document"
       >

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import useOnClickOutside from '../../hooks/useOnClickOutside';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { useI18n } from '../../hooks/useI18n';
 import { postApi } from '../../utils/apiUtils';
-import LoginModal from '../../components/LoginModal';
+import LoginModal from '../LoginModal';
 
 const PageLink = ({ link, name, active }) => (
   <li className="nav-item col-3 col-xl-auto mt-0 ">
@@ -83,7 +84,9 @@ const UserMenuLink = ({ link, icon, name }) => (
 );
 
 const UserInfo = ({ user, handleLogout }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
   const [showMenu, setShowMenu] = useState(false);
+  useOnClickOutside(ref, () => setShowMenu(false));
   return (
     <div className="menu__blocks d-flex order-xl-6 order-4 ">
       <button data-toggle="osm" className="osm-header-btn d-flex">
@@ -124,6 +127,7 @@ const UserInfo = ({ user, handleLogout }) => {
         <i className="icon-head"></i>
       </button>
       <div
+        ref={ref}
         className={`menu__blocks--container account mr-xl-2 collapse ${
           showMenu ? 'show' : ''
         }`}
@@ -184,8 +188,11 @@ const PageHeader = () => {
   const { t } = useI18n();
   const { pathname } = useLocation();
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const handleLogin = async () => {
+  const handleLogin = () => {
     setShowLoginModal(true);
+  };
+  const handleCloseLoginModal = () => {
+    setShowLoginModal(false);
   };
   useEffect(() => {
     if (config.user.id) {
@@ -245,7 +252,7 @@ const PageHeader = () => {
           )}
         </div>
       </nav>
-      {showLoginModal && <LoginModal />}
+      {showLoginModal && <LoginModal handleClose={handleCloseLoginModal} />}
     </>
   );
 };
