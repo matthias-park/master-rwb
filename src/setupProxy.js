@@ -8,7 +8,7 @@ const domainToApi = franchises.reduce((obj, fr) => {
   return obj;
 }, {});
 const domainToName = franchises.reduce((obj, fr) => {
-  obj[`${fr.domain}:${port}`] = fr.name;
+  obj[fr.domain] = fr.name;
   return obj;
 }, {});
 
@@ -22,6 +22,9 @@ module.exports = function (app) {
       },
       changeOrigin: true,
       router: domainToApi,
+      cookieDomainRewrite: '',
+      secure: false,
+      rejectUnauthorized: false,
     }),
   );
   app.use(
