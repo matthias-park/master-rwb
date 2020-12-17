@@ -1,5 +1,6 @@
-import React, { useContext, createContext, ReactNode } from 'react';
+import React, { useContext, createContext, ReactNode, useState } from 'react';
 import useSWR from 'swr';
+import Lockr from 'lockr';
 import { getApi } from '../utils/apiUtils';
 import Config from '../types/Config';
 import { HEADER_ROUTES } from '../constants';
@@ -20,6 +21,7 @@ export type ConfigProviderProps = {
 };
 
 export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
+  const [locale, changeLocale] = useState(Lockr.get('locale', 'en'));
   const { data, mutate: mutateUser } = useSWR<UserStatus>(
     '/api/app/v1/user/status.json',
     getApi,
@@ -28,19 +30,16 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
       revalidateOnReconnect: false,
     },
   );
-  // const { data: config } = useSWR('/api/init', getApi, {
-  //   revalidateOnFocus: false,
-  //   revalidateOnReconnect: false,
-  // });
-  // const value = useMemo(
-  //   () => ({ ...config, user: user || { id: 0 }, mutateUser }),
-  //   [config, user, mutateUser],
-  // );
-  const value = {
+  const setLocale = (lang: string) => {
+    Lockr.set('locale', lang);
+    changeLocale(lang);
+  };
+  const value: Config = {
     headerRoutes: HEADER_ROUTES,
-    theme: 'tonybet',
     user: data?.user || { id: 0 },
     mutateUser,
+    locale,
+    setLocale,
   };
   return <configContext.Provider value={value} {...props} />;
 };

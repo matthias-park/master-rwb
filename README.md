@@ -1,17 +1,40 @@
-nodejs next web
-===========
+# nodejs next web
 
-## Running project
-Installation:
+#### Installation:
 
-`npm install`  
+`npm install`
 
-To Start Server:
+#### Config file :
 
-`npm start`  
+```json
+{
+  "franchises": [
+    {
+      "name": "bundle name",
+      "domain": "request domain associated bundle",
+      "theme": "styles bundle name - styles/[name].main.scss",
+      "api": "rails api url"
+    }
+  ],
+  "port": "port to start dev/prod"
+}
+```
 
-To Visit App:
+#### To start dev :
 
-`localhost:3800`  
+`npm start`
 
+starts webpack dev server with api proxy from config/default.json
 
+#### Hosts file :
+
+`127.0.0.1 bnl.local`
+
+#### To visit app :
+
+`bnl.local:3800`
+
+#### Build stage/prod :
+
+`NODE_ENV=stage npm start build`
+`NODE_ENV=stage node web.js`

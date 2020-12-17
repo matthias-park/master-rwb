@@ -2,7 +2,15 @@ import React from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { useConfig } from '../hooks/useConfig';
 
-const ProtectedRoute = ({ children, ...rest }: RouteProps) => {
+interface Props extends RouteProps {
+  redirectTo?: string;
+}
+
+const ProtectedRoute = ({
+  children,
+  redirectTo = '/login',
+  ...rest
+}: Props) => {
   const config = useConfig();
 
   return (
@@ -14,7 +22,7 @@ const ProtectedRoute = ({ children, ...rest }: RouteProps) => {
         ) : (
           <Redirect
             to={{
-              pathname: '/login',
+              pathname: redirectTo,
               state: { from: location },
             }}
           />

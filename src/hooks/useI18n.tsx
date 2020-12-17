@@ -8,6 +8,7 @@ import React, {
 import i18n, { I18n } from '../utils/i18n';
 import { postApi } from '../utils/apiUtils';
 import { TRANSLATION_SYMBOLS } from '../constants';
+import { useConfig } from './useConfig';
 
 export const I18nContext = createContext<I18n | null>(null);
 
@@ -38,7 +39,7 @@ interface translationSymbol {
 }
 
 export const I18nProvider = ({ ...props }: I18nProviderProps) => {
-  const locale = 'en';
+  const { locale } = useConfig();
   const [data, setData] = useState({});
   useEffect(() => {
     (async () => {
@@ -61,7 +62,7 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
         }, {}),
       );
     })();
-  }, []);
+  }, [locale]);
   const [translations, setTranslations] = useState(() =>
     createLocale(locale, data),
   );

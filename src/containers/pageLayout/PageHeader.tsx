@@ -23,26 +23,6 @@ const LoginBtn = ({ handleLogin }) => (
     id="userCollapse"
   >
     <div>
-      <form className="d-block d-xl-none">
-        <div className="form-group">
-          <label htmlFor="loginUsername">Username</label>
-          <input
-            className="form-control"
-            id="loginUsername"
-            name="login"
-            type="text"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="loginPassword">Password</label>
-          <input
-            className="form-control"
-            id="loginPassword"
-            name="password"
-            type="password"
-          />
-        </div>
-      </form>
       <div className="user-navigation d-flex justify-content-end">
         <button
           className="btn btn-opacity"
@@ -123,7 +103,7 @@ const UserInfo = ({ user, handleLogout }) => {
         aria-controls="navbarAccCollapseContent"
         onClick={() => setShowMenu(!showMenu)}
       >
-        <span className="mobile-balance pr-1 d-xl-none">4,744.99 €</span>
+        <span className="mobile-balance pr-1 d-xl-none">{user.balance}</span>
         <i className="icon-head"></i>
       </button>
       <div
@@ -212,7 +192,7 @@ const PageHeader = () => {
             <img
               className="dark-theme-img"
               alt="TonyBet"
-              src="/bnl/images/logo/tonybet-logo-color.png"
+              src="/assets/images/logo/tonybet-logo-color.png"
             />
           </Link>
         </div>

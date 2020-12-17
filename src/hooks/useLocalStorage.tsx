@@ -1,22 +1,14 @@
 import { useState } from 'react';
+import Lockr from 'lockr';
 
-const useLocalStorage = (key: string, initialValue: unknown) => {
-  const [storedValue, setStoredValue] = useState(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch {
-      return initialValue;
-    }
-  });
-
-  const setValue = value => {
-    try {
-      setStoredValue(value);
-      window.localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      console.log(error);
-    }
+const useLocalStorage = (
+  key: string,
+  initialValue: unknown,
+): [value: unknown, setValue: (value: string | number | Object) => void] => {
+  const [storedValue, setStoredValue] = useState(Lockr.get(key, initialValue));
+  const setValue = (value: string | number | Object) => {
+    setStoredValue(value);
+    Lockr.set(key, value);
   };
 
   return [storedValue, setValue];

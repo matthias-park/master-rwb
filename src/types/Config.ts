@@ -1,8 +1,9 @@
 type Config = {
   headerRoutes: any[];
-  theme: string;
   user: any;
   mutateUser: (user?: any) => void;
+  locale: string;
+  setLocale: (lang: string) => void;
 };
 
 export default Config;

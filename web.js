@@ -9,8 +9,14 @@ const domainsToName = config.get('franchises').reduce((obj, fr) => {
   return obj;
 }, {});
 
+app.use((req, _, next) => {
+  if (req.path.includes('/assets/')) {
+    const name = domainsToName[req.hostname];
+    req.url = req.url.replace('/assets/', `/${name}/`);
+  }
+  next();
+});
 app.use(express.static(path.join(__dirname, 'build')));
-
 app.get('*', (req, res) => {
   const name = domainsToName[req.hostname];
   res.sendFile(path.join(__dirname, `/build/${name}.html`));

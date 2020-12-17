@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 // import { useLocation } from 'react-router-dom';
+import { useConfig } from '../../hooks/useConfig';
 
 const CopyWrite = () => (
   <div className="footer-copyright d-flex align-items-center order-4 order-lg-1 flex-grow-1 flex-lg-grow-0 my-1">
@@ -25,8 +26,8 @@ const CopyWrite = () => (
 );
 
 const FooterHeaderButtons = () => {
-  // const { pathname } = useLocation();
-  // const [showLocaleMenu, setShowLocaleMenu] = useState(false);
+  const { locale, setLocale } = useConfig();
+  const [showLocaleMenu, setShowLocaleMenu] = useState(false);
   return (
     <div className="footer-button-wrapper d-flex flex-wrap order-2 flex-grow-1">
       <div className="mobile-apps d-flex order-1 order-lg-2 my-1 ml-lg-auto">
@@ -36,7 +37,7 @@ const FooterHeaderButtons = () => {
         >
           <img
             alt="Android"
-            src="../assets/images/theme15/images/footer/phone-android.png"
+            src="/assets/images/theme15/images/footer/phone-android.png"
           />
           <p>
             Download the app
@@ -198,7 +199,7 @@ const FooterHeaderButtons = () => {
             </form>
           </div>
         </div>
-        {/* <div className="dropdown language order-3">
+        <div className="dropdown language order-3">
           <button
             className="btn btn-opacity dropdown-toggle"
             onClick={() => setShowLocaleMenu(!showLocaleMenu)}
@@ -215,13 +216,20 @@ const FooterHeaderButtons = () => {
             aria-labelledby="dropdownMenuButton"
             x-placement="top-start"
           >
-            {locales?.map(lang => (
-              <Link className="lang-ee dropdown-item" key={lang} to={pathname}>
+            {['en', 'lt'].map(lang => (
+              <div
+                className={`lang-${lang} dropdown-item`}
+                key={lang}
+                onClick={() => {
+                  setLocale(lang);
+                  setShowLocaleMenu(false);
+                }}
+              >
                 {lang}
-              </Link>
+              </div>
             ))}
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );

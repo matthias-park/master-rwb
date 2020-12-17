@@ -52,7 +52,7 @@ const LoginModal = ({ handleClose }: Props) => {
               <img
                 alt="TonyBet"
                 className="d-block m-auto"
-                src="/bnl/images/logo/tonybet-logo-color.png"
+                src="/assets/images/logo/tonybet-logo-color.png"
               />{' '}
             </a>
             <div className="modal-body">
