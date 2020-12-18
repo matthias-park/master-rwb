@@ -69,10 +69,6 @@ const UserInfo = ({ user, handleLogout }) => {
   useOnClickOutside(ref, () => setShowMenu(false));
   return (
     <div className="menu__blocks d-flex order-xl-6 order-4 ">
-      <button data-toggle="osm" className="osm-header-btn d-flex">
-        <i className="icon-mail"></i>
-        <span className="osm-header-btn__count">2</span>
-      </button>
       <Link
         to="/deposit"
         className="btn-group btn-deposit justify-content-center flex-md-grow d-none d-xl-flex"

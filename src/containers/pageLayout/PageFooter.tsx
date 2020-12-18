@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-// import { useLocation } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
+import useOnClickOutside from '../../hooks/useOnClickOutside';
 
 const CopyWrite = () => (
   <div className="footer-copyright d-flex align-items-center order-4 order-lg-1 flex-grow-1 flex-lg-grow-0 my-1">
@@ -12,7 +12,7 @@ const CopyWrite = () => (
       data-placement="top"
       data-toggle="tooltip"
       height="24"
-      src="/bnl/images/theme15/images/footer/18_mini.png"
+      src="/assets/images/footer/18_mini.png"
       title=""
       width="24"
       data-original-title="You must be over 18 years of age to register and place bets.<br>TonyBet reserves the right to ask any customer to prove their age.<br>Customer accounts may be suspended until a satisfactory proof is provided."
@@ -26,8 +26,10 @@ const CopyWrite = () => (
 );
 
 const FooterHeaderButtons = () => {
+  const ref = useRef<HTMLDivElement | null>(null);
   const { locale, setLocale } = useConfig();
   const [showLocaleMenu, setShowLocaleMenu] = useState(false);
+  useOnClickOutside(ref, () => setShowLocaleMenu(false));
   return (
     <div className="footer-button-wrapper d-flex flex-wrap order-2 flex-grow-1">
       <div className="mobile-apps d-flex order-1 order-lg-2 my-1 ml-lg-auto">
@@ -212,6 +214,7 @@ const FooterHeaderButtons = () => {
             {locale}
           </button>
           <div
+            ref={ref}
             className={`dropdown-menu ${showLocaleMenu ? 'show' : ''}`}
             aria-labelledby="dropdownMenuButton"
             x-placement="top-start"

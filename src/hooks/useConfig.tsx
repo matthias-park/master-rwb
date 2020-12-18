@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import Lockr from 'lockr';
 import { getApi } from '../utils/apiUtils';
 import Config from '../types/Config';
-import { HEADER_ROUTES } from '../constants';
+import { HEADER_ROUTES, NAVIGATION_ROUTES, HEAD_DATA } from '../constants';
 import UserStatus from '../types/UserStatus';
 
 export const configContext = createContext<Config | null>(null);
@@ -40,6 +40,8 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     mutateUser,
     locale,
     setLocale,
+    headData: HEAD_DATA,
+    routes: NAVIGATION_ROUTES,
   };
   return <configContext.Provider value={value} {...props} />;
 };

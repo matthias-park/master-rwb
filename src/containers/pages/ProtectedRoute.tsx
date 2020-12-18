@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
-import { useConfig } from '../hooks/useConfig';
+import { useConfig } from '../../hooks/useConfig';
 
 interface Props extends RouteProps {
   redirectTo?: string;

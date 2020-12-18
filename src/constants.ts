@@ -1,3 +1,4 @@
+import { ConfigRoute, HeadData } from './types/Config';
 export const HEADER_ROUTES = [
   {
     link: '/sports',
@@ -104,5 +105,65 @@ export const DEPOSIT_LIST = [
       'ransfer time up to 48hours, your balance will be updated once the transfer has been confirmed.',
     img:
       'https://n.tonybet.com/uploads/1/payment_method/icon/455/online-uberweisen-120x48.jpg',
+  },
+];
+
+export const HEAD_DATA: HeadData = {
+  title: 'test header',
+};
+
+export const NAVIGATION_ROUTES: ConfigRoute[] = [
+  {
+    path: '/',
+    id: 'home',
+  },
+  {
+    path: '/cookie-policy',
+    id: 'cookiePolicy',
+  },
+  {
+    path: '/faq',
+    id: 'faq',
+  },
+  {
+    path: '/sports',
+    id: 'sports',
+  },
+  {
+    path: '/login',
+    id: 'login',
+  },
+  {
+    path: '/register',
+    id: 'register',
+  },
+  {
+    path: '/promotions',
+    id: 'promotions',
+  },
+  {
+    path: '/bonus',
+    id: 'bonus',
+    protected: true,
+  },
+  {
+    path: '/deposit',
+    id: 'deposit',
+    protected: true,
+  },
+  {
+    path: '/limits',
+    id: 'limits',
+    protected: true,
+  },
+  {
+    path: '/settings',
+    id: 'settings',
+    protected: true,
+  },
+  {
+    path: '/withdrawal',
+    id: 'withdrawal',
+    protected: true,
   },
 ];
