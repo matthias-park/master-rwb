@@ -1,16 +1,18 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
-import NotFoundPage from './pages/notFoundPage';
+import { BrowserRouter } from 'react-router-dom';
 import PageLayout from './pageLayout';
 import ErrorBoundary from './ErrorBoundary';
 import Routes from './pages';
+import { HEAD_DATA } from '../constants';
+import HeadData from '../types/HeadData';
 import { useConfig } from '../hooks/useConfig';
 
 const App = () => {
-  const { headData } = useConfig();
+  const headData: HeadData = HEAD_DATA;
+  const { locale } = useConfig();
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={`/${locale}`}>
       <Helmet>
         <title>{headData.title}</title>
         {headData.links?.map(linkProps => (
@@ -25,10 +27,7 @@ const App = () => {
       </Helmet>
       <ErrorBoundary>
         <PageLayout>
-          <Switch>
-            <Routes />
-            <Route component={NotFoundPage} />
-          </Switch>
+          <Routes />
         </PageLayout>
       </ErrorBoundary>
     </BrowserRouter>

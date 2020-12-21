@@ -2,28 +2,27 @@ import React from 'react';
 import PageHeader from './PageHeader';
 import PageFooter from './PageFooter';
 import CookieConsent from '../../components/CookieConsent';
-import UserPageLayout from './UserPageLayout';
 import { useLocation } from 'react-router-dom';
+import LayoutWithSidebar from './LayoutWithSidebar';
 
-const helpRoutes = ['/cookie-policy', '/faq'];
-const userRoutes = [
+const pathsWithSidebar = [
   '/bonus',
   '/deposit',
   '/limits',
   '/settings',
   '/withdrawal',
+  '/cookie-policy',
+  '/faq',
 ];
 
 const PageLayout = ({ children }) => {
-  let { pathname } = useLocation();
-  const playerPage =
-    userRoutes.includes(pathname) || helpRoutes.includes(pathname);
-  console.log(pathname);
+  const { pathname } = useLocation();
+  const SidebarLayout = pathsWithSidebar.includes(pathname);
   return (
     <>
       <PageHeader />
-      {playerPage ? (
-        <UserPageLayout>{children}</UserPageLayout>
+      {SidebarLayout ? (
+        <LayoutWithSidebar>{children}</LayoutWithSidebar>
       ) : (
         <>
           {children}

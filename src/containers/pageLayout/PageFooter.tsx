@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
+import { FOOTER_LINKS } from '../../constants';
+import FooterLink from '../../types/FooterLink';
 
 const CopyWrite = () => (
   <div className="footer-copyright d-flex align-items-center order-4 order-lg-1 flex-grow-1 flex-lg-grow-0 my-1">
@@ -27,7 +29,7 @@ const CopyWrite = () => (
 
 const FooterHeaderButtons = () => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const { locale, setLocale } = useConfig();
+  const { locale, locales, setLocale } = useConfig();
   const [showLocaleMenu, setShowLocaleMenu] = useState(false);
   useOnClickOutside(ref, () => setShowLocaleMenu(false));
   return (
@@ -201,7 +203,7 @@ const FooterHeaderButtons = () => {
             </form>
           </div>
         </div>
-        <div className="dropdown language order-3">
+        <div ref={ref} className="dropdown language order-3">
           <button
             className="btn btn-opacity dropdown-toggle"
             onClick={() => setShowLocaleMenu(!showLocaleMenu)}
@@ -214,12 +216,11 @@ const FooterHeaderButtons = () => {
             {locale}
           </button>
           <div
-            ref={ref}
             className={`dropdown-menu ${showLocaleMenu ? 'show' : ''}`}
             aria-labelledby="dropdownMenuButton"
             x-placement="top-start"
           >
-            {['en', 'lt'].map(lang => (
+            {locales.map(lang => (
               <div
                 className={`lang-${lang} dropdown-item`}
                 key={lang}
@@ -249,225 +250,124 @@ const FooterHeader = () => {
   );
 };
 
-const FooterMenu = () => (
-  <div className="footer-menu">
-    <div className="d-flex flex-column">
-      <div className="footer-disclaimer d-flex flex-wrap my-1 text-read-more collapsed">
-        <p>
-          <span></span>
-        </p>
-        <p>
-          Gambling is not a proper way to solve your financial problems. Please
-          read the terms and act responsibly. 18+ only, T&amp;Cs apply.
-        </p>
-        <p>
-          TonyBet OÜ, an Operator incorporated in Estonia, registration code
-          12103082, having its registered office at Punane tn 14a-4. korrus
-          419/4, 13619 Tallinn, Estonia.
-        </p>
-        <a href="/" id="seo_footer_link">
-          TonyBet
-        </a>
-        <div id="seo_footer_ext" style={{ display: 'none' }}>
-          TonyBet
-        </div>
-        <a href="/" className="read-more">
-          <span className="show">Read More</span>
-          <span className="">Read less</span>
-        </a>
+const FooterMenu = () => {
+  const footerLinks: FooterLink[] = FOOTER_LINKS;
+  return (
+    <div className="footer-menu">
+      <div className="d-flex flex-column">
+        <div className="footer-disclaimer d-flex flex-wrap my-1 text-read-more collapsed">
+          <p>
+            <span></span>
+          </p>
+          <p>
+            Gambling is not a proper way to solve your financial problems.
+            Please read the terms and act responsibly. 18+ only, T&amp;Cs apply.
+          </p>
+          <p>
+            TonyBet OÜ, an Operator incorporated in Estonia, registration code
+            12103082, having its registered office at Punane tn 14a-4. korrus
+            419/4, 13619 Tallinn, Estonia.
+          </p>
+          <a href="/" id="seo_footer_link">
+            TonyBet
+          </a>
+          <div id="seo_footer_ext" style={{ display: 'none' }}>
+            TonyBet
+          </div>
+          <a href="/" className="read-more">
+            <span className="show">Read More</span>
+            <span className="">Read less</span>
+          </a>
 
-        <p></p>
-      </div>
-      <div className="row d-flex justify-content-start justify-content-md-between">
-        <div className="col-4 col-md-3">
-          <h4>Products</h4>
-          <div className="row footer-menu-products">
-            <div className="col-12 col-md-6">
-              <ul>
-                <li>
-                  <a href="/sports">Sports</a>
-                </li>
-                <li>
-                  <a href="/in-play">In-Play</a>
-                </li>
-                <li>
-                  <a href="/casino">Casino</a>
-                </li>
-              </ul>
-            </div>
-            <div className="col-12 col-md-6">
-              <ul>
-                <li>
-                  <a href="/betgamestv">Live Games</a>
-                </li>
-                <li>
-                  <a href="/betonpoker">Bet on Poker</a>
-                </li>
-                <li>
-                  <a href="/live-casino">Live Casino</a>
-                </li>
-                <li>
-                  <a href="/articles/promotions" className="">
-                    Promotions
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
+          <p></p>
         </div>
-        <div className="col-4 col-md-2  d-flex flex-column align-items-center">
-          <div>
-            <h4>Policies</h4>
-            <ul>
-              <li>
-                <a data-gtm-item="null" href="/security">
-                  Security &amp; Privacy
-                </a>
-              </li>
-              <li>
-                <a data-gtm-item="null" href="/betting-regulation">
-                  Terms &amp; Conditions
-                </a>
-              </li>
-              <li>
-                <a data-gtm-item="null" href="/betting-rules">
-                  Betting rules
-                </a>
-              </li>
-              <li>
-                <a data-gtm-item="null" href="/responsible_gambling">
-                  Responsible Gambling
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="col-4 col-md-2 d-flex flex-column align-items-center footer-menu-company">
-          <div>
-            <h4>Company</h4>
-            <ul>
-              <li>
-                <a data-gtm-item="null" href="/about_us">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="http://blog.tonybet.com">Blog</a>
-              </li>
-
-              <li>
-                <a href="/articles/news" className="">
-                  News
-                </a>
-              </li>
-              <li>
-                <a href="https://affiliatestonybet.com/">Affiliates</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="col-4 col-md-2 d-flex flex-column align-items-md-center">
-          <div>
-            <h4>Help</h4>
-            <ul>
-              <li>
-                <Link to="/faq">FAQ</Link>
-              </li>
-              <li>
-                <a href="/payments/payment_methods">Payment Methods</a>
-              </li>
-              <li>
-                <a href="/contacts">Contact Us</a>
-              </li>
-              <li>
-                <a href="http://tonybet.enetscores.com/statistics">
-                  Statistics
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="col-4 col-md-2 d-flex flex-column align-items-center align-items-md-end">
-          <div>
-            <h4>Contact us</h4>
-            <ul>
-              <li>24/7 Customer Support</li>
-              <li>
-                <a href="mailto:info@tonybet.com">info@tonybet.com</a>
-              </li>
-              <li>
-                <div className="social-media d-flex align-items-center">
-                  <a href="https://www.facebook.com/Bet.At.TonyBet/">
-                    <img
-                      alt=""
-                      src="/bnl/tonybet18/images/FB-7fcb1590ac1ec7a8be784ec6f973028f47dc35ee8601419e4902afe523a072c0.svg"
-                    />
-                  </a>
-                  <a href="https://twitter.com/TonyBet">
-                    <img
-                      alt=""
-                      src="/bnl/tonybet18/images/tweet-7cd296a0a788d95d57bb61243a4ccbe719fa2d75e86cf95fceaaaf1119d0e86c.svg"
-                    />
-                  </a>
-                  <a href="https://www.instagram.com/tonybetofficial/">
-                    <img
-                      alt=""
-                      src="/bnl/tonybet18/images/insta-80912f4ddb1f01aecb3ce7a0f9a12d161447b567cf9d281ca646c151c0721bb8.svg"
-                    />
-                  </a>
+        <div className="row d-flex justify-content-start justify-content-md-between">
+          {footerLinks
+            .sort((a, b) => a.order - b.order)
+            .map(column => {
+              const oneColumn = column.children.length < 5;
+              const sortedChildren = column.children.sort(
+                (a, b) => a.order - b.order,
+              );
+              return (
+                <div className={`col-4 col-md-${oneColumn ? 2 : 3}`}>
+                  <h4>{column.name}</h4>
+                  <div className={!oneColumn ? 'row' : ''}>
+                    {new Array(Math.round(sortedChildren.length / 4))
+                      .fill(null)
+                      .map((_, index) => {
+                        const children = sortedChildren.slice(
+                          4 * index,
+                          4 * (index + 1),
+                        );
+                        return (
+                          <div className="col-12 col-md-6">
+                            <ul>
+                              {children.map(link => (
+                                <li>
+                                  {link.link ? (
+                                    <Link to={link.link}>{link.name}</Link>
+                                  ) : (
+                                    link.name
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      })}
+                  </div>
                 </div>
-              </li>
-            </ul>
-          </div>
+              );
+            })}
         </div>
-      </div>
-      <div className="footer-logo">
-        <div className="container ml-0">
-          <div className="row d-flex justify-content-center">
-            <div className="logo-inline d-flex col-12 justify-content-start align-items-center">
-              <a href="https://mtr.mkm.ee/juriidiline_isik/96226">
-                <img
-                  className="img-responsive"
-                  src="https://n.tonybet.com/uploads/1/footer_partner/image/83/maksu.png"
-                  alt="maksu"
-                />
-              </a>{' '}
-              <a href="https://www.gamblingtherapy.org/en">
-                <img
-                  className="img-responsive"
-                  src="https://n.tonybet.com/uploads/1/footer_partner/image/249/gamblingtherapy.png"
-                  alt="GT"
-                />
-              </a>{' '}
-              <a href="/">
-                <img
-                  className="img-responsive"
-                  src="https://n.tonybet.com/uploads/1/footer_partner/image/250/ssl.png"
-                  alt="ssl"
-                />
-              </a>
-              <a href="https://www.trustly.com">
-                <img
-                  className="img-responsive"
-                  src="https://n.tonybet.com/uploads/1/footer_partner/image/251/trustly_payment_method_1.png"
-                  alt="Trustly"
-                />
-              </a>{' '}
-              <a href="https://www.gamcare.org.uk/">
-                <img
-                  className="img-responsive"
-                  src="https://n.tonybet.com/uploads/1/footer_partner/image/255/gamcare-25x90.png"
-                  alt="GamCare"
-                />
-              </a>{' '}
+        <div className="footer-logo">
+          <div className="container ml-0">
+            <div className="row d-flex justify-content-center">
+              <div className="logo-inline d-flex col-12 justify-content-start align-items-center">
+                <a href="https://mtr.mkm.ee/juriidiline_isik/96226">
+                  <img
+                    className="img-responsive"
+                    src="https://n.tonybet.com/uploads/1/footer_partner/image/83/maksu.png"
+                    alt="maksu"
+                  />
+                </a>{' '}
+                <a href="https://www.gamblingtherapy.org/en">
+                  <img
+                    className="img-responsive"
+                    src="https://n.tonybet.com/uploads/1/footer_partner/image/249/gamblingtherapy.png"
+                    alt="GT"
+                  />
+                </a>{' '}
+                <a href="/">
+                  <img
+                    className="img-responsive"
+                    src="https://n.tonybet.com/uploads/1/footer_partner/image/250/ssl.png"
+                    alt="ssl"
+                  />
+                </a>
+                <a href="https://www.trustly.com">
+                  <img
+                    className="img-responsive"
+                    src="https://n.tonybet.com/uploads/1/footer_partner/image/251/trustly_payment_method_1.png"
+                    alt="Trustly"
+                  />
+                </a>{' '}
+                <a href="https://www.gamcare.org.uk/">
+                  <img
+                    className="img-responsive"
+                    src="https://n.tonybet.com/uploads/1/footer_partner/image/255/gamcare-25x90.png"
+                    alt="GamCare"
+                  />
+                </a>{' '}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-);
-
+  );
+};
 const PageFooter = ({ wrapped }: { wrapped?: boolean }) => {
   return (
     <footer

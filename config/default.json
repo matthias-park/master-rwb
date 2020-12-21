@@ -4,7 +4,8 @@
       "name": "bnl",
       "domain": "bnl.local",
       "theme": "tonybet",
-      "api": "https://bnl-dev.tglab.dev"
+      "api": "https://bnl-dev.tglab.dev",
+      "defaultLocale": "en"
     }
   ],
   "port": 3800

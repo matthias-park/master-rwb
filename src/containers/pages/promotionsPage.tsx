@@ -1,7 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import useSWR from 'swr';
-// import { getApi } from '../../utils/apiUtils';
 import { PROMOTION_LIST } from '../../constants';
 import PromotionListItem from '../../types/PromotionListItem';
 
@@ -25,10 +23,6 @@ const PromoItem = ({ item }) => (
 );
 
 const PromotionsPage = () => {
-  // const { data } = useSWR('/api/promotions', getApi, {
-  //   revalidateOnFocus: false,
-  //   revalidateOnReconnect: false,
-  // });
   const data: PromotionListItem[] = PROMOTION_LIST;
   return (
     <div

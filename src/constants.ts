@@ -1,23 +1,38 @@
-import { ConfigRoute, HeadData } from './types/Config';
-export const HEADER_ROUTES = [
+import { ConfigRoute } from './types/Config';
+import HeadData from './types/HeadData';
+import HeaderLink from './types/HeaderLinks';
+
+export const HEADER_ROUTES: HeaderLink[] = [
   {
-    link: '/sports',
+    path: '/sports',
     name: 'link_sports',
   },
   {
-    link: '/promotions',
+    name: 'live_betting',
+    children: [
+      {
+        name: 'link_sports',
+        path: '/sports',
+      },
+    ],
+  },
+  {
+    path: '/promotions',
     name: 'promotions',
   },
 ];
 
 export const TRANSLATION_SYMBOLS = [
   'link_sports',
+  'live_betting',
   'promotions',
   'deposit',
   'bonus',
   'withdrawal',
   'profile',
   'logout',
+  'login',
+  'play_now',
 ];
 
 export const PROMOTION_LIST = [
@@ -165,5 +180,143 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
     path: '/withdrawal',
     id: 'withdrawal',
     protected: true,
+  },
+];
+
+export const AVAILABLE_LOCALES = ['en', 'nl', 'lt'];
+
+export const FOOTER_LINKS = [
+  {
+    name: 'Products',
+    order: 1,
+    children: [
+      {
+        name: 'Sports',
+        link: '/sports',
+        order: 1,
+      },
+      {
+        name: 'InPlay',
+        link: '/inplay',
+        order: 2,
+      },
+      {
+        name: 'Casino',
+        link: '/casino',
+        order: 3,
+      },
+      {
+        name: 'Live Games',
+        link: '/live-games',
+        order: 4,
+      },
+      {
+        name: 'Bet on Poker',
+        link: '/bet-on-poker',
+        order: 5,
+      },
+      {
+        name: 'Live Casino',
+        link: '/live-casino',
+        order: 6,
+      },
+      {
+        name: 'Promotions',
+        link: '/promotions',
+        order: 7,
+      },
+    ],
+  },
+  {
+    name: 'Policies',
+    order: 2,
+    children: [
+      {
+        name: 'Security & Privacy',
+        link: '/security-privacy',
+        order: 1,
+      },
+      {
+        name: 'Terms & Conditions',
+        link: '/terms-conditions',
+        order: 2,
+      },
+      {
+        name: 'Betting rules',
+        link: '/betting-rules',
+        order: 3,
+      },
+      {
+        name: 'Responsible Gambling',
+        link: '/responsible-gambling',
+        order: 4,
+      },
+    ],
+  },
+  {
+    name: 'Company',
+    order: 3,
+    children: [
+      {
+        name: 'About Us',
+        link: '/about-us',
+        order: 1,
+      },
+      {
+        name: 'Blog',
+        link: '/blog',
+        order: 2,
+      },
+      {
+        name: 'News',
+        link: '/news',
+        order: 3,
+      },
+      {
+        name: 'Affiliates',
+        link: '/affiliates',
+        order: 4,
+      },
+    ],
+  },
+  {
+    name: 'Help',
+    order: 4,
+    children: [
+      {
+        name: 'FAQ',
+        link: '/faq',
+        order: 1,
+      },
+      {
+        name: 'Payment Methods',
+        link: '/payment-methods',
+        order: 2,
+      },
+      {
+        name: 'Contact Us',
+        link: '/contact-us',
+        order: 3,
+      },
+      {
+        name: 'Statistics',
+        link: '/statistics',
+        order: 4,
+      },
+    ],
+  },
+  {
+    name: 'Contact us',
+    order: 5,
+    children: [
+      {
+        name: '24/7 Customer Support',
+        order: 1,
+      },
+      {
+        name: 'info@tonybet.com',
+        order: 2,
+      },
+    ],
   },
 ];

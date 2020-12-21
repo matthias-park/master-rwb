@@ -15,7 +15,7 @@ const CookieConsent = () => {
     <nav className="navbar fixed-bottom navbar-dark bg-dark">
       <span className="navbar-text">
         We use cookies on this site to enhance your user experience. Learn more
-        about <Link to="http://tonybet.com/cookie-policy">Cookies policy.</Link>
+        about <Link to="/cookie-policy">Cookies policy.</Link>
       </span>
       <button
         id="gdpr-snackbar-accept"

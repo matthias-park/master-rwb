@@ -1,167 +1,36 @@
-import useOnClickOutside from '../../hooks/useOnClickOutside';
-import React, { useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { useI18n } from '../../hooks/useI18n';
 import { postApi } from '../../utils/apiUtils';
 import LoginModal from '../LoginModal';
+import { HEADER_ROUTES } from '../../constants';
+import HeaderUserInfo from '../../components/header/HeaderUserInfo';
+import HeaderLoginButton from '../../components/header/HeaderLoginButton';
+import HeaderLink from '../../types/HeaderLinks';
 
-const PageLink = ({ link, name, active }) => (
-  <li className="nav-item col-3 col-xl-auto mt-0 ">
-    <Link to={link} className={`nav-link ${active ? 'active' : ''}`}>
-      <div className="title d-flex flex-column align-items-center justify-content-center d-xl-block">
-        <i className="icon-football mb-1 mb-xl-0 d-xl-none"></i>
-        <span className="text-center">{name}</span>
-      </div>
-    </Link>
-  </li>
-);
-
-const LoginBtn = ({ handleLogin }) => (
-  <div
-    className="user-settings collapse navbar-collapse order-xl-6 order-4 justify-content-end flex-md-grow-0"
-    id="userCollapse"
-  >
-    <div>
-      <div className="user-navigation d-flex justify-content-end">
-        <button
-          className="btn btn-opacity"
-          data-target="#login-form"
-          data-toggle="modal"
-          name="button"
-          type="button"
-          onClick={handleLogin}
-        >
-          Prisijungti
-        </button>
-        <button
-          className="btn btn-success"
-          data-target="#reg-form-about"
-          data-toggle="modal"
-          name="button"
-          type="button"
-        >
-          <span
-            className="translation_missing"
-            title="translation missing: en.trustly_login"
-          >
-            Play Now
-          </span>
-        </button>
-      </div>
-    </div>
-  </div>
-);
-
-const UserMenuLink = ({ link, icon, name }) => (
-  <Link
-    to={link}
-    className="menu__blocks--item d-flex flex-column align-items-center align-items-xl-start justify-content-center"
-  >
-    <i className={`icon-${icon} mb-1 d-xl-none`}></i>
-    <span>{name}</span>
-  </Link>
-);
-
-const UserInfo = ({ user, handleLogout }) => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [showMenu, setShowMenu] = useState(false);
-  useOnClickOutside(ref, () => setShowMenu(false));
+const PageLink = ({ link, active }: { link: HeaderLink; active: boolean }) => {
+  const { t } = useI18n();
   return (
-    <div className="menu__blocks d-flex order-xl-6 order-4 ">
+    <li className="nav-item col-3 col-xl-auto mt-0 ">
       <Link
-        to="/deposit"
-        className="btn-group btn-deposit justify-content-center flex-md-grow d-none d-xl-flex"
+        to={link.path || '#'}
+        className={`nav-link ${active ? 'active' : ''}`}
       >
-        <button
-          name="button"
-          type="button"
-          className="btn btn-violet btn-violet-dark with-border balance"
-        >
-          {user.balance}
-        </button>
-        <button
-          name="button"
-          type="button"
-          className="btn btn-violet with-border d-flex align-items-center"
-        >
-          <i className="icon-bank-card"></i>Deposit
-        </button>
-      </Link>
-      <button
-        name="button"
-        type="button"
-        className="btn btn-opacity dropdown-toggle btn-acc btn-acc--hideBalance d-flex align-items-center collapsed"
-        id="navbarAccCollapseToggle"
-        data-toggle="collapse"
-        data-target="#navbarAccCollapseContent"
-        aria-expanded="true"
-        aria-controls="navbarAccCollapseContent"
-        onClick={() => setShowMenu(!showMenu)}
-      >
-        <span className="mobile-balance pr-1 d-xl-none">{user.balance}</span>
-        <i className="icon-head"></i>
-      </button>
-      <div
-        ref={ref}
-        className={`menu__blocks--container account mr-xl-2 collapse ${
-          showMenu ? 'show' : ''
-        }`}
-        id="navbarAccCollapseContent"
-      >
-        <div className="">
-          <div className="user-navigation d-flex flex-wrap flex-xl-column ">
-            {[
-              {
-                link: '/deposit',
-                icon: 'wallet',
-                name: 'Deposit',
-              },
-              {
-                link: '/bonus',
-                icon: 'betslip',
-                name: 'Bonus',
-              },
-              {
-                link: '/limits',
-                icon: 'transactions',
-                name: 'Limits',
-              },
-              {
-                link: '/withdrawal',
-                icon: 'bonus',
-                name: 'Withdrawal',
-              },
-              {
-                link: '/settings',
-                icon: 'money',
-                name: 'Settings',
-              },
-            ].map(link => (
-              <UserMenuLink
-                key={link.link}
-                link={link.link}
-                icon={link.icon}
-                name={link.name}
-              />
-            ))}
-            <div
-              className="menu__blocks--item padding-top  d-flex flex-column align-items-center align-items-xl-start justify-content-center cursor-pointer"
-              onClick={handleLogout}
-            >
-              <i className="icon-wrong mb-1 d-xl-none"></i>
-              <span>Log Out</span>
-            </div>
-          </div>
+        <div className="title d-flex flex-column align-items-center justify-content-center d-xl-block">
+          <i className="icon-football mb-1 mb-xl-0 d-xl-none"></i>
+          <span className="text-center">
+            {t(link.name)} {link.children ? `(${link.children.length})` : ''}
+          </span>
         </div>
-      </div>
-    </div>
+      </Link>
+    </li>
   );
 };
 
 const PageHeader = () => {
+  const headerRoutes = HEADER_ROUTES;
   const config = useConfig();
-  const { t } = useI18n();
   const { pathname } = useLocation();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const handleLogin = () => {
@@ -212,19 +81,18 @@ const PageHeader = () => {
         </button>
         <div className="collapse navbar-collapse order-5" id="navbarNav">
           <ul className="navbar-nav mr-auto flex-row flex-wrap flex-xl-nowrap navbar__blocks-list">
-            {config.headerRoutes?.map(link => (
+            {headerRoutes.map(link => (
               <PageLink
-                key={link.link}
-                link={link.link}
-                name={t(link.name)}
-                active={pathname === link.link}
+                key={link.path}
+                link={link}
+                active={pathname === link.path}
               />
             ))}
           </ul>
           {config.user.id ? (
-            <UserInfo user={config.user} handleLogout={handleLogout} />
+            <HeaderUserInfo user={config.user} handleLogout={handleLogout} />
           ) : (
-            <LoginBtn handleLogin={handleLogin} />
+            <HeaderLoginButton handleLogin={handleLogin} />
           )}
         </div>
       </nav>
