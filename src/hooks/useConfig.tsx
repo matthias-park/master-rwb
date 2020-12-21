@@ -5,6 +5,7 @@ import Config from '../types/Config';
 import UserStatus from '../types/UserStatus';
 import { getRedirectLocalePathname, setLocalePathname } from '../utils/i18n';
 import { AVAILABLE_LOCALES, NAVIGATION_ROUTES } from '../constants';
+import { User } from '../types/UserStatus';
 
 export const configContext = createContext<Config | null>(null);
 
@@ -26,20 +27,27 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   const [locale, changeLocale] = useState(
     getRedirectLocalePathname(locales, window.DEFAULT_LOCALE, routes),
   );
-  const { data, mutate: mutateUser } = useSWR<UserStatus>(
-    '/api/app/v1/user/status.json',
-    getApi,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    },
-  );
+  const { data: userData, error: userError, mutate: mutateUser } = useSWR<
+    UserStatus
+  >('/api/app/v1/user/status.json', getApi, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
   const setLocale = (lang: string) => {
     setLocalePathname(lang);
     changeLocale(lang);
   };
+  const user: User = userData?.user || {
+    logged_in: false,
+    token: '',
+    format: 'eu',
+    id: 0,
+    balance: '',
+  };
+  user.loading = !userData && !userError;
+
   const value: Config = {
-    user: data?.user || { id: 0 },
+    user,
     mutateUser,
     locale,
     setLocale,

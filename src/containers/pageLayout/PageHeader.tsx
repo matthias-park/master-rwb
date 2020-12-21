@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { useI18n } from '../../hooks/useI18n';
-import { postApi } from '../../utils/apiUtils';
+import { getApi } from '../../utils/apiUtils';
 import LoginModal from '../LoginModal';
 import { HEADER_ROUTES } from '../../constants';
 import HeaderUserInfo from '../../components/header/HeaderUserInfo';
@@ -45,8 +45,8 @@ const PageHeader = () => {
     }
   }, [config.user.id]);
   const handleLogout = async () => {
-    const data = await postApi('/api/auth/logout');
-    config.mutateUser(data || { id: 0 });
+    await getApi('/players/logout');
+    config.mutateUser({ id: 0 });
   };
 
   return (

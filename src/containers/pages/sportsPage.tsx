@@ -1,21 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useConfig } from '../../hooks/useConfig';
 import { formatUrl, getApi } from '../../utils/apiUtils';
-import useSWR from 'swr';
+import GetToken from '../../types/api/kambi/GetToken';
+
+interface Params {
+  locale: string;
+  playerId: number | string;
+  ticket: string;
+}
 
 const SportsPage = () => {
   const config = useConfig();
-  const { data } = useSWR('/railsapi/v1/kambi/get_token', getApi, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
-  //@ts-ignore
-  const ticket = data?.Data || '';
-  const params = {
-    locale: 'en',
-    playerId: config.user.id ? config.user.id : '',
-    ticket,
-  };
+  const [params, setParams] = useState<Params | null>(null);
+  useEffect(() => {
+    (async () => {
+      const playerId = config.user.id ? config.user.id : '';
+      const data: GetToken | null = playerId
+        ? await getApi<GetToken>('/railsapi/v1/kambi/get_token')
+        : null;
+      const ticket = data?.Data || '';
+      setParams({
+        locale: config.locale,
+        playerId,
+        ticket,
+      });
+    })();
+  }, [config]);
+  if (!params || config.user.loading) {
+    return null;
+  }
   return (
     <iframe
       title="iframe"
@@ -24,7 +37,7 @@ const SportsPage = () => {
       frameBorder="0"
       id="tonysportsbookiframe"
       name="tonysportsbookiframe"
-      src={formatUrl('/iframe/kambiSB.html', params)}
+      src={formatUrl('/iframe/kambiSB.html', params as any)}
     />
   );
 };

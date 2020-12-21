@@ -1,3 +1,4 @@
+import { User } from './UserStatus';
 export interface ConfigRoute {
   id: string;
   path: string;
@@ -5,7 +6,7 @@ export interface ConfigRoute {
 }
 
 type Config = {
-  user: any;
+  user: User;
   mutateUser: (user?: any) => void;
   locale: string;
   locales: string[];
