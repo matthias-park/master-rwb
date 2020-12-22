@@ -7,7 +7,7 @@ namespace :pm2 do
       ['next-web'].each do |role|
         on roles(role) do
           within current_path do
-            execute :pm2, :start, 'ecosystem.config.js', '--only', role, '--env', stage
+            execute :pm2, :start, 'ecosystem.config.js', '--only', role, '--env', :stage
           end
         end
       end
