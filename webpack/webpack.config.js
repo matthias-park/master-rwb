@@ -170,7 +170,7 @@ module.exports = function (webpackEnv) {
           template: paths.appBuildHtml,
           chunks: ['main'],
           filename: `${franchise.name}.html`,
-          franchiseTheme: `static/css/${franchise.theme}.css`,
+          franchiseTheme: `static/css/theme-${franchise.theme}.css`,
           apiUrl: franchise.api,
           defaultLocale: franchise.defaultLocale,
         },

@@ -53,7 +53,7 @@ const resolveAllStyles = (resolveFn, filePath) => {
   return franchises
     .filter(fr => fs.existsSync(formatFranchiseStylePath(fr)))
     .reduce((obj, fr) => {
-      obj[fr] = formatFranchiseStylePath(fr);
+      obj[`theme-${fr}`] = formatFranchiseStylePath(fr);
       return obj;
     }, {});
 };
