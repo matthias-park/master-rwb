@@ -12,7 +12,7 @@
     {
       "name": "bundle name",
       "domain": "request domain associated bundle",
-      "theme": "styles bundle name - styles/[name].main.scss",
+      "theme": "styles bundle name - styles/[name]",
       "api": "rails api url"
     }
   ],
