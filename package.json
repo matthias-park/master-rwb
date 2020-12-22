@@ -100,6 +100,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "build:production": "NODE_ENV=production npm run build",
+    "build:stage": "NODE_ENV=stage npm run build",
     "test": "node scripts/test.js",
     "checkTs": "tsc --noEmit",
     "eslint": "eslint --ext js,ts,tsx",
