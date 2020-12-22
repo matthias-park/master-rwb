@@ -47,18 +47,15 @@ const resolveModule = (resolveFn, filePath) => {
 };
 
 const resolveAllStyles = (resolveFn, filePath) => {
-  const extensions = ['main.css', 'main.scss', 'main.sass'];
-  const files = fs.readdirSync(filePath, {
-    withFileTypes: true,
-  });
-  return files
-    .filter(file => extensions.some(ext => file.name.includes(ext)))
-    .reduce((obj, file) => {
-      const name = file.name.split('.')[0];
-      obj[name] = resolveFn(`${filePath}/${file.name}`);
+  const franchises = fs.readdirSync(filePath);
+  const formatFranchiseStylePath = fr =>
+    resolveFn(`${filePath}/${fr}/stylesheets/main.scss`);
+  return franchises
+    .filter(fr => fs.existsSync(formatFranchiseStylePath(fr)))
+    .reduce((obj, fr) => {
+      obj[fr] = formatFranchiseStylePath(fr);
       return obj;
     }, {});
-  // .map(file => resolveFn(`${filePath}/${file.name}`));
 };
 
 // config after eject: we're in ./webpack/

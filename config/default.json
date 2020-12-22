@@ -3,7 +3,7 @@
     {
       "name": "bnl",
       "domain": "bnl.local",
-      "theme": "tonybet",
+      "theme": "tbnl",
       "api": "https://bnl-dev.tglab.dev",
       "defaultLocale": "en"
     }

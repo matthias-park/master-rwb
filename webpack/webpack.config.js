@@ -536,33 +536,12 @@ module.exports = function (webpackEnv) {
       // Generates an `index.html` file with the <script> injected.
       ...(isEnvProduction ? configFranchises.map(generateHtmlPlugin) : []),
       isEnvDevelopment &&
-        new HtmlWebpackPlugin(
-          Object.assign(
-            {},
-            {
-              inject: true,
-              template: paths.appDevHtml,
-              chunks: ['main'],
-              franchises: JSON.stringify(configFranchises),
-            },
-            isEnvProduction
-              ? {
-                  minify: {
-                    removeComments: true,
-                    collapseWhitespace: true,
-                    removeRedundantAttributes: true,
-                    useShortDoctype: true,
-                    removeEmptyAttributes: true,
-                    removeStyleLinkTypeAttributes: true,
-                    keepClosingSlash: true,
-                    minifyJS: true,
-                    minifyCSS: true,
-                    minifyURLs: true,
-                  },
-                }
-              : undefined,
-          ),
-        ),
+        new HtmlWebpackPlugin({
+          inject: true,
+          template: paths.appDevHtml,
+          chunks: ['main'],
+          franchises: JSON.stringify(configFranchises),
+        }),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       // https://github.com/facebook/create-react-app/issues/5358
