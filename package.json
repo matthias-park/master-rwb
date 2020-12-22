@@ -105,7 +105,7 @@
     "eslint": "eslint --ext js,ts,tsx",
     "lint": "npm run eslint src",
     "lint:fix": "npm run eslint --fix src",
-    "lint:css": "stylelint src/**/*.css",
+    "lint:css": "stylelint styles/**/*.css",
     "prettify": "prettier --write"
   },
   "browserslist": {

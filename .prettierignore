@@ -1,4 +1,5 @@
 build/
 node_modules/
+styles/
 package-lock.json
 yarn.lock
