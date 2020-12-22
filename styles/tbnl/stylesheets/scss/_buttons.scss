@@ -1,0 +1,31 @@
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    max-height: 39px;
+    i {
+        font-size: 26px;
+        line-height: 28px;
+        margin-right: 6px;
+    }
+    &:focus,
+    &:active {
+        box-shadow: none !important;
+    }
+    &.btn-sm {
+        max-height: 28px;
+    }
+    &.btn-lg {
+        max-height: 48px;
+    }
+}
+
+.btn-light {
+    &:hover,
+    &:active,
+    &:focus {
+        background-color: $primary;
+        color: $white;
+    }
+}

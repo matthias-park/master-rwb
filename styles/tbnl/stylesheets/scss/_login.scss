@@ -1,0 +1,61 @@
+.login-dropdown {
+    z-index: 1100;
+    &__toggle {
+        &:after {
+            content: none;
+        }
+    }
+    &__menu {
+        top: 50px;
+        left: auto;
+        right: 0;
+        width: 365px;
+        padding: 25px 15px;
+        box-shadow: 0 -2px 20px 0 rgba(0, 0, 0, 0.3);
+        &:after {
+            content: '';
+            position: absolute;
+            top: -7px;
+            right: 15%;
+            width: 0; 
+            height: 0; 
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid $white;
+            border-radius: 2px;
+        }
+        &-form {
+            border-bottom: 1px solid $gray-100;
+        }
+        &-link {
+            color: $primary-light;
+        }
+        @include media-breakpoint-down(lg) {
+            left: -125%;
+            top: 48px;
+            &:after {
+                right: 29%;
+            }
+        }
+        @include media-breakpoint-down(xs) {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 96vw;
+            max-width: 365px;
+            &:after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    }
+}
+
+.lottery-club {
+    display: flex;
+    background-color: $gray-custom-200;
+    border-radius: 8px;
+    padding: 15px 5px;
+    &__text {
+        color: $black;
+    }
+}

@@ -1,0 +1,120 @@
+*:focus {
+    outline: none !important;
+}
+
+* {
+	-webkit-overflow-scrolling: touch;
+}
+
+body {
+    max-width: 1920px;
+    padding: 0 80px;
+    margin: auto;
+    overflow-x: hidden;
+    @include media-breakpoint-down(xl) {
+        padding: 0 45px;
+    }
+    @include media-breakpoint-down(lg) {
+        padding: 0 20px;
+    }
+}
+
+.text-14 {
+    font-size: 14px;
+}
+
+.weight-500 {
+    font-weight: 500;
+}
+
+.bg-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255,255,255,0.6);
+    z-index: 1000;
+}
+
+.on-top {
+    z-index: 1100;
+}
+
+.custom-text-label {
+    background-color: $success-alt;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: $white;
+}
+
+.dropdown {
+    .dropdown-toggle {
+        &:after {
+            position: relative;
+            top: 4px;
+            border-top-color: $sub-brand;
+            border-top-width: 8px;
+            border-right-width: 5px;
+            border-left-width: 5px;
+            border-radius: 2px;
+            margin-left: 0;
+        }
+    }
+}
+
+.tooltip-custom {
+    position: relative;
+    display: inline-flex;
+    $self: &;
+    .icon-tooltip {
+        font-size: 20px;
+        color: $primary-light;
+    }
+    &__block {
+        position: absolute;
+        top: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        justify-content: center;
+        align-items: center;
+        width: 210px;
+        background-color:#677175;
+        color: rgba(255,255,255,0.7);
+        border-radius: 4px;
+        padding: 25px 20px;
+        z-index: 1;
+        display: none;
+        .icon-close {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            color: rgba(255,255,255,0.5);
+            font-size: 12px;
+        }
+        &:after {
+            content: '';
+            position: absolute;
+            top: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; 
+            height: 0; 
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid #677175;
+            border-radius: 2px;
+        }
+    }
+    &.show {
+        .icon-tooltip {
+            color: $primary;
+        }
+        #{ $self }__block {
+            display: flex;
+        }
+    }
+}

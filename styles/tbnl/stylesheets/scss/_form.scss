@@ -1,0 +1,130 @@
+.form-group {
+    position: relative;
+    $self: &;
+    input {
+        padding-top: 17px;
+        + label {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            color: $gray-700;
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+        &:focus,
+        &:active,
+        &:not(:placeholder-shown) {
+            + label {
+                font-size: 9px;
+                top: 4px;
+            }
+        }
+    }
+    &__icons {
+        position: absolute;
+        top: 0;
+        right: 5px;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        font-size: 32px;
+        .icon-eye-on {
+            color: $primary-light;
+            cursor: pointer;
+        }
+        .icon-check {
+            display: none;
+            color: $success-alt;
+        }
+        .icon-exclamation {
+            display: none;
+            color: $danger;
+        }
+        .tooltip-custom {
+            margin-right: 4px;
+        }
+    }
+    &__error-msg {
+        display: none;
+        font-size: 12px;
+        color: $danger;
+        margin-top: 3px;
+    }
+    &.show-pass {
+        #{ $self }__icons {
+            .icon-eye-on {
+                &:before {
+                    content: '\e977';
+                }
+            }
+        }
+    }
+    &.success {
+        #{ $self }__icons {
+            .icon-check {
+                display: inline-block;
+            }
+        }
+    }
+    &.has-error {
+        input {
+            border: 1px solid $danger;
+            background-color: $danger-bg;
+            color: $danger;
+        }
+        #{ $self }__icons {
+            top: -8px;
+            .icon-exclamation {
+                display: inline-block;
+            }
+            .icon-eye-on {
+                position: relative;
+                right: -6px;
+            }
+        }
+        #{ $self }__error-msg {
+            display: block;
+        }
+    }
+}
+
+.custom-checkbox {
+    label {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    .custom-control-input {
+        z-index: 1;
+        &:checked {
+            + label {
+                &:before {
+                    background-color: $success;
+                    border-color: transparent;
+                }
+            }
+        }
+    }
+    &.has-error {
+        label {
+            &:before {
+                border-color: $danger;
+                background-color: $danger-bg;
+            }
+        }
+    }
+}
+
+.custom-radio {
+    label {
+        line-height: 1.5;
+        font-size: 15px;
+    }
+    &.has-error {
+        label {
+            &:before {
+                border-color: $danger;
+                background-color: $danger-bg;
+            }
+        }
+    }
+}
