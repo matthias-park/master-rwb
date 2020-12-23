@@ -5,6 +5,7 @@ interface FooterLink {
     name: string;
     link?: string;
     order: number;
+    button?: boolean;
   }[];
 }
 

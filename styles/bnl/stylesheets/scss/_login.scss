@@ -1,5 +1,4 @@
 .login-dropdown {
-    z-index: 1100;
     &__toggle {
         &:after {
             content: none;
@@ -47,6 +46,9 @@
                 transform: translateX(-50%);
             }
         }
+    }
+    &.show {
+      z-index: 1100;
     }
 }
 

@@ -3,7 +3,7 @@
     {
       "name": "bnl",
       "domain": "bnl.local",
-      "theme": "tbnl",
+      "theme": "bnl",
       "api": "https://bnl-dev.tglab.dev",
       "defaultLocale": "en"
     }

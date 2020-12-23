@@ -86,7 +86,7 @@ const LayoutWithSidebar = ({ children }) => {
         >
           {children}
         </div>
-        <PageFooter wrapped={true} />
+        <PageFooter />
       </div>
     </div>
   );

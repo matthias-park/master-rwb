@@ -187,101 +187,8 @@ export const AVAILABLE_LOCALES = ['en', 'nl', 'lt'];
 
 export const FOOTER_LINKS = [
   {
-    name: 'Products',
-    order: 1,
-    children: [
-      {
-        name: 'Sports',
-        link: '/sports',
-        order: 1,
-      },
-      {
-        name: 'InPlay',
-        link: '/inplay',
-        order: 2,
-      },
-      {
-        name: 'Casino',
-        link: '/casino',
-        order: 3,
-      },
-      {
-        name: 'Live Games',
-        link: '/live-games',
-        order: 4,
-      },
-      {
-        name: 'Bet on Poker',
-        link: '/bet-on-poker',
-        order: 5,
-      },
-      {
-        name: 'Live Casino',
-        link: '/live-casino',
-        order: 6,
-      },
-      {
-        name: 'Promotions',
-        link: '/promotions',
-        order: 7,
-      },
-    ],
-  },
-  {
-    name: 'Policies',
-    order: 2,
-    children: [
-      {
-        name: 'Security & Privacy',
-        link: '/security-privacy',
-        order: 1,
-      },
-      {
-        name: 'Terms & Conditions',
-        link: '/terms-conditions',
-        order: 2,
-      },
-      {
-        name: 'Betting rules',
-        link: '/betting-rules',
-        order: 3,
-      },
-      {
-        name: 'Responsible Gambling',
-        link: '/responsible-gambling',
-        order: 4,
-      },
-    ],
-  },
-  {
-    name: 'Company',
-    order: 3,
-    children: [
-      {
-        name: 'About Us',
-        link: '/about-us',
-        order: 1,
-      },
-      {
-        name: 'Blog',
-        link: '/blog',
-        order: 2,
-      },
-      {
-        name: 'News',
-        link: '/news',
-        order: 3,
-      },
-      {
-        name: 'Affiliates',
-        link: '/affiliates',
-        order: 4,
-      },
-    ],
-  },
-  {
     name: 'Help',
-    order: 4,
+    order: 1,
     children: [
       {
         name: 'FAQ',
@@ -289,33 +196,104 @@ export const FOOTER_LINKS = [
         order: 1,
       },
       {
-        name: 'Payment Methods',
-        link: '/payment-methods',
+        name: 'Contact',
+        link: '/contact',
         order: 2,
-      },
-      {
-        name: 'Contact Us',
-        link: '/contact-us',
-        order: 3,
-      },
-      {
-        name: 'Statistics',
-        link: '/statistics',
-        order: 4,
       },
     ],
   },
   {
-    name: 'Contact us',
-    order: 5,
+    name: 'Privacy',
+    order: 2,
     children: [
       {
-        name: '24/7 Customer Support',
+        name: 'Our privacy policy',
+        link: '/security-privacy',
         order: 1,
       },
       {
-        name: 'info@tonybet.com',
+        name: 'Manage your preferences',
+        link: '/preferences',
         order: 2,
+      },
+    ],
+  },
+  {
+    name: 'How and where can you play?',
+    order: 3,
+    children: [
+      {
+        name: 'Find a store',
+        link: '/find-store',
+        order: 1,
+      },
+      {
+        name: 'Play online',
+        link: '/play-online',
+        order: 2,
+      },
+      {
+        name: 'Subscriptions',
+        link: '/subscriptions',
+        order: 3,
+      },
+      {
+        name: 'Play responsibly',
+        link: '/play-responsibly',
+        order: 4,
+      },
+      {
+        name: 'All possibilities',
+        link: '/where-to-play',
+        order: 5,
+        button: true,
+      }
+    ],
+  },
+  {
+    name: 'More than playing',
+    order: 4,
+    children: [
+      {
+        name: 'About us',
+        link: '/about',
+        order: 1,
+      },
+      {
+        name: ' Our mission and assignment',
+        link: '/mission',
+        order: 2,
+      },
+      {
+        name: 'Charities',
+        link: '/charities',
+        order: 3,
+      },
+      {
+        name: 'Grants and sponsorships',
+        link: '/sponsorships',
+        order: 4,
+      },
+      {
+        name: 'Our services',
+        link: '/services',
+        order: 5,
+      },
+      {
+        name: 'Jobs',
+        link: '/jobs',
+        order: 6,
+      },
+      {
+        name: 'Press',
+        link: '/press',
+        order: 7,
+      },
+      {
+        name: 'All over play',
+        link: '/play',
+        order: 8,
+        button: true,
       },
     ],
   },

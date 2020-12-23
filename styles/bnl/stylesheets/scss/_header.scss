@@ -211,6 +211,7 @@
             }
         }
         &--secondary {
+            z-index: 1;
             #{ $self }-item {
                 #{ $self }-item-link {
                     font-size: 15px;
@@ -384,6 +385,9 @@
         &-icon {
             font-size: 38px;
             color: $primary;
+            &:after {
+              display: none;
+            }
         }
     }
 }
