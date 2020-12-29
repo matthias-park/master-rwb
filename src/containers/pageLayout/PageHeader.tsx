@@ -5,6 +5,7 @@ import { useI18n } from '../../hooks/useI18n';
 import { getApi } from '../../utils/apiUtils';
 import LoginModal from '../LoginModal';
 import { HEADER_ROUTES } from '../../constants';
+import { useBgBackdrop } from '../../hooks/useBgBackdrop';
 import HeaderUserInfo from '../../components/header/HeaderUserInfo';
 import HeaderLoginButton from '../../components/header/HeaderLoginButton';
 import HeaderLink from '../../types/HeaderLinks';
@@ -29,6 +30,8 @@ const PageHeader = () => {
   const { user, mutateUser, locales, locale, setLocale } = useConfig();
   const { pathname } = useLocation();
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const { bgBackdrop, setBgBackdrop } = useBgBackdrop();
+
   const handleLogin = () => {
     setShowLoginModal(true);
   };
@@ -46,7 +49,7 @@ const PageHeader = () => {
   };
 
   return (
-      <Navbar bg="light" expand="xl" className="header">
+      <Navbar bg="light" expand="xl" className="header" onToggle={() => setBgBackdrop(!bgBackdrop)}>
         <a className="header__mobile-logo" href='#'>
             <img className="d-block d-sm-none" src="/assets/images/logo/logo-small.svg" width="32" height="32"/>  
         </a>

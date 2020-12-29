@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 import PageLayout from './pageLayout';
+import BgBackdrop from '../components/BgBackdrop';
 import ErrorBoundary from './ErrorBoundary';
 import Routes from './pages';
 import { HEAD_DATA } from '../constants';
@@ -29,6 +30,7 @@ const App = () => {
         <PageLayout>
           <Routes />
         </PageLayout>
+        <BgBackdrop/>
       </ErrorBoundary>
     </BrowserRouter>
   );

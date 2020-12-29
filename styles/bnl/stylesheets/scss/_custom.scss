@@ -17,6 +17,9 @@ body {
     @include media-breakpoint-down(lg) {
         padding: 0 20px;
     }
+    &.modal-open {
+      overflow: hidden;
+    }
 }
 
 .text-14 {
@@ -36,6 +39,9 @@ body {
     bottom: 0;
     background-color: rgba(255,255,255,0.6);
     z-index: 1000;
+    &.show {
+      display: block;
+    }
 }
 
 .on-top {
