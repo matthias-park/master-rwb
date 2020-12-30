@@ -247,7 +247,7 @@ export const FOOTER_LINKS = [
         link: '/where-to-play',
         order: 5,
         button: true,
-      }
+      },
     ],
   },
   {
@@ -298,3 +298,51 @@ export const FOOTER_LINKS = [
     ],
   },
 ];
+export const FOOTER_DATA = {
+  social: {
+    androidApp: '#',
+    iosApp: '#',
+    mail: '#',
+    facebook: '#',
+    youtube: '#',
+    twitter: '#',
+    instagram: '#',
+    linkedin: '#',
+  },
+  links: FOOTER_LINKS,
+  subFooter: {
+    title: '®2018 Nationale Loterij',
+    links: [
+      {
+        name: 'Algemene voorwaarden',
+        link: '/terms-and-conditions',
+        order: 0,
+      },
+      {
+        name: 'Gebruiksvoorwaarden',
+        link: '/terms-of-use',
+        order: 1,
+      },
+      {
+        name: 'Cookiebeleid',
+        link: '/cookie-policy',
+        order: 2,
+      },
+      {
+        name: 'Certificaten en gedragscodes',
+        link: '/certs-and-code-conduct',
+        order: 3,
+      },
+      {
+        name: 'Sitemap',
+        link: '/sitemap',
+        order: 4,
+      },
+    ],
+  },
+};
+
+export const iconName: { [key: string]: string } = {
+  mail: 'mail2',
+  instagram: 'nsta',
+};

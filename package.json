@@ -24,6 +24,7 @@
     "chalk": "4.1.0",
     "config": "3.3.3",
     "css-loader": "4.3.0",
+    "dayjs": "1.9.8",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "eslint": "^7.11.0",

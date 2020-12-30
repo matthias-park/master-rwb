@@ -14,7 +14,7 @@ const App = () => {
   const { locale } = useConfig();
   return (
     <BrowserRouter basename={`/${locale}`}>
-      <Helmet>
+      <Helmet htmlAttributes={{ lang: locale }}>
         <title>{headData.title}</title>
         {headData.links?.map(linkProps => (
           <link {...linkProps} />
@@ -30,7 +30,7 @@ const App = () => {
         <PageLayout>
           <Routes />
         </PageLayout>
-        <BgBackdrop/>
+        <BgBackdrop />
       </ErrorBoundary>
     </BrowserRouter>
   );

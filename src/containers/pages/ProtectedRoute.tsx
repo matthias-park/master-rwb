@@ -9,25 +9,18 @@ interface Props extends RouteProps {
 const ProtectedRoute = ({
   children,
   redirectTo = '/login',
-  ...rest
+  ...props
 }: Props) => {
-  const config = useConfig();
-
+  const { user } = useConfig();
+  if (user.logged_in) {
+    return <Route {...props} />;
+  }
   return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        config.user && config.user.id ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: redirectTo,
-              state: { from: location },
-            }}
-          />
-        )
-      }
+    <Redirect
+      to={{
+        pathname: redirectTo,
+        state: { from: props.location },
+      }}
     />
   );
 };

@@ -13,7 +13,10 @@ export const formatUrl = (
 };
 
 export const getApi = <T>(url: string): Promise<T> =>
-  fetch(`${API_URL}${url}`)
+  fetch(`${API_URL}${url}`, {
+    mode: 'cors',
+    credentials: 'include',
+  })
     .then(r => r.json())
     .catch(err => {
       console.log(err);
@@ -23,6 +26,8 @@ export const getApi = <T>(url: string): Promise<T> =>
 export const postApi = <T>(url: string, body?: unknown): Promise<T> => {
   const config: RequestInit = {
     method: 'post',
+    mode: 'cors',
+    credentials: 'include',
     headers: new Headers(),
   };
   if (body) {
