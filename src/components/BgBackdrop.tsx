@@ -7,15 +7,13 @@ const BgBackdrop = () => {
   const { bgBackdrop } = useBgBackdrop();
 
   useEffect(() => {
-    if (bgBackdrop)
-      document.querySelector('body')!.classList.add('modal-open');
-    else
-      document.querySelector('body')!.classList.remove('modal-open');
-  }, [bgBackdrop])
+    if (bgBackdrop) document.querySelector('body')!.classList.add('modal-open');
+    else document.querySelector('body')!.classList.remove('modal-open');
+  }, [bgBackdrop]);
   return createPortal(
-      <div className={`bg-overlay ${ bgBackdrop && 'show'}`}></div>,
-      portalDiv
-  )
-}
+    <div className={`bg-overlay ${bgBackdrop && 'show'}`}></div>,
+    portalDiv,
+  );
+};
 
 export default BgBackdrop;

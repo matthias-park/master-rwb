@@ -1,14 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
-import { useI18n } from '../../hooks/useI18n';
 import { getApi } from '../../utils/apiUtils';
-import LoginModal from '../LoginModal';
-import { HEADER_ROUTES } from '../../constants';
 import { useBgBackdrop } from '../../hooks/useBgBackdrop';
-import HeaderUserInfo from '../../components/header/HeaderUserInfo';
-import HeaderLoginButton from '../../components/header/HeaderLoginButton';
-import HeaderLink from '../../types/HeaderLinks';
 import LoginDropdown from '../LoginDropdown';
 import UserInfoBlock from '../../components/header/UserInfoBlock';
 import { Navbar, Dropdown } from 'react-bootstrap';
@@ -162,6 +156,7 @@ const PageHeader = () => {
                     <img
                       className="drawgames-card__img"
                       src="/assets/images/drawgames/loto.png"
+                      alt=""
                     />
                     <div className="d-flex justify-content-end">
                       <div className="drawgames-card__text ml-auto">
@@ -182,6 +177,7 @@ const PageHeader = () => {
                     <img
                       className="drawgames-card__img"
                       src="/assets/images/drawgames/millions.png"
+                      alt=""
                     />
                     <div className="d-flex justify-content-end">
                       <div className="drawgames-card__text ml-auto">
@@ -202,6 +198,7 @@ const PageHeader = () => {
                     <img
                       className="drawgames__game-img"
                       src="/assets/images/drawgames/life.png"
+                      alt=""
                     />
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -211,6 +208,7 @@ const PageHeader = () => {
                     <img
                       className="drawgames__game-img"
                       src="/assets/images/drawgames/cash.png"
+                      alt=""
                     />
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -220,6 +218,7 @@ const PageHeader = () => {
                     <img
                       className="drawgames__game-img"
                       src="/assets/images/drawgames/woohoo.png"
+                      alt=""
                     />
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -229,6 +228,7 @@ const PageHeader = () => {
                     <img
                       className="drawgames__game-img"
                       src="/assets/images/drawgames/kraspelen.png"
+                      alt=""
                     />
                   </Dropdown.Item>
                   <div className="d-flex w-100 mt-3 mb-2">
@@ -261,6 +261,7 @@ const PageHeader = () => {
                     <img
                       className="drawgames__game-img"
                       src="/assets/images/drawgames/loto.png"
+                      alt=""
                     />
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -270,6 +271,7 @@ const PageHeader = () => {
                     <img
                       className="drawgames__game-img"
                       src="/assets/images/drawgames/millions.png"
+                      alt=""
                     />
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -279,6 +281,7 @@ const PageHeader = () => {
                     <img
                       className="drawgames__game-img"
                       src="/assets/images/drawgames/joker.png"
+                      alt=""
                     />
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -288,6 +291,7 @@ const PageHeader = () => {
                     <img
                       className="drawgames__game-img"
                       src="/assets/images/drawgames/viking.png"
+                      alt=""
                     />
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -297,6 +301,7 @@ const PageHeader = () => {
                     <img
                       className="drawgames__game-img"
                       src="/assets/images/drawgames/keno.png"
+                      alt=""
                     />
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -306,6 +311,7 @@ const PageHeader = () => {
                     <img
                       className="drawgames__game-img"
                       src="/assets/images/drawgames/3-pick.png"
+                      alt=""
                     />
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -315,6 +321,7 @@ const PageHeader = () => {
                     <img
                       className="drawgames__game-img"
                       src="/assets/images/drawgames/extra.png"
+                      alt=""
                     />
                   </Dropdown.Item>
                   <div className="d-flex w-100 mt-3 mb-2">

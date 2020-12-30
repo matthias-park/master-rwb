@@ -10,15 +10,15 @@ const RegisterPage = () => {
   return (
     <main className="registration">
       <div className="reg-block">
-        <RegSelection/>
-        <HelpBlock/>
-        <OnlineForm/>
-        <StoreForm/>
-        <RegVerification/>
-        <RegWelcome/>
+        <RegSelection />
+        <HelpBlock />
+        <OnlineForm />
+        <StoreForm />
+        <RegVerification />
+        <RegWelcome />
       </div>
     </main>
-  )
+  );
 };
 
 export default RegisterPage;

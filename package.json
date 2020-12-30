@@ -109,7 +109,7 @@
     "lint": "npm run eslint src",
     "lint:fix": "npm run eslint --fix src",
     "lint:css": "stylelint styles/**/*.css",
-    "prettify": "prettier --write"
+    "prettify": "prettier --write src"
   },
   "browserslist": {
     "production": [
@@ -134,7 +134,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "npm run eslint --fix"
+      "npm run lint:fix",
+      "npm run prettify"
     ],
     "*.{md,json}": [
       "prettier --write"
