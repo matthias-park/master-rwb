@@ -2,10 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { getApi } from '../../utils/apiUtils';
-import { useBgBackdrop } from '../../hooks/useBgBackdrop';
 import LoginDropdown from '../LoginDropdown';
 import UserInfoBlock from '../../components/header/UserInfoBlock';
 import { Navbar, Dropdown } from 'react-bootstrap';
+import { useUIConfig } from '../../hooks/useUIConfig';
+import { ComponentName } from '../../constants';
 
 const LocaleSelector = () => {
   const { locales, locale, setLocale } = useConfig();
@@ -54,19 +55,22 @@ const LocaleSelector = () => {
 
 const PageHeader = () => {
   const { user, mutateUser } = useConfig();
-  const { bgBackdrop, setBgBackdrop } = useBgBackdrop();
+  const { backdrop } = useUIConfig();
 
   const handleLogout = async () => {
     await getApi('/players/logout');
     mutateUser({ id: 0 });
   };
-
   return (
     <Navbar
       bg="light"
       expand="xl"
-      className="header"
-      onToggle={() => setBgBackdrop(!bgBackdrop)}
+      className={`header ${
+        backdrop.ignoredComponents.includes(ComponentName.Header)
+          ? 'on-top'
+          : ''
+      }`}
+      onToggle={expanded => backdrop.toggle(expanded)}
     >
       <Link className="header__mobile-logo" to="/">
         <img

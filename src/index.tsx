@@ -7,20 +7,25 @@ import App from './containers/App';
 import { HelmetProvider } from 'react-helmet-async';
 import { ConfigProvider } from './hooks/useConfig';
 import { I18nProvider } from './hooks/useI18n';
-import { BgBackdropProvider } from './hooks/useBgBackdrop';
+import { SWRConfig } from 'swr';
+import { SwrFetcherConfig } from './utils/apiUtils';
+import { UIConfigProvider } from 'hooks/useUIConfig';
+
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(
-  <ConfigProvider>
-    <I18nProvider>
-      <HelmetProvider>
-        <BgBackdropProvider>
-          <React.StrictMode>
-            <App />
-          </React.StrictMode>
-        </BgBackdropProvider>
-      </HelmetProvider>
-    </I18nProvider>
-  </ConfigProvider>,
+  <SWRConfig value={SwrFetcherConfig}>
+    <ConfigProvider>
+      <I18nProvider>
+        <HelmetProvider>
+          <UIConfigProvider>
+            <React.StrictMode>
+              <App />
+            </React.StrictMode>
+          </UIConfigProvider>
+        </HelmetProvider>
+      </I18nProvider>
+    </ConfigProvider>
+  </SWRConfig>,
   MOUNT_NODE,
 );

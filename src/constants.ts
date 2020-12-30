@@ -2,6 +2,12 @@ import { ConfigRoute } from './types/Config';
 import HeadData from './types/HeadData';
 import HeaderLink from './types/HeaderLinks';
 
+export enum ComponentName {
+  Header,
+  Footer,
+  LoginDropdown,
+}
+
 export const HEADER_ROUTES: HeaderLink[] = [
   {
     path: '/sports',

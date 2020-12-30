@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-unfetch';
+import { ConfigInterface } from 'swr';
 
 const API_URL = window.API_URL;
 
@@ -40,4 +41,21 @@ export const postApi = <T>(url: string, body?: unknown): Promise<T> => {
       console.log(err);
       return null;
     });
+};
+
+export const SwrFetcherConfig: ConfigInterface<
+  any,
+  any,
+  (...args: any) => any
+> = {
+  fetcher: getApi,
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false,
+  shouldRetryOnError: true,
+  errorRetryInterval: 5000,
+  errorRetryCount: 3,
+  onError: (err, key) => {
+    console.log(`error fething ${key}`);
+    console.log(err);
+  },
 };

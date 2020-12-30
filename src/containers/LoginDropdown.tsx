@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { postApi } from '../utils/apiUtils';
 import { useConfig } from '../hooks/useConfig';
-import { useBgBackdrop } from '../hooks/useBgBackdrop';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { useUIConfig } from '../hooks/useUIConfig';
+import { ComponentName } from '../constants';
 
 interface Props {
   dropdownClasses?: string;
@@ -13,7 +14,7 @@ const LoginDropdown = ({ dropdownClasses, toggleClasses }: Props) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { mutateUser } = useConfig();
-  const { bgBackdrop, setBgBackdrop } = useBgBackdrop();
+  const { backdrop } = useUIConfig();
 
   const handleLogin = async e => {
     e.preventDefault();
@@ -21,13 +22,14 @@ const LoginDropdown = ({ dropdownClasses, toggleClasses }: Props) => {
       login: username,
       password,
     });
+    backdrop.hide();
     mutateUser();
   };
 
   return (
     <Dropdown
       className={`login-dropdown ${dropdownClasses}`}
-      onToggle={() => setBgBackdrop(!bgBackdrop)}
+      onToggle={isOpen => backdrop.toggle(isOpen, [ComponentName.Header])}
     >
       <Dropdown.Toggle
         variant="outline-primary"
