@@ -6,7 +6,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import useDesktopWidth from 'hooks/useDesktopWidth';
 import SessionTimer from 'components/SessionTimer';
 import { useI18n } from '../../hooks/useI18n';
-import { sortNumber } from '../../utils/index';
+import { sortAscending } from '../../utils/index';
 
 const FooterHeader = () => {
   const { t } = useI18n();
@@ -15,7 +15,6 @@ const FooterHeader = () => {
       <div className="session-block mb-2 mb-sm-0">
         <span className="session-block__text text-14">
           {t('time_spent_in_website')}
-          {/* Tijd besteed op nationale-loterij.be: */}
         </span>
         <i className="icon-clock"></i>
         <span className="session-block__time text-14">
@@ -32,8 +31,6 @@ const FooterHeader = () => {
         />
         <span className="restrictions-block__text text-14 mr-3 d-none d-sm-block d-md-none d-lg-block">
           {t('minimum_age_disclaimer')}
-          {/* Minderjarigen mogen niet deelnemen aan de spelen van de Nationale
-          Loterij. */}
         </span>
         <img
           className="restrictions-block__img mr-3"
@@ -61,7 +58,7 @@ const FooterBottom = ({ data }: { data: SubFooter }) => (
     </span>
     <ul className="footer-sub__nav ml-auto">
       {data.links
-        .sort((a, b) => sortNumber(a.order, b.order))
+        .sort((a, b) => sortAscending(a.order, b.order))
         .map(link => (
           <li
             key={`${link.name}-${link.link}`}
@@ -113,18 +110,20 @@ const SocialSection = ({ social }: { social: SocialLinks }) => {
         )}
         <p className="section-social__title">{t('find_us_in_social')}</p>
         <p className="section-social__icons">
-          {Object.entries(webSocial).map(([key, value]) => (
-            <a key={key} href={value} className="section-social__icons-link">
-              <i className={`icon-${iconName[key] || key}`}></i>
-            </a>
-          ))}
+          {Object.entries(webSocial)
+            .filter(Boolean)
+            .map(([key, value]) => (
+              <a key={key} href={value} className="section-social__icons-link">
+                <i className={`icon-${iconName[key] || key}`}></i>
+              </a>
+            ))}
         </p>
       </div>
     </section>
   );
 };
 
-const SortedFooterLinks = ({ links }: { links: FooterLink[] }) => {
+const SortedFooterLinks = ({ links }: { links: FooterLink[] }): any => {
   const desktopWidth = useDesktopWidth(768);
   const FooterLink = useMemo(
     () => ({
@@ -134,67 +133,41 @@ const SortedFooterLinks = ({ links }: { links: FooterLink[] }) => {
     }),
     [desktopWidth],
   );
-  let skipColumns: FooterLink[] = [];
-  return (
-    <>
-      {links
-        .sort((a, b) => a.order - b.order)
-        .flatMap((column, index) => {
-          if (skipColumns.some(skip => skip.name === column.name)) {
-            return [];
-          } else {
-            const oneRow = column.children.length > 4;
-            let mergedColumns = [column];
-            if (!oneRow) {
-              let columnsChildrenLength = column.children.length;
-              while (columnsChildrenLength < 4) {
-                columnsChildrenLength +=
-                  links[index + mergedColumns.length].children.length;
-                skipColumns.push(links[index + mergedColumns.length]);
-                mergedColumns = [
-                  ...mergedColumns,
-                  links[index + mergedColumns.length],
-                ];
-              }
-            }
-            return (
-              <section key={column.name} className="footer-links-block">
-                {mergedColumns.map(mergedColumn => {
-                  const sortedChildren = mergedColumn.children.sort(
-                    (a, b) => a.order - b.order,
-                  );
-                  return (
-                    <FooterLink.Container
-                      key={mergedColumn.name}
-                      className="section-item"
+  return links
+    .sort((a, b) => sortAscending(a.order, b.order))
+    .map((column, index) => (
+      <section key={index} className="footer-links-block">
+        {column.children
+          .sort((a, b) => sortAscending(a.order, b.order))
+          .map(linkContainer => (
+            <FooterLink.Container
+              key={linkContainer.name}
+              className="section-item"
+            >
+              <FooterLink.Title as="h3" className="section-item__title">
+                {linkContainer.name}
+              </FooterLink.Title>
+              <FooterLink.Children>
+                {linkContainer.children
+                  .sort((a, b) => sortAscending(a.order, b.order))
+                  .map(child => (
+                    <Link
+                      key={child.name}
+                      to={child.link || '#'}
+                      className={
+                        child.button
+                          ? 'btn btn-outline-gray-700 btn-sm my-3'
+                          : 'section-item__link'
+                      }
                     >
-                      <FooterLink.Title as="h3" className="section-item__title">
-                        {mergedColumn.name}
-                      </FooterLink.Title>
-                      <FooterLink.Children>
-                        {sortedChildren.map(child => (
-                          <Link
-                            key={child.name}
-                            to={child.link || '#'}
-                            className={
-                              child.button
-                                ? 'btn btn-outline-gray-700 btn-sm my-3'
-                                : 'section-item__link'
-                            }
-                          >
-                            {child.name}
-                          </Link>
-                        ))}
-                      </FooterLink.Children>
-                    </FooterLink.Container>
-                  );
-                })}
-              </section>
-            );
-          }
-        })}
-    </>
-  );
+                      {child.name}
+                    </Link>
+                  ))}
+              </FooterLink.Children>
+            </FooterLink.Container>
+          ))}
+      </section>
+    ));
 };
 
 const PageFooter = () => {

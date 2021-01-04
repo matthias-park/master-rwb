@@ -1,11 +1,14 @@
 export interface FooterLink {
-  name: string;
   order: number;
   children: {
     name: string;
-    link?: string;
     order: number;
-    button?: boolean;
+    children: {
+      name: string;
+      link?: string;
+      order: number;
+      button?: boolean;
+    }[];
   }[];
 }
 

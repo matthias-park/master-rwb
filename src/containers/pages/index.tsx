@@ -13,24 +13,25 @@ import ProtectedRoute from 'containers/pages/ProtectedRoute';
 import { Route, Switch } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import NotFoundPage from './notFoundPage';
+import { ComponentName } from '../../constants';
 
 const LoadableFaqPage = loadable(() => import('./faqPage'));
 const LoadableLoginPage = loadable(() => import('./loginPage'));
 const LoadableRegisterPage = loadable(() => import('./registerPage'));
 
 export const COMPONENT_PAGES = {
-  bonus: BonusPage,
-  cookiePolicy: CookiePolicyPage,
-  deposit: DepositPage,
-  faq: LoadableFaqPage,
-  home: HomePage,
-  limits: LimitsPage,
-  login: LoadableLoginPage,
-  promotions: PromotionsPage,
-  register: LoadableRegisterPage,
-  settings: SettingsPage,
-  sports: SportsPage,
-  withdrawal: WithdrawalPage,
+  [ComponentName.BonusPage]: BonusPage,
+  [ComponentName.CookiePolicyPage]: CookiePolicyPage,
+  [ComponentName.DepositPage]: DepositPage,
+  [ComponentName.FaqPage]: LoadableFaqPage,
+  [ComponentName.HomePage]: HomePage,
+  [ComponentName.LimitsPage]: LimitsPage,
+  [ComponentName.LoginPage]: LoadableLoginPage,
+  [ComponentName.PromotionsPage]: PromotionsPage,
+  [ComponentName.RegisterPage]: LoadableRegisterPage,
+  [ComponentName.SettingsPage]: SettingsPage,
+  [ComponentName.SportsPage]: SportsPage,
+  [ComponentName.WithdrawalPage]: WithdrawalPage,
 };
 
 const Routes = () => {

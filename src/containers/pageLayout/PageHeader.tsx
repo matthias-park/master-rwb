@@ -7,6 +7,7 @@ import UserInfoBlock from '../../components/header/UserInfoBlock';
 import { Navbar, Dropdown } from 'react-bootstrap';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName } from '../../constants';
+import clsx from 'clsx';
 
 const LocaleSelector = () => {
   const { locales, locale, setLocale } = useConfig();
@@ -23,8 +24,9 @@ const LocaleSelector = () => {
         <Dropdown.Menu>
           {locales.map(lang => (
             <Dropdown.Item
-              className={`lang-${lang} header__nav-item-link text-uppercase`}
+              className={`lang-${lang} header__nav-item-link text-uppercase cursor-pointer`}
               key={lang}
+              as="div"
               onClick={() => {
                 setLocale(lang);
               }}
@@ -37,9 +39,11 @@ const LocaleSelector = () => {
       <li className="d-flex d-xl-none languages">
         {locales.map(lang => (
           <div
-            className={`lang-${lang} header__nav-item-link text-uppercase cursor-pointer ${
-              lang === locale ? 'font-weight-bold' : ''
-            }`}
+            className={clsx(
+              `lang-${lang}`,
+              'header__nav-item-link text-uppercase cursor-pointer',
+              lang === locale && 'font-weight-bold',
+            )}
             key={lang}
             onClick={() => {
               setLocale(lang);

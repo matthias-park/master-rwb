@@ -55,23 +55,23 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
           ],
         },
       );
-      setData(
-        trans.reduce((obj, symbol) => {
-          obj[symbol.key] = symbol.translation;
-          return obj;
-        }, {}),
-      );
+      if (trans) {
+        setData(
+          trans.reduce((obj, symbol) => {
+            obj[symbol.key] = symbol.translation;
+            return obj;
+          }, {}),
+        );
+      }
     })();
   }, [locale]);
   const [translations, setTranslations] = useState(() =>
     createLocale(locale, data),
   );
 
-  const hasChanged = translations.locale() !== locale;
-
   useEffect(() => {
     setTranslations(createLocale(locale, data));
-  }, [hasChanged, data, locale]);
+  }, [data, locale]);
 
   return <I18nContext.Provider value={translations} {...props} />;
 };

@@ -6,6 +6,19 @@ export enum ComponentName {
   Header,
   Footer,
   LoginDropdown,
+  HomePage,
+  CookiePolicyPage,
+  FaqPage,
+  SportsPage,
+  LoginPage,
+  RegisterPage,
+  PromotionsPage,
+  BonusPage,
+  DepositPage,
+  LimitsPage,
+  SettingsPage,
+  WithdrawalPage,
+  ForgotPasswordPage,
 }
 
 export const HEADER_ROUTES: HeaderLink[] = [
@@ -136,56 +149,60 @@ export const HEAD_DATA: HeadData = {
 export const NAVIGATION_ROUTES: ConfigRoute[] = [
   {
     path: '/',
-    id: 'home',
+    id: ComponentName.HomePage,
   },
   {
     path: '/cookie-policy',
-    id: 'cookiePolicy',
+    id: ComponentName.CookiePolicyPage,
   },
   {
     path: '/faq',
-    id: 'faq',
+    id: ComponentName.FaqPage,
   },
   {
     path: '/sports',
-    id: 'sports',
+    id: ComponentName.SportsPage,
   },
   {
     path: '/login',
-    id: 'login',
+    id: ComponentName.LoginPage,
   },
   {
     path: '/register',
-    id: 'register',
+    id: ComponentName.RegisterPage,
   },
   {
     path: '/promotions',
-    id: 'promotions',
+    id: ComponentName.PromotionsPage,
   },
   {
     path: '/bonus',
-    id: 'bonus',
+    id: ComponentName.BonusPage,
     protected: true,
   },
   {
     path: '/deposit',
-    id: 'deposit',
+    id: ComponentName.DepositPage,
     protected: true,
   },
   {
     path: '/limits',
-    id: 'limits',
+    id: ComponentName.LimitsPage,
     protected: true,
   },
   {
     path: '/settings',
-    id: 'settings',
+    id: ComponentName.SettingsPage,
     protected: true,
   },
   {
     path: '/withdrawal',
-    id: 'withdrawal',
+    id: ComponentName.WithdrawalPage,
     protected: true,
+  },
+  {
+    path: '/forgot_password',
+    id: ComponentName.ForgotPasswordPage,
   },
 ];
 
@@ -193,113 +210,128 @@ export const AVAILABLE_LOCALES = ['en', 'nl', 'lt'];
 
 export const FOOTER_LINKS = [
   {
-    name: 'Help',
     order: 1,
     children: [
       {
-        name: 'FAQ',
-        link: '/faq',
+        name: 'Help',
         order: 1,
+        children: [
+          {
+            name: 'FAQ',
+            link: '/faq',
+            order: 1,
+          },
+          {
+            name: 'Contact',
+            link: '/contact',
+            order: 2,
+          },
+        ],
       },
       {
-        name: 'Contact',
-        link: '/contact',
+        name: 'Privacy',
         order: 2,
+        children: [
+          {
+            name: 'Our privacy policy',
+            link: '/security-privacy',
+            order: 1,
+          },
+          {
+            name: 'Manage your preferences',
+            link: '/preferences',
+            order: 2,
+          },
+        ],
       },
     ],
   },
   {
-    name: 'Privacy',
     order: 2,
     children: [
       {
-        name: 'Our privacy policy',
-        link: '/security-privacy',
+        name: 'How and where can you play?',
         order: 1,
-      },
-      {
-        name: 'Manage your preferences',
-        link: '/preferences',
-        order: 2,
+        children: [
+          {
+            name: 'Find a store',
+            link: '/find-store',
+            order: 1,
+          },
+          {
+            name: 'Play online',
+            link: '/play-online',
+            order: 2,
+          },
+          {
+            name: 'Subscriptions',
+            link: '/subscriptions',
+            order: 3,
+          },
+          {
+            name: 'Play responsibly',
+            link: '/play-responsibly',
+            order: 4,
+          },
+          {
+            name: 'All possibilities',
+            link: '/where-to-play',
+            order: 5,
+            button: true,
+          },
+        ],
       },
     ],
   },
   {
-    name: 'How and where can you play?',
     order: 3,
     children: [
       {
-        name: 'Find a store',
-        link: '/find-store',
+        name: 'More than playing',
         order: 1,
-      },
-      {
-        name: 'Play online',
-        link: '/play-online',
-        order: 2,
-      },
-      {
-        name: 'Subscriptions',
-        link: '/subscriptions',
-        order: 3,
-      },
-      {
-        name: 'Play responsibly',
-        link: '/play-responsibly',
-        order: 4,
-      },
-      {
-        name: 'All possibilities',
-        link: '/where-to-play',
-        order: 5,
-        button: true,
-      },
-    ],
-  },
-  {
-    name: 'More than playing',
-    order: 4,
-    children: [
-      {
-        name: 'About us',
-        link: '/about',
-        order: 1,
-      },
-      {
-        name: ' Our mission and assignment',
-        link: '/mission',
-        order: 2,
-      },
-      {
-        name: 'Charities',
-        link: '/charities',
-        order: 3,
-      },
-      {
-        name: 'Grants and sponsorships',
-        link: '/sponsorships',
-        order: 4,
-      },
-      {
-        name: 'Our services',
-        link: '/services',
-        order: 5,
-      },
-      {
-        name: 'Jobs',
-        link: '/jobs',
-        order: 6,
-      },
-      {
-        name: 'Press',
-        link: '/press',
-        order: 7,
-      },
-      {
-        name: 'All over play',
-        link: '/play',
-        order: 8,
-        button: true,
+        children: [
+          {
+            name: 'About us',
+            link: '/about',
+            order: 1,
+          },
+          {
+            name: ' Our mission and assignment',
+            link: '/mission',
+            order: 2,
+          },
+          {
+            name: 'Charities',
+            link: '/charities',
+            order: 3,
+          },
+          {
+            name: 'Grants and sponsorships',
+            link: '/sponsorships',
+            order: 4,
+          },
+          {
+            name: 'Our services',
+            link: '/services',
+            order: 5,
+          },
+          {
+            name: 'Jobs',
+            link: '/jobs',
+            order: 6,
+          },
+          {
+            name: 'Press',
+            link: '/press',
+            order: 7,
+          },
+          {
+            name: 'All over play',
+            link: '/play',
+            order: 8,
+            button: true,
+          },
+        ],
       },
     ],
   },

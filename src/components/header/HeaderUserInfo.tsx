@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 import { Link } from 'react-router-dom';
+import clsx from 'clsx';
 
 const UserMenuLink = ({ link, icon, name }) => (
   <Link
@@ -53,9 +54,10 @@ const HeaderUserInfo = ({ user, handleLogout }) => {
       </button>
       <div
         ref={ref}
-        className={`menu__blocks--container account mr-xl-2 collapse ${
-          showMenu ? 'show' : ''
-        }`}
+        className={clsx(
+          'menu__blocks--container account mr-xl-2 collapse',
+          showMenu && 'show',
+        )}
         id="navbarAccCollapseContent"
       >
         <div className="">
