@@ -1,5 +1,6 @@
 import { UIBackdrop, UIBackdropState } from 'types/UIConfig';
 import { ComponentName } from '../constants';
+import { throttle } from './index';
 
 export const changeBackdropVisibility = (visibility: boolean) => {
   const SHOW_CLASS = 'show';
@@ -20,20 +21,25 @@ export const changeBodyScroll = (enabledScroll: boolean) => {
   return classList.add(DISABLED_SCROLL_CLASS);
 };
 
+let setNewBackdropCallback;
 export const createBackdropProviderValues = (
   backdrop: UIBackdropState,
   setBackdrop: (newState: UIBackdropState) => void,
 ): UIBackdrop => {
+  if (!setNewBackdropCallback) {
+    setNewBackdropCallback = throttle(setBackdrop, 300);
+  }
   const toggle = (show?: boolean, ignoredComponents: ComponentName[] = []) => {
     const active = show ?? !backdrop.active;
-    setBackdrop({
+    setNewBackdropCallback({
       active,
       ignoredComponents: active ? ignoredComponents : [],
     });
   };
   const show = (ignoredComponents: ComponentName[] = []) =>
-    setBackdrop({ active: true, ignoredComponents });
-  const hide = () => setBackdrop({ active: false, ignoredComponents: [] });
+    setNewBackdropCallback({ active: true, ignoredComponents });
+  const hide = () =>
+    setNewBackdropCallback({ active: false, ignoredComponents: [] });
 
   return {
     ...backdrop,
