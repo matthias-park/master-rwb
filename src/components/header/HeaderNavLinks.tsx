@@ -40,7 +40,8 @@ export const HeaderNavCardLink = ({ data, mobile }: HeaderNavLinkProps) => {
                 key={`${card.path}-${card.logo}`}
                 className={clsx(
                   smallCard ? 'drawgames__game' : 'drawgames-card',
-                  card.color && `drawgames__game--${card.color}`,
+                  card.color &&
+                    `drawgames${smallCard ? '__game' : '-card'}--${card.color}`,
                 )}
                 {...cardLinkProps}
               >
@@ -60,7 +61,7 @@ export const HeaderNavCardLink = ({ data, mobile }: HeaderNavLinkProps) => {
                             className={clsx(
                               'drawgames-card__text-small',
                               card.smallTextIcon &&
-                                'drawgames-card__text-small--icon"',
+                                'drawgames-card__text-small--icon',
                             )}
                           >
                             {card.smallText}
@@ -78,12 +79,15 @@ export const HeaderNavCardLink = ({ data, mobile }: HeaderNavLinkProps) => {
                       </Link>
                     )}
                     {card.button2 && (
-                      <Link
-                        to={card.button2.path}
-                        className="drawgames-card__link"
-                      >
-                        {card.button2.name}
-                      </Link>
+                      <>
+                        {' '}
+                        <Link
+                          to={card.button2.path}
+                          className="drawgames-card__link"
+                        >
+                          {card.button2.name}
+                        </Link>
+                      </>
                     )}
                   </>
                 )}

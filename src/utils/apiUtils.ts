@@ -5,12 +5,12 @@ const API_URL = window.API_URL;
 
 export const formatUrl = (
   url: string,
-  params: { [key: string]: string },
+  params: { [key: string]: string } = {},
 ): string => {
   const paramsArr = Object.keys(params)
     .filter(key => params[key])
     .map(key => `${key}=${params[key]}`);
-  return `${url}?${paramsArr.join('&')}`;
+  return `${url}${paramsArr.length ? '?' : ''}${paramsArr.join('&')}`;
 };
 
 export const getApi = <T>(url: string): Promise<T> =>

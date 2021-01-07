@@ -98,12 +98,12 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
 
   const handleLogout = async () => {
     await getApi('/players/logout');
-    mutateUser({ id: 0 });
+    mutateUser();
   };
   if (user.id) {
     return (
       <UserInfoBlock
-        dropdownClasses={clsx('ml-auto', !mobile && 'mr-1')}
+        dropdownClasses={clsx('d-flex ml-auto', !mobile && 'mr-1')}
         isMobile={mobile}
         user={user}
         handleLogout={handleLogout}

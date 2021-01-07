@@ -1,19 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Dropdown from 'react-bootstrap/Dropdown';
 
-const UserMenuLink = ({ link, name }) => (
+const UserMenuLink = ({ link, name, setShowDropdown }) => (
   <li className="user-menu__list-item">
-    <Link to={link} className="user-menu__list-item-link">
+    <Link
+      to={link}
+      onClick={() => setShowDropdown(false)}
+      className="user-menu__list-item-link"
+    >
       {name}
     </Link>
   </li>
 );
 
 const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
+  const [showDropdown, setShowDropdown] = useState(false);
   return (
     <Dropdown
       className={`header__user-menu user-menu-dropdown ${dropdownClasses}`}
+      show={showDropdown}
+      onToggle={isOpen => setShowDropdown(isOpen)}
     >
       <div className="header__user-menu-info">
         <strong className="text-primary-light">{user.name}</strong>
@@ -34,7 +41,11 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
             as="button"
             className="header__user-menu-toggle user-menu-dropdown"
           >
-            <i className="icon-down header__user-menu-toggle-icon"></i>
+            <i
+              className={`icon-${
+                showDropdown ? 'up' : 'down'
+              } header__user-menu-toggle-icon`}
+            ></i>
           </Dropdown.Toggle>
         </>
       )}
@@ -70,7 +81,12 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
               name: 'Settings',
             },
           ].map(link => (
-            <UserMenuLink key={link.link} link={link.link} name={link.name} />
+            <UserMenuLink
+              key={link.link}
+              link={link.link}
+              name={link.name}
+              setShowDropdown={setShowDropdown}
+            />
           ))}
         </ul>
         <div className="club-card">

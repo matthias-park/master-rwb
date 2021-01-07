@@ -8,6 +8,7 @@ import { ComponentName } from '../constants';
 import clsx from 'clsx';
 import { useI18n } from '../hooks/useI18n';
 import { Link, useLocation } from 'react-router-dom';
+import { Spinner } from 'react-bootstrap';
 
 interface Props {
   dropdownClasses?: string;
@@ -22,6 +23,7 @@ const LoginForm = () => {
   const { t } = useI18n();
   const { register, handleSubmit, errors } = useForm<LoginFromData>();
   const [passwordVisible, setPasswordVisibility] = useState(false);
+  const [loginInProgress, setLoginInProgress] = useState(false);
   const { mutateUser, routes } = useConfig();
   const { backdrop } = useUIConfig();
   const forgotPasswordRoute = useMemo(
@@ -34,10 +36,12 @@ const LoginForm = () => {
     setPasswordVisibility(prevValue => !prevValue);
 
   const onSubmit = async ({ email, password }) => {
+    setLoginInProgress(true);
     await postApi('/players/login.json', {
       login: email,
       password,
     });
+    setLoginInProgress(false);
     backdrop.hide();
     mutateUser();
   };
@@ -129,6 +133,17 @@ const LoginForm = () => {
         </Link>
       </div>
       <button className="btn btn-primary d-block mx-auto mt-4 px-5">
+        {loginInProgress && (
+          <>
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />{' '}
+          </>
+        )}
         {'login_submit'}
       </button>
     </form>
