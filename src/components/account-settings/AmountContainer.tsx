@@ -7,7 +7,7 @@ const AmountContainer = ({ title, amount }) => {
       <h2 className="amount-container__amount">€ {amount}</h2>
       <i className="amount-container__icon icon-tooltip"></i>
     </div>
-  )
-}
+  );
+};
 
 export default AmountContainer;

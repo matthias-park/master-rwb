@@ -27,8 +27,8 @@ const profileSidebarLinks = [
   },
   {
     name: 'Transactions',
-    link: '/transactions'
-  }
+    link: '/transactions',
+  },
 ];
 const helpLinks = [
   {
@@ -74,9 +74,9 @@ const LayoutWithSidebar = ({ rightSidebar, children }) => {
         {children}
         {rightSidebar && (
           <div className="right-sidebar">
-            <HelpBlock title="Is er iets niet duidelijk" blocks={['phone']}/>
-          </div>)
-        }
+            <HelpBlock title="Is er iets niet duidelijk" blocks={['phone']} />
+          </div>
+        )}
       </div>
       <PageFooter />
     </>

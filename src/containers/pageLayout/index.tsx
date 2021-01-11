@@ -35,7 +35,9 @@ const PageLayout = ({ children }) => {
     <>
       <PageHeader />
       {sidebarLayout ? (
-        <LayoutWithSidebar rightSidebar={rightSidebarLayout}>{children}</LayoutWithSidebar>
+        <LayoutWithSidebar rightSidebar={rightSidebarLayout}>
+          {children}
+        </LayoutWithSidebar>
       ) : (
         <>
           {children}
