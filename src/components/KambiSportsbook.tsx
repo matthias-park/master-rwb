@@ -14,28 +14,21 @@ interface Props extends KambiSportsbookProps {
   updateBalance: () => void;
 }
 
-let insertLock = false;
 const insertKambiBootstrap = (containerRef: HTMLDivElement): void => {
-  if (insertLock) return;
-  insertLock = true;
-  Promise.resolve(disposeKambiBootstrap()).then(() => {
-    const id = 'kambi-bootstrap';
-    if (document.getElementById(id)) return;
-    const kambiSB = document.createElement('div');
-    kambiSB.id = 'KambiBC';
-    const s = document.createElement('script');
-    s.id = id;
-    s.setAttribute(
-      'src',
-      'https://ctn-static.kambi.com/client/bnlbe/kambi-bootstrap.js?cb=' +
-        new Date().getTime(),
-    );
-    containerRef.after(kambiSB);
-    kambiSB.after(s);
-    setTimeout(() => (insertLock = false), 500);
-  });
+  const id = 'kambi-bootstrap';
+  if (document.getElementById(id)) return;
+  const kambiSB = document.createElement('div');
+  kambiSB.id = 'KambiBC';
+  const s = document.createElement('script');
+  s.id = id;
+  s.setAttribute(
+    'src',
+    'https://ctn-static.kambi.com/client/bnlbe/kambi-bootstrap.js?cb=' +
+      new Date().getTime(),
+  );
+  containerRef.after(kambiSB);
+  kambiSB.after(s);
 };
-const disposeKambiBootstrap = () => window._kbc?.dispose?.();
 
 const KambiSportsbook = React.memo(
   (params: Props) => {
@@ -77,7 +70,7 @@ const KambiSportsbook = React.memo(
           insertKambiBootstrap(containerRef.current!);
         }
       }, 500);
-      return () => disposeKambiBootstrap();
+      return () => window.location.reload();
     }, [containerRef, params]);
 
     return <div ref={containerRef}></div>;

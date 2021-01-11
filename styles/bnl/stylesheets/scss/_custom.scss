@@ -20,6 +20,7 @@ body {
     &.modal-open {
       overflow: hidden;
     }
+    background-color: $white !important;
 }
 
 .text-14 {
@@ -174,4 +175,8 @@ body {
 }
 .cursor-pointer {
     cursor: pointer;
+}
+
+#KambiBC {
+    z-index: 0 !important;
 }

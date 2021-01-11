@@ -4,6 +4,7 @@ export interface ConfigRoute {
   id: ComponentName;
   path: string;
   protected?: true;
+  exact?: boolean;
 }
 
 type Config = {
