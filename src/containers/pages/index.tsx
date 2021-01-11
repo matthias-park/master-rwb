@@ -10,7 +10,7 @@ import LimitsPage from './limitsPage';
 import SettingsPage from './settingsPage';
 import WithdrawalPage from './withdrawalPage';
 import ProtectedRoute from 'containers/pages/ProtectedRoute';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import NotFoundPage from './notFoundPage';
 import { ComponentName } from '../../constants';
@@ -47,7 +47,7 @@ const Routes = () => {
         return (
           <RouteEl
             key={route.id}
-            exact={true}
+            exact={route.exact ?? true}
             path={route.path}
             component={page}
           />
