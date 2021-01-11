@@ -32,6 +32,7 @@ export const COMPONENT_PAGES = {
   [ComponentName.RegisterPage]: LoadableRegisterPage,
   [ComponentName.SettingsPage]: SettingsPage,
   [ComponentName.SportsPage]: SportsPage,
+  [ComponentName.TransactionsPage]: TransactionsPage,
   [ComponentName.WithdrawalPage]: WithdrawalPage,
 };
 

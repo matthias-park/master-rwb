@@ -270,6 +270,9 @@ footer {
         }
         &-link {
             list-style-type: none;
+            a {
+              color: white;
+            }
             @include media-breakpoint-down(md) {
                 padding-top: 18px;
                 &:nth-last-of-type(-n+3) {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ACCOUNT_SETTINGS, ComponentName } from '../../constants';
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
@@ -577,57 +578,19 @@ const DisablingYourAccount = ({ active, order }: SettingProps) => {
   );
 };
 
-const activeSettings = [
-  {
-    name: 'Required documents',
-    order: 1,
-    component: <RequiredDocuments order="0" />,
-    activeComponent: <RequiredDocuments order="0" active={true} />,
-  },
-  {
-    name: 'Marketing settings',
-    order: 2,
-    component: <MarketingSettings order="1" />,
-    activeComponent: <MarketingSettings order="1" active={true} />,
-  },
-  {
-    name: 'Betting Loss Limits',
-    order: 3,
-    component: <BettingLossLimits order="2" />,
-    activeComponent: <BettingLossLimits order="2" active={true} />,
-  },
-  {
-    name: 'Deposit Limit',
-    order: 4,
-    component: <DepositLimit order="3" />,
-    activeComponent: <DepositLimit order="3" active={true} />,
-  },
-  {
-    name: 'Set the wagering amount limit per period',
-    order: 5,
-    component: <SetTheWageringAmountLimitPerPeriod order="4" />,
-    activeComponent: (
-      <SetTheWageringAmountLimitPerPeriod order="4" active={true} />
-    ),
-  },
-  {
-    name: 'Set the wagering amount limit per session',
-    order: 6,
-    component: <SetTheWageringAmountLimitPerSession order="5" />,
-    activeComponent: (
-      <SetTheWageringAmountLimitPerSession order="5" active={true} />
-    ),
-  },
-  {
-    name: 'Disabling Your Account',
-    order: 7,
-    component: <DisablingYourAccount order="6" />,
-    activeComponent: <DisablingYourAccount order="6" active={true} />,
-  },
-];
+export const COMPONENTS_BY_SETTINGS = {
+  [ComponentName.RequiredDocuments]: RequiredDocuments,
+  [ComponentName.MarketingSettings]: MarketingSettings,
+  [ComponentName.BettingLossLimits]: BettingLossLimits,
+  [ComponentName.DepositLimit]: DepositLimit,
+  [ComponentName.SetTheWageringAmountLimitPerPeriod]: SetTheWageringAmountLimitPerPeriod,
+  [ComponentName.SetTheWageringAmountLimitPerSession]: SetTheWageringAmountLimitPerSession,
+  [ComponentName.DisablingYourAccount]: DisablingYourAccount,
+};
 
 const SettingsPage = () => {
   const [activeKey, setActiveKey] = useState<string | null>(null);
+  const activeSettings = ACCOUNT_SETTINGS;
 
   return (
     <div className="container-fluid px-0 px-sm-4 mb-4">
@@ -636,10 +599,13 @@ const SettingsPage = () => {
         {activeSettings
           .sort((a, b) => a.order - b.order)
           .map((setting, index) => {
+            const SettingsComponent = COMPONENTS_BY_SETTINGS[setting.component];
             if (activeKey === index.toString()) {
-              return setting.activeComponent;
+              return (
+                <SettingsComponent order={index.toString()} active={true} />
+              );
             } else {
-              return setting.component;
+              return <SettingsComponent order={index.toString()} />;
             }
           })}
       </Accordion>

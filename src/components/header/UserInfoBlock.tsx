@@ -80,6 +80,10 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
               link: '/settings',
               name: 'Settings',
             },
+            {
+              link: '/transactions',
+              name: 'Transactions',
+            },
           ].map(link => (
             <UserMenuLink
               key={link.link}

@@ -20,6 +20,13 @@ export enum ComponentName {
   WithdrawalPage,
   TransactionsPage,
   ForgotPasswordPage,
+  RequiredDocuments,
+  MarketingSettings,
+  BettingLossLimits,
+  DepositLimit,
+  SetTheWageringAmountLimitPerPeriod,
+  SetTheWageringAmountLimitPerSession,
+  DisablingYourAccount,
 }
 
 export const HEADER_ROUTES: HeaderLink[] = [
@@ -545,3 +552,41 @@ export const iconName: { [key: string]: string } = {
   mail: 'mail2',
   instagram: 'nsta',
 };
+
+export const ACCOUNT_SETTINGS = [
+  {
+    name: 'Required documents',
+    order: 1,
+    component: ComponentName.RequiredDocuments,
+  },
+  {
+    name: 'Marketing settings',
+    order: 2,
+    component: ComponentName.MarketingSettings,
+  },
+  {
+    name: 'Betting Loss Limits',
+    order: 3,
+    component: ComponentName.BettingLossLimits,
+  },
+  {
+    name: 'Deposit Limit',
+    order: 4,
+    component: ComponentName.DepositLimit,
+  },
+  {
+    name: 'Set the wagering amount limit per period',
+    order: 5,
+    component: ComponentName.SetTheWageringAmountLimitPerPeriod,
+  },
+  {
+    name: 'Set the wagering amount limit per session',
+    order: 6,
+    component: ComponentName.SetTheWageringAmountLimitPerSession,
+  },
+  {
+    name: 'Disabling Your Account',
+    order: 7,
+    component: ComponentName.DisablingYourAccount,
+  },
+];
