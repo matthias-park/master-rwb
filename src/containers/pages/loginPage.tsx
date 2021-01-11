@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useConfig } from '../../hooks/useConfig';
 import { postApi } from '../../utils/apiUtils';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { mutateUser } = useConfig();
+  const { user, mutateUser } = useConfig();
 
   const handleLogin = async () => {
     await postApi('/players/login.json', {
@@ -14,23 +15,14 @@ const LoginPage = () => {
     });
     mutateUser();
   };
+
+  if (user.id) {
+    return <Redirect to="/" />;
+  }
+
   return (
     <div className="center-container">
       <div className="login">
-        {/* <div style={{ position: 'relative' }}>
-          <div className="alert alert-danger alert-dismissible">
-            <span id="label_login_errors">
-              The username or the password you have entered is invalid.
-              <br />
-              If you forgot your username, please <a href="https://tonybet.com/players/forgot_login">PRESS HERE.</a>
-              <br />
-              If you forgot your password, please <a href="https://tonybet.com/players/forgot_password">PRESS HERE.</a>
-            </span>
-            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-        </div> */}
         <form
           autoComplete="off"
           className="loginForm form-container"

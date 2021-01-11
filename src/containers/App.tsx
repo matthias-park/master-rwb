@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 import PageLayout from './pageLayout';
-import BgBackdrop from '../components/BgBackdrop';
 import ErrorBoundary from './ErrorBoundary';
 import Routes from './pages';
 import { HEAD_DATA } from '../constants';
@@ -14,7 +13,7 @@ const App = () => {
   const { locale } = useConfig();
   return (
     <BrowserRouter basename={`/${locale}`}>
-      <Helmet>
+      <Helmet htmlAttributes={{ lang: locale }}>
         <title>{headData.title}</title>
         {headData.links?.map(linkProps => (
           <link {...linkProps} />
@@ -30,7 +29,6 @@ const App = () => {
         <PageLayout>
           <Routes />
         </PageLayout>
-        <BgBackdrop/>
       </ErrorBoundary>
     </BrowserRouter>
   );

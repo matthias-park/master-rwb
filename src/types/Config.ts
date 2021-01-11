@@ -1,6 +1,7 @@
 import { User } from './UserStatus';
+import { ComponentName } from '../constants';
 export interface ConfigRoute {
-  id: string;
+  id: ComponentName;
   path: string;
   protected?: true;
 }

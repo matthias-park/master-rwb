@@ -29,10 +29,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   );
   const { data: userData, error: userError, mutate: mutateUser } = useSWR<
     UserStatus
-  >('/api/app/v1/user/status.json', getApi, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+  >('/api/app/v1/user/status.json');
   const setLocale = (lang: string) => {
     setLocalePathname(lang);
     changeLocale(lang);

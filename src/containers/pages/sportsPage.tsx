@@ -1,45 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { useConfig } from '../../hooks/useConfig';
-import { formatUrl, getApi } from '../../utils/apiUtils';
+import { getApi } from '../../utils/apiUtils';
 import GetToken from '../../types/api/kambi/GetToken';
+import Config from '../../types/Config';
+import { useCallback } from 'react';
+import KambiSportsbook, {
+  KambiSportsbookProps,
+} from '../../components/KambiSportsbook';
 
-interface Params {
-  locale: string;
-  playerId: number | string;
-  ticket: string;
-}
+const getSBParams = async (config: Config) => {
+  const playerId = config.user.id ? config.user.id.toString() : '';
+  const data: GetToken | null = playerId
+    ? await getApi<GetToken>('/railsapi/v1/kambi/get_token')
+    : null;
+  return {
+    key: Math.floor(Math.random() * (500 - 100) + 100),
+    locale: config.locale,
+    playerId,
+    ticket: data?.Data || '',
+    currency: 'EUR',
+    market: 'BE',
+    getApiBalance: `${window.API_URL}/players/get_balance/true`,
+  };
+};
 
 const SportsPage = () => {
   const config = useConfig();
-  const [params, setParams] = useState<Params | null>(null);
+  const [params, setParams] = useState<KambiSportsbookProps | null>(null);
+
+  const updateUserBalance = useCallback(() => config.mutateUser(), []);
+
   useEffect(() => {
-    (async () => {
-      const playerId = config.user.id ? config.user.id : '';
-      const data: GetToken | null = playerId
-        ? await getApi<GetToken>('/railsapi/v1/kambi/get_token')
-        : null;
-      const ticket = data?.Data || '';
-      setParams({
-        locale: config.locale,
-        playerId,
-        ticket,
+    if (!config.user.loading) {
+      getSBParams(config).then(async sbParams => {
+        setParams(sbParams);
       });
-    })();
-  }, [config]);
-  if (!params || config.user.loading) {
-    return null;
-  }
-  return (
-    <iframe
-      title="iframe"
-      style={{ width: '100vw', height: '100vh' }}
-      scrolling="no"
-      frameBorder="0"
-      id="tonysportsbookiframe"
-      name="tonysportsbookiframe"
-      src={formatUrl('/iframe/kambiSB.html', params as any)}
-    />
-  );
+    }
+  }, [config.user.id]);
+
+  if (!params) return null;
+  return <KambiSportsbook updateBalance={updateUserBalance} {...params} />;
 };
 
 export default SportsPage;
