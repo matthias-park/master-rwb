@@ -181,6 +181,11 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
     id: 'withdrawal',
     protected: true,
   },
+  {
+    path: '/transactions',
+    id: 'transactions',
+    protected: true,
+  }
 ];
 
 export const AVAILABLE_LOCALES = ['en', 'nl', 'lt'];

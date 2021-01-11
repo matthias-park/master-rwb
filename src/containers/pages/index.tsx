@@ -9,6 +9,7 @@ import DepositPage from './depositPage';
 import LimitsPage from './limitsPage';
 import SettingsPage from './settingsPage';
 import WithdrawalPage from './withdrawalPage';
+import TransactionsPage from './transactionsPage';
 import ProtectedRoute from 'containers/pages/ProtectedRoute';
 import { Route, Switch } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
@@ -31,6 +32,7 @@ export const COMPONENT_PAGES = {
   settings: SettingsPage,
   sports: SportsPage,
   withdrawal: WithdrawalPage,
+  transactions: TransactionsPage,
 };
 
 const Routes = () => {

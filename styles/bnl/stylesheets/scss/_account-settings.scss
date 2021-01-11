@@ -1,0 +1,412 @@
+.account-settings {
+  display: flex;
+  padding: 0 80px;
+  margin: 0 -80px;
+  color: $white;
+  background-color: $account-primary;
+  @include media-breakpoint-down(xl) {
+      padding: 0 45px;
+      margin: 0 -45px;
+  }
+  @include media-breakpoint-down(lg) {
+      padding: 0 20px;
+      margin: 0 -20px;
+  }
+  a {
+    color: $white;
+  }
+  .left-sidebar {
+    min-width: 310px;
+    @include media-breakpoint-down(md) {
+      min-width: 220px;
+    }
+    @include media-breakpoint-down(sm) {
+      display: none;
+    }
+  }
+  .left-sidebar,
+  .right-sidebar {
+    margin-top: 50px;
+  }
+  .sidebar-list {
+    padding: 0;
+    &__item {
+      display: flex;
+      align-items: center;
+      height: 42px;
+      list-style-type: none;
+      padding: 0 20px;
+      &:not(:last-of-type) {
+        border-bottom: 1px solid rgba(229, 229, 229, 0.15);
+      }
+      &-link {
+        color: $white;
+        font-size: 14px;
+        &--active {
+          color: $white;
+          background-color: $account-active;
+        }
+      }
+    }
+  }
+  .help-block {
+    &__body {
+      background-color: rgba(255,255,255,0.08);
+      border: 1px solid $white;
+      padding: 16px 6px 4px 16px;
+      &-item {
+        &-icon{
+          color: $white;
+          opacity: 1;
+          font-size: 36px;
+        }
+        &-text {
+          color: $white;
+          .gray {
+            color: $white;
+          }
+        }
+      }
+    }
+  }
+}
+
+.amount-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 22px;
+  max-height: 90px;
+  &__text {
+  }
+  &__amount {
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+  &__icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 20px;
+  }
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: $gray-custom;
+  border-radius: 8px;
+  padding: 15px;
+  max-height: 150px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  &__title {
+    color: $black;
+    font-weight: 500;
+  }
+  &__input {
+    border-radius: 4px;
+    background-color: $white;
+    border: 1px solid #E0E0E0;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 10px;
+    width: 100%;
+    &.form-control:not(select) {
+      padding-top: 0;
+    }
+  }
+}
+
+.info-container {
+  background-color: $account-light;
+  border: 1px solid #707070;
+  color: $black;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  &__info {
+    padding: 12px 18px;
+  }
+  &__text {
+    padding: 12px 18px;
+    background-color: $white;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-radius: 8px;
+    border: 1px solid #CCCCCC;
+    font-size: 14px;
+  }
+}
+
+.questions-acr {
+  background: transparent;
+  color: $white;
+  border: 1px solid $gray-100;
+  border-radius: 8px;
+  &__item {
+    position: relative;
+    $self: &;
+    &-toggle {
+      height: 50px;
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: $white;
+      text-align: left;
+      padding: 0 20px;
+    }
+    &-icon {
+      position: absolute;
+      top: 8px;
+      right: 15px;
+      font-size: 35px;
+      color: $gray-100;
+      transition: transform 0.3s;
+    }
+    &-body {
+      padding: 0 20px 10px 20px;
+      &.show {
+        + #{ $self }-icon {
+          transform: rotate(180deg);
+        }
+      }
+    }
+    &:not(:last-of-type) {
+      border-bottom: 1px solid $gray-100;
+    }
+  }
+}
+
+.date-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-radius: 8px;
+  background-color: $white;
+  padding: 20px 22px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  border: 1px solid $gray-200;
+  &__picker-wrp {
+    position: relative;
+    &-icon {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 0;
+      color: $primary-light;
+      font-size: 34px;
+    }
+  }
+  .account-tabs {
+    margin-left: auto;
+  }
+  @media only screen and (min-width: 767.8px) and (max-width: 880px) {
+    .account-tabs {
+      width: 50%;
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+  @include media-breakpoint-down(sm) {
+    .account-tabs {
+      width: 100%;
+      max-width: unset;
+      margin-left: 0;
+      margin-top: 10px;
+      &__tab {
+        width: calc(100% / 3);
+      }
+    }
+  }
+  @include media-breakpoint-down(xs) {
+    &__picker-wrp {
+      width: 100%;
+      .react-datepicker-wrapper {
+        width: 100%;
+        input {
+          max-width: unset;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.react-datepicker {
+  &__input-container {
+    input {
+      height: 36px;
+      max-width: 110px;
+      border: 1px solid #E0E0E0;
+      border-radius: 4px;
+      background-color: $gray-custom-100;
+      font-size: 12px;
+      padding-left: 8px;
+      padding-right: 30px;
+    }
+  }
+}
+
+.account-tabs {
+  display: inline-block;
+  border: 0.5px solid $primary;
+  border-radius: 8px;
+  height: 36px;
+  overflow: hidden;
+  &--mx-205 {
+    max-width: 205px;
+  }
+  &__tab {
+    border: none;
+    background-color: $white;
+    height: 100%;
+    font-size: 12px;
+    color: $primary;
+    font-weight: 500;
+    padding: 0 10px;
+    &--w-140 {
+      width: 140px;
+    }
+    &.active {
+      background-color: $primary;
+      color: $white;
+    }
+  }
+}
+
+.table-container {
+  border: 1px solid $gray-200;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: $white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  .table {
+    background-color: $white;
+    margin-bottom: 0;
+    border-bottom: 1px solid $gray-200;
+    thead {
+      th {
+        border-top: none;
+        border-bottom: none;
+        font-size: 12px;
+        font-weight: 600;
+      }
+    }
+    tbody {
+      td {
+        border-top: 1px solid $gray-200;
+        font-size: 11px;
+      }
+    }
+    th, td {
+      padding: 16px 18px 12px 18px;
+    }
+    .heading-sm {
+      display: none;
+    }
+  }
+  &__info {
+    border-radius: 8px;
+    background-color: $account-light;
+    color: $black;
+    font-size: 12px;
+    padding: 13px 18px 11px 18px;
+    border: 1px solid $gray-200;
+    margin-top: 25px;
+    font-weight: 500;
+  }
+  @include media-breakpoint-down(xs) {
+    .table {
+      thead {
+        display: none;
+      }
+      tbody, tr {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      tr {
+        border-bottom: 2px solid $gray-200;
+      }
+      .heading-sm {
+        display: inline-block;
+        width: 100px;
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+.settings-card {
+  position: relative;
+  border: 1px solid $gray-200;
+  color: $black;
+  font-size: 12px;
+  $self: &;
+  &__header {
+    position: relative;
+    background-color: $gray-custom-200;
+    border-bottom: 1px solid $gray-200;
+    font-weight: 600;
+    height: 44px;
+    padding: 0;
+    &.active {
+      background-color: $white;
+      border-bottom: none;
+    }
+    > a {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      top: 0;
+      left: 20px;
+      right: 0;
+      height: 100%;
+      cursor: pointer;
+    }
+  }
+  &__body {
+    &.show {
+      + #{ $self }__icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  &__icon {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    color: $gray-200;
+    font-size: 28px;
+    transition: transform 0.3s;
+  }
+}
+
+.settings-radios {
+  display: inline-flex;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0;
+  $self: &;
+  &__label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 30px;
+    background-color: $gray-custom-200;
+    color: $primary;
+    margin-bottom: 0;
+    cursor: pointer;
+  }
+  &__input:checked {
+      + #{ $self }__label {
+        background-color: $primary;
+        color: $white;
+      }
+  }
+}

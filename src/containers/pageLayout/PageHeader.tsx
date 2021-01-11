@@ -40,7 +40,7 @@ const PageHeader = () => {
   };
   useEffect(() => {
     if (user.id) {
-      setShowLoginModal(false);
+      setBgBackdrop(false);
     }
   }, [user.id]);
   const handleLogout = async () => {

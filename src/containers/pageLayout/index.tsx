@@ -11,18 +11,31 @@ const pathsWithSidebar = [
   '/limits',
   '/settings',
   '/withdrawal',
+  '/transactions',
+  '/cookie-policy',
+  '/faq',
+];
+
+const pathsWithRightSidebar = [
+  '/bonus',
+  '/deposit',
+  '/limits',
+  '/settings',
+  '/withdrawal',
+  '/transactions',
   '/cookie-policy',
   '/faq',
 ];
 
 const PageLayout = ({ children }) => {
   const { pathname } = useLocation();
-  const SidebarLayout = pathsWithSidebar.includes(pathname);
+  const sidebarLayout = pathsWithSidebar.includes(pathname);
+  const rightSidebarLayout = pathsWithRightSidebar.includes(pathname);
   return (
     <>
       <PageHeader />
-      {SidebarLayout ? (
-        <LayoutWithSidebar>{children}</LayoutWithSidebar>
+      {sidebarLayout ? (
+        <LayoutWithSidebar rightSidebar={rightSidebarLayout}>{children}</LayoutWithSidebar>
       ) : (
         <>
           {children}

@@ -189,6 +189,7 @@ footer {
             }
             &:hover {
                 color: $gray-600;
+                text-decoration: none;
             }
             @include media-breakpoint-down(lg) {
                 font-size: 23px;

@@ -1,5 +1,5 @@
 import React from 'react';
-import HelpBlock from '../../components/registration/HelpBlock';
+import HelpBlock from '../../components/HelpBlock';
 import RegSelection from '../../components/registration/RegSelection';
 import OnlineForm from '../../components/registration/OnlineForm';
 import StoreForm from '../../components/registration/StoreForm';
@@ -11,7 +11,7 @@ const RegisterPage = () => {
     <main className="registration">
       <div className="reg-block">
         <RegSelection/>
-        <HelpBlock/>
+        <HelpBlock title="Hulp nodig?" blocks={['faq', 'phone', 'email']}/>
         <OnlineForm/>
         <StoreForm/>
         <RegVerification/>

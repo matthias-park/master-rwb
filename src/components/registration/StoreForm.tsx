@@ -1,4 +1,6 @@
 import React from 'react';
+import Form from 'react-bootstrap/Form';
+import FormCheck from 'react-bootstrap/FormCheck';
 
 const StoreForm = () => {
   return (
@@ -11,109 +13,103 @@ const StoreForm = () => {
       <form>
           <div className="reg-form__block">
               <p className="weight-500 mt-4 mb-3">Persoonlijke informatie</p>
-              <div className="custom-control custom-radio custom-control-inline mb-4">
-                  <input type="radio" id="man" name="gender" className="custom-control-input"/>
-                  <label className="custom-control-label" htmlFor="man">Man</label>
-              </div>
-              <div className="custom-control custom-radio custom-control-inline mb-4">
-                  <input type="radio" id="woman" name="gender" className="custom-control-input"/>
-                  <label className="custom-control-label" htmlFor="woman">Vrouw</label>
-              </div>
-              <div className="form-group">
-                  <input type="text" className="form-control" id="firstname" placeholder=" "/>
-                  <label htmlFor="firstname" className="text-14">Voornaam</label>
-                  <div className="form-group__icons">
-                      <i className="icon-check"></i>
-                      <i className="icon-exclamation"></i>
-                  </div>
-                  <small className="form-group__error-msg">Error message</small>
-              </div>
-              <div className="form-group">
-                  <input type="text" className="form-control" id="lastname" placeholder=" "/>
-                  <label htmlFor="lastname" className="text-14">Naam</label>
-                  <div className="form-group__icons">
-                      <i className="icon-check"></i>
-                      <i className="icon-exclamation"></i>
-                  </div>
-                  <small className="form-group__error-msg">Error message</small>
-              </div>
+              <Form.Check custom type="radio" id="male" name="gender" label="Man" className="mb-4 custom-control-inline"/>
+              <Form.Check custom type="radio" id="Female" name="gender" label="Vrouw" className="mb-4 custom-control-inline"/>
+              <Form.Group>
+                <Form.Control type="text" id="firstname" placeholder=" "/>
+                <label htmlFor="firstname" className="text-14">Voornaam</label>
+                <div className="form-group__icons">
+                    <i className="icon-check"></i>
+                    <i className="icon-exclamation"></i>
+                </div>
+                <small className="form-group__error-msg">Error message</small>
+              </Form.Group>
+              <Form.Group>
+                <Form.Control type="text" id="lastname" placeholder=" "/>
+                <label htmlFor="lastname" className="text-14">Naam</label>
+                <div className="form-group__icons">
+                    <i className="icon-check"></i>
+                    <i className="icon-exclamation"></i>
+                </div>
+                <small className="form-group__error-msg">Error message</small>
+              </Form.Group>
           </div>
           <div className="reg-form__block">
               <p className="weight-500 mt-4 mb-3">Je bent 18+</p>
-              <div className="form-group">
-                  <input type="text" className="form-control" id="dob" placeholder=" "/>
-                  <label htmlFor="dob" className="text-14">Geboortedatum</label>
-                  <div className="form-group__icons">
-                      <span className="tooltip-custom ml-auto" id="tooltipCustom">
-                          <i className="icon-tooltip"></i>
-                          <div className="tooltip-custom__block text-14 text-center">
-                              <i className="icon-close" id="tooltipClose"></i>
-                              Lorem ipsum dolor sit amet lorem dolor ipsum
-                          </div>
-                      </span>
-                      <i className="icon-check"></i>
-                      <i className="icon-exclamation"></i>
-                  </div>
-                  <small className="form-group__error-msg">Error message</small>
-              </div>
+              <Form.Group>
+                <Form.Control type="text" id="dob" placeholder=" "/>
+                <label htmlFor="dob" className="text-14">Geboortedatum</label>
+                <div className="form-group__icons">
+                    <span className="tooltip-custom ml-auto" id="tooltipCustom">
+                      <i className="icon-tooltip"></i>
+                      <div className="tooltip-custom__block text-14 text-center">
+                          <i className="icon-close" id="tooltipClose"></i>
+                          Lorem ipsum dolor sit amet lorem dolor ipsum
+                      </div>
+                    </span>
+                    <i className="icon-check"></i>
+                    <i className="icon-exclamation"></i>
+                </div>
+                <small className="form-group__error-msg">Error message</small>
+              </Form.Group>
           </div>
           <div className="reg-form__block">
               <p className="weight-500 mt-4 mb-3">Je favoriete winkelpunt</p>
-              <div className="form-group">
-                  <input type="text" className="form-control" id="fav_store" placeholder=" "/>
-                  <label htmlFor="fav_store" className="text-14">Je favoriete winkelpunt (optioneel)</label>
-                  <div className="form-group__icons">
-                      <i className="icon-check"></i>
-                      <i className="icon-exclamation"></i>
-                  </div>
-                  <small className="form-group__error-msg">Error message</small>
-              </div>
+              <Form.Group>
+                <Form.Control type="text" id="fav_store" placeholder=" "/>
+                <label htmlFor="faw_store" className="text-14">Je favoriete winkelpunt (optioneel)</label>
+                <div className="form-group__icons">
+                    <i className="icon-check"></i>
+                    <i className="icon-exclamation"></i>
+                </div>
+                <small className="form-group__error-msg">Error message</small>
+              </Form.Group>
           </div>
           <div className="reg-form__block">
               <p className="weight-500 mt-4 mb-3">Wachtwoord</p>
-              <div className="form-group">
-                  <input type="text" className="form-control" id="password" placeholder=" "/>
-                  <label htmlFor="password" className="text-14">Wachtwoord</label>
-                  <div className="form-group__icons">
-                      <i className="icon-eye-on show-password"></i>
-                      <i className="icon-check"></i>
-                      <i className="icon-exclamation"></i>
-                  </div>
-                  <small className="form-group__error-msg">Error message</small>
-              </div>
-              <div className="form-group">
-                  <input type="text" className="form-control" id="password_confirm" placeholder=" "/>
-                  <label htmlFor="password_confirm" className="text-14">Herhaal Wachtwoord</label>
-                  <div className="form-group__icons">
-                      <i className="icon-eye-on show-password"></i>
-                      <i className="icon-check"></i>
-                      <i className="icon-exclamation"></i>
-                  </div>
-                  <small className="form-group__error-msg">Error message</small>
-              </div>
+              <Form.Group>
+                <Form.Control type="text" id="password" placeholder=" "/>
+                <label htmlFor="password" className="text-14">Wachtwoord</label>
+                <div className="form-group__icons">
+                    <i className="icon-eye-on show-password"></i>
+                    <i className="icon-check"></i>
+                    <i className="icon-exclamation"></i>
+                </div>
+                <small className="form-group__error-msg">Error message</small>
+              </Form.Group>
+              <Form.Group>
+                <Form.Control type="text" id="password_confirm" placeholder=" "/>
+                <label htmlFor="password_confirm" className="text-14">Herhaal Wachtwoord</label>
+                <div className="form-group__icons">
+                    <i className="icon-eye-on show-password"></i>
+                    <i className="icon-check"></i>
+                    <i className="icon-exclamation"></i>
+                </div>
+                <small className="form-group__error-msg">Error message</small>
+              </Form.Group>
           </div>
           <div className="reg-form__block">
-              <div className="custom-control custom-checkbox mb-4">
-                  <input type="checkbox" className="custom-control-input" id="customCheck1"/>
-                  <label className="custom-control-label" htmlFor="customCheck1">
-                      Ik blijf graag op de hoogte van nieuws van de Nationale Loterij. Wil je onze jackpots,
-                      spelen en acties als eerste ontdekken? Bijzondere aanbiedingen en voordelen rechtstreeks
-                      in je mailbox ontvangen? Vink dan dit hokje aan! Je kan op elk moment uitschrijven of je
-                      voorkeuren aanpassen: zie onze 
-                      <a href="#" className="text-primary-light ml-1">
-                          <u>privacyverklaring</u>
-                      </a>
-                  </label>
-              </div>
-              <div className="custom-control custom-checkbox">
-                  <input type="checkbox" className="custom-control-input" id="customCheck1"/>
-                  <label className="custom-control-label" htmlFor="customCheck1">
-                      Ik accepteer de 
-                      <a href="#" className="text-primary-light ml-1">
-                          <u>algemene voorwaarden</u>
-                      </a>
-                  </label>
-              </div>
+              <FormCheck custom className="mb-4">
+                <FormCheck.Input/>
+                <FormCheck.Label>
+                  Ik blijf graag op de hoogte van nieuws van de Nationale Loterij. Wil je onze jackpots,
+                  spelen en acties als eerste ontdekken? Bijzondere aanbiedingen en voordelen rechtstreeks
+                  in je mailbox ontvangen? Vink dan dit hokje aan! Je kan op elk moment uitschrijven of je
+                  voorkeuren aanpassen: zie onze 
+                  <a href="#" className="text-primary-light ml-1">
+                      <u>privacyverklaring</u>
+                  </a>
+                </FormCheck.Label>
+              </FormCheck>
+              <FormCheck custom className="mb-4">
+                <FormCheck.Input/>
+                <FormCheck.Label>
+                    Ik accepteer de 
+                    <a href="#" className="text-primary-light ml-1">
+                        <u>algemene voorwaarden</u>
+                    </a>
+                </FormCheck.Label>
+              </FormCheck>
           </div>
           <button className="btn btn-primary d-block mx-auto mb-4">Registreer</button>
       </form>
