@@ -19,13 +19,16 @@ interface LoginFromData {
   password: string;
 }
 
-const LoginForm = () => {
+const LoginForm = ({
+  hideLoginDropdown,
+}: {
+  hideLoginDropdown: () => void;
+}) => {
   const { t } = useI18n();
   const { register, handleSubmit, errors } = useForm<LoginFromData>();
   const [passwordVisible, setPasswordVisibility] = useState(false);
   const [loginInProgress, setLoginInProgress] = useState(false);
   const { mutateUser, routes } = useConfig();
-  const { backdrop } = useUIConfig();
   const forgotPasswordRoute = useMemo(
     () =>
       routes.find(route => route.id === ComponentName.ForgotPasswordPage)
@@ -42,7 +45,7 @@ const LoginForm = () => {
       password,
     });
     setLoginInProgress(false);
-    backdrop.hide();
+    hideLoginDropdown();
     mutateUser();
   };
   return (
@@ -201,8 +204,11 @@ const LoginDropdown = ({ dropdownClasses, toggleClasses }: Props) => {
 
   useEffect(() => {
     backdrop.toggle(showDropdown, [ComponentName.Header]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showDropdown]);
+
+  const handleHideDropdown = React.useCallback(() => {
+    setShowDropdown(prev => !prev);
+  }, []);
 
   return (
     <Dropdown
@@ -217,7 +223,7 @@ const LoginDropdown = ({ dropdownClasses, toggleClasses }: Props) => {
         <i className="icon-account"></i>Inloggen
       </Dropdown.Toggle>
       <Dropdown.Menu className="login-dropdown__menu">
-        <LoginForm />
+        <LoginForm hideLoginDropdown={handleHideDropdown} />
         <JoinLotteryClub />
         <RegistrationLink />
       </Dropdown.Menu>

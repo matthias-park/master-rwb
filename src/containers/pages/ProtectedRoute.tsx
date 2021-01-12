@@ -12,6 +12,7 @@ const ProtectedRoute = ({
   ...props
 }: Props) => {
   const { user } = useConfig();
+  if (user.loading) return null;
   if (user.logged_in) {
     return <Route {...props} />;
   }

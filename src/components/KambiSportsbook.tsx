@@ -17,6 +17,7 @@ interface Props extends KambiSportsbookProps {
 const insertKambiBootstrap = (containerRef: HTMLDivElement): void => {
   const id = 'kambi-bootstrap';
   if (document.getElementById(id)) return;
+  document.body.classList.add('body-background');
   const kambiSB = document.createElement('div');
   kambiSB.id = 'KambiBC';
   const s = document.createElement('script');
