@@ -1,6 +1,8 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import FormCheck from 'react-bootstrap/FormCheck';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 const OnlineForm = () => {
   return (
@@ -87,13 +89,16 @@ const OnlineForm = () => {
               Nummer identiteitskaart
             </label>
             <div className="form-group__icons">
-              <span className="tooltip-custom ml-auto" id="tooltipCustom">
-                <i className="icon-tooltip"></i>
-                <div className="tooltip-custom__block text-14 text-center">
-                  <i className="icon-close" id="tooltipClose"></i>
-                  Lorem ipsum dolor sit amet lorem dolor ipsum
-                </div>
-              </span>
+              <OverlayTrigger
+                placement={'bottom'}
+                overlay={
+                  <Tooltip id="tooltip_id_number">
+                    Tooltip for id number
+                  </Tooltip>
+                }
+              >
+                <i className="icon-tooltip ml-auto"></i>
+              </OverlayTrigger>
               <i className="icon-check"></i>
               <i className="icon-exclamation"></i>
             </div>
@@ -105,13 +110,16 @@ const OnlineForm = () => {
               Rijksregisternummer
             </label>
             <div className="form-group__icons">
-              <span className="tooltip-custom ml-auto" id="tooltipCustom">
-                <i className="icon-tooltip"></i>
-                <div className="tooltip-custom__block text-14 text-center">
-                  <i className="icon-close" id="tooltipClose"></i>
-                  Lorem ipsum dolor sit amet lorem dolor ipsum
-                </div>
-              </span>
+              <OverlayTrigger
+                placement={'bottom'}
+                overlay={
+                  <Tooltip id="tooltip_insurance">
+                    Tooltip for insurance
+                  </Tooltip>
+                }
+              >
+                <i className="icon-tooltip ml-auto"></i>
+              </OverlayTrigger>
               <i className="icon-check"></i>
               <i className="icon-exclamation"></i>
             </div>

@@ -723,7 +723,7 @@ $zindex-fixed:                      1030 !default;
 $zindex-modal-backdrop:             1040 !default;
 $zindex-modal:                      1050 !default;
 $zindex-popover:                    1060 !default;
-$zindex-tooltip:                    1070 !default;
+$zindex-tooltip:                    2000 !default;
 
 
 // Navs
@@ -885,15 +885,15 @@ $card-columns-margin:               $card-spacer-y !default;
 
 // Tooltips
 
-$tooltip-font-size:                 $font-size-sm !default;
-$tooltip-max-width:                 200px !default;
-$tooltip-color:                     $white !default;
-$tooltip-bg:                        $black !default;
-$tooltip-border-radius:             $border-radius !default;
-$tooltip-opacity:                   .9 !default;
-$tooltip-padding-y:                 .25rem !default;
-$tooltip-padding-x:                 .5rem !default;
-$tooltip-margin:                    0 !default;
+$tooltip-font-size:                 14px;
+$tooltip-max-width:                 210px !default;
+$tooltip-color:                     rgba(255,255,255,0.7);
+$tooltip-bg:                        #677175;
+$tooltip-border-radius:             4px;
+$tooltip-opacity:                   1;
+$tooltip-padding-y:                 25px;
+$tooltip-padding-x:                 20px;
+$tooltip-margin:                    5px 0 0 0;
 
 $tooltip-arrow-width:               .8rem !default;
 $tooltip-arrow-height:              .4rem !default;

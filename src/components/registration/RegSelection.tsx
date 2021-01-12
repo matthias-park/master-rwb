@@ -1,4 +1,6 @@
 import React from 'react';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 const RegSelection = () => {
   return (
@@ -29,13 +31,14 @@ const RegSelection = () => {
           <p className="reg-selection__select-title">
             Ik wil in een verkooppunt spelen
           </p>
-          <span className="tooltip-custom ml-auto" id="tooltipCustom">
-            <i className="icon-tooltip"></i>
-            <div className="tooltip-custom__block text-14 text-center">
-              <i className="icon-close" id="tooltipClose"></i>
-              Lorem ipsum dolor sit amet lorem dolor ipsum
-            </div>
-          </span>
+          <OverlayTrigger
+            placement={'bottom'}
+            overlay={
+              <Tooltip id="tooltip_reg_store">Tooltip for store reg</Tooltip>
+            }
+          >
+            <i className="icon-tooltip ml-auto"></i>
+          </OverlayTrigger>
         </label>
         <label className="reg-selection__select">
           <input
@@ -53,13 +56,14 @@ const RegSelection = () => {
             alt=""
           />
           <p className="reg-selection__select-title">Ik wil online spelen</p>
-          <span className="tooltip-custom ml-auto" id="tooltipCustom">
-            <i className="icon-tooltip"></i>
-            <div className="tooltip-custom__block text-14 text-center">
-              <i className="icon-close" id="tooltipClose"></i>
-              Lorem ipsum dolor sit amet lorem dolor ipsum
-            </div>
-          </span>
+          <OverlayTrigger
+            placement={'bottom'}
+            overlay={
+              <Tooltip id="tooltip_reg_online">Tooltip for online reg</Tooltip>
+            }
+          >
+            <i className="icon-tooltip ml-auto"></i>
+          </OverlayTrigger>
         </label>
         <label className="reg-selection__select">
           <input
@@ -79,13 +83,16 @@ const RegSelection = () => {
           <p className="reg-selection__select-title">
             Ik wil lid worden van Lottery Club
           </p>
-          <span className="tooltip-custom ml-auto" id="tooltipCustom">
-            <i className="icon-tooltip"></i>
-            <div className="tooltip-custom__block text-14 text-center">
-              <i className="icon-close" id="tooltipClose"></i>
-              Lorem ipsum dolor sit amet lorem dolor ipsum
-            </div>
-          </span>
+          <OverlayTrigger
+            placement={'bottom'}
+            overlay={
+              <Tooltip id="tooltip_reg_lottery">
+                Tooltip for lottery reg
+              </Tooltip>
+            }
+          >
+            <i className="icon-tooltip ml-auto"></i>
+          </OverlayTrigger>
         </label>
       </div>
       <button className="btn btn-primary d-block mx-auto mt-5">

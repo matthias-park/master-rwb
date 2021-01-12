@@ -105,6 +105,11 @@ footer {
                 font-size: 28px;
                 color: #cccccc;
             }
+            &[aria-expanded="true"] {
+              &:after {
+                transform: rotate(180deg);
+              }
+            }
         }
     }
     &__link {
@@ -136,8 +141,11 @@ footer {
             border-radius: 0;
             margin-top: 0;
             padding: 0 20px;
+            opacity: 0;
+            transition: opacity 0.6s;
             &.show {
                 display: block;
+                opacity: 1;
             }
         }
     }
@@ -282,7 +290,10 @@ footer {
                 &:last-of-type {
                     display: flex;
                     justify-content: flex-end;
-                    opacity: 0.7;
+                    opacity: 0.5;
+                }
+                a {
+                  color: $black;
                 }
             }
         }

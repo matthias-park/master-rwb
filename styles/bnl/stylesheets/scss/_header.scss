@@ -56,6 +56,9 @@
                 overflow-y: auto;
                 box-shadow: 10px 0 34px 0 rgba(0, 0, 0, 0.5);
             }
+            &.collapsing {
+              height: 100%;
+            }
         }
     }
     &__nav {
@@ -540,14 +543,29 @@
 
 .user-menu {
     width: 336px;
-    left: 50%;
+    left: 46%;
     transform: translateX(-50%);
     top: calc(100% + 10px);
+    padding: 0;
     background-color: $account-primary;
     text-align: center;
-    padding: 25px 20px;
     padding-bottom: 0;
     z-index: 1100;
+    box-shadow: 0 -2px 20px 0 rgba(0, 0, 0, 0.3);
+    &__wrp {
+      padding: 25px 20px;
+      padding-bottom: 0;
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      @include media-breakpoint-down(lg) {
+        max-height: calc(100vh - 70px);
+      }
+    }
     &__list {
         padding-left: 0;
         &-item {
@@ -664,7 +682,8 @@
         }
     }
     @include media-breakpoint-down(xs) {
-        width: 95vw;
+        width: 100vw;
+        max-width: 400px;
         right: -50px;
         left: auto;
         transform: none;

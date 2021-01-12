@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { useUIConfig } from '../../hooks/useUIConfig';
+import { ComponentName } from '../../constants';
 
 const UserMenuLink = ({ link, name, setShowDropdown }) => (
   <li className="user-menu__list-item">
@@ -16,11 +18,18 @@ const UserMenuLink = ({ link, name, setShowDropdown }) => (
 
 const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const { backdrop } = useUIConfig();
+
+  const showUserMenu = isOpen => {
+    setShowDropdown(isOpen);
+    backdrop.toggle(isOpen, [ComponentName.Header]);
+  };
+
   return (
     <Dropdown
       className={`header__user-menu user-menu-dropdown ${dropdownClasses}`}
       show={showDropdown}
-      onToggle={isOpen => setShowDropdown(isOpen)}
+      onToggle={isOpen => showUserMenu(isOpen)}
     >
       <div className="header__user-menu-info">
         <strong className="text-primary-light">{user.name}</strong>
@@ -49,76 +58,75 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
           </Dropdown.Toggle>
         </>
       )}
-      <Dropdown.Menu
-        className="dropdown-menu user-menu"
-        aria-labelledby="userMenuDropdown"
-      >
-        <Dropdown.Item as="div">
-          <Link
-            to="/deposit"
-            className="btn btn-light btn-lg text-14 px-3 mb-2"
-          >
-            <i className="icon-card"></i>
-            Geld opladen
-          </Link>
-        </Dropdown.Item>
-        <ul className="user-menu__list">
-          {[
-            {
-              link: '/bonus',
-              name: 'Bonus',
-            },
-            {
-              link: '/limits',
-              name: 'Limits',
-            },
-            {
-              link: '/withdrawal',
-              name: 'Withdrawal',
-            },
-            {
-              link: '/settings',
-              name: 'Settings',
-            },
-            {
-              link: '/transactions',
-              name: 'Transactions',
-            },
-          ].map(link => (
-            <UserMenuLink
-              key={link.link}
-              link={link.link}
-              name={link.name}
-              setShowDropdown={setShowDropdown}
-            />
-          ))}
-        </ul>
-        <div className="club-card">
-          <img
-            className="club-card__bg-img"
-            src="/assets/images/lottery-club/bg.png"
-            alt=""
-          />
-          <img
-            className="club-card__img"
-            src="/assets/images/lottery-club/logo.png"
-            alt=""
-          />
-          <span className="club-card__text club-barcode mt-n3">
-            <p className="club-barcode__text">My lottery Club Card</p>
+      <Dropdown.Menu className="dropdown-menu user-menu">
+        <div className="user-menu__wrp">
+          <Dropdown.Item as="div">
+            <Link
+              to="/deposit"
+              className="btn btn-light btn-lg text-14 px-3 mb-2"
+            >
+              <i className="icon-card"></i>
+              Geld opladen
+            </Link>
+          </Dropdown.Item>
+          <ul className="user-menu__list">
+            {[
+              {
+                link: '/bonus',
+                name: 'Bonus',
+              },
+              {
+                link: '/limits',
+                name: 'Limits',
+              },
+              {
+                link: '/withdrawal',
+                name: 'Withdrawal',
+              },
+              {
+                link: '/settings',
+                name: 'Settings',
+              },
+              {
+                link: '/transactions',
+                name: 'Transactions',
+              },
+            ].map(link => (
+              <UserMenuLink
+                key={link.link}
+                link={link.link}
+                name={link.name}
+                setShowDropdown={showUserMenu}
+              />
+            ))}
+          </ul>
+          <div className="club-card">
             <img
-              className="club-barcode__img"
-              src="/assets/images/lottery-club/barcode.png"
+              className="club-card__bg-img"
+              src="/assets/images/lottery-club/bg.png"
               alt=""
             />
-            <p className="club-barcode__number">1700340334308</p>
-          </span>
-        </div>
-        <div
-          className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
-          onClick={handleLogout}
-        >
-          Logout
+            <img
+              className="club-card__img"
+              src="/assets/images/lottery-club/logo.png"
+              alt=""
+            />
+            <span className="club-card__text club-barcode mt-n3">
+              <p className="club-barcode__text">My lottery Club Card</p>
+              <img
+                className="club-barcode__img"
+                src="/assets/images/lottery-club/barcode.png"
+                alt=""
+              />
+              <p className="club-barcode__number">1700340334308</p>
+            </span>
+          </div>
+          <div
+            className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
+            onClick={handleLogout}
+          >
+            Logout
+          </div>
         </div>
       </Dropdown.Menu>
     </Dropdown>

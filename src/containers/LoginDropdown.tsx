@@ -8,7 +8,7 @@ import { ComponentName } from '../constants';
 import clsx from 'clsx';
 import { useI18n } from '../hooks/useI18n';
 import { Link, useLocation } from 'react-router-dom';
-import { Spinner } from 'react-bootstrap';
+import { Spinner, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 interface Props {
   dropdownClasses?: string;
@@ -121,13 +121,16 @@ const LoginForm = ({
             {t('login_remember_me')}
           </label>
         </div>
-        <span className="tooltip-custom ml-2" id="tooltipCustom">
-          <i className="icon-tooltip"></i>
-          <div className="tooltip-custom__block text-14 text-center">
-            <i className="icon-close" id="tooltipClose"></i>
-            Lorem ipsum dolor sit amet lorem dolor ipsum
-          </div>
-        </span>
+        <OverlayTrigger
+          placement={'bottom'}
+          overlay={
+            <Tooltip id="tooltip_remember" className="tooltip-custom">
+              Tooltip for remember me
+            </Tooltip>
+          }
+        >
+          <i className="icon-tooltip ml-2"></i>
+        </OverlayTrigger>
         <Link
           to={forgotPasswordRoute}
           className="text-14 ml-auto login-dropdown__menu-link"

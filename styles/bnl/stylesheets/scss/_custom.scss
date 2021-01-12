@@ -22,6 +22,11 @@ body {
     }
 }
 
+a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .text-14 {
     font-size: 14px;
 }
@@ -76,57 +81,14 @@ body {
     }
 }
 
-.tooltip-custom {
-    position: relative;
-    display: inline-flex;
-    $self: &;
-    .icon-tooltip {
-        font-size: 20px;
-        color: $primary-light;
-    }
-    &__block {
-        position: absolute;
-        top: 28px;
-        left: 50%;
-        transform: translateX(-50%);
-        justify-content: center;
-        align-items: center;
-        width: 210px;
-        background-color:#677175;
-        color: rgba(255,255,255,0.7);
-        border-radius: 4px;
-        padding: 25px 20px;
-        z-index: 1;
-        display: none;
-        .icon-close {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            color: rgba(255,255,255,0.5);
-            font-size: 12px;
-        }
-        &:after {
-            content: '';
-            position: absolute;
-            top: -7px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0; 
-            height: 0; 
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-bottom: 8px solid #677175;
-            border-radius: 2px;
-        }
-    }
-    &.show {
-        .icon-tooltip {
-            color: $primary;
-        }
-        #{ $self }__block {
-            display: flex;
-        }
-    }
+.icon-tooltip {
+    font-size: 20px;
+    color: $primary-light;
+    cursor: default;
+}
+
+.tooltip-inner {
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.1);
 }
 
 .help-block {

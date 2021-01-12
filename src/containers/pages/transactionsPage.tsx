@@ -24,8 +24,8 @@ const TransactionsPage = () => {
   return (
     <div className="container-fluid px-0 px-sm-4 mb-4">
       <h2 className="mb-4">Transactions</h2>
-      <div className="date-filter mb-4">
-        <div className="date-filter__picker-wrp">
+      <div className="date-filter mb-4 pb-sm-2">
+        <div className="date-filter__picker-wrp mb-sm-3">
           <DatePicker
             selected={startDate}
             onChange={date => setStartDate(date)}
@@ -33,14 +33,17 @@ const TransactionsPage = () => {
           <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
         </div>
         <span className="text-gray-400 mx-auto mx-sm-1">-</span>
-        <div className="date-filter__picker-wrp">
+        <div className="date-filter__picker-wrp mb-sm-3">
           <DatePicker selected={endDate} onChange={date => setEndDate(date)} />
           <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
         </div>
-        <Button className="mt-3 mt-sm-0 ml-sm-2" variant="primary">
+        <Button
+          className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3"
+          variant="primary"
+        >
           Search
         </Button>
-        <div className="account-tabs account-tabs--mx-205">
+        <div className="account-tabs account-tabs--mx-205 mb-sm-3">
           <button
             className={`account-tabs__tab ${periodSelected === 7 && 'active'}`}
             onClick={() => setPeriodSelected(7)}
