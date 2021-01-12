@@ -8,7 +8,7 @@ import { ComponentName } from '../constants';
 import clsx from 'clsx';
 import { useI18n } from '../hooks/useI18n';
 import { Link, useLocation } from 'react-router-dom';
-import { Spinner, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Spinner, OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
 
 interface Props {
   dropdownClasses?: string;
@@ -49,19 +49,14 @@ const LoginForm = ({
     mutateUser();
   };
   return (
-    <form
+    <Form
       className="pb-4 mb-4 login-dropdown__menu-form"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div
-        className={clsx(
-          'form-group',
-          errors.email && 'has-error',
-          false && 'success',
-        )}
+      <Form.Group
+        className={clsx(errors.email && 'has-error', false && 'success')}
       >
-        <input
-          className="form-control"
+        <Form.Control
           id="email"
           name="email"
           placeholder=" "
@@ -81,11 +76,10 @@ const LoginForm = ({
             {errors.email.message}
           </small>
         )}
-      </div>
-      <div className={clsx('form-group', errors.password && 'has-error')}>
-        <input
+      </Form.Group>
+      <Form.Group className={clsx(errors.password && 'has-error')}>
+        <Form.Control
           type={passwordVisible ? 'text' : 'password'}
-          className="form-control"
           id="password"
           name="password"
           placeholder=" "
@@ -109,18 +103,9 @@ const LoginForm = ({
             {errors.password.message}
           </small>
         )}
-      </div>
+      </Form.Group>
       <div className="d-flex align-items-center flex-wrap">
-        <div className="custom-control custom-checkbox">
-          <input
-            type="checkbox"
-            className="custom-control-input"
-            id="rememberCheck"
-          />
-          <label className="custom-control-label" htmlFor="rememberCheck">
-            {t('login_remember_me')}
-          </label>
-        </div>
+        <Form.Check custom id="remember_check" label={t('login_remember_me')} />
         <OverlayTrigger
           placement={'bottom'}
           overlay={
@@ -152,7 +137,7 @@ const LoginForm = ({
         )}
         {'login_submit'}
       </button>
-    </form>
+    </Form>
   );
 };
 
@@ -179,6 +164,7 @@ const JoinLotteryClub = () => {
     </div>
   );
 };
+
 const RegistrationLink = () => {
   const { t } = useI18n();
   return (

@@ -19,7 +19,7 @@ const StoreForm = () => {
           <strong>Meer weten?</strong>
         </u>
       </a>
-      <form>
+      <Form>
         <div className="reg-form__block">
           <p className="weight-500 mt-4 mb-3">Persoonlijke informatie</p>
           <Form.Check
@@ -151,7 +151,7 @@ const StoreForm = () => {
         <button className="btn btn-primary d-block mx-auto mb-4">
           Registreer
         </button>
-      </form>
+      </Form>
     </div>
   );
 };
