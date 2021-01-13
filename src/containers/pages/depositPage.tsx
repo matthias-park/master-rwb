@@ -4,8 +4,8 @@ import InputContainer from 'components/account-settings/InputContainer';
 import QuestionsContainer from 'components/account-settings/QuestionsContainer';
 import { getApi, postApi } from '../../utils/apiUtils';
 import { useParams } from 'react-router-dom';
-import { useConfig } from '../../hooks/useConfig';
 import DepositRequest from '../../types/api/user/DepositReques';
+import { useToasts } from 'react-toast-notifications';
 
 const questionItems = [
   {
@@ -18,28 +18,43 @@ const questionItems = [
   },
 ];
 
-const handleRequestDeposit = async (depositValue: number) => {
-  const userIp: any = await getApi('/check-cf-ip');
-  const response: DepositRequest | null = await postApi(
-    `/tgbetapi/franchises/38/players/_player_id_/deposit_request`,
-    {
-      tgbet_params: JSON.stringify({
-        BankId: 160,
-        ip: userIp?.ip || '0.0.0.0',
-        amount: depositValue,
-        ReturnSuccessUrl: `${window.location.href}/success`,
-        ReturnCancelUrl: `${window.location.href}/cancel`,
-        ReturnErrorUrl: `${window.location.href}/error`,
-      }),
-    },
-  );
-  if (response?.Success) {
-    window.location.href = response.RedirectUrl;
-  }
-};
-
 const DepositPage = () => {
+  const { addToast } = useToasts();
   let { bankResponse } = useParams<{ bankResponse?: string }>();
+
+  const handleRequestDeposit = useCallback(async (depositValue: number) => {
+    const userIp: any = await getApi('/check-cf-ip').catch(err => {
+      addToast(`Failed to get ip, using fallback`, {
+        appearance: 'warning',
+        autoDismiss: true,
+      });
+      console.log(err);
+      return {};
+    });
+    const response: DepositRequest | null = await postApi<DepositRequest>(
+      `/tgbetapi/franchises/38/players/_player_id_/deposit_request`,
+      {
+        tgbet_params: JSON.stringify({
+          BankId: 160,
+          ip: userIp.ip || '0.0.0.0',
+          amount: depositValue,
+          ReturnSuccessUrl: `${window.location.href}/success`,
+          ReturnCancelUrl: `${window.location.href}/cancel`,
+          ReturnErrorUrl: `${window.location.href}/error`,
+        }),
+      },
+    ).catch(err => {
+      addToast(`Failed to redirect to bank`, {
+        appearance: 'error',
+      });
+      console.log(err);
+      return null;
+    });
+    if (response?.Success) {
+      window.location.href = response.RedirectUrl;
+    }
+  }, []);
+
   return (
     <div className="container-fluid px-0 px-sm-4 mb-4">
       <h2 className="mb-4">Deposit</h2>

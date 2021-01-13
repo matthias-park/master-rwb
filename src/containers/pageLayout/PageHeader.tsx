@@ -15,6 +15,7 @@ import {
   HeaderNavClassicLink,
 } from '../../components/header/HeaderNavLinks';
 import BrandLogo from 'components/header/BrandLogo';
+import { useToasts } from 'react-toast-notifications';
 
 const LocaleSelector = () => {
   const { locales, locale, setLocale } = useConfig();
@@ -94,10 +95,14 @@ interface UserBlockProps {
   mobile: boolean;
 }
 const UserBlock = ({ mobile }: UserBlockProps) => {
+  const { addToast } = useToasts();
   const { user, mutateUser } = useConfig();
 
   const handleLogout = async () => {
-    await getApi('/players/logout');
+    await getApi('/players/logout').catch(err => {
+      addToast('Failed to logout', { appearance: 'error' });
+      console.log(err);
+    });
     mutateUser();
   };
   if (user.id) {

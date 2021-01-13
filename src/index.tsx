@@ -10,22 +10,25 @@ import { I18nProvider } from './hooks/useI18n';
 import { SWRConfig } from 'swr';
 import { SwrFetcherConfig } from './utils/apiUtils';
 import { UIConfigProvider } from 'hooks/useUIConfig';
+import { ToastProvider } from 'react-toast-notifications';
 
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(
   <SWRConfig value={SwrFetcherConfig}>
-    <ConfigProvider>
-      <I18nProvider>
-        <HelmetProvider>
-          <UIConfigProvider>
-            <React.StrictMode>
-              <App />
-            </React.StrictMode>
-          </UIConfigProvider>
-        </HelmetProvider>
-      </I18nProvider>
-    </ConfigProvider>
+    <ToastProvider>
+      <ConfigProvider>
+        <I18nProvider>
+          <HelmetProvider>
+            <UIConfigProvider>
+              <React.StrictMode>
+                <App />
+              </React.StrictMode>
+            </UIConfigProvider>
+          </HelmetProvider>
+        </I18nProvider>
+      </ConfigProvider>
+    </ToastProvider>
   </SWRConfig>,
   MOUNT_NODE,
 );

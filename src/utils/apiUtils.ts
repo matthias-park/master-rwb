@@ -17,12 +17,12 @@ export const getApi = <T>(url: string): Promise<T> =>
   fetch(`${API_URL}${url}`, {
     mode: 'cors',
     credentials: 'include',
-  })
-    .then(r => r.json())
-    .catch(err => {
-      console.log(err);
-      return null;
-    });
+  }).then(r => {
+    if (!r.ok) {
+      throw new Error(`${url} - ${r.status} ${r.statusText}`);
+    }
+    return r.json();
+  });
 
 export const postApi = <T>(url: string, body?: unknown): Promise<T> => {
   const config: RequestInit = {
@@ -36,27 +36,7 @@ export const postApi = <T>(url: string, body?: unknown): Promise<T> => {
     (config.headers as Headers).append('Content-Type', 'application/json');
     // (config.headers as Headers).set('User-Agent', 'TonyBetApp');
   }
-  return fetch(`${API_URL}${url}`, config)
-    .then(res => res.json())
-    .catch(err => {
-      console.log(err);
-      return null;
-    });
-};
-
-export const postRedirectApi = (url: string, body: any = {}): void => {
-  var form = document.createElement('form');
-  form.method = 'post';
-  form.action = url;
-  for (const [key, value] of Object.entries(body)) {
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.name = key;
-    input.value = value as string;
-    form.appendChild(input);
-  }
-  document.body.appendChild(form);
-  form.submit();
+  return fetch(`${API_URL}${url}`, config).then(res => res.json());
 };
 
 export const SwrFetcherConfig: ConfigInterface<
@@ -67,11 +47,8 @@ export const SwrFetcherConfig: ConfigInterface<
   fetcher: getApi,
   revalidateOnFocus: false,
   revalidateOnReconnect: false,
-  shouldRetryOnError: true,
-  errorRetryInterval: 5000,
-  errorRetryCount: 3,
-  onError: (err, key) => {
-    console.log(`error fething ${key}`);
-    console.log(err);
+  errorRetryCount: 2,
+  onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+    console.log(error, `retry count - ${retryCount}`);
   },
 };
