@@ -358,10 +358,9 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
     protected: true,
   },
   {
-    path: '/deposit',
+    path: ['/deposit/', '/deposit/:bankResponse'],
     id: ComponentName.DepositPage,
     protected: true,
-    exact: false,
   },
   {
     path: '/limits',

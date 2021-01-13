@@ -8,6 +8,9 @@ import LayoutWithSidebar from './LayoutWithSidebar';
 const pathsWithSidebar = [
   '/bonus',
   '/deposit',
+  '/deposit/success',
+  '/deposit/cancel',
+  '/deposit/error',
   '/limits',
   '/settings',
   '/withdrawal',
@@ -19,6 +22,9 @@ const pathsWithSidebar = [
 const pathsWithRightSidebar = [
   '/bonus',
   '/deposit',
+  '/deposit/success',
+  '/deposit/cancel',
+  '/deposit/error',
   '/limits',
   '/settings',
   '/withdrawal',

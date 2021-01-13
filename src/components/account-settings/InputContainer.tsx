@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { enterKeyPress } from '../../utils/uiUtils';
 
 interface Props {
   title: string;
@@ -26,6 +27,7 @@ const InputContainer = ({
           id="amount"
           placeholder={placeholder}
           value={inputValue}
+          onKeyUp={e => enterKeyPress(e, handleSubmit)}
           onChange={e => setInputValue(e.target.value)}
           className="input-container__input"
         ></Form.Control>

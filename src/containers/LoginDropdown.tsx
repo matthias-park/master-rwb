@@ -31,8 +31,8 @@ const LoginForm = ({
   const { mutateUser, routes } = useConfig();
   const forgotPasswordRoute = useMemo(
     () =>
-      routes.find(route => route.id === ComponentName.ForgotPasswordPage)
-        ?.path || '/',
+      (routes.find(route => route.id === ComponentName.ForgotPasswordPage)
+        ?.path as string) || '/',
     [routes],
   );
   const togglePasswordVisibility = () =>

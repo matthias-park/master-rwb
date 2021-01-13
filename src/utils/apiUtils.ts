@@ -34,6 +34,7 @@ export const postApi = <T>(url: string, body?: unknown): Promise<T> => {
   if (body) {
     config.body = JSON.stringify(body);
     (config.headers as Headers).append('Content-Type', 'application/json');
+    // (config.headers as Headers).set('User-Agent', 'TonyBetApp');
   }
   return fetch(`${API_URL}${url}`, config)
     .then(res => res.json())
