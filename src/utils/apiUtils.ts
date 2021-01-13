@@ -43,6 +43,21 @@ export const postApi = <T>(url: string, body?: unknown): Promise<T> => {
     });
 };
 
+export const postRedirectApi = (url: string, body: any = {}): void => {
+  var form = document.createElement('form');
+  form.method = 'post';
+  form.action = url;
+  for (const [key, value] of Object.entries(body)) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = key;
+    input.value = value as string;
+    form.appendChild(input);
+  }
+  document.body.appendChild(form);
+  form.submit();
+};
+
 export const SwrFetcherConfig: ConfigInterface<
   any,
   any,

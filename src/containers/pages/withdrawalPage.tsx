@@ -29,6 +29,7 @@ const WithdrawalPage = () => {
         title="How much do you want to withdraw?"
         placeholder="€ 300"
         buttonText="Withdrawal Request"
+        onSubmit={() => {}}
       />
       <div className="info-container mb-4">
         <p className="info-container__info pb-0 mb-n1">

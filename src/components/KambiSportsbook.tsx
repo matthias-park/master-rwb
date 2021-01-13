@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import isEqual from 'lodash.isequal';
 
 export interface KambiSportsbookProps {
@@ -35,7 +35,7 @@ const KambiSportsbook = React.memo(
   (params: Props) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       window.customerSettings = {
         getBalance: function (successFunc, failureFunc, $) {
           $.ajax({
@@ -66,11 +66,9 @@ const KambiSportsbook = React.memo(
         streamingAllowedForPlayer: 'false',
         racingMode: 'false',
       };
-      setTimeout(() => {
-        if (containerRef.current) {
-          insertKambiBootstrap(containerRef.current!);
-        }
-      }, 500);
+      if (containerRef.current) {
+        insertKambiBootstrap(containerRef.current!);
+      }
       return () => window.location.reload();
     }, [containerRef, params]);
 

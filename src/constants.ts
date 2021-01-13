@@ -215,6 +215,20 @@ export const TRANSLATION_SYMBOLS = [
   'logout',
   'login',
   'play_now',
+  'login_email',
+  'login_password',
+  'login_remember_me',
+  'login_forgot_password',
+  'login_dont_have_lottery_acc',
+  'login_register_with_card',
+  'login_dont_have_acc',
+  'login_registration_link',
+  'login_find_out_lottery',
+  'time_spent_in_website',
+  'minimum_age_disclaimer',
+  'footer_social_title',
+  'footer_download_the_app',
+  'find_us_in_social',
 ];
 
 export const PROMOTION_LIST = [
@@ -347,6 +361,7 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
     path: '/deposit',
     id: ComponentName.DepositPage,
     protected: true,
+    exact: false,
   },
   {
     path: '/limits',
