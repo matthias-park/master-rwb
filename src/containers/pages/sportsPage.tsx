@@ -34,7 +34,10 @@ const SportsPage = () => {
   const config = useConfig();
   const [params, setParams] = useState<KambiSportsbookProps | null>(null);
   const handleTokenError = () =>
-    addToast(`Failed to get user token`, { appearance: 'error' });
+    addToast(`Failed to get user token`, {
+      appearance: 'error',
+      autoDismiss: true,
+    });
   const updateUserBalance = useCallback(() => config.mutateUser(), []);
 
   useEffect(() => {

@@ -46,6 +46,7 @@ const DepositPage = () => {
     ).catch(err => {
       addToast(`Failed to redirect to bank`, {
         appearance: 'error',
+        autoDismiss: true,
       });
       console.log(err);
       return null;

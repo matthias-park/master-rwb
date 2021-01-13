@@ -46,7 +46,7 @@ const LoginForm = ({
       login: email,
       password,
     }).catch(err => {
-      addToast(`Failed to login`, { appearance: 'error' });
+      addToast(`Failed to login`, { appearance: 'error', autoDismiss: true });
       console.log(err);
     });
     setLoginInProgress(false);

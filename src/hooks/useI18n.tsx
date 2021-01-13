@@ -65,7 +65,10 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
           }, {}),
         );
       } else {
-        addToast(`Failed to fetch translations`, { appearance: 'error' });
+        addToast(`Failed to fetch translations`, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
       }
     })();
   }, [locale]);
