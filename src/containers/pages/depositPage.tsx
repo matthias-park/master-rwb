@@ -20,7 +20,7 @@ const questionItems = [
 
 const DepositPage = () => {
   const { addToast } = useToasts();
-  let { bankResponse } = useParams<{ bankResponse?: string }>();
+  const { bankResponse } = useParams<{ bankResponse?: string }>();
 
   const handleRequestDeposit = useCallback(async (depositValue: number) => {
     const userIp: any = await getApi('/check-cf-ip').catch(err => {
@@ -60,19 +60,11 @@ const DepositPage = () => {
     <div className="container-fluid px-0 px-sm-4 mb-4">
       <h2 className="mb-4">Deposit</h2>
       <AmountContainer title="Total playable amount" amount={80.1} />
-      {bankResponse === 'success' && (
+      {!!bankResponse && (
         <div className="amount-container mb-4">
-          <h2 className="amount-container__amount">Successfull deposit</h2>
-        </div>
-      )}
-      {bankResponse === 'error' && (
-        <div className="amount-container mb-4">
-          <h2 className="amount-container__amount">ERROR deposit</h2>
-        </div>
-      )}
-      {bankResponse === 'cancel' && (
-        <div className="amount-container mb-4">
-          <h2 className="amount-container__amount">CANCEL deposit</h2>
+          <h2 className="amount-container__amount">
+            {bankResponse.toUpperCase()} deposit
+          </h2>
         </div>
       )}
       <InputContainer

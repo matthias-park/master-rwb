@@ -4,12 +4,14 @@ import React, {
   useState,
   useEffect,
   ReactNode,
+  useMemo,
 } from 'react';
 import i18n, { I18n } from '../utils/i18n';
 import { postApi } from '../utils/apiUtils';
 import { TRANSLATION_SYMBOLS } from '../constants';
 import { useConfig } from './useConfig';
 import { useToasts } from 'react-toast-notifications';
+import useSWR from 'swr';
 
 export const I18nContext = createContext<I18n | null>(null);
 
@@ -42,36 +44,27 @@ interface translationSymbol {
 export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   const { addToast } = useToasts();
   const { locale } = useConfig();
-  const [data, setData] = useState({});
-  useEffect(() => {
-    (async () => {
-      const trans = await postApi<translationSymbol[]>(
-        '/translations/translate',
-        {
-          keys: TRANSLATION_SYMBOLS,
-          lang_fr: [
-            {
-              fr: 1,
-              lang: [locale],
-            },
-          ],
-        },
-      );
-      if (trans) {
-        setData(
-          trans.reduce((obj, symbol) => {
-            obj[symbol.key] = symbol.translation;
-            return obj;
-          }, {}),
-        );
-      } else {
+  const params = useMemo(
+    () => ({
+      keys: TRANSLATION_SYMBOLS,
+      lang: locale,
+    }),
+    [locale],
+  );
+  const { data } = useSWR<translationSymbol[]>(
+    ['/railsapi/v1/translations', params],
+    postApi,
+    {
+      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
         addToast(`Failed to fetch translations`, {
           appearance: 'error',
           autoDismiss: true,
         });
-      }
-    })();
-  }, [locale]);
+        console.log(error);
+      },
+    },
+  );
+
   const [translations, setTranslations] = useState(() =>
     createLocale(locale, data),
   );

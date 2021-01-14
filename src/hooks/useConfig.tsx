@@ -33,7 +33,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     UserStatus
   >('/api/app/v1/user/status.json', getApi, {
     onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-      addToast(`Failed to fetch user data, retrying`, {
+      addToast(`Failed to fetch user data`, {
         appearance: 'error',
         autoDismiss: true,
       });

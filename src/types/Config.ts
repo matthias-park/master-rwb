@@ -3,7 +3,7 @@ import { ComponentName } from '../constants';
 export interface ConfigRoute {
   id: ComponentName;
   path: string | string[];
-  protected?: true;
+  protected?: boolean;
   exact?: boolean;
 }
 

@@ -264,61 +264,6 @@ export const PROMOTION_LIST = [
   },
 ];
 
-export const WITHDRAWAL_LIST = [
-  {
-    cardName: 'Skrill',
-    img:
-      '/assets/shared/withdrawals/skrill-c81e4d4699bb51e2c5dbc135746b9956b0ef4de556e96272bf633ac5e0e78550.png',
-    account: 'info@gmail.com',
-    name: 'Test3555 Test4',
-  },
-  {
-    cardName: 'Swedbank',
-    img:
-      '/assets/shared/withdrawals/swedbank-a1d02ee4d7123bfae9456e3c5adb6fe62c4844648e52bc3c008c442674c36167.png',
-    account: 'LT54849515945159484',
-    name: 'Test3555 Test4',
-  },
-  {
-    cardName: 'Paysera',
-    img:
-      '/assets/shared/withdrawals/paysera-455a13bca8c563760ae083777ba8adcf43d3529efce20dfdd5a1967d7882cce4.png',
-    account: 'ABbankasSnoras',
-    name: 'Test3555 Test4',
-  },
-];
-
-export const DEPOSIT_LIST = [
-  {
-    info: 'Transfer time 1-2 min.',
-    img:
-      'https://n.tonybet.com/uploads/1/payment_method/icon/75/paysafecard.jpg',
-  },
-  {
-    info: 'Transfer time 1-2 min.',
-    img: 'https://n.tonybet.com/uploads/1/payment_method/icon/78/mokejimai.png',
-  },
-  {
-    info: 'Transfer time 1-2 min.',
-    img: 'https://n.tonybet.com/uploads/1/payment_method/icon/15/skrill.gif',
-  },
-  {
-    info: 'Transfer time 1-2 min.',
-    img: 'https://n.tonybet.com/uploads/1/payment_method/icon/433/neteller.png',
-  },
-  {
-    info: 'Transfer time 1-2 min.',
-    img:
-      'https://n.tonybet.com/uploads/1/payment_method/icon/453/wirecard_visa.png',
-  },
-  {
-    info:
-      'ransfer time up to 48hours, your balance will be updated once the transfer has been confirmed.',
-    img:
-      'https://n.tonybet.com/uploads/1/payment_method/icon/455/online-uberweisen-120x48.jpg',
-  },
-];
-
 export const HEAD_DATA: HeadData = {
   title: 'test header',
 };
@@ -370,7 +315,7 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
   {
     path: '/settings',
     id: ComponentName.SettingsPage,
-    protected: true,
+    protected: false,
   },
   {
     path: '/withdrawal',

@@ -17,11 +17,11 @@ export const getApi = <T>(url: string): Promise<T> =>
   fetch(`${API_URL}${url}`, {
     mode: 'cors',
     credentials: 'include',
-  }).then(r => {
-    if (!r.ok) {
-      throw new Error(`${url} - ${r.status} ${r.statusText}`);
+  }).then(res => {
+    if (!res.ok) {
+      throw new Error(`${url} - ${res.status} ${res.statusText}`);
     }
-    return r.json();
+    return res.json();
   });
 
 export const postApi = <T>(url: string, body?: unknown): Promise<T> => {
@@ -36,7 +36,12 @@ export const postApi = <T>(url: string, body?: unknown): Promise<T> => {
     (config.headers as Headers).append('Content-Type', 'application/json');
     // (config.headers as Headers).set('User-Agent', 'TonyBetApp');
   }
-  return fetch(`${API_URL}${url}`, config).then(res => res.json());
+  return fetch(`${API_URL}${url}`, config).then(res => {
+    if (!res.ok) {
+      throw new Error(`${url} - ${res.status} ${res.statusText}`);
+    }
+    return res.json();
+  });
 };
 
 export const SwrFetcherConfig: ConfigInterface<

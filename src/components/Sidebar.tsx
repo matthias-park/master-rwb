@@ -16,6 +16,7 @@ const Sidebar = ({ links }: Props) => {
       <ul className="sidebar-list">
         {links.map(link => (
           <li
+            key={link.link}
             className={`sidebar-list__item ${
               link.link === pathname ? 'sidebar-list__item-link--active' : ''
             }`}

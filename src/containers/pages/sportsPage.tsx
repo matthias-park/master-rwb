@@ -19,7 +19,6 @@ const getSBParams = async (config: Config, error: () => void) => {
       })
     : null;
   return {
-    key: Math.floor(Math.random() * (500 - 100) + 100),
     locale: config.locale,
     playerId,
     ticket: data?.Data || '',

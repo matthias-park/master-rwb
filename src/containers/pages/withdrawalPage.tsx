@@ -1,8 +1,6 @@
 import React from 'react';
 // import useSWR from 'swr';
 // import { getApi } from '../../utils/apiUtils';
-import { WITHDRAWAL_LIST } from '../../constants';
-import WithdrawalListItem from '../../types/WithdrawalListItem';
 import AmountContainer from 'components/account-settings/AmountContainer';
 import InputContainer from 'components/account-settings/InputContainer';
 import QuestionsContainer from 'components/account-settings/QuestionsContainer';
@@ -19,8 +17,6 @@ const questionItems = [
 ];
 
 const WithdrawalPage = () => {
-  // const { data } = useSWR('/api/withdrawal-list', getApi);
-  const data: WithdrawalListItem[] = WITHDRAWAL_LIST;
   return (
     <div className="container-fluid px-0 px-sm-4 mb-4">
       <h2 className="mb-4">Withdrawal</h2>
