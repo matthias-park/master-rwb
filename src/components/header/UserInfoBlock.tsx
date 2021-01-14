@@ -35,7 +35,6 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
         <strong className="text-primary-light">{user.name}</strong>
         <div className="header__user-menu-info-balance">
           <span>{user.balance}</span>
-          <span>€0,75 bonus</span>
         </div>
       </div>
       {isMobile ? (

@@ -337,23 +337,23 @@
                 @include media-breakpoint-down(lg) {
                     font-size: 12px;
                 }
-                span:first-of-type {
+                span:nth-of-type(2) {
                     position: relative;
-                    margin-right: 25px;
+                    margin-left: 25px;
                     &:after {
                         content: '';
                         position: absolute;
                         top: 7px;
-                        right: -14px;
+                        left: -14px;
                         height: 3px;
                         width: 3px;
                         background-color: $primary;
                         border-radius: 50%;
                     }
                     @include media-breakpoint-down(lg) {
-                        margin-right: 20px;
+                        margin-left: 20px;
                         &:after {
-                            right: -11px;
+                            left: -11px;
                             top: 5px;
                         }
                     }
