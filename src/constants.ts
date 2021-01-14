@@ -229,6 +229,13 @@ export const TRANSLATION_SYMBOLS = [
   'footer_social_title',
   'footer_download_the_app',
   'find_us_in_social',
+  'date',
+  'action',
+  'account',
+  'amount',
+  'transactions_no_data',
+  'days',
+  'search',
 ];
 
 export const PROMOTION_LIST = [

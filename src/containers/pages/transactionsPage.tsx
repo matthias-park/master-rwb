@@ -32,6 +32,7 @@ interface Transactions {
     date: string;
     title: string;
     amount: string;
+    account_number?: string;
   }[];
 }
 
