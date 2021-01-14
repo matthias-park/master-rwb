@@ -35,7 +35,7 @@ const QuestionsContainer = ({ items }: Props) => {
       <h3 className="mb-3">Questions?</h3>
       <Accordion className="questions-acr">
         {items.map((item, index) => {
-          return <QuestionItem item={item} index={index} />;
+          return <QuestionItem key={index} item={item} index={index} />;
         })}
       </Accordion>
       <u className="d-block text-center my-3 text-14 font-weight-bold">

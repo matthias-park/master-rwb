@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
+import useSWR from 'swr';
+import { formatUrl } from '../../utils/apiUtils';
+import { useI18n } from '../../hooks/useI18n';
+import dayjs from 'dayjs';
+import clsx from 'clsx';
 import 'react-datepicker/dist/react-datepicker.css';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
+import Spinner from 'react-bootstrap/Spinner';
+import Pagination from 'react-bootstrap/Pagination';
 import QuestionsContainer from 'components/account-settings/QuestionsContainer';
 
 const questionItems = [
@@ -16,128 +23,228 @@ const questionItems = [
   },
 ];
 
+interface Transactions {
+  pages: number;
+  time_limitation_notice: string;
+  title: string;
+  transactions: {
+    in: boolean;
+    date: string;
+    title: string;
+    amount: string;
+  }[];
+}
+
+const TransactionsTable = ({ dateTo, dateFrom, data, setUrl }) => {
+  const { t } = useI18n();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setUrl(
+      formatUrl('/transactions.json', {
+        to: dateTo.format('DD/MM/YYYY'),
+        from: dateFrom.format('DD/MM/YYYY'),
+        page: currentPage.toString(),
+      }),
+    );
+  }, [currentPage]);
+
+  return (
+    <div className="d-flex flex-column">
+      {!data ? (
+        <div className="d-flex justify-content-center pt-4 pb-3">
+          <Spinner animation="border" variant="white" className="mx-auto" />
+        </div>
+      ) : data.transactions.length ? (
+        <div className="table-container d-flex flex-column mb-4">
+          <Table hover>
+            <thead>
+              <tr>
+                <th>{t('date')}</th>
+                <th>{t('action')}</th>
+                <th>{t('account')}</th>
+                <th>{t('amount')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.transactions.map((transaction, index) => {
+                return (
+                  <tr key={index}>
+                    <td>
+                      <strong className="heading-sm">{t('date')}</strong>
+                      {dayjs(new Date(transaction.date)).format('DD/MM/YYYY')}
+                    </td>
+                    <td>
+                      <strong className="heading-sm">{t('action')}</strong>
+                      {transaction.title}
+                    </td>
+                    <td>
+                      <strong className="heading-sm">{t('account')}</strong>
+                      {transaction.account_number
+                        ? transaction.account_number
+                        : '-'}
+                    </td>
+                    <td>
+                      <strong className="heading-sm">{t('amount')}</strong>
+                      {`${transaction.in ? '+' : '-'} ${transaction.amount}`}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+          {data.pages > 1 && (
+            <Pagination className="ml-auto mr-3 mt-3 mb-n2">
+              {[...Array(data.pages)].map((_, i) => {
+                return (
+                  <Pagination.Item
+                    key={i}
+                    onClick={() => setCurrentPage(i + 1)}
+                    active={i + 1 === currentPage}
+                  >
+                    {i + 1}
+                  </Pagination.Item>
+                );
+              })}
+            </Pagination>
+          )}
+          <div className="table-container__info">
+            {data && data.time_limitation_notice}
+          </div>
+        </div>
+      ) : (
+        <h2 className="mt-3 mb-5 text-center">{t('transactions_no_data')}</h2>
+      )}
+    </div>
+  );
+};
+
+const TransactionsPeriodFilter = ({
+  periodSelected,
+  setPeriodSelected,
+  setDateFrom,
+  setDateTo,
+}) => {
+  const { t } = useI18n();
+
+  const updatePeriod = period => {
+    setPeriodSelected(period);
+    setDateFrom(dayjs().subtract(period, 'day'));
+    setDateTo(dayjs());
+  };
+
+  return (
+    <div className="account-tabs mb-sm-3">
+      {[7, 14, 30].map(period => {
+        return (
+          <button
+            key={period}
+            className={clsx(
+              'account-tabs__tab',
+              periodSelected === period && 'active',
+            )}
+            onClick={() => updatePeriod(period)}
+          >
+            {period} {t('days')}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
+
+const TransactionsDateFilter = ({
+  dateTo,
+  dateFrom,
+  setDateTo,
+  setDateFrom,
+  setUrl,
+}) => {
+  const { t } = useI18n();
+
+  const updateDate = () => {
+    setUrl(
+      formatUrl('/transactions.json', {
+        to: dateTo.format('DD/MM/YYYY'),
+        from: dateFrom.format('DD/MM/YYYY'),
+      }),
+    );
+  };
+
+  return (
+    <>
+      <div className="date-filter__picker-wrp mb-sm-3">
+        <DatePicker
+          selected={dateFrom.toDate()}
+          onChange={date => setDateFrom(dayjs(date))}
+        />
+        <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
+      </div>
+      <span className="text-gray-400 mx-auto mx-sm-1 mb-sm-3">-</span>
+      <div className="date-filter__picker-wrp mb-sm-3">
+        <DatePicker
+          selected={dateTo.toDate()}
+          onChange={date => setDateTo(dayjs(date))}
+        />
+        <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
+      </div>
+      <Button
+        className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3"
+        variant="primary"
+        onClick={() => updateDate()}
+      >
+        {t('search')}
+      </Button>
+    </>
+  );
+};
+
 const TransactionsPage = () => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [periodSelected, setPeriodSelected] = useState(0);
+  const [url, setUrl] = useState('/transactions.json');
+  const { data } = useSWR<Transactions>(url);
+  const [periodSelected, setPeriodSelected] = useState(30);
+  const [dateTo, setDateTo] = useState(dayjs());
+  const [dateFrom, setDateFrom] = useState(
+    dayjs().subtract(periodSelected, 'day'),
+  );
+
+  useEffect(() => {
+    setUrl(
+      formatUrl('/transactions.json', {
+        to: dateTo.format('DD/MM/YYYY'),
+        from: dateFrom.format('DD/MM/YYYY'),
+      }),
+    );
+  }, [periodSelected]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [url]);
 
   return (
     <div className="container-fluid px-0 px-sm-4 mb-4">
       <h2 className="mb-4">Transactions</h2>
       <div className="date-filter mb-4 pb-sm-2">
-        <div className="date-filter__picker-wrp mb-sm-3">
-          <DatePicker
-            selected={startDate}
-            onChange={date => setStartDate(date)}
-          />
-          <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
-        </div>
-        <span className="text-gray-400 mx-auto mx-sm-1">-</span>
-        <div className="date-filter__picker-wrp mb-sm-3">
-          <DatePicker selected={endDate} onChange={date => setEndDate(date)} />
-          <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
-        </div>
-        <Button
-          className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3"
-          variant="primary"
-        >
-          Search
-        </Button>
-        <div className="account-tabs account-tabs--mx-205 mb-sm-3">
-          <button
-            className={`account-tabs__tab ${periodSelected === 7 && 'active'}`}
-            onClick={() => setPeriodSelected(7)}
-          >
-            7 days
-          </button>
-          <button
-            className={`account-tabs__tab ${periodSelected === 14 && 'active'}`}
-            onClick={() => setPeriodSelected(14)}
-          >
-            14 days
-          </button>
-          <button
-            className={`account-tabs__tab ${periodSelected === 30 && 'active'}`}
-            onClick={() => setPeriodSelected(30)}
-          >
-            30 days
-          </button>
-        </div>
+        <TransactionsDateFilter
+          dateTo={dateTo}
+          dateFrom={dateFrom}
+          setDateFrom={setDateFrom}
+          setDateTo={setDateTo}
+          setUrl={setUrl}
+        />
+        <TransactionsPeriodFilter
+          periodSelected={periodSelected}
+          setPeriodSelected={setPeriodSelected}
+          setDateFrom={setDateFrom}
+          setDateTo={setDateTo}
+        />
       </div>
-      <div className="table-container mb-4">
-        <Table hover>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Action</th>
-              <th>Account</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <strong className="heading-sm">Date</strong>2020-10-26
-              </td>
-              <td>
-                <strong className="heading-sm">Action</strong>Sports bet lost
-              </td>
-              <td>
-                <strong className="heading-sm">Account</strong>-
-              </td>
-              <td>
-                <strong className="heading-sm">Amount</strong>-5€
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <strong className="heading-sm">Date</strong>2020-10-26
-              </td>
-              <td>
-                <strong className="heading-sm">Action</strong>Sports bet lost
-              </td>
-              <td>
-                <strong className="heading-sm">Account</strong>-
-              </td>
-              <td>
-                <strong className="heading-sm">Amount</strong>-5€
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <strong className="heading-sm">Date</strong>2020-10-26
-              </td>
-              <td>
-                <strong className="heading-sm">Action</strong>Sports bet lost
-              </td>
-              <td>
-                <strong className="heading-sm">Account</strong>-
-              </td>
-              <td>
-                <strong className="heading-sm">Amount</strong>-5€
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <strong className="heading-sm">Date</strong>2020-10-26
-              </td>
-              <td>
-                <strong className="heading-sm">Action</strong>Sports bet lost
-              </td>
-              <td>
-                <strong className="heading-sm">Account</strong>-
-              </td>
-              <td>
-                <strong className="heading-sm">Amount</strong>-5€
-              </td>
-            </tr>
-          </tbody>
-        </Table>
-        <div className="table-container__info">
-          The betting history displayed on this page only covers the period of
-          the last six months.
-        </div>
-      </div>
+      <TransactionsTable
+        dateTo={dateTo}
+        dateFrom={dateFrom}
+        data={data}
+        setUrl={setUrl}
+      />
       <QuestionsContainer items={questionItems} />
     </div>
   );
