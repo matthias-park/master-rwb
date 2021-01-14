@@ -20,7 +20,7 @@ const RequiredDocuments = ({ active, order }: SettingProps) => {
       <Card.Header
         className={`settings-card__header ${active ? 'active' : ''}`}
       >
-        <Accordion.Toggle as="a" eventKey={order}>
+        <Accordion.Toggle as="a" eventKey={order} className="text-dark">
           Required documents
         </Accordion.Toggle>
       </Card.Header>
@@ -106,7 +106,7 @@ const MarketingSettings = ({ active, order }: SettingProps) => {
       <Card.Header
         className={`settings-card__header ${active ? 'active' : ''}`}
       >
-        <Accordion.Toggle as="a" eventKey={order}>
+        <Accordion.Toggle as="a" eventKey={order} className="text-dark">
           Marketing Settings
         </Accordion.Toggle>
       </Card.Header>
@@ -281,7 +281,7 @@ const BettingLossLimits = ({ active, order }: SettingProps) => {
       <Card.Header
         className={`settings-card__header ${active ? 'active' : ''}`}
       >
-        <Accordion.Toggle as="a" eventKey={order}>
+        <Accordion.Toggle as="a" eventKey={order} className="text-dark">
           Betting Loss Limits
         </Accordion.Toggle>
       </Card.Header>
@@ -347,7 +347,7 @@ const DepositLimit = ({ active, order }: SettingProps) => {
       <Card.Header
         className={`settings-card__header ${active ? 'active' : ''}`}
       >
-        <Accordion.Toggle as="a" eventKey={order}>
+        <Accordion.Toggle as="a" eventKey={order} className="text-dark">
           Deposit Limit
         </Accordion.Toggle>
       </Card.Header>
@@ -415,7 +415,7 @@ const SetTheWageringAmountLimitPerPeriod = ({
       <Card.Header
         className={`settings-card__header ${active ? 'active' : ''}`}
       >
-        <Accordion.Toggle as="a" eventKey={order}>
+        <Accordion.Toggle as="a" eventKey={order} className="text-dark">
           Set the wagering amount limit per period
         </Accordion.Toggle>
       </Card.Header>
@@ -493,7 +493,7 @@ const SetTheWageringAmountLimitPerSession = ({
       <Card.Header
         className={`settings-card__header ${active ? 'active' : ''}`}
       >
-        <Accordion.Toggle as="a" eventKey={order}>
+        <Accordion.Toggle as="a" eventKey={order} className="text-dark">
           Set the wagering amount limit per session
         </Accordion.Toggle>
       </Card.Header>
@@ -554,7 +554,7 @@ const DisablingYourAccount = ({ active, order }: SettingProps) => {
       <Card.Header
         className={`settings-card__header ${active ? 'active' : ''}`}
       >
-        <Accordion.Toggle as="a" eventKey={order}>
+        <Accordion.Toggle as="a" eventKey={order} className="text-dark">
           Disabling Your Account
         </Accordion.Toggle>
       </Card.Header>
