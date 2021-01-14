@@ -4,14 +4,19 @@ import { getApi } from '../../utils/apiUtils';
 import GetToken from '../../types/api/kambi/GetToken';
 import Config from '../../types/Config';
 import { useCallback } from 'react';
+import { useToasts } from 'react-toast-notifications';
 import KambiSportsbook, {
   KambiSportsbookProps,
 } from '../../components/KambiSportsbook';
 
-const getSBParams = async (config: Config) => {
+const getSBParams = async (config: Config, error: () => void) => {
   const playerId = config.user.id ? config.user.id.toString() : '';
   const data: GetToken | null = playerId
-    ? await getApi<GetToken>('/railsapi/v1/kambi/get_token')
+    ? await getApi<GetToken>('/railsapi/v1/kambi/get_token').catch(err => {
+        error();
+        console.log(err);
+        return null;
+      })
     : null;
   return {
     key: Math.floor(Math.random() * (500 - 100) + 100),
@@ -25,14 +30,19 @@ const getSBParams = async (config: Config) => {
 };
 
 const SportsPage = () => {
+  const { addToast } = useToasts();
   const config = useConfig();
   const [params, setParams] = useState<KambiSportsbookProps | null>(null);
-
+  const handleTokenError = () =>
+    addToast(`Failed to get user token`, {
+      appearance: 'error',
+      autoDismiss: true,
+    });
   const updateUserBalance = useCallback(() => config.mutateUser(), []);
 
   useEffect(() => {
     if (!config.user.loading) {
-      getSBParams(config).then(async sbParams => {
+      getSBParams(config, handleTokenError).then(async sbParams => {
         setParams(sbParams);
       });
     }

@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import { useI18n } from '../hooks/useI18n';
 import { Link, useLocation } from 'react-router-dom';
 import { Spinner, OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
+import { useToasts } from 'react-toast-notifications';
 
 interface Props {
   dropdownClasses?: string;
@@ -24,6 +25,7 @@ const LoginForm = ({
 }: {
   hideLoginDropdown: () => void;
 }) => {
+  const { addToast } = useToasts();
   const { t } = useI18n();
   const { register, handleSubmit, errors } = useForm<LoginFromData>();
   const [passwordVisible, setPasswordVisibility] = useState(false);
@@ -31,8 +33,8 @@ const LoginForm = ({
   const { mutateUser, routes } = useConfig();
   const forgotPasswordRoute = useMemo(
     () =>
-      routes.find(route => route.id === ComponentName.ForgotPasswordPage)
-        ?.path || '/',
+      (routes.find(route => route.id === ComponentName.ForgotPasswordPage)
+        ?.path as string) || '/',
     [routes],
   );
   const togglePasswordVisibility = () =>
@@ -43,6 +45,9 @@ const LoginForm = ({
     await postApi('/players/login.json', {
       login: email,
       password,
+    }).catch(err => {
+      addToast(`Failed to login`, { appearance: 'error', autoDismiss: true });
+      console.log(err);
     });
     setLoginInProgress(false);
     hideLoginDropdown();

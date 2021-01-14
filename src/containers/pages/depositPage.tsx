@@ -1,11 +1,11 @@
-import React from 'react';
-// import useSWR from 'swr';
-// import { getApi } from '../../utils/apiUtils';
-import { DEPOSIT_LIST } from '../../constants';
-import DepositListItem from '../../types/DepositListItem';
+import React, { useCallback } from 'react';
 import AmountContainer from 'components/account-settings/AmountContainer';
 import InputContainer from 'components/account-settings/InputContainer';
 import QuestionsContainer from 'components/account-settings/QuestionsContainer';
+import { getApi, postApi } from '../../utils/apiUtils';
+import { useParams } from 'react-router-dom';
+import DepositRequest from '../../types/api/user/DepositReques';
+import { useToasts } from 'react-toast-notifications';
 
 const questionItems = [
   {
@@ -19,16 +19,67 @@ const questionItems = [
 ];
 
 const DepositPage = () => {
-  // const { data } = useSWR('/api/deposit-list', getApi);
-  const data: DepositListItem[] = DEPOSIT_LIST;
+  const { addToast } = useToasts();
+  let { bankResponse } = useParams<{ bankResponse?: string }>();
+
+  const handleRequestDeposit = useCallback(async (depositValue: number) => {
+    const userIp: any = await getApi('/check-cf-ip').catch(err => {
+      addToast(`Failed to get ip, using fallback`, {
+        appearance: 'warning',
+        autoDismiss: true,
+      });
+      console.log(err);
+      return {};
+    });
+    const response: DepositRequest | null = await postApi<DepositRequest>(
+      `/tgbetapi/franchises/38/players/_player_id_/deposit_request`,
+      {
+        tgbet_params: JSON.stringify({
+          BankId: 160,
+          ip: userIp.ip || '0.0.0.0',
+          amount: depositValue,
+          ReturnSuccessUrl: `${window.location.href}/success`,
+          ReturnCancelUrl: `${window.location.href}/cancel`,
+          ReturnErrorUrl: `${window.location.href}/error`,
+        }),
+      },
+    ).catch(err => {
+      addToast(`Failed to redirect to bank`, {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+      console.log(err);
+      return null;
+    });
+    if (response?.Success) {
+      window.location.href = response.RedirectUrl;
+    }
+  }, []);
+
   return (
     <div className="container-fluid px-0 px-sm-4 mb-4">
       <h2 className="mb-4">Deposit</h2>
       <AmountContainer title="Total playable amount" amount={80.1} />
+      {bankResponse === 'success' && (
+        <div className="amount-container mb-4">
+          <h2 className="amount-container__amount">Successfull deposit</h2>
+        </div>
+      )}
+      {bankResponse === 'error' && (
+        <div className="amount-container mb-4">
+          <h2 className="amount-container__amount">ERROR deposit</h2>
+        </div>
+      )}
+      {bankResponse === 'cancel' && (
+        <div className="amount-container mb-4">
+          <h2 className="amount-container__amount">CANCEL deposit</h2>
+        </div>
+      )}
       <InputContainer
         title="Select Amount"
         placeholder="€ 300"
         buttonText="Deposit"
+        onSubmit={handleRequestDeposit}
       />
       <div className="info-container mb-4">
         <p className="info-container__info text-14 mb-0">

@@ -6,6 +6,7 @@ import UserStatus from '../types/UserStatus';
 import { getRedirectLocalePathname, setLocalePathname } from '../utils/i18n';
 import { AVAILABLE_LOCALES, NAVIGATION_ROUTES } from '../constants';
 import { User } from '../types/UserStatus';
+import { useToasts } from 'react-toast-notifications';
 
 export const configContext = createContext<Config | null>(null);
 
@@ -22,6 +23,7 @@ export type ConfigProviderProps = {
 };
 
 export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
+  const { addToast } = useToasts();
   const routes = NAVIGATION_ROUTES;
   const locales = AVAILABLE_LOCALES;
   const [locale, changeLocale] = useState(
@@ -29,7 +31,15 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   );
   const { data: userData, error: userError, mutate: mutateUser } = useSWR<
     UserStatus
-  >('/api/app/v1/user/status.json');
+  >('/api/app/v1/user/status.json', getApi, {
+    onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+      addToast(`Failed to fetch user data, retrying`, {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+      console.log(error);
+    },
+  });
   const setLocale = (lang: string) => {
     setLocalePathname(lang);
     changeLocale(lang);

@@ -48,3 +48,11 @@ export const createBackdropProviderValues = (
     hide,
   };
 };
+
+export const enterKeyPress = (e: any, callback: any) => {
+  const charCode = typeof e.which === 'number' ? e.which : e.keyCode;
+  const enterKey = 13;
+  if (charCode === enterKey) {
+    callback();
+  }
+};
