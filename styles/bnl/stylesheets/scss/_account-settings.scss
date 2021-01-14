@@ -12,7 +12,7 @@
       padding: 0 20px;
       margin: 0 -20px;
   }
-  a {
+  a:not(.page-link) {
     color: $white;
   }
   .left-sidebar {
