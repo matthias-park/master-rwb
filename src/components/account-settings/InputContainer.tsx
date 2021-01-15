@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { enterKeyPress } from '../../utils/uiUtils';
+import Spinner from 'react-bootstrap/Spinner';
 
 interface Props {
   title: string;
   placeholder: string;
   buttonText: string;
+  loading?: boolean;
   onSubmit: (inputValue: number) => void;
 }
 
@@ -14,6 +16,7 @@ const InputContainer = ({
   title,
   placeholder,
   buttonText,
+  loading,
   onSubmit,
 }: Props) => {
   const [inputValue, setInputValue] = useState<string>('');
@@ -34,6 +37,15 @@ const InputContainer = ({
         <small className="form-group__error-msg">Error message</small>
       </Form.Group>
       <Button variant="primary" onClick={handleSubmit}>
+        {loading && (
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            className="mr-1"
+          />
+        )}
         {buttonText}
       </Button>
     </div>

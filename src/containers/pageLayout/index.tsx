@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PageHeader from './PageHeader';
 import PageFooter from './PageFooter';
 import CookieConsent from '../../components/CookieConsent';
-import { matchPath, useLocation } from 'react-router-dom';
+import { matchPath, useHistory, useLocation } from 'react-router-dom';
 import LayoutWithSidebar from './LayoutWithSidebar';
 import { ComponentName, NAVIGATION_ROUTES } from '../../constants';
 import { ConfigRoute } from '../../types/Config';
+import { usePrevious } from '../../hooks/index';
 
 const pathsWithSidebar = NAVIGATION_ROUTES.filter(route =>
   [
@@ -43,8 +44,23 @@ const pathMatch = (routes: ConfigRoute[], currentPath: string) =>
 
 const PageLayout = ({ children }) => {
   const { pathname } = useLocation();
+  const history = useHistory();
+  const prevPathname = usePrevious(pathname);
   const sidebarLayout = pathMatch(pathsWithSidebar, pathname);
   const rightSidebarLayout = pathMatch(pathsWithRightSidebar, pathname);
+
+  useEffect(() => {
+    if (prevPathname)
+      sessionStorage.setItem(
+        `route-${prevPathname}`,
+        window.scrollY.toString(),
+      );
+    const savedScroll =
+      (history.action === 'POP' &&
+        sessionStorage.getItem(`route-${pathname}`)) ||
+      0;
+    window.scrollTo(0, Number(savedScroll));
+  }, [pathname]);
 
   return (
     <>

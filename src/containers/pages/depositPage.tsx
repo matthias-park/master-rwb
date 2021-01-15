@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import AmountContainer from 'components/account-settings/AmountContainer';
 import InputContainer from 'components/account-settings/InputContainer';
 import QuestionsContainer from 'components/account-settings/QuestionsContainer';
 import { getApi, postApi } from '../../utils/apiUtils';
 import { useParams } from 'react-router-dom';
-import DepositRequest from '../../types/api/user/DepositReques';
+import { DepositRequest, DepositResponse } from '../../types/api/user/Deposit';
 import { useToasts } from 'react-toast-notifications';
 
 const questionItems = [
@@ -21,8 +21,10 @@ const questionItems = [
 const DepositPage = () => {
   const { addToast } = useToasts();
   const { bankResponse } = useParams<{ bankResponse?: string }>();
+  const [depositLoading, setDepositLoading] = useState(false);
 
   const handleRequestDeposit = useCallback(async (depositValue: number) => {
+    setDepositLoading(true);
     const userIp: any = await getApi('/check-cf-ip').catch(err => {
       addToast(`Failed to get ip, using fallback`, {
         appearance: 'warning',
@@ -31,17 +33,18 @@ const DepositPage = () => {
       console.log(err);
       return {};
     });
-    const response: DepositRequest | null = await postApi<DepositRequest>(
+    const depositParams: DepositRequest = {
+      BankId: 160,
+      Ip: userIp.ip || '0.0.0.0',
+      Amount: depositValue,
+      ReturnSuccessUrl: `${window.location.href}/success`,
+      ReturnCancelUrl: `${window.location.href}/cancel`,
+      ReturnErrorUrl: `${window.location.href}/error`,
+    };
+    const response: DepositResponse | null = await postApi<DepositResponse>(
       `/tgbetapi/franchises/38/players/_player_id_/deposit_request`,
       {
-        tgbet_params: JSON.stringify({
-          BankId: 160,
-          ip: userIp.ip || '0.0.0.0',
-          amount: depositValue,
-          ReturnSuccessUrl: `${window.location.href}/success`,
-          ReturnCancelUrl: `${window.location.href}/cancel`,
-          ReturnErrorUrl: `${window.location.href}/error`,
-        }),
+        tgbet_params: JSON.stringify(depositParams),
       },
     ).catch(err => {
       addToast(`Failed to redirect to bank`, {
@@ -52,8 +55,14 @@ const DepositPage = () => {
       return null;
     });
     if (response?.Success) {
-      window.location.href = response.RedirectUrl;
+      return (window.location.href = response.RedirectUrl);
     }
+    addToast(`Failed to redirect to bank`, {
+      appearance: 'error',
+      autoDismiss: true,
+    });
+    console.log(response);
+    setDepositLoading(false);
   }, []);
 
   return (
@@ -71,6 +80,7 @@ const DepositPage = () => {
         title="Select Amount"
         placeholder="€ 300"
         buttonText="Deposit"
+        loading={depositLoading}
         onSubmit={handleRequestDeposit}
       />
       <div className="info-container mb-4">
