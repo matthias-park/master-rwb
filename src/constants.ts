@@ -229,7 +229,7 @@ export const TRANSLATION_SYMBOLS = [
   'footer_social_title',
   'footer_download_the_app',
   'find_us_in_social',
-  'date',
+  '_date',
   'action',
   'account',
   'amount',

@@ -1,7 +1,8 @@
 import fetch from 'isomorphic-unfetch';
 import { ConfigInterface } from 'swr';
 
-const API_URL = window.API_URL;
+// For rails api testing in dev
+// const API_URL = window.API_URL;
 
 export const formatUrl = (
   url: string,
@@ -14,7 +15,7 @@ export const formatUrl = (
 };
 
 export const getApi = <T>(url: string): Promise<T> =>
-  fetch(`${API_URL}${url}`, {
+  fetch(`${window.API_URL}${url}`, {
     mode: 'cors',
     credentials: 'include',
   }).then(res => {
@@ -36,7 +37,7 @@ export const postApi = <T>(url: string, body?: unknown): Promise<T> => {
     (config.headers as Headers).append('Content-Type', 'application/json');
     // (config.headers as Headers).set('User-Agent', 'TonyBetApp');
   }
-  return fetch(`${API_URL}${url}`, config).then(res => {
+  return fetch(`${window.API_URL}${url}`, config).then(res => {
     if (!res.ok) {
       throw new Error(`${url} - ${res.status} ${res.statusText}`);
     }

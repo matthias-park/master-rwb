@@ -61,7 +61,7 @@ const TransactionsTable = ({ dateTo, dateFrom, data, setUrl }) => {
           <Table hover>
             <thead>
               <tr>
-                <th>{t('date')}</th>
+                <th>{t('_date')}</th>
                 <th>{t('action')}</th>
                 <th>{t('account')}</th>
                 <th>{t('amount')}</th>
@@ -72,7 +72,7 @@ const TransactionsTable = ({ dateTo, dateFrom, data, setUrl }) => {
                 return (
                   <tr key={index}>
                     <td>
-                      <strong className="heading-sm">{t('date')}</strong>
+                      <strong className="heading-sm">{t('_date')}</strong>
                       {dayjs(new Date(transaction.date)).format('DD/MM/YYYY')}
                     </td>
                     <td>
@@ -201,7 +201,7 @@ const TransactionsDateFilter = ({
 };
 
 const TransactionsPage = () => {
-  const [url, setUrl] = useState('/transactions.json');
+  const [url, setUrl] = useState<string | null>(null);
   const { data } = useSWR<Transactions>(url);
   const [periodSelected, setPeriodSelected] = useState(30);
   const [dateTo, setDateTo] = useState(dayjs());
