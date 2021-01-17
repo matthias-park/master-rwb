@@ -36,7 +36,13 @@ interface Transactions {
   }[];
 }
 
-const TransactionsTable = ({ dateTo, dateFrom, data, setUrl }) => {
+const TransactionsTable = ({
+  dateTo,
+  dateFrom,
+  data,
+  setUrl,
+  periodSelected,
+}) => {
   const { t } = useI18n();
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -49,6 +55,10 @@ const TransactionsTable = ({ dateTo, dateFrom, data, setUrl }) => {
       }),
     );
   }, [currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [periodSelected]);
 
   return (
     <div className="d-flex flex-column">
@@ -160,6 +170,7 @@ const TransactionsDateFilter = ({
   setDateTo,
   setDateFrom,
   setUrl,
+  setPeriodSelected,
 }) => {
   const { t } = useI18n();
 
@@ -170,6 +181,7 @@ const TransactionsDateFilter = ({
         from: dateFrom.format('DD/MM/YYYY'),
       }),
     );
+    setPeriodSelected(dateTo.diff(dateFrom, 'day'));
   };
 
   return (
@@ -232,6 +244,7 @@ const TransactionsPage = () => {
           setDateFrom={setDateFrom}
           setDateTo={setDateTo}
           setUrl={setUrl}
+          setPeriodSelected={setPeriodSelected}
         />
         <TransactionsPeriodFilter
           periodSelected={periodSelected}
@@ -245,6 +258,7 @@ const TransactionsPage = () => {
         dateFrom={dateFrom}
         data={data}
         setUrl={setUrl}
+        periodSelected={periodSelected}
       />
       <QuestionsContainer items={questionItems} />
     </div>
