@@ -1,17 +1,16 @@
 import React from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
+import { useRoutePath } from '../../hooks/index';
+import { REDIRECT_PROTECTED_NOT_LOGGED_IN } from '../../constants';
 
 interface Props extends RouteProps {
   redirectTo?: string;
 }
 
-const ProtectedRoute = ({
-  children,
-  redirectTo = '/login',
-  ...props
-}: Props) => {
+const ProtectedRoute = ({ children, redirectTo, ...props }: Props) => {
   const { user } = useConfig();
+  const redirectToPath = useRoutePath(REDIRECT_PROTECTED_NOT_LOGGED_IN);
   if (user.loading) return null;
   if (user.logged_in) {
     return <Route {...props} />;
@@ -19,7 +18,7 @@ const ProtectedRoute = ({
   return (
     <Redirect
       to={{
-        pathname: redirectTo,
+        pathname: redirectTo || redirectToPath,
         state: { from: props.location },
       }}
     />

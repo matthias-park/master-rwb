@@ -10,6 +10,7 @@ import { useI18n } from '../hooks/useI18n';
 import { Link, useLocation } from 'react-router-dom';
 import { Spinner, OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
 import { useToasts } from 'react-toast-notifications';
+import { useRoutePath } from '../hooks/index';
 
 interface Props {
   dropdownClasses?: string;
@@ -30,13 +31,8 @@ const LoginForm = ({
   const { register, handleSubmit, errors } = useForm<LoginFromData>();
   const [passwordVisible, setPasswordVisibility] = useState(false);
   const [loginInProgress, setLoginInProgress] = useState(false);
-  const { mutateUser, routes } = useConfig();
-  const forgotPasswordRoute = useMemo(
-    () =>
-      (routes.find(route => route.id === ComponentName.ForgotPasswordPage)
-        ?.path as string) || '/',
-    [routes],
-  );
+  const { mutateUser } = useConfig();
+  const forgotPasswordRoute = useRoutePath(ComponentName.ForgotPasswordPage);
   const togglePasswordVisibility = () =>
     setPasswordVisibility(prevValue => !prevValue);
 

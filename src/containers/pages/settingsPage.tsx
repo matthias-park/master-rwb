@@ -4,6 +4,8 @@ import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import useSWR from 'swr';
+import ProfileSettings from '../../types/api/user/ProfileSettings';
 
 interface SettingProps {
   active?: boolean;
@@ -591,7 +593,8 @@ export const COMPONENTS_BY_SETTINGS = {
 const SettingsPage = () => {
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const activeSettings = ACCOUNT_SETTINGS;
-
+  // const { data } = useSWR<ProfileSettings>('/v2/profile.json');
+  // console.log(data);
   return (
     <div className="container-fluid px-0 px-sm-4 mb-4">
       <h2 className="mb-4">My account</h2>

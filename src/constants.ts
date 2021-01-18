@@ -10,7 +10,6 @@ export enum ComponentName {
   CookiePolicyPage,
   FaqPage,
   SportsPage,
-  LoginPage,
   RegisterPage,
   PromotionsPage,
   BonusPage,
@@ -27,6 +26,7 @@ export enum ComponentName {
   SetTheWageringAmountLimitPerPeriod,
   SetTheWageringAmountLimitPerSession,
   DisablingYourAccount,
+  NotFoundPage,
 }
 
 export const HEADER_ROUTES: HeaderLink[] = [
@@ -293,10 +293,6 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
     id: ComponentName.SportsPage,
   },
   {
-    path: '/login',
-    id: ComponentName.LoginPage,
-  },
-  {
     path: '/register',
     id: ComponentName.RegisterPage,
   },
@@ -310,7 +306,12 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
     protected: true,
   },
   {
-    path: ['/deposit/', '/deposit/:bankResponse'],
+    path: '/deposit',
+    id: ComponentName.DepositPage,
+    protected: true,
+  },
+  {
+    path: '/deposit/:bankResponse',
     id: ComponentName.DepositPage,
     protected: true,
   },
@@ -322,7 +323,7 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
   {
     path: '/settings',
     id: ComponentName.SettingsPage,
-    protected: false,
+    protected: true,
   },
   {
     path: '/withdrawal',
@@ -337,6 +338,11 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
   {
     path: '/forgot_password',
     id: ComponentName.ForgotPasswordPage,
+  },
+  {
+    path: '*',
+    id: ComponentName.NotFoundPage,
+    exact: false,
   },
 ];
 
@@ -556,3 +562,5 @@ export const ACCOUNT_SETTINGS = [
     component: ComponentName.DisablingYourAccount,
   },
 ];
+
+export const REDIRECT_PROTECTED_NOT_LOGGED_IN = ComponentName.HomePage;

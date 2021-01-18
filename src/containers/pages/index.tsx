@@ -15,9 +15,9 @@ import { Route, Switch } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import NotFoundPage from './notFoundPage';
 import { ComponentName } from '../../constants';
+import PageLayout from 'containers/pageLayout';
 
 const LoadableFaqPage = loadable(() => import('./faqPage'));
-const LoadableLoginPage = loadable(() => import('./loginPage'));
 const LoadableRegisterPage = loadable(() => import('./registerPage'));
 
 export const COMPONENT_PAGES = {
@@ -27,22 +27,26 @@ export const COMPONENT_PAGES = {
   [ComponentName.FaqPage]: LoadableFaqPage,
   [ComponentName.HomePage]: HomePage,
   [ComponentName.LimitsPage]: LimitsPage,
-  [ComponentName.LoginPage]: LoadableLoginPage,
   [ComponentName.PromotionsPage]: PromotionsPage,
   [ComponentName.RegisterPage]: LoadableRegisterPage,
   [ComponentName.SettingsPage]: SettingsPage,
   [ComponentName.SportsPage]: SportsPage,
   [ComponentName.TransactionsPage]: TransactionsPage,
   [ComponentName.WithdrawalPage]: WithdrawalPage,
+  [ComponentName.NotFoundPage]: NotFoundPage,
 };
 
 const Routes = () => {
   const { routes } = useConfig();
+
   return (
     <Switch>
       {routes.map(route => {
-        const page = COMPONENT_PAGES[route.id];
-        if (!page) {
+        const Page =
+          COMPONENT_PAGES[route.id] ||
+          COMPONENT_PAGES[ComponentName.NotFoundPage];
+
+        if (!Page) {
           return null;
         }
         const RouteEl = route.protected ? ProtectedRoute : Route;
@@ -51,11 +55,14 @@ const Routes = () => {
             key={route.id}
             exact={route.exact ?? true}
             path={route.path}
-            component={page}
+            render={props => (
+              <PageLayout>
+                <Page {...props} />
+              </PageLayout>
+            )}
           />
         );
       })}
-      <Route component={NotFoundPage} />
     </Switch>
   );
 };

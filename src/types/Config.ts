@@ -2,7 +2,7 @@ import { User } from './UserStatus';
 import { ComponentName } from '../constants';
 export interface ConfigRoute {
   id: ComponentName;
-  path: string | string[];
+  path: string;
   protected?: boolean;
   exact?: boolean;
 }
