@@ -50,6 +50,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     format: 'eu',
     id: 0,
     balance: '',
+    name: '',
   };
   user.loading = !userData && !userError;
 

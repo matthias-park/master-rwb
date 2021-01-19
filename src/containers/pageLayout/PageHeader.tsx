@@ -99,7 +99,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
   const { user, mutateUser } = useConfig();
 
   const handleLogout = async () => {
-    await getApi('/players/logout').catch(err => {
+    await getApi('/players/logout?response_json=true').catch(err => {
       addToast('Failed to logout', { appearance: 'error', autoDismiss: true });
       console.log(err);
     });

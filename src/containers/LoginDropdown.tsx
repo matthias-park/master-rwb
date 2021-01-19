@@ -11,6 +11,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Spinner, OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
 import { useToasts } from 'react-toast-notifications';
 import { useRoutePath } from '../hooks/index';
+import { NET_USER } from '../types/UserStatus';
 
 interface Props {
   dropdownClasses?: string;
@@ -28,7 +29,7 @@ const LoginForm = ({
 }) => {
   const { addToast } = useToasts();
   const { t } = useI18n();
-  const { register, handleSubmit, errors } = useForm<LoginFromData>();
+  const { register, handleSubmit, errors, setError } = useForm<LoginFromData>();
   const [passwordVisible, setPasswordVisibility] = useState(false);
   const [loginInProgress, setLoginInProgress] = useState(false);
   const { mutateUser } = useConfig();
@@ -38,16 +39,42 @@ const LoginForm = ({
 
   const onSubmit = async ({ email, password }) => {
     setLoginInProgress(true);
-    await postApi('/players/login.json', {
-      login: email,
-      password,
-    }).catch(err => {
+    const response = await postApi<NET_USER | null>(
+      '/players/login.json?response_json=true',
+      {
+        login: email,
+        password,
+      },
+    ).catch(err => {
       addToast(`Failed to login`, { appearance: 'error', autoDismiss: true });
       console.log(err);
+      return null;
     });
     setLoginInProgress(false);
-    hideLoginDropdown();
-    mutateUser();
+    if (response?.PlayerId) {
+      hideLoginDropdown();
+      mutateUser(
+        {
+          user: {
+            id: response.PlayerId,
+            balance: response.Balance.toLocaleString('de-DE', {
+              style: 'currency',
+              currency: 'EUR',
+            }),
+            logged_in: true,
+            token: '',
+            format: 'eu',
+            name: response.Login,
+          },
+        },
+        true,
+      );
+    } else if (response?.error) {
+      setError('password', {
+        type: 'response',
+        message: response.error,
+      });
+    }
   };
   return (
     <Form
@@ -124,7 +151,10 @@ const LoginForm = ({
           <u>{t('login_forgot_password')}</u>
         </Link>
       </div>
-      <button className="btn btn-primary d-block mx-auto mt-4 px-5">
+      <button
+        disabled={!!errors.email || !!errors.password}
+        className="btn btn-primary d-block mx-auto mt-4 px-5"
+      >
         {loginInProgress && (
           <>
             <Spinner

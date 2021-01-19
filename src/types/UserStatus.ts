@@ -49,7 +49,7 @@ export interface User {
   id: number;
   // email: string;
   // first_name: string;
-  // name: string;
+  name: string;
   // tv_streams: TvStreams;
   // contract: Contract;
   // deposit_contract: DepositContract;
@@ -60,6 +60,17 @@ export interface User {
   // evtsrv: Evtsrv;
   balance: string;
   loading?: boolean;
+}
+
+export interface NET_USER {
+  PlayerId: number;
+  Login: string;
+  Email: string;
+  Balance: number;
+  CurrencyId: number;
+  Code: number;
+  Message: string;
+  error?: string;
 }
 
 export interface UserStatus {
