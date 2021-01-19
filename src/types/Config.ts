@@ -1,6 +1,6 @@
-import { User } from './UserStatus';
 import { ComponentName } from '../constants';
 import UserStatus from './UserStatus';
+import { User } from './UserStatus';
 export interface ConfigRoute {
   id: ComponentName;
   path: string;

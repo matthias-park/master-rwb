@@ -51,26 +51,31 @@ const FooterHeader = () => {
   );
 };
 
-const FooterBottom = ({ data }: { data: SubFooter }) => (
-  <div className="row no-gutters footer-sub">
-    <span className="footer-sub__title d-none d-lg-inline-block">
-      {data.title}
-    </span>
-    <ul className="footer-sub__nav ml-auto">
-      {data.links
-        .sort((a, b) => sortAscending(a.order, b.order))
-        .map(link => (
-          <li
-            key={`${link.name}-${link.link}`}
-            className="footer-sub__nav-link"
-          >
-            <Link to={link.link}>{link.name}</Link>
-          </li>
-        ))}
-      <li className="footer-sub__nav-link d-flex d-lg-none">{data.title}</li>
-    </ul>
-  </div>
-);
+const FooterBottom = ({ data }: { data: SubFooter }) => {
+  const { t } = useI18n();
+  return (
+    <div className="row no-gutters footer-sub">
+      <span className="footer-sub__title d-none d-lg-inline-block">
+        {t(data.title)}
+      </span>
+      <ul className="footer-sub__nav ml-auto">
+        {data.links
+          .sort((a, b) => sortAscending(a.order, b.order))
+          .map(link => (
+            <li
+              key={`${link.name}-${link.link}`}
+              className="footer-sub__nav-link"
+            >
+              <Link to={link.link}>{t(link.name)}</Link>
+            </li>
+          ))}
+        <li className="footer-sub__nav-link d-flex d-lg-none">
+          {t(data.title)}
+        </li>
+      </ul>
+    </div>
+  );
+};
 
 const SocialSection = ({ social }: { social: SocialLinks }) => {
   const { t } = useI18n();
@@ -124,6 +129,7 @@ const SocialSection = ({ social }: { social: SocialLinks }) => {
 };
 
 const SortedFooterLinks = ({ links }: { links: FooterLink[] }): any => {
+  const { t } = useI18n();
   const desktopWidth = useDesktopWidth(768);
   const FooterLink = useMemo(
     () => ({
@@ -145,7 +151,7 @@ const SortedFooterLinks = ({ links }: { links: FooterLink[] }): any => {
               className="section-item"
             >
               <FooterLink.Title as="h3" className="section-item__title">
-                {linkContainer.name}
+                {t(linkContainer.name)}
               </FooterLink.Title>
               <FooterLink.Children>
                 {linkContainer.children
@@ -160,7 +166,7 @@ const SortedFooterLinks = ({ links }: { links: FooterLink[] }): any => {
                           : 'section-item__link'
                       }
                     >
-                      {child.name}
+                      {t(child.name)}
                     </Link>
                   ))}
               </FooterLink.Children>

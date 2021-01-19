@@ -16,6 +16,7 @@ import { NET_USER } from '../types/UserStatus';
 interface Props {
   dropdownClasses?: string;
   toggleClasses?: string;
+  userLoading?: boolean;
 }
 interface LoginFromData {
   email: string;
@@ -62,8 +63,7 @@ const LoginForm = ({
               currency: 'EUR',
             }),
             logged_in: true,
-            token: '',
-            format: 'eu',
+            loading: false,
             name: response.Login,
           },
         },
@@ -213,7 +213,12 @@ const RegistrationLink = () => {
   );
 };
 
-const LoginDropdown = ({ dropdownClasses, toggleClasses }: Props) => {
+const LoginDropdown = ({
+  dropdownClasses,
+  toggleClasses,
+  userLoading,
+}: Props) => {
+  const { t } = useI18n();
   const location = useLocation();
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const { backdrop } = useUIConfig();
@@ -239,8 +244,19 @@ const LoginDropdown = ({ dropdownClasses, toggleClasses }: Props) => {
       <Dropdown.Toggle
         variant="outline-primary"
         className={`dropdown-toggle login-dropdown__toggle ${toggleClasses}`}
+        disabled={userLoading}
       >
-        <i className="icon-account"></i>Inloggen
+        {userLoading && (
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            className="mr-1"
+          />
+        )}
+        <i className="icon-account"></i>
+        {t('login_btn')}
       </Dropdown.Toggle>
       <Dropdown.Menu className="login-dropdown__menu">
         <LoginForm hideLoginDropdown={handleHideDropdown} />

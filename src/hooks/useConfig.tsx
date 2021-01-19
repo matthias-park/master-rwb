@@ -5,7 +5,6 @@ import Config from '../types/Config';
 import UserStatus from '../types/UserStatus';
 import { getRedirectLocalePathname, setLocalePathname } from '../utils/i18n';
 import { AVAILABLE_LOCALES, NAVIGATION_ROUTES } from '../constants';
-import { User } from '../types/UserStatus';
 import { useToasts } from 'react-toast-notifications';
 
 export const configContext = createContext<Config | null>(null);
@@ -44,15 +43,13 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     setLocalePathname(lang);
     changeLocale(lang);
   };
-  const user: User = userData?.user || {
-    logged_in: false,
-    token: '',
-    format: 'eu',
-    id: 0,
-    balance: '',
-    name: '',
-  };
-  user.loading = !userData && !userError;
+
+  let user = { logged_in: false, loading: false };
+  if (!userData && !userError) {
+    user.loading = true;
+  } else if (userData?.user && !userError) {
+    user = userData.user;
+  }
 
   const value: Config = {
     user,

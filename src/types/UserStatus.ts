@@ -39,27 +39,12 @@ export interface Evtsrv {
 
 export interface User {
   logged_in: boolean;
-  token: string;
-  format: string;
-  // cc: string;
-  // errors?: any;
-  // test: boolean;
-  // registration_not_finished: boolean;
-  // nick: string;
-  id: number;
-  // email: string;
-  // first_name: string;
-  name: string;
-  // tv_streams: TvStreams;
-  // contract: Contract;
-  // deposit_contract: DepositContract;
-  // need_to_change_login: boolean;
-  // first_login: boolean;
-  // menu: Menu;
-  // features: Features;
-  // evtsrv: Evtsrv;
-  balance: string;
-  loading?: boolean;
+  token?: string;
+  format?: string;
+  id?: number;
+  name?: string;
+  balance?: string;
+  loading: boolean;
 }
 
 export interface NET_USER {

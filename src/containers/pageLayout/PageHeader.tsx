@@ -105,6 +105,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
     });
     mutateUser();
   };
+
   if (user.id) {
     return (
       <UserInfoBlock
@@ -121,6 +122,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
         mobile ? 'mx-auto ml-sm-auto mr-sm-0' : 'ml-auto mt-0 mt-lg-4'
       }
       toggleClasses={clsx(mobile && 'ml-auto')}
+      userLoading={user.loading}
     />
   );
 };

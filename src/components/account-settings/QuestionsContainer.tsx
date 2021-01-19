@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Accordion from 'react-bootstrap/Accordion';
+import { useI18n } from '../../hooks/useI18n';
 
 interface Props {
   items: {
@@ -30,16 +31,17 @@ const QuestionItem = ({ item, index }) => {
 };
 
 const QuestionsContainer = ({ items }: Props) => {
+  const { t } = useI18n();
   return (
     <>
-      <h3 className="mb-3">Questions?</h3>
+      <h3 className="mb-3">{t('user_questions')}</h3>
       <Accordion className="questions-acr">
         {items.map((item, index) => {
           return <QuestionItem key={index} item={item} index={index} />;
         })}
       </Accordion>
       <u className="d-block text-center my-3 text-14 font-weight-bold">
-        <Link to="/">All frequently asked questions</Link>
+        <Link to="/">{t('user_all_faq')}</Link>
       </u>
     </>
   );

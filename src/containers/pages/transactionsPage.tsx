@@ -213,6 +213,7 @@ const TransactionsDateFilter = ({
 };
 
 const TransactionsPage = () => {
+  const { t } = useI18n();
   const [url, setUrl] = useState<string | null>(null);
   const { data } = useSWR<Transactions>(url);
   const [periodSelected, setPeriodSelected] = useState(30);
@@ -236,7 +237,7 @@ const TransactionsPage = () => {
 
   return (
     <div className="container-fluid px-0 px-sm-4 mb-4">
-      <h2 className="mb-4">Transactions</h2>
+      <h2 className="mb-4">{t('transactions_page_title')}</h2>
       <div className="date-filter mb-4 pb-sm-2">
         <TransactionsDateFilter
           dateTo={dateTo}

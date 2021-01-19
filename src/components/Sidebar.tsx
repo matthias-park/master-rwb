@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import { useI18n } from '../hooks/useI18n';
 
 interface Props {
   links: {
@@ -10,7 +11,7 @@ interface Props {
 
 const Sidebar = ({ links }: Props) => {
   const { pathname } = useLocation();
-
+  const { t } = useI18n();
   return (
     <div className="left-sidebar">
       <ul className="sidebar-list">
@@ -22,7 +23,7 @@ const Sidebar = ({ links }: Props) => {
             }`}
           >
             <Link to={link.link} className="sidebar-list__item-link">
-              {link.name}
+              {t(link.name)}
             </Link>
           </li>
         ))}

@@ -1,6 +1,8 @@
 import React from 'react';
+import { useI18n } from '../hooks/useI18n';
 
 const HelpBlock = ({ title, blocks }) => {
+  const { t } = useI18n();
   return (
     <div className="help-block">
       <p className="help-block__title">{title}</p>
@@ -11,7 +13,7 @@ const HelpBlock = ({ title, blocks }) => {
               <i className="icon-questions"></i>
             </span>
             <div className="help-block__body-item-text">
-              <p className="weight-500">Check onze FAQ</p>
+              <p className="weight-500">{t('help_check_faq')}</p>
             </div>
           </div>
         )}
@@ -21,14 +23,19 @@ const HelpBlock = ({ title, blocks }) => {
               <i className="icon-phone"></i>
             </span>
             <div className="help-block__body-item-text">
-              <p className="weight-500">Bel ons op het gratis nummer:</p>
-              <p className="text-14 weight-500 mb-2">0800 99 762</p>
-              <p className="text-14 gray">
-                Op Ma-Wo-Do-Za:
-                <span className="ml-2 weight-500">6u tot 19u</span>
+              <p className="weight-500">{t('help_call_us_number')}</p>
+              <p className="text-14 weight-500 mb-2">
+                {t('help_call_us_number_data')}
               </p>
               <p className="text-14 gray">
-                Op Di-Vr:<span className=" ml-2 weight-500">6u tot 20u</span>
+                {t('help_call_days')}
+                <span className="ml-2 weight-500">{t('help_call_hours')}</span>
+              </p>
+              <p className="text-14 gray">
+                {t('help_call_days_2')}
+                <span className=" ml-2 weight-500">
+                  {t('help_call_hours_2')}
+                </span>
               </p>
             </div>
           </div>
@@ -39,10 +46,8 @@ const HelpBlock = ({ title, blocks }) => {
               <i className="icon-mail"></i>
             </span>
             <div className="help-block__body-item-text">
-              <p className="weight-500">Stuur ons een bericht</p>
-              <p className="text-14 gray">
-                We antwoorden zo snel mogelijk via mail
-              </p>
+              <p className="weight-500">{t('help_mail_title')}</p>
+              <p className="text-14 gray">{t('help_mail_description')}</p>
             </div>
           </div>
         )}

@@ -20,8 +20,7 @@ const i18n = () => {
 
     t(key: string, lang?: string) {
       //! Replace with empty string fallback
-      const val =
-        symbols?.[lang || locale]?.[key] || `missing translation: ${key}`;
+      const val = symbols?.[lang || locale]?.[key] || `symbol: ${key}`;
       return val;
     },
   };

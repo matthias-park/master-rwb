@@ -1,30 +1,32 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 // import useSWR from 'swr';
 // import { getApi } from '../../utils/apiUtils';
 import AmountContainer from 'components/account-settings/AmountContainer';
 import InputContainer from 'components/account-settings/InputContainer';
 import QuestionsContainer from 'components/account-settings/QuestionsContainer';
-
-const questionItems = [
-  {
-    title: 'Additional Information',
-    body: 'Expanded description block',
-  },
-  {
-    title: 'Additional Information',
-    body: 'Expanded description block',
-  },
-];
+import { useI18n } from '../../hooks/useI18n';
 
 const WithdrawalPage = () => {
+  const { t } = useI18n();
+  const questionItems = useMemo(
+    () => [
+      { title: t('withdrawal_question_1'), body: 'withdrawal_answer_1' },
+      { title: t('withdrawal_question_2'), body: 'withdrawal_answer_2' },
+    ],
+    [t],
+  );
   return (
     <div className="container-fluid px-0 px-sm-4 mb-4">
-      <h2 className="mb-4">Withdrawal</h2>
-      <AmountContainer title="Total playable amount" amount={80.1} />
+      <h2 className="mb-4">{t('withdrawal_page_title')}</h2>
+      <AmountContainer
+        title={t('total_playable_amount')}
+        amount={80.1}
+        tooltip={t('playable_amount_tooltip')}
+      />
       <InputContainer
-        title="How much do you want to withdraw?"
+        title={t('withdrawal_amount')}
         placeholder="€ 300"
-        buttonText="Withdrawal Request"
+        buttonText={t('withdrawal_btn')}
         onSubmit={() => {}}
       />
       <div className="info-container mb-4">

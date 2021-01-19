@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import AmountContainer from 'components/account-settings/AmountContainer';
 import InputContainer from 'components/account-settings/InputContainer';
 import QuestionsContainer from 'components/account-settings/QuestionsContainer';
@@ -6,6 +6,7 @@ import { getApi, postApi } from '../../utils/apiUtils';
 import { useParams } from 'react-router-dom';
 import { DepositRequest, DepositResponse } from '../../types/api/user/Deposit';
 import { useToasts } from 'react-toast-notifications';
+import { useI18n } from '../../hooks/useI18n';
 
 const questionItems = [
   {
@@ -20,8 +21,17 @@ const questionItems = [
 
 const DepositPage = () => {
   const { addToast } = useToasts();
+  const { t } = useI18n();
   const { bankResponse } = useParams<{ bankResponse?: string }>();
   const [depositLoading, setDepositLoading] = useState(false);
+
+  const questionItems = useMemo(
+    () => [
+      { title: t('deposit_question_1'), body: 'deposit_answer_1' },
+      { title: t('deposit_question_2'), body: 'deposit_answer_2' },
+    ],
+    [t],
+  );
 
   const handleRequestDeposit = useCallback(async (depositValue: number) => {
     setDepositLoading(true);
@@ -67,8 +77,12 @@ const DepositPage = () => {
 
   return (
     <div className="container-fluid px-0 px-sm-4 mb-4">
-      <h2 className="mb-4">Deposit</h2>
-      <AmountContainer title="Total playable amount" amount={80.1} />
+      <h2 className="mb-4">{t('deposit_page_title')}</h2>
+      <AmountContainer
+        title={t('total_playable_amount')}
+        amount={80.1}
+        tooltip={t('playable_amount_tooltip')}
+      />
       {!!bankResponse && (
         <div className="amount-container mb-4">
           <h2 className="amount-container__amount">
@@ -77,30 +91,41 @@ const DepositPage = () => {
         </div>
       )}
       <InputContainer
-        title="Select Amount"
+        title={t('select_amount')}
         placeholder="€ 300"
-        buttonText="Deposit"
+        buttonText={t('deposit_btn')}
         loading={depositLoading}
         onSubmit={handleRequestDeposit}
       />
       <div className="info-container mb-4">
         <p className="info-container__info text-14 mb-0">
-          To deposit through bank please deposit to this account
+          {t('deposit_to_bank_info')}
         </p>
         <div className="info-container__text">
           <ul className="list-unstyled mb-0">
             <li className="mb-1">
-              IBAN: <span className="font-weight-bold">456654</span>
+              {t('deposit_iban')}:{' '}
+              <span className="font-weight-bold">
+                {t('deposit_bank_iban_data')}
+              </span>
             </li>
             <li className="mb-1">
-              Bank Account:{' '}
-              <span className="font-weight-bold">XX 7897 7894 1233 4566</span>
+              {t('deposit_bank_account')}:{' '}
+              <span className="font-weight-bold">
+                {t('deposit_bank_account')}
+              </span>
             </li>
             <li className="mb-1">
-              Bank Code: <span className="font-weight-bold">XXCVI45789</span>
+              {t('deposit_bank_code')}:{' '}
+              <span className="font-weight-bold">
+                {t('deposit_bank_code_data')}
+              </span>
             </li>
             <li className="mb-1">
-              Bank: <span className="font-weight-bold">National Bank</span>
+              {t('deposit_bank_title')}:{' '}
+              <span className="font-weight-bold">
+                {t('deposit_bank_title_data')}
+              </span>
             </li>
           </ul>
         </div>

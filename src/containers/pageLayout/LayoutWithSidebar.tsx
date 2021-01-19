@@ -6,27 +6,27 @@ import HelpBlock from '../../components/HelpBlock';
 
 const profileSidebarLinks = [
   {
-    name: 'Deposit',
+    name: 'deposit_link',
     link: '/deposit',
   },
   {
-    name: 'Bonus',
+    name: 'bonus_link',
     link: '/bonus',
   },
   {
-    name: 'Limits',
+    name: 'limits_link',
     link: '/limits',
   },
   {
-    name: 'Settings',
+    name: 'settings_link',
     link: '/settings',
   },
   {
-    name: 'Withdrawal',
+    name: 'withdrawal_link',
     link: '/withdrawal',
   },
   {
-    name: 'Transactions',
+    name: 'transactions_link',
     link: '/transactions',
   },
 ];
@@ -74,7 +74,7 @@ const LayoutWithSidebar = ({ rightSidebar, children }) => {
         {children}
         {rightSidebar && (
           <div className="right-sidebar">
-            <HelpBlock title="Is er iets niet duidelijk" blocks={['phone']} />
+            <HelpBlock title={'user_help_title'} blocks={['phone']} />
           </div>
         )}
       </div>
