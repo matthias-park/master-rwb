@@ -7,20 +7,11 @@ import { useParams } from 'react-router-dom';
 import { DepositRequest, DepositResponse } from '../../types/api/user/Deposit';
 import { useToasts } from 'react-toast-notifications';
 import { useI18n } from '../../hooks/useI18n';
-
-const questionItems = [
-  {
-    title: 'Additional Information',
-    body: 'Expanded description block',
-  },
-  {
-    title: 'Additional Information',
-    body: 'Expanded description block',
-  },
-];
+import { useConfig } from '../../hooks/useConfig';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
+  const { user } = useConfig();
   const { t } = useI18n();
   const { bankResponse } = useParams<{ bankResponse?: string }>();
   const [depositLoading, setDepositLoading] = useState(false);
@@ -80,7 +71,7 @@ const DepositPage = () => {
       <h2 className="mb-4">{t('deposit_page_title')}</h2>
       <AmountContainer
         title={t('total_playable_amount')}
-        amount={80.1}
+        amount={user.balance!}
         tooltip={t('playable_amount_tooltip')}
       />
       {!!bankResponse && (

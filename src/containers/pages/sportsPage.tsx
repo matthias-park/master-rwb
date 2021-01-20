@@ -45,7 +45,7 @@ const SportsPage = () => {
         setParams(sbParams);
       });
     }
-  }, [config.user.id, config.locale]);
+  }, [config.user.id, config.user.loading, config.locale]);
 
   if (!params) return null;
   return <KambiSportsbook updateBalance={updateUserBalance} {...params} />;

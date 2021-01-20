@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName } from '../../constants';
+import { useI18n } from '../../hooks/useI18n';
 
 const UserMenuLink = ({ link, name, setShowDropdown }) => (
   <li className="user-menu__list-item">
@@ -17,6 +18,7 @@ const UserMenuLink = ({ link, name, setShowDropdown }) => (
 );
 
 const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
+  const { t } = useI18n();
   const [showDropdown, setShowDropdown] = useState(false);
   const { backdrop } = useUIConfig();
 
@@ -65,40 +67,36 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
               className="btn btn-light btn-lg text-14 px-3 mb-2"
             >
               <i className="icon-card"></i>
-              Geld opladen
+              {t('deposit_link')}
             </Link>
           </Dropdown.Item>
           <ul className="user-menu__list">
             {[
               {
-                link: '/deposit',
-                name: 'Deposit',
-              },
-              {
                 link: '/bonus',
-                name: 'Bonus',
+                name: 'bonus_link',
               },
               {
                 link: '/limits',
-                name: 'Limits',
+                name: 'limits_link',
               },
               {
                 link: '/withdrawal',
-                name: 'Withdrawal',
+                name: 'withdrawal_link',
               },
               {
                 link: '/settings',
-                name: 'Settings',
+                name: 'settings_link',
               },
               {
                 link: '/transactions',
-                name: 'Transactions',
+                name: 'transactions_link',
               },
             ].map(link => (
               <UserMenuLink
                 key={link.link}
                 link={link.link}
-                name={link.name}
+                name={t(link.name)}
                 setShowDropdown={showUserMenu}
               />
             ))}

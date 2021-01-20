@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
-// import useSWR from 'swr';
-// import { getApi } from '../../utils/apiUtils';
 import AmountContainer from 'components/account-settings/AmountContainer';
 import InputContainer from 'components/account-settings/InputContainer';
 import QuestionsContainer from 'components/account-settings/QuestionsContainer';
 import { useI18n } from '../../hooks/useI18n';
+import { useConfig } from '../../hooks/useConfig';
 
 const WithdrawalPage = () => {
   const { t } = useI18n();
+  const { user } = useConfig();
   const questionItems = useMemo(
     () => [
       { title: t('withdrawal_question_1'), body: 'withdrawal_answer_1' },
@@ -20,7 +20,7 @@ const WithdrawalPage = () => {
       <h2 className="mb-4">{t('withdrawal_page_title')}</h2>
       <AmountContainer
         title={t('total_playable_amount')}
-        amount={80.1}
+        amount={user.balance!}
         tooltip={t('playable_amount_tooltip')}
       />
       <InputContainer

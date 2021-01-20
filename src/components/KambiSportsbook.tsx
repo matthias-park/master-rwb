@@ -40,6 +40,9 @@ const KambiSportsbook = React.memo(
         getBalance: function (successFunc, failureFunc, $) {
           $.ajax({
             url: params!.getApiBalance,
+            xhrFields: {
+              withCredentials: true,
+            },
             success: function (response) {
               successFunc(parseFloat(response));
             },

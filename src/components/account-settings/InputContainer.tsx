@@ -36,7 +36,11 @@ const InputContainer = ({
         ></Form.Control>
         <small className="form-group__error-msg">Error message</small>
       </Form.Group>
-      <Button variant="primary" disabled={loading} onClick={handleSubmit}>
+      <Button
+        variant="primary"
+        disabled={!inputValue.length || loading}
+        onClick={handleSubmit}
+      >
         {loading && (
           <Spinner
             as="span"

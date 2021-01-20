@@ -12,7 +12,7 @@ const AmountContainer = ({ title, amount, tooltip }: Props) => {
   return (
     <div className="amount-container mb-4">
       <small className="amount-container__text">{title}</small>
-      <h2 className="amount-container__amount">€ {amount}</h2>
+      <h2 className="amount-container__amount">{amount}</h2>
       {!!tooltip && (
         <OverlayTrigger
           placement={'bottom'}
