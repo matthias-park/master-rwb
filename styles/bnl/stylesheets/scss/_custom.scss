@@ -146,4 +146,14 @@ a:hover {
 
 #KambiBC {
     z-index: 0 !important;
+    width: calc(100% + 160px) !important;
+    transform: translateX(-80px);
+    @include media-breakpoint-down(xl) {
+      width: calc(100% + 90px) !important;
+      transform: translateX(-45px);
+    }
+    @include media-breakpoint-down(lg) {
+      width: calc(100% + 40px) !important;
+      transform: translateX(-20px);
+    }
 }
