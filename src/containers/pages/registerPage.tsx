@@ -17,12 +17,12 @@ const RegisterPage = () => {
   return (
     <main className="registration">
       <div className="reg-block">
-        <RegSelection />
+        {/* <RegSelection /> */}
         <HelpBlock title="Hulp nodig?" blocks={['faq', 'phone', 'email']} />
         <OnlineForm />
-        <StoreForm />
-        <RegVerification />
-        <RegWelcome />
+        {/* <StoreForm /> */}
+        {/* <RegVerification /> */}
+        {/* <RegWelcome /> */}
       </div>
     </main>
   );

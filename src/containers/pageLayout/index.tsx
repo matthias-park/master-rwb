@@ -7,6 +7,7 @@ import LayoutWithSidebar from './LayoutWithSidebar';
 import { ComponentName, NAVIGATION_ROUTES } from '../../constants';
 import { ConfigRoute } from '../../types/Config';
 import { usePrevious } from '../../hooks/index';
+import { useConfig } from '../../hooks/useConfig';
 
 const pathsWithSidebar = NAVIGATION_ROUTES.filter(route =>
   [
@@ -44,9 +45,10 @@ const pathMatch = (routes: ConfigRoute[], currentPath: string) =>
 
 const PageLayout = ({ children }) => {
   const { pathname } = useLocation();
+  const { user } = useConfig();
   const history = useHistory();
   const prevPathname = usePrevious(pathname);
-  const sidebarLayout = pathMatch(pathsWithSidebar, pathname);
+  const sidebarLayout = !user.loading && pathMatch(pathsWithSidebar, pathname);
   const rightSidebarLayout = pathMatch(pathsWithRightSidebar, pathname);
 
   useEffect(() => {

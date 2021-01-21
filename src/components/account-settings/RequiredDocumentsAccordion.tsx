@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { AccordionContext, Form } from 'react-bootstrap';
 import {
   SettingsForm,
@@ -50,63 +50,73 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
       </Card.Header>
       <Accordion.Collapse className="settings-card__body" eventKey={form.id}>
         <Card.Body className="pt-2">
-          <div className="row mx-0 flex-column flex-sm-row">
-            {['image_id', 'image_residence', 'image_payment_proof'].map(id => {
-              if (!fields[id]) return null;
+          <Form onSubmit={handleSubmit(updateSettingsSubmit)}>
+            <div className="row mx-0 flex-column flex-sm-row">
+              {['image_id', 'image_residence', 'image_payment_proof'].map(
+                id => {
+                  if (!fields[id]) return null;
 
-              return (
-                <div className="col-12 col-sm-4 px-0 pl-sm-0 pr-sm-1 mb-1 mx-0">
-                  <div className="p-3 bg-gray-custom-200 rounded d-flex flex-column h-100">
-                    <p className="font-14">
-                      <strong>{fields[id].title}</strong>
-                    </p>
-                    <p className="mb-3">
-                      NOTE: Only One document can be uploaded one time before
-                      next approval lorem ipsu longer text here
-                    </p>
-                    <Form.File
-                      custom
-                      className="mt-auto"
-                      ref={register}
-                      name={id}
+                  return (
+                    <div
+                      key={id}
+                      className="col-12 col-sm-4 px-0 pl-sm-0 pr-sm-1 mb-1 mx-0"
                     >
-                      <Form.File.Label
-                        className={clsx(fields[id].status, false && 'uploaded')}
-                      >
-                        {t('settings_file_upload')}
-                        <Form.File.Input />
-                      </Form.File.Label>
-                    </Form.File>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          {!!fields.password && (
-            <div className="row mx-0 mt-2">
-              <Form.Group>
-                <Form.Control
-                  ref={register}
-                  size="sm"
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder=" "
-                />
-                <label htmlFor="password">{fields.password.title}</label>
-                <div className="form-group__icons">
-                  <i className="icon-check"></i>
-                  <i className="icon-exclamation"></i>
-                </div>
-                {fields.password.errors?.map(error => (
-                  <small className="form-group__error-msg">{error}</small>
-                ))}
-              </Form.Group>
+                      <div className="p-3 bg-gray-custom-200 rounded d-flex flex-column h-100">
+                        <p className="font-14">
+                          <strong>{fields[id].title}</strong>
+                        </p>
+                        <p className="mb-3">
+                          NOTE: Only One document can be uploaded one time
+                          before next approval lorem ipsu longer text here
+                        </p>
+                        <Form.File
+                          custom
+                          className="mt-auto"
+                          ref={register}
+                          name={id}
+                        >
+                          <Form.File.Label
+                            className={clsx(
+                              fields[id].status,
+                              false && 'uploaded',
+                            )}
+                          >
+                            {t('settings_file_upload')}
+                            <Form.File.Input />
+                          </Form.File.Label>
+                        </Form.File>
+                      </div>
+                    </div>
+                  );
+                },
+              )}
             </div>
-          )}
-          <Button className="mt-3" variant="primary" type="submit">
-            {fields.submit_button.title}
-          </Button>
+            {!!fields.password && (
+              <div className="row mx-0 mt-2">
+                <Form.Group>
+                  <Form.Control
+                    ref={register}
+                    size="sm"
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder=" "
+                  />
+                  <label htmlFor="password">{fields.password.title}</label>
+                  <div className="form-group__icons">
+                    <i className="icon-check"></i>
+                    <i className="icon-exclamation"></i>
+                  </div>
+                  {fields.password.errors?.map(error => (
+                    <small className="form-group__error-msg">{error}</small>
+                  ))}
+                </Form.Group>
+              </div>
+            )}
+            <Button className="mt-3" variant="primary" type="submit">
+              {fields.submit_button.title}
+            </Button>
+          </Form>
         </Card.Body>
       </Accordion.Collapse>
       <i className="settings-card__icon icon-down1"></i>

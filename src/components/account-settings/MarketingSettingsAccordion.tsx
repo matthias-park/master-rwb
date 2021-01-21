@@ -72,6 +72,7 @@ const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                   {['marketing_consents', 'separator'].map(id =>
                     fields[id] ? (
                       <button
+                        key={id}
                         type="button"
                         className={clsx(
                           'account-tabs__tab w-50',

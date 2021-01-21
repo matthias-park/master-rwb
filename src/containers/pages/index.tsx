@@ -36,30 +36,28 @@ const Routes = () => {
   const { routes } = useConfig();
 
   return (
-    <Switch>
-      {routes.map(route => {
-        const Page =
-          COMPONENT_PAGES[route.id] ||
-          COMPONENT_PAGES[ComponentName.NotFoundPage];
+    <PageLayout>
+      <Switch>
+        {routes.map(route => {
+          const Page =
+            COMPONENT_PAGES[route.id] ||
+            COMPONENT_PAGES[ComponentName.NotFoundPage];
 
-        if (!Page) {
-          return null;
-        }
-        const RouteEl = route.protected ? ProtectedRoute : Route;
-        return (
-          <RouteEl
-            key={route.id}
-            exact={route.exact ?? true}
-            path={route.path}
-            render={props => (
-              <PageLayout>
-                <Page {...props} />
-              </PageLayout>
-            )}
-          />
-        );
-      })}
-    </Switch>
+          if (!Page) {
+            return null;
+          }
+          const RouteEl = route.protected ? ProtectedRoute : Route;
+          return (
+            <RouteEl
+              key={`${route.id}-${route.path}`}
+              exact={route.exact ?? true}
+              path={route.path}
+              component={Page}
+            />
+          );
+        })}
+      </Switch>
+    </PageLayout>
   );
 };
 

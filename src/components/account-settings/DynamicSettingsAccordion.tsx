@@ -96,7 +96,12 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                   }
                   if (field.id === 'submit_button') {
                     return (
-                      <Button className="mt-2" variant="primary" type="submit">
+                      <Button
+                        key={field.id}
+                        className="mt-2"
+                        variant="primary"
+                        type="submit"
+                      >
                         {field.title}
                       </Button>
                     );
@@ -107,11 +112,13 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                   const formGroupChildren =
                     field.type === 'select'
                       ? field.values?.map(option => (
-                          <option value={option.id}>{option.title}</option>
+                          <option key={option.id} value={option.id}>
+                            {option.title}
+                          </option>
                         ))
                       : null;
                   return (
-                    <Form.Group>
+                    <Form.Group key={field.id}>
                       <Form.Control
                         ref={register}
                         as={formGroupAs}
