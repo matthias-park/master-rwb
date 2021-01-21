@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useConfig } from './useConfig';
 import { ComponentName } from '../constants';
 
-export const usePrevious = (value: unknown) => {
-  const ref = useRef<unknown>();
+export const usePrevious = <T>(value: T): T | undefined => {
+  const ref = useRef<T>();
 
   useEffect(() => {
     ref.current = value;
