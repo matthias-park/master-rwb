@@ -242,6 +242,10 @@ export const TRANSLATION_SYMBOLS = [
   'certs_code_conduct_link',
   'sitemap_link',
   'login_btn',
+  'settings_file_upload',
+  'settings_page_title',
+  'settings_yes',
+  'settings_no',
 ];
 
 export const PROMOTION_LIST = [
