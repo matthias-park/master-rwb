@@ -11,7 +11,7 @@ import { sortAscending } from '../../utils/index';
 const FooterHeader = () => {
   const { t } = useI18n();
   return (
-    <div className="row footer-pre py-3">
+    <div className="row footer-pre pt-3">
       <div className="session-block mb-2 mb-sm-0">
         <span className="session-block__text text-14">
           {t('time_spent_in_website')}
@@ -26,7 +26,7 @@ const FooterHeader = () => {
           className="restrictions-block__img d-none d-sm-block d-md-none d-lg-block"
           alt=""
           src="/assets/images/restrictions/18-label.png"
-          width="37"
+          width="40"
           height="37"
         />
         <span className="restrictions-block__text text-14 mr-3 d-none d-sm-block d-md-none d-lg-block">
@@ -40,11 +40,11 @@ const FooterHeader = () => {
           height="45"
         />
         <img
-          className="restrictions-block__img"
+          className="restrictions-block__img pt-1"
           alt=""
           src="/assets/images/restrictions/becommerce.png"
-          width="65"
-          height="65"
+          width="95"
+          height="95"
         />
       </div>
     </div>
@@ -81,7 +81,7 @@ const SocialSection = ({ social }: { social: SocialLinks }) => {
   const { t } = useI18n();
   const { iosApp, androidApp, ...webSocial } = social;
   return (
-    <section className="footer-social-block pt-4 mt-0 mt-md-4 mt-lg-0 pt-lg-0">
+    <section className="footer-social-block ml-auto pt-4 mt-0 mt-md-4 mt-lg-0 pt-lg-0">
       <div className="section-social">
         <h2 className="section-social__head-title">
           {t('footer_social_title')}
@@ -162,7 +162,7 @@ const SortedFooterLinks = ({ links }: { links: FooterLink[] }): any => {
                       to={child.link || '#'}
                       className={
                         child.button
-                          ? 'btn btn-outline-gray-700 btn-sm my-3'
+                          ? 'btn btn-outline-light btn-sm my-3'
                           : 'section-item__link'
                       }
                     >

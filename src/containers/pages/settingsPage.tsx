@@ -596,8 +596,8 @@ const SettingsPage = () => {
   const { data } = useSWR<ProfileSettings>('/v2/profile.json');
   console.log(data);
   return (
-    <div className="container-fluid px-0 px-sm-4 mb-4">
-      <h2 className="mb-4">My account</h2>
+    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">
+      <h1 className="mb-4">My account</h1>
       <Accordion onSelect={e => setActiveKey(e)}>
         {activeSettings
           .sort((a, b) => a.order - b.order)
@@ -612,7 +612,7 @@ const SettingsPage = () => {
             }
           })}
       </Accordion>
-    </div>
+    </main>
   );
 };
 

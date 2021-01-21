@@ -1,4 +1,5 @@
 .registration {
+    background-image: url(../../../../public/bnl/images/registration/registration-bg.jpg);
     background-size: cover;
     background-position: top;
     background-repeat: no-repeat;
@@ -80,8 +81,8 @@
             &:checked {
                 + #{ $self }-checkbox {
                     background-image: escape-svg(url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 -2 8 12'><path fill='#fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26l2.974 2.99L8 2.193z'/></svg>"));
-                    background-color: $success;
-                    border-color: $success;
+                    background-color: $success-alt;
+                    border-color: $success-alt;
                 }
             }
         }

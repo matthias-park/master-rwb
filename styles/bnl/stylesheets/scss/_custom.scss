@@ -83,8 +83,9 @@ a:hover {
 
 .icon-tooltip {
     font-size: 20px;
-    color: $primary-light;
+    color: $brand-light;
     cursor: default;
+    opacity: 0.9;
 }
 
 .tooltip-inner {
@@ -134,9 +135,11 @@ a:hover {
       display: none;
   }
 }
+
 .cursor-pointer {
     cursor: pointer;
 }
+
 .body-background {
     background-color: $white !important;
 }

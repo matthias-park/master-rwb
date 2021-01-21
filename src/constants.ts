@@ -37,104 +37,23 @@ export const HEADER_ROUTES: HeaderLink[] = [
     order: 0,
   },
   {
-    name: 'Spelen',
+    name: 'Sportwedden',
     order: 1,
-    cards: [
+    links: [
       {
-        logo: '/assets/images/drawgames/loto.png',
-        smallText: 'Nog 6 uur 52min',
-        smallTextIcon: true,
-        text: '€ 1.000.000',
+        text: 'Action',
+        path: '#',
         order: 1,
-        color: 'red',
-        button1: {
-          name: 'Speel in de winkel',
-          path: '#',
-        },
-        button2: {
-          name: 'Speel online',
-          path: '#',
-        },
       },
       {
-        logo: '/assets/images/drawgames/millions.png',
-        smallText: 'vrijdag 21 september Jackpot van zo’n',
-        text: '€ 89.000.000',
+        text: 'Another action',
+        path: '#',
         order: 2,
-        color: 'blue',
-        button1: {
-          name: 'Speel online',
-          path: '#',
-        },
-        button2: {
-          name: 'Speel online',
-          path: '#',
-        },
       },
       {
-        logo: '/assets/images/drawgames/life.png',
+        text: 'Something else here',
+        path: '#',
         order: 3,
-        color: 'purple',
-      },
-      {
-        logo: '/assets/images/drawgames/cash.png',
-        order: 4,
-        color: 'yellow-dark',
-      },
-      {
-        logo: '/assets/images/drawgames/woohoo.png',
-        order: 5,
-        color: 'red-light',
-      },
-      {
-        logo: '/assets/images/drawgames/kraspelen.png',
-        order: 6,
-        color: 'blue-light',
-      },
-    ],
-    bottomButton: {
-      name: 'Alle resultaten',
-      path: '#',
-    },
-  },
-  {
-    name: 'Resultaten',
-    order: 2,
-    cards: [
-      {
-        logo: '/assets/images/drawgames/loto.png',
-        order: 1,
-        color: 'red',
-      },
-      {
-        logo: '/assets/images/drawgames/millions.png',
-        order: 2,
-        color: 'blue',
-      },
-      {
-        logo: '/assets/images/drawgames/joker.png',
-        order: 3,
-        color: 'orange',
-      },
-      {
-        logo: '/assets/images/drawgames/viking.png',
-        order: 4,
-        color: 'black',
-      },
-      {
-        logo: '/assets/images/drawgames/keno.png',
-        order: 5,
-        color: 'purple',
-      },
-      {
-        logo: '/assets/images/drawgames/3-pick.png',
-        order: 6,
-        color: 'yellow',
-      },
-      {
-        logo: '/assets/images/drawgames/extra.png',
-        order: 7,
-        color: 'red',
       },
     ],
     bottomButton: {
@@ -144,11 +63,36 @@ export const HEADER_ROUTES: HeaderLink[] = [
   },
   {
     name: 'Winnaars',
+    order: 2,
+    links: [
+      {
+        text: 'Action',
+        path: '#',
+        order: 1,
+      },
+      {
+        text: 'Another action',
+        path: '#',
+        order: 2,
+      },
+      {
+        text: 'Something else here',
+        path: '#',
+        order: 3,
+      },
+    ],
+    bottomButton: {
+      name: 'Alle resultaten',
+      path: '#',
+    },
+  },
+  {
+    name: 'Meer dan spelen',
     path: '#',
     order: 3,
   },
   {
-    name: 'Meer dan spelen',
+    name: 'Voordelen en acties',
     path: '#',
     order: 4,
     links: [
@@ -170,7 +114,7 @@ export const HEADER_ROUTES: HeaderLink[] = [
     ],
   },
   {
-    name: 'Voordelen en acties',
+    name: 'Loterij spelen',
     path: '#',
     order: 5,
     links: [
@@ -190,17 +134,6 @@ export const HEADER_ROUTES: HeaderLink[] = [
         order: 3,
       },
     ],
-  },
-  {
-    name: 'Lottery Club',
-    path: '#',
-    order: 6,
-  },
-  {
-    name: 'Scoore',
-    path: '#',
-    order: 7,
-    externalLink: true,
   },
 ];
 

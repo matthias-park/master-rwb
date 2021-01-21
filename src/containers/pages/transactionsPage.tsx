@@ -64,7 +64,7 @@ const TransactionsTable = ({
     <div className="d-flex flex-column">
       {!data ? (
         <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="white" className="mx-auto" />
+          <Spinner animation="border" variant="brand" className="mx-auto" />
         </div>
       ) : data.transactions.length ? (
         <div className="table-container d-flex flex-column mb-4">
@@ -97,7 +97,9 @@ const TransactionsTable = ({
                     </td>
                     <td>
                       <strong className="heading-sm">{t('amount')}</strong>
-                      {`${transaction.in ? '+' : '-'} ${transaction.amount}`}
+                      <span className={clsx(transaction.in && 'text-success')}>
+                        {`${transaction.in ? '+' : '-'} ${transaction.amount}`}
+                      </span>
                     </td>
                   </tr>
                 );
@@ -202,7 +204,7 @@ const TransactionsDateFilter = ({
         <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
       </div>
       <Button
-        className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3"
+        className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3 btn--small-radius"
         variant="primary"
         onClick={() => updateDate()}
       >
@@ -236,8 +238,8 @@ const TransactionsPage = () => {
   }, [url]);
 
   return (
-    <div className="container-fluid px-0 px-sm-4 mb-4">
-      <h2 className="mb-4">{t('transactions_page_title')}</h2>
+    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">
+      <h1 className="mb-4">{t('transactions_page_title')}</h1>
       <div className="date-filter mb-4 pb-sm-2">
         <TransactionsDateFilter
           dateTo={dateTo}
@@ -262,7 +264,7 @@ const TransactionsPage = () => {
         periodSelected={periodSelected}
       />
       <QuestionsContainer items={questionItems} />
-    </div>
+    </main>
   );
 };
 

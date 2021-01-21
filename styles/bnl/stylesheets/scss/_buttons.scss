@@ -19,6 +19,23 @@
     &.btn-lg {
         max-height: 48px;
     }
+    &--small-radius {
+      border-radius: 2px;
+    }
+}
+
+.btn-primary,
+.btn-primary.disabled,
+.btn-primary:disabled {
+  color: $brand-text;
+}
+
+.btn-outline-light {
+    &:hover,
+    &:active,
+    &:focus {
+        color: $brand-text;
+    }
 }
 
 .btn-light {

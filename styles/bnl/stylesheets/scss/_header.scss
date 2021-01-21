@@ -1,27 +1,29 @@
 .header {
-    @extend .navbar;
-    @extend .navbar-light;
-    padding: 14px 0;
+    position: relative;
+    padding: 14px 0 22px 0;
     @include media-breakpoint-down(lg) {
-        padding: 10px 0;
-    }
+      padding: 0;
+  }
+    @include full-bg($brand);
     &__nav-toggler {
         @extend .navbar-toggler;
         display: flex;
         font-size: 32px;
         margin-left: 8px;
-        .icon-menu,
-        .icon-menu-close {
+        border: none;
+        .icon-menu {
             color: $primary;
+        }
+        .icon-menu-close {
+            color: $brand-light;
         }
         @include media-breakpoint-down(xs) {
             margin-left: 0px;
         }
     }
     &__desktop-logo {
-        @extend .navbar-brand;
         position: absolute;
-        top: 18px;
+        top: -15px;
         @include media-breakpoint-down(lg) {
             top: 10px;
             img {
@@ -29,6 +31,9 @@
                 height: 35px;
             }
         }
+    }
+    &__mobile-logo {
+      transform: translateY(-3px);
     }
     &__collapse-wrp {
         @extend .collapse;
@@ -67,41 +72,34 @@
         &-item {
             @extend .nav-item;
             &-link {
-                @extend .nav-link
+                @extend .nav-link;
             }
         }
         &--main {
             #{ $self }-item {
                 position: relative;
+                &:first-of-type {
+                  #{ $self }-item-link {
+                    padding-left: 0;
+                  }
+                  &.dropdown {
+                    &.show {
+                      .dropdown-toggle {
+                        &:before {
+                          transform: translateX(calc(-50% - 12px));
+                        }
+                      }
+                    }
+                  }
+                }
                 #{ $self }-item-link {
                     padding-bottom: 0;
                 }
                 &-link {
-                    @include media-breakpoint-up(xl) {
-                        &:before {
-                            display: block;
-                            content: attr(title);
-                            font-weight: 600;
-                            height: 0;
-                            overflow: hidden;
-                            visibility: hidden;
-                        }
-                    }
-                }
-                &:hover,
-                &.show {
-                    #{ $self }-item-link {
-                        color: $brand-dark;
-                        font-weight: 600;
-                        &:not(.secondary-nav).dropdown-toggle {
-                            &:after {
-                                border-top-color: $black;
-                                font-weight: 400;
-                            }
-                        }
-                        .dropdown-menu {
-                            min-width: 0;
-                        }
+                    font-weight: 600;
+                    font-size: 20px;
+                    &:after {
+                      content: none;
                     }
                 }
                 &-icon {
@@ -118,21 +116,55 @@
                     }
                 }
                 &.dropdown {
+                  position: static;
                     @include media-breakpoint-up(xl) {
                         .dropdown-menu {
-                            text-align: center;
-                            left: 50%;
-                            transform: translateX(-50%);
-                        }
-                    }
-                    &--wide {
-                        .dropdown-menu {
-                            min-width: 710px;
-                            left: 0;
-                            transform: none;
-                            @include media-breakpoint-down(lg) {
-                                min-width: 100%;
+                          position: absolute;
+                          align-items: center;
+                          top: 145px;
+                          left: -80px;
+                          border-radius: 0;
+                          width: 100vw;
+                          height: 45px;
+                          padding: 0 75px;
+                          @include media-breakpoint-down(xl) {
+                              padding: 0 40px;
+                              left: -45px;
+                          }
+                          .dropdown-item {
+                            display: flex;
+                            align-items: center;
+                            height: 100%;
+                            width: auto;
+                            padding: 0 10px;
+                            color: $brand-text;
+                            &:hover,
+                            &:active,
+                            &:focus {
+                              border-bottom: 3px solid $brand;
+                              padding-top: 3px;
                             }
+                          }
+                        }
+                        &.show {
+                          .dropdown-menu {
+                            display: flex;
+                          }
+                          .dropdown-toggle {
+                            position: relative;
+                            &:before {
+                              content: "";
+                              position: absolute;
+                              bottom: -22px;
+                              left: 50%;
+                              transform: translateX(-50%);
+                              width: 0;
+                              height: 0;
+                              border-left: 8px solid transparent;
+                              border-right: 8px solid transparent;
+                              border-bottom: 8px solid $white;
+                            }
+                          }
                         }
                     }
                 }
@@ -142,12 +174,18 @@
                     align-items: center;
                     border-bottom: 1px solid $gray-100;
                     #{ $self }-item-link {
-                        color: $black;
+                        position: relative;
+                        color: $brand-text;
                         display: flex;
                         justify-content: center;
                         align-items: center;
                         height: 65px;
                         width: 100%;
+                        font-size: 16px;
+                        &[aria-expanded="true"],
+                        &:hover {
+                          color: $brand-text;
+                        }
                     }
                     &.dropdown {
                         flex-wrap: wrap;
@@ -217,15 +255,20 @@
             z-index: 1;
             #{ $self }-item {
                 #{ $self }-item-link {
-                    font-size: 15px;
+                    font-size: 14px;
                     padding-left: 12px;
                     padding-right: 12px;
-                    color: $gray-400;
-                    @include media-breakpoint-down(lg) {
-                        color: $black;
-                    }
+                    color: $white-light;
                     &:hover {
-                        color: $gray-600;
+                        color: $white;
+                    }
+                    @include media-breakpoint-down(lg) {
+                      color: $black-custom;
+                      &:hover,
+                      &:active,
+                      &:focus {
+                        color: $black-custom;
+                      }
                     }
                 }
                 &.dropdown {
@@ -243,6 +286,8 @@
                     }
                     .dropdown-menu {
                         min-width: 0;
+                        background-color: $brand-light;
+                        color: $white;
                     }
                 }
             }
@@ -251,18 +296,21 @@
                 i {
                     position: relative;
                     font-size: 32px;
-                    color: $gray-400;
+                    color: $white-light;
                     &:after {
                         content: '';
                         position: absolute;
                         top: 7px;
-                        right: 0;
+                        right: -3px;
                         height: 55%;
                         border-right: 1px solid $gray-200;
                         @include media-breakpoint-down(lg) {
                             border-right: none;
                         }
                     }
+                    @include media-breakpoint-down(lg) {
+                      color: $brand-text;
+                  }
                 }
                 @include media-breakpoint-down(lg) {
                     padding-left: 3px;
@@ -280,6 +328,13 @@
                         &:not(:last-of-type) {
                             border-right: 1px solid $gray-400;
                         }
+                        @include media-breakpoint-down(lg) {
+                          &:hover,
+                          &:focus,
+                          &:active {
+                            color: $black-custom;
+                          }
+                        }
                     }
                 }
             }
@@ -288,31 +343,11 @@
             width: 100%;
         }
     }
-    &:after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: -80px;
-        right: -80px;
-        border-bottom: 2px solid $gray-100;
-        @include media-breakpoint-down(xl) {
-            left: -45px;
-            right: -45px;
-        }
-        @include media-breakpoint-down(lg) {
-            left: -20px;
-            right: -20px;
-        }
-        @include media-breakpoint-down(xs) {
-            border-bottom: none;
-        }
-    }
     &__user-menu {
         position: relative;
         align-items: center;
         height: 65px;
         background-color: $gray-custom-100;
-        border: 1px solid $gray-100;
         border-radius: 16px;
         padding-left: 16px;
         padding-right: 35px;
@@ -330,12 +365,14 @@
             align-items: flex-end;
             @include media-breakpoint-down(lg) {
                 font-size: 13px;
+                color: white;
             }
             &-balance {
                 color: $light-black;
                 font-weight: 500;
                 @include media-breakpoint-down(lg) {
                     font-size: 12px;
+                    color: $white-light;
                 }
                 span:nth-of-type(2) {
                     position: relative;
@@ -387,167 +424,29 @@
         }
         &-icon {
             font-size: 38px;
-            color: $primary;
+            color: $brand-text;
             &:after {
               display: none;
             }
-        }
-    }
-}
-
-.drawgames {
-    flex-wrap: wrap;
-    &__game {
-        position: relative;
-        display: flex;
-        width: 160px;
-        height: 75px;
-        border-radius: 8px;
-        margin: 5px;
-        margin-bottom: 10px;
-        @include media-breakpoint-down(lg) {
-            width: calc(50% - 20px);
-            margin: 10px;
-        }
-        &-img {
-            margin: auto;
-            width: 95px;
-            height: 70px;
-            z-index: 1;
-        }
-        &--red,
-        &--red:hover {
-            background: #ec1c24;
-        }
-        &--blue,
-        &--blue:hover {
-            background-color: #001367;
-        }
-        &--orange,
-        &--orange:hover {
-            background-color: #ec5d13;
-        }
-        &--black,
-        &--black:hover {
-            background-color: $black;
-        }
-        &--purple,
-        &--purple:hover {
-            background-color: #ca6edd;
-        }
-        &--yellow,
-        &--yellow:hover {
-            background-color: #fdc300;
-        }
-        &--yellow-dark,
-        &--yellow-dark:hover {
-            background-color: #cfad59;
-        }
-        &--red-light,
-        &--red-light:hover {
-            background-color: #fa5860;
-        }
-        &--blue-light,
-        &--blue-light:hover {
-            background-color: $primary;
-        }
-        &:hover {
-            &:before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: rgba(0,0,0,0.15);
-                border-radius: 8px;
-            }
-        }
-    }
-    &.show {
-        display: flex;
-    }
-}
-
-.drawgames-card {
-    position: relative;
-    width: calc(50% - 10px);
-    height: 116px;
-    margin: 5px;
-    padding: 10px;
-    padding-top: 20px;
-    border-radius: 8px;
-    @include media-breakpoint-down(lg) {
-        &.dropdown-item {
-            width: 100%;
-        }
-    }
-    &--red,
-    &--red:hover {
-        background-color: #ec1c24;
-    }
-    &--blue,
-    &--blue:hover {
-        background-color: #001367;
-    }
-    &__img {
-        position: absolute;
-        left: 10px;
-        width: 88px;
-        height: 65px;
-        transform: translateY(-14px);
-    }
-    &__text {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        font-size: 25px;
-        color: $white;
-        font-weight: 600;
-        &-small {
-            position: relative;
-            font-size: 10px;
-            font-weight: 500;
-            opacity: 0.7;
-            &--icon {
-                &:before {
-                    font-family: 'icomoon';
-                    content: "\e988";
-                    position: absolute;
-                    top: -10px;
-                    left: -23px;
-                    font-size: 26px;
-                }
-            }
-        }
-    }
-    &__link {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        height: 32px;
-        width: calc(50% - 2px);
-        color: $white;
-        font-weight: 500;
-        font-size: 14px;
-        background-color: rgba(255,255,255,0.2);
-        border-radius: 8px;
-        margin-top: 14px;
-        &:hover {
-            text-decoration: none;
-            color: $white;
-            background-color: rgba(255,255,255,0.25);
+            @include media-breakpoint-down(lg) {
+              color: $white;
+              &:hover,
+              &:focus,
+              &:active {
+                color: $white;
+              }
+          }
         }
     }
 }
 
 .user-menu {
-    width: 336px;
-    left: 46%;
+    width: 330px;
+    left: 43%;
     transform: translateX(-50%);
     top: calc(100% + 10px);
     padding: 0;
-    background-color: $account-primary;
+    background-color: $light-gray-bg;
     text-align: center;
     padding-bottom: 0;
     z-index: 1100;
@@ -563,7 +462,7 @@
         display: none;
       }
       @include media-breakpoint-down(lg) {
-        max-height: calc(100vh - 70px);
+        max-height: calc(100vh - 86px);
       }
     }
     &__list {
@@ -581,14 +480,8 @@
                 align-items: center;
                 width: 100%;
                 height: 100%;
-                color: rgba(255,255,255,0.85);
                 height: 64px;
                 padding: 0 20px;
-                &--no-divider {
-                    &:before {
-                        display: none;
-                    }
-                }
                 &:before {
                     content: '';
                     position: absolute;
@@ -596,8 +489,7 @@
                     left: 50%;
                     transform: translateX(-50%);
                     width: 100%;
-                    border-bottom: 1px solid $gray-100;
-                    opacity: 0.25;
+                    border-bottom: 1px solid $gray-200;
                 }
                 &--toggler {
                     &:after {
@@ -611,18 +503,35 @@
                         color: $gray-200;
                     }
                 }
-                &:hover {
+                &:hover,
+                &:active,
+                &:focus {
                     text-decoration: none;
-                    color: rgba(255,255,255,0.85);
+                    background-color: $brand-light;
+                    color: $white;
                 }
+                &--no-divider {
+                  &:before {
+                      display: none;
+                  }
+                  &:hover,
+                  &:active,
+                  &:focus {
+                      background-color: $light-gray-bg;
+                      color: $brand-text;
+                      font-weight: 500;
+                  }
+              }
             }
             &:last-of-type {
                 #{ $self }-link {
+                    height: 72px;
                     &:before {
                         height: 8px;
                         border-top: 1px solid $black;
                         border-bottom: 1px solid $black;
                         background-color: rgba(0, 0, 0, 0.2);
+                        opacity: 0.3;
                     }
                 }
             }
@@ -633,7 +542,6 @@
             justify-content: flex-start;
             align-items: center;
             height: 48px;
-            background-color: $account-secondary;
             color: rgba(255,255,255,0.85);
             padding: 0 20px;
             &:not(:last-of-type):after {
@@ -642,8 +550,7 @@
                 right: 0;
                 bottom: 0;
                 width: 92%;
-                border-bottom: 1px solid $gray-300;
-                opacity: 0.3;
+                border-bottom: 1px solid $gray-200;
             }
             &:hover {
                 color: $white;
@@ -659,8 +566,7 @@
             left: 50%;
             transform: translateX(-50%);
             width: calc(100% + 40px);
-            border-bottom: 1px solid $gray-100;
-            opacity: 0.25;
+            border-bottom: 1px solid $gray-200;
         }
     }
     &:after {
@@ -672,7 +578,7 @@
         height: 0; 
         border-left: 8px solid transparent;
         border-right: 8px solid transparent;
-        border-bottom: 8px solid $account-primary;
+        border-bottom: 8px solid $light-gray-bg;
         border-radius: 2px;
         @include media-breakpoint-down(lg) {
             right: 20.5%;

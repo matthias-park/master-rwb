@@ -67,8 +67,8 @@ const DepositPage = () => {
   }, []);
 
   return (
-    <div className="container-fluid px-0 px-sm-4 mb-4">
-      <h2 className="mb-4">{t('deposit_page_title')}</h2>
+    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">
+      <h1 className="mb-4">{t('deposit_page_title')}</h1>
       <AmountContainer
         title={t('total_playable_amount')}
         amount={user.balance!}
@@ -122,7 +122,7 @@ const DepositPage = () => {
         </div>
       </div>
       <QuestionsContainer items={questionItems} />
-    </div>
+    </main>
   );
 };
 

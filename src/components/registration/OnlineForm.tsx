@@ -12,7 +12,7 @@ const OnlineForm = () => {
         Dankzij je account profiteer je regelmatig van leuke verrassingen en
         onvergetelijke ervaringen!
       </p>
-      <a href="#" className="text-14 text-primary-light">
+      <a href="#" className="text-14 text-brand-light">
         <u>
           <strong>Meer weten?</strong>
         </u>
@@ -189,7 +189,7 @@ const OnlineForm = () => {
               Bijzondere aanbiedingen en voordelen rechtstreeks in je mailbox
               ontvangen? Vink dan dit hokje aan! Je kan op elk moment
               uitschrijven of je voorkeuren aanpassen: zie onze
-              <a href="#" className="text-primary-light ml-1">
+              <a href="#" className="text-brand-light ml-1">
                 <u>privacyverklaring</u>
               </a>
             </FormCheck.Label>
@@ -198,7 +198,7 @@ const OnlineForm = () => {
             <FormCheck.Input />
             <FormCheck.Label>
               Ik accepteer de
-              <a href="#" className="text-primary-light ml-1">
+              <a href="#" className="text-brand-light ml-1">
                 <u>algemene voorwaarden</u>
               </a>
             </FormCheck.Label>

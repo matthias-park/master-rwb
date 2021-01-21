@@ -6,6 +6,7 @@
 // Color system
 
 $white:    #ffffff;
+$white-light: rgba(255,255,255,0.75);
 $gray-100: #e5e5e5;
 $gray-200: #cccccc;
 $gray-300: #b2b2b2;
@@ -16,10 +17,12 @@ $gray-700: #4c4c4c;
 $gray-800: #323232;
 $gray-900: #c4c4c4;
 $black:    #000000;
+$black-custom: #202020;
 $light-black: #595959;
 $gray-custom: #efeff4;
 $gray-custom-100: #f9f9f9;
 $gray-custom-200: #f6f6f6;
+$gray-custom-300: #fafafa;
 
 $grays: () !default;
 $grays: map-merge(
@@ -68,28 +71,25 @@ $colors: map-merge(
   $colors
 );
 
-$primary:       #0c9bed;
-$primary-light: #55c1ff;
+$primary:       #00eb5d;
+$primary-light: #5eed53;
+$brand:         #031442;
+$brand-light: #191e54;
+$brand-text:  #000541;
 $secondary:     $gray-600 !default;
-$success:       #4be48c;
-$success-alt:   #32ba62;
+$success:     #32ba62;
+$success-alt: #4be48c;
 $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        #ff0000;
 $danger-bg:     #fef5f5;      
 $light:         $white;
 $dark:          $gray-800 !default;
-$brand:         #00af43;
-$brand-secondary: #00a94f;
 $sub-brand:     #ccdddb;
-$brand-dark:    #243f30;
-$light-spacer:  #e5e5e5;
-$account-primary: #526f70;
-$account-active:  #4D6869;
-$account-secondary: #4c6768;
-$account-light:   #CFF3E1;
-
-$primary-hover: #0a83c9;
+$light-spacer:  rgb(229, 229, 229, 0.2);
+$light-gray-bg: $gray-custom-300;
+$account-light:  #cff3e1;
+$primary-hover: #00C537;
 
 $theme-colors: () !default;
 $theme-colors: map-merge(
@@ -103,6 +103,8 @@ $theme-colors: map-merge(
     "danger":        $danger,
     "light":         $light,
     "dark":          $dark,
+    "brand":         $brand,
+    "brand-light":   $brand-light,
     "gray-100": $gray-100,
     "gray-200": $gray-200,
     "gray-300": $gray-300,
@@ -195,15 +197,15 @@ $sizes: map-merge(
 //
 // Settings for the `<body>` element.
 
-$body-bg:                   $white !default;
-$body-color:                $gray-800;
+$body-bg:                   $gray-custom-300;
+$body-color:                #202020;
 
 
 // Links
 //
 // Style anchor elements.
 
-$link-color:                              theme-color("primary") !default;
+$link-color:                              $brand-text;
 $link-decoration:                         none !default;
 $link-hover-color:                        darken($link-color, 15%) !default;
 $link-hover-decoration:                   underline !default;
@@ -573,7 +575,7 @@ $custom-control-label-color:            null !default;
 $custom-control-indicator-disabled-bg:          $input-disabled-bg !default;
 $custom-control-label-disabled-color:           $gray-600 !default;
 
-$custom-control-indicator-checked-color:        $success;
+$custom-control-indicator-checked-color:        $success-alt;
 $custom-control-indicator-checked-bg:           $white;
 $custom-control-indicator-checked-disabled-bg:  rgba(theme-color("primary"), .5) !default;
 $custom-control-indicator-checked-box-shadow:   null !default;
@@ -582,7 +584,7 @@ $custom-control-indicator-checked-border-color: $gray-100;
 $custom-control-indicator-focus-box-shadow:     $input-focus-box-shadow !default;
 $custom-control-indicator-focus-border-color:   $input-focus-border-color !default;
 
-$custom-control-indicator-active-color:         $success;
+$custom-control-indicator-active-color:         $success-alt;
 $custom-control-indicator-active-bg:            lighten($component-active-bg, 35%) !default;
 $custom-control-indicator-active-box-shadow:    null !default;
 $custom-control-indicator-active-border-color:  $gray-100;
@@ -766,14 +768,14 @@ $navbar-toggler-padding-x:          .75rem !default;
 $navbar-toggler-font-size:          $font-size-lg !default;
 $navbar-toggler-border-radius:      $btn-border-radius !default;
 
-$navbar-dark-color:                 rgba($white, .5) !default;
-$navbar-dark-hover-color:           rgba($white, .75) !default;
+$navbar-dark-color:                 $white;
+$navbar-dark-hover-color:           $white;
 $navbar-dark-active-color:          $white !default;
 $navbar-dark-disabled-color:        rgba($white, .25) !default;
 $navbar-dark-toggler-icon-bg:       url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path stroke='#{$navbar-dark-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>") !default;
 $navbar-dark-toggler-border-color:  rgba($white, .1) !default;
 
-$navbar-light-color:                $brand-dark;
+$navbar-light-color:                $brand-text;
 $navbar-light-hover-color:          rgba($black, .7) !default;
 $navbar-light-active-color:         rgba($black, .9) !default;
 $navbar-light-disabled-color:       rgba($black, .3) !default;

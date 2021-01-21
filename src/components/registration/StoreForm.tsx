@@ -14,7 +14,7 @@ const StoreForm = () => {
         Dankzij je account blijf je op de hoogte van je spelen en check je
         makkelijk of je gewonnen hebt!
       </p>
-      <a href="#" className="text-14 text-primary-light">
+      <a href="#" className="text-14 text-brand-light">
         <u>
           <strong>Meer weten?</strong>
         </u>
@@ -133,7 +133,7 @@ const StoreForm = () => {
               Bijzondere aanbiedingen en voordelen rechtstreeks in je mailbox
               ontvangen? Vink dan dit hokje aan! Je kan op elk moment
               uitschrijven of je voorkeuren aanpassen: zie onze
-              <a href="#" className="text-primary-light ml-1">
+              <a href="#" className="text-brand-light ml-1">
                 <u>privacyverklaring</u>
               </a>
             </FormCheck.Label>
@@ -142,7 +142,7 @@ const StoreForm = () => {
             <FormCheck.Input />
             <FormCheck.Label>
               Ik accepteer de
-              <a href="#" className="text-primary-light ml-1">
+              <a href="#" className="text-brand-light ml-1">
                 <u>algemene voorwaarden</u>
               </a>
             </FormCheck.Label>

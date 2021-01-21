@@ -69,7 +69,7 @@ const LayoutWithSidebar = ({ rightSidebar, children }) => {
   );
   return (
     <>
-      <div className="account-settings py-4">
+      <div className="account-settings pt-5 pb-4">
         <Sidebar links={links} />
         {children}
         {rightSidebar && (

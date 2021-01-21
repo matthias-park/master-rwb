@@ -201,7 +201,7 @@ const RegistrationLink = () => {
   return (
     <div className="d-flex flex-column align-items-center">
       <p className="weight-500 mt-3">{t('login_dont_have_acc')}</p>
-      <Link to="/register" className="btn btn-outline-primary my-2">
+      <Link to="/register" className="btn btn-outline-brand my-2">
         {t('login_registration_link')}
       </Link>
       <a href="#" className="d-block text-14 mt-2 mb-2">
@@ -242,7 +242,7 @@ const LoginDropdown = ({
       onToggle={isOpen => setShowDropdown(isOpen)}
     >
       <Dropdown.Toggle
-        variant="outline-primary"
+        variant="primary"
         className={`dropdown-toggle login-dropdown__toggle ${toggleClasses}`}
         disabled={userLoading}
       >

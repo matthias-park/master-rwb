@@ -134,7 +134,7 @@ const PageHeader = () => {
 
   return (
     <Navbar
-      bg="light"
+      variant="dark"
       expand="xl"
       className={clsx(
         'header',
@@ -146,7 +146,7 @@ const PageHeader = () => {
         <>
           <BrandLogo mobile={true} />
           <UserBlock mobile={true} />
-          <Navbar.Toggle className="header__nav-toggler px-0" type="button">
+          <Navbar.Toggle className="header__nav-toggler pr-0" type="button">
             <span className="icon-menu"></span>
           </Navbar.Toggle>
         </>

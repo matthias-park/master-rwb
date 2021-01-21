@@ -26,7 +26,7 @@ const RegVerification = () => {
           Controleer eerst je spamfilter. Niets ontvangen? Dan proberen we het
           nog een keer:{' '}
         </p>
-        <a href="#" className="text-14 text-primary-light">
+        <a href="#" className="text-14 text-brand-light">
           <u>
             <strong>Stuur opnieuw</strong>
           </u>

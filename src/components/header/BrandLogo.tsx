@@ -15,8 +15,8 @@ const BrandLogo = ({ mobile }: BrandLogoProps) => {
       <img
         alt="logo"
         src={`/assets/images/logo/logo${logoSuffix}.svg`}
-        width={mobile ? 32 : 240}
-        height={mobile ? 32 : 45}
+        width={mobile ? 100 : 165}
+        height={mobile ? 75 : 120}
       />
     </Link>
   );

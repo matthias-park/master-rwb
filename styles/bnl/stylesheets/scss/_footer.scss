@@ -1,4 +1,6 @@
 footer {
+    position: relative;
+    @include full-bg($brand-light);
     .footer-pre {
         position: relative;
         &:after {
@@ -80,7 +82,7 @@ footer {
 
 .section-item {
     margin-bottom: 24px;
-    color: $brand-dark;
+    color: $white-light;
     &__title {
         margin-bottom: 12px;
         &:after {
@@ -116,14 +118,17 @@ footer {
         display: block;
         line-height: 25px;
         margin-bottom: 0;
-        color: $brand-dark;
+        color: $white-light;
         margin-bottom: 5px;
+        &:hover {
+          color: $white;
+        }
         @include media-breakpoint-down(sm) {
             height: 48px;
             line-height: 48px;
             margin-bottom: 0;
             &:not(:last-of-type) {
-                border-bottom: 1px solid $gray-200;
+                border-bottom: 1px solid $light-spacer;
             }
         }
     }
@@ -137,7 +142,7 @@ footer {
         background-color: transparent;
         @include media-breakpoint-down(sm) {
             display: none;
-            background-color: $gray-custom;
+            background-color: $brand;
             border-radius: 0;
             margin-top: 0;
             padding: 0 20px;
@@ -161,6 +166,7 @@ footer {
     padding: 10px;
     padding-left: 20px;
     border-left: 1px solid $light-spacer;
+    color: $white-light;
     @include media-breakpoint-down(md) {
         display: flex;
         flex-direction: column;
@@ -169,6 +175,7 @@ footer {
     }
     &__head-title {
         margin-bottom: 25px;
+        color: $white;
     }
     &__title {
         font-weight: 500;
@@ -187,7 +194,7 @@ footer {
     &__icons {
         &-link {
             font-size: 26px;
-            color: $gray-400;
+            color: $white;
             cursor: pointer;
             &:not(:last-of-type) {
                 margin-right: 15px;
@@ -196,7 +203,7 @@ footer {
                 }
             }
             &:hover {
-                color: $gray-600;
+                color: $white-light;
                 text-decoration: none;
             }
             @include media-breakpoint-down(lg) {
@@ -211,13 +218,13 @@ footer {
     align-items: center;
     i {
         font-size: 35px;
-        color: $gray-400;
+        color: $white-light;
     }
     &__text {
-        color: $gray-600;
+        color: rgba(255,255,255,0.45);
     }
     &__time {
-        color: $black;
+        color: $white-light;
         font-weight: 500;
     }
 }
@@ -228,7 +235,7 @@ footer {
     &__text {
         display: inline-block;
         max-width: 300px;
-        color: $gray-500;
+        color: $white-light;
     }
     &__img {
         margin-right: 10px;
@@ -242,7 +249,7 @@ footer {
     align-items: center;
     font-size: 14px;
     padding: 0 80px;
-    background-color: $brand-secondary;
+    background-color: $brand;
     @include media-breakpoint-down(xl) {
         padding: 0 45px;
     }
@@ -257,8 +264,7 @@ footer {
         border-top: 1px solid $light-spacer;
     }
     &__title {
-        color: $white;
-        opacity: 0.7;
+        color: $white-light;
     }
     &__nav {
         display: flex;
@@ -279,7 +285,7 @@ footer {
         &-link {
             list-style-type: none;
             a {
-              color: white;
+              color: $white-light;
             }
             @include media-breakpoint-down(md) {
                 padding-top: 18px;

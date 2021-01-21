@@ -34,7 +34,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
       onToggle={isOpen => showUserMenu(isOpen)}
     >
       <div className="header__user-menu-info">
-        <strong className="text-primary-light">{user.name}</strong>
+        <strong className="text-brand-text">{user.name}</strong>
         <div className="header__user-menu-info-balance">
           <span>{user.balance}</span>
         </div>
@@ -64,7 +64,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
           <Dropdown.Item as="div">
             <Link
               to="/deposit"
-              className="btn btn-light btn-lg text-14 px-3 mb-2"
+              className="btn btn-outline-brand btn-lg text-14 px-3 mb-2"
             >
               <i className="icon-card"></i>
               {t('deposit_link')}
