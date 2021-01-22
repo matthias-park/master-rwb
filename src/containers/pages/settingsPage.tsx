@@ -35,7 +35,7 @@ const SettingsPage = () => {
   });
   const isDataLoading = !data && !error;
   const handleOnSubmit = async (url: string, body: unknown) => {
-    const rez = await postApi(url, body).catch(() => {
+    const rez = await postApi(`${url}?response_json=true`, body).catch(() => {
       addToast(`Failed to update user settings`, {
         appearance: 'error',
         autoDismiss: true,
