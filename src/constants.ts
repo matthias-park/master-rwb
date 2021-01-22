@@ -29,6 +29,12 @@ export enum ComponentName {
   NotFoundPage,
 }
 
+export enum FormFieldValidation {
+  Valid,
+  Invalid,
+  Validating,
+}
+
 export const HEADER_ROUTES: HeaderLink[] = [
   {
     name: 'Home',
@@ -272,6 +278,7 @@ export const TRANSLATION_SYMBOLS = [
   'register_need_match_password', //Password needs to match
   'register_input_required', //Field required
   'register_already_taken', //Already taken
+  'register_input_date_of_birth', //Birthday
 ];
 
 export const PROMOTION_LIST = [

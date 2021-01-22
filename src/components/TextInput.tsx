@@ -1,23 +1,22 @@
 import clsx from 'clsx';
 import React, { forwardRef } from 'react';
-import { Form } from 'react-bootstrap';
+import { Form, Spinner } from 'react-bootstrap';
+import { FormFieldValidation } from '../constants';
 
-interface Props {
-  id: string;
-  name?: string;
-  type?: string;
-  placeholder?: string;
+type Props = {
   error?: { message: string };
-  valid?: string | boolean;
-  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
-}
+  validation?: FormFieldValidation;
+} & React.ComponentProps<typeof Form.Control>;
 
 const TextInput = forwardRef<HTMLInputElement, Props>(
-  ({ id, type = 'text', placeholder, error, name, valid, ...props }, ref) => (
+  (
+    { id, type = 'text', placeholder, error, name, validation, ...props },
+    ref,
+  ) => (
     <Form.Group
       className={clsx(
         error && 'has-error',
-        typeof valid === 'boolean' && valid && 'success',
+        validation === FormFieldValidation.Valid && 'success',
       )}
     >
       <Form.Control
@@ -32,7 +31,10 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
       <label htmlFor={id} className="text-14">
         {placeholder}
       </label>
-      <div className="form-group__icons">
+      <div className={clsx('form-group__icons', type === 'date' && 'mr-4')}>
+        {validation === FormFieldValidation.Validating && (
+          <Spinner as="span" animation="border" role="status" size="sm" />
+        )}
         <i className="icon-check"></i>
         <i className="icon-exclamation"></i>
       </div>

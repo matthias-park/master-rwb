@@ -6,11 +6,9 @@ import {
   PostRegistration,
   ValidateRegisterInput,
 } from '../../types/api/user/Registration';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Spinner } from 'react-bootstrap';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import dayjs from 'dayjs';
+import { FormFieldValidation } from '../../constants';
 
 interface Props {
   checkEmailAvailable: (email: string) => Promise<ValidateRegisterInput | null>;
@@ -24,19 +22,16 @@ const OnlineForm = ({
   handleRegisterSubmit,
 }: Props) => {
   const { t } = useI18n();
-  const [validForms, setValidForms] = useState({});
-  const {
-    register,
-    handleSubmit,
-    errors,
-    watch,
-    trigger,
-    formState,
-    control,
-  } = useForm({
-    mode: 'onBlur',
-  });
-
+  const [validationForms, setValidationForms] = useState<{
+    [key: string]: FormFieldValidation;
+  }>({});
+  const { register, handleSubmit, errors, watch, trigger, formState } = useForm(
+    {
+      mode: 'onBlur',
+    },
+  );
+  const setValidation = (id: string, status: FormFieldValidation) =>
+    setValidationForms({ ...validationForms, [id]: status });
   const validateRepeat = (id: string, value: string) => {
     return value === watch(id) || t(`register_need_match_${id}`);
   };
@@ -81,36 +76,38 @@ const OnlineForm = ({
                 validate: async value => {
                   let valid: string | boolean = true;
                   if (id === 'login') {
+                    // setValidatingForms({ ...validatingForms, [id]: true });
+                    setValidation(id, FormFieldValidation.Validating);
                     const res = await checkLoginAvailable(value);
                     if (res?.Exists && !res.Message)
                       res.Message = t('register_already_taken');
                     valid = res?.Message || !res?.Exists;
-                    setValidForms({ ...validForms, [id]: valid });
+                    setValidation(
+                      id,
+                      res?.Exists ?? false
+                        ? FormFieldValidation.Invalid
+                        : FormFieldValidation.Valid,
+                    );
                   }
                   return valid;
                 },
               })}
               id={id}
               key={id}
-              valid={validForms[id]}
+              validation={validationForms[id]}
               error={errors[id]}
               placeholder={t(`register_input_${id}`)}
             />
           ))}
-          <Controller
-            control={control}
-            name="date_of_birth"
-            render={({ onChange, onBlur, value }) => (
-              <DatePicker
-                onChange={onChange}
-                dateFormat="yyyy-MM-dd"
-                onBlur={onBlur}
-                selected={value}
-                showMonthDropdown
-                showYearDropdown
-                scrollableYearDropdown
-              />
-            )}
+          <TextInput
+            ref={register({
+              required: t('register_input_required'),
+              valueAsDate: true,
+            })}
+            id="date_of_birth"
+            error={errors.date_of_birth}
+            type="date"
+            placeholder={t(`register_input_date_of_birth`)}
           />
         </div>
         {/* <div className="reg-form__block">
@@ -166,6 +163,7 @@ const OnlineForm = ({
                 required: t('register_input_required'),
                 validate: async value => {
                   let valid: string | boolean = true;
+                  setValidation(id, FormFieldValidation.Validating);
                   if (id === 'email') {
                     const res = await checkEmailAvailable(value);
                     if (res?.Exists && !res.Message)
@@ -174,14 +172,19 @@ const OnlineForm = ({
                   } else {
                     valid = validateRepeat('email', value);
                   }
-                  setValidForms({ ...validForms, [id]: valid });
+                  setValidation(
+                    id,
+                    typeof valid === 'boolean' && valid
+                      ? FormFieldValidation.Valid
+                      : FormFieldValidation.Invalid,
+                  );
                   return valid;
                 },
               })}
               onBlur={() => triggerRepeat(id)}
               key={id}
               id={id}
-              valid={validForms[id]}
+              validation={validationForms[id]}
               error={errors[id]}
               placeholder={t(`register_input_${id}`)}
             />
@@ -198,7 +201,12 @@ const OnlineForm = ({
                 validate: async value => {
                   if (id === 'password') return true;
                   const valid = validateRepeat('password', value);
-                  setValidForms({ ...validForms, [id]: valid });
+                  setValidation(
+                    id,
+                    typeof valid === 'boolean' && valid
+                      ? FormFieldValidation.Valid
+                      : FormFieldValidation.Invalid,
+                  );
                   return valid;
                 },
               })}
@@ -206,7 +214,7 @@ const OnlineForm = ({
               key={id}
               id={id}
               type="password"
-              valid={validForms[id]}
+              validation={validationForms[id]}
               error={errors[id]}
               placeholder={t(`register_input_${id}`)}
             />
