@@ -8,3 +8,9 @@ export interface PostRegistration {
   city: string;
   date_of_birth: string;
 }
+export interface ValidateRegisterInput {
+  Exists: boolean;
+  Success: boolean;
+  Code: number;
+  Message: string;
+}

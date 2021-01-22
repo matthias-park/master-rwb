@@ -267,7 +267,11 @@ export const TRANSLATION_SYMBOLS = [
   'register_privacy_btn', //Privacy statement
   'register_accept_conditions', //I accept the
   'register_terms_conditions', //terms and conditions
-  'register_submit_btn', //Register
+  'register_submit_btn', //Register,
+  'register_need_match_email', //Email needs to match
+  'register_need_match_password', //Password needs to match
+  'register_input_required', //Field required
+  'register_already_taken', //Already taken
 ];
 
 export const PROMOTION_LIST = [

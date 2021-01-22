@@ -191,7 +191,7 @@ const TransactionsDateFilter = ({
       <div className="date-filter__picker-wrp mb-sm-3">
         <DatePicker
           selected={dateFrom.toDate()}
-          onChange={date => setDateFrom(dayjs(date))}
+          onChange={date => setDateFrom(dayjs(date as Date))}
         />
         <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
       </div>
@@ -199,7 +199,7 @@ const TransactionsDateFilter = ({
       <div className="date-filter__picker-wrp mb-sm-3">
         <DatePicker
           selected={dateTo.toDate()}
-          onChange={date => setDateTo(dayjs(date))}
+          onChange={date => setDateTo(dayjs(date as Date))}
         />
         <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
       </div>
