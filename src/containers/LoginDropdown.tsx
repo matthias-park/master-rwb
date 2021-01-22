@@ -200,15 +200,15 @@ const RegistrationLink = () => {
   const { t } = useI18n();
   return (
     <div className="d-flex flex-column align-items-center">
-      <p className="weight-500 mt-3">{t('login_dont_have_acc')}</p>
+      {/* <p className="weight-500 mt-3">{t('login_dont_have_acc')}</p> */}
       <Link to="/register" className="btn btn-outline-brand my-2">
         {t('login_registration_link')}
       </Link>
-      <a href="#" className="d-block text-14 mt-2 mb-2">
+      {/* <a href="#" className="d-block text-14 mt-2 mb-2">
         <u>
           <strong>{t('login_find_out_lottery')}</strong>
         </u>
-      </a>
+      </a> */}
     </div>
   );
 };
@@ -260,7 +260,7 @@ const LoginDropdown = ({
       </Dropdown.Toggle>
       <Dropdown.Menu className="login-dropdown__menu">
         <LoginForm hideLoginDropdown={handleHideDropdown} />
-        <JoinLotteryClub />
+        {/* <JoinLotteryClub /> */}
         <RegistrationLink />
       </Dropdown.Menu>
     </Dropdown>

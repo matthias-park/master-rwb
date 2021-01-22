@@ -246,6 +246,28 @@ export const TRANSLATION_SYMBOLS = [
   'settings_page_title',
   'settings_yes',
   'settings_no',
+
+  'register_title', //Do you want to play online? Register now!
+  'register_desc', //Thanks to your account, you regularly benefit from nice surprises and unforgettable experiences!
+  'register_know_more', //Know more?
+  'register_persona_info', //Personal info
+  'register_radio_male', //Male
+  'register_radio_female', //Female
+  'register_input_login', //Username
+  'register_input_street', //Street
+  'register_input_postal_code', //Postal code
+  'register_input_city', //City
+  'register_email_section', //Your e-mail (this will also be your login)
+  'register_input_email', //E-mail
+  'register_input_repeat_email', //Repeat e-mail
+  'register_password_section', //Password
+  'register_input_password', //Password
+  'register_input_repeat_password', //Repeat password
+  'register_news_letter_desc', //I would like to stay informed of news from the National Lottery.
+  'register_privacy_btn', //Privacy statement
+  'register_accept_conditions', //I accept the
+  'register_terms_conditions', //terms and conditions
+  'register_submit_btn', //Register
 ];
 
 export const PROMOTION_LIST = [

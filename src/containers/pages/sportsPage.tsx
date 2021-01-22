@@ -5,6 +5,7 @@ import GetToken from '../../types/api/kambi/GetToken';
 import Config from '../../types/Config';
 import { useCallback } from 'react';
 import { useToasts } from 'react-toast-notifications';
+import Spinner from 'react-bootstrap/Spinner';
 import KambiSportsbook, {
   KambiSportsbookProps,
 } from '../../components/KambiSportsbook';
@@ -47,8 +48,16 @@ const SportsPage = () => {
     }
   }, [config.user.id, config.user.loading, config.locale]);
 
-  if (!params) return null;
-  return <KambiSportsbook updateBalance={updateUserBalance} {...params} />;
+  return (
+    <div style={{ minHeight: 100 }} className="position-relative">
+      <div className="position-absolute w-100 d-flex justify-content-center pt-4 pb-3">
+        <Spinner animation="border" variant="black" className="mx-auto" />
+      </div>
+      {!!params && (
+        <KambiSportsbook updateBalance={updateUserBalance} {...params} />
+      )}
+    </div>
+  );
 };
 
 export default SportsPage;
