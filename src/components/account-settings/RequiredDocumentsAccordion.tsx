@@ -9,6 +9,7 @@ import Card from 'react-bootstrap/Card';
 import clsx from 'clsx';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 import { useI18n } from '../../hooks/useI18n';
 
 interface SettingProps {
@@ -19,7 +20,7 @@ interface SettingProps {
 const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
   const { t } = useI18n();
   const currentEventKey = useContext(AccordionContext);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState } = useForm();
   const fields: { [key: string]: SettingsField } = useMemo(
     () =>
       form.fields.reduce((obj, value) => {
@@ -113,7 +114,23 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
                 </Form.Group>
               </div>
             )}
-            <Button className="mt-3" variant="primary" type="submit">
+            <Button
+              disabled={formState.isSubmitting}
+              className="mt-3"
+              variant="primary"
+              type="submit"
+            >
+              {formState.isSubmitting && (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />{' '}
+                </>
+              )}
               {fields.submit_button.title}
             </Button>
           </Form>

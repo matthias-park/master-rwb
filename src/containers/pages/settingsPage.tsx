@@ -8,6 +8,7 @@ import { postApi } from '../../utils/apiUtils';
 import DynamicSettingsAccordion from '../../components/account-settings/DynamicSettingsAccordion';
 import { useI18n } from '../../hooks/useI18n';
 import { useToasts } from 'react-toast-notifications';
+import { useConfig } from '../../hooks/useConfig';
 
 const LoadableMarketingSettingsAccordion = loadable(
   () => import('../../components/account-settings/MarketingSettingsAccordion'),
@@ -23,8 +24,9 @@ export const COMPONENTS_BY_SETTINGS = {
 
 const SettingsPage = () => {
   const { t } = useI18n();
+  const { user } = useConfig();
   const { addToast } = useToasts();
-  const { data, error } = useSWR<ProfileSettings>('/v2/profile.json', {
+  const { data, error, mutate } = useSWR<ProfileSettings>('/v2/profile.json', {
     onErrorRetry: (error, key) => {
       addToast(`Failed to fetch user settings`, {
         appearance: 'error',
@@ -34,22 +36,30 @@ const SettingsPage = () => {
     },
   });
   const isDataLoading = !data && !error;
-  const handleOnSubmit = async (url: string, body: unknown) => {
-    const rez = await postApi(`${url}?response_json=true`, body).catch(() => {
+  const handleOnSubmit = async (
+    url: string,
+    body: { [key: string]: unknown },
+  ) => {
+    body.authenticity_token = user.token;
+    const res = await postApi<{ success: boolean }>(
+      `${url}?response_json=true`,
+      body,
+    ).catch(() => ({ success: false }));
+    if (res.success) {
+      mutate();
+    } else {
       addToast(`Failed to update user settings`, {
         appearance: 'error',
         autoDismiss: true,
       });
-    });
-    console.log(url, body, rez);
+    }
   };
-  // console.log(data);
   return (
     <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">
       <h1 className="mb-4">{t('settings_page_title')}</h1>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="white" className="mx-auto" />
+          <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
       )}
       {!!data?.forms && (

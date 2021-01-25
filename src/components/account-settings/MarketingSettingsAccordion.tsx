@@ -9,6 +9,7 @@ import Card from 'react-bootstrap/Card';
 import clsx from 'clsx';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 import { useI18n } from '../../hooks/useI18n';
 
 interface SettingProps {
@@ -19,7 +20,7 @@ interface SettingProps {
 const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
   const { t } = useI18n();
   const currentEventKey = useContext(AccordionContext);
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, formState } = useForm({
     defaultValues: form.fields
       .filter(field => field.default !== undefined && field.default !== null)
       .reduce((obj, value) => {
@@ -45,10 +46,12 @@ const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
   );
 
   const updateSettingsSubmit = useCallback(data => {
-    const body = Object.keys(data).reduce((obj, key) => {
-      obj[key] = Number(data[key]);
-      return obj;
-    }, {});
+    const body = {
+      gdpr_config: Object.keys(data).reduce((obj, key) => {
+        obj[key] = Number(data[key]);
+        return obj;
+      }, {}),
+    };
     onSubmit(form.action, body);
   }, []);
 
@@ -155,7 +158,23 @@ const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                 ) : null,
               )}
             </div>
-            <Button className="mt-3" variant="primary" type="submit">
+            <Button
+              disabled={formState.isSubmitting}
+              className="mt-3"
+              variant="primary"
+              type="submit"
+            >
+              {formState.isSubmitting && (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />{' '}
+                </>
+              )}
               {fields.button.title}
             </Button>
           </Form>

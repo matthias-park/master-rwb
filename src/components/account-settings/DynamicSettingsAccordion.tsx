@@ -7,6 +7,7 @@ import AccordionContext from 'react-bootstrap/AccordionContext';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 
 interface SettingProps {
   form: SettingsForm;
@@ -15,7 +16,7 @@ interface SettingProps {
 
 const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
   const currentEventKey = useContext(AccordionContext);
-  const { register, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch, formState } = useForm({
     defaultValues: form.fields
       .filter(field => field.default ?? false)
       .reduce((obj, value) => {
@@ -50,11 +51,7 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
     [form.fields],
   );
   const updateSettingsSubmit = useCallback(data => {
-    const body = Object.keys(data).reduce((obj, key) => {
-      obj[key] = isFinite(data[key]) ? Number(data[key]) : data[key];
-      return obj;
-    }, {});
-    onSubmit(form.action, body);
+    onSubmit(form.action, data);
   }, []);
 
   return (
@@ -98,10 +95,22 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                     return (
                       <Button
                         key={field.id}
+                        disabled={formState.isSubmitting}
                         className="mt-2"
                         variant="primary"
                         type="submit"
                       >
+                        {formState.isSubmitting && (
+                          <>
+                            <Spinner
+                              as="span"
+                              animation="border"
+                              size="sm"
+                              role="status"
+                              aria-hidden="true"
+                            />{' '}
+                          </>
+                        )}
                         {field.title}
                       </Button>
                     );
