@@ -53,3 +53,9 @@ export interface LastLogin {
   title: string;
   value: string;
 }
+
+export interface UpdateSettingResponse {
+  success?: boolean;
+  status?: 'success' | 'failure';
+  message?: string;
+}

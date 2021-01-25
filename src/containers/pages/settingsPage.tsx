@@ -9,6 +9,7 @@ import DynamicSettingsAccordion from '../../components/account-settings/DynamicS
 import { useI18n } from '../../hooks/useI18n';
 import { useToasts } from 'react-toast-notifications';
 import { useConfig } from '../../hooks/useConfig';
+import { UpdateSettingResponse } from '../../types/api/user/ProfileSettings';
 
 const LoadableMarketingSettingsAccordion = loadable(
   () => import('../../components/account-settings/MarketingSettingsAccordion'),
@@ -41,11 +42,17 @@ const SettingsPage = () => {
     body: { [key: string]: unknown },
   ) => {
     body.authenticity_token = user.token;
-    const res = await postApi<{ success: boolean }>(
+    const res = await postApi<UpdateSettingResponse>(
       `${url}?response_json=true`,
       body,
-    ).catch(() => ({ success: false }));
-    if (res.success) {
+    ).catch(() => ({ success: false, status: 'failure', message: '' }));
+    if (res.success || res.status === 'success') {
+      if (res.message) {
+        addToast(res.message, {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+      }
       mutate();
     } else {
       addToast(`Failed to update user settings`, {
