@@ -133,6 +133,11 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                         as={formGroupAs}
                         size="sm"
                         type={formGroupType}
+                        autoComplete={
+                          field.type === 'password'
+                            ? 'current-password'
+                            : undefined
+                        }
                         id={field.id}
                         name={field.id}
                         placeholder=" "

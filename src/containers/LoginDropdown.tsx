@@ -88,6 +88,8 @@ const LoginForm = ({
           id="email"
           name="email"
           placeholder=" "
+          autoFocus
+          autoComplete="username"
           ref={register({
             required: t('input_field_required'),
           })}
@@ -110,6 +112,7 @@ const LoginForm = ({
           type={passwordVisible ? 'text' : 'password'}
           id="password"
           name="password"
+          autoComplete="current-password"
           placeholder=" "
           ref={register({
             required: t('input_field_required'),

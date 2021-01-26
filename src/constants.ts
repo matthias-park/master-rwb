@@ -278,7 +278,9 @@ export const TRANSLATION_SYMBOLS = [
   'register_need_match_password', //Password needs to match
   'register_input_required', //Field required
   'register_already_taken', //Already taken
-  'register_input_date_of_birth', //Birthday
+  'register_input_date_of_birth', //Birthday,
+  'register_password_weak',
+  'register_email_bad_format',
 ];
 
 export const PROMOTION_LIST = [

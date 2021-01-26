@@ -3,6 +3,7 @@ import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { useRoutePath } from '../../hooks/index';
 import { REDIRECT_PROTECTED_NOT_LOGGED_IN } from '../../constants';
+import Spinner from 'react-bootstrap/Spinner';
 
 interface Props extends RouteProps {
   redirectTo?: string;
@@ -11,7 +12,16 @@ interface Props extends RouteProps {
 const ProtectedRoute = ({ children, redirectTo, ...props }: Props) => {
   const { user } = useConfig();
   const redirectToPath = useRoutePath(REDIRECT_PROTECTED_NOT_LOGGED_IN);
-  if (user.loading) return null;
+  if (user.loading) {
+    return (
+      <div
+        style={{ minHeight: '300px' }}
+        className="w-100 d-flex align-items-center justify-content-center pt-4 pb-3"
+      >
+        <Spinner animation="border" variant="black" className="mx-auto" />
+      </div>
+    );
+  }
   if (user.logged_in) {
     return <Route {...props} />;
   }

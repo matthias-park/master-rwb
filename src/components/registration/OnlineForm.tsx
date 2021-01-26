@@ -165,6 +165,11 @@ const OnlineForm = ({
                   let valid: string | boolean = true;
                   setValidation(id, FormFieldValidation.Validating);
                   if (id === 'email') {
+                    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                    if (!emailRegex.test(value)) {
+                      setValidation(id, FormFieldValidation.Invalid);
+                      return t('register_email_bad_format');
+                    }
                     const res = await checkEmailAvailable(value);
                     if (res?.Exists && !res.Message)
                       res.Message = t('register_already_taken');
@@ -199,7 +204,25 @@ const OnlineForm = ({
               ref={register({
                 required: t('register_input_required'),
                 validate: async value => {
-                  if (id === 'password') return true;
+                  if (id === 'password') {
+                    const valueValid = value.length > 7;
+                    const hasLowerCase = /[a-z]/.test(value);
+                    const hasUpperCase = /[A-Z]/.test(value);
+                    const hasNumbers = /\d/.test(value);
+                    const hasSpecialCharacters = /[!@#$%^&*(),.?":{}|<>]/.test(
+                      value,
+                    );
+                    const mixOfThree =
+                      [
+                        hasLowerCase,
+                        hasUpperCase,
+                        hasNumbers,
+                        hasSpecialCharacters,
+                      ].filter(Boolean).length > 2;
+                    return (
+                      (valueValid && mixOfThree) || t('register_password_weak')
+                    );
+                  }
                   const valid = validateRepeat('password', value);
                   setValidation(
                     id,
@@ -211,6 +234,7 @@ const OnlineForm = ({
                 },
               })}
               onBlur={() => triggerRepeat(id)}
+              autoComplete={id === 'password' ? 'new-password' : undefined}
               key={id}
               id={id}
               type="password"
