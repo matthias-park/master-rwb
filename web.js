@@ -64,8 +64,10 @@ app.get('*', (req, res) => {
         return res.send('hi!');
       }
       const withAuthContent = data.replace(
-        'API_URL="https://',
-        `API_URL="https://${req.auth.name}:${req.auth.pass}@`,
+        'window.DEFAULT_LOCALE',
+        `window.BASIC_AUTH="${Buffer.from(
+          req.auth.name + ':' + req.auth.pass,
+        ).toString('base64')}"; window.DEFAULT_LOCALE`,
       );
       res.send(withAuthContent);
     });

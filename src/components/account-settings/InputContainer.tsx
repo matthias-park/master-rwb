@@ -21,24 +21,31 @@ const InputContainer = ({
 }: Props) => {
   const [inputValue, setInputValue] = useState<string>('');
   const handleSubmit = () => onSubmit(Number(inputValue));
+  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value =
+      Number(e.target.value) > 0 || !e.target.value.length
+        ? e.target.value
+        : '0';
+    setInputValue(value);
+  };
   return (
     <div className="input-container mb-4">
       <p className="input-container__title text-14 mb-2">{title}</p>
       <Form.Group className="w-100">
         <Form.Control
           type="number"
-          id="amount"
           placeholder={placeholder}
+          min="0"
           value={inputValue}
           onKeyUp={e => enterKeyPress(e, handleSubmit)}
-          onChange={e => setInputValue(e.target.value)}
+          onChange={handleValueChange}
           className="input-container__input"
         ></Form.Control>
-        <small className="form-group__error-msg">Error message</small>
+        {/* <small className="form-group__error-msg">Error message</small> */}
       </Form.Group>
       <Button
         variant="primary"
-        disabled={!inputValue.length || loading}
+        disabled={!inputValue.length || inputValue === '0' || loading}
         onClick={handleSubmit}
       >
         {loading && (

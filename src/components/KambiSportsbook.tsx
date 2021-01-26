@@ -1,5 +1,6 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import isEqual from 'lodash.isequal';
+import { useToasts } from 'react-toast-notifications';
 
 export interface KambiSportsbookProps {
   locale: string;
@@ -33,6 +34,7 @@ const insertKambiBootstrap = (containerRef: HTMLDivElement): void => {
 
 const KambiSportsbook = React.memo(
   (params: Props) => {
+    const { addToast } = useToasts();
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     useLayoutEffect(() => {
@@ -54,6 +56,12 @@ const KambiSportsbook = React.memo(
         notification: event => {
           if (event.name === 'placedBet') {
             params.updateBalance();
+          }
+          if (event.name === 'loginRequestDone' && !event.data) {
+            addToast('KAMBI failed to authenticate user', {
+              appearance: 'error',
+              autoDismiss: true,
+            });
           }
           // console.log(event);
         },

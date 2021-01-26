@@ -10,11 +10,14 @@ import { Redirect } from 'react-router-dom';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
 import { PostRegistration } from 'types/api/user/Registration';
-import { ValidateRegisterInput } from '../../types/api/user/Registration';
+import {
+  ValidateRegisterInput,
+  RegistrationResponse,
+} from '../../types/api/user/Registration';
 import dayjs from 'dayjs';
 
 const RegisterPage = () => {
-  const { user } = useConfig();
+  const { user, mutateUser } = useConfig();
   const { addToast } = useToasts();
   const checkEmailAvailable = useCallback(
     async (email: string): Promise<ValidateRegisterInput | null> => {
@@ -67,7 +70,7 @@ const RegisterPage = () => {
         return obj;
       }, {});
       console.log(finalForm);
-      const res = await postApi(
+      const res = await postApi<RegistrationResponse>(
         '/railsapi/v1/registration/new',
         finalForm,
       ).catch(err => {
@@ -78,6 +81,20 @@ const RegisterPage = () => {
         console.log(err);
         return null;
       });
+      if (res?.Success && res.Data) {
+        mutateUser(
+          {
+            user: {
+              loading: false,
+              logged_in: true,
+              balance: '',
+              id: res.Data.PlayerId,
+              name: res.Data.Login,
+            },
+          },
+          true,
+        );
+      }
       console.log(res);
       return true;
     },

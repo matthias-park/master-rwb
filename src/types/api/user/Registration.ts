@@ -14,3 +14,17 @@ export interface ValidateRegisterInput {
   Code: number;
   Message: string;
 }
+
+export interface RegistrationResponse {
+  Success: boolean;
+  Code: number;
+  Message: string | null;
+  Data?: {
+    RegistrationId: number;
+    Email: string;
+    Login: string;
+    PlayerId: number;
+    Code: number;
+    Message: string;
+  };
+}
