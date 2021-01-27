@@ -165,7 +165,7 @@ const OnlineForm = ({
                   let valid: string | boolean = true;
                   setValidation(id, FormFieldValidation.Validating);
                   if (id === 'email') {
-                    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                    const emailRegex = /\A[a-zA-Z0-9.!\#$%&‘*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\z/;
                     if (!emailRegex.test(value)) {
                       setValidation(id, FormFieldValidation.Invalid);
                       return t('register_email_bad_format');

@@ -39,12 +39,14 @@ const SettingsPage = () => {
   const isDataLoading = !data && !error;
   const handleOnSubmit = async (
     url: string,
-    body: { [key: string]: unknown },
+    body: { [key: string]: string | Blob },
+    formBody: boolean = false,
   ) => {
-    body.authenticity_token = user.token;
+    body.authenticity_token = user.token!;
     const res = await postApi<UpdateSettingResponse>(
       `${url}?response_json=true`,
       body,
+      { formData: formBody },
     ).catch(() => ({ success: false, status: 'failure', message: '' }));
     if (res.success || res.status === 'success') {
       if (res.message) {

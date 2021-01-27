@@ -34,7 +34,15 @@ export const getApi = <T>(url: string): Promise<T> => {
   });
 };
 
-export const postApi = <T>(url: string, body?: unknown): Promise<T> => {
+export interface PostOptions {
+  formData?: boolean;
+}
+
+export const postApi = <T>(
+  url: string,
+  body?: { [key: string]: string | Blob },
+  options: PostOptions = {},
+): Promise<T> => {
   const config: RequestInit = {
     method: 'post',
     mode: 'cors',
@@ -42,8 +50,17 @@ export const postApi = <T>(url: string, body?: unknown): Promise<T> => {
     headers: new Headers(),
   };
   if (body) {
-    config.body = JSON.stringify(body);
-    (config.headers as Headers).append('Content-Type', 'application/json');
+    if (options.formData) {
+      console.log(body);
+      const formData = new FormData();
+      for (const key in body) {
+        formData.append(key, body[key]);
+      }
+      config.body = formData;
+    } else {
+      config.body = JSON.stringify(body);
+      (config.headers as Headers).append('Content-Type', 'application/json');
+    }
   }
   if (window.BASIC_AUTH) {
     (config.headers as Headers).append(

@@ -14,7 +14,7 @@ import { useI18n } from '../../hooks/useI18n';
 
 interface SettingProps {
   form: SettingsForm;
-  onSubmit: (url: string, body: unknown) => void;
+  onSubmit: (url: string, body: unknown, formBody?: boolean) => void;
 }
 
 const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
@@ -31,11 +31,18 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
   );
 
   const updateSettingsSubmit = useCallback(data => {
-    const body = Object.keys(data).reduce((obj, key) => {
-      obj[key] = Number(data[key]);
-      return obj;
-    }, {});
-    onSubmit(form.action, body);
+    const body = {
+      password: data.password,
+      button: '',
+      image_id: data.image_id?.[0],
+      image_residence: data.image_residence?.[0],
+      image_payment_proof: data.image_payment_proof?.[0],
+      controller: 'settings',
+      action: 'upload_images',
+      locale: 'en',
+    };
+    console.log(data, body);
+    onSubmit(form.action, body, true);
   }, []);
 
   return (
@@ -70,20 +77,12 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
                           NOTE: Only One document can be uploaded one time
                           before next approval lorem ipsu longer text here
                         </p>
-                        <Form.File
-                          custom
-                          className="mt-auto"
-                          ref={register}
-                          name={id}
-                        >
+                        <Form.File custom className="mt-auto">
                           <Form.File.Label
-                            className={clsx(
-                              fields[id].status,
-                              false && 'uploaded',
-                            )}
+                            className={clsx(false && 'uploaded')}
                           >
                             {t('settings_file_upload')}
-                            <Form.File.Input />
+                            <Form.File.Input ref={register} name={id} />
                           </Form.File.Label>
                         </Form.File>
                       </div>
