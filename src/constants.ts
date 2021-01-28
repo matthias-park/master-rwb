@@ -252,7 +252,7 @@ export const TRANSLATION_SYMBOLS = [
   'settings_page_title',
   'settings_yes',
   'settings_no',
-
+  'settings_page_failed_to_load',
   'register_title', //Do you want to play online? Register now!
   'register_desc', //Thanks to your account, you regularly benefit from nice surprises and unforgettable experiences!
   'register_know_more', //Know more?

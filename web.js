@@ -57,7 +57,10 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.get('*', (req, res) => {
   const name = domainsToName[req.hostname];
   const filePath = path.join(__dirname, `/build/${name}.html`);
-  res.sendFile(filePath);
+  if (fs.existsSync(filePath)) {
+    return res.sendFile(filePath);
+  }
+  return res.sendStatus(404);
 });
 
 const port = config.get('port') || 3800;

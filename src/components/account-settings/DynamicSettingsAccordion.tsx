@@ -50,9 +50,10 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
         }, {}),
     [form.fields],
   );
-  const updateSettingsSubmit = useCallback(data => {
-    onSubmit(form.action, data);
-  }, []);
+  const updateSettingsSubmit = useCallback(
+    data => onSubmit(form.action, data),
+    [],
+  );
 
   return (
     <Card className="settings-card">

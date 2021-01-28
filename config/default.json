@@ -5,7 +5,7 @@
       "domain": "bnl.local",
       "theme": "bnl",
       "api": "https://bnl-dev.tglab.dev",
-      "defaultLocale": "en"
+      "defaultLocale": "nl"
     }
   ],
   "port": 3800

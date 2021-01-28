@@ -41,7 +41,7 @@ const SettingsPage = () => {
     url: string,
     body: { [key: string]: string | Blob },
     formBody: boolean = false,
-  ) => {
+  ): Promise<void> => {
     body.authenticity_token = user.token!;
     const res = await postApi<UpdateSettingResponse>(
       `${url}?response_json=true`,
@@ -62,6 +62,7 @@ const SettingsPage = () => {
         autoDismiss: true,
       });
     }
+    return;
   };
   return (
     <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">
@@ -70,6 +71,11 @@ const SettingsPage = () => {
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
+      )}
+      {!!error && (
+        <h2 className="mt-3 mb-5 text-center">
+          {t('settings_page_failed_to_load')}
+        </h2>
       )}
       {!!data?.forms && (
         <Accordion>

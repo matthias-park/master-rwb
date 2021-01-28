@@ -42,7 +42,7 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
       locale: 'en',
     };
     console.log(data, body);
-    onSubmit(form.action, body, true);
+    return onSubmit(form.action, body, true);
   }, []);
 
   return (
@@ -120,15 +120,13 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
               type="submit"
             >
               {formState.isSubmitting && (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />{' '}
-                </>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
               )}
               {fields.submit_button.title}
             </Button>

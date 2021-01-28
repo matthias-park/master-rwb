@@ -52,7 +52,7 @@ const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
         return obj;
       }, {}),
     };
-    onSubmit(form.action, body);
+    return onSubmit(form.action, body);
   }, []);
 
   return (
