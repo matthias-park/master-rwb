@@ -57,23 +57,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.get('*', (req, res) => {
   const name = domainsToName[req.hostname];
   const filePath = path.join(__dirname, `/build/${name}.html`);
-  if (req.auth) {
-    fs.readFile(filePath, 'utf8', function (err, data) {
-      if (err) {
-        console.log(err);
-        return res.send('hi!');
-      }
-      const withAuthContent = data.replace(
-        'window.DEFAULT_LOCALE',
-        `window.BASIC_AUTH="${Buffer.from(
-          req.auth.name + ':' + req.auth.pass,
-        ).toString('base64')}"; window.DEFAULT_LOCALE`,
-      );
-      res.send(withAuthContent);
-    });
-  } else {
-    res.sendFile(path.join(__dirname, `/build/${name}.html`));
-  }
+  res.sendFile(filePath);
 });
 
 const port = config.get('port') || 3800;

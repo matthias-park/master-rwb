@@ -20,12 +20,6 @@ export const getApi = <T>(url: string): Promise<T> => {
     credentials: 'include',
     headers: new Headers(),
   };
-  if (window.BASIC_AUTH) {
-    (config.headers as Headers).append(
-      'Authorization',
-      `Basic ${window.BASIC_AUTH}`,
-    );
-  }
   return fetch(`${window.API_URL}${url}`, config).then(res => {
     if (!res.ok) {
       throw new Error(`${url} - ${res.status} ${res.statusText}`);
@@ -61,12 +55,6 @@ export const postApi = <T>(
       config.body = JSON.stringify(body);
       (config.headers as Headers).append('Content-Type', 'application/json');
     }
-  }
-  if (window.BASIC_AUTH) {
-    (config.headers as Headers).append(
-      'Authorization',
-      `Basic ${window.BASIC_AUTH}`,
-    );
   }
   const postUrl = url.startsWith('http') ? url : `${window.API_URL}${url}`;
   return fetch(postUrl, config).then(res => {
