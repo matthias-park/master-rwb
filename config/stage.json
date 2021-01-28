@@ -5,14 +5,21 @@
       "domain": "bnl-rj.tglab.dev",
       "theme": "bnl",
       "api": "https://bnl-dev.tglab.dev",
-      "defaultLocale": "en"
+      "defaultLocale": "nl"
     }
   ],
   "port": 3800,
   "basicAuth": {
     "whitelistedIp": ["88.119.158.27"],
-    "users": {
-      "tbtest": "B3st.P4ssword"
-    }
+    "users": [
+      {
+        "username": "tbtest",
+        "password": "B3st.P4ssword"
+      },
+      {
+        "username": "tbtest",
+        "password": "wCrXilO_iq!N"
+      }
+    ]
   }
 }

@@ -64,7 +64,7 @@ export type ConfigProviderProps = {
 
 export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   const routes = NAVIGATION_ROUTES;
-  const locales = AVAILABLE_LOCALES;
+  const locales = AVAILABLE_LOCALES.map(locale => locale.iso);
   const { user, mutateUser } = useUser();
   const [locale, changeLocale] = useState(
     getRedirectLocalePathname(locales, window.DEFAULT_LOCALE, routes),

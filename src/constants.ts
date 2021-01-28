@@ -391,7 +391,17 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
   },
 ];
 
-export const AVAILABLE_LOCALES = ['en', 'nl', 'lt'];
+export const AVAILABLE_LOCALES = [
+  {
+    id: 6,
+    iso: 'nl',
+  },
+  { id: 9, iso: 'de' },
+  {
+    id: 17,
+    iso: 'fr',
+  },
+];
 
 export const FOOTER_LINKS = [
   {

@@ -15,9 +15,10 @@ import {
   RegistrationResponse,
 } from '../../types/api/user/Registration';
 import dayjs from 'dayjs';
+import { AVAILABLE_LOCALES } from '../../constants';
 
 const RegisterPage = () => {
-  const { user, mutateUser } = useConfig();
+  const { user, mutateUser, locale } = useConfig();
   const { addToast } = useToasts();
   const checkEmailAvailable = useCallback(
     async (email: string): Promise<ValidateRegisterInput | null> => {
@@ -60,6 +61,9 @@ const RegisterPage = () => {
   );
   const handleRegisterSubmit = useCallback(
     async (form: PostRegistration): Promise<boolean> => {
+      form.language_id =
+        AVAILABLE_LOCALES.find(lang => lang.iso === locale)?.id.toString() ||
+        '0';
       const finalForm = Object.keys(form).reduce((obj, key) => {
         if (!key.includes('repeat')) {
           obj[key] = form[key];

@@ -34,10 +34,10 @@ app.use((req, res, next) => {
   if (!authentication) {
     return unauthorized();
   }
-  for (var i in basicAuth.users) {
+  for (var user of basicAuth.users) {
     if (
-      authentication.name === i &&
-      authentication.pass === basicAuth.users[i]
+      authentication.name === user.username &&
+      authentication.pass === user.password
     ) {
       req.auth = authentication;
       return next();
