@@ -14,8 +14,9 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
     ref,
   ) => (
     <Form.Group
+      data-testid="container"
       className={clsx(
-        error && 'has-error',
+        validation === FormFieldValidation.Invalid && 'has-error',
         validation === FormFieldValidation.Valid && 'success',
       )}
     >
@@ -27,19 +28,31 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
         id={id}
         name={name || id}
         placeholder=" "
+        data-testid="input"
       />
-      <label htmlFor={id} className="text-14">
+      <label htmlFor={id} data-testid="placeholder" className="text-14">
         {placeholder}
       </label>
-      <div className={clsx('form-group__icons', type === 'date' && 'mr-4')}>
+      <div
+        data-testid="icons"
+        className={clsx('form-group__icons', type === 'date' && 'mr-4')}
+      >
         {validation === FormFieldValidation.Validating && (
-          <Spinner as="span" animation="border" role="status" size="sm" />
+          <Spinner
+            as="span"
+            data-testid="spinner"
+            animation="border"
+            role="status"
+            size="sm"
+          />
         )}
         <i className="icon-check"></i>
         <i className="icon-exclamation"></i>
       </div>
-      {!!error?.message && (
-        <small className="form-group__error-msg">{error.message}</small>
+      {!!error?.message && validation === FormFieldValidation.Invalid && (
+        <small data-testid="error" className="form-group__error-msg">
+          {error.message}
+        </small>
       )}
     </Form.Group>
   ),

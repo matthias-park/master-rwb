@@ -1,4 +1,4 @@
-import useLocalStorage from 'hooks/useLocalStorage';
+import useLocalStorage from '../hooks/useLocalStorage';
 import React from 'react';
 import { Link } from 'react-router-dom';
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import loadable from '@loadable/component';
-import ProtectedRoute from 'containers/pages/ProtectedRoute';
+import ProtectedRoute from './ProtectedRoute';
 import { Route, Switch } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { ComponentName } from '../../constants';
-import PageLayout from 'containers/pageLayout';
+import PageLayout from '../pageLayout';
 import Spinner from 'react-bootstrap/Spinner';
 
 const AsyncPage = (pageName: string) =>

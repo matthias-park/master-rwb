@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+Array [
+  <div
+    className="header__nav-item dropdown"
+    onKeyDown={[Function]}
+  >
+    <button
+      aria-expanded={false}
+      aria-haspopup={true}
+      className="header__nav-item-link d-none d-xl-block dropdown-toggle btn btn-link"
+      data-testid="dropdown-trigger"
+      disabled={false}
+      id="navbarDropdownMenuLink"
+      onClick={[Function]}
+      type="button"
+    >
+      <strong
+        className="text-uppercase"
+        data-testid="current"
+      >
+        en
+      </strong>
+    </button>
+  </div>,
+  <li
+    className="d-flex d-xl-none languages"
+    data-testid="available-mobile"
+  >
+    <div
+      className="lang-lt header__nav-item-link text-uppercase cursor-pointer"
+      onClick={[Function]}
+    >
+      lt
+    </div>
+    <div
+      className="lang-en header__nav-item-link text-uppercase cursor-pointer font-weight-bold"
+      onClick={[Function]}
+    >
+      en
+    </div>
+    <div
+      className="lang-de header__nav-item-link text-uppercase cursor-pointer"
+      onClick={[Function]}
+    >
+      de
+    </div>
+    <div
+      className="lang-fr header__nav-item-link text-uppercase cursor-pointer"
+      onClick={[Function]}
+    >
+      fr
+    </div>
+  </li>,
+]
+`;

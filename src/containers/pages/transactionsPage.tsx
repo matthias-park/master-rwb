@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
 import Pagination from 'react-bootstrap/Pagination';
-import QuestionsContainer from 'components/account-settings/QuestionsContainer';
+import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
 
 const questionItems = [
   {

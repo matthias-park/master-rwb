@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import AmountContainer from 'components/account-settings/AmountContainer';
-import InputContainer from 'components/account-settings/InputContainer';
-import QuestionsContainer from 'components/account-settings/QuestionsContainer';
+import AmountContainer from '../../components/account-settings/AmountContainer';
+import InputContainer from '../../components/account-settings/InputContainer';
+import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
 

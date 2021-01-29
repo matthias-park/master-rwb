@@ -1,5 +1,5 @@
 import React from 'react';
-import HeaderLink from 'types/HeaderLinks';
+import HeaderLink from '../../types/HeaderLinks';
 import { Dropdown } from 'react-bootstrap';
 import { sortAscending } from '../../utils/index';
 import { Link } from 'react-router-dom';

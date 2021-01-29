@@ -1,0 +1,118 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`default matches snapshot 1`] = `
+<div
+  className="settings-card card"
+>
+  <div
+    className="settings-card__header card-header"
+  >
+    <a
+      className="text-dark"
+      data-testid="accordion-toggle"
+      onClick={[Function]}
+    >
+      Set the wagering amount limit per period
+    </a>
+  </div>
+  <div
+    aria-expanded={null}
+    className="settings-card__body collapse"
+  >
+    <div
+      className="pt-2 card-body"
+    >
+      <form
+        className=""
+        onSubmit={[Function]}
+      >
+        <p
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "This option allows you to set the limit on the amount you can wager per selected time period. Please note that after setting this limit you will not be able to wager more than the specified amount. Should you wish to reduce this amount, the changes will take effect immediately. However, if you want to increase or cancel the limit, the changes will only take effect after one week.",
+            }
+          }
+          data-testid="form-note"
+        />
+        <div
+          className="row mt-3"
+        >
+          <div
+            className="col-12 col-sm-6"
+            data-testid="form-container"
+          >
+            <div
+              className="form-group"
+            >
+              <select
+                className="form-control form-control-sm"
+                data-testid="max_bet_per_period_option"
+                id="max_bet_per_period_option"
+                name="max_bet_per_period_option"
+                placeholder=" "
+                type="text"
+              >
+                <option
+                  value="default"
+                >
+                  Turn on/off
+                </option>
+                <option
+                  value={1}
+                >
+                  Turn on
+                </option>
+                <option
+                  value={2}
+                >
+                  Turn off
+                </option>
+              </select>
+            </div>
+            <div
+              className="form-group"
+            >
+              <input
+                autoComplete="current-password"
+                className="form-control form-control-sm"
+                data-testid="max_bet_per_period_password"
+                id="max_bet_per_period_password"
+                name="max_bet_per_period_password"
+                placeholder=" "
+                type="password"
+              />
+              <label
+                data-testid="max_bet_per_period_password-title"
+                htmlFor="amount"
+              >
+                Password
+              </label>
+              <div
+                className="form-group__icons"
+              >
+                <i
+                  className="icon-check"
+                />
+                <i
+                  className="icon-exclamation"
+                />
+              </div>
+            </div>
+            <button
+              className="mt-2 btn btn-primary"
+              data-testid="submit_button"
+              disabled={false}
+              type="submit"
+            >
+              Set
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <i
+    className="settings-card__icon icon-down1"
+  />
+</div>
+`;

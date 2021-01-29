@@ -1,4 +1,4 @@
-import { UIBackdrop, UIBackdropState } from 'types/UIConfig';
+import { UIBackdrop, UIBackdropState } from '../types/UIConfig';
 import { ComponentName } from '../constants';
 import { throttle } from './index';
 

@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import i18n, { I18n } from '../utils/i18n';
 import { postApi } from '../utils/apiUtils';
-import { TRANSLATION_SYMBOLS } from '../constants';
+import { TRANSLATION_SYMBOLS, TestEnv } from '../constants';
 import { useConfig } from './useConfig';
 import { useToasts } from 'react-toast-notifications';
 import useSWR from 'swr';
@@ -52,7 +52,7 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
     [locale],
   );
   const { data } = useSWR<translationSymbol[]>(
-    ['/railsapi/v1/translations', params],
+    !TestEnv ? ['/railsapi/v1/translations', params] : null,
     postApi,
     {
       onErrorRetry: (error, key, config, revalidate, { retryCount }) => {

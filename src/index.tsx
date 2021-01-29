@@ -9,7 +9,7 @@ import { ConfigProvider } from './hooks/useConfig';
 import { I18nProvider } from './hooks/useI18n';
 import { SWRConfig } from 'swr';
 import { SwrFetcherConfig } from './utils/apiUtils';
-import { UIConfigProvider } from 'hooks/useUIConfig';
+import { UIConfigProvider } from './hooks/useUIConfig';
 import { ToastProvider } from 'react-toast-notifications';
 
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;

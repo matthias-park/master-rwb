@@ -1,15 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import HelpBlock from '../../components/HelpBlock';
-import RegSelection from '../../components/registration/RegSelection';
 import OnlineForm from '../../components/registration/OnlineForm';
-import StoreForm from '../../components/registration/StoreForm';
-import RegVerification from '../../components/registration/RegVerification';
-import RegWelcome from '../../components/registration/RegWelcome';
 import { useConfig } from '../../hooks/useConfig';
 import { Redirect } from 'react-router-dom';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
-import { PostRegistration } from 'types/api/user/Registration';
+import {
+  PostRegistration,
+  ValidateRegisterPersonalCode,
+} from '../../types/api/user/Registration';
 import {
   ValidateRegisterInput,
   RegistrationResponse,
@@ -51,6 +50,24 @@ const RegisterPage = () => {
           appearance: 'error',
           autoDismiss: true,
         });
+        console.log(err);
+        return null;
+      });
+      console.log(res);
+      return res;
+    },
+    [],
+  );
+  const checkPersonalCode = useCallback(
+    async (
+      personal_code: string,
+    ): Promise<ValidateRegisterPersonalCode | null> => {
+      const res = await postApi<ValidateRegisterPersonalCode>(
+        '/railsapi/v1/registration/check/personal_code',
+        {
+          personal_code,
+        },
+      ).catch(err => {
         console.log(err);
         return null;
       });
@@ -111,16 +128,13 @@ const RegisterPage = () => {
   return (
     <main className="registration">
       <div className="reg-block">
-        {/* <RegSelection /> */}
         <HelpBlock title="Hulp nodig?" blocks={['faq', 'phone', 'email']} />
         <OnlineForm
           checkEmailAvailable={checkEmailAvailable}
           checkLoginAvailable={checkLoginAvailable}
+          checkPersonalCode={checkPersonalCode}
           handleRegisterSubmit={handleRegisterSubmit}
         />
-        {/* <StoreForm /> */}
-        {/* <RegVerification /> */}
-        {/* <RegWelcome /> */}
       </div>
     </main>
   );

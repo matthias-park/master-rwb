@@ -16,6 +16,25 @@ export interface ValidateRegisterInput {
   Message: string;
 }
 
+export interface ValidateRegisterPersonalCode {
+  Success: boolean;
+  Code: number;
+  Message: string | null;
+  Data:
+    | {
+        valid: true;
+        result: {
+          year: string;
+          month: string;
+          day: string;
+          diff: string;
+          checksum: string;
+          gender: string;
+        };
+      }
+    | string;
+}
+
 export interface RegistrationResponse {
   Success: boolean;
   Code: number;

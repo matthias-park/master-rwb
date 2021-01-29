@@ -63,7 +63,12 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
           currentEventKey === form.id && 'active',
         )}
       >
-        <Accordion.Toggle as="a" eventKey={form.id} className="text-dark">
+        <Accordion.Toggle
+          data-testid="accordion-toggle"
+          as="a"
+          eventKey={form.id}
+          className="text-dark"
+        >
           {form.title}
         </Accordion.Toggle>
       </Card.Header>
@@ -71,11 +76,14 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
         <Card.Body className="pt-2">
           <Form onSubmit={handleSubmit(updateSettingsSubmit)}>
             {!!form.note && (
-              <p dangerouslySetInnerHTML={{ __html: form.note }} />
+              <p
+                data-testid="form-note"
+                dangerouslySetInnerHTML={{ __html: form.note }}
+              />
             )}
 
             <div className="row mt-3">
-              <div className="col-12 col-sm-6">
+              <div data-testid="form-container" className="col-12 col-sm-6">
                 {form.fields.map(field => {
                   const visibilityOverrideField =
                     visibilityOverrideFields[field.id];
@@ -96,6 +104,7 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                     return (
                       <Button
                         key={field.id}
+                        data-testid={field.id}
                         disabled={formState.isSubmitting}
                         className="mt-2"
                         variant="primary"
@@ -130,6 +139,7 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                   return (
                     <Form.Group key={field.id}>
                       <Form.Control
+                        data-testid={field.id}
                         ref={register}
                         as={formGroupAs}
                         size="sm"
@@ -147,7 +157,12 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                       </Form.Control>
                       {!isFieldSelect && (
                         <>
-                          <label htmlFor="amount">{field.title}</label>
+                          <label
+                            data-testid={`${field.id}-title`}
+                            htmlFor="amount"
+                          >
+                            {field.title}
+                          </label>
                           <div className="form-group__icons">
                             <i className="icon-check"></i>
                             <i className="icon-exclamation"></i>
@@ -156,7 +171,12 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                       )}
 
                       {field.errors?.map(error => (
-                        <small className="form-group__error-msg">{error}</small>
+                        <small
+                          data-testid={`${field.id}-error`}
+                          className="form-group__error-msg"
+                        >
+                          {error}
+                        </small>
                       ))}
                     </Form.Group>
                   );

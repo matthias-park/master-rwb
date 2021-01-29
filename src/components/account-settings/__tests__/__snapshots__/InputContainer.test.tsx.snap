@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`default matches snapshot 1`] = `
+<div
+  className="input-container mb-4"
+>
+  <p
+    className="input-container__title text-14 mb-2"
+    data-testid="title"
+  >
+    titlePlaceholder
+  </p>
+  <div
+    className="w-100 form-group"
+  >
+    <input
+      className="input-container__input form-control"
+      data-testid="input"
+      min="0"
+      onChange={[Function]}
+      onKeyUp={[Function]}
+      placeholder=""
+      type="number"
+      value=""
+    />
+  </div>
+  <button
+    className="btn btn-primary"
+    data-testid="button"
+    disabled={true}
+    onClick={[Function]}
+    type="button"
+  >
+    buttonPlaceholder
+  </button>
+</div>
+`;
+
+exports[`with spinner matches snapshot 1`] = `
+<div
+  className="input-container mb-4"
+>
+  <p
+    className="input-container__title text-14 mb-2"
+    data-testid="title"
+  >
+    titlePlaceholder
+  </p>
+  <div
+    className="w-100 form-group"
+  >
+    <input
+      className="input-container__input form-control"
+      data-testid="input"
+      min="0"
+      onChange={[Function]}
+      onKeyUp={[Function]}
+      placeholder=""
+      type="number"
+      value=""
+    />
+  </div>
+  <button
+    className="btn btn-primary"
+    data-testid="button"
+    disabled={true}
+    onClick={[Function]}
+    type="button"
+  >
+    <span
+      className="mr-1 spinner-border spinner-border-sm"
+      data-testid="spinner"
+      role="status"
+    />
+    buttonPlaceholder
+  </button>
+</div>
+`;

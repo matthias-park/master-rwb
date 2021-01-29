@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import AmountContainer from 'components/account-settings/AmountContainer';
-import InputContainer from 'components/account-settings/InputContainer';
-import QuestionsContainer from 'components/account-settings/QuestionsContainer';
+import AmountContainer from '../../components/account-settings/AmountContainer';
+import InputContainer from '../../components/account-settings/InputContainer';
+import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
 import { getApi, postApi } from '../../utils/apiUtils';
 import { useParams } from 'react-router-dom';
 import { DepositRequest, DepositResponse } from '../../types/api/user/Deposit';

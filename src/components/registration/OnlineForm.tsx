@@ -1,10 +1,11 @@
-import TextInput from 'components/TextInput';
+import TextInput from '../TextInput';
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useI18n } from '../../hooks/useI18n';
 import {
   PostRegistration,
   ValidateRegisterInput,
+  ValidateRegisterPersonalCode,
 } from '../../types/api/user/Registration';
 import { useForm } from 'react-hook-form';
 import { Spinner } from 'react-bootstrap';
@@ -14,6 +15,9 @@ import { OnlineFormBlock } from '../../types/RegistrationBlock';
 interface Props {
   checkEmailAvailable: (email: string) => Promise<ValidateRegisterInput | null>;
   checkLoginAvailable: (login: string) => Promise<ValidateRegisterInput | null>;
+  checkPersonalCode: (
+    personalCode: string,
+  ) => Promise<ValidateRegisterPersonalCode | null>;
   handleRegisterSubmit: (form: PostRegistration) => Promise<boolean>;
 }
 
@@ -26,20 +30,6 @@ const blocks = (
   {
     title: 'personal_info',
     fields: [
-      {
-        id: 'male',
-        value: 'M',
-        name: 'gender',
-        type: 'radio',
-        required: true,
-      },
-      {
-        id: 'female',
-        value: 'F',
-        name: 'gender',
-        type: 'radio',
-        required: true,
-      },
       {
         id: 'login',
         type: 'text',
@@ -76,9 +66,24 @@ const blocks = (
         required: true,
       },
       {
-        id: 'date_of_birth',
-        type: 'date',
+        id: 'personal_code',
+        type: 'text',
         required: true,
+        validate: async value => {
+          let valid: string | boolean = true;
+          setValidation('personal_code', FormFieldValidation.Validating);
+          const res = await props.checkPersonalCode(value);
+          if (!res?.Success) {
+            valid = t('register_personal_code_invalid');
+          }
+          setValidation(
+            'personal_code',
+            !res?.Success
+              ? FormFieldValidation.Invalid
+              : FormFieldValidation.Valid,
+          );
+          return valid;
+        },
       },
     ],
   },
@@ -184,6 +189,7 @@ const OnlineForm = ({
   checkEmailAvailable,
   checkLoginAvailable,
   handleRegisterSubmit,
+  checkPersonalCode,
 }: Props) => {
   const { t } = useI18n();
   const [validationForms, setValidationForms] = useState<{
@@ -213,7 +219,12 @@ const OnlineForm = ({
       </a>
       <Form onSubmit={handleSubmit(handleRegisterSubmit)}>
         {blocks(
-          { checkEmailAvailable, checkLoginAvailable, handleRegisterSubmit },
+          {
+            checkEmailAvailable,
+            checkLoginAvailable,
+            handleRegisterSubmit,
+            checkPersonalCode,
+          },
           t,
           setValidation,
           validateRepeat,

@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { FOOTER_DATA, iconName } from '../../constants';
 import { FooterLink, SocialLinks, SubFooter } from '../../types/FooterData';
 import Dropdown from 'react-bootstrap/Dropdown';
-import useDesktopWidth from 'hooks/useDesktopWidth';
-import SessionTimer from 'components/SessionTimer';
+import useDesktopWidth from '../../hooks/useDesktopWidth';
+import SessionTimer from '../../components/SessionTimer';
 import { useI18n } from '../../hooks/useI18n';
 import { sortAscending } from '../../utils/index';
 

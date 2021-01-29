@@ -8,7 +8,6 @@
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
     "@svgr/webpack": "5.4.0",
     "@testing-library/jest-dom": "5.11.4",
-    "@testing-library/react": "11.0.2",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
     "babel-eslint": "^10.1.0",
@@ -174,7 +173,6 @@
       "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
     ],
     "testEnvironment": "jsdom",
-    "testRunner": "/home/mantas/Documents/next-webb/node_modules/jest-circus/runner.js",
     "transform": {
       "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/webpack/jest/cssTransform.js",
@@ -226,6 +224,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "@testing-library/react": "11.0.2",
     "@types/jest": "25.1.4",
     "@types/loadable__component": "5.13.1",
     "@types/lockr": "0.8.6",

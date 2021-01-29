@@ -14,83 +14,42 @@ import {
   HeaderNavCardLink,
   HeaderNavClassicLink,
 } from '../../components/header/HeaderNavLinks';
-import BrandLogo from 'components/header/BrandLogo';
+import BrandLogo from '../../components/header/BrandLogo';
 import { useToasts } from 'react-toast-notifications';
+import LocaleSelector from '../../components/header/LocaleSelector';
 
-const LocaleSelector = () => {
+const SubNavLinks = () => {
   const { locales, locale, setLocale } = useConfig();
   return (
-    <>
-      <Dropdown className="header__nav-item">
-        <Dropdown.Toggle
-          variant="link"
-          className="header__nav-item-link d-none d-xl-block"
-          id="navbarDropdownMenuLink"
-        >
-          <strong className="text-uppercase">{locale}</strong>
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          {locales.map(lang => (
-            <Dropdown.Item
-              className={`lang-${lang} header__nav-item-link text-uppercase cursor-pointer`}
-              key={lang}
-              as="div"
-              onClick={() => {
-                setLocale(lang);
-              }}
-            >
-              {lang}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
-      <li className="d-flex d-xl-none languages">
-        {locales.map(lang => (
-          <div
-            className={clsx(
-              `lang-${lang}`,
-              'header__nav-item-link text-uppercase cursor-pointer',
-              lang === locale && 'font-weight-bold',
-            )}
-            key={lang}
-            onClick={() => {
-              setLocale(lang);
-            }}
-          >
-            {lang}
-          </div>
-        ))}
-      </li>
-    </>
+    <div className="row w-100 align-items-start order-2 order-xl-1">
+      <ul className="header__nav header__nav--secondary mr-auto mr-lg-0 ml-lg-auto">
+        <li className="header__nav-item">
+          <Link className="header__nav-item-link" to="/help">
+            Help
+          </Link>
+        </li>
+        <li className="header__nav-item">
+          <Link className="header__nav-item-link" to="/">
+            Waar kan je spelen?
+          </Link>
+        </li>
+        <li className="header__nav-item">
+          <Link className="header__nav-item-link" to="/">
+            Verantwoord spelen
+          </Link>
+        </li>
+        <li className="header-search">
+          <i className="icon-search-nav"></i>
+        </li>
+        <LocaleSelector
+          available={locales}
+          current={locale}
+          setLocale={setLocale}
+        />
+      </ul>
+    </div>
   );
 };
-
-const SubNavLinks = () => (
-  <div className="row w-100 align-items-start order-2 order-xl-1">
-    <ul className="header__nav header__nav--secondary mr-auto mr-lg-0 ml-lg-auto">
-      <li className="header__nav-item">
-        <Link className="header__nav-item-link" to="/help">
-          Help
-        </Link>
-      </li>
-      <li className="header__nav-item">
-        <Link className="header__nav-item-link" to="/">
-          Waar kan je spelen?
-        </Link>
-      </li>
-      <li className="header__nav-item">
-        <Link className="header__nav-item-link" to="/">
-          Verantwoord spelen
-        </Link>
-      </li>
-      <li className="header-search">
-        <i className="icon-search-nav"></i>
-      </li>
-      <LocaleSelector />
-    </ul>
-  </div>
-);
-
 interface UserBlockProps {
   mobile: boolean;
 }

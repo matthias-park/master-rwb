@@ -2,6 +2,7 @@ import { ConfigRoute } from './types/Config';
 import HeadData from './types/HeadData';
 import HeaderLink from './types/HeaderLinks';
 
+export const TestEnv = process.env.NODE_ENV === 'test';
 export enum ComponentName {
   Header,
   Footer,
@@ -253,34 +254,33 @@ export const TRANSLATION_SYMBOLS = [
   'settings_yes',
   'settings_no',
   'settings_page_failed_to_load',
-  'register_title', //Do you want to play online? Register now!
-  'register_desc', //Thanks to your account, you regularly benefit from nice surprises and unforgettable experiences!
-  'register_know_more', //Know more?
-  'register_persona_info', //Personal info
-  'register_radio_male', //Male
-  'register_radio_female', //Female
-  'register_input_login', //Username
-  'register_input_street', //Street
-  'register_input_postal_code', //Postal code
-  'register_input_city', //City
-  'register_email_section', //Your e-mail (this will also be your login)
-  'register_input_email', //E-mail
-  'register_input_repeat_email', //Repeat e-mail
-  'register_password_section', //Password
-  'register_input_password', //Password
-  'register_input_repeat_password', //Repeat password
-  'register_news_letter_desc', //I would like to stay informed of news from the National Lottery.
-  'register_privacy_btn', //Privacy statement
-  'register_accept_conditions', //I accept the
-  'register_terms_conditions', //terms and conditions
-  'register_submit_btn', //Register,
-  'register_need_match_email', //Email needs to match
-  'register_need_match_password', //Password needs to match
-  'register_input_required', //Field required
-  'register_already_taken', //Already taken
-  'register_input_date_of_birth', //Birthday,
+  'register_title',
+  'register_desc',
+  'register_know_more',
+  'register_persona_info',
+  'register_input_login',
+  'register_input_street',
+  'register_input_postal_code',
+  'register_input_city',
+  'register_email_section',
+  'register_input_email',
+  'register_input_repeat_email',
+  'register_password_section',
+  'register_input_password',
+  'register_input_repeat_password',
+  'register_news_letter_desc',
+  'register_privacy_btn',
+  'register_accept_conditions',
+  'register_terms_conditions',
+  'register_submit_btn',
+  'register_need_match_email',
+  'register_need_match_password',
+  'register_input_required',
+  'register_already_taken',
+  'register_input_personal_code',
   'register_password_weak',
   'register_email_bad_format',
+  'register_personal_code_invalid',
 ];
 
 export const PROMOTION_LIST = [

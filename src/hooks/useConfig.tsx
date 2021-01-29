@@ -10,7 +10,7 @@ import { getApi } from '../utils/apiUtils';
 import Config from '../types/Config';
 import UserStatus from '../types/UserStatus';
 import { getRedirectLocalePathname, setLocalePathname } from '../utils/i18n';
-import { AVAILABLE_LOCALES, NAVIGATION_ROUTES } from '../constants';
+import { AVAILABLE_LOCALES, NAVIGATION_ROUTES, TestEnv } from '../constants';
 import { useToasts } from 'react-toast-notifications';
 import { usePrevious } from './index';
 
@@ -18,7 +18,7 @@ const useUser = () => {
   const { addToast } = useToasts();
   const { data: userData, error: userError, mutate: mutateUser } = useSWR<
     UserStatus
-  >('/api/app/v1/user/status.json', getApi, {
+  >(!TestEnv ? '/api/app/v1/user/status.json' : null, getApi, {
     revalidateOnFocus: true,
     refreshInterval: 300000, // 5 min
     onErrorRetry: error => {
