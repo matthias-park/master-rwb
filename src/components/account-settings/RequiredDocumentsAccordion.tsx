@@ -31,18 +31,19 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
   );
 
   const updateSettingsSubmit = useCallback(data => {
-    const body = JSON.parse(
-      JSON.stringify({
-        password: data.password,
-        button: '',
-        image_id: data.image_id?.[0],
-        image_residence: data.image_residence?.[0],
-        image_payment_proof: data.image_payment_proof?.[0],
-        controller: 'settings',
-        action: 'upload_images',
-        locale: 'en',
-      }),
-    );
+    const body: any = {
+      password: data.password,
+      button: '',
+      controller: 'settings',
+      action: 'upload_images',
+      locale: 'en',
+    };
+    if (data.image_id?.[0]) body.image_id = data.image_id?.[0];
+    if (data.image_residence?.[0])
+      body.image_residence = data.image_residence?.[0];
+    if (data.image_payment_proof?.[0])
+      body.image_payment_proof = data.image_payment_proof?.[0];
+
     return onSubmit(form.action, body, true);
   }, []);
 
