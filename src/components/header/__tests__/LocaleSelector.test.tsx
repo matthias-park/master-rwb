@@ -49,13 +49,12 @@ test('displays desktop list', async () => {
 });
 
 test('set new locale callback', async () => {
-  let newLocale;
   const { getByTestId } = render(
     <LocaleSelector
       available={availableLocales}
       current={current}
       setLocale={locale => {
-        newLocale = locale;
+        expect(locale).toBe('fr');
       }}
     />,
   );
@@ -66,7 +65,6 @@ test('set new locale callback', async () => {
   await act(async () => {
     fireEvent.click(getByTestId('desktop-locale-fr'));
   });
-  expect(newLocale).toBe('fr');
 });
 
 test('matches snapshot', () => {

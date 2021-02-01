@@ -1,12 +1,8 @@
 import React from 'react';
-import { render, cleanup, fireEvent, screen } from '../../../utils/testUtils';
+import { render, cleanup, fireEvent } from '../../../utils/testUtils';
 import renderer from 'react-test-renderer';
 import InputContainer from '../InputContainer';
 import { act } from 'react-dom/test-utils';
-import {
-  SettingsFieldStyle,
-  SettingsForm,
-} from '../../../types/api/user/ProfileSettings';
 
 beforeEach(cleanup);
 
@@ -63,14 +59,13 @@ test('displays spinner correctly', async () => {
 });
 test('submit value correctly', async () => {
   const newEnteredValue = '500';
-  let newValue;
   const { getByTestId } = render(
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
       placeholder=""
       onSubmit={value => {
-        newValue = value;
+        expect(value).toBe(Number(newEnteredValue));
       }}
       loading={false}
     />,
@@ -81,7 +76,6 @@ test('submit value correctly', async () => {
   await act(async () => {
     fireEvent.click(getByTestId('button'));
   });
-  expect(newValue).toBe(Number(newEnteredValue));
 });
 
 test('default matches snapshot', () => {

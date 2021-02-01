@@ -38,6 +38,7 @@ export interface Evtsrv {
 }
 
 export interface User {
+  logout?: true;
   logged_in: boolean;
   token?: string;
   format?: string;

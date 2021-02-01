@@ -62,7 +62,13 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
       addToast('Failed to logout', { appearance: 'error', autoDismiss: true });
       console.log(err);
     });
-    mutateUser();
+    mutateUser({
+      user: {
+        loading: false,
+        logged_in: false,
+        logout: true,
+      },
+    });
   };
 
   if (user.id) {

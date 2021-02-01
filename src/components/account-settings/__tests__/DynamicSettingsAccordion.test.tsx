@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, cleanup, fireEvent, screen } from '../../../utils/testUtils';
+import { render, cleanup, fireEvent } from '../../../utils/testUtils';
 import renderer from 'react-test-renderer';
 import DynamicSettingsAccordion from '../DynamicSettingsAccordion';
+import { act } from 'react-dom/test-utils';
 import {
   SettingsFieldStyle,
   SettingsForm,
@@ -115,15 +116,31 @@ test('additional fields are displayed', async () => {
   expect(getByTestId('form-container').children).toHaveLength(5);
 });
 
-// test('submit value correctly', async () => {
-//   const { getByTestId } = render(
-//     <DynamicSettingsAccordion form={form} onSubmit={() => {}} />,
-//   );
-//   fireEvent.change(getByTestId('max_bet_per_period_option'), {
-//     target: { value: 1 },
-//   });
-//   expect(getByTestId('form-container').children).toHaveLength(5);
-// });
+test('submit value correctly', async () => {
+  const data = {
+    max_bet_per_period_option: '1',
+    max_bet_per_period_period: '1',
+    max_bet_per_period_amount: '123',
+    max_bet_per_period_password: 'secret_password',
+  };
+  const { getByTestId } = render(
+    <DynamicSettingsAccordion
+      form={form}
+      onSubmit={(url, body) => {
+        expect(url).toBe(form.action);
+        expect(body).toStrictEqual(data);
+      }}
+    />,
+  );
+  for (const key in data) {
+    fireEvent.change(getByTestId(key), {
+      target: { value: data[key] },
+    });
+  }
+  await act(async () => {
+    fireEvent.click(getByTestId('submit_button'));
+  });
+});
 
 test('default matches snapshot', () => {
   const dom = renderer.create(

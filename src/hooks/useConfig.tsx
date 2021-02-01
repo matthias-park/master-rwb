@@ -31,7 +31,11 @@ const useUser = () => {
   });
   const prevUser = usePrevious(userData?.user);
   useEffect(() => {
-    if (!userData?.user.logged_in && prevUser?.logged_in) {
+    if (
+      !userData?.user.logout &&
+      !userData?.user.logged_in &&
+      prevUser?.logged_in
+    ) {
       addToast(`User session ended`, {
         appearance: 'warning',
         autoDismiss: true,

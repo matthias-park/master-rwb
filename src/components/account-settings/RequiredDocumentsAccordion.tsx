@@ -31,17 +31,18 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
   );
 
   const updateSettingsSubmit = useCallback(data => {
-    const body = {
-      password: data.password,
-      button: '',
-      image_id: data.image_id?.[0],
-      image_residence: data.image_residence?.[0],
-      image_payment_proof: data.image_payment_proof?.[0],
-      controller: 'settings',
-      action: 'upload_images',
-      locale: 'en',
-    };
-    console.log(data, body);
+    const body = JSON.parse(
+      JSON.stringify({
+        password: data.password,
+        button: '',
+        image_id: data.image_id?.[0],
+        image_residence: data.image_residence?.[0],
+        image_payment_proof: data.image_payment_proof?.[0],
+        controller: 'settings',
+        action: 'upload_images',
+        locale: 'en',
+      }),
+    );
     return onSubmit(form.action, body, true);
   }, []);
 
@@ -113,23 +114,25 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
                 </Form.Group>
               </div>
             )}
-            <Button
-              disabled={formState.isSubmitting}
-              className="mt-3"
-              variant="primary"
-              type="submit"
-            >
-              {formState.isSubmitting && (
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />
-              )}
-              {fields.submit_button.title}
-            </Button>
+            {!!fields.submit_button && (
+              <Button
+                disabled={formState.isSubmitting}
+                className="mt-3"
+                variant="primary"
+                type="submit"
+              >
+                {formState.isSubmitting && (
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                )}
+                {fields.submit_button.title}
+              </Button>
+            )}
           </Form>
         </Card.Body>
       </Accordion.Collapse>
