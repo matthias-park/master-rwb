@@ -12,6 +12,7 @@ export interface SettingsForm {
   id: string;
   title: string;
   note: string;
+  footer?: string;
   action: string;
   errors: any[];
   prefix?: string;
@@ -25,6 +26,7 @@ export interface SettingsField {
   text?: string;
   title?: string;
   errors?: any[];
+  date?: string;
   status?: string[];
   style?: SettingsFieldStyle;
   default?: number | null | string;

@@ -17,6 +17,8 @@ interface SettingProps {
   onSubmit: (url: string, body: unknown, formBody?: boolean) => void;
 }
 
+const fileIds = ['image_id', 'image_residence', 'image_payment_proof'];
+
 const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
   const { t } = useI18n();
   const currentEventKey = useContext(AccordionContext);
@@ -33,17 +35,10 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
   const updateSettingsSubmit = useCallback(data => {
     const body: any = {
       password: data.password,
-      button: '',
-      controller: 'settings',
-      action: 'upload_images',
-      locale: 'en',
     };
-    if (data.image_id?.[0]) body.image_id = data.image_id?.[0];
-    if (data.image_residence?.[0])
-      body.image_residence = data.image_residence?.[0];
-    if (data.image_payment_proof?.[0])
-      body.image_payment_proof = data.image_payment_proof?.[0];
-
+    fileIds.forEach(id => {
+      if (data[id]?.[0]) body[id] = data[id][0];
+    });
     return onSubmit(form.action, body, true);
   }, []);
 
@@ -62,23 +57,23 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
         <Card.Body className="pt-2">
           <Form onSubmit={handleSubmit(updateSettingsSubmit)}>
             <div className="row mx-0 flex-column flex-sm-row">
-              {['image_id', 'image_residence', 'image_payment_proof'].map(
-                id => {
-                  if (!fields[id]) return null;
+              {fileIds.map(id => {
+                if (!fields[id]) return null;
 
-                  return (
-                    <div
-                      key={id}
-                      className="col-12 col-sm-4 px-0 pl-sm-0 pr-sm-1 mb-1 mx-0"
-                    >
-                      <div className="p-3 bg-gray-custom-200 rounded d-flex flex-column h-100">
-                        <p className="font-14">
-                          <strong>{fields[id].title}</strong>
-                        </p>
-                        <p className="mb-3">
-                          NOTE: Only One document can be uploaded one time
-                          before next approval lorem ipsu longer text here
-                        </p>
+                return (
+                  <div
+                    key={id}
+                    className="col-12 col-sm-4 px-0 pl-sm-0 pr-sm-1 mb-1 mx-0"
+                  >
+                    <div className="p-3 bg-gray-custom-200 rounded d-flex flex-column h-100">
+                      <p className="font-14">
+                        <strong>{fields[id].title}</strong>
+                      </p>
+                      <p className="mb-3">
+                        {fields[id].status &&
+                          `${fields[id].status} ${fields[id].date}`}
+                      </p>
+                      {!fields[id].date && (
                         <Form.File custom className="mt-auto">
                           <Form.File.Label
                             className={clsx(false && 'uploaded')}
@@ -87,12 +82,13 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
                             <Form.File.Input ref={register} name={id} />
                           </Form.File.Label>
                         </Form.File>
-                      </div>
+                      )}
                     </div>
-                  );
-                },
-              )}
+                  </div>
+                );
+              })}
             </div>
+            {!!form.footer && <p className="mb-3">{form.footer}</p>}
             {!!fields.password && (
               <div className="row mx-0 mt-2">
                 <Form.Group>
