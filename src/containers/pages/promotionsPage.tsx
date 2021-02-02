@@ -1,76 +1,65 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { PROMOTION_LIST } from '../../constants';
-import PromotionListItem from '../../types/PromotionListItem';
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useI18n } from '../../hooks/useI18n';
+import { Tab, Tabs } from 'react-bootstrap';
+import useSWR from 'swr';
+import Card from 'react-bootstrap/Card';
+import { PostItem, Posts } from '../../types/api/Posts';
+import Spinner from 'react-bootstrap/Spinner';
 
-const PromoItem = ({ item }) => (
-  <div className="promo-item  col-sm-6 pb-3">
-    <div className="card">
-      <Link className="promo-img" to={item.link}>
-        <img className="card-img-top" alt="img" src={item.img} />
-      </Link>
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start flex-grow-1 flex-md-grow-0 pt-3">
-        <div className="card-body pt-0">
-          <h5 className="card-title font-weight-bold mb-0 pb-1">
-            {item.title}
-          </h5>
-          <p className="card-text"></p>
-        </div>
-        <div className="card-footer p-0 pl-md-3"></div>
-      </div>
-    </div>
-  </div>
-);
+const PromoItem = ({ item }: { item: PostItem }) => {
+  const { pathname } = useLocation();
+  const LinkEl = ({ children }) =>
+    item.use_alternative_url ? (
+      <a href={item.alternative_url}>{children}</a>
+    ) : (
+      <Link to={`${pathname}/${item.slug}`}>{children}</Link>
+    );
+  return (
+    <Card className="mx-1 mt-1">
+      <LinkEl>
+        <Card.Img
+          variant="top"
+          style={{ height: 300, width: 300 }}
+          src={item.image.thumb_300_300.url ?? undefined}
+        />
+      </LinkEl>
+      <Card.Body>
+        <Card.Title>{item.title}</Card.Title>
+        <Card.Body>{item.body}</Card.Body>
+      </Card.Body>
+    </Card>
+  );
+};
 
 const PromotionsPage = () => {
-  const data: PromotionListItem[] = PROMOTION_LIST;
+  const [activeTab, setActiveTab] = useState<string | null>('all');
+  const { data, error } = useSWR<Posts>('/api/v1/posts.json');
+  const { t } = useI18n();
+  const isDataLoading = !data && !error;
   return (
-    <div
-      className="d-flex flex-xl-nowrap justify-content-center px-2 px-xl-0"
-      id=" "
-    >
-      <div className="p-md-3 py-3 scrollable w-100">
-        <div className="container promotions-inner">
-          <h1 className="promo-title mb-3">Ongoing Promotions</h1>
-
-          <ul
-            className="nav nav-tabs flex-nowrap justify-content-start"
-            id="myTab"
-            role="tablist"
-          >
-            <li className="nav-item pr-2 pr-md-2">
-              <a
-                className="nav-link px-0 active"
-                id="promo-all-tab"
-                data-toggle="tab"
-                href="#promo-all"
-                role="tab"
-                aria-controls="promo-all"
-                aria-selected="true"
-              >
-                All <span>(5)</span>
-              </a>
-            </li>
-          </ul>
-
-          <div className="tab-content" id="myTabContent">
-            <div
-              className="tab-pane fade active show"
-              id="promo-all"
-              role="tabpanel"
-              aria-labelledby="promo-all-tab"
-            >
-              <div className="promotion-cards container px-0">
-                <div className="row">
-                  {data &&
-                    data.map(item => <PromoItem key={item.link} item={item} />)}
-                </div>
-              </div>
+    <main className="container-fluid mb-4">
+      <h1 className="mb-4">{t('promotions_page_title')}</h1>
+      <Tabs activeKey={activeTab} onSelect={key => setActiveTab(key)}>
+        <Tab eventKey="all" title="All" mountOnEnter unmountOnExit>
+          {isDataLoading && (
+            <div className="d-flex justify-content-center pt-4 pb-3">
+              <Spinner animation="border" variant="black" className="mx-auto" />
             </div>
+          )}
+          {!!error && (
+            <h2 className="mt-3 mb-5 text-center">
+              {t('promotions_failed_to_load')}
+            </h2>
+          )}
+          <div className="d-flex mt-1">
+            {data?.data?.map(item => (
+              <PromoItem key={item.id} item={item} />
+            ))}
           </div>
-        </div>
-      </div>
-    </div>
+        </Tab>
+      </Tabs>
+    </main>
   );
 };
 

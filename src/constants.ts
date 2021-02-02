@@ -279,39 +279,8 @@ export const TRANSLATION_SYMBOLS = [
   'nav_link_sports',
   'login_field_required',
   'login_invalid_credentials',
-];
-
-export const PROMOTION_LIST = [
-  {
-    link: 'welcome_onsite',
-    img:
-      'https://n.tonybet.com/uploads/1/post/image/5434/thumb_570_320_Sport_1.png',
-    title: 'Sportsbook Welcome Offer',
-  },
-  {
-    link: '/no-resolutions-casino-bonus',
-    img:
-      'https://n.tonybet.com/uploads/1/post/image/5447/thumb_570_320_570_x_320_Casino.png',
-    title: 'Casino Welcome Offer',
-  },
-  {
-    link: '/weekly-sports-cashback',
-    img:
-      'https://n.tonybet.com/uploads/1/post/image/6259/thumb_570_320_thumb_570_320_570x320_EN.png',
-    title: 'Weekly Sports Cashback',
-  },
-  {
-    link: '/no-resolutions-regulars-casino',
-    img:
-      'https://n.tonybet.com/uploads/1/post/image/5457/thumb_570_320_570_x_320_Casino_2.png',
-    title: 'Casino Regulars Offer',
-  },
-  {
-    link: '/drops-and-wins',
-    img:
-      'https://n.tonybet.com/uploads/1/post/image/6293/thumb_570_320_570x320__Without_Prize_Multiplier.jpg',
-    title: 'Drops and Wins" Casino Campaign',
-  },
+  'promotions_page_title',
+  'promotions_failed_to_load',
 ];
 
 export const HEAD_DATA: HeadData = {
