@@ -4,10 +4,12 @@ import InputContainer from '../../components/account-settings/InputContainer';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
+import { useUIConfig } from '../../hooks/useUIConfig';
 
 const WithdrawalPage = () => {
   const { t } = useI18n();
   const { user } = useConfig();
+  const { contentStyle } = useUIConfig();
   const questionItems = useMemo(
     () => [
       { title: t('withdrawal_question_1'), body: 'withdrawal_answer_1' },
@@ -16,7 +18,10 @@ const WithdrawalPage = () => {
     [t],
   );
   return (
-    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">
+    <main
+      style={contentStyle.styles}
+      className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4"
+    >
       <h1 className="mb-4">{t('withdrawal_page_title')}</h1>
       <AmountContainer
         title={t('total_playable_amount')}

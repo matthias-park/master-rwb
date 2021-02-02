@@ -10,6 +10,7 @@ interface Props {
   buttonText: string;
   loading?: boolean;
   onSubmit: (inputValue: number) => void;
+  quickAmounts?: number[];
 }
 
 const InputContainer = ({
@@ -18,6 +19,7 @@ const InputContainer = ({
   buttonText,
   loading,
   onSubmit,
+  quickAmounts = [],
 }: Props) => {
   const [inputValue, setInputValue] = useState<string>('');
   const handleSubmit = () => onSubmit(Number(inputValue));
@@ -34,6 +36,18 @@ const InputContainer = ({
         {title}
       </p>
       <Form.Group className="w-100">
+        {quickAmounts.map(value => (
+          <Button
+            key={value}
+            variant="secondary"
+            className="mr-1 mb-1"
+            onClick={() => setInputValue(value.toString())}
+            // onClick={handleSubmit}
+            // data-testid="button"
+          >
+            {value}€
+          </Button>
+        ))}
         <Form.Control
           type="number"
           data-testid="input"

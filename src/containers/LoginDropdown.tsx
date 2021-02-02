@@ -8,19 +8,16 @@ import { ComponentName } from '../constants';
 import clsx from 'clsx';
 import { useI18n } from '../hooks/useI18n';
 import { Link, useLocation } from 'react-router-dom';
-import { Spinner, OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
+import { Spinner, OverlayTrigger, Tooltip, Form, Alert } from 'react-bootstrap';
 import { useToasts } from 'react-toast-notifications';
 import { useRoutePath } from '../hooks/index';
 import { NET_USER } from '../types/UserStatus';
+import TextInput from '../components/TextInput';
 
 interface Props {
   dropdownClasses?: string;
   toggleClasses?: string;
   userLoading?: boolean;
-}
-interface LoginFromData {
-  email: string;
-  password: string;
 }
 
 const LoginForm = ({
@@ -30,16 +27,15 @@ const LoginForm = ({
 }) => {
   const { addToast } = useToasts();
   const { t } = useI18n();
-  const { register, handleSubmit, errors, setError } = useForm<LoginFromData>();
-  const [passwordVisible, setPasswordVisibility] = useState(false);
-  const [loginInProgress, setLoginInProgress] = useState(false);
+  const { register, handleSubmit, errors } = useForm({
+    mode: 'onBlur',
+  });
   const { mutateUser } = useConfig();
   const forgotPasswordRoute = useRoutePath(ComponentName.ForgotPasswordPage);
-  const togglePasswordVisibility = () =>
-    setPasswordVisibility(prevValue => !prevValue);
-
+  const [apiLoginError, setApiLoginError] = useState(false);
+  const [loadingLogin, setLoadingLogin] = useState(false);
   const onSubmit = async ({ email, password }) => {
-    setLoginInProgress(true);
+    setLoadingLogin(true);
     const response = await postApi<NET_USER | null>(
       '/players/login.json?response_json=true',
       {
@@ -51,7 +47,7 @@ const LoginForm = ({
       console.log(err);
       return null;
     });
-    setLoginInProgress(false);
+    console.log(!!response?.error);
     if (response?.PlayerId) {
       hideLoginDropdown();
       mutateUser(
@@ -69,72 +65,44 @@ const LoginForm = ({
         },
         true,
       );
-    } else if (response?.error) {
-      setError('password', {
-        type: 'response',
-        message: response.error,
-      });
+    } else if (response?.error !== undefined) {
+      setApiLoginError(true);
+      // setError('password', {
+      //   type: 'response',
+      //   message: response.error,
+      // });
     }
+    setLoadingLogin(false);
   };
+  console.log(errors);
   return (
     <Form
       className="pb-4 mb-4 login-dropdown__menu-form"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Form.Group
-        className={clsx(errors.email && 'has-error', false && 'success')}
-      >
-        <Form.Control
-          id="email"
-          name="email"
-          placeholder=" "
-          autoFocus
-          autoComplete="username"
-          ref={register({
-            required: t('input_field_required'),
-          })}
-        />
-        <label htmlFor="email" className="text-14">
-          {t('login_email')}
-        </label>
-        <div className="form-group__icons">
-          <i className="icon-check"></i>
-          <i className="icon-exclamation"></i>
-        </div>
-        {errors.email && (
-          <small className="form-group__error-msg">
-            {errors.email.message}
-          </small>
-        )}
-      </Form.Group>
-      <Form.Group className={clsx(errors.password && 'has-error')}>
-        <Form.Control
-          type={passwordVisible ? 'text' : 'password'}
-          id="password"
-          name="password"
-          autoComplete="current-password"
-          placeholder=" "
-          ref={register({
-            required: t('input_field_required'),
-          })}
-        />
-        <label htmlFor="password" className="text-14">
-          {t('login_password')}
-        </label>
-        <div className="form-group__icons">
-          <i
-            className="icon-eye-on show-password"
-            onClick={togglePasswordVisibility}
-          ></i>
-          <i className="icon-check"></i>
-          <i className="icon-exclamation"></i>
-        </div>
-        {errors.password && (
-          <small className="form-group__error-msg">
-            {errors.password.message}
-          </small>
-        )}
-      </Form.Group>
+      <Alert show={apiLoginError} variant="danger">
+        {t('login_invalid_credentials')}
+      </Alert>
+      <TextInput
+        ref={register({
+          required: t('login_field_required'),
+        })}
+        id="email"
+        placeholder={t('login_email')}
+        autoComplete="username"
+        error={errors.email || apiLoginError}
+      />
+      <TextInput
+        ref={register({
+          required: t('login_field_required'),
+        })}
+        id="password"
+        type={'password'}
+        placeholder={t('login_password')}
+        autoComplete="current-password"
+        toggleVisibility
+        error={errors.password || apiLoginError}
+      />
       <div className="d-flex align-items-center flex-wrap">
         <Form.Check custom id="remember_check" label={t('login_remember_me')} />
         <OverlayTrigger
@@ -155,10 +123,10 @@ const LoginForm = ({
         </Link>
       </div>
       <button
-        disabled={!!errors.email || !!errors.password}
+        disabled={!!loadingLogin || !!errors.email || !!errors.password}
         className="btn btn-primary d-block mx-auto mt-4 px-5"
       >
-        {loginInProgress && (
+        {loadingLogin && (
           <>
             <Spinner
               as="span"

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import HeaderLink from '../../types/HeaderLinks';
 import { Dropdown } from 'react-bootstrap';
 import { sortAscending } from '../../utils/index';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
+import { useI18n } from '../../hooks/useI18n';
+import { useUIConfig } from '../../hooks/useUIConfig';
 
 interface HeaderNavLinkProps {
   data: HeaderLink;
@@ -100,18 +102,31 @@ export const HeaderNavCardLink = ({ data, mobile }: HeaderNavLinkProps) => {
 };
 
 export const HeaderNavClassicLink = ({ data, mobile }: HeaderNavLinkProps) => {
+  const { t } = useI18n();
+  const { pathname } = useLocation();
+  const { contentStyle } = useUIConfig();
+  useEffect(() => {
+    if (data.path === pathname) {
+      contentStyle.set({ marginTop: '45px' });
+    }
+  }, [pathname]);
   if (!mobile && data.mobileLink) {
     return null;
   }
   if (data.links) {
     return (
-      <Dropdown as="li" className="header__nav-item">
+      <Dropdown
+        as="li"
+        className="header__nav-item"
+        show={pathname === data.path}
+      >
         <Dropdown.Toggle
-          as="div"
+          as={Link}
+          to={data.path || '/'}
           title={`${data.name} ▼}`}
           className="header__nav-item-link cursor-pointer"
         >
-          {data.name}
+          {t(data.name) || data.name}
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {data.links

@@ -1,4 +1,4 @@
-import { UIBackdrop, UIBackdropState } from '../types/UIConfig';
+import { UIBackdrop, UIBackdropState, UIContentStyle } from '../types/UIConfig';
 import { ComponentName } from '../constants';
 import { throttle } from './index';
 
@@ -49,6 +49,23 @@ export const createBackdropProviderValues = (
   };
 };
 
+export const createContentStylesProviderValues = (
+  contentStyles: React.CSSProperties,
+  setContentStyles: (newState: React.CSSProperties) => void,
+): UIContentStyle => {
+  const set = (styles: React.CSSProperties, clear: boolean = false) => {
+    setContentStyles({
+      ...(clear ? {} : contentStyles),
+      ...styles,
+    });
+  };
+  const clear = () => setContentStyles({});
+  return {
+    styles: contentStyles,
+    set,
+    clear,
+  };
+};
 export const enterKeyPress = (e: any, callback: any) => {
   const charCode = typeof e.which === 'number' ? e.which : e.keyCode;
   const enterKey = 13;

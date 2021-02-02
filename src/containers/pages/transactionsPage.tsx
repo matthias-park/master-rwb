@@ -11,6 +11,7 @@ import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
 import Pagination from 'react-bootstrap/Pagination';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
+import { useUIConfig } from '../../hooks/useUIConfig';
 
 const questionItems = [
   {
@@ -216,6 +217,7 @@ const TransactionsDateFilter = ({
 
 const TransactionsPage = () => {
   const { t } = useI18n();
+  const { contentStyle } = useUIConfig();
   const [url, setUrl] = useState<string | null>(null);
   const { data } = useSWR<Transactions>(url);
   const [periodSelected, setPeriodSelected] = useState(30);
@@ -238,7 +240,10 @@ const TransactionsPage = () => {
   }, [url]);
 
   return (
-    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">
+    <main
+      style={contentStyle.styles}
+      className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4"
+    >
       <h1 className="mb-4">{t('transactions_page_title')}</h1>
       <div className="date-filter mb-4 pb-sm-2">
         <TransactionsDateFilter

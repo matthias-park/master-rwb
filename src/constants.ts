@@ -38,13 +38,8 @@ export enum FormFieldValidation {
 
 export const HEADER_ROUTES: HeaderLink[] = [
   {
-    name: 'Home',
-    path: '/',
-    mobileLink: true,
-    order: 0,
-  },
-  {
-    name: 'Sportwedden',
+    name: 'nav_link_sports',
+    path: '/sports',
     order: 1,
     links: [
       {
@@ -281,6 +276,9 @@ export const TRANSLATION_SYMBOLS = [
   'register_password_weak',
   'register_email_bad_format',
   'register_personal_code_invalid',
+  'nav_link_sports',
+  'login_field_required',
+  'login_invalid_credentials',
 ];
 
 export const PROMOTION_LIST = [

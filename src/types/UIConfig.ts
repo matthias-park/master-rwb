@@ -9,8 +9,15 @@ export type UIBackdrop = {
   hide: () => void;
 } & UIBackdropState;
 
+export type UIContentStyle = {
+  styles: React.CSSProperties;
+  set: (styles: React.CSSProperties, clear?: boolean) => void;
+  clear: () => void;
+};
+
 type UIConfig = {
   backdrop: UIBackdrop;
+  contentStyle: UIContentStyle;
 };
 
 export default UIConfig;

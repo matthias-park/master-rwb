@@ -69,11 +69,11 @@ const DepositPage = () => {
   return (
     <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">
       <h1 className="mb-4">{t('deposit_page_title')}</h1>
-      <AmountContainer
+      {/* <AmountContainer
         title={t('total_playable_amount')}
         amount={user.balance!}
         tooltip={t('playable_amount_tooltip')}
-      />
+      /> */}
       {!!bankResponse && (
         <div className="amount-container mb-4">
           <h2 className="amount-container__amount">
@@ -83,10 +83,11 @@ const DepositPage = () => {
       )}
       <InputContainer
         title={t('select_amount')}
-        placeholder="€ 300"
+        placeholder="€ 0"
         buttonText={t('deposit_btn')}
         loading={depositLoading}
         onSubmit={handleRequestDeposit}
+        quickAmounts={[10, 20, 50, 100]}
       />
       <div className="info-container mb-4">
         <p className="info-container__info text-14 mb-0">

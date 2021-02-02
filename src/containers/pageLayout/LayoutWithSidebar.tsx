@@ -10,14 +10,6 @@ const profileSidebarLinks = [
     link: '/deposit',
   },
   {
-    name: 'bonus_link',
-    link: '/bonus',
-  },
-  {
-    name: 'limits_link',
-    link: '/limits',
-  },
-  {
     name: 'settings_link',
     link: '/settings',
   },

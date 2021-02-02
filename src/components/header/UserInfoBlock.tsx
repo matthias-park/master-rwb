@@ -73,14 +73,6 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
           <ul className="user-menu__list">
             {[
               {
-                link: '/bonus',
-                name: 'bonus_link',
-              },
-              {
-                link: '/limits',
-                name: 'limits_link',
-              },
-              {
                 link: '/withdrawal',
                 name: 'withdrawal_link',
               },
