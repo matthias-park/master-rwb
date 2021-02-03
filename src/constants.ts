@@ -256,6 +256,8 @@ export const TRANSLATION_SYMBOLS = [
   'register_persona_info',
   'register_input_login',
   'register_input_street',
+  'register_input_firstname',
+  'register_input_lastname',
   'register_input_postal_code',
   'register_input_city',
   'register_email_section',

@@ -51,6 +51,16 @@ const blocks = (
         },
       },
       {
+        id: 'firstname',
+        type: 'text',
+        required: true,
+      },
+      {
+        id: 'lastname',
+        type: 'text',
+        required: true,
+      },
+      {
         id: 'street',
         type: 'text',
         required: true,
