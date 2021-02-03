@@ -28,6 +28,7 @@ export enum ComponentName {
   SetTheWageringAmountLimitPerSession,
   DisablingYourAccount,
   NotFoundPage,
+  TemplatePage,
 }
 
 export enum FormFieldValidation {
@@ -281,6 +282,7 @@ export const TRANSLATION_SYMBOLS = [
   'login_invalid_credentials',
   'promotions_page_title',
   'promotions_failed_to_load',
+  'failed_to_load_page',
 ];
 
 export const HEAD_DATA: HeadData = {
@@ -311,6 +313,10 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
   {
     path: '/promotions',
     id: ComponentName.PromotionsPage,
+  },
+  {
+    path: '/promotions/:slug',
+    id: ComponentName.TemplatePage,
   },
   {
     path: '/bonus',
@@ -546,43 +552,5 @@ export const iconName: { [key: string]: string } = {
   mail: 'mail2',
   instagram: 'nsta',
 };
-
-export const ACCOUNT_SETTINGS = [
-  {
-    name: 'Required documents',
-    order: 1,
-    component: ComponentName.RequiredDocuments,
-  },
-  {
-    name: 'Marketing settings',
-    order: 2,
-    component: ComponentName.MarketingSettings,
-  },
-  {
-    name: 'Betting Loss Limits',
-    order: 3,
-    component: ComponentName.BettingLossLimits,
-  },
-  {
-    name: 'Deposit Limit',
-    order: 4,
-    component: ComponentName.DepositLimit,
-  },
-  {
-    name: 'Set the wagering amount limit per period',
-    order: 5,
-    component: ComponentName.SetTheWageringAmountLimitPerPeriod,
-  },
-  {
-    name: 'Set the wagering amount limit per session',
-    order: 6,
-    component: ComponentName.SetTheWageringAmountLimitPerSession,
-  },
-  {
-    name: 'Disabling Your Account',
-    order: 7,
-    component: ComponentName.DisablingYourAccount,
-  },
-];
 
 export const REDIRECT_PROTECTED_NOT_LOGGED_IN = ComponentName.HomePage;

@@ -9,11 +9,12 @@ import Spinner from 'react-bootstrap/Spinner';
 
 const PromoItem = ({ item }: { item: PostItem }) => {
   const { pathname } = useLocation();
+  const slug = new URL(item.alternative_url).pathname; //getPath();
   const LinkEl = ({ children }) =>
     item.use_alternative_url ? (
-      <a href={item.alternative_url}>{children}</a>
+      <Link to={`${pathname}${slug}`}>{children}</Link>
     ) : (
-      <Link to={`${pathname}/${item.slug}`}>{children}</Link>
+      children
     );
   return (
     <Card className="mx-1 mt-1">

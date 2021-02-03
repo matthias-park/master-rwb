@@ -30,6 +30,7 @@ export const COMPONENT_PAGES = {
   [ComponentName.TransactionsPage]: AsyncPage('transactionsPage'),
   [ComponentName.WithdrawalPage]: AsyncPage('withdrawalPage'),
   [ComponentName.NotFoundPage]: AsyncPage('notFoundPage'),
+  [ComponentName.TemplatePage]: AsyncPage('templatePage'),
 };
 
 const Routes = () => {
