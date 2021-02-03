@@ -282,7 +282,6 @@ export const TRANSLATION_SYMBOLS = [
   'login_invalid_credentials',
   'promotions_page_title',
   'promotions_failed_to_load',
-  'failed_to_load_page',
 ];
 
 export const HEAD_DATA: HeadData = {

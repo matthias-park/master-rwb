@@ -6,13 +6,15 @@ import Routes from './pages';
 import { HEAD_DATA } from '../constants';
 import HeadData from '../types/HeadData';
 import { useConfig } from '../hooks/useConfig';
+import ApiHead from './ApiHead';
 
 const App = () => {
-  const headData: HeadData = HEAD_DATA;
+  // const headData: HeadData = HEAD_DATA;
   const { locale } = useConfig();
   return (
     <BrowserRouter basename={`/${locale}`}>
-      <Helmet htmlAttributes={{ lang: locale }}>
+      <ApiHead />
+      {/* <Helmet htmlAttributes={{ lang: locale }}>
         <title>{headData.title}</title>
         {headData.links?.map(linkProps => (
           <link {...linkProps} />
@@ -23,7 +25,7 @@ const App = () => {
         {headData.metas?.map(metaProps => (
           <meta {...metaProps} />
         ))}
-      </Helmet>
+      </Helmet> */}
       <ErrorBoundary>
         <Routes />
       </ErrorBoundary>
