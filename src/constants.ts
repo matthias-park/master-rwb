@@ -371,7 +371,7 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
   },
   {
     path: '*',
-    id: ComponentName.NotFoundPage,
+    id: ComponentName.TemplatePage,
     exact: false,
   },
 ];
