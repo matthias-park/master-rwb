@@ -1,4 +1,6 @@
 import { ConfigRoute } from '../types/Config';
+import Lockr from 'lockr';
+
 type Symbols = { [key: string]: { [key: string]: string } };
 
 const i18n = () => {
@@ -34,8 +36,9 @@ export const getRedirectLocalePathname = (
   const windowPaths = window.location.pathname.split('/');
   let urlLocale = defaultLocale;
   let urlPaths = window.location.pathname;
+  const storageLocale = Lockr.get('locale');
 
-  if (availableLocales.includes(windowPaths[1])) {
+  if (!storageLocale && availableLocales.includes(windowPaths[1])) {
     urlLocale = windowPaths[1];
   } else if (availableRoutes.some(route => route.path === urlPaths)) {
     urlPaths = `/${urlLocale}${urlPaths}`;
@@ -54,11 +57,17 @@ export const getRedirectLocalePathname = (
   return urlLocale;
 };
 
-export const setLocalePathname = (newlocale: string) => {
+export const setLocalePathname = (
+  newlocale: string,
+  saveToStorage?: boolean,
+) => {
   const paths = window.location.pathname.split('/');
   paths[1] = newlocale;
   const newPath = paths.join('/');
   window.history.pushState({}, '', newPath);
+  if (saveToStorage) {
+    Lockr.set('locale', newlocale);
+  }
 };
 
 export type I18n = ReturnType<typeof i18n>;

@@ -87,7 +87,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   );
 
   const setLocale = (lang: string) => {
-    setLocalePathname(lang);
+    setLocalePathname(lang, storageCookies.functional);
     changeLocale(lang);
   };
 
