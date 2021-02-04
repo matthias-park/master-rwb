@@ -17,7 +17,6 @@ const pathsWithSidebar = NAVIGATION_ROUTES.filter(route =>
     ComponentName.SettingsPage,
     ComponentName.WithdrawalPage,
     ComponentName.TransactionsPage,
-    ComponentName.CookiePolicyPage,
     ComponentName.FaqPage,
   ].includes(route.id),
 );
@@ -30,7 +29,6 @@ const pathsWithRightSidebar = NAVIGATION_ROUTES.filter(route =>
     ComponentName.SettingsPage,
     ComponentName.WithdrawalPage,
     ComponentName.TransactionsPage,
-    ComponentName.CookiePolicyPage,
     ComponentName.FaqPage,
   ].includes(route.id),
 );

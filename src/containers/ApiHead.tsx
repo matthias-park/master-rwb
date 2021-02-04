@@ -17,7 +17,7 @@ const ApiHead = () => {
     [pathname, locale],
   );
   const { data } = useSWR<SeoPages>(
-    ['/railsapi/v1/content/seo_pages/fetch', params],
+    ['/railsapi/v1/content/seo_pages/fetch?response_json=true', params],
     postApi,
   );
   const seoData = data?.Success ? data?.Data : null;

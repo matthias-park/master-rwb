@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import Lockr from 'lockr';
 
-const useLocalStorage = (
+const useLocalStorage = <T extends unknown>(
   key: string,
-  initialValue: unknown,
-): [value: unknown, setValue: (value: string | number | Object) => void] => {
-  const [storedValue, setStoredValue] = useState(Lockr.get(key, initialValue));
-  const setValue = (value: string | number | Object) => {
+  initialValue: T,
+): [value: T, setValue: (value: T) => void] => {
+  const [storedValue, setStoredValue] = useState<T>(
+    Lockr.get<T>(key, initialValue),
+  );
+  const setValue = (value: T) => {
     setStoredValue(value);
-    Lockr.set(key, value);
+    Lockr.set(key, value as any);
   };
 
   return [storedValue, setValue];

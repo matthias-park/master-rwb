@@ -142,6 +142,7 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                         data-testid={field.id}
                         ref={register}
                         as={formGroupAs}
+                        disabled={field.disabled}
                         size="sm"
                         type={formGroupType}
                         autoComplete={

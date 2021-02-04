@@ -13,6 +13,8 @@ import { getRedirectLocalePathname, setLocalePathname } from '../utils/i18n';
 import { AVAILABLE_LOCALES, NAVIGATION_ROUTES, TestEnv } from '../constants';
 import { useToasts } from 'react-toast-notifications';
 import { usePrevious } from './index';
+import useLocalStorage from './useLocalStorage';
+import { Cookies } from '../types/Config';
 
 const useUser = () => {
   const { addToast } = useToasts();
@@ -52,6 +54,12 @@ const useUser = () => {
   return { user, mutateUser };
 };
 
+const defaultCookies: Cookies = {
+  essential: true,
+  functional: true,
+  thirdParty: true,
+};
+
 export const configContext = createContext<Config | null>(null);
 
 export function useConfig(): Config {
@@ -73,6 +81,10 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   const [locale, changeLocale] = useState(
     getRedirectLocalePathname(locales, window.DEFAULT_LOCALE, routes),
   );
+  const [storageCookies, setStorageCookies] = useLocalStorage<Cookies>(
+    'cookieSettings',
+    defaultCookies,
+  );
 
   const setLocale = (lang: string) => {
     setLocalePathname(lang);
@@ -86,6 +98,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     setLocale,
     locales,
     routes,
+    cookies: { cookies: storageCookies, save: setStorageCookies },
   };
   return <configContext.Provider value={value} {...props} />;
 };

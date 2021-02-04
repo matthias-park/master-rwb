@@ -33,6 +33,7 @@ export interface SettingsField {
   enabled?: boolean;
   values?: SettingsFieldValue[];
   visible?: boolean;
+  disabled?: boolean;
 }
 
 export enum SettingsFieldStyle {

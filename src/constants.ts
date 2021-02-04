@@ -284,6 +284,17 @@ export const TRANSLATION_SYMBOLS = [
   'login_invalid_credentials',
   'promotions_page_title',
   'promotions_failed_to_load',
+  'cookie_page_title',
+  'cookies_check_all',
+  'cookies_check_essential',
+  'cookies_check_functional',
+  'cookies_check_thirdParty',
+  'cookies_check_all_desc',
+  'cookies_check_essential_desc',
+  'cookies_check_functional_desc',
+  'cookies_check_thirdParty_desc',
+  'cookies_btn_cancel',
+  'cookies_btn_save',
 ];
 
 export const HEAD_DATA: HeadData = {
