@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { useI18n } from '../../hooks/useI18n';
-import useLocalStorage from '../../hooks/useLocalStorage';
 import Button from 'react-bootstrap/Button';
-import { useConfig } from '../../hooks/useConfig';
-import { Cookies } from '../../types/Config';
+import useStorage from '../../hooks/useStorage';
+import { Storage } from '../../types/Storage';
 
 const cookiesId = ['essential', 'functional', 'thirdParty'];
 
 const CookiePolicyPage = () => {
   const { t } = useI18n();
-  const { cookies } = useConfig();
-  const [cookieSettings, setCookieSettings] = useState<Cookies>(
-    cookies.cookies,
+  const storage = useStorage();
+  const [cookieSettings, setCookieSettings] = useState<Storage>(
+    storage.cookies,
   );
 
   const toggleCookie = (id: string) => {
@@ -22,7 +21,7 @@ const CookiePolicyPage = () => {
         cookiesId.reduce((obj, id) => {
           obj[id] = id === 'essential' || !isChecked('all');
           return obj;
-        }, {}) as Cookies,
+        }, {}) as Storage,
       );
     }
     setCookieSettings({ ...cookieSettings, [id]: !cookieSettings[id] });
@@ -35,9 +34,9 @@ const CookiePolicyPage = () => {
   };
   const handleBtnClick = (id: string) => {
     if (id === 'cancel') {
-      return setCookieSettings(cookies.cookies);
+      return setCookieSettings(storage.cookies);
     }
-    return cookies.save(cookieSettings);
+    return storage.save(cookieSettings);
   };
 
   return (
