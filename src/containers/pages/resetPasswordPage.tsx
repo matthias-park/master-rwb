@@ -7,9 +7,10 @@ import { useToasts } from 'react-toast-notifications';
 import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import NotFoundPage from './notFoundPage';
 import Spinner from 'react-bootstrap/Spinner';
+import { useConfig } from '../../hooks/useConfig';
 
 const ForgotPasswordPage = () => {
   const { code } = useParams<{ code?: string }>();
@@ -24,6 +25,11 @@ const ForgotPasswordPage = () => {
   } | null>(null);
   const { t } = useI18n();
   const { addToast } = useToasts();
+  const { user } = useConfig();
+
+  if (user.logged_in) {
+    return <Redirect to="/" />;
+  }
   const onSubmit = async ({ password, repeat_password }) => {
     const result = await postApi(`/set_password/${code}?response_json=true`, {
       new_password: password,

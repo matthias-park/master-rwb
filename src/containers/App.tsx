@@ -7,6 +7,7 @@ import { HEAD_DATA } from '../constants';
 import HeadData from '../types/HeadData';
 import { useConfig } from '../hooks/useConfig';
 import ApiHead from './ApiHead';
+import ResponsibleGamblingModal from '../components/modals/ResponsibleGamblingModal';
 
 const App = () => {
   // const headData: HeadData = HEAD_DATA;
@@ -26,6 +27,7 @@ const App = () => {
           <meta {...metaProps} />
         ))}
       </Helmet> */}
+      <ResponsibleGamblingModal />
       <ErrorBoundary>
         <Routes />
       </ErrorBoundary>

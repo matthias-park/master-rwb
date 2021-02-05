@@ -9,6 +9,8 @@ import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import { useForm } from 'react-hook-form';
 import Spinner from 'react-bootstrap/Spinner';
+import { Redirect } from 'react-router-dom';
+import { useConfig } from '../../hooks/useConfig';
 
 const ForgotPasswordPage = () => {
   const { register, handleSubmit, errors, formState } = useForm({
@@ -20,6 +22,12 @@ const ForgotPasswordPage = () => {
   } | null>(null);
   const { t } = useI18n();
   const { addToast } = useToasts();
+  const { user } = useConfig();
+
+  if (user.logged_in) {
+    return <Redirect to="/" />;
+  }
+
   const onSubmit = async ({ email }) => {
     const result = await postApi<ForgotPasswordResponse>(
       '/forgot_password.json?response_json=true',

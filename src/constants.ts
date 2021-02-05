@@ -304,6 +304,9 @@ export const TRANSLATION_SYMBOLS = [
   'reset_password_field',
   'reset_password_repeat_field',
   'reset_password_need_match_password',
+  'responsible_gambling_title',
+  'responsible_gambling_body',
+  'responsible_gambling_close',
 ];
 
 export const HEAD_DATA: HeadData = {
