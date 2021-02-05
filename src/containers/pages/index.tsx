@@ -31,6 +31,9 @@ export const COMPONENT_PAGES = {
   [ComponentName.WithdrawalPage]: AsyncPage('withdrawalPage'),
   [ComponentName.NotFoundPage]: AsyncPage('notFoundPage'),
   [ComponentName.TemplatePage]: AsyncPage('templatePage'),
+  [ComponentName.ForgotPasswordPage]: AsyncPage('forgotPasswordPage'),
+  [ComponentName.ResetPasswordPage]: AsyncPage('resetPasswordPage'),
+  [ComponentName.ForgotLoginPage]: AsyncPage('forgotLoginPage'),
 };
 
 const Routes = () => {

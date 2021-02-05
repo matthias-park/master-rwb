@@ -20,6 +20,8 @@ export enum ComponentName {
   WithdrawalPage,
   TransactionsPage,
   ForgotPasswordPage,
+  ResetPasswordPage,
+  ForgotLoginPage,
   RequiredDocuments,
   MarketingSettings,
   BettingLossLimits,
@@ -295,6 +297,13 @@ export const TRANSLATION_SYMBOLS = [
   'cookies_check_thirdParty_desc',
   'cookies_btn_cancel',
   'cookies_btn_save',
+  'forgot_password_page_title',
+  'forgot_password_email_field',
+  'forgot_password_submit_btn',
+  'reset_password_page_title',
+  'reset_password_field',
+  'reset_password_repeat_field',
+  'reset_password_need_match_password',
 ];
 
 export const HEAD_DATA: HeadData = {
@@ -368,6 +377,14 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
   {
     path: '/forgot_password',
     id: ComponentName.ForgotPasswordPage,
+  },
+  {
+    path: '/set_password/:code',
+    id: ComponentName.ResetPasswordPage,
+  },
+  {
+    path: '/forgot_login',
+    id: ComponentName.ForgotLoginPage,
   },
   {
     path: '*',
