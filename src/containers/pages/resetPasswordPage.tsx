@@ -11,6 +11,7 @@ import { Redirect, useParams } from 'react-router-dom';
 import NotFoundPage from './notFoundPage';
 import Spinner from 'react-bootstrap/Spinner';
 import { useConfig } from '../../hooks/useConfig';
+import ForgotPasswordResponse from '../../types/api/user/ForgotPassword';
 
 const ForgotPasswordPage = () => {
   const { code } = useParams<{ code?: string }>();
@@ -19,10 +20,7 @@ const ForgotPasswordPage = () => {
       mode: 'onBlur',
     },
   );
-  const [apiResponse, setApiResponse] = useState<{
-    msg: string;
-    success: boolean;
-  } | null>(null);
+  const [apiResponse, setApiResponse] = useState<boolean | null>(null);
   const { t } = useI18n();
   const { addToast } = useToasts();
   const { user } = useConfig();
@@ -31,30 +29,23 @@ const ForgotPasswordPage = () => {
     return <Redirect to="/" />;
   }
   const onSubmit = async ({ password, repeat_password }) => {
-    const result = await postApi(`/set_password/${code}?response_json=true`, {
-      new_password: password,
-      new_password_confirm: repeat_password,
-      reset_code: code!,
-    }).catch(() => {
+    const result = await postApi<ForgotPasswordResponse>(
+      `/set_password/${code}?response_json=true`,
+      {
+        new_password: password,
+        new_password_confirm: repeat_password,
+        reset_code: code!,
+      },
+    ).catch(() => {
       addToast('failed to set new password', {
         appearance: 'error',
         autoDismiss: true,
       });
-      // return {
-      //   errors: {},
-      //   message: '',
-      //   status: 'timeout',
-      //   title: '',
-      // };
+      return {
+        success: false,
+      };
     });
-    console.log(result);
-    // if (result.status !== 'timeout') {
-    //   setApiResponse({
-    //     msg: result.message,
-    //     success: result.status === 'success',
-    //   });
-    // }
-    return;
+    return setApiResponse(result?.success);
   };
   if (!code) {
     return <NotFoundPage />;
@@ -64,10 +55,10 @@ const ForgotPasswordPage = () => {
       <h1 className="mb-4">{t('reset_password_page_title')}</h1>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Alert
-          show={!!apiResponse}
-          variant={apiResponse?.success ? 'success' : 'danger'}
+          show={typeof apiResponse === 'boolean'}
+          variant={apiResponse ? 'success' : 'danger'}
         >
-          {apiResponse?.msg}
+          {t(`set_password_${apiResponse ? 'success' : 'failed'}`)}
         </Alert>
         <TextInput
           ref={register({

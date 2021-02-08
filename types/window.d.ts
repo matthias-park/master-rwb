@@ -4,6 +4,7 @@ export declare global {
   interface Window {
     API_URL: string;
     DEFAULT_LOCALE: string;
+    LOCALE?: string;
     BASIC_AUTH?: string;
     customerSettings?: CustomerSettings;
     _kc?: KambiConfig;

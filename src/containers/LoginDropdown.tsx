@@ -27,15 +27,12 @@ const LoginForm = ({
 }) => {
   const { addToast } = useToasts();
   const { t } = useI18n();
-  const { register, handleSubmit, errors } = useForm({
+  const { register, handleSubmit, errors, formState, setError } = useForm({
     mode: 'onBlur',
   });
   const { mutateUser } = useConfig();
   const forgotPasswordRoute = useRoutePath(ComponentName.ForgotPasswordPage);
-  const [apiLoginError, setApiLoginError] = useState(false);
-  const [loadingLogin, setLoadingLogin] = useState(false);
   const onSubmit = async ({ email, password }) => {
-    setLoadingLogin(true);
     const response = await postApi<NET_USER | null>(
       '/players/login.json?response_json=true',
       {
@@ -47,7 +44,6 @@ const LoginForm = ({
       console.log(err);
       return null;
     });
-    console.log(!!response?.error);
     if (response?.PlayerId) {
       hideLoginDropdown();
       mutateUser(
@@ -65,22 +61,25 @@ const LoginForm = ({
         },
         true,
       );
-    } else if (response?.error !== undefined) {
-      setApiLoginError(true);
-      // setError('password', {
-      //   type: 'response',
-      //   message: response.error,
-      // });
+    } else if (response?.error ?? true) {
+      setError('email', {
+        type: 'manual',
+      });
+      setError('password', {
+        type: 'manual',
+      });
     }
-    setLoadingLogin(false);
+    return;
   };
-  console.log(errors);
   return (
     <Form
       className="pb-4 mb-4 login-dropdown__menu-form"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Alert show={apiLoginError} variant="danger">
+      <Alert
+        show={formState.isSubmitted && !formState.isSubmitSuccessful}
+        variant="danger"
+      >
         {t('login_invalid_credentials')}
       </Alert>
       <TextInput
@@ -90,7 +89,7 @@ const LoginForm = ({
         id="email"
         placeholder={t('login_email')}
         autoComplete="username"
-        error={errors.email || apiLoginError}
+        error={errors.email}
       />
       <TextInput
         ref={register({
@@ -101,7 +100,7 @@ const LoginForm = ({
         placeholder={t('login_password')}
         autoComplete="current-password"
         toggleVisibility
-        error={errors.password || apiLoginError}
+        error={errors.password}
       />
       <div className="d-flex align-items-center flex-wrap">
         <Form.Check custom id="remember_check" label={t('login_remember_me')} />
@@ -123,10 +122,10 @@ const LoginForm = ({
         </Link>
       </div>
       <button
-        disabled={!!loadingLogin || !!errors.email || !!errors.password}
+        disabled={formState.isSubmitting || !formState.isDirty}
         className="btn btn-primary d-block mx-auto mt-4 px-5"
       >
-        {loadingLogin && (
+        {formState.isSubmitting && (
           <>
             <Spinner
               as="span"

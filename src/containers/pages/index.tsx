@@ -34,6 +34,7 @@ export const COMPONENT_PAGES = {
   [ComponentName.ForgotPasswordPage]: AsyncPage('forgotPasswordPage'),
   [ComponentName.ResetPasswordPage]: AsyncPage('resetPasswordPage'),
   [ComponentName.ForgotLoginPage]: AsyncPage('forgotLoginPage'),
+  [ComponentName.ContactUsPage]: AsyncPage('contactUsPage'),
 };
 
 const Routes = () => {

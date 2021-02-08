@@ -1,6 +1,7 @@
 import { ConfigRoute } from './types/Config';
 import HeadData from './types/HeadData';
 import HeaderLink from './types/HeaderLinks';
+import ContactUsPage from './containers/pages/contactUsPage';
 
 export const TestEnv = process.env.NODE_ENV === 'test';
 export enum ComponentName {
@@ -31,10 +32,11 @@ export enum ComponentName {
   DisablingYourAccount,
   NotFoundPage,
   TemplatePage,
+  ContactUsPage,
 }
 
 export enum FormFieldValidation {
-  Valid,
+  Valid = 1,
   Invalid,
   Validating,
 }
@@ -300,6 +302,12 @@ export const TRANSLATION_SYMBOLS = [
   'forgot_password_page_title',
   'forgot_password_email_field',
   'forgot_password_submit_btn',
+  'forgot_password_success',
+  'forgot_password_failed',
+  'forgot_login_success',
+  'forgot_login_failed',
+  'set_password_success',
+  'set_password_failed',
   'reset_password_page_title',
   'reset_password_field',
   'reset_password_repeat_field',
@@ -307,6 +315,8 @@ export const TRANSLATION_SYMBOLS = [
   'responsible_gambling_title',
   'responsible_gambling_body',
   'responsible_gambling_close',
+  'contact_page_failed_to_load',
+  'contact_page_success',
 ];
 
 export const HEAD_DATA: HeadData = {
@@ -388,6 +398,10 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
   {
     path: '/forgot_login',
     id: ComponentName.ForgotLoginPage,
+  },
+  {
+    path: '/contact_us',
+    id: ComponentName.ContactUsPage,
   },
   {
     path: '*',

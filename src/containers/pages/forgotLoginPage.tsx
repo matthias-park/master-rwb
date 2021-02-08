@@ -16,10 +16,7 @@ const ForgotLoginPage = () => {
   const { register, handleSubmit, errors, formState } = useForm({
     mode: 'onBlur',
   });
-  const [apiResponse, setApiResponse] = useState<{
-    msg: string;
-    success: boolean;
-  } | null>(null);
+  const [apiResponse, setApiResponse] = useState<boolean | null>(null);
   const { t } = useI18n();
   const { addToast } = useToasts();
   const { user } = useConfig();
@@ -30,7 +27,7 @@ const ForgotLoginPage = () => {
 
   const onSubmit = async ({ email }) => {
     const result = await postApi<ForgotPasswordResponse>(
-      '/players/forgot_login.json',
+      '/players/forgot_login.json?response_json=true',
       {
         email,
       },
@@ -40,18 +37,10 @@ const ForgotLoginPage = () => {
         autoDismiss: true,
       });
       return {
-        errors: {},
-        message: '',
-        status: 'timeout',
-        title: '',
+        success: false,
       };
     });
-    if (result.status !== 'timeout') {
-      setApiResponse({
-        msg: result.message,
-        success: result.status === 'success',
-      });
-    }
+    setApiResponse(result.success);
     return;
   };
   return (
@@ -59,10 +48,10 @@ const ForgotLoginPage = () => {
       <h1 className="mb-4">{t('forgot_login_page_title')}</h1>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Alert
-          show={!!apiResponse}
-          variant={apiResponse?.success ? 'success' : 'danger'}
+          show={typeof apiResponse === 'boolean'}
+          variant={apiResponse ? 'success' : 'danger'}
         >
-          {apiResponse?.msg}
+          {t(`forgot_login_${apiResponse ? 'success' : 'failed'}`)}
         </Alert>
         <TextInput
           ref={register({

@@ -54,6 +54,7 @@ export const getRedirectLocalePathname = (
   if (window.location.pathname !== urlPaths) {
     window.history.replaceState({}, '', urlPaths);
   }
+  window.LOCALE = urlLocale;
   return urlLocale;
 };
 
@@ -68,6 +69,7 @@ export const setLocalePathname = (
   if (saveToStorage) {
     Lockr.set('locale', newlocale);
   }
+  window.LOCALE = newlocale;
 };
 
 export type I18n = ReturnType<typeof i18n>;

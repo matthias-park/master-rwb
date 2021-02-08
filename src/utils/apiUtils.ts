@@ -15,12 +15,13 @@ export const formatUrl = (
 };
 
 export const getApi = <T>(url: string): Promise<T> => {
+  const locale = ''; //`/${document.documentElement.lang}` || '';
   const config: RequestInit = {
     mode: 'cors',
     credentials: 'include',
     headers: new Headers(),
   };
-  return fetch(`${window.API_URL}${url}`, config).then(res => {
+  return fetch(`${window.API_URL}${locale}${url}`, config).then(res => {
     if (!res.ok) {
       throw new Error(`${url} - ${res.status} ${res.statusText}`);
     }
@@ -37,6 +38,7 @@ export const postApi = <T>(
   body?: { [key: string]: string | Blob },
   options: PostOptions = {},
 ): Promise<T> => {
+  const locale = ''; //window.LOCALE ? `/${window.LOCALE}` : '';
   const config: RequestInit = {
     method: 'post',
     mode: 'cors',
@@ -56,7 +58,10 @@ export const postApi = <T>(
       (config.headers as Headers).append('Content-Type', 'application/json');
     }
   }
-  const postUrl = url.startsWith('http') ? url : `${window.API_URL}${url}`;
+  const postUrl = url.startsWith('http')
+    ? url
+    : `${window.API_URL}${locale}${url}`;
+  console.log(postUrl);
   return fetch(postUrl, config).then(res => {
     if (!res.ok) {
       throw new Error(`${url} - ${res.status} ${res.statusText}`);

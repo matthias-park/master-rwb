@@ -16,10 +16,7 @@ const ForgotPasswordPage = () => {
   const { register, handleSubmit, errors, formState } = useForm({
     mode: 'onBlur',
   });
-  const [apiResponse, setApiResponse] = useState<{
-    msg: string;
-    success: boolean;
-  } | null>(null);
+  const [apiResponse, setApiResponse] = useState<boolean | null>(null);
   const { t } = useI18n();
   const { addToast } = useToasts();
   const { user } = useConfig();
@@ -40,29 +37,21 @@ const ForgotPasswordPage = () => {
         autoDismiss: true,
       });
       return {
-        errors: {},
-        message: '',
-        status: 'timeout',
-        title: '',
+        success: false,
       };
     });
-    if (result.status !== 'timeout') {
-      setApiResponse({
-        msg: result.message,
-        success: result.status === 'success',
-      });
-    }
-    return;
+
+    return setApiResponse(result.success);
   };
   return (
     <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">
       <h1 className="mb-4">{t('forgot_password_page_title')}</h1>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Alert
-          show={!!apiResponse}
-          variant={apiResponse?.success ? 'success' : 'danger'}
+          show={typeof apiResponse === 'boolean'}
+          variant={apiResponse ? 'success' : 'danger'}
         >
-          {apiResponse?.msg}
+          {t(`forgot_password_${apiResponse ? 'success' : 'failed'}`)}
         </Alert>
         <TextInput
           ref={register({

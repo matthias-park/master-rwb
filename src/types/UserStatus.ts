@@ -46,6 +46,9 @@ export interface User {
   name?: string;
   balance?: string;
   loading: boolean;
+  email?: string;
+  first_name?: string;
+  last_name?: string;
 }
 
 export interface NET_USER {
