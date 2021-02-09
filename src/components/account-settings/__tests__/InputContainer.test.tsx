@@ -78,6 +78,65 @@ test('submit value correctly', async () => {
   });
 });
 
+test('submit value less than min', async () => {
+  const newEnteredValue = '10';
+  const { getByTestId } = render(
+    <InputContainer
+      title={titleContent}
+      buttonText={buttonContent}
+      placeholder=""
+      min="200"
+      onSubmit={value => {
+        expect(value).toBe(Number(200));
+      }}
+      loading={false}
+    />,
+  );
+  fireEvent.change(getByTestId('input'), {
+    target: { value: newEnteredValue },
+  });
+  await act(async () => {
+    fireEvent.click(getByTestId('button'));
+  });
+});
+
+test('submit value more than max', async () => {
+  const newEnteredValue = '500';
+  const { getByTestId } = render(
+    <InputContainer
+      title={titleContent}
+      buttonText={buttonContent}
+      placeholder=""
+      max="200"
+      onSubmit={value => {
+        expect(value).toBe(Number(200));
+      }}
+      loading={false}
+    />,
+  );
+  fireEvent.change(getByTestId('input'), {
+    target: { value: newEnteredValue },
+  });
+  await act(async () => {
+    fireEvent.click(getByTestId('button'));
+  });
+});
+test('submit value on disabled prop', async () => {
+  const { getByTestId } = render(
+    <InputContainer
+      title={titleContent}
+      buttonText={buttonContent}
+      placeholder=""
+      disabled
+      onSubmit={value => {
+        expect(value).toBe(Number(200));
+      }}
+      loading={false}
+    />,
+  );
+  expect(getByTestId('button')).toBeDisabled();
+});
+
 test('default matches snapshot', () => {
   const dom = renderer.create(
     <InputContainer

@@ -9,7 +9,7 @@ const i18n = () => {
 
   return {
     set(lang: string, data: unknown = {}) {
-      symbols[lang] = Object.assign(symbols[lang] || {}, data);
+      symbols[lang] = Object.assign(symbols[lang || locale] || {}, data);
     },
 
     locale(lang?: string) {
@@ -40,11 +40,15 @@ export const getRedirectLocalePathname = (
 
   if (!storageLocale && availableLocales.includes(windowPaths[1])) {
     urlLocale = windowPaths[1];
-  } else if (availableRoutes.some(route => route.path === urlPaths)) {
+  } else if (availableRoutes.some(route => urlPaths.startsWith(route.path))) {
     urlPaths = `/${urlLocale}${urlPaths}`;
   } else {
     const urlPathWithoutFirstPath = urlPaths.replace(`/${windowPaths[1]}`, '');
-    if (availableRoutes.some(route => route.path === urlPathWithoutFirstPath)) {
+    if (
+      availableRoutes.some(route =>
+        urlPathWithoutFirstPath.startsWith(route.path),
+      )
+    ) {
       urlPaths = `/${urlLocale}${urlPathWithoutFirstPath}`;
     } else {
       urlPaths = `/${urlLocale}`;

@@ -437,7 +437,7 @@ export const FOOTER_LINKS = [
           },
           {
             name: 'contact_link',
-            link: '/contact',
+            link: '/contact_us',
             order: 2,
           },
         ],

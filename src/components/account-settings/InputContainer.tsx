@@ -9,8 +9,11 @@ interface Props {
   placeholder: string;
   buttonText: string;
   loading?: boolean;
+  min?: number | string;
+  max?: number | string;
   onSubmit: (inputValue: number) => void;
   quickAmounts?: number[];
+  disabled?: boolean;
 }
 
 const InputContainer = ({
@@ -20,15 +23,20 @@ const InputContainer = ({
   loading,
   onSubmit,
   quickAmounts = [],
+  min = 0,
+  max,
+  disabled,
 }: Props) => {
   const [inputValue, setInputValue] = useState<string>('');
   const handleSubmit = () => onSubmit(Number(inputValue));
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value =
-      Number(e.target.value) > 0 || !e.target.value.length
-        ? e.target.value
-        : '0';
-    setInputValue(value);
+    let value = Number(e.target.value);
+    if (isNaN(value) || value < min) {
+      value = Number(min);
+    } else if (max && value > max) {
+      value = Number(max);
+    }
+    setInputValue(value.toString());
   };
   return (
     <div className="input-container mb-4">
@@ -42,8 +50,6 @@ const InputContainer = ({
             variant="secondary"
             className="mr-1 mb-1"
             onClick={() => setInputValue(value.toString())}
-            // onClick={handleSubmit}
-            // data-testid="button"
           >
             {value}€
           </Button>
@@ -52,17 +58,19 @@ const InputContainer = ({
           type="number"
           data-testid="input"
           placeholder={placeholder}
-          min="0"
+          min={min}
+          max={max}
           value={inputValue}
           onKeyUp={e => enterKeyPress(e, handleSubmit)}
           onChange={handleValueChange}
           className="input-container__input"
         />
-        {/* <small className="form-group__error-msg">Error message</small> */}
       </Form.Group>
       <Button
         variant="primary"
-        disabled={!inputValue.length || inputValue === '0' || loading}
+        disabled={
+          !inputValue.length || inputValue === '0' || loading || disabled
+        }
         onClick={handleSubmit}
         data-testid="button"
       >

@@ -35,7 +35,7 @@ export interface PostOptions {
 
 export const postApi = <T>(
   url: string,
-  body?: { [key: string]: string | Blob },
+  body?: { [key: string]: number | string | Blob },
   options: PostOptions = {},
 ): Promise<T> => {
   const locale = ''; //window.LOCALE ? `/${window.LOCALE}` : '';
@@ -50,7 +50,7 @@ export const postApi = <T>(
       console.log(body);
       const formData = new FormData();
       for (const key in body) {
-        formData.append(key, body[key]);
+        formData.append(key, body[key] as string | Blob);
       }
       config.body = formData;
     } else {

@@ -4,7 +4,6 @@ import ProtectedRoute from './ProtectedRoute';
 import { Route, Switch } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { ComponentName } from '../../constants';
-import PageLayout from '../pageLayout';
 import Spinner from 'react-bootstrap/Spinner';
 
 const AsyncPage = (pageName: string) =>
@@ -41,28 +40,26 @@ const Routes = () => {
   const { routes } = useConfig();
 
   return (
-    <PageLayout>
-      <Switch>
-        {routes.map(route => {
-          const Page =
-            COMPONENT_PAGES[route.id] ||
-            COMPONENT_PAGES[ComponentName.NotFoundPage];
+    <Switch>
+      {routes.map(route => {
+        const Page =
+          COMPONENT_PAGES[route.id] ||
+          COMPONENT_PAGES[ComponentName.NotFoundPage];
 
-          if (!Page) {
-            return null;
-          }
-          const RouteEl = route.protected ? ProtectedRoute : Route;
-          return (
-            <RouteEl
-              key={`${route.id}-${route.path}`}
-              exact={route.exact ?? true}
-              path={route.path}
-              component={Page}
-            />
-          );
-        })}
-      </Switch>
-    </PageLayout>
+        if (!Page) {
+          return null;
+        }
+        const RouteEl = route.protected ? ProtectedRoute : Route;
+        return (
+          <RouteEl
+            key={`${route.id}-${route.path}`}
+            exact={route.exact ?? true}
+            path={route.path}
+            component={Page}
+          />
+        );
+      })}
+    </Switch>
   );
 };
 
