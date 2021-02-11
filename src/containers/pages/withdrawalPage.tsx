@@ -146,7 +146,9 @@ const WithdrawalPage = () => {
     withdrawalConfirmData,
     setWithdrawalConfirmData,
   ] = useState<WithdrawalConfirmation | null>(null);
-  const { data, error, mutate } = useSWR<Withdrawal>('/v2/withdraw.json');
+  const { data, error, mutate } = useSWR<Withdrawal>(
+    '/v2/withdraw.json?response_json=true',
+  );
   const isDataLoading = !data && !error;
   useEffect(() => {
     if (data?.translations) {
@@ -167,10 +169,13 @@ const WithdrawalPage = () => {
   }, [data]);
   const cancelRequest = useCallback(
     async (id: number): Promise<void> => {
-      const response = await postApi('/v2/withdraw/cancel.json', {
-        authenticity_token: user.token!,
-        request_id: id,
-      }).catch(() => {
+      const response = await postApi(
+        '/v2/withdraw/cancel.json?response_json=true',
+        {
+          authenticity_token: user.token!,
+          request_id: id,
+        },
+      ).catch(() => {
         addToast('failed to cancel withdraw', {
           appearance: 'error',
           autoDismiss: true,
@@ -191,7 +196,7 @@ const WithdrawalPage = () => {
       }
       const response = await postApi<
         RequestWithdrawalResponse | Withdrawal | null
-      >('/v2/withdraw.json', {
+      >('/v2/withdraw.json?response_json=true', {
         authenticity_token: user.token!,
         amount: amount.toString(),
         id: defaultAccount!.id,
@@ -219,7 +224,7 @@ const WithdrawalPage = () => {
     async (data: any) => {
       setWithdrawalLoading(true);
       const response = await postApi<RequestWithdrawalResponse | null>(
-        '/v2/withdraw.json',
+        '/v2/withdraw.json?response_json=true',
         { ...data, authenticity_token: user.token! },
         {
           formData: true,
