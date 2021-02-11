@@ -110,7 +110,7 @@ const WithdrawalPage = () => {
   }, [data]);
   const cancelRequest = useCallback(
     async (id: number): Promise<void> => {
-      const response = await postApi('/v2/withdraw/cancel.json', {
+      const response = await postApi('/railsapi/v1/withdrawals/cancel', {
         authenticity_token: user.token!,
         request_id: id,
       }).catch(() => {
@@ -162,7 +162,7 @@ const WithdrawalPage = () => {
     async (data: any) => {
       setWithdrawalLoading(true);
       const response = await postApi<RequestWithdrawalResponse | null>(
-        '/v2/withdraw.json',
+        '/railsapi/v1/withdrawals/confirm',
         { ...data, authenticity_token: user.token! },
         {
           formData: true,
