@@ -50,19 +50,19 @@ const WithdrawalRequests = ({
               return (
                 <tr key={index}>
                   <td>
-                    <strong className="heading-sm">{t('_date')}</strong>
+                    <strong className="heading-sm">ID</strong>
                     {request.id}
                   </td>
                   <td>
-                    <strong className="heading-sm">{t('action')}</strong>
+                    <strong className="heading-sm">Account</strong>
                     {request.account}
                   </td>
                   <td>
-                    <strong className="heading-sm">{t('account')}</strong>
+                    <strong className="heading-sm">Amount</strong>
                     {request.amount}
                   </td>
                   <td>
-                    <strong className="heading-sm">{t('amount')}</strong>
+                    <strong className="heading-sm">Request cancel</strong>
                     <Button
                       variant="secondary"
                       onClick={() => onCancelRequest(request.id)}
@@ -268,13 +268,14 @@ const WithdrawalPage = () => {
           )}
           <InputContainer
             title={t('withdrawal_amount')}
-            placeholder="€ 300"
+            placeholder={`${user.currency || ''} 0`}
             buttonText={t('withdrawal_btn')}
             min={defaultAccount?.set_values.min_withdraw.split(' ')?.[0]}
             max={defaultAccount?.set_values.max_withdraw.split(' ')?.[0]}
             loading={!withdrawalConfirmData && withdrawalLoading}
             onSubmit={requestWithdrawal}
             disabled={!defaultAccount}
+            currency={user.currency}
           />
           <div className="info-container mb-4">
             {/* <p className="info-container__info pb-0 mb-n1">

@@ -4,7 +4,7 @@ import { postApi } from '../utils/apiUtils';
 import { useConfig } from '../hooks/useConfig';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../hooks/useUIConfig';
-import { ComponentName } from '../constants';
+import { ComponentName, RailsApiResponseFallback } from '../constants';
 import clsx from 'clsx';
 import { useI18n } from '../hooks/useI18n';
 import { Link, useLocation } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { useToasts } from 'react-toast-notifications';
 import { useRoutePath } from '../hooks/index';
 import { NET_USER } from '../types/UserStatus';
 import TextInput from '../components/TextInput';
+import RailsApiResponse from '../types/api/RailsApiResponse';
 
 interface Props {
   dropdownClasses?: string;
@@ -27,49 +28,48 @@ const LoginForm = ({
 }) => {
   const { addToast } = useToasts();
   const { t } = useI18n();
+  const [apiError, setApiError] = useState<string | null>(null);
   const { register, handleSubmit, errors, formState, setError } = useForm({
     mode: 'onBlur',
   });
   const { mutateUser } = useConfig();
   const forgotPasswordRoute = useRoutePath(ComponentName.ForgotPasswordPage);
   const onSubmit = async ({ email, password }) => {
-    const response = await postApi<NET_USER | null>(
-      '/players/login.json?response_json=true',
+    const response = await postApi<RailsApiResponse<NET_USER | null>>(
+      '/railsapi/v1/login',
       {
         login: email,
         password,
       },
-    ).catch(err => {
-      addToast(`Failed to login`, { appearance: 'error', autoDismiss: true });
-      console.log(err);
-      return null;
+    ).catch((res: RailsApiResponse<null>) => {
+      if (res.Fallback) {
+        addToast(`Failed to login`, { appearance: 'error', autoDismiss: true });
+      }
+      return res;
     });
-    if (response?.PlayerId) {
+    if (response.Success && response.Data?.PlayerId) {
       hideLoginDropdown();
-      mutateUser(
+      return mutateUser(
         {
-          user: {
-            id: response.PlayerId,
-            balance: response.Balance.toLocaleString('de-DE', {
-              style: 'currency',
-              currency: 'EUR',
-            }),
-            logged_in: true,
-            loading: false,
-            name: response.Login,
-          },
+          id: response.Data.PlayerId,
+          balance: response.Data.Balance.toLocaleString('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+          }),
+          logged_in: true,
+          loading: false,
+          name: response.Data.Login,
         },
         true,
       );
-    } else if (response?.error ?? true) {
-      setError('email', {
-        type: 'manual',
-      });
-      setError('password', {
-        type: 'manual',
-      });
     }
-    return;
+    setApiError(response.Message);
+    setError('email', {
+      type: 'manual',
+    });
+    return setError('password', {
+      type: 'manual',
+    });
   };
   return (
     <Form
@@ -80,7 +80,7 @@ const LoginForm = ({
         show={formState.isSubmitted && !formState.isSubmitSuccessful}
         variant="danger"
       >
-        {t('login_invalid_credentials')}
+        <div dangerouslySetInnerHTML={{ __html: apiError || '' }} />
       </Alert>
       <TextInput
         ref={register({

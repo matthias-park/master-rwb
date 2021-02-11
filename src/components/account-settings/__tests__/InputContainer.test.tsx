@@ -73,6 +73,7 @@ test('submit value correctly', async () => {
   fireEvent.change(getByTestId('input'), {
     target: { value: newEnteredValue },
   });
+  fireEvent.blur(getByTestId('input'));
   await act(async () => {
     fireEvent.click(getByTestId('button'));
   });
@@ -95,6 +96,7 @@ test('submit value less than min', async () => {
   fireEvent.change(getByTestId('input'), {
     target: { value: newEnteredValue },
   });
+  fireEvent.blur(getByTestId('input'));
   await act(async () => {
     fireEvent.click(getByTestId('button'));
   });
@@ -117,6 +119,7 @@ test('submit value more than max', async () => {
   fireEvent.change(getByTestId('input'), {
     target: { value: newEnteredValue },
   });
+  fireEvent.blur(getByTestId('input'));
   await act(async () => {
     fireEvent.click(getByTestId('button'));
   });
@@ -145,6 +148,7 @@ test('default matches snapshot', () => {
       placeholder=""
       onSubmit={() => {}}
       loading={false}
+      currency="€"
     />,
   );
   expect(dom).toMatchSnapshot();
@@ -157,6 +161,7 @@ test('with spinner matches snapshot', () => {
       placeholder=""
       onSubmit={() => {}}
       loading={true}
+      currency="€"
     />,
   );
   expect(dom).toMatchSnapshot();

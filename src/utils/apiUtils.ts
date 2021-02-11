@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-unfetch';
 import { ConfigInterface } from 'swr';
+import { RailsApiResponseFallback } from '../constants';
 
 // For rails api testing in dev
 // const API_URL = window.API_URL;
@@ -23,7 +24,7 @@ export const getApi = <T>(url: string): Promise<T> => {
   };
   return fetch(`${window.API_URL}${locale}${url}`, config).then(res => {
     if (!res.ok) {
-      throw new Error(`${url} - ${res.status} ${res.statusText}`);
+      throw res.status === 400 ? res.json() : RailsApiResponseFallback;
     }
     return res.json();
   });
@@ -64,7 +65,7 @@ export const postApi = <T>(
   console.log(postUrl);
   return fetch(postUrl, config).then(res => {
     if (!res.ok) {
-      throw new Error(`${url} - ${res.status} ${res.statusText}`);
+      throw res.status === 400 ? res.json() : RailsApiResponseFallback;
     }
     return res.json();
   });
@@ -79,7 +80,7 @@ export const SwrFetcherConfig: ConfigInterface<
   revalidateOnFocus: false,
   revalidateOnReconnect: false,
   errorRetryCount: 2,
-  onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-    console.log(error, `retry count - ${retryCount}`);
-  },
+  // onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+  //   console.log(error, `retry count - ${retryCount}`);
+  // },
 };

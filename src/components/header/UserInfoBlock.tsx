@@ -36,7 +36,9 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
       <div className="header__user-menu-info">
         <strong className="text-brand-text">{user.name}</strong>
         <div className="header__user-menu-info-balance">
-          <span>{user.balance}</span>
+          <span>
+            {user.balance} {user.currency}
+          </span>
         </div>
       </div>
       {isMobile ? (

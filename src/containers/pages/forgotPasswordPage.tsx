@@ -11,12 +11,16 @@ import { useForm } from 'react-hook-form';
 import Spinner from 'react-bootstrap/Spinner';
 import { Redirect } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 const ForgotPasswordPage = () => {
   const { register, handleSubmit, errors, formState } = useForm({
     mode: 'onBlur',
   });
-  const [apiResponse, setApiResponse] = useState<boolean | null>(null);
+  const [apiResponse, setApiResponse] = useState<{
+    success: boolean;
+    msg: string;
+  } | null>(null);
   const { t } = useI18n();
   const { addToast } = useToasts();
   const { user } = useConfig();
@@ -26,32 +30,35 @@ const ForgotPasswordPage = () => {
   }
 
   const onSubmit = async ({ email }) => {
-    const result = await postApi<ForgotPasswordResponse>(
-      '/forgot_password.json?response_json=true',
+    const result = await postApi<RailsApiResponse<ForgotPasswordResponse>>(
+      '/railsapi/v1/login/forgot_password',
       {
         email,
       },
-    ).catch(() => {
-      addToast('failed to recover password', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-      return {
-        success: false,
-      };
+    ).catch((res: RailsApiResponse<null>) => {
+      if (res.Fallback) {
+        addToast('failed to recover password', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      }
+      return res;
     });
 
-    return setApiResponse(result.success);
+    return setApiResponse({
+      success: result.Success,
+      msg: result.Message || '',
+    });
   };
   return (
     <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">
       <h1 className="mb-4">{t('forgot_password_page_title')}</h1>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Alert
-          show={typeof apiResponse === 'boolean'}
-          variant={apiResponse ? 'success' : 'danger'}
+          show={!!apiResponse}
+          variant={apiResponse?.success ? 'success' : 'danger'}
         >
-          {t(`forgot_password_${apiResponse ? 'success' : 'failed'}`)}
+          <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />
         </Alert>
         <TextInput
           ref={register({

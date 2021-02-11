@@ -12,6 +12,7 @@ import NotFoundPage from './notFoundPage';
 import Spinner from 'react-bootstrap/Spinner';
 import { useConfig } from '../../hooks/useConfig';
 import ForgotPasswordResponse from '../../types/api/user/ForgotPassword';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 const ForgotPasswordPage = () => {
   const { code } = useParams<{ code?: string }>();
@@ -20,7 +21,10 @@ const ForgotPasswordPage = () => {
       mode: 'onBlur',
     },
   );
-  const [apiResponse, setApiResponse] = useState<boolean | null>(null);
+  const [apiResponse, setApiResponse] = useState<{
+    success: boolean;
+    msg: string;
+  } | null>(null);
   const { t } = useI18n();
   const { addToast } = useToasts();
   const { user } = useConfig();
@@ -28,24 +32,26 @@ const ForgotPasswordPage = () => {
   if (user.logged_in) {
     return <Redirect to="/" />;
   }
-  const onSubmit = async ({ password, repeat_password }) => {
-    const result = await postApi<ForgotPasswordResponse>(
-      `/set_password/${code}?response_json=true`,
+  const onSubmit = async ({ password }) => {
+    const result = await postApi<RailsApiResponse<ForgotPasswordResponse>>(
+      `/railsapi/v1/login/set_password`,
       {
         new_password: password,
-        new_password_confirm: repeat_password,
         reset_code: code!,
       },
-    ).catch(() => {
-      addToast('failed to set new password', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-      return {
-        success: false,
-      };
+    ).catch((res: RailsApiResponse<null>) => {
+      if (res.Fallback) {
+        addToast('failed to set new password', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      }
+      return res;
     });
-    return setApiResponse(result?.success);
+    return setApiResponse({
+      success: result.Success,
+      msg: result.Message || '',
+    });
   };
   if (!code) {
     return <NotFoundPage />;
@@ -55,14 +61,29 @@ const ForgotPasswordPage = () => {
       <h1 className="mb-4">{t('reset_password_page_title')}</h1>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Alert
-          show={typeof apiResponse === 'boolean'}
-          variant={apiResponse ? 'success' : 'danger'}
+          show={!!apiResponse}
+          variant={apiResponse?.success ? 'success' : 'danger'}
         >
-          {t(`set_password_${apiResponse ? 'success' : 'failed'}`)}
+          <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />
         </Alert>
         <TextInput
           ref={register({
             required: t('login_field_required'),
+            validate: value => {
+              const valueValid = value.length > 7;
+              const hasLowerCase = /[a-z]/.test(value);
+              const hasUpperCase = /[A-Z]/.test(value);
+              const hasNumbers = /\d/.test(value);
+              const hasSpecialCharacters = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+              const mixOfThree =
+                [
+                  hasLowerCase,
+                  hasUpperCase,
+                  hasNumbers,
+                  hasSpecialCharacters,
+                ].filter(Boolean).length > 2;
+              return (valueValid && mixOfThree) || t('register_password_weak');
+            },
           })}
           error={errors.password}
           onBlur={() => watch('repeat_password') && trigger('repeat_password')}

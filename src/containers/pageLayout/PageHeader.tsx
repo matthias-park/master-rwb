@@ -63,11 +63,9 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
       console.log(err);
     });
     mutateUser({
-      user: {
-        loading: false,
-        logged_in: false,
-        logout: true,
-      },
+      loading: false,
+      logged_in: false,
+      logout: true,
     });
   };
 

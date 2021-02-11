@@ -2,6 +2,7 @@ import { ConfigRoute } from './types/Config';
 import HeadData from './types/HeadData';
 import HeaderLink from './types/HeaderLinks';
 import ContactUsPage from './containers/pages/contactUsPage';
+import RailsApiResponse from './types/api/RailsApiResponse';
 
 export const TestEnv = process.env.NODE_ENV === 'test';
 export enum ComponentName {
@@ -285,7 +286,6 @@ export const TRANSLATION_SYMBOLS = [
   'register_personal_code_invalid',
   'nav_link_sports',
   'login_field_required',
-  'login_invalid_credentials',
   'promotions_page_title',
   'promotions_failed_to_load',
   'cookie_page_title',
@@ -302,12 +302,6 @@ export const TRANSLATION_SYMBOLS = [
   'forgot_password_page_title',
   'forgot_password_email_field',
   'forgot_password_submit_btn',
-  'forgot_password_success',
-  'forgot_password_failed',
-  'forgot_login_success',
-  'forgot_login_failed',
-  'set_password_success',
-  'set_password_failed',
   'reset_password_page_title',
   'reset_password_field',
   'reset_password_repeat_field',
@@ -600,3 +594,11 @@ export const iconName: { [key: string]: string } = {
 };
 
 export const REDIRECT_PROTECTED_NOT_LOGGED_IN = ComponentName.HomePage;
+
+export const RailsApiResponseFallback: RailsApiResponse<null> = {
+  Code: -1,
+  Data: null,
+  Message: null,
+  Success: false,
+  Fallback: true,
+};

@@ -14,6 +14,7 @@ interface Props {
   onSubmit: (inputValue: number) => void;
   quickAmounts?: number[];
   disabled?: boolean;
+  currency?: string;
 }
 
 const InputContainer = ({
@@ -26,17 +27,24 @@ const InputContainer = ({
   min = 0,
   max,
   disabled,
+  currency,
 }: Props) => {
   const [inputValue, setInputValue] = useState<string>('');
   const handleSubmit = () => onSubmit(Number(inputValue));
-  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = Number(e.target.value);
-    if (isNaN(value) || value < min) {
-      value = Number(min);
-    } else if (max && value > max) {
-      value = Number(max);
+  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setInputValue(Number(e.target.value).toString());
+  const handleOnBlur = () => {
+    let value = Number(inputValue);
+    const minNumber = Number(min);
+    const maxNumber = Number(max);
+    if (isNaN(value) || value < minNumber) {
+      value = minNumber;
+    } else if (maxNumber && value > maxNumber) {
+      value = maxNumber;
     }
-    setInputValue(value.toString());
+    if (value !== Number(inputValue)) {
+      setInputValue(value.toString());
+    }
   };
   return (
     <div className="input-container mb-4">
@@ -51,7 +59,8 @@ const InputContainer = ({
             className="mr-1 mb-1"
             onClick={() => setInputValue(value.toString())}
           >
-            {value}€
+            {value}
+            {currency}
           </Button>
         ))}
         <Form.Control
@@ -61,6 +70,7 @@ const InputContainer = ({
           min={min}
           max={max}
           value={inputValue}
+          onBlur={handleOnBlur}
           onKeyUp={e => enterKeyPress(e, handleSubmit)}
           onChange={handleValueChange}
           className="input-container__input"

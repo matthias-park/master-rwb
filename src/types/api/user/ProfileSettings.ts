@@ -1,7 +1,5 @@
 interface ProfileSettings {
   token: string;
-  status: null;
-  profile_info: ProfileInfo;
   forms: SettingsForm[];
 }
 
