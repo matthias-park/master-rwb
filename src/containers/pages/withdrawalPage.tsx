@@ -12,15 +12,14 @@ import {
   Request,
   RequestWithdrawalResponse,
   WithdrawalConfirmation,
-  WithdrawalConfirmationParams,
 } from '../../types/api/user/Withdrawal';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import { useCallback } from 'react';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
-import Modal from 'react-bootstrap/Modal';
-import { Alert } from 'react-bootstrap';
+import Alert from 'react-bootstrap/Alert';
+import WithdrawalConfirmModal from '../../components/modals/WithdrawalConfirmModal';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -80,62 +79,6 @@ const WithdrawalRequests = ({
   );
 };
 
-interface WithdrawalConfirmProps {
-  data: WithdrawalConfirmation;
-  onCancel: () => void;
-  onConfirm: (data: WithdrawalConfirmationParams) => void;
-  loading?: boolean;
-}
-
-const WithdrawalConfirm = ({
-  data,
-  onCancel,
-  onConfirm,
-  loading,
-}: WithdrawalConfirmProps) => {
-  const { t } = useI18n();
-  return (
-    <Modal show={true} onHide={onCancel} backdrop="static" centered>
-      <Modal.Header closeButton>
-        <Modal.Title>{t('withdrawal_page_withdrawal_confirm')}</Modal.Title>
-      </Modal.Header>
-
-      <Modal.Body>
-        {Object.keys(data.confirm_info).map(key => (
-          <div key={key}>
-            {t(`withdrawal_page_${key}`)}: {data.confirm_info[key]}
-          </div>
-        ))}
-      </Modal.Body>
-
-      <Modal.Footer>
-        <Button onClick={onCancel} variant="secondary" className="mx-auto">
-          {t('withdrawal_page_cancel')}
-        </Button>
-        <Button
-          onClick={() => {
-            onConfirm(data.params);
-          }}
-          variant="primary"
-          className="mx-auto"
-        >
-          {loading && (
-            <Spinner
-              data-testid="spinner"
-              as="span"
-              animation="border"
-              size="sm"
-              role="status"
-              className="mr-1"
-            />
-          )}
-          {t('withdrawal_page_confirm')}
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
-};
-
 const WithdrawalPage = () => {
   const { t, set } = useI18n();
   const { user, locale } = useConfig();
@@ -146,9 +89,7 @@ const WithdrawalPage = () => {
     withdrawalConfirmData,
     setWithdrawalConfirmData,
   ] = useState<WithdrawalConfirmation | null>(null);
-  const { data, error, mutate } = useSWR<Withdrawal>(
-    '/v2/withdraw.json?response_json=true',
-  );
+  const { data, error, mutate } = useSWR<Withdrawal>('/v2/withdraw.json');
   const isDataLoading = !data && !error;
   useEffect(() => {
     if (data?.translations) {
@@ -169,13 +110,10 @@ const WithdrawalPage = () => {
   }, [data]);
   const cancelRequest = useCallback(
     async (id: number): Promise<void> => {
-      const response = await postApi(
-        '/v2/withdraw/cancel.json?response_json=true',
-        {
-          authenticity_token: user.token!,
-          request_id: id,
-        },
-      ).catch(() => {
+      const response = await postApi('/v2/withdraw/cancel.json', {
+        authenticity_token: user.token!,
+        request_id: id,
+      }).catch(() => {
         addToast('failed to cancel withdraw', {
           appearance: 'error',
           autoDismiss: true,
@@ -196,7 +134,7 @@ const WithdrawalPage = () => {
       }
       const response = await postApi<
         RequestWithdrawalResponse | Withdrawal | null
-      >('/v2/withdraw.json?response_json=true', {
+      >('/v2/withdraw.json', {
         authenticity_token: user.token!,
         amount: amount.toString(),
         id: defaultAccount!.id,
@@ -224,7 +162,7 @@ const WithdrawalPage = () => {
     async (data: any) => {
       setWithdrawalLoading(true);
       const response = await postApi<RequestWithdrawalResponse | null>(
-        '/v2/withdraw.json?response_json=true',
+        '/v2/withdraw.json',
         { ...data, authenticity_token: user.token! },
         {
           formData: true,
@@ -309,7 +247,7 @@ const WithdrawalPage = () => {
         </>
       )}
       {withdrawalConfirmData && (
-        <WithdrawalConfirm
+        <WithdrawalConfirmModal
           data={withdrawalConfirmData}
           onCancel={() => setWithdrawalConfirmData(null)}
           onConfirm={confirmWithdrawal}

@@ -311,6 +311,9 @@ export const TRANSLATION_SYMBOLS = [
   'responsible_gambling_close',
   'contact_page_failed_to_load',
   'contact_page_success',
+  'sub_header_help',
+  'sub_header_where_to_play',
+  'sub_header_play_responsibly',
 ];
 
 export const HEAD_DATA: HeadData = {

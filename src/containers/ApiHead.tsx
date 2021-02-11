@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import useSWR from 'swr';
 import SeoPages from '../types/api/content/SeoPages';
 import { postApi } from '../utils/apiUtils';
+import RailsApiResponse from '../types/api/RailsApiResponse';
 
 const ApiHead = () => {
   const { locale } = useConfig();
@@ -16,8 +17,8 @@ const ApiHead = () => {
     }),
     [pathname, locale],
   );
-  const { data } = useSWR<SeoPages>(
-    ['/railsapi/v1/content/seo_pages/fetch?response_json=true', params],
+  const { data } = useSWR<RailsApiResponse<SeoPages>>(
+    ['/railsapi/v1/content/seo_pages/fetch', params],
     postApi,
   );
   const seoData = data?.Success ? data?.Data : null;
