@@ -20,6 +20,7 @@ import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
 import Alert from 'react-bootstrap/Alert';
 import WithdrawalConfirmModal from '../../components/modals/WithdrawalConfirmModal';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -31,7 +32,12 @@ const WithdrawalRequests = ({
   onCancelRequest,
 }: WithdrawalRequestsProps) => {
   const { t } = useI18n();
-
+  const [cancelLoading, setCancelLoading] = useState<number | null>(null);
+  const handleCancel = async (id: number) => {
+    setCancelLoading(id);
+    await onCancelRequest(id);
+    setCancelLoading(null);
+  };
   return (
     <div className="d-flex flex-column">
       <div className="table-container d-flex flex-column mb-4">
@@ -64,8 +70,18 @@ const WithdrawalRequests = ({
                     <strong className="heading-sm">Request cancel</strong>
                     <Button
                       variant="secondary"
-                      onClick={() => onCancelRequest(request.id)}
+                      onClick={() => handleCancel(request.id)}
                     >
+                      {cancelLoading === request.id && (
+                        <Spinner
+                          data-testid="spinner"
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          className="mr-1"
+                        />
+                      )}
                       Cancel
                     </Button>
                   </td>
@@ -84,6 +100,10 @@ const WithdrawalPage = () => {
   const { user, locale } = useConfig();
   const { contentStyle } = useUIConfig();
   const { addToast } = useToasts();
+  const [submitResponse, setSubmitResponse] = useState<{
+    success: boolean;
+    msg: string | null;
+  } | null>(null);
   const [withdrawalLoading, setWithdrawalLoading] = useState(false);
   const [
     withdrawalConfirmData,
@@ -112,16 +132,25 @@ const WithdrawalPage = () => {
   }, [data]);
   const cancelRequest = useCallback(
     async (id: number): Promise<void> => {
-      const response = await postApi('/railsapi/v1/withdrawals/cancel', {
-        authenticity_token: user.token!,
-        request_id: id,
-      }).catch(() => {
-        addToast('failed to cancel withdraw', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
+      const response = await postApi<RailsApiResponse<null>>(
+        '/railsapi/v1/withdrawals/cancel',
+        {
+          request_id: id,
+        },
+      ).catch((res: RailsApiResponse<null>) => {
+        if (res.Fallback) {
+          addToast('failed to cancel withdraw', {
+            appearance: 'error',
+            autoDismiss: true,
+          });
+        }
+        return res;
       });
-      console.log(response);
+      mutate();
+      return setSubmitResponse({
+        success: response.Success,
+        msg: response.Message,
+      });
     },
     [user],
   );
@@ -137,7 +166,6 @@ const WithdrawalPage = () => {
       const response = await postApi<
         RequestWithdrawalResponse | Withdrawal | null
       >('/railsapi/v1/withdrawals', {
-        authenticity_token: user.token!,
         amount: amount.toString(),
         id: defaultAccount!.id,
       }).catch(() => {
@@ -153,7 +181,7 @@ const WithdrawalPage = () => {
       } else if (response) {
         const { error, ...withoutErrorData } = data!;
         mutate(withoutErrorData, false);
-        setWithdrawalConfirmData(
+        return setWithdrawalConfirmData(
           (response as RequestWithdrawalResponse).confirmation,
         );
       }
@@ -163,21 +191,28 @@ const WithdrawalPage = () => {
   const confirmWithdrawal = useCallback(
     async (data: any) => {
       setWithdrawalLoading(true);
-      const response = await postApi<RequestWithdrawalResponse | null>(
+      const response = await postApi<RailsApiResponse<null>>(
         '/railsapi/v1/withdrawals/confirm',
-        { ...data, authenticity_token: user.token! },
+        data,
         {
           formData: true,
         },
-      ).catch(() => {
-        addToast('failed to withdraw amount', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-        return null;
+      ).catch((res: RailsApiResponse<null>) => {
+        if (res.Fallback) {
+          addToast('failed to withdraw amount', {
+            appearance: 'error',
+            autoDismiss: true,
+          });
+        }
+        return res;
       });
       setWithdrawalLoading(false);
-      console.log(response);
+      setWithdrawalConfirmData(null);
+      mutate();
+      return setSubmitResponse({
+        success: response.Success,
+        msg: response.Message,
+      });
     },
     [defaultAccount, user],
   );
@@ -206,9 +241,20 @@ const WithdrawalPage = () => {
             amount={user.balance!}
             tooltip={t('playable_amount_tooltip')}
           />
-          {(!!data.error || !defaultAccount) && (
-            <Alert show variant={!defaultAccount ? 'info' : 'danger'}>
-              {data.error || data.note}
+          {(!!data.error || !defaultAccount || submitResponse) && (
+            <Alert
+              show
+              variant={
+                submitResponse
+                  ? submitResponse.success
+                    ? 'success'
+                    : 'danger'
+                  : !defaultAccount
+                  ? 'info'
+                  : 'danger'
+              }
+            >
+              {submitResponse?.msg || data.error || data.note}
             </Alert>
           )}
           <InputContainer
