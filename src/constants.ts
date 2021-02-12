@@ -304,6 +304,7 @@ export const TRANSLATION_SYMBOLS = [
   'forgot_password_submit_btn',
   'forgot_password_success',
   'forgot_password_failed',
+  'forgot_login_page_title',
   'forgot_login_success',
   'forgot_login_failed',
   'set_password_success',
@@ -317,6 +318,14 @@ export const TRANSLATION_SYMBOLS = [
   'responsible_gambling_close',
   'contact_page_failed_to_load',
   'contact_page_success',
+  'questions_or_suggestions',
+  'call_us',
+  'time_workday',
+  'time_weekend',
+  'use_form_below',
+  'contact_form_text',
+  'forgot_password_text',
+  'forgot_login_text',
 ];
 
 export const HEAD_DATA: HeadData = {

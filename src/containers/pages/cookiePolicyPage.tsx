@@ -40,42 +40,49 @@ const CookiePolicyPage = () => {
   };
 
   return (
-    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">
-      <h1 className="mb-4">{t('cookie_page_title')}</h1>
-      <Form.Check type="checkbox" id="checkbox_all">
-        <Form.Check.Input
-          type="checkbox"
-          checked={isChecked('all')}
-          onChange={() => toggleCookie('all')}
-        />
-        <Form.Check.Label>{t('cookies_check_all')}</Form.Check.Label>
-      </Form.Check>
-      <p className="pt-1">{t(`cookies_check_all_desc`)}</p>
-      <div className="pl-3 pt-2">
-        {cookiesId.map(id => (
-          <>
-            <Form.Check type="checkbox" id={`checkbox_${id}`}>
-              <Form.Check.Input
+    <main className="page-container">
+      <div className="page-inner">
+        <h2 className="mb-4">{t('cookie_page_title')}</h2>
+        <Form.Check custom type="checkbox" id="checkbox_all" className="mb-3">
+          <Form.Check.Input
+            type="checkbox"
+            checked={isChecked('all')}
+            onChange={() => toggleCookie('all')}
+          />
+          <Form.Check.Label>{t('cookies_check_all')}</Form.Check.Label>
+        </Form.Check>
+        <p className="mt-2 text-14">{t(`cookies_check_all_desc`)}</p>
+        <div className="pl-4">
+          {cookiesId.map(id => (
+            <>
+              <Form.Check
+                custom
                 type="checkbox"
-                checked={isChecked(id)}
-                onChange={() => toggleCookie(id)}
-              />
-              <Form.Check.Label>{t(`cookies_check_${id}`)}</Form.Check.Label>
-            </Form.Check>
-            <p className="py-1">{t(`cookies_check_${id}_desc`)}</p>
-          </>
-        ))}
-      </div>
-      <div>
-        {['cancel', 'save'].map(id => (
-          <Button
-            className="mr-1"
-            variant="primary"
-            onClick={() => handleBtnClick(id)}
-          >
-            {t(`cookies_btn_${id}`)}
-          </Button>
-        ))}
+                id={`checkbox_${id}`}
+                className="mb-3 mt-4 pt-2"
+              >
+                <Form.Check.Input
+                  type="checkbox"
+                  checked={isChecked(id)}
+                  onChange={() => toggleCookie(id)}
+                />
+                <Form.Check.Label>{t(`cookies_check_${id}`)}</Form.Check.Label>
+              </Form.Check>
+              <p className="mt-2 text-14">{t(`cookies_check_${id}_desc`)}</p>
+            </>
+          ))}
+        </div>
+        <div>
+          {['cancel', 'save'].map(id => (
+            <Button
+              className="mr-2 mt-3 mt-md-4"
+              variant="primary"
+              onClick={() => handleBtnClick(id)}
+            >
+              {t(`cookies_btn_${id}`)}
+            </Button>
+          ))}
+        </div>
       </div>
     </main>
   );

@@ -12,7 +12,7 @@ const CookieConsent = () => {
   }
   const handleAccept = () => setCookiesAccepted(true);
   return (
-    <nav className="navbar fixed-bottom navbar-dark bg-dark">
+    <nav className="navbar fixed-bottom navbar-dark bg-brand">
       <span className="navbar-text">
         We use cookies on this site to enhance your user experience. Learn more
         about <Link to="/cookie-policy">Cookies policy.</Link>

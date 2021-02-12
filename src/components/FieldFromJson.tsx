@@ -5,15 +5,19 @@ import Spinner from 'react-bootstrap/Spinner';
 import { Form as Field } from '../types/api/JsonFormPage';
 import { FormState } from 'react-hook-form';
 import clsx from 'clsx';
+import { useI18n } from '../hooks/useI18n';
 
 interface Props {
   field: Field;
   formState: FormState<Record<string, any>>;
   error?: { message: string };
+  size?: 'sm' | 'lg' | undefined;
 }
 
 const FieldFromJson = React.forwardRef(
-  ({ field, formState, error }: Props, ref: any) => {
+  ({ field, formState, error, size }: Props, ref: any) => {
+    const { t } = useI18n();
+
     if (field.type === 'submit') {
       return (
         <Button
@@ -70,7 +74,7 @@ const FieldFromJson = React.forwardRef(
           data-testid={formGroupAs}
           ref={ref}
           as={formGroupAs}
-          size="sm"
+          size={size}
           type={formGroupType}
           autoComplete={
             field.type === 'password' ? 'current-password' : undefined
@@ -83,13 +87,20 @@ const FieldFromJson = React.forwardRef(
         </Form.Control>
         {!isFieldSelect && (
           <>
-            <label data-testid={`${field.id}-title`} htmlFor="amount">
+            <label
+              data-testid={`${field.id}-title`}
+              htmlFor="amount"
+              className="text-14"
+            >
               {field.title}
             </label>
             <div className="form-group__icons">
               <i className="icon-check"></i>
               <i className="icon-exclamation"></i>
             </div>
+            <small className="form-group__error-msg">
+              {error ? error.message : t('input_generic_error_msg')}
+            </small>
           </>
         )}
       </Form.Group>
