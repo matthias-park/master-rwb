@@ -1,50 +1,22 @@
 export interface Withdrawal {
-  token: string;
   title: string;
-  action: string;
-  translations: { [key: string]: string };
+  translations?: { [key: string]: string };
   requests?: Request[];
   info: string;
-  info_data: InfoData;
-  fields: Field[];
-  note?: string;
-  error?: string;
+  default_account?: DefaultAccount;
 }
 
-export interface Field {
-  id: string;
-  type: string;
-  default?: number;
-  values?: Value[];
-  title?: string;
-  errors?: any[];
-  visible?: boolean;
-  disabled?: boolean;
-}
-
-export interface Value {
-  id: string;
-  title: string;
-  additional_fields: any[];
-  image: string;
-  set_values: SetValues;
-}
-
-export interface SetValues {
-  min_withdraw: string;
-  max_withdraw: string;
-}
-
-export interface InfoData {
-  min_withdraw_amount: string;
-  max_withdraw_amount: string;
-  user_max_withdraw_amount: string;
-  fee: string;
-  days_interval_banks: null;
-  days_interval_ebanks: null;
-  fee_percentage: null;
-  withdrawal_max_amount_weekly: string;
-  withdrawal_max_amount_monthly: string;
+export interface DefaultAccount {
+  uniq_id: string;
+  bank: string;
+  bank_id: number;
+  account: string;
+  name: string;
+  min_withdraw_amount: number;
+  max_withdraw_amount: number;
+  editable: boolean;
+  allow_sepa_payout: boolean;
+  net_balance: number;
 }
 
 export interface Request {

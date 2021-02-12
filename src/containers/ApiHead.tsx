@@ -20,6 +20,9 @@ const ApiHead = () => {
   const { data } = useSWR<RailsApiResponse<SeoPages>>(
     ['/railsapi/v1/content/seo_pages/fetch', params],
     postApi,
+    {
+      errorRetryCount: 0,
+    },
   );
   const seoData = data?.Success ? data?.Data : null;
   return (

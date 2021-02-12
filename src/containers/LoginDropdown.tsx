@@ -34,12 +34,13 @@ const LoginForm = ({
   });
   const { mutateUser } = useConfig();
   const forgotPasswordRoute = useRoutePath(ComponentName.ForgotPasswordPage);
-  const onSubmit = async ({ email, password }) => {
+  const onSubmit = async ({ email, password, remember_me }) => {
     const response = await postApi<RailsApiResponse<NET_USER | null>>(
       '/railsapi/v1/login',
       {
         login: email,
         password,
+        remember_me,
       },
     ).catch((res: RailsApiResponse<null>) => {
       if (res.Fallback) {
@@ -103,7 +104,14 @@ const LoginForm = ({
         error={errors.password}
       />
       <div className="d-flex align-items-center flex-wrap">
-        <Form.Check custom id="remember_check" label={t('login_remember_me')} />
+        <Form.Check
+          ref={register({
+            setValueAs: value => Boolean(value),
+          })}
+          custom
+          name="remember_me"
+          label={t('login_remember_me')}
+        />
         <OverlayTrigger
           placement={'bottom'}
           overlay={

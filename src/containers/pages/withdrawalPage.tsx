@@ -10,13 +10,12 @@ import Spinner from 'react-bootstrap/Spinner';
 import {
   Withdrawal,
   Request,
-  RequestWithdrawalResponse,
   WithdrawalConfirmation,
 } from '../../types/api/user/Withdrawal';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import { useCallback } from 'react';
-import { postApi } from '../../utils/apiUtils';
+import { postApi, getApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
 import Alert from 'react-bootstrap/Alert';
 import WithdrawalConfirmModal from '../../components/modals/WithdrawalConfirmModal';
@@ -52,6 +51,7 @@ const WithdrawalRequests = ({
           </thead>
           <tbody>
             {requests.map((request, index) => {
+              if (request.cancel_requested) return null;
               return (
                 <tr key={index}>
                   <td>
@@ -111,6 +111,12 @@ const WithdrawalPage = () => {
   ] = useState<WithdrawalConfirmation | null>(null);
   const { data, error, mutate } = useSWR<Withdrawal>(
     '/railsapi/v1/withdrawals',
+    url =>
+      getApi<Withdrawal>(url).catch(
+        async (res: RailsApiResponse<Withdrawal>) => {
+          return (await res).Data;
+        },
+      ),
   );
   const isDataLoading = !data && !error;
   useEffect(() => {
@@ -118,17 +124,11 @@ const WithdrawalPage = () => {
       set(
         locale,
         Object.keys(data.translations).reduce((obj, key) => {
-          obj[`withdrawal_page_${key}`] = data.translations[key];
+          obj[`withdrawal_page_${key}`] = data.translations![key];
           return obj;
         }, {}),
       );
     }
-  }, [data]);
-  const defaultAccount = useMemo(() => {
-    if (!data) return null;
-    const accountField = data.fields.find(field => field.id === 'id');
-    if (!accountField?.values?.length) return null;
-    return accountField.values[accountField.default || 0];
   }, [data]);
   const cancelRequest = useCallback(
     async (id: number): Promise<void> => {
@@ -157,17 +157,17 @@ const WithdrawalPage = () => {
   const requestWithdrawal = useCallback(
     async (amount: number) => {
       setWithdrawalLoading(true);
-      if (!defaultAccount) {
+      if (!data?.default_account) {
         return addToast('account not found for withdrawal', {
           appearance: 'error',
           autoDismiss: true,
         });
       }
       const response = await postApi<
-        RequestWithdrawalResponse | Withdrawal | null
+        WithdrawalConfirmation | Withdrawal | null
       >('/railsapi/v1/withdrawals', {
         amount: amount.toString(),
-        id: defaultAccount!.id,
+        id: data?.default_account.uniq_id,
       }).catch(() => {
         addToast('failed to withdraw amount', {
           appearance: 'error',
@@ -176,17 +176,15 @@ const WithdrawalPage = () => {
         return null;
       });
       setWithdrawalLoading(false);
-      if (response && (response as Withdrawal)?.error) {
-        return mutate(response as Withdrawal, false);
-      } else if (response) {
-        const { error, ...withoutErrorData } = data!;
-        mutate(withoutErrorData, false);
-        return setWithdrawalConfirmData(
-          (response as RequestWithdrawalResponse).confirmation,
-        );
-      }
+      // if (response && (response as Withdrawal)?.error) {
+      //   return mutate(response as Withdrawal, false);
+      // } else if (response) {
+      // const { error, ...withoutErrorData } = data!;
+      mutate(data, false);
+      return setWithdrawalConfirmData(response as WithdrawalConfirmation);
+      // }
     },
-    [defaultAccount, user],
+    [data?.default_account, user],
   );
   const confirmWithdrawal = useCallback(
     async (data: any) => {
@@ -214,7 +212,7 @@ const WithdrawalPage = () => {
         msg: response.Message,
       });
     },
-    [defaultAccount, user],
+    [data?.default_account, user],
   );
   const questionItems = useMemo(
     () => [
@@ -241,7 +239,7 @@ const WithdrawalPage = () => {
             amount={user.balance!}
             tooltip={t('playable_amount_tooltip')}
           />
-          {(!!data.error || !defaultAccount || submitResponse) && (
+          {(!data?.default_account || submitResponse) && (
             <Alert
               show
               variant={
@@ -249,42 +247,42 @@ const WithdrawalPage = () => {
                   ? submitResponse.success
                     ? 'success'
                     : 'danger'
-                  : !defaultAccount
+                  : !data?.default_account
                   ? 'info'
                   : 'danger'
               }
             >
-              {submitResponse?.msg || data.error || data.note}
+              {submitResponse?.msg || data.info}
             </Alert>
           )}
           <InputContainer
             title={t('withdrawal_amount')}
             placeholder={`${user.currency || ''} 0`}
             buttonText={t('withdrawal_btn')}
-            min={defaultAccount?.set_values.min_withdraw.split(' ')?.[0]}
-            max={defaultAccount?.set_values.max_withdraw.split(' ')?.[0]}
+            min={data.default_account?.min_withdraw_amount}
+            max={data.default_account?.max_withdraw_amount}
             loading={!withdrawalConfirmData && withdrawalLoading}
             onSubmit={requestWithdrawal}
-            disabled={!defaultAccount}
+            disabled={!data?.default_account}
             currency={user.currency}
           />
-          <div className="info-container mb-4">
-            {/* <p className="info-container__info pb-0 mb-n1">
+          {!!data.default_account && (
+            <div className="info-container mb-4">
+              {/* <p className="info-container__info pb-0 mb-n1">
               <strong>Your bank account number</strong>
             </p> */}
-            <p
-              className="info-container__info text-14 mb-0"
-              dangerouslySetInnerHTML={{ __html: data.info }}
-            />
-            {!!defaultAccount && (
+              <p
+                className="info-container__info text-14 mb-0"
+                dangerouslySetInnerHTML={{ __html: data.info }}
+              />
               <div className="info-container__text">
                 <ul className="list-unstyled mb-0">
                   <li className="mb-1">Your current bank account number:</li>
-                  <li className="mb-1">{defaultAccount?.id}</li>
+                  <li className="mb-1">{data.default_account.uniq_id}</li>
                 </ul>
               </div>
-            )}
-          </div>
+            </div>
+          )}
           {!!data.requests && (
             <WithdrawalRequests
               onCancelRequest={cancelRequest}

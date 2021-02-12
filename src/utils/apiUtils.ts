@@ -24,7 +24,9 @@ export const getApi = <T>(url: string): Promise<T> => {
   };
   return fetch(`${window.API_URL}${locale}${url}`, config).then(res => {
     if (!res.ok) {
-      throw res.status === 400 ? res.json() : RailsApiResponseFallback;
+      throw res.status === 400
+        ? res.json()
+        : Promise.resolve(RailsApiResponseFallback);
     }
     return res.json();
   });
