@@ -14,29 +14,32 @@ import { AVAILABLE_LOCALES, NAVIGATION_ROUTES, TestEnv } from '../constants';
 import { useToasts } from 'react-toast-notifications';
 import { usePrevious } from './index';
 import useLocalStorage from './useLocalStorage';
+import RailsApiResponse from '../types/api/RailsApiResponse';
 
 const useUser = () => {
   const { addToast } = useToasts();
-  const { data: userData, error: userError, mutate: mutateUser } = useSWR<
-    UserStatus
-  >(!TestEnv ? '/api/app/v1/user/status.json' : null, getApi, {
-    revalidateOnFocus: true,
-    refreshInterval: 300000, // 5 min
-    onErrorRetry: error => {
-      addToast(`Failed to fetch user data`, {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-      console.log(error);
+  const {
+    data: userData,
+    error: userError,
+    mutate: mutateUser,
+  } = useSWR<UserStatus | null>(
+    !TestEnv ? '/railsapi/v1/user/status' : null,
+    url => getApi<RailsApiResponse<UserStatus>>(url).then(res => res.Data),
+    {
+      revalidateOnFocus: true,
+      refreshInterval: 300000, // 5 min
+      onErrorRetry: () => {
+        addToast(`Failed to fetch user data`, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      },
     },
-  });
-  const prevUser = usePrevious(userData?.user);
+  );
+
+  const prevUser = usePrevious(userData);
   useEffect(() => {
-    if (
-      !userData?.user.logout &&
-      !userData?.user.logged_in &&
-      prevUser?.logged_in
-    ) {
+    if (!userData?.logout && !userData?.logged_in && prevUser?.logged_in) {
       addToast(`User session ended`, {
         appearance: 'warning',
         autoDismiss: true,
@@ -44,11 +47,11 @@ const useUser = () => {
     }
   }, [userData, prevUser]);
 
-  let user = { logged_in: false, loading: false };
+  let user: UserStatus = { logged_in: false, loading: false };
   if (!userData && !userError) {
     user.loading = true;
-  } else if (userData?.user && !userError) {
-    user = userData.user;
+  } else if (userData && !userError) {
+    user = userData;
   }
   return { user, mutateUser };
 };

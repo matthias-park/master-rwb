@@ -83,11 +83,12 @@ const DepositPage = () => {
       )}
       <InputContainer
         title={t('select_amount')}
-        placeholder="€ 0"
+        placeholder={`${user.currency || ''} 0`}
         buttonText={t('deposit_btn')}
         loading={depositLoading}
         onSubmit={handleRequestDeposit}
         quickAmounts={[10, 20, 50, 100]}
+        currency={user.currency}
       />
       <div className="info-container mb-4">
         <p className="info-container__info text-14 mb-0">

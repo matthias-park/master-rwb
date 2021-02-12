@@ -37,20 +37,6 @@ export interface Evtsrv {
   betslip: string;
 }
 
-export interface User {
-  logout?: true;
-  logged_in: boolean;
-  token?: string;
-  format?: string;
-  id?: number;
-  name?: string;
-  balance?: string;
-  loading: boolean;
-  email?: string;
-  first_name?: string;
-  last_name?: string;
-}
-
 export interface NET_USER {
   PlayerId: number;
   Login: string;
@@ -63,8 +49,17 @@ export interface NET_USER {
 }
 
 export interface UserStatus {
-  user: User;
-  redirect?: any;
+  loading: boolean;
+  logout?: true;
+  logged_in: boolean;
+  token?: string;
+  id?: number;
+  name?: string;
+  balance?: string;
+  currency?: string;
+  email?: string;
+  first_name?: string;
+  last_name?: string;
 }
 
 export default UserStatus;

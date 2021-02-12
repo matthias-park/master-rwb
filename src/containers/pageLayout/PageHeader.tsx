@@ -17,25 +17,27 @@ import {
 import BrandLogo from '../../components/header/BrandLogo';
 import { useToasts } from 'react-toast-notifications';
 import LocaleSelector from '../../components/header/LocaleSelector';
+import { useI18n } from '../../hooks/useI18n';
 
 const SubNavLinks = () => {
   const { locales, locale, setLocale } = useConfig();
+  const { t } = useI18n();
   return (
     <div className="row w-100 align-items-start order-2 order-xl-1">
       <ul className="header__nav header__nav--secondary mr-auto mr-lg-0 ml-lg-auto">
         <li className="header__nav-item">
           <Link className="header__nav-item-link" to="/help">
-            Help
+            {t('sub_header_help')}
           </Link>
         </li>
         <li className="header__nav-item">
           <Link className="header__nav-item-link" to="/">
-            Waar kan je spelen?
+            {t('sub_header_where_to_play')}
           </Link>
         </li>
         <li className="header__nav-item">
           <Link className="header__nav-item-link" to="/">
-            Verantwoord spelen
+            {t('sub_header_play_responsibly')}
           </Link>
         </li>
         <li className="header-search">
@@ -63,11 +65,9 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
       console.log(err);
     });
     mutateUser({
-      user: {
-        loading: false,
-        logged_in: false,
-        logout: true,
-      },
+      loading: false,
+      logged_in: false,
+      logout: true,
     });
   };
 

@@ -2,6 +2,7 @@ import { ConfigRoute } from './types/Config';
 import HeadData from './types/HeadData';
 import HeaderLink from './types/HeaderLinks';
 import ContactUsPage from './containers/pages/contactUsPage';
+import RailsApiResponse from './types/api/RailsApiResponse';
 
 export const TestEnv = process.env.NODE_ENV === 'test';
 export enum ComponentName {
@@ -285,7 +286,6 @@ export const TRANSLATION_SYMBOLS = [
   'register_personal_code_invalid',
   'nav_link_sports',
   'login_field_required',
-  'login_invalid_credentials',
   'promotions_page_title',
   'promotions_failed_to_load',
   'cookie_page_title',
@@ -326,6 +326,9 @@ export const TRANSLATION_SYMBOLS = [
   'contact_form_text',
   'forgot_password_text',
   'forgot_login_text',
+  'sub_header_help',
+  'sub_header_where_to_play',
+  'sub_header_play_responsibly',
 ];
 
 export const HEAD_DATA: HeadData = {
@@ -609,3 +612,11 @@ export const iconName: { [key: string]: string } = {
 };
 
 export const REDIRECT_PROTECTED_NOT_LOGGED_IN = ComponentName.HomePage;
+
+export const RailsApiResponseFallback: RailsApiResponse<null> = {
+  Code: -1,
+  Data: null,
+  Message: null,
+  Success: false,
+  Fallback: true,
+};

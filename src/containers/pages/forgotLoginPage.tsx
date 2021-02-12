@@ -11,12 +11,16 @@ import { useForm } from 'react-hook-form';
 import Spinner from 'react-bootstrap/Spinner';
 import { useConfig } from '../../hooks/useConfig';
 import { Redirect } from 'react-router-dom';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 const ForgotLoginPage = () => {
   const { register, handleSubmit, errors, formState } = useForm({
     mode: 'onBlur',
   });
-  const [apiResponse, setApiResponse] = useState<boolean | null>(null);
+  const [apiResponse, setApiResponse] = useState<{
+    success: boolean;
+    msg: string;
+  } | null>(null);
   const { t } = useI18n();
   const { addToast } = useToasts();
   const { user } = useConfig();
@@ -26,22 +30,24 @@ const ForgotLoginPage = () => {
   }
 
   const onSubmit = async ({ email }) => {
-    const result = await postApi<ForgotPasswordResponse>(
-      '/players/forgot_login.json?response_json=true',
+    const result = await postApi<RailsApiResponse<ForgotPasswordResponse>>(
+      '/railsapi/v1/login/forgot_login',
       {
         email,
       },
-    ).catch(() => {
-      addToast('failed to recover username', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-      return {
-        success: false,
-      };
+    ).catch((res: RailsApiResponse<null>) => {
+      if (res.Fallback) {
+        addToast('failed to recover username', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      }
+      return res;
     });
-    setApiResponse(result.success);
-    return;
+    return setApiResponse({
+      success: result.Success,
+      msg: result.Message || '',
+    });
   };
   return (
     <main className="page-container">

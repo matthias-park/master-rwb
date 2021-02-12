@@ -12,15 +12,15 @@ import {
   Request,
   RequestWithdrawalResponse,
   WithdrawalConfirmation,
-  WithdrawalConfirmationParams,
 } from '../../types/api/user/Withdrawal';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import { useCallback } from 'react';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
-import Modal from 'react-bootstrap/Modal';
-import { Alert } from 'react-bootstrap';
+import Alert from 'react-bootstrap/Alert';
+import WithdrawalConfirmModal from '../../components/modals/WithdrawalConfirmModal';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -32,7 +32,12 @@ const WithdrawalRequests = ({
   onCancelRequest,
 }: WithdrawalRequestsProps) => {
   const { t } = useI18n();
-
+  const [cancelLoading, setCancelLoading] = useState<number | null>(null);
+  const handleCancel = async (id: number) => {
+    setCancelLoading(id);
+    await onCancelRequest(id);
+    setCancelLoading(null);
+  };
   return (
     <div className="d-flex flex-column">
       <div className="table-container d-flex flex-column mb-4">
@@ -50,7 +55,7 @@ const WithdrawalRequests = ({
               return (
                 <tr key={index}>
                   <td>
-                    <strong className="heading-sm">{t('_date')}</strong>
+                    <strong className="heading-sm">ID</strong>
                     {request.id}
                   </td>
                   <td className="text-sm-center">
@@ -68,6 +73,16 @@ const WithdrawalRequests = ({
                       size="sm"
                       onClick={() => onCancelRequest(request.id)}
                     >
+                      {cancelLoading === request.id && (
+                        <Spinner
+                          data-testid="spinner"
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          className="mr-1"
+                        />
+                      )}
                       Cancel
                     </Button>
                   </td>
@@ -81,73 +96,23 @@ const WithdrawalRequests = ({
   );
 };
 
-interface WithdrawalConfirmProps {
-  data: WithdrawalConfirmation;
-  onCancel: () => void;
-  onConfirm: (data: WithdrawalConfirmationParams) => void;
-  loading?: boolean;
-}
-
-const WithdrawalConfirm = ({
-  data,
-  onCancel,
-  onConfirm,
-  loading,
-}: WithdrawalConfirmProps) => {
-  const { t } = useI18n();
-  return (
-    <Modal show={true} onHide={onCancel} backdrop="static" centered>
-      <Modal.Header closeButton>
-        <Modal.Title>{t('withdrawal_page_withdrawal_confirm')}</Modal.Title>
-      </Modal.Header>
-
-      <Modal.Body>
-        {Object.keys(data.confirm_info).map(key => (
-          <div key={key}>
-            {t(`withdrawal_page_${key}`)}: {data.confirm_info[key]}
-          </div>
-        ))}
-      </Modal.Body>
-
-      <Modal.Footer>
-        <Button onClick={onCancel} variant="secondary" className="mx-auto">
-          {t('withdrawal_page_cancel')}
-        </Button>
-        <Button
-          onClick={() => {
-            onConfirm(data.params);
-          }}
-          variant="primary"
-          className="mx-auto"
-        >
-          {loading && (
-            <Spinner
-              data-testid="spinner"
-              as="span"
-              animation="border"
-              size="sm"
-              role="status"
-              className="mr-1"
-            />
-          )}
-          {t('withdrawal_page_confirm')}
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
-};
-
 const WithdrawalPage = () => {
   const { t, set } = useI18n();
   const { user, locale } = useConfig();
   const { contentStyle } = useUIConfig();
   const { addToast } = useToasts();
+  const [submitResponse, setSubmitResponse] = useState<{
+    success: boolean;
+    msg: string | null;
+  } | null>(null);
   const [withdrawalLoading, setWithdrawalLoading] = useState(false);
   const [
     withdrawalConfirmData,
     setWithdrawalConfirmData,
   ] = useState<WithdrawalConfirmation | null>(null);
-  const { data, error, mutate } = useSWR<Withdrawal>('/v2/withdraw.json');
+  const { data, error, mutate } = useSWR<Withdrawal>(
+    '/railsapi/v1/withdrawals',
+  );
   const isDataLoading = !data && !error;
   useEffect(() => {
     if (data?.translations) {
@@ -168,16 +133,25 @@ const WithdrawalPage = () => {
   }, [data]);
   const cancelRequest = useCallback(
     async (id: number): Promise<void> => {
-      const response = await postApi('/v2/withdraw/cancel.json', {
-        authenticity_token: user.token!,
-        request_id: id,
-      }).catch(() => {
-        addToast('failed to cancel withdraw', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
+      const response = await postApi<RailsApiResponse<null>>(
+        '/railsapi/v1/withdrawals/cancel',
+        {
+          request_id: id,
+        },
+      ).catch((res: RailsApiResponse<null>) => {
+        if (res.Fallback) {
+          addToast('failed to cancel withdraw', {
+            appearance: 'error',
+            autoDismiss: true,
+          });
+        }
+        return res;
       });
-      console.log(response);
+      mutate();
+      return setSubmitResponse({
+        success: response.Success,
+        msg: response.Message,
+      });
     },
     [user],
   );
@@ -192,8 +166,7 @@ const WithdrawalPage = () => {
       }
       const response = await postApi<
         RequestWithdrawalResponse | Withdrawal | null
-      >('/v2/withdraw.json', {
-        authenticity_token: user.token!,
+      >('/railsapi/v1/withdrawals', {
         amount: amount.toString(),
         id: defaultAccount!.id,
       }).catch(() => {
@@ -209,7 +182,7 @@ const WithdrawalPage = () => {
       } else if (response) {
         const { error, ...withoutErrorData } = data!;
         mutate(withoutErrorData, false);
-        setWithdrawalConfirmData(
+        return setWithdrawalConfirmData(
           (response as RequestWithdrawalResponse).confirmation,
         );
       }
@@ -219,21 +192,28 @@ const WithdrawalPage = () => {
   const confirmWithdrawal = useCallback(
     async (data: any) => {
       setWithdrawalLoading(true);
-      const response = await postApi<RequestWithdrawalResponse | null>(
-        '/v2/withdraw.json',
-        { ...data, authenticity_token: user.token! },
+      const response = await postApi<RailsApiResponse<null>>(
+        '/railsapi/v1/withdrawals/confirm',
+        data,
         {
           formData: true,
         },
-      ).catch(() => {
-        addToast('failed to withdraw amount', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-        return null;
+      ).catch((res: RailsApiResponse<null>) => {
+        if (res.Fallback) {
+          addToast('failed to withdraw amount', {
+            appearance: 'error',
+            autoDismiss: true,
+          });
+        }
+        return res;
       });
       setWithdrawalLoading(false);
-      console.log(response);
+      setWithdrawalConfirmData(null);
+      mutate();
+      return setSubmitResponse({
+        success: response.Success,
+        msg: response.Message,
+      });
     },
     [defaultAccount, user],
   );
@@ -262,20 +242,32 @@ const WithdrawalPage = () => {
             amount={user.balance!}
             tooltip={t('playable_amount_tooltip')}
           />
-          {(!!data.error || !defaultAccount) && (
-            <Alert show variant={!defaultAccount ? 'info' : 'danger'}>
-              {data.error || data.note}
+          {(!!data.error || !defaultAccount || submitResponse) && (
+            <Alert
+              show
+              variant={
+                submitResponse
+                  ? submitResponse.success
+                    ? 'success'
+                    : 'danger'
+                  : !defaultAccount
+                  ? 'info'
+                  : 'danger'
+              }
+            >
+              {submitResponse?.msg || data.error || data.note}
             </Alert>
           )}
           <InputContainer
             title={t('withdrawal_amount')}
-            placeholder="€ 300"
+            placeholder={`${user.currency || ''} 0`}
             buttonText={t('withdrawal_btn')}
             min={defaultAccount?.set_values.min_withdraw.split(' ')?.[0]}
             max={defaultAccount?.set_values.max_withdraw.split(' ')?.[0]}
             loading={!withdrawalConfirmData && withdrawalLoading}
             onSubmit={requestWithdrawal}
             disabled={!defaultAccount}
+            currency={user.currency}
           />
           <div className="info-container mb-4">
             {/* <p className="info-container__info pb-0 mb-n1">
@@ -304,7 +296,7 @@ const WithdrawalPage = () => {
         </>
       )}
       {withdrawalConfirmData && (
-        <WithdrawalConfirm
+        <WithdrawalConfirmModal
           data={withdrawalConfirmData}
           onCancel={() => setWithdrawalConfirmData(null)}
           onConfirm={confirmWithdrawal}

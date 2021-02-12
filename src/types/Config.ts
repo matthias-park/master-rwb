@@ -1,6 +1,5 @@
 import { ComponentName } from '../constants';
 import UserStatus from './UserStatus';
-import { User } from './UserStatus';
 export interface ConfigRoute {
   id: ComponentName;
   path: string;
@@ -9,7 +8,7 @@ export interface ConfigRoute {
 }
 
 type Config = {
-  user: User;
+  user: UserStatus;
   mutateUser: (status?: UserStatus, shouldRevalidate?: boolean) => void;
   locale: string;
   locales: string[];

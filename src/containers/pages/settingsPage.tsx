@@ -11,6 +11,7 @@ import { useToasts } from 'react-toast-notifications';
 import { useConfig } from '../../hooks/useConfig';
 import { UpdateSettingResponse } from '../../types/api/user/ProfileSettings';
 import { useUIConfig } from '../../hooks/useUIConfig';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 const LoadableMarketingSettingsAccordion = loadable(
   () => import('../../components/account-settings/MarketingSettingsAccordion'),
@@ -29,15 +30,18 @@ const SettingsPage = () => {
   const { user } = useConfig();
   const { addToast } = useToasts();
   const { contentStyle } = useUIConfig();
-  const { data, error, mutate } = useSWR<ProfileSettings>('/v2/profile.json', {
-    onErrorRetry: (error, key) => {
-      addToast(`Failed to fetch user settings`, {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-      console.log(error);
+  const { data, error, mutate } = useSWR<ProfileSettings>(
+    '/railsapi/v1/user/profile',
+    {
+      onErrorRetry: (error, key) => {
+        addToast(`Failed to fetch user settings`, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+        console.log(error);
+      },
     },
-  });
+  );
   const isDataLoading = !data && !error;
   const handleOnSubmit = async (
     url: string,

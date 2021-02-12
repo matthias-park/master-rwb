@@ -12,6 +12,7 @@ import { useToasts } from 'react-toast-notifications';
 import SeoPages from '../../types/api/content/SeoPages';
 import HelpBlock from '../../components/HelpBlock';
 import Alert from 'react-bootstrap/Alert';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 const loggedInHiddenFields = ['first_name', 'last_name', 'email_address'];
 
@@ -38,9 +39,13 @@ const ContactUsPage = () => {
       fields.last_name = user.last_name;
       fields.email_address = user.email;
     }
-    const response = await postApi<SeoPages>(data!.action, fields, {
-      formData: true,
-    }).catch(err => {
+    const response = await postApi<RailsApiResponse<SeoPages>>(
+      data!.action,
+      fields,
+      {
+        formData: true,
+      },
+    ).catch(err => {
       addToast('failed to send form', {
         appearance: 'error',
         autoDismiss: true,

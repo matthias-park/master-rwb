@@ -1,17 +1,12 @@
 interface SeoPages {
-  Success: boolean;
-  Code: number;
-  Message: null;
-  Data?: {
-    slug: string;
-    locale: string;
-    title: string;
-    description: string;
-    keywords: string;
-    hidden_h1: string;
-    footer: string;
-    canonical_tag: string;
-  };
+  slug: string;
+  locale: string;
+  title: string;
+  description: string;
+  keywords: string;
+  hidden_h1: string;
+  footer: string;
+  canonical_tag: string;
 }
 
 export default SeoPages;

@@ -105,13 +105,11 @@ const RegisterPage = () => {
       if (res?.Success && res.Data) {
         mutateUser(
           {
-            user: {
-              loading: false,
-              logged_in: true,
-              balance: '',
-              id: res.Data.PlayerId,
-              name: res.Data.Login,
-            },
+            loading: false,
+            logged_in: true,
+            balance: '',
+            id: res.Data.PlayerId,
+            name: res.Data.Login,
           },
           true,
         );
