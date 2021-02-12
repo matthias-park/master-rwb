@@ -55,8 +55,9 @@ const InputContainer = ({
         {quickAmounts.map(value => (
           <Button
             key={value}
-            variant="secondary"
-            className="mr-1 mb-1"
+            variant="outline-brand"
+            size="sm"
+            className="mr-1 mb-3 weight-500"
             onClick={() => setInputValue(value.toString())}
           >
             {value}

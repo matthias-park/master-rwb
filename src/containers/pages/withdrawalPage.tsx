@@ -44,9 +44,9 @@ const WithdrawalRequests = ({
           <thead>
             <tr>
               <th>ID</th>
-              <th>Account</th>
-              <th>Amount</th>
-              <th>Request cancel</th>
+              <th className="text-sm-center">Account</th>
+              <th className="text-sm-center">Amount</th>
+              <th className="d-block text-sm-right mr-1">Request cancel</th>
             </tr>
           </thead>
           <tbody>
@@ -58,19 +58,20 @@ const WithdrawalRequests = ({
                     <strong className="heading-sm">ID</strong>
                     {request.id}
                   </td>
-                  <td>
-                    <strong className="heading-sm">Account</strong>
+                  <td className="text-sm-center">
+                    <strong className="heading-sm">{t('action')}</strong>
                     {request.account}
                   </td>
-                  <td>
-                    <strong className="heading-sm">Amount</strong>
+                  <td className="text-sm-center">
+                    <strong className="heading-sm">{t('account')}</strong>
                     {request.amount}
                   </td>
-                  <td>
-                    <strong className="heading-sm">Request cancel</strong>
+                  <td className="text-sm-right py-2">
+                    <strong className="heading-sm">{t('amount')}</strong>
                     <Button
-                      variant="secondary"
-                      onClick={() => handleCancel(request.id)}
+                      variant="outline-danger"
+                      size="sm"
+                      onClick={() => onCancelRequest(request.id)}
                     >
                       {cancelLoading === request.id && (
                         <Spinner

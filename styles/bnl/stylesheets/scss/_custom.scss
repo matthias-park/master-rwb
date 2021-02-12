@@ -28,11 +28,29 @@ a:hover {
 }
 
 .text-14 {
-    font-size: 14px;
+    font-size: 14px !important;
 }
 
 .weight-500 {
-    font-weight: 500;
+    font-weight: 500 !important;
+}
+
+.text-sm-center {
+  @include media-breakpoint-up(sm) {
+    text-align: center;
+  }
+}
+
+.text-sm-right {
+  @include media-breakpoint-up(sm) {
+    text-align: right;
+  }
+}
+
+.w-md-100 {
+  @include media-breakpoint-down(sm) {
+    width: 100% !important;
+  }
 }
 
 .bg-overlay {
@@ -93,7 +111,6 @@ a:hover {
 }
 
 .help-block {
-  height: 300px;
   width: 306px;
   &__title {
       color: $white;
@@ -142,6 +159,36 @@ a:hover {
 
 .body-background {
     background-color: $white !important;
+}
+
+.page-container {
+  display: flex;
+  justify-content: center;
+  background-color: $gray-custom-200;
+  margin: 0 -80px;
+  @include media-breakpoint-down(xl) {
+      margin: 0 -45px;
+  }
+  @include media-breakpoint-down(lg) {
+      margin: 0 -20px;
+  }
+  .page-inner {
+    width: 70%;
+    min-width: 850px;
+    max-width: 1200px;
+    background-color: $white;
+    padding: 40px;
+    margin: 40px 0;
+    border-radius: 4px;
+    @include media-breakpoint-down(md) {
+      min-width: unset;
+      width: 100%;
+      margin: 0;
+    }
+    @include media-breakpoint-down(sm) {
+      padding: 25px;
+    }
+  }
 }
 
 #KambiBC {

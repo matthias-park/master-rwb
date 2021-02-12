@@ -1,11 +1,19 @@
 import React from 'react';
 import { useI18n } from '../hooks/useI18n';
 
-const HelpBlock = ({ title, blocks }) => {
+const HelpBlock = ({
+  title,
+  blocks,
+  className,
+}: {
+  title?: string;
+  blocks: string[];
+  className?: string;
+}) => {
   const { t } = useI18n();
   return (
-    <div className="help-block">
-      <p className="help-block__title">{title}</p>
+    <div className={`help-block ${className}`}>
+      {title && <p className="help-block__title">{title}</p>}
       <div className="help-block__body">
         {blocks.includes('faq') && (
           <div className="help-block__body-item">

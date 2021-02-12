@@ -10,6 +10,7 @@ import { useConfig } from '../../hooks/useConfig';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
 import SeoPages from '../../types/api/content/SeoPages';
+import HelpBlock from '../../components/HelpBlock';
 import Alert from 'react-bootstrap/Alert';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 
@@ -66,48 +67,71 @@ const ContactUsPage = () => {
   };
 
   return (
-    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">
-      {isDataLoading && (
-        <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="black" className="mx-auto" />
-        </div>
-      )}
-      {!!error && (
-        <h2 className="mt-3 mb-5 text-center">
-          {t('contact_page_failed_to_load')}
-        </h2>
-      )}
-      {!!data && (
-        <>
-          <h1 className="mb-4">{data.title}</h1>
-          {!!submitResponse && (
-            <Alert
-              show={!!submitResponse}
-              variant={submitResponse.success ? 'success' : 'danger'}
-            >
-              {submitResponse.msg || t('contact_page_success')}
-            </Alert>
-          )}
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            {data.form.map(field => {
-              if (user.logged_in && loggedInHiddenFields.includes(field.id)) {
-                return null;
-              }
-              return (
-                <FieldFromJson
-                  key={field.id}
-                  field={field}
-                  error={errors[field.id]}
-                  ref={register({
-                    required: field.required && t('login_field_required'),
-                  })}
-                  formState={formState}
-                />
-              );
-            })}
-          </Form>
-        </>
-      )}
+    <main className="page-container">
+      <div className="page-inner">
+        {isDataLoading && (
+          <div className="d-flex justify-content-center pt-4 pb-3">
+            <Spinner animation="border" variant="black" className="mx-auto" />
+          </div>
+        )}
+        {!!error && (
+          <h2 className="mt-3 mb-5 text-center">
+            {t('contact_page_failed_to_load')}
+          </h2>
+        )}
+        {!!data && (
+          <div className="d-flex flex-column flex-md-row">
+            <div className="flex-grow-1 mr-0 mr-md-5">
+              <h2 className="mb-4">{data.title}</h2>
+              <small className="d-block mb-2">
+                {t('questions_or_suggestions')}
+              </small>
+              <small>
+                {t('call_us')} <b>{t('help_call_us_number')}</b>
+              </small>
+              <ul className="my-3">
+                <li>{t('time_workday')}</li>
+                <li>{t('time_weekend')}</li>
+              </ul>
+              <small className="d-block mb-4">{t('use_form_below')}</small>
+              {!!submitResponse && (
+                <Alert
+                  show={!!submitResponse}
+                  variant={submitResponse.success ? 'success' : 'danger'}
+                >
+                  {submitResponse.msg || t('contact_page_success')}
+                </Alert>
+              )}
+              <Form onSubmit={handleSubmit(onSubmit)}>
+                <small className="d-block mb-3">{t('contact_form_text')}</small>
+                {data.form.map(field => {
+                  if (
+                    user.logged_in &&
+                    loggedInHiddenFields.includes(field.id)
+                  ) {
+                    return null;
+                  }
+                  return (
+                    <FieldFromJson
+                      key={field.id}
+                      field={field}
+                      error={errors[field.id]}
+                      ref={register({
+                        required: field.required && t('login_field_required'),
+                      })}
+                      formState={formState}
+                    />
+                  );
+                })}
+              </Form>
+            </div>
+            <HelpBlock
+              blocks={['faq', 'phone', 'email']}
+              className="d-block w-md-100 mt-5 mt-md-0"
+            />
+          </div>
+        )}
+      </div>
     </main>
   );
 };

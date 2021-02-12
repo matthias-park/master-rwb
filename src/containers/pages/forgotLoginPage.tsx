@@ -50,47 +50,51 @@ const ForgotLoginPage = () => {
     });
   };
   return (
-    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">
-      <h1 className="mb-4">{t('forgot_login_page_title')}</h1>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Alert
-          show={!!apiResponse}
-          variant={apiResponse?.success ? 'success' : 'danger'}
-        >
-          <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />
-        </Alert>
-        <TextInput
-          ref={register({
-            required: t('login_field_required'),
-            validate: async value => {
-              const emailRegex = /[a-zA-Z0-9.!\#$%&‘*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*/;
-              return emailRegex.test(value) || t('register_email_bad_format');
-            },
-          })}
-          error={errors.email}
-          id="email"
-          placeholder={t('forgot_password_email_field')}
-        />
-        <Button
-          variant="primary"
-          disabled={!!formState.isSubmitting || !!errors.email}
-          type="submit"
-          data-testid="button"
-        >
-          {!!formState.isSubmitting && (
-            <>
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-              />{' '}
-            </>
-          )}
-          {t('forgot_password_submit_btn')}
-        </Button>
-      </Form>
+    <main className="page-container">
+      <div className="page-inner">
+        <h2 className="mb-4">{t('forgot_login_page_title')}</h2>
+        <p className="text-14 mb-3">{t('forgot_login_text')}</p>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Alert
+            show={typeof apiResponse === 'boolean'}
+            variant={apiResponse ? 'success' : 'danger'}
+          >
+            {t(`forgot_login_${apiResponse ? 'success' : 'failed'}`)}
+          </Alert>
+          <TextInput
+            ref={register({
+              required: t('login_field_required'),
+              validate: async value => {
+                const emailRegex = /[a-zA-Z0-9.!\#$%&‘*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*/;
+                return emailRegex.test(value) || t('register_email_bad_format');
+              },
+            })}
+            error={errors.email}
+            id="email"
+            placeholder={t('forgot_password_email_field')}
+          />
+          <Button
+            variant="primary"
+            disabled={!!formState.isSubmitting || !!errors.email}
+            type="submit"
+            data-testid="button"
+            className="mt-3"
+          >
+            {!!formState.isSubmitting && (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />{' '}
+              </>
+            )}
+            {t('forgot_password_submit_btn')}
+          </Button>
+        </Form>
+      </div>
     </main>
   );
 };
