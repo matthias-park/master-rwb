@@ -34,11 +34,9 @@ export const getRedirectLocalePathname = (
   availableRoutes: ConfigRoute[],
 ) => {
   const windowPaths = window.location.pathname.split('/');
-  let urlLocale = defaultLocale;
   let urlPaths = window.location.pathname;
-  const storageLocale = Lockr.get('locale');
-
-  if (!storageLocale && availableLocales.includes(windowPaths[1])) {
+  let urlLocale = Lockr.get('locale', defaultLocale);
+  if (availableLocales.includes(windowPaths[1])) {
     urlLocale = windowPaths[1];
   } else if (availableRoutes.some(route => urlPaths.startsWith(route.path))) {
     urlPaths = `/${urlLocale}${urlPaths}`;
