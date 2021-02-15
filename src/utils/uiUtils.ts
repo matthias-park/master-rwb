@@ -66,10 +66,38 @@ export const createContentStylesProviderValues = (
     clear,
   };
 };
+
 export const enterKeyPress = (e: any, callback: any) => {
   const charCode = typeof e.which === 'number' ? e.which : e.keyCode;
   const enterKey = 13;
   if (charCode === enterKey) {
     callback();
   }
+};
+
+export const makeCollapsible = (
+  mainElClass: string,
+  collapseElClass: string,
+  headerElClass,
+) => {
+  Array.from(document.getElementsByClassName(mainElClass)).forEach(el => {
+    el.addEventListener('click', e => {
+      const currentEl = e.currentTarget as HTMLElement;
+      const collapseEl = currentEl.getElementsByClassName(
+        collapseElClass,
+      )[0] as HTMLElement;
+      const collapseHeader = currentEl.getElementsByClassName(
+        headerElClass,
+      )[0] as HTMLElement;
+      if (collapseEl) {
+        if (collapseEl.classList.contains('show')) {
+          collapseEl.classList.remove('show');
+          collapseHeader.classList.remove('active');
+        } else {
+          collapseEl.classList.add('show');
+          collapseHeader.classList.add('active');
+        }
+      }
+    });
+  });
 };

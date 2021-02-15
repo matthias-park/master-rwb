@@ -363,6 +363,8 @@ export const TRANSLATION_SYMBOLS = [
   'sitemap_termsAndConditions',
   'sitemap_termsOfUse',
   'sitemap_CertsCodeConduct',
+  'info_faq_title',
+  'betting_rules_title',
 ];
 
 export const HEAD_DATA: HeadData = {
@@ -381,13 +383,8 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
     name: 'cookiePolicy',
   },
   {
-    path: '/info',
-    id: ComponentName.FaqPage,
-    name: 'info',
-  },
-  {
-    path: '/info/faq',
-    id: ComponentName.FaqPage,
+    path: '/faq',
+    id: ComponentName.TemplatePage,
     name: 'faq',
   },
   {
@@ -600,7 +597,7 @@ export const FOOTER_LINKS = [
         children: [
           {
             name: 'faq_link',
-            link: '/info/faq',
+            link: '/faq',
             order: 1,
           },
           {
