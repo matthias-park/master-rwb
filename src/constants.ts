@@ -34,6 +34,7 @@ export enum ComponentName {
   NotFoundPage,
   TemplatePage,
   ContactUsPage,
+  SitemapPage,
 }
 
 export enum FormFieldValidation {
@@ -329,6 +330,39 @@ export const TRANSLATION_SYMBOLS = [
   'sub_header_help',
   'sub_header_where_to_play',
   'sub_header_play_responsibly',
+  'sitemap_page_title',
+  'sitemap_cookiePolicy',
+  'sitemap_info',
+  'sitemap_faq',
+  'sitemap_sports',
+  'sitemap_register',
+  'sitemap_promotions',
+  'sitemap_deposit',
+  'sitemap_settings',
+  'sitemap_withdrawal',
+  'sitemap_transactions',
+  'sitemap_forgotPassword',
+  'sitemap_resetPassword',
+  'sitemap_forgotLogin',
+  'sitemap_contactUs',
+  'sitemap_securityPrivacy',
+  'sitemap_preferences',
+  'sitemap_findStore',
+  'sitemap_playOnline',
+  'sitemap_subscriptions',
+  'sitemap_playResponsibly',
+  'sitemap_whereToPlay',
+  'sitemap_about',
+  'sitemap_mission',
+  'sitemap_charities',
+  'sitemap_sponsorships',
+  'sitemap_services',
+  'sitemap_jobs',
+  'sitemap_press',
+  'sitemap_play',
+  'sitemap_termsAndConditions',
+  'sitemap_termsOfUse',
+  'sitemap_CertsCodeConduct',
 ];
 
 export const HEAD_DATA: HeadData = {
@@ -339,86 +373,208 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
   {
     path: '/',
     id: ComponentName.HomePage,
+    name: 'home',
   },
   {
     path: '/cookie-policy',
     id: ComponentName.CookiePolicyPage,
+    name: 'cookiePolicy',
   },
   {
-    path: '/faq',
+    path: '/info',
     id: ComponentName.FaqPage,
+    name: 'info',
+  },
+  {
+    path: '/info/faq',
+    id: ComponentName.FaqPage,
+    name: 'faq',
   },
   {
     path: '/sports',
     id: ComponentName.SportsPage,
+    name: 'sports',
   },
   {
     path: '/register',
     id: ComponentName.RegisterPage,
+    name: 'register',
   },
   {
     path: '/promotions',
     id: ComponentName.PromotionsPage,
+    name: 'promotions',
   },
   {
     path: '/promotions/:slug',
     id: ComponentName.TemplatePage,
+    name: 'promotion',
+    hiddenSitemap: true,
   },
-  {
-    path: '/bonus',
-    id: ComponentName.BonusPage,
-    protected: true,
-  },
+  // {
+  //   path: '/bonus',
+  //   id: ComponentName.BonusPage,
+  //   protected: true,
+  // },
   {
     path: '/deposit',
     id: ComponentName.DepositPage,
     protected: true,
+    name: 'deposit',
   },
   {
     path: '/deposit/:bankResponse',
     id: ComponentName.DepositPage,
     protected: true,
+    name: 'depositResponse',
+    hiddenSitemap: true,
   },
-  {
-    path: '/limits',
-    id: ComponentName.LimitsPage,
-    protected: true,
-  },
+  // {
+  //   path: '/limits',
+  //   id: ComponentName.LimitsPage,
+  //   protected: true,
+  // },
   {
     path: '/settings',
     id: ComponentName.SettingsPage,
     protected: true,
+    name: 'settings',
   },
   {
     path: '/withdrawal',
     id: ComponentName.WithdrawalPage,
     protected: true,
+    name: 'withdrawal',
+  },
+  {
+    path: '/sitemap',
+    id: ComponentName.SitemapPage,
+    name: 'sitemap',
+    hiddenSitemap: true,
   },
   {
     path: '/transactions',
     id: ComponentName.TransactionsPage,
     protected: true,
+    name: 'transactions',
   },
   {
     path: '/forgot_password',
     id: ComponentName.ForgotPasswordPage,
+    name: 'forgotPassword',
   },
   {
     path: '/set_password/:code',
     id: ComponentName.ResetPasswordPage,
+    name: 'resetPassword',
+    hiddenSitemap: true,
   },
   {
     path: '/forgot_login',
     id: ComponentName.ForgotLoginPage,
+    name: 'forgotLogin',
   },
   {
     path: '/contact_us',
     id: ComponentName.ContactUsPage,
+    name: 'contactUs',
+  },
+  {
+    path: '/security-privacy',
+    id: ComponentName.TemplatePage,
+    name: 'securityPrivacy',
+  },
+  {
+    path: '/preferences',
+    id: ComponentName.TemplatePage,
+    name: 'preferences',
+  },
+  {
+    path: '/find-store',
+    id: ComponentName.TemplatePage,
+    name: 'findStore',
+  },
+  {
+    path: '/play-online',
+    id: ComponentName.TemplatePage,
+    name: 'playOnline',
+  },
+  {
+    path: '/subscriptions',
+    id: ComponentName.TemplatePage,
+    name: 'subscriptions',
+  },
+  {
+    path: '/play-responsibly',
+    id: ComponentName.TemplatePage,
+    name: 'playResponsibly',
+  },
+  {
+    path: '/where-to-play',
+    id: ComponentName.TemplatePage,
+    name: 'whereToPlay',
+  },
+  {
+    path: '/about',
+    id: ComponentName.TemplatePage,
+    name: 'about',
+  },
+  {
+    path: '/mission',
+    id: ComponentName.TemplatePage,
+    name: 'mission',
+  },
+  {
+    path: '/charities',
+    id: ComponentName.TemplatePage,
+    name: 'charities',
+  },
+  {
+    path: '/sponsorships',
+    id: ComponentName.TemplatePage,
+    name: 'sponsorships',
+  },
+  {
+    path: '/services',
+    id: ComponentName.TemplatePage,
+    name: 'services',
+  },
+  {
+    path: '/jobs',
+    id: ComponentName.TemplatePage,
+    name: 'jobs',
+  },
+  {
+    path: '/press',
+    id: ComponentName.TemplatePage,
+    name: 'press',
+  },
+  {
+    path: '/play',
+    id: ComponentName.TemplatePage,
+    name: 'play',
+  },
+  {
+    path: '/terms-and-conditions',
+    id: ComponentName.TemplatePage,
+    name: 'termsAndConditions',
+  },
+  {
+    path: '/terms-of-use',
+    id: ComponentName.TemplatePage,
+    name: 'termsOfUse',
+  },
+  {
+    path: '/certs-and-code-conduct',
+    id: ComponentName.TemplatePage,
+    name: 'CertsCodeConduct',
   },
   {
     path: '*',
     id: ComponentName.TemplatePage,
     exact: false,
+    name: '',
+    hiddenSitemap: true,
   },
 ];
 
@@ -444,7 +600,7 @@ export const FOOTER_LINKS = [
         children: [
           {
             name: 'faq_link',
-            link: '/faq',
+            link: '/info/faq',
             order: 1,
           },
           {

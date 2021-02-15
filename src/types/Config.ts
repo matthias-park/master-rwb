@@ -5,6 +5,8 @@ export interface ConfigRoute {
   path: string;
   protected?: boolean;
   exact?: boolean;
+  hiddenSitemap?: boolean;
+  name: string;
 }
 
 type Config = {

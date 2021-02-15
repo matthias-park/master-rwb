@@ -50,7 +50,6 @@ export const postApi = <T>(
   };
   if (body) {
     if (options.formData) {
-      console.log(body);
       const formData = new FormData();
       for (const key in body) {
         formData.append(key, body[key] as string | Blob);
@@ -64,7 +63,6 @@ export const postApi = <T>(
   const postUrl = url.startsWith('http')
     ? url
     : `${window.API_URL}${locale}${url}`;
-  console.log(postUrl);
   return fetch(postUrl, config).then(res => {
     if (!res.ok) {
       throw res.status === 400 ? res.json() : RailsApiResponseFallback;

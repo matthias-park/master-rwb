@@ -71,7 +71,7 @@ const WithdrawalRequests = ({
                     <Button
                       variant="outline-danger"
                       size="sm"
-                      onClick={() => onCancelRequest(request.id)}
+                      onClick={() => handleCancel(request.id)}
                     >
                       {cancelLoading === request.id && (
                         <Spinner

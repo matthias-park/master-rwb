@@ -62,7 +62,6 @@ const DepositPage = () => {
       appearance: 'error',
       autoDismiss: true,
     });
-    console.log(response);
     setDepositLoading(false);
   }, []);
 

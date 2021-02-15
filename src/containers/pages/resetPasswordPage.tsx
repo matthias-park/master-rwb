@@ -34,7 +34,7 @@ const ForgotPasswordPage = () => {
   }
   const onSubmit = async ({ password }) => {
     const result = await postApi<RailsApiResponse<ForgotPasswordResponse>>(
-      `/railsapi/v1/login/set_password`,
+      `/railsapi/v1/user/set_password`,
       {
         new_password: password,
         reset_code: code!,

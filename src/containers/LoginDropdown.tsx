@@ -36,7 +36,7 @@ const LoginForm = ({
   const forgotPasswordRoute = useRoutePath(ComponentName.ForgotPasswordPage);
   const onSubmit = async ({ email, password, remember_me }) => {
     const response = await postApi<RailsApiResponse<NET_USER | null>>(
-      '/railsapi/v1/login',
+      '/railsapi/v1/user/login',
       {
         login: email,
         password,

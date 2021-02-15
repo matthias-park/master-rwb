@@ -15,7 +15,7 @@ const AsyncPage = (pageName: string) =>
     ),
   });
 
-export const COMPONENT_PAGES = {
+const COMPONENT_PAGES = {
   [ComponentName.BonusPage]: AsyncPage('bonusPage'),
   [ComponentName.CookiePolicyPage]: AsyncPage('cookiePolicyPage'),
   [ComponentName.DepositPage]: AsyncPage('depositPage'),
@@ -34,6 +34,7 @@ export const COMPONENT_PAGES = {
   [ComponentName.ResetPasswordPage]: AsyncPage('resetPasswordPage'),
   [ComponentName.ForgotLoginPage]: AsyncPage('forgotLoginPage'),
   [ComponentName.ContactUsPage]: AsyncPage('contactUsPage'),
+  [ComponentName.SitemapPage]: AsyncPage('sitemapPage'),
 };
 
 const Routes = () => {
