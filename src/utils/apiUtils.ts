@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-unfetch';
 import { ConfigInterface } from 'swr';
 import { RailsApiResponseFallback } from '../constants';
+import RailsApiResponse from '../types/api/RailsApiResponse';
 
 // For rails api testing in dev
 // const API_URL = window.API_URL;
@@ -16,17 +17,17 @@ export const formatUrl = (
 };
 
 export const getApi = <T>(url: string): Promise<T> => {
-  const locale = ''; //`/${document.documentElement.lang}` || '';
   const config: RequestInit = {
     mode: 'cors',
     credentials: 'include',
     headers: new Headers(),
   };
-  return fetch(`${window.API_URL}${locale}${url}`, config).then(res => {
-    if (!res.ok) {
-      throw res.status === 400
-        ? res.json()
-        : Promise.resolve(RailsApiResponseFallback);
+  return fetch(`${window.API_URL}${url}`, config).then(res => {
+    if (!res.ok && res.status !== 400) {
+      return Promise.reject<RailsApiResponse<null>>({
+        ...RailsApiResponseFallback,
+        Code: res.status,
+      });
     }
     return res.json();
   });
@@ -41,7 +42,6 @@ export const postApi = <T>(
   body?: { [key: string]: number | string | Blob },
   options: PostOptions = {},
 ): Promise<T> => {
-  const locale = ''; //window.LOCALE ? `/${window.LOCALE}` : '';
   const config: RequestInit = {
     method: 'post',
     mode: 'cors',
@@ -60,12 +60,13 @@ export const postApi = <T>(
       (config.headers as Headers).append('Content-Type', 'application/json');
     }
   }
-  const postUrl = url.startsWith('http')
-    ? url
-    : `${window.API_URL}${locale}${url}`;
+  const postUrl = url.startsWith('http') ? url : `${window.API_URL}${url}`;
   return fetch(postUrl, config).then(res => {
-    if (!res.ok) {
-      throw res.status === 400 ? res.json() : RailsApiResponseFallback;
+    if (!res.ok && res.status !== 400) {
+      throw Promise.reject<RailsApiResponse<null>>({
+        ...RailsApiResponseFallback,
+        Code: res.status,
+      });
     }
     return res.json();
   });

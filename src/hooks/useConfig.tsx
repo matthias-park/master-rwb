@@ -28,11 +28,13 @@ const useUser = () => {
     {
       revalidateOnFocus: true,
       refreshInterval: 300000, // 5 min
-      onErrorRetry: () => {
-        addToast(`Failed to fetch user data`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
+      onErrorRetry: (err: RailsApiResponse<null>) => {
+        if (err.Code !== 401) {
+          addToast(`Failed to fetch user data`, {
+            appearance: 'error',
+            autoDismiss: true,
+          });
+        }
       },
     },
   );
