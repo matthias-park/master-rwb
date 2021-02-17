@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useConfig } from '../../hooks/useConfig';
 import { getApi } from '../../utils/apiUtils';
-import GetToken from '../../types/api/kambi/GetToken';
 import Config from '../../types/Config';
 import { useCallback } from 'react';
 import { useToasts } from 'react-toast-notifications';
 import Spinner from 'react-bootstrap/Spinner';
 import { useUIConfig } from '../../hooks/useUIConfig';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
 import KambiSportsbook, {
   KambiSportsbookProps,
 } from '../../components/KambiSportsbook';
 
 const getSBParams = async (config: Config, error: () => void) => {
   const playerId = config.user.id ? config.user.id.toString() : '';
-  const data: GetToken | null = playerId
-    ? await getApi<GetToken>('/railsapi/v1/kambi/get_token').catch(err => {
-        error();
-        console.log(err);
-        return null;
+  const data = playerId
+    ? await getApi<RailsApiResponse<string>>(
+        '/railsapi/v1/kambi/get_token',
+      ).catch((res: RailsApiResponse<null>) => {
+        if (res.Fallback) {
+          error();
+        }
+        return res;
       })
     : null;
   return {
@@ -45,6 +48,7 @@ const SportsPage = () => {
   useEffect(() => {
     if (!config.user.loading) {
       getSBParams(config, handleTokenError).then(async sbParams => {
+        console.log(sbParams);
         setParams(sbParams);
       });
     }

@@ -10,10 +10,7 @@ import { ComponentName, HEADER_ROUTES } from '../../constants';
 import clsx from 'clsx';
 import useDesktopWidth from '../../hooks/useDesktopWidth';
 import { sortAscending } from '../../utils/index';
-import {
-  HeaderNavCardLink,
-  HeaderNavClassicLink,
-} from '../../components/header/HeaderNavLinks';
+import { HeaderNavClassicLink } from '../../components/header/HeaderNavLinks';
 import BrandLogo from '../../components/header/BrandLogo';
 import { useToasts } from 'react-toast-notifications';
 import LocaleSelector from '../../components/header/LocaleSelector';
@@ -133,11 +130,8 @@ const PageHeader = () => {
               {headerLinks
                 .sort((a, b) => sortAscending(a.order!, b.order!))
                 .map(link => {
-                  const HeaderNavLink = link.cards
-                    ? HeaderNavCardLink
-                    : HeaderNavClassicLink;
                   return (
-                    <HeaderNavLink
+                    <HeaderNavClassicLink
                       key={link.name}
                       data={link}
                       mobile={!desktopWidth}

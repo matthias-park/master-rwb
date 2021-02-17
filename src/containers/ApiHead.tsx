@@ -18,7 +18,7 @@ const ApiHead = () => {
     [pathname, locale],
   );
   const { data } = useSWR<RailsApiResponse<SeoPages>>(
-    ['/railsapi/v1/content/seo_pages/fetch', params],
+    ['/railsapi/v1/content/seo_pages', params],
     postApi,
     {
       errorRetryCount: 0,
@@ -32,7 +32,7 @@ const ApiHead = () => {
           <>
             <title>{seoData.title}</title>
             {['description', 'keywords'].map(id => (
-              <meta name={id} content={seoData[id]}></meta>
+              <meta key={id} name={id} content={seoData[id]}></meta>
             ))}
             {!!seoData.canonical_tag && (
               <link rel="canonical" href={seoData.canonical_tag} />

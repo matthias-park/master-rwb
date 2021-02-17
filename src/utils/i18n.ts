@@ -1,5 +1,6 @@
 import { ConfigRoute } from '../types/Config';
 import Lockr from 'lockr';
+import { postApi } from './apiUtils';
 
 type Symbols = { [key: string]: { [key: string]: string } };
 
@@ -34,7 +35,7 @@ export const getRedirectLocalePathname = (
   availableRoutes: ConfigRoute[],
 ) => {
   const windowPaths = window.location.pathname.split('/');
-  let urlPaths = window.location.pathname;
+  let urlPaths = `${window.location.pathname}${window.location.hash}`;
   let urlLocale = Lockr.get('locale', defaultLocale);
   if (availableLocales.includes(windowPaths[1])) {
     urlLocale = windowPaths[1];
@@ -57,6 +58,9 @@ export const getRedirectLocalePathname = (
     window.history.replaceState({}, '', urlPaths);
   }
   window.LOCALE = urlLocale;
+  postApi('/railsapi/v1/locale', {
+    locale: urlLocale,
+  });
   return urlLocale;
 };
 

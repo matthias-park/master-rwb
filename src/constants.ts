@@ -35,6 +35,7 @@ export enum ComponentName {
   TemplatePage,
   ContactUsPage,
   SitemapPage,
+  Null,
 }
 
 export enum FormFieldValidation {
@@ -50,97 +51,121 @@ export const HEADER_ROUTES: HeaderLink[] = [
     order: 1,
     links: [
       {
-        text: 'Action',
-        path: '#',
+        text: 'nav_link_sports_prematch',
+        path: '/sports#home',
         order: 1,
       },
       {
-        text: 'Another action',
-        path: '#',
+        text: 'nav_link_sports_live',
+        path: '/sports#filter/all/all/all/all/in-play',
         order: 2,
       },
       {
-        text: 'Something else here',
-        path: '#',
+        text: 'nav_link_sports_bet_history',
+        path: '/sports#bethistory',
         order: 3,
+        onlyLoggedIn: true,
+      },
+      {
+        text: 'nav_link_sports_promotions',
+        path: '/sports#bethistory/rewards',
+        order: 4,
+        onlyLoggedIn: true,
+      },
+      {
+        text: 'nav_link_sports_about_retails',
+        path: '/sports/about_retails',
+        order: 5,
+      },
+      {
+        text: 'nav_link_sports_how_to_play',
+        path: '/sports/how_to_play',
+        order: 6,
+      },
+      {
+        text: 'nav_link_sports_responsible_gaming',
+        path: '/sports/responsible_gaming',
+        order: 7,
       },
     ],
-    bottomButton: {
-      name: 'Alle resultaten',
-      path: '#',
-    },
   },
   {
-    name: 'Winnaars',
+    name: 'nav_link_winners',
+    prefix: '/winners',
     order: 2,
     links: [
       {
-        text: 'Action',
-        path: '#',
+        text: 'nav_link_winners_winner_of_the_day',
+        path: '/winners/winner_of_the_day',
         order: 1,
       },
       {
-        text: 'Another action',
-        path: '#',
+        text: 'nav_link_winners_how_to_win',
+        path: '/winners/how_to_win',
         order: 2,
       },
+    ],
+  },
+  {
+    name: 'nav_link_more_than_playing',
+    prefix: '/more_than_playing',
+    order: 3,
+    links: [
       {
-        text: 'Something else here',
-        path: '#',
-        order: 3,
+        text: 'nav_link_more_than_playing_charities',
+        path: '/more_than_playing/charities',
+        order: 1,
+      },
+      {
+        text: 'nav_link_more_than_playing_partners',
+        path: '/more_than_playing/sport_partners',
+        order: 2,
       },
     ],
-    bottomButton: {
-      name: 'Alle resultaten',
-      path: '#',
-    },
   },
   {
-    name: 'Meer dan spelen',
-    path: '#',
-    order: 3,
-  },
-  {
-    name: 'Voordelen en acties',
-    path: '#',
+    name: 'nav_link_promotions',
+    prefix: '/promotions',
     order: 4,
     links: [
       {
-        text: 'Action',
-        path: '#',
+        text: 'nav_link_promotions_promotions',
+        path: '/promotions',
         order: 1,
-      },
-      {
-        text: 'Another action',
-        path: '#',
-        order: 2,
-      },
-      {
-        text: 'Something else here',
-        path: '#',
-        order: 3,
       },
     ],
   },
   {
-    name: 'Loterij spelen',
-    path: '#',
+    name: 'nav_link_lottery',
+    externalLink: true,
     order: 5,
     links: [
       {
-        text: 'Action',
-        path: '#',
+        text: 'nav_link_lottery_lotto',
+        path:
+          'https://www.e-lotto.be/{__locale__}/drawGames/lotto/play/single/board',
         order: 1,
       },
       {
-        text: 'Another action',
-        path: '#',
+        text: 'nav_link_lottery_euromillions',
+        path:
+          'https://www.e-lotto.be/{__locale__}/drawGames/euromillions/play/single/board',
         order: 2,
       },
       {
-        text: 'Something else here',
-        path: '#',
+        text: 'nav_link_lottery_win_for_life',
+        path: 'https://www.e-lotto.be/{__locale__}/eGames/scratch',
         order: 3,
+      },
+      {
+        text: 'nav_link_lottery_woohoo',
+        path: 'https://www.e-lotto.be/{__locale__}/eGames/woohoo',
+        order: 4,
+      },
+      {
+        text: 'nav_link_lottery_all_games',
+        path: 'https://www.e-lotto.be/{__locale__}/home',
+        order: 5,
       },
     ],
   },
@@ -286,6 +311,18 @@ export const TRANSLATION_SYMBOLS = [
   'register_email_bad_format',
   'register_personal_code_invalid',
   'nav_link_sports',
+  'nav_link_winners',
+  'nav_link_more_than_playing',
+  'nav_link_promotions',
+  'nav_link_lottery',
+  'nav_link_sports_prematch',
+  'nav_link_sports_live',
+  'nav_link_sports_bet_history',
+  'nav_link_lottery_lotto',
+  'nav_link_lottery_euromillions',
+  'nav_link_lottery_win_for_life',
+  'nav_link_lottery_woohoo',
+  'nav_link_lottery_all_games',
   'login_field_required',
   'promotions_page_title',
   'promotions_failed_to_load',
@@ -332,7 +369,6 @@ export const TRANSLATION_SYMBOLS = [
   'sub_header_play_responsibly',
   'sitemap_page_title',
   'sitemap_cookiePolicy',
-  'sitemap_info',
   'sitemap_faq',
   'sitemap_sports',
   'sitemap_register',
@@ -365,6 +401,15 @@ export const TRANSLATION_SYMBOLS = [
   'sitemap_CertsCodeConduct',
   'info_faq_title',
   'betting_rules_title',
+  'sitemap_aboutRetails',
+  'sitemap_howToPlay',
+  'sitemap_responsibleGaming',
+  'sitemap_CertsCodeConduct',
+  'sitemap_winnersWinnerOfTheDay',
+  'sitemap_winnersHowToWin',
+  'sitemap_sportsLive',
+  'sitemap_sportsBettingHistory',
+  'sitemap_sportsPromotions',
 ];
 
 export const HEAD_DATA: HeadData = {
@@ -391,6 +436,38 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
     path: '/sports',
     id: ComponentName.SportsPage,
     name: 'sports',
+  },
+  {
+    path: '/sports#filter/all/all/all/all/in-play',
+    id: ComponentName.Null,
+    name: 'sportsLive',
+  },
+  {
+    path: '/sports#bethistory',
+    id: ComponentName.Null,
+    name: 'sportsBettingHistory',
+    protected: true,
+  },
+  {
+    path: '/sports#bethistory/rewards',
+    id: ComponentName.Null,
+    name: 'sportsPromotions',
+    protected: true,
+  },
+  {
+    path: '/sports/about_retails',
+    id: ComponentName.TemplatePage,
+    name: 'aboutRetails',
+  },
+  {
+    path: '/sports/how_to_play',
+    id: ComponentName.TemplatePage,
+    name: 'howToPlay',
+  },
+  {
+    path: '/sports/responsible_gaming',
+    id: ComponentName.TemplatePage,
+    name: 'responsibleGaming',
   },
   {
     path: '/register',
@@ -565,6 +642,16 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
     path: '/certs-and-code-conduct',
     id: ComponentName.TemplatePage,
     name: 'CertsCodeConduct',
+  },
+  {
+    path: '/winners/winner_of_the_day',
+    id: ComponentName.TemplatePage,
+    name: 'winnersWinnerOfTheDay',
+  },
+  {
+    path: '/winners/how_to_win',
+    id: ComponentName.TemplatePage,
+    name: 'winnersHowToWin',
   },
   {
     path: '*',

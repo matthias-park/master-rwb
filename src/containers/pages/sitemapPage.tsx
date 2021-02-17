@@ -42,12 +42,17 @@ const TreeItem = ({ route }: { route: SitemapListItem }) => {
 
 const SitemapPage = () => {
   const { t } = useI18n();
-  const { routes } = useConfig();
+  const { routes, user } = useConfig();
 
   const sitemapList = useMemo(() => {
     const list: SitemapListItem[] = [];
     for (const route of routes) {
-      if (route.hiddenSitemap || route.path === '/') continue;
+      if (
+        route.hiddenSitemap ||
+        route.path === '/' ||
+        (route.protected && !user.logged_in)
+      )
+        continue;
       const mapItem = list.find(item => route.path.startsWith(item.path));
       if (mapItem) {
         insertSitemapChildren(mapItem, route);
@@ -59,7 +64,7 @@ const SitemapPage = () => {
       }
     }
     return list;
-  }, [routes]);
+  }, [routes, user]);
 
   return (
     <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4">

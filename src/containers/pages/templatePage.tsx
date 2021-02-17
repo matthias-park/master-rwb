@@ -6,6 +6,7 @@ import { makeCollapsible } from '../../utils/uiUtils';
 import { useParams, useLocation } from 'react-router-dom';
 import NotFoundPage from './notFoundPage';
 import Sidebar from '../../components/Sidebar';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 const infoPages = [
   {
@@ -19,10 +20,11 @@ const infoPages = [
 ];
 
 const TemplatePage = () => {
-  const { slug } = useParams<{ slug: string }>();
+  const { slug } = useParams<{ slug?: string }>();
   const { pathname } = useLocation();
-  const { data, error } = useSWR<JsonPage>(
-    `/${slug || pathname}.json?response_json=true`,
+  const page = slug || pathname.substring(1).replaceAll('/', '_');
+  const { data, error } = useSWR<RailsApiResponse<JsonPage>>(
+    `/railsapi/v1/content/page/${page}`,
   );
   const isDataLoading = !data && !error;
 
@@ -30,7 +32,7 @@ const TemplatePage = () => {
     makeCollapsible('card', 'collapse', 'card-header');
   }, [data]);
 
-  if (error) {
+  if (error || !data?.Success) {
     return <NotFoundPage />;
   }
 
@@ -47,9 +49,9 @@ const TemplatePage = () => {
         )}
         {!!data && (
           <>
-            <h1 className="mb-2">{data.title || data.headline}</h1>
-            {!!data.text && (
-              <div dangerouslySetInnerHTML={{ __html: data.text }} />
+            <h1 className="mb-4">{data.Data.title || data.Data.headline}</h1>
+            {!!data.Data.body && (
+              <div dangerouslySetInnerHTML={{ __html: data.Data.body }} />
             )}
           </>
         )}

@@ -54,6 +54,7 @@ const KambiSportsbook = React.memo(
           });
         },
         notification: event => {
+          console.log(event);
           if (event.name === 'placedBet') {
             params.updateBalance();
           }
