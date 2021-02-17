@@ -77,9 +77,18 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   const locales = AVAILABLE_LOCALES.map(locale => locale.iso);
   const { user, mutateUser } = useUser();
   const [storage] = useLocalStorage<Storage | null>('cookieSettings', null);
-  const [locale, changeLocale] = useState(
-    getRedirectLocalePathname(locales, window.DEFAULT_LOCALE, routes),
-  );
+  const [locale, changeLocale] = useState(window.DEFAULT_LOCALE);
+
+  useEffect(() => {
+    const detectedLocale = getRedirectLocalePathname(
+      locales,
+      window.DEFAULT_LOCALE,
+      routes,
+    );
+    if (locale !== detectedLocale) {
+      changeLocale(detectedLocale);
+    }
+  }, [locale]);
 
   const setLocale = (lang: string) => {
     setLocalePathname(lang, storage?.functional ?? true);

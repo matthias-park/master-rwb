@@ -57,10 +57,12 @@ export const getRedirectLocalePathname = (
   if (window.location.pathname !== urlPaths) {
     window.history.replaceState({}, '', urlPaths);
   }
-  window.LOCALE = urlLocale;
-  postApi('/railsapi/v1/locale', {
-    locale: urlLocale,
-  });
+  if (!window.LOCALE || window.LOCALE !== urlLocale) {
+    window.LOCALE = urlLocale;
+    postApi('/railsapi/v1/locale', {
+      locale: urlLocale,
+    });
+  }
   return urlLocale;
 };
 
@@ -75,7 +77,6 @@ export const setLocalePathname = (
   if (saveToStorage) {
     Lockr.set('locale', newlocale);
   }
-  window.LOCALE = newlocale;
 };
 
 export type I18n = ReturnType<typeof i18n>;
