@@ -82,8 +82,7 @@ const RegisterPage = () => {
       form: PostRegistration,
     ): Promise<RailsApiResponse<RegistrationResponse | null>> => {
       form.language_id =
-        AVAILABLE_LOCALES.find(lang => lang.iso === locale)?.id.toString() ||
-        '0';
+        AVAILABLE_LOCALES.find(lang => lang.iso === locale)?.id || 0;
       const finalForm = Object.keys(form).reduce((obj, key) => {
         if (!key.includes('repeat')) {
           obj[key] = form[key];

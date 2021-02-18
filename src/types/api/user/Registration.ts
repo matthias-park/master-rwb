@@ -7,7 +7,7 @@ export interface PostRegistration {
   postal_code: string;
   city: string;
   date_of_birth: string;
-  language_id: string;
+  language_id: number;
 }
 export interface ValidateRegisterInput {
   Exists: boolean;
