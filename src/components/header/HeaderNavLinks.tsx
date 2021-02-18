@@ -173,7 +173,7 @@ export const HeaderNavClassicLink = ({ data, mobile }: HeaderNavLinkProps) => {
               className={clsx(link.path === fullPath && 'active')}
               href={link.path.replace('{__locale__}', locale)}
             >
-              {link.text}
+              {t(link.text)}
             </Dropdown.Item>
           );
         })}

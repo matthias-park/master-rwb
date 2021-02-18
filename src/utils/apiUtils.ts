@@ -63,7 +63,7 @@ export const postApi = <T>(
   const postUrl = url.startsWith('http') ? url : `${window.API_URL}${url}`;
   return fetch(postUrl, config).then(res => {
     if (!res.ok && res.status !== 400) {
-      throw Promise.reject<RailsApiResponse<null>>({
+      return Promise.reject<RailsApiResponse<null>>({
         ...RailsApiResponseFallback,
         Code: res.status,
       });

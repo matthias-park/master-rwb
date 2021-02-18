@@ -47,11 +47,9 @@ const SettingsPage = () => {
     updateUser: boolean = false,
   ): Promise<void> => {
     body.authenticity_token = user.token!;
-    const res = await postApi<RailsApiResponse<null>>(
-      `${url.replace('https://bnl-dev.tglab.dev', '')}`,
-      body,
-      { formData: formBody },
-    ).catch((res: RailsApiResponse<null>) => {
+    const res = await postApi<RailsApiResponse<null>>(url, body, {
+      formData: formBody,
+    }).catch((res: RailsApiResponse<null>) => {
       if (res.Fallback) {
         addToast(`Failed to update user settings`, {
           appearance: 'error',

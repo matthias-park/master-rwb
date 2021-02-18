@@ -11,6 +11,9 @@ import { useForm } from 'react-hook-form';
 import { Spinner } from 'react-bootstrap';
 import { FormFieldValidation } from '../../constants';
 import { OnlineFormBlock } from '../../types/RegistrationBlock';
+import Alert from 'react-bootstrap/Alert';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
+import { RegistrationResponse } from '../../types/api/user/Registration';
 
 interface Props {
   checkEmailAvailable: (email: string) => Promise<ValidateRegisterInput | null>;
@@ -18,7 +21,9 @@ interface Props {
   checkPersonalCode: (
     personalCode: string,
   ) => Promise<ValidateRegisterPersonalCode | null>;
-  handleRegisterSubmit: (form: PostRegistration) => Promise<boolean>;
+  handleRegisterSubmit: (
+    form: any,
+  ) => Promise<RailsApiResponse<RegistrationResponse | null>>;
 }
 
 const blocks = (
@@ -218,6 +223,7 @@ const OnlineForm = ({
   checkPersonalCode,
 }: Props) => {
   const { t, jsxT } = useI18n();
+  const [apiError, setApiError] = useState<string | null>(null);
   const [validationForms, setValidationForms] = useState<{
     [key: string]: FormFieldValidation;
   }>({});
@@ -234,6 +240,13 @@ const OnlineForm = ({
   const triggerRepeat = (id: string) => {
     return watch(id, '') !== '' && trigger(id);
   };
+  const onSubmit = async ({ terms_and_conditions, ...data }) => {
+    const response = await handleRegisterSubmit({ ...data, city: 'tempCity' });
+    if (!response.Success) {
+      return setApiError(response.Message);
+    }
+    return setApiError(null);
+  };
   return (
     <div className="reg-form">
       <h1 className="reg-form__title">{jsxT('register_title')}</h1>
@@ -243,7 +256,7 @@ const OnlineForm = ({
           <strong>{jsxT('register_know_more')}</strong>
         </u>
       </a>
-      <Form onSubmit={handleSubmit(handleRegisterSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         {blocks(
           {
             checkEmailAvailable,
@@ -268,13 +281,13 @@ const OnlineForm = ({
                       ref={register({
                         required:
                           field.required && t('register_input_required'),
+                        setValueAs: value => !!value,
                       })}
                       custom
                       type={field.type}
                       id={field.id}
                       key={field.id}
-                      name={field.name}
-                      value={field.value || field.id}
+                      name={field.name || field.id}
                       label={jsxT(`register_input_${field.id}`)}
                       className="mb-4 custom-control-inline"
                     />
@@ -322,6 +335,11 @@ const OnlineForm = ({
             })}
           </div>
         ))}
+        {!!apiError && (
+          <Alert show={!!apiError} variant="danger">
+            {apiError}
+          </Alert>
+        )}
         <button
           disabled={formState.isSubmitting}
           className="btn btn-primary d-block mx-auto mb-4"

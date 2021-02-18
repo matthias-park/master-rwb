@@ -36,15 +36,10 @@ export interface ValidateRegisterPersonalCode {
 }
 
 export interface RegistrationResponse {
-  Success: boolean;
+  RegistrationId: number;
+  Email: string;
+  Login: string;
+  PlayerId: number;
   Code: number;
-  Message: string | null;
-  Data?: {
-    RegistrationId: number;
-    Email: string;
-    Login: string;
-    PlayerId: number;
-    Code: number;
-    Message: string;
-  };
+  Message: string;
 }
