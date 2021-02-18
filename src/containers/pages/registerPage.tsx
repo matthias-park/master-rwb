@@ -124,7 +124,7 @@ const RegisterPage = () => {
     return <Redirect to="/" />;
   }
   return (
-    <main className="registration">
+    <main className="registration pt-5">
       <div className="reg-block">
         <HelpBlock title="Hulp nodig?" blocks={['faq', 'phone', 'email']} />
         <OnlineForm

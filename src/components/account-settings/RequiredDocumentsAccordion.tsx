@@ -1,5 +1,7 @@
 import React, { useCallback, useContext, useMemo } from 'react';
-import { AccordionContext, Form } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import AccordionContext from 'react-bootstrap/AccordionContext';
+import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import {
   SettingsForm,
   SettingsField,
@@ -22,6 +24,7 @@ const fileIds = ['image_id', 'image_residence', 'image_payment_proof'];
 const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
   const { t } = useI18n();
   const currentEventKey = useContext(AccordionContext);
+  const accordionOnClick = useAccordionToggle(form.id);
   const { register, handleSubmit, formState } = useForm();
   const fields: { [key: string]: SettingsField } = useMemo(
     () =>
@@ -133,7 +136,10 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
           </Form>
         </Card.Body>
       </Accordion.Collapse>
-      <i className="settings-card__icon icon-down1"></i>
+      <i
+        className="settings-card__icon icon-down1"
+        onClick={accordionOnClick}
+      />
     </Card>
   );
 };

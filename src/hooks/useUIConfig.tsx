@@ -5,7 +5,6 @@ import {
   createBackdropProviderValues,
 } from '../utils/uiUtils';
 import { UIBackdropState } from '../types/UIConfig';
-import { createContentStylesProviderValues } from '../utils/uiUtils';
 
 export const uiConfig = createContext<UIConfig | null>(null);
 
@@ -24,7 +23,6 @@ export const UIConfigProvider = props => {
     active: false,
     ignoredComponents: [],
   });
-  const [contentStyles, setContentStyles] = useState<React.CSSProperties>({});
 
   useEffect(() => {
     changeBackdropVisibility(backdrop.active);
@@ -32,10 +30,6 @@ export const UIConfigProvider = props => {
 
   const value: UIConfig = {
     backdrop: createBackdropProviderValues(backdrop, setBackdrop),
-    contentStyle: createContentStylesProviderValues(
-      contentStyles,
-      setContentStyles,
-    ),
   };
   return <uiConfig.Provider value={value}>{props.children}</uiConfig.Provider>;
 };

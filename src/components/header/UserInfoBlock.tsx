@@ -4,6 +4,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName } from '../../constants';
 import { useI18n } from '../../hooks/useI18n';
+import Spinner from 'react-bootstrap/Spinner';
 
 const UserMenuLink = ({ link, name, setShowDropdown }) => (
   <li className="user-menu__list-item">
@@ -19,12 +20,18 @@ const UserMenuLink = ({ link, name, setShowDropdown }) => (
 
 const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const { t } = useI18n();
+  const [loggingOut, setLoggingOut] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const { backdrop } = useUIConfig();
 
   const showUserMenu = isOpen => {
     setShowDropdown(isOpen);
     backdrop.toggle(isOpen, [ComponentName.Header]);
+  };
+  const onLogoutClick = async () => {
+    setLoggingOut(true);
+    await handleLogout();
+    setLoggingOut(false);
   };
 
   return (
@@ -118,8 +125,17 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
           </div>
           <div
             className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
-            onClick={handleLogout}
+            onClick={onLogoutClick}
           >
+            {loggingOut && (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                className="mr-1"
+              />
+            )}
             Logout
           </div>
         </div>

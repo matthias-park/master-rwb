@@ -40,7 +40,7 @@ const CookiePolicyPage = () => {
   };
 
   return (
-    <main className="page-container">
+    <main className="page-container pt-5">
       <div className="page-inner">
         <h2 className="mb-4">{t('cookie_page_title')}</h2>
         <Form.Check custom type="checkbox" id="checkbox_all" className="mb-3">

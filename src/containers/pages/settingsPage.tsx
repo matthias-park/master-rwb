@@ -10,8 +10,6 @@ import { useI18n } from '../../hooks/useI18n';
 import { useToasts } from 'react-toast-notifications';
 import { useConfig } from '../../hooks/useConfig';
 import { UpdateSettingResponse } from '../../types/api/user/ProfileSettings';
-import { useUIConfig } from '../../hooks/useUIConfig';
-import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 const LoadableMarketingSettingsAccordion = loadable(
   () => import('../../components/account-settings/MarketingSettingsAccordion'),
@@ -29,7 +27,6 @@ const SettingsPage = () => {
   const { t } = useI18n();
   const { user } = useConfig();
   const { addToast } = useToasts();
-  const { contentStyle } = useUIConfig();
   const { data, error, mutate } = useSWR<ProfileSettings>(
     '/railsapi/v1/user/profile',
     {
@@ -71,10 +68,7 @@ const SettingsPage = () => {
     return;
   };
   return (
-    <main
-      style={contentStyle.styles}
-      className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4"
-    >
+    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4 pt-5">
       <h1 className="mb-4">{t('settings_page_title')}</h1>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">

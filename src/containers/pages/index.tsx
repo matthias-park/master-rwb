@@ -16,10 +16,8 @@ const AsyncPage = (pageName: string) =>
   });
 
 const COMPONENT_PAGES = {
-  [ComponentName.BonusPage]: AsyncPage('bonusPage'),
   [ComponentName.CookiePolicyPage]: AsyncPage('cookiePolicyPage'),
   [ComponentName.DepositPage]: AsyncPage('depositPage'),
-  [ComponentName.FaqPage]: AsyncPage('faqPage'),
   [ComponentName.HomePage]: AsyncPage('homePage'),
   [ComponentName.LimitsPage]: AsyncPage('limitsPage'),
   [ComponentName.PromotionsPage]: AsyncPage('promotionsPage'),
@@ -45,7 +43,7 @@ const Routes = () => {
       {routes.map(route => {
         const Page =
           COMPONENT_PAGES[route.id] ||
-          COMPONENT_PAGES[ComponentName.NotFoundPage];
+          COMPONENT_PAGES[ComponentName.TemplatePage];
 
         if (!Page) {
           return null;

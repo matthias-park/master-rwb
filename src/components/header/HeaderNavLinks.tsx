@@ -5,7 +5,6 @@ import { sortAscending } from '../../utils/index';
 import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { useI18n } from '../../hooks/useI18n';
-import { useUIConfig } from '../../hooks/useUIConfig';
 import { useConfig } from '../../hooks/useConfig';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 
@@ -108,7 +107,6 @@ export const HeaderNavClassicLink = ({ data, mobile }: HeaderNavLinkProps) => {
   const { locale, user } = useConfig();
   const { pathname, hash } = useLocation();
   const fullPath = `${pathname}${hash}`;
-  const { contentStyle } = useUIConfig();
   const dropdownRef = useRef(null);
   const [active, setActive] = useState(false);
   useOnClickOutside(dropdownRef, () => setActive(false));
@@ -116,22 +114,20 @@ export const HeaderNavClassicLink = ({ data, mobile }: HeaderNavLinkProps) => {
     () => data.links?.sort((a, b) => sortAscending(a.order, b.order)),
     [data],
   );
-
-  useEffect(() => {
-    if (
-      (data.path || data.prefix) &&
-      fullPath.startsWith(data.path || data.prefix || '')
-    ) {
-      contentStyle.set({ marginTop: '45px' });
-    }
-  }, [fullPath]);
-  if (!mobile && data.mobileLink) {
-    return null;
-  }
   const showDropdown =
     (!!(data.path || data.prefix) &&
       fullPath.startsWith(data.path || data.prefix || '')) ||
     active;
+
+  // useEffect(() => {
+  //   if (showDropdown) {
+  //     contentStyle.set({ marginTop: '45px' });
+  //   }
+  // }, [showDropdown]);
+  if (!mobile && data.mobileLink) {
+    return null;
+  }
+
   return (
     <Dropdown
       ref={ref => {
@@ -160,7 +156,7 @@ export const HeaderNavClassicLink = ({ data, mobile }: HeaderNavLinkProps) => {
           }
         }}
       >
-        {t(data.name) || data.name}
+        {t(data.name)}
       </Dropdown.Toggle>
       <Dropdown.Menu>
         {dropdownLinks?.map(link => {
@@ -173,6 +169,7 @@ export const HeaderNavClassicLink = ({ data, mobile }: HeaderNavLinkProps) => {
                   ? 'a'
                   : (props: any): any => <Link to={link.path} {...props} />
               }
+              target={link.path.includes('https') ? '_blank' : undefined}
               className={clsx(link.path === fullPath && 'active')}
               href={link.path.replace('{__locale__}', locale)}
             >

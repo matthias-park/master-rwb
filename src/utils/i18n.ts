@@ -1,6 +1,7 @@
 import { ConfigRoute } from '../types/Config';
 import Lockr from 'lockr';
 import { postApi } from './apiUtils';
+import { replaceStringTagsReact } from './reactUtils';
 
 type Symbols = { [key: string]: { [key: string]: string } };
 
@@ -22,9 +23,12 @@ const i18n = () => {
     },
 
     t(key: string, lang?: string) {
-      //! Replace with empty string fallback
       const val = symbols?.[lang || locale]?.[key] || '';
       return val;
+    },
+    jsxT(key: string, lang?: string) {
+      const val = symbols?.[lang || locale]?.[key] || '';
+      return replaceStringTagsReact(val);
     },
   };
 };

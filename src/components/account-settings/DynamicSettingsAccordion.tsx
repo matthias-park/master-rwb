@@ -8,6 +8,7 @@ import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 
 interface SettingProps {
   form: SettingsForm;
@@ -16,6 +17,7 @@ interface SettingProps {
 
 const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
   const currentEventKey = useContext(AccordionContext);
+  const accordionOnClick = useAccordionToggle(form.id);
   const { register, handleSubmit, watch, formState } = useForm({
     defaultValues: form.fields
       .filter(field => field.default ?? false)
@@ -187,7 +189,10 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
           </Form>
         </Card.Body>
       </Accordion.Collapse>
-      <i className="settings-card__icon icon-down1"></i>
+      <i
+        className="settings-card__icon icon-down1"
+        onClick={accordionOnClick}
+      />{' '}
     </Card>
   );
 };

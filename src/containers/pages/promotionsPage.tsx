@@ -6,7 +6,6 @@ import useSWR from 'swr';
 import Card from 'react-bootstrap/Card';
 import { PostItem, Posts } from '../../types/api/Posts';
 import Spinner from 'react-bootstrap/Spinner';
-import { useUIConfig } from '../../hooks/useUIConfig';
 
 const PromoItem = ({ item }: { item: PostItem }) => {
   const { pathname } = useLocation();
@@ -36,12 +35,11 @@ const PromoItem = ({ item }: { item: PostItem }) => {
 
 const PromotionsPage = () => {
   const [activeTab, setActiveTab] = useState<string | null>('all');
-  const { contentStyle } = useUIConfig();
   const { data, error } = useSWR<Posts>('/api/v1/posts.json');
   const { t } = useI18n();
   const isDataLoading = !data && !error;
   return (
-    <main style={contentStyle.styles} className="container-fluid mb-4">
+    <main className="container-fluid mb-4 pt-5">
       <h1 className="mb-4">{t('promotions_page_title')}</h1>
       <Tabs activeKey={activeTab} onSelect={key => setActiveTab(key)}>
         <Tab eventKey="all" title="All" mountOnEnter unmountOnExit>

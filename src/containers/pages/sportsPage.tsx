@@ -5,7 +5,6 @@ import Config from '../../types/Config';
 import { useCallback } from 'react';
 import { useToasts } from 'react-toast-notifications';
 import Spinner from 'react-bootstrap/Spinner';
-import { useUIConfig } from '../../hooks/useUIConfig';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import KambiSportsbook, {
   KambiSportsbookProps,
@@ -36,7 +35,6 @@ const getSBParams = async (config: Config, error: () => void) => {
 const SportsPage = () => {
   const { addToast } = useToasts();
   const config = useConfig();
-  const { contentStyle } = useUIConfig();
   const [params, setParams] = useState<KambiSportsbookProps | null>(null);
   const handleTokenError = () =>
     addToast(`Failed to get user token`, {
@@ -55,10 +53,7 @@ const SportsPage = () => {
   }, [config.user.id, config.user.loading, config.locale]);
 
   return (
-    <div
-      style={{ ...contentStyle.styles, minHeight: 100 }}
-      className="position-relative"
-    >
+    <div style={{ minHeight: 100 }} className="position-relative mt-5">
       <div className="position-absolute w-100 d-flex justify-content-center pt-4 pb-3">
         <Spinner animation="border" variant="black" className="mx-auto" />
       </div>

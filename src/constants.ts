@@ -15,7 +15,6 @@ export enum ComponentName {
   SportsPage,
   RegisterPage,
   PromotionsPage,
-  BonusPage,
   DepositPage,
   LimitsPage,
   SettingsPage,
@@ -35,6 +34,7 @@ export enum ComponentName {
   TemplatePage,
   ContactUsPage,
   SitemapPage,
+  BettingRulesPage,
   Null,
 }
 
@@ -284,12 +284,14 @@ export const TRANSLATION_SYMBOLS = [
   'register_title',
   'register_desc',
   'register_know_more',
-  'register_persona_info',
+  'register_personal_info',
   'register_input_login',
   'register_input_street',
   'register_input_firstname',
   'register_input_lastname',
   'register_input_postal_code',
+  'register_input_phone_number',
+  'register_over_18',
   'register_input_city',
   'register_email_section',
   'register_input_email',
@@ -310,6 +312,8 @@ export const TRANSLATION_SYMBOLS = [
   'register_password_weak',
   'register_email_bad_format',
   'register_personal_code_invalid',
+  'register_input_newsletter',
+  'register_input_terms_and_conditions',
   'nav_link_sports',
   'nav_link_winners',
   'nav_link_more_than_playing',
@@ -410,6 +414,7 @@ export const TRANSLATION_SYMBOLS = [
   'sitemap_sportsLive',
   'sitemap_sportsBettingHistory',
   'sitemap_sportsPromotions',
+  'sitemap_bettingRules',
 ];
 
 export const HEAD_DATA: HeadData = {
@@ -429,7 +434,7 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
   },
   {
     path: '/faq',
-    id: ComponentName.TemplatePage,
+    id: ComponentName.FaqPage,
     name: 'faq',
   },
   {
@@ -485,11 +490,6 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
     name: 'promotion',
     hiddenSitemap: true,
   },
-  // {
-  //   path: '/bonus',
-  //   id: ComponentName.BonusPage,
-  //   protected: true,
-  // },
   {
     path: '/deposit',
     id: ComponentName.DepositPage,
@@ -652,6 +652,11 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
     path: '/winners/how_to_win',
     id: ComponentName.TemplatePage,
     name: 'winnersHowToWin',
+  },
+  {
+    path: '/betting-rules',
+    id: ComponentName.BettingRulesPage,
+    name: 'bettingRules',
   },
   {
     path: '*',

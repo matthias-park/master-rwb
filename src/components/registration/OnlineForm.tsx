@@ -71,10 +71,15 @@ const blocks = (
         required: true,
       },
       {
-        id: 'city',
+        id: 'phone_number',
         type: 'text',
         required: true,
       },
+    ],
+  },
+  {
+    title: 'over_18',
+    fields: [
       {
         id: 'personal_code',
         type: 'text',
@@ -193,6 +198,19 @@ const blocks = (
       },
     ],
   },
+  {
+    fields: [
+      {
+        id: 'newsletter',
+        type: 'checkbox',
+      },
+      {
+        id: 'terms_and_conditions',
+        type: 'checkbox',
+        required: true,
+      },
+    ],
+  },
 ];
 
 const OnlineForm = ({
@@ -201,7 +219,7 @@ const OnlineForm = ({
   handleRegisterSubmit,
   checkPersonalCode,
 }: Props) => {
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
   const [validationForms, setValidationForms] = useState<{
     [key: string]: FormFieldValidation;
   }>({});
@@ -220,11 +238,11 @@ const OnlineForm = ({
   };
   return (
     <div className="reg-form">
-      <h1 className="reg-form__title">{t('register_title')}</h1>
-      <p className="reg-form__sub-title">{t('register_desc')}</p>
+      <h1 className="reg-form__title">{jsxT('register_title')}</h1>
+      <p className="reg-form__sub-title">{jsxT('register_desc')}</p>
       <a href="#" className="text-14 text-primary-light">
         <u>
-          <strong>{t('register_know_more')}</strong>
+          <strong>{jsxT('register_know_more')}</strong>
         </u>
       </a>
       <Form onSubmit={handleSubmit(handleRegisterSubmit)}>
@@ -241,10 +259,11 @@ const OnlineForm = ({
         ).map(block => (
           <div key={block.title} className="reg-form__block">
             <p className="weight-500 mt-4 mb-3">
-              {t(`register_${block.title}`)}
+              {!!block.title && jsxT(`register_${block.title}`)}
             </p>
             {block.fields.map(field => {
               switch (field.type) {
+                case 'checkbox':
                 case 'radio': {
                   return (
                     <Form.Check
@@ -253,12 +272,12 @@ const OnlineForm = ({
                           field.required && t('register_input_required'),
                       })}
                       custom
-                      type="radio"
+                      type={field.type}
                       id={field.id}
                       key={field.id}
                       name={field.name}
                       value={field.value || field.id}
-                      label={t(`register_radio_${field.id}`)}
+                      label={jsxT(`register_input_${field.id}`)}
                       className="mb-4 custom-control-inline"
                     />
                   );
@@ -282,6 +301,7 @@ const OnlineForm = ({
                       validation={validationForms[field.id]}
                       error={errors[field.id]}
                       placeholder={t(`register_input_${field.id}`)}
+                      toggleVisibility={field.type === 'password'}
                     />
                   );
                 }
@@ -319,7 +339,7 @@ const OnlineForm = ({
               />{' '}
             </>
           )}
-          {t('register_submit_btn')}
+          {jsxT('register_submit_btn')}
         </button>
       </Form>
     </div>
