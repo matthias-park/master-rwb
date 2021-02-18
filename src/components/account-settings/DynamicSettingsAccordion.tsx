@@ -12,8 +12,19 @@ import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 
 interface SettingProps {
   form: SettingsForm;
-  onSubmit: (url: string, body: unknown) => void;
+  onSubmit: (
+    url: string,
+    body: { [key: string]: string | Blob },
+    formBody?: boolean,
+    updateUser?: boolean,
+  ) => void;
 }
+
+const FormsWithUpdateUser = [
+  'disable_player',
+  'disable_player_time_out',
+  'permanent_disable',
+];
 
 const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
   const currentEventKey = useContext(AccordionContext);
@@ -53,7 +64,8 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
     [form.fields],
   );
   const updateSettingsSubmit = useCallback(
-    data => onSubmit(form.action, data),
+    data =>
+      onSubmit(form.action, data, false, FormsWithUpdateUser.includes(form.id)),
     [],
   );
 

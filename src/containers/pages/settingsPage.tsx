@@ -9,7 +9,7 @@ import DynamicSettingsAccordion from '../../components/account-settings/DynamicS
 import { useI18n } from '../../hooks/useI18n';
 import { useToasts } from 'react-toast-notifications';
 import { useConfig } from '../../hooks/useConfig';
-import { UpdateSettingResponse } from '../../types/api/user/ProfileSettings';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 const LoadableMarketingSettingsAccordion = loadable(
   () => import('../../components/account-settings/MarketingSettingsAccordion'),
@@ -25,7 +25,7 @@ export const COMPONENTS_BY_SETTINGS = {
 
 const SettingsPage = () => {
   const { t } = useI18n();
-  const { user } = useConfig();
+  const { user, mutateUser } = useConfig();
   const { addToast } = useToasts();
   const { data, error, mutate } = useSWR<ProfileSettings>(
     '/railsapi/v1/user/profile',
@@ -44,26 +44,29 @@ const SettingsPage = () => {
     url: string,
     body: { [key: string]: string | Blob },
     formBody: boolean = false,
+    updateUser: boolean = false,
   ): Promise<void> => {
     body.authenticity_token = user.token!;
-    const res = await postApi<UpdateSettingResponse>(
-      `${url}?response_json=true`,
+    const res = await postApi<RailsApiResponse<null>>(
+      `${url.replace('https://bnl-dev.tglab.dev', '')}`,
       body,
       { formData: formBody },
-    ).catch(() => ({ success: false, status: 'failure', message: '' }));
-    if (res.success || res.status === 'success') {
-      if (res.message) {
-        addToast(res.message, {
-          appearance: 'success',
+    ).catch((res: RailsApiResponse<null>) => {
+      if (res.Fallback) {
+        addToast(`Failed to update user settings`, {
+          appearance: 'error',
           autoDismiss: true,
         });
       }
-      mutate();
-    } else {
-      addToast(`Failed to update user settings`, {
-        appearance: 'error',
-        autoDismiss: true,
-      });
+      return res;
+    });
+    addToast(res.Message, {
+      appearance: res.Success ? 'success' : 'error',
+      autoDismiss: true,
+    });
+    setTimeout(() => mutate(), 1000);
+    if (updateUser) {
+      mutateUser();
     }
     return;
   };

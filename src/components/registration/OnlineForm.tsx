@@ -119,9 +119,7 @@ const blocks = (
             return t('register_email_bad_format');
           }
           const res = await props.checkEmailAvailable(value);
-          if (res?.Exists && !res.Message)
-            res.Message = t('register_already_taken');
-          valid = res?.Message || !res?.Exists;
+          valid = res?.Success || res?.Message || t('register_already_taken');
           setValidation(
             'email',
             typeof valid === 'boolean' && valid
