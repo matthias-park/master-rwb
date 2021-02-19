@@ -7,7 +7,7 @@ export interface PostRegistration {
   postal_code: string;
   city: string;
   date_of_birth: string;
-  language_id: string;
+  language_id: number;
 }
 export interface ValidateRegisterInput {
   Exists: boolean;
@@ -36,15 +36,10 @@ export interface ValidateRegisterPersonalCode {
 }
 
 export interface RegistrationResponse {
-  Success: boolean;
+  RegistrationId: number;
+  Email: string;
+  Login: string;
+  PlayerId: number;
   Code: number;
-  Message: string | null;
-  Data?: {
-    RegistrationId: number;
-    Email: string;
-    Login: string;
-    PlayerId: number;
-    Code: number;
-    Message: string;
-  };
+  Message: string;
 }

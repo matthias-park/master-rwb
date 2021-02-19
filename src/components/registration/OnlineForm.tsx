@@ -11,6 +11,9 @@ import { useForm } from 'react-hook-form';
 import { Spinner } from 'react-bootstrap';
 import { FormFieldValidation } from '../../constants';
 import { OnlineFormBlock } from '../../types/RegistrationBlock';
+import Alert from 'react-bootstrap/Alert';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
+import { RegistrationResponse } from '../../types/api/user/Registration';
 
 interface Props {
   checkEmailAvailable: (email: string) => Promise<ValidateRegisterInput | null>;
@@ -18,7 +21,9 @@ interface Props {
   checkPersonalCode: (
     personalCode: string,
   ) => Promise<ValidateRegisterPersonalCode | null>;
-  handleRegisterSubmit: (form: PostRegistration) => Promise<boolean>;
+  handleRegisterSubmit: (
+    form: any,
+  ) => Promise<RailsApiResponse<RegistrationResponse | null>>;
 }
 
 const blocks = (
@@ -71,10 +76,15 @@ const blocks = (
         required: true,
       },
       {
-        id: 'city',
+        id: 'phone_number',
         type: 'text',
         required: true,
       },
+    ],
+  },
+  {
+    title: 'over_18',
+    fields: [
       {
         id: 'personal_code',
         type: 'text',
@@ -114,9 +124,7 @@ const blocks = (
             return t('register_email_bad_format');
           }
           const res = await props.checkEmailAvailable(value);
-          if (res?.Exists && !res.Message)
-            res.Message = t('register_already_taken');
-          valid = res?.Message || !res?.Exists;
+          valid = res?.Success || res?.Message || t('register_already_taken');
           setValidation(
             'email',
             typeof valid === 'boolean' && valid
@@ -193,6 +201,19 @@ const blocks = (
       },
     ],
   },
+  {
+    fields: [
+      {
+        id: 'newsletter',
+        type: 'checkbox',
+      },
+      {
+        id: 'terms_and_conditions',
+        type: 'checkbox',
+        required: true,
+      },
+    ],
+  },
 ];
 
 const OnlineForm = ({
@@ -201,7 +222,8 @@ const OnlineForm = ({
   handleRegisterSubmit,
   checkPersonalCode,
 }: Props) => {
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
+  const [apiError, setApiError] = useState<string | null>(null);
   const [validationForms, setValidationForms] = useState<{
     [key: string]: FormFieldValidation;
   }>({});
@@ -218,16 +240,23 @@ const OnlineForm = ({
   const triggerRepeat = (id: string) => {
     return watch(id, '') !== '' && trigger(id);
   };
+  const onSubmit = async ({ terms_and_conditions, ...data }) => {
+    const response = await handleRegisterSubmit({ ...data, city: 'tempCity' });
+    if (!response.Success) {
+      return setApiError(response.Message);
+    }
+    return setApiError(null);
+  };
   return (
     <div className="reg-form">
-      <h1 className="reg-form__title">{t('register_title')}</h1>
-      <p className="reg-form__sub-title">{t('register_desc')}</p>
+      <h1 className="reg-form__title">{jsxT('register_title')}</h1>
+      <p className="reg-form__sub-title">{jsxT('register_desc')}</p>
       <a href="#" className="text-14 text-primary-light">
         <u>
-          <strong>{t('register_know_more')}</strong>
+          <strong>{jsxT('register_know_more')}</strong>
         </u>
       </a>
-      <Form onSubmit={handleSubmit(handleRegisterSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         {blocks(
           {
             checkEmailAvailable,
@@ -241,24 +270,25 @@ const OnlineForm = ({
         ).map(block => (
           <div key={block.title} className="reg-form__block">
             <p className="weight-500 mt-4 mb-3">
-              {t(`register_${block.title}`)}
+              {!!block.title && jsxT(`register_${block.title}`)}
             </p>
             {block.fields.map(field => {
               switch (field.type) {
+                case 'checkbox':
                 case 'radio': {
                   return (
                     <Form.Check
                       ref={register({
                         required:
                           field.required && t('register_input_required'),
+                        setValueAs: value => !!value,
                       })}
                       custom
-                      type="radio"
+                      type={field.type}
                       id={field.id}
                       key={field.id}
-                      name={field.name}
-                      value={field.value || field.id}
-                      label={t(`register_radio_${field.id}`)}
+                      name={field.name || field.id}
+                      label={jsxT(`register_input_${field.id}`)}
                       className="mb-4 custom-control-inline"
                     />
                   );
@@ -282,6 +312,7 @@ const OnlineForm = ({
                       validation={validationForms[field.id]}
                       error={errors[field.id]}
                       placeholder={t(`register_input_${field.id}`)}
+                      toggleVisibility={field.type === 'password'}
                     />
                   );
                 }
@@ -304,6 +335,11 @@ const OnlineForm = ({
             })}
           </div>
         ))}
+        {!!apiError && (
+          <Alert show={!!apiError} variant="danger">
+            {apiError}
+          </Alert>
+        )}
         <button
           disabled={formState.isSubmitting}
           className="btn btn-primary d-block mx-auto mb-4"
@@ -319,7 +355,7 @@ const OnlineForm = ({
               />{' '}
             </>
           )}
-          {t('register_submit_btn')}
+          {jsxT('register_submit_btn')}
         </button>
       </Form>
     </div>

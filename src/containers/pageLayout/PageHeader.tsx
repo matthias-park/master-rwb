@@ -1,19 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { getApi } from '../../utils/apiUtils';
 import LoginDropdown from '../LoginDropdown';
 import UserInfoBlock from '../../components/header/UserInfoBlock';
-import { Navbar, Dropdown } from 'react-bootstrap';
+import { Navbar } from 'react-bootstrap';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName, HEADER_ROUTES } from '../../constants';
 import clsx from 'clsx';
 import useDesktopWidth from '../../hooks/useDesktopWidth';
 import { sortAscending } from '../../utils/index';
-import {
-  HeaderNavCardLink,
-  HeaderNavClassicLink,
-} from '../../components/header/HeaderNavLinks';
+import { HeaderNavClassicLink } from '../../components/header/HeaderNavLinks';
 import BrandLogo from '../../components/header/BrandLogo';
 import { useToasts } from 'react-toast-notifications';
 import LocaleSelector from '../../components/header/LocaleSelector';
@@ -64,7 +61,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
       addToast('Failed to logout', { appearance: 'error', autoDismiss: true });
       console.log(err);
     });
-    mutateUser({
+    return mutateUser({
       loading: false,
       logged_in: false,
       logout: true,
@@ -134,11 +131,8 @@ const PageHeader = () => {
               {headerLinks
                 .sort((a, b) => sortAscending(a.order!, b.order!))
                 .map(link => {
-                  const HeaderNavLink = link.cards
-                    ? HeaderNavCardLink
-                    : HeaderNavClassicLink;
                   return (
-                    <HeaderNavLink
+                    <HeaderNavClassicLink
                       key={link.name}
                       data={link}
                       mobile={!desktopWidth}

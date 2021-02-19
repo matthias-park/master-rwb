@@ -9,8 +9,6 @@ import DynamicSettingsAccordion from '../../components/account-settings/DynamicS
 import { useI18n } from '../../hooks/useI18n';
 import { useToasts } from 'react-toast-notifications';
 import { useConfig } from '../../hooks/useConfig';
-import { UpdateSettingResponse } from '../../types/api/user/ProfileSettings';
-import { useUIConfig } from '../../hooks/useUIConfig';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 const LoadableMarketingSettingsAccordion = loadable(
@@ -27,9 +25,8 @@ export const COMPONENTS_BY_SETTINGS = {
 
 const SettingsPage = () => {
   const { t } = useI18n();
-  const { user } = useConfig();
+  const { user, mutateUser } = useConfig();
   const { addToast } = useToasts();
-  const { contentStyle } = useUIConfig();
   const { data, error, mutate } = useSWR<ProfileSettings>(
     '/railsapi/v1/user/profile',
     {
@@ -47,34 +44,32 @@ const SettingsPage = () => {
     url: string,
     body: { [key: string]: string | Blob },
     formBody: boolean = false,
+    updateUser: boolean = false,
   ): Promise<void> => {
     body.authenticity_token = user.token!;
-    const res = await postApi<UpdateSettingResponse>(
-      `${url}?response_json=true`,
-      body,
-      { formData: formBody },
-    ).catch(() => ({ success: false, status: 'failure', message: '' }));
-    if (res.success || res.status === 'success') {
-      if (res.message) {
-        addToast(res.message, {
-          appearance: 'success',
+    const res = await postApi<RailsApiResponse<null>>(url, body, {
+      formData: formBody,
+    }).catch((res: RailsApiResponse<null>) => {
+      if (res.Fallback) {
+        addToast(`Failed to update user settings`, {
+          appearance: 'error',
           autoDismiss: true,
         });
       }
-      mutate();
-    } else {
-      addToast(`Failed to update user settings`, {
-        appearance: 'error',
-        autoDismiss: true,
-      });
+      return res;
+    });
+    addToast(res.Message, {
+      appearance: res.Success ? 'success' : 'error',
+      autoDismiss: true,
+    });
+    setTimeout(() => mutate(), 1000);
+    if (updateUser) {
+      mutateUser();
     }
     return;
   };
   return (
-    <main
-      style={contentStyle.styles}
-      className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4"
-    >
+    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4 pt-5">
       <h1 className="mb-4">{t('settings_page_title')}</h1>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">

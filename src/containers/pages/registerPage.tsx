@@ -15,6 +15,7 @@ import {
 } from '../../types/api/user/Registration';
 import dayjs from 'dayjs';
 import { AVAILABLE_LOCALES } from '../../constants';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 const RegisterPage = () => {
   const { user, mutateUser, locale } = useConfig();
@@ -77,10 +78,11 @@ const RegisterPage = () => {
     [],
   );
   const handleRegisterSubmit = useCallback(
-    async (form: PostRegistration): Promise<boolean> => {
+    async (
+      form: PostRegistration,
+    ): Promise<RailsApiResponse<RegistrationResponse | null>> => {
       form.language_id =
-        AVAILABLE_LOCALES.find(lang => lang.iso === locale)?.id.toString() ||
-        '0';
+        AVAILABLE_LOCALES.find(lang => lang.iso === locale)?.id || 0;
       const finalForm = Object.keys(form).reduce((obj, key) => {
         if (!key.includes('repeat')) {
           obj[key] = form[key];
@@ -90,17 +92,17 @@ const RegisterPage = () => {
         }
         return obj;
       }, {});
-      console.log(finalForm);
-      const res = await postApi<RegistrationResponse>(
+      const res = await postApi<RailsApiResponse<RegistrationResponse>>(
         '/railsapi/v1/registration/new',
         finalForm,
-      ).catch(err => {
-        addToast(`Failed to register`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-        console.log(err);
-        return null;
+      ).catch((res: RailsApiResponse<null>) => {
+        if (res.Fallback) {
+          addToast(`Failed to register`, {
+            appearance: 'error',
+            autoDismiss: true,
+          });
+        }
+        return res;
       });
       if (res?.Success && res.Data) {
         mutateUser(
@@ -114,8 +116,7 @@ const RegisterPage = () => {
           true,
         );
       }
-      console.log(res);
-      return true;
+      return res;
     },
     [],
   );
@@ -124,7 +125,7 @@ const RegisterPage = () => {
     return <Redirect to="/" />;
   }
   return (
-    <main className="registration">
+    <main className="registration pt-5">
       <div className="reg-block">
         <HelpBlock title="Hulp nodig?" blocks={['faq', 'phone', 'email']} />
         <OnlineForm

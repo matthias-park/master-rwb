@@ -113,6 +113,8 @@ exports[`default matches snapshot 1`] = `
   </div>
   <i
     className="settings-card__icon icon-down1"
+    onClick={[Function]}
   />
+   
 </div>
 `;

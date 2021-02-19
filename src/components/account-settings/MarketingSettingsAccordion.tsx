@@ -1,10 +1,12 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react';
-import { AccordionContext, Form } from 'react-bootstrap';
 import {
   SettingsForm,
   SettingsField,
 } from '../../types/api/user/ProfileSettings';
 import { useForm } from 'react-hook-form';
+import Form from 'react-bootstrap/Form';
+import AccordionContext from 'react-bootstrap/AccordionContext';
+import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import Card from 'react-bootstrap/Card';
 import clsx from 'clsx';
 import Accordion from 'react-bootstrap/Accordion';
@@ -20,6 +22,7 @@ interface SettingProps {
 const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
   const { t } = useI18n();
   const currentEventKey = useContext(AccordionContext);
+  const accordionOnClick = useAccordionToggle(form.id);
   const { register, handleSubmit, formState } = useForm({
     defaultValues: form.fields
       .filter(field => field.default !== undefined && field.default !== null)
@@ -180,7 +183,10 @@ const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
           </Form>
         </Card.Body>
       </Accordion.Collapse>
-      <i className="settings-card__icon icon-down1"></i>
+      <i
+        className="settings-card__icon icon-down1"
+        onClick={accordionOnClick}
+      />{' '}
     </Card>
   );
 };

@@ -50,7 +50,7 @@ const ForgotLoginPage = () => {
     });
   };
   return (
-    <main className="page-container">
+    <main className="page-container pt-5">
       <div className="page-inner">
         <h2 className="mb-4">{t('forgot_login_page_title')}</h2>
         <p className="text-14 mb-3">{t('forgot_login_text')}</p>

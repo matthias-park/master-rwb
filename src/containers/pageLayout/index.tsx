@@ -11,25 +11,23 @@ import { useConfig } from '../../hooks/useConfig';
 
 const pathsWithSidebar = NAVIGATION_ROUTES.filter(route =>
   [
-    ComponentName.BonusPage,
     ComponentName.DepositPage,
     ComponentName.LimitsPage,
     ComponentName.SettingsPage,
     ComponentName.WithdrawalPage,
     ComponentName.TransactionsPage,
     ComponentName.FaqPage,
+    ComponentName.BettingRulesPage,
   ].includes(route.id),
 );
 
 const pathsWithRightSidebar = NAVIGATION_ROUTES.filter(route =>
   [
-    ComponentName.BonusPage,
     ComponentName.DepositPage,
     ComponentName.LimitsPage,
     ComponentName.SettingsPage,
     ComponentName.WithdrawalPage,
     ComponentName.TransactionsPage,
-    ComponentName.FaqPage,
   ].includes(route.id),
 );
 

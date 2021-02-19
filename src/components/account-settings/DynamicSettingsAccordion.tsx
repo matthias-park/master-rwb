@@ -8,14 +8,27 @@ import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 
 interface SettingProps {
   form: SettingsForm;
-  onSubmit: (url: string, body: unknown) => void;
+  onSubmit: (
+    url: string,
+    body: { [key: string]: string | Blob },
+    formBody?: boolean,
+    updateUser?: boolean,
+  ) => void;
 }
+
+const FormsWithUpdateUser = [
+  'disable_player',
+  'disable_player_time_out',
+  'permanent_disable',
+];
 
 const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
   const currentEventKey = useContext(AccordionContext);
+  const accordionOnClick = useAccordionToggle(form.id);
   const { register, handleSubmit, watch, formState } = useForm({
     defaultValues: form.fields
       .filter(field => field.default ?? false)
@@ -51,7 +64,8 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
     [form.fields],
   );
   const updateSettingsSubmit = useCallback(
-    data => onSubmit(form.action, data),
+    data =>
+      onSubmit(form.action, data, false, FormsWithUpdateUser.includes(form.id)),
     [],
   );
 
@@ -187,7 +201,10 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
           </Form>
         </Card.Body>
       </Accordion.Collapse>
-      <i className="settings-card__icon icon-down1"></i>
+      <i
+        className="settings-card__icon icon-down1"
+        onClick={accordionOnClick}
+      />{' '}
     </Card>
   );
 };

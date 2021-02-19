@@ -39,7 +39,7 @@ const PromotionsPage = () => {
   const { t } = useI18n();
   const isDataLoading = !data && !error;
   return (
-    <main className="container-fluid mb-4">
+    <main className="container-fluid mb-4 pt-5">
       <h1 className="mb-4">{t('promotions_page_title')}</h1>
       <Tabs activeKey={activeTab} onSelect={key => setActiveTab(key)}>
         <Tab eventKey="all" title="All" mountOnEnter unmountOnExit>

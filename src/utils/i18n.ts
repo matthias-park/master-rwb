@@ -1,5 +1,7 @@
 import { ConfigRoute } from '../types/Config';
 import Lockr from 'lockr';
+import { postApi } from './apiUtils';
+import { replaceStringTagsReact } from './reactUtils';
 
 type Symbols = { [key: string]: { [key: string]: string } };
 
@@ -21,9 +23,12 @@ const i18n = () => {
     },
 
     t(key: string, lang?: string) {
-      //! Replace with empty string fallback
       const val = symbols?.[lang || locale]?.[key] || '';
       return val;
+    },
+    jsxT(key: string, lang?: string) {
+      const val = symbols?.[lang || locale]?.[key] || '';
+      return replaceStringTagsReact(val);
     },
   };
 };
@@ -34,7 +39,7 @@ export const getRedirectLocalePathname = (
   availableRoutes: ConfigRoute[],
 ) => {
   const windowPaths = window.location.pathname.split('/');
-  let urlPaths = window.location.pathname;
+  let urlPaths = `${window.location.pathname}${window.location.hash}`;
   let urlLocale = Lockr.get('locale', defaultLocale);
   if (availableLocales.includes(windowPaths[1])) {
     urlLocale = windowPaths[1];
@@ -56,7 +61,12 @@ export const getRedirectLocalePathname = (
   if (window.location.pathname !== urlPaths) {
     window.history.replaceState({}, '', urlPaths);
   }
-  window.LOCALE = urlLocale;
+  if (!window.LOCALE || window.LOCALE !== urlLocale) {
+    window.LOCALE = urlLocale;
+    postApi('/railsapi/v1/locale', {
+      locale: urlLocale,
+    });
+  }
   return urlLocale;
 };
 
@@ -71,7 +81,6 @@ export const setLocalePathname = (
   if (saveToStorage) {
     Lockr.set('locale', newlocale);
   }
-  window.LOCALE = newlocale;
 };
 
 export type I18n = ReturnType<typeof i18n>;

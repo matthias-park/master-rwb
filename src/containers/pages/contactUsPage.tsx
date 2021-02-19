@@ -67,7 +67,7 @@ const ContactUsPage = () => {
   };
 
   return (
-    <main className="page-container">
+    <main className="page-container pt-5">
       <div className="page-inner">
         {isDataLoading && (
           <div className="d-flex justify-content-center pt-4 pb-3">

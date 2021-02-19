@@ -1,5 +1,7 @@
 import React, { useCallback, useContext, useMemo } from 'react';
-import { AccordionContext, Form } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import AccordionContext from 'react-bootstrap/AccordionContext';
+import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import {
   SettingsForm,
   SettingsField,
@@ -22,7 +24,8 @@ const fileIds = ['image_id', 'image_residence', 'image_payment_proof'];
 const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
   const { t } = useI18n();
   const currentEventKey = useContext(AccordionContext);
-  const { register, handleSubmit, formState } = useForm();
+  const accordionOnClick = useAccordionToggle(form.id);
+  const { register, handleSubmit, formState, watch } = useForm();
   const fields: { [key: string]: SettingsField } = useMemo(
     () =>
       form.fields.reduce((obj, value) => {
@@ -41,7 +44,6 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
     });
     return onSubmit(form.action, body, true);
   }, []);
-
   return (
     <Card className="settings-card">
       <Card.Header
@@ -59,7 +61,7 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
             <div className="row mx-0 flex-column flex-sm-row">
               {fileIds.map(id => {
                 if (!fields[id]) return null;
-
+                const uploadedFilename = watch(id, [])[0]?.name;
                 return (
                   <div
                     key={id}
@@ -72,11 +74,12 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
                       <p className="mb-3">
                         {fields[id].status &&
                           `${fields[id].status} ${fields[id].date}`}
+                        {uploadedFilename}
                       </p>
                       {!fields[id].date && (
                         <Form.File custom className="mt-auto">
                           <Form.File.Label
-                            className={clsx(false && 'uploaded')}
+                            className={clsx(uploadedFilename && 'text-primary')}
                           >
                             {t('settings_file_upload')}
                             <Form.File.Input ref={register} name={id} />
@@ -133,7 +136,10 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
           </Form>
         </Card.Body>
       </Accordion.Collapse>
-      <i className="settings-card__icon icon-down1"></i>
+      <i
+        className="settings-card__icon icon-down1"
+        onClick={accordionOnClick}
+      />
     </Card>
   );
 };

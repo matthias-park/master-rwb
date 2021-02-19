@@ -28,11 +28,13 @@ const useUser = () => {
     {
       revalidateOnFocus: true,
       refreshInterval: 300000, // 5 min
-      onErrorRetry: () => {
-        addToast(`Failed to fetch user data`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
+      onErrorRetry: (err: RailsApiResponse<null>) => {
+        if (err.Code !== 401) {
+          addToast(`Failed to fetch user data`, {
+            appearance: 'error',
+            autoDismiss: true,
+          });
+        }
       },
     },
   );
@@ -75,9 +77,18 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   const locales = AVAILABLE_LOCALES.map(locale => locale.iso);
   const { user, mutateUser } = useUser();
   const [storage] = useLocalStorage<Storage | null>('cookieSettings', null);
-  const [locale, changeLocale] = useState(
-    getRedirectLocalePathname(locales, window.DEFAULT_LOCALE, routes),
-  );
+  const [locale, changeLocale] = useState(window.DEFAULT_LOCALE);
+
+  useEffect(() => {
+    const detectedLocale = getRedirectLocalePathname(
+      locales,
+      window.DEFAULT_LOCALE,
+      routes,
+    );
+    if (locale !== detectedLocale) {
+      changeLocale(detectedLocale);
+    }
+  }, [locale]);
 
   const setLocale = (lang: string) => {
     setLocalePathname(lang, storage?.functional ?? true);

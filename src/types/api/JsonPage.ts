@@ -1,8 +1,13 @@
 interface JsonPage {
-  title: string | null;
-  headline: string | null;
-  page_description: string | null;
-  text: string | null;
+  id: null;
+  slug: string;
+  title: string;
+  description: string | null;
+  meta: string | null;
+  body: string;
+  headline: string;
+  meta_description: string;
+  seo_title: string;
 }
 
 export default JsonPage;

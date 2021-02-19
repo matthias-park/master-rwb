@@ -4,7 +4,6 @@ import InputContainer from '../../components/account-settings/InputContainer';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
-import { useUIConfig } from '../../hooks/useUIConfig';
 import useSWR from 'swr';
 import Spinner from 'react-bootstrap/Spinner';
 import {
@@ -99,7 +98,6 @@ const WithdrawalRequests = ({
 const WithdrawalPage = () => {
   const { t, set } = useI18n();
   const { user, locale } = useConfig();
-  const { contentStyle } = useUIConfig();
   const { addToast } = useToasts();
   const [submitResponse, setSubmitResponse] = useState<{
     success: boolean;
@@ -223,10 +221,7 @@ const WithdrawalPage = () => {
     [t],
   );
   return (
-    <main
-      style={contentStyle.styles}
-      className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4"
-    >
+    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4 pt-5">
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />

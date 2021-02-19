@@ -1,4 +1,4 @@
-import { UIBackdrop, UIBackdropState, UIContentStyle } from '../types/UIConfig';
+import { UIBackdrop, UIBackdropState } from '../types/UIConfig';
 import { ComponentName } from '../constants';
 import { throttle } from './index';
 
@@ -46,24 +46,6 @@ export const createBackdropProviderValues = (
     toggle,
     show,
     hide,
-  };
-};
-
-export const createContentStylesProviderValues = (
-  contentStyles: React.CSSProperties,
-  setContentStyles: (newState: React.CSSProperties) => void,
-): UIContentStyle => {
-  const set = (styles: React.CSSProperties, clear: boolean = false) => {
-    setContentStyles({
-      ...(clear ? {} : contentStyles),
-      ...styles,
-    });
-  };
-  const clear = () => setContentStyles({});
-  return {
-    styles: contentStyles,
-    set,
-    clear,
   };
 };
 

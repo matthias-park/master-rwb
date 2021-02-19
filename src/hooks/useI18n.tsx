@@ -70,7 +70,14 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   );
 
   useEffect(() => {
-    setTranslations(createLocale(locale, data));
+    setTranslations(
+      createLocale(locale, data),
+      // createLocale(locale, {
+      //   ...data,
+      //   register_input_newsletter:
+      //     'I would like to stay informed of news from the National Lottery. Do you want to be the first to discover our jackpots, games and promotions? Receive special offers and benefits directly in your mailbox? Then tick this box! You can unsubscribe or change your preferences at any time: see our {linkTo=/privacy-policy}privacy statement{linkTo}',
+      // }),
+    );
   }, [data, locale]);
 
   return <I18nContext.Provider value={translations} {...props} />;
