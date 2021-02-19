@@ -224,17 +224,17 @@ const LoginDropdown = ({
         className={`dropdown-toggle login-dropdown__toggle ${toggleClasses}`}
         disabled={userLoading}
       >
+        {t('login_btn')}
+        <i className="icon-account mr-0 ml-2"></i>
         {userLoading && (
           <Spinner
             as="span"
             animation="border"
             size="sm"
             role="status"
-            className="mr-1"
+            className="ml-1"
           />
         )}
-        <i className="icon-account"></i>
-        {t('login_btn')}
       </Dropdown.Toggle>
       <Dropdown.Menu className="login-dropdown__menu">
         <LoginForm hideLoginDropdown={handleHideDropdown} />

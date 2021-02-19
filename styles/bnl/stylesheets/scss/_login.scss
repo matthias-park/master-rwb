@@ -1,11 +1,20 @@
 .login-dropdown {
+    position: relative;
+    top: 5px;
+    @include media-breakpoint-down(lg) {
+      top: 0;
+    }
     &__toggle {
-        &:after {
-            content: none;
-        }
+      min-height: 44px;
+      border-radius: 16px;
+      padding: 0 20px;
+      font-size: 13px;
+      &:after {
+          content: none;
+      }
     }
     &__menu {
-        top: 50px;
+        top: 55px;
         left: auto;
         right: 0;
         width: 365px;
@@ -15,7 +24,7 @@
             content: '';
             position: absolute;
             top: -7px;
-            right: 15%;
+            right: 7%;
             width: 0; 
             height: 0; 
             border-left: 8px solid transparent;
@@ -30,21 +39,29 @@
             color: $brand-text;
         }
         @include media-breakpoint-down(lg) {
-            left: -125%;
-            top: 48px;
+            left: -187%;
+            top: 55px;
             &:after {
-                right: 29%;
+                right: 21%;
             }
         }
         @include media-breakpoint-down(xs) {
-            left: 50%;
-            transform: translateX(-50%);
+            left: -174%;
             width: 96vw;
             max-width: 365px;
             &:after {
-                left: 50%;
-                transform: translateX(-50%);
+                left: 70.5%;
             }
+        }
+        @media only screen and (max-width: 375px) {
+          position: fixed;
+          left: 50%;
+          transform: translateX(-50%);
+          top: 72px;
+          &:after {
+            right: 87px;
+            left: unset;
+          }
         }
     }
     &.show {

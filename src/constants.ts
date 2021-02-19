@@ -35,6 +35,7 @@ export enum ComponentName {
   TemplatePage,
   ContactUsPage,
   SitemapPage,
+  CookiesModal,
 }
 
 export enum FormFieldValidation {
@@ -289,17 +290,27 @@ export const TRANSLATION_SYMBOLS = [
   'login_field_required',
   'promotions_page_title',
   'promotions_failed_to_load',
-  'cookie_page_title',
+  'cookie_modal_title',
+  'cookie_modal_text',
   'cookies_check_all',
   'cookies_check_essential',
   'cookies_check_functional',
   'cookies_check_thirdParty',
   'cookies_check_all_desc',
+  'cookies_check_all_title',
+  'cookies_check_all_short_desc',
   'cookies_check_essential_desc',
+  'cookies_check_essential_title',
+  'cookies_check_essential_short_desc',
   'cookies_check_functional_desc',
+  'cookies_check_functional_title',
+  'cookies_check_functional_short_desc',
   'cookies_check_thirdParty_desc',
+  'cookies_check_thirdParty_title',
+  'cookies_check_thirdParty_short_desc',
   'cookies_btn_cancel',
   'cookies_btn_save',
+  'cookies_btn_all',
   'forgot_password_page_title',
   'forgot_password_email_field',
   'forgot_password_submit_btn',
@@ -365,6 +376,13 @@ export const TRANSLATION_SYMBOLS = [
   'sitemap_CertsCodeConduct',
   'info_faq_title',
   'betting_rules_title',
+  'custom_checkbox_checked',
+  'custom_checkbox_unchecked',
+  'moderation_gamble',
+  'bnl_modal_footer_text_1',
+  'bnl_modal_footer_text_2',
+  'official_partners_title',
+  'footer_info_text',
 ];
 
 export const HEAD_DATA: HeadData = {
@@ -717,18 +735,19 @@ export const FOOTER_LINKS = [
 ];
 export const FOOTER_DATA = {
   social: {
-    androidApp: '#',
-    iosApp: '#',
     mail: '#',
     facebook: '#',
     youtube: '#',
     twitter: '#',
-    instagram: '#',
-    linkedin: '#',
+  },
+  partners: {
+    reddevils: '#',
+    redflames: '#',
+    superleague: '#',
+    rscs: '#',
   },
   links: FOOTER_LINKS,
   subFooter: {
-    title: 'sub_footer_title',
     links: [
       {
         name: 'terms_conditions_link',
@@ -742,7 +761,7 @@ export const FOOTER_DATA = {
       },
       {
         name: 'cookie_policy_link',
-        link: '/cookie-policy',
+        modal: ComponentName.CookiesModal,
         order: 2,
       },
       {

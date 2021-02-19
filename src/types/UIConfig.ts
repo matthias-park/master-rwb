@@ -18,6 +18,8 @@ export type UIContentStyle = {
 type UIConfig = {
   backdrop: UIBackdrop;
   contentStyle: UIContentStyle;
+  showModal: ComponentName | null;
+  setShowModal: (ComponentName) => void;
 };
 
 export default UIConfig;

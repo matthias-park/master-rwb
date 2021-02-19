@@ -1,3 +1,4 @@
+import { ComponentName } from '../constants';
 export interface FooterLink {
   order: number;
   children: {
@@ -22,11 +23,19 @@ export interface SocialLinks {
   instagram?: string;
   linkedin?: string;
 }
+
+export interface PartnerLinks {
+  reddevils?: string;
+  redflames?: string;
+  superleague?: string;
+  rcsc?: string;
+}
 export interface SubFooter {
-  title: string;
+  title?: string;
   links: {
     name: string;
-    link: string;
+    link?: string;
+    modal?: ComponentName;
     order: number;
   }[];
 }

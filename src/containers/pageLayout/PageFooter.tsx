@@ -1,17 +1,23 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { FOOTER_DATA, iconName } from '../../constants';
-import { FooterLink, SocialLinks, SubFooter } from '../../types/FooterData';
+import {
+  FooterLink,
+  SocialLinks,
+  PartnerLinks,
+  SubFooter,
+} from '../../types/FooterData';
 import Dropdown from 'react-bootstrap/Dropdown';
 import useDesktopWidth from '../../hooks/useDesktopWidth';
 import SessionTimer from '../../components/SessionTimer';
 import { useI18n } from '../../hooks/useI18n';
+import { useUIConfig } from '../../hooks/useUIConfig';
 import { sortAscending } from '../../utils/index';
 
 const FooterHeader = () => {
   const { t } = useI18n();
   return (
-    <div className="row footer-pre pt-3">
+    <div className="row footer-pre align-items-center py-3">
       <div className="session-block mb-2 mb-sm-0">
         <span className="session-block__text text-14">
           {t('time_spent_in_website')}
@@ -21,7 +27,10 @@ const FooterHeader = () => {
           <SessionTimer />
         </span>
       </div>
-      <div className="restrictions-block ml-md-auto">
+      <h3 className="text-gray-100 ml-auto mr-5 mb-0">
+        {t('moderation_gamble')}
+      </h3>
+      <div className="restrictions-block">
         <img
           className="restrictions-block__img d-none d-sm-block d-md-none d-lg-block"
           alt=""
@@ -35,16 +44,8 @@ const FooterHeader = () => {
         <img
           className="restrictions-block__img mr-3"
           alt=""
-          src="/assets/images/restrictions/bnl.png"
-          width="190"
-          height="45"
-        />
-        <img
-          className="restrictions-block__img pt-1"
-          alt=""
-          src="/assets/images/restrictions/becommerce.png"
-          width="95"
-          height="95"
+          src="/assets/images/restrictions/bnl.jpg"
+          width="200"
         />
       </div>
     </div>
@@ -53,12 +54,10 @@ const FooterHeader = () => {
 
 const FooterBottom = ({ data }: { data: SubFooter }) => {
   const { t } = useI18n();
+  const { setShowModal } = useUIConfig();
   return (
     <div className="row no-gutters footer-sub">
-      <span className="footer-sub__title d-none d-lg-inline-block">
-        {t(data.title)}
-      </span>
-      <ul className="footer-sub__nav ml-auto">
+      <ul className="footer-sub__nav mr-auto">
         {data.links
           .sort((a, b) => sortAscending(a.order, b.order))
           .map(link => (
@@ -66,22 +65,57 @@ const FooterBottom = ({ data }: { data: SubFooter }) => {
               key={`${link.name}-${link.link}`}
               className="footer-sub__nav-link"
             >
-              <Link to={link.link}>{t(link.name)}</Link>
+              {link.link ? (
+                <Link to={link.link}>{t(link.name)}</Link>
+              ) : (
+                <span onClick={() => setShowModal(link.modal)}>
+                  {t(link.name)}
+                </span>
+              )}
             </li>
           ))}
-        <li className="footer-sub__nav-link d-flex d-lg-none">
-          {t(data.title)}
+      </ul>
+      <ul className="footer-sub__nav flex-row justify-content-center h-auto pb-3 pb-lg-0">
+        <li>
+          <img height="45" src="/assets/images/footer/kansspel.jpg" />
+        </li>
+        <li>
+          <img
+            className="ml-2 ml-lg-3"
+            height="45"
+            src="/assets/images/footer/loterij.jpg"
+          />
+        </li>
+        <li>
+          <img
+            className="ml-2 ml-lg-3"
+            height="45"
+            src="/assets/images/footer/european.jpg"
+          />
+        </li>
+        <li>
+          <img
+            className="ml-2 ml-lg-3"
+            height="45"
+            src="/assets/images/footer/becommerce.jpg"
+          />
         </li>
       </ul>
     </div>
   );
 };
 
-const SocialSection = ({ social }: { social: SocialLinks }) => {
+const SocialSection = ({
+  social,
+  partners,
+}: {
+  social: SocialLinks;
+  partners: PartnerLinks;
+}) => {
   const { t } = useI18n();
   const { iosApp, androidApp, ...webSocial } = social;
   return (
-    <section className="footer-social-block ml-auto pt-4 mt-0 mt-md-4 mt-lg-0 pt-lg-0">
+    <section className="footer-social-block d-flex ml-auto pt-4 mt-0 mt-md-4 mt-lg-0 pt-lg-0">
       <div className="section-social">
         <h2 className="section-social__head-title">
           {t('footer_social_title')}
@@ -123,6 +157,21 @@ const SocialSection = ({ social }: { social: SocialLinks }) => {
               </a>
             ))}
         </p>
+        <h2 className="section-social__head-title mt-4">
+          {t('official_partners_title')}
+        </h2>
+        <p className="section-social__icons d-flex align-items-center">
+          {Object.entries(partners)
+            .filter(Boolean)
+            .map(([key, value]) => (
+              <a key={key} href={value} className="section-social__icons-link">
+                <img height="42" src={`/assets/images/footer/${key}.jpg`} />
+              </a>
+            ))}
+        </p>
+      </div>
+      <div className="footer-info-text d-none d-xxl-flex align-items-end ml-3 mb-2">
+        <p>{t('footer_info_text')}</p>
       </div>
     </section>
   );
@@ -162,7 +211,7 @@ const SortedFooterLinks = ({ links }: { links: FooterLink[] }): any => {
                       to={child.link || '#'}
                       className={
                         child.button
-                          ? 'btn btn-outline-light btn-sm my-3'
+                          ? 'btn btn-outline-light btn-sm mt-3'
                           : 'section-item__link'
                       }
                     >
@@ -182,9 +231,12 @@ const PageFooter = () => {
     <footer>
       <div className="container-fluid">
         <FooterHeader />
-        <div className="row footer-main pt-0 pt-md-4 pb-2 py-lg-4">
+        <div className="row footer-main pt-0 pt-md-4 pb-2 pb-lg-4 pt-lg-5">
           <SortedFooterLinks links={footerData.links} />
-          <SocialSection social={footerData.social} />
+          <SocialSection
+            social={footerData.social}
+            partners={footerData.partners}
+          />
         </div>
         <FooterBottom data={footerData.subFooter} />
       </div>

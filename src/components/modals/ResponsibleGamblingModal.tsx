@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import GenericModal from './GenericModal';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
 import Lockr from 'lockr';
@@ -28,21 +28,18 @@ const ResponsibleGamblingModal = () => {
   const hideModal = () => setShowModal(false);
 
   return (
-    <Modal show={showModal} onHide={hideModal} backdrop="static" centered>
-      <Modal.Header closeButton>
-        <Modal.Title>{t('responsible_gambling_title')}</Modal.Title>
-      </Modal.Header>
-
-      <Modal.Body>
-        <p>{t('responsible_gambling_body')}</p>
-      </Modal.Body>
-
-      <Modal.Footer>
-        <Button onClick={hideModal} variant="secondary" className="mx-auto">
-          {t('responsible_gambling_close')}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <GenericModal
+      show={showModal}
+      hideCallback={hideModal}
+      isCentered={true}
+      isStatic={true}
+    >
+      <h2 className="mb-3 mt-4">{t('responsible_gambling_title')}</h2>
+      <p>{t('responsible_gambling_body')}</p>
+      <Button onClick={hideModal} variant="primary" className="mx-auto mt-4">
+        {t('responsible_gambling_close')}
+      </Button>
+    </GenericModal>
   );
 };
 

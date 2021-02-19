@@ -83,9 +83,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
   }
   return (
     <LoginDropdown
-      dropdownClasses={
-        mobile ? 'mx-auto ml-sm-auto mr-sm-0' : 'ml-auto mt-0 mt-lg-4'
-      }
+      dropdownClasses={mobile ? 'ml-auto mr-0' : 'ml-auto mt-0 mt-lg-2'}
       toggleClasses={clsx(mobile && 'ml-auto')}
       userLoading={user.loading}
     />
@@ -111,7 +109,10 @@ const PageHeader = () => {
         <>
           <BrandLogo mobile={true} />
           <UserBlock mobile={true} />
-          <Navbar.Toggle className="header__nav-toggler pr-0" type="button">
+          <Navbar.Toggle
+            className="header__nav-toggler px-1 ml-2"
+            type="button"
+          >
             <span className="icon-menu"></span>
           </Navbar.Toggle>
         </>

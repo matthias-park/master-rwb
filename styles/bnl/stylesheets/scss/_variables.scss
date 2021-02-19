@@ -71,9 +71,9 @@ $colors: map-merge(
   $colors
 );
 
-$primary:       #00eb5d;
+$primary:       #0ee56f;
 $primary-light: #5eed53;
-$brand:         #031442;
+$brand:         #000541;
 $brand-light: #191e54;
 $brand-text:  #000541;
 $secondary:     $gray-600 !default;
@@ -975,7 +975,7 @@ $badge-pill-border-radius:          10rem !default;
 // Modals
 
 // Padding applied to the modal body
-$modal-inner-padding:               1rem !default;
+$modal-inner-padding:               2.2rem;
 
 // Margin between elements in footer, must be lower than or equal to 2 * $modal-inner-padding
 $modal-footer-margin-between:       .5rem !default;
@@ -989,7 +989,7 @@ $modal-content-color:               null !default;
 $modal-content-bg:                  $white !default;
 $modal-content-border-color:        rgba($black, .2) !default;
 $modal-content-border-width:        $border-width !default;
-$modal-content-border-radius:       $border-radius-lg !default;
+$modal-content-border-radius:       8px;
 $modal-content-inner-border-radius: subtract($modal-content-border-radius, $modal-content-border-width) !default;
 $modal-content-box-shadow-xs:       0 .25rem .5rem rgba($black, .5) !default;
 $modal-content-box-shadow-sm-up:    0 .5rem 1rem rgba($black, .5) !default;
@@ -1006,7 +1006,7 @@ $modal-header-padding:              $modal-header-padding-y $modal-header-paddin
 
 $modal-xl:                          1140px !default;
 $modal-lg:                          800px !default;
-$modal-md:                          500px !default;
+$modal-md:                          430px !default;
 $modal-sm:                          300px !default;
 
 $modal-fade-transform:              translate(0, -50px) !default;

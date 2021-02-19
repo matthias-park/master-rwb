@@ -25,6 +25,7 @@ export const UIConfigProvider = props => {
     ignoredComponents: [],
   });
   const [contentStyles, setContentStyles] = useState<React.CSSProperties>({});
+  const [showModal, setShowModal] = useState(null);
 
   useEffect(() => {
     changeBackdropVisibility(backdrop.active);
@@ -36,6 +37,8 @@ export const UIConfigProvider = props => {
       contentStyles,
       setContentStyles,
     ),
+    showModal: showModal,
+    setShowModal: setShowModal,
   };
   return <uiConfig.Provider value={value}>{props.children}</uiConfig.Provider>;
 };

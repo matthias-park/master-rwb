@@ -30,7 +30,7 @@
         &:active,
         &:not(:placeholder-shown) {
             + label {
-                font-size: 8px;
+                font-size: 8px !important;
                 top: 4px;
             }
         }

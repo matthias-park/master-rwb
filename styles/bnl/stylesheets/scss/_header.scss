@@ -3,7 +3,7 @@
     padding: 14px 0 22px 0;
     @include media-breakpoint-down(lg) {
       padding: 0;
-  }
+    }
     @include full-bg($brand);
     &__nav-toggler {
         @extend .navbar-toggler;
@@ -12,7 +12,7 @@
         margin-left: 8px;
         border: none;
         .icon-menu {
-            color: $primary;
+            color: $white;
         }
         .icon-menu-close {
             color: $brand-light;
@@ -121,15 +121,16 @@
                         .dropdown-menu {
                           position: absolute;
                           align-items: center;
-                          top: 145px;
+                          top: 133px;
                           left: -80px;
                           border-radius: 0;
-                          width: 100vw;
+                          width: calc(100% + 160px);
                           height: 45px;
                           padding: 0 75px;
                           @include media-breakpoint-down(xl) {
                               padding: 0 40px;
                               left: -45px;
+                              width: calc(100% + 90px);
                           }
                           .dropdown-item {
                             display: flex;
@@ -140,8 +141,10 @@
                             color: $brand-text;
                             &:hover,
                             &:active,
-                            &:focus {
+                            &:focus,
+                            &.active {
                               border-bottom: 3px solid $brand;
+                              background-color: $white;
                               padding-top: 3px;
                             }
                           }
@@ -345,34 +348,66 @@
     }
     &__user-menu {
         position: relative;
+        top: 5px;
         align-items: center;
-        height: 65px;
+        height: 52px;
         background-color: $gray-custom-100;
         border-radius: 16px;
         padding-left: 16px;
-        padding-right: 35px;
+        padding-right: 32px;
         @include media-breakpoint-down(lg) {
-            background-color: transparent;
-            height: 50px;
-            border: none;
-            padding-right: 0;
+            height: 36px;
+            top: 0;
         }
         &-info {
-            height: 65%;
+            height: 70%;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: flex-end;
-            @include media-breakpoint-down(lg) {
-                font-size: 13px;
-                color: white;
+            align-items: center;
+            font-size: 13px;
+            &-name {
+              width: 70px;
+              @include media-breakpoint-down(lg) {
+                display: none;
+              }
             }
             &-balance {
-                color: $light-black;
+                display: flex;
+                align-items: center;
+                height: 100%;
+                color: $black-custom;
                 font-weight: 500;
+                padding-right: 15px;
+                margin-right: 15px;
+                border-right: 2px solid $gray-200;
+                font-size: 16px;
                 @include media-breakpoint-down(lg) {
-                    font-size: 12px;
-                    color: $white-light;
+                  padding-right: 5px;
+                  margin-right: -4px;
+                  font-size: 12px;
+                }
+                i {
+                  position: relative;
+                  font-size: 28px;
+                  color: $white;
+                  @include media-breakpoint-down(lg) {
+                    top: -1px;
+                  }
+                  &:before {
+                    position: relative;
+                    z-index: 2;
+                  }
+                  &:after {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translateX(-50%) translateY(-50%);
+                    width: 22px;
+                    height: 22px;
+                    border-radius: 50%;
+                    background-color: $primary;
+                    z-index: 1;
+                  }
                 }
                 span:nth-of-type(2) {
                     position: relative;
@@ -387,13 +422,6 @@
                         background-color: $primary;
                         border-radius: 50%;
                     }
-                    @include media-breakpoint-down(lg) {
-                        margin-left: 20px;
-                        &:after {
-                            left: -11px;
-                            top: 5px;
-                        }
-                    }
                 }
             }
         }
@@ -405,52 +433,44 @@
             width: 27px;
             height: 100%;
             border: none;
-            background-color: $primary-light;
+            background-color: $primary;
             color: $white;
-            font-size: 33px;
+            font-size: 28px;
             padding: 0;
             border-top-right-radius: 16px;
             border-bottom-right-radius: 16px;
-            @include media-breakpoint-down(lg) {
-                display: none;
-            }
             &:after {
                 display: none;
             }
             &-icon {
                 display: inline-block;
-                transform: translateX(-3px) translateY(4px);
+                transform: translateX(-1px) translateY(4px);
             }
         }
         &-icon {
-            font-size: 38px;
-            color: $brand-text;
+            font-size: 28px;
+            color: $primary;
             &:after {
               display: none;
             }
-            @include media-breakpoint-down(lg) {
-              color: $white;
-              &:hover,
-              &:focus,
-              &:active {
-                color: $white;
-              }
-          }
         }
     }
 }
 
 .user-menu {
     width: 330px;
-    left: 43%;
+    left: 49%;
     transform: translateX(-50%);
-    top: calc(100% + 10px);
+    top: calc(100% + 12px);
     padding: 0;
     background-color: $light-gray-bg;
     text-align: center;
     padding-bottom: 0;
     z-index: 1100;
     box-shadow: 0 -2px 20px 0 rgba(0, 0, 0, 0.3);
+    @include media-breakpoint-down(lg) {
+      left: 40%;
+    }
     &__wrp {
       padding: 25px 20px;
       padding-bottom: 0;
@@ -584,13 +604,13 @@
             right: 20.5%;
         }
         @include media-breakpoint-down(xs) {
-            right: 59px;
+            right: 69px;
         }
     }
     @include media-breakpoint-down(xs) {
         width: 100vw;
         max-width: 400px;
-        right: -50px;
+        right: -62px;
         left: auto;
         transform: none;
     }
