@@ -254,7 +254,7 @@ export interface CustomerSettings {
    * @default []
    * NOTE: Overriding this setting overrides complete value so it would not merge array, it would replace it.
    */
-  reservedRoutes?: string[];
+  reservedRoutes?: (string | RegExp)[];
 
   /**
          * Defines routes ignored by the betting client.
@@ -834,4 +834,155 @@ export interface CustomerSettings {
     fetchStreamUrl,
     onExitFullscreen,
   }: any) => boolean;
+}
+
+export interface WidgetAPI {
+  request: (key: string, ...args: any[]) => unknown;
+  set: (key: string, ...args: any[]) => unknown;
+  navigateClient: (path: string, widget: string) => void;
+  ua: Ua;
+  VERSION: string;
+  BETSLIP_OUTCOMES_ARGS: BetslipOutcomesArgs;
+  PLACE_BET_STATE_VALUE: PlaceBetStateValue;
+  BET_TYPE: BetType;
+  BETSLIP_STAKE_UPDATED_TYPES: BetslipStakeUpdatedTypes;
+  EVENT_INFO_TYPES: EventInfoTypes;
+  EVENT_INFO_CONTEXT: EventInfoContext;
+  FETCH_COUPON_STATUS: FetchCouponStatus;
+  LOGOUT_REASONS: LogoutReasons;
+  ODDS_FORMAT_TYPES: OddsFormatTypes;
+  FEEDBACK_MESSAGE_TYPES: { [key: string]: string };
+  IFRAME_READY: string;
+  REMOVE: string;
+  NAVIGATE: string;
+  BET_HISTORY: string;
+  BETSLIP_OUTCOMES_REMOVE: string;
+  BETSLIP_OUTCOMES: string;
+  BETSLIP_MAXIMIZED: string;
+  BETSLIP_MAXIMIZED_CHANGE: string;
+  BETSLIP_STAKE_UPDATED: string;
+  BETSLIP_UPDATE_STAKE: string;
+  EVENT_INFO: string;
+  EVENT_INFO_UNSUBSCRIBE: string;
+  PLACE_BET: string;
+  CLIENT_ODDS_FORMAT: string;
+  PLACE_BET_STATE: string;
+  PLACE_BET_FAILURE_REASON: string;
+  PAGE_INFO: string;
+  USER_LOGGED_IN: string;
+  USER_SESSION_CHANGE: string;
+  USER_DATA: string;
+  CLIENT_CONFIG: string;
+  VERSIONS: string;
+  ODDS_FRACTIONAL: string;
+  ODDS_AMERICAN: string;
+  LIBS: string;
+  WIDGET_ARGS: string;
+  WIDGET_HEIGHT: string;
+  WIDGET_ENABLE_TRANSITION: string;
+  WIDGET_DISABLE_TRANSITION: string;
+  WIDGET_SETUP: string;
+  LOGIN: string;
+  LOGOUT: string;
+  CLIENT_HIDE: string;
+  CLIENT_SHOW: string;
+  TRACK_EXTERNAL_INTERACTION: string;
+  BETSLIP_HIDE: string;
+  BETSLIP_SHOW: string;
+  BETSLIP_CLEAR: string;
+  REWARDS: string;
+  KAMBI_REQUEST_CLIENT_READY_RESPONSE: string;
+  KAMBI_RESPOND_CLIENT_READY: string;
+  START_TUTORIAL: string;
+  DISABLE_CASH_OUT: string;
+  ENABLE_CASH_OUT: string;
+}
+
+export interface BetslipOutcomesArgs {
+  UPDATE_REPLACE: string;
+  UPDATE_APPEND: string;
+  TYPE_SINGLE: string;
+  TYPE_COMBINATION: string;
+  TYPE_SYSTEM: string;
+  TYPE_PATENT: string;
+  TYPE_TRIXIE: string;
+  TYPE_YANKEE: string;
+  TYPE_CANADIAN: string;
+  TYPE_HEINZ: string;
+  TYPE_SUPERHEINZ: string;
+}
+
+export interface BetslipStakeUpdatedTypes {
+  STAKE_UPDATE_TYPE_SINGLE: string;
+  STAKE_UPDATE_TYPE_COMBINATION: string;
+  STAKE_UPDATE_TYPE_SYSTEM: string;
+}
+
+export interface BetType {
+  SINGLE: string;
+  COMBINATION: string;
+  SYSTEM: string;
+}
+
+export interface EventInfoContext {
+  LIVE: string;
+  PRE_MATCH: string;
+}
+
+export interface EventInfoTypes {
+  BASIC: string;
+  BET_OFFERS: string;
+  SCORE: string;
+}
+
+export interface FetchCouponStatus {
+  PENDING: string;
+  SETTLED: string;
+  WON: string;
+  LOST: string;
+  VOID: string;
+  CASH_OUT: string;
+  CASHED_OUT: string;
+  ALL: string;
+  REWARDS: string;
+}
+
+export interface LogoutReasons {
+  SESSION_TIMED_OUT: string;
+  LOGOUT_REQUESTED: string;
+  LOGIN_FAILED: string;
+}
+
+export interface OddsFormatTypes {
+  DECIMAL: string;
+  FRACTIONAL: string;
+  AMERICAN: string;
+}
+
+export interface PlaceBetStateValue {
+  PLACING: string;
+  SUCCEEDED: string;
+  FAILED: string;
+}
+
+export interface Ua {
+  source: string;
+  browser: Browser;
+  os: Browser;
+  device: Device;
+}
+
+export interface Browser {
+  family: string;
+  major: number | null;
+  minor: number | null;
+  patch: number | null;
+  name: string;
+  version: string;
+}
+
+export interface Device {
+  family: string;
+  type: string;
+  manufacturer: null;
 }

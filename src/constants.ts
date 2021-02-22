@@ -1,7 +1,6 @@
 import { ConfigRoute } from './types/Config';
 import HeadData from './types/HeadData';
 import HeaderLink from './types/HeaderLinks';
-import ContactUsPage from './containers/pages/contactUsPage';
 import RailsApiResponse from './types/api/RailsApiResponse';
 
 export const TestEnv = process.env.NODE_ENV === 'test';
@@ -48,7 +47,7 @@ export enum FormFieldValidation {
 export const HEADER_ROUTES: HeaderLink[] = [
   {
     name: 'nav_link_sports',
-    path: '/sports',
+    prefix: '/sports',
     order: 1,
     links: [
       {
@@ -328,6 +327,15 @@ export const TRANSLATION_SYMBOLS = [
   'nav_link_lottery_win_for_life',
   'nav_link_lottery_woohoo',
   'nav_link_lottery_all_games',
+  'nav_link_winners_winner_of_the_day',
+  'nav_link_winners_how_to_win',
+  'nav_link_more_than_playing_charities',
+  'nav_link_more_than_playing_partners',
+  'nav_link_promotions_promotions',
+  'nav_link_sports_promotions',
+  'nav_link_sports_about_retails',
+  'nav_link_sports_how_to_play',
+  'nav_link_sports_responsible_gaming',
   'login_field_required',
   'promotions_page_title',
   'promotions_failed_to_load',
@@ -883,4 +891,10 @@ export const RailsApiResponseFallback: RailsApiResponse<null> = {
   Message: null,
   Success: false,
   Fallback: true,
+};
+
+export const KambiSbLocales = {
+  nl: 'nl_BE',
+  fr: 'fr_BE',
+  de: 'de_DE',
 };

@@ -1,4 +1,7 @@
-import KambiConfig, { CustomerSettings } from '../src/types/KambiConfig';
+import KambiConfig, {
+  CustomerSettings,
+  WidgetAPI,
+} from '../src/types/KambiConfig';
 
 export declare global {
   interface Window {
@@ -9,5 +12,7 @@ export declare global {
     customerSettings?: CustomerSettings;
     _kc?: KambiConfig;
     _kbc?: { dispose: any };
+    KambiWidget?: { ready: Promise<any> };
+    KambiWapi?: WidgetAPI;
   }
 }
