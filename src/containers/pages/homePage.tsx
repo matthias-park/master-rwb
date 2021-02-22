@@ -9,7 +9,7 @@ const HomePage = () => {
         <title>Home Page</title>
         <meta name="description" content="A Boilerplate application homepage" />
       </Helmet>
-      <Redirect to="/sports" />
+      <Redirect to="/sports#home" />
       <span>HomePage container</span>
     </>
   );

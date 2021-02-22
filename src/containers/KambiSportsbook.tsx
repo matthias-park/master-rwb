@@ -147,7 +147,7 @@ const kambiId = 'KambiBC';
 const KambiSportsbook = () => {
   const { addToast } = useToasts();
   const config = useConfig();
-  const { hash } = useLocation();
+  const { hash, key: locationKey } = useLocation();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [sbLoading, setSbLoading] = useState(true);
   const [apiLoaded, setApiLoaded] = useState(false);
@@ -173,7 +173,7 @@ const KambiSportsbook = () => {
   }, [config.user.logged_in, apiLoaded]);
 
   useEffect(() => {
-    if (hash.length && window.KambiWapi) {
+    if (locationKey && hash.length && window.KambiWapi) {
       window.KambiWapi.navigateClient(hash, 'sportsbook');
     }
   }, [hash, apiLoaded]);
