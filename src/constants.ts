@@ -314,6 +314,7 @@ export const TRANSLATION_SYMBOLS = [
   'register_personal_code_invalid',
   'register_input_newsletter',
   'register_input_terms_and_conditions',
+  'register_input_postal_code_invalid',
   'nav_link_sports',
   'nav_link_winners',
   'nav_link_more_than_playing',

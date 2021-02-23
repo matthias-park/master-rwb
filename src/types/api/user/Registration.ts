@@ -17,22 +17,15 @@ export interface ValidateRegisterInput {
 }
 
 export interface ValidateRegisterPersonalCode {
-  Success: boolean;
-  Code: number;
-  Message: string | null;
-  Data:
-    | {
-        valid: true;
-        result: {
-          year: string;
-          month: string;
-          day: string;
-          diff: string;
-          checksum: string;
-          gender: string;
-        };
-      }
-    | string;
+  valid: true;
+  result: {
+    year: string;
+    month: string;
+    day: string;
+    diff: string;
+    checksum: string;
+    gender: string;
+  };
 }
 
 export interface RegistrationResponse {
@@ -42,4 +35,19 @@ export interface RegistrationResponse {
   PlayerId: number;
   Code: number;
   Message: string;
+}
+
+export interface PostCodeInfo {
+  district_name: string;
+  locality: string;
+  locality_name: string;
+  locality_type: string;
+  zip_code: string;
+}
+
+export interface RegistrationPostalCodeAutofill {
+  valid: boolean;
+  result: {
+    [key: string]: PostCodeInfo;
+  };
 }

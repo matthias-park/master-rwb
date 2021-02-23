@@ -16,6 +16,7 @@ import {
 import dayjs from 'dayjs';
 import { AVAILABLE_LOCALES } from '../../constants';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
+import { RegistrationPostalCodeAutofill } from '../../types/api/user/Registration';
 
 const RegisterPage = () => {
   const { user, mutateUser, locale } = useConfig();
@@ -54,29 +55,34 @@ const RegisterPage = () => {
         console.log(err);
         return null;
       });
-      console.log(res);
       return res;
     },
     [],
   );
-  const checkPersonalCode = useCallback(
-    async (
-      personal_code: string,
-    ): Promise<ValidateRegisterPersonalCode | null> => {
-      const res = await postApi<ValidateRegisterPersonalCode>(
-        '/railsapi/v1/registration/check/personal_code',
-        {
-          personal_code,
-        },
-      ).catch(err => {
-        console.log(err);
-        return null;
-      });
-      console.log(res);
-      return res;
-    },
-    [],
-  );
+  const checkPersonalCode = useCallback(async (personal_code: string): Promise<
+    RailsApiResponse<ValidateRegisterPersonalCode | null>
+  > => {
+    const res = await postApi<RailsApiResponse<ValidateRegisterPersonalCode>>(
+      '/railsapi/v1/registration/check/personal_code',
+      {
+        personal_code,
+      },
+    ).catch((err: RailsApiResponse<null>) => err);
+    return res;
+  }, []);
+  const checkPostalCode = useCallback(async (post_code: string): Promise<
+    RailsApiResponse<any>
+  > => {
+    const res = await postApi<RailsApiResponse<RegistrationPostalCodeAutofill>>(
+      '/railsapi/v1/registration/check/post_code',
+      {
+        post_code,
+      },
+    ).catch((err: RailsApiResponse<null>) => {
+      return err;
+    });
+    return res;
+  }, []);
   const handleRegisterSubmit = useCallback(
     async (
       form: PostRegistration,
@@ -132,6 +138,7 @@ const RegisterPage = () => {
           checkEmailAvailable={checkEmailAvailable}
           checkLoginAvailable={checkLoginAvailable}
           checkPersonalCode={checkPersonalCode}
+          checkPostalCode={checkPostalCode}
           handleRegisterSubmit={handleRegisterSubmit}
         />
       </div>
