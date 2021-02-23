@@ -278,7 +278,7 @@
             }
         }
         &--secondary {
-            z-index: 1;
+            z-index: 3;
             #{ $self }-item {
                 #{ $self }-item-link {
                     font-size: 14px;
