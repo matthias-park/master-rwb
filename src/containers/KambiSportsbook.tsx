@@ -39,7 +39,7 @@ const updateWindowKambiConfig = (params: KambiSportsbookProps) => {
     racingMode: 'false',
   };
 };
-
+let sportsbookRendered = false;
 const setCustomerSettings = ({
   getApiBalance,
   updateBalance,
@@ -77,6 +77,7 @@ const setCustomerSettings = ({
           break;
         }
         case 'pageRendered': {
+          sportsbookRendered = true;
           sbLoaded?.();
           break;
         }
@@ -151,7 +152,7 @@ const KambiSportsbook = () => {
   const config = useConfig();
   const { hash, key: locationKey } = useLocation();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [sbLoading, setSbLoading] = useState(true);
+  const [sbLoading, setSbLoading] = useState(!sportsbookRendered);
   const [apiLoaded, setApiLoaded] = useState(false);
   const desktopWidth = useDesktopWidth(1199);
 
