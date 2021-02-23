@@ -6,6 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
+import { useUIConfig } from '../../hooks/useUIConfig';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 
 interface HeaderNavLinkProps {
@@ -17,6 +18,7 @@ interface HeaderNavLinkProps {
   ) => void;
   active: HTMLElement | null;
   setActive: (value: HTMLElement | null) => void;
+  setNavExpanded: (value: boolean) => void;
   fullPath: string;
 }
 
@@ -115,10 +117,12 @@ export const HeaderNavClassicLink = ({
   handleNavChange,
   active,
   setActive,
+  setNavExpanded,
   fullPath,
 }: HeaderNavLinkProps) => {
   const { t } = useI18n();
   const { locale, user } = useConfig();
+  const { backdrop } = useUIConfig();
   const dropdownRef = useRef(null);
   useOnClickOutside(dropdownRef, () => setActive(mobile ? active : null));
   const dropdownLinks = useMemo(
@@ -177,6 +181,10 @@ export const HeaderNavClassicLink = ({
             <Link
               to={data.path || dropdownLinks?.[0].path || '/'}
               className="header__nav-item-link cursor-pointer"
+              onClick={() => {
+                setNavExpanded(false);
+                backdrop.hide();
+              }}
             >
               <span>{t(data.name)}</span>
             </Link>
@@ -199,7 +207,16 @@ export const HeaderNavClassicLink = ({
               as={
                 link.path.includes('https')
                   ? 'a'
-                  : (props: any): any => <Link to={link.path} {...props} />
+                  : (props: any): any => (
+                      <Link
+                        to={link.path}
+                        {...props}
+                        onClick={() => {
+                          setNavExpanded(false);
+                          backdrop.hide();
+                        }}
+                      />
+                    )
               }
               target={link.path.includes('https') ? '_blank' : undefined}
               className={clsx(link.path === fullPath && 'active')}

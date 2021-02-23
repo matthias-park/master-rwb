@@ -94,6 +94,7 @@ const PageHeader = () => {
   const { pathname, hash } = useLocation();
   const fullPath = `${pathname}${hash}`;
   const [active, setActive] = useState<HTMLElement | null>(null);
+  const [navExpanded, setNavExpanded] = useState(false);
 
   const handleNavChange = (isExternal, ref) => {
     if (isExternal || !desktopWidth) {
@@ -113,7 +114,11 @@ const PageHeader = () => {
         'header',
         backdrop.ignoredComponents.includes(ComponentName.Header) && 'on-top',
       )}
-      onToggle={expanded => backdrop.toggle(expanded)}
+      expanded={navExpanded}
+      onToggle={expanded => {
+        backdrop.toggle(expanded);
+        setNavExpanded(!navExpanded);
+      }}
     >
       {!desktopWidth && (
         <>
@@ -152,6 +157,7 @@ const PageHeader = () => {
                       handleNavChange={handleNavChange}
                       active={active}
                       setActive={setActive}
+                      setNavExpanded={setNavExpanded}
                       fullPath={fullPath}
                     />
                   );
