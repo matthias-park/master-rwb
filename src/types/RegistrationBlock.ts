@@ -6,7 +6,8 @@ export interface OnlineFormBlockField {
   required?: boolean;
   validate?: (value: string) => boolean | string | Promise<boolean | string>;
   triggerId?: string;
-  autoComplete?: string;
+  autoComplete?: ((value: string) => Promise<any>) | string;
+  labelKey?: (value: any) => string;
 }
 
 export interface OnlineFormBlock {

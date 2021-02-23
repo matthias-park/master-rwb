@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useI18n } from '../../hooks/useI18n';
 import {
-  PostRegistration,
   ValidateRegisterInput,
   ValidateRegisterPersonalCode,
 } from '../../types/api/user/Registration';
@@ -13,14 +12,22 @@ import { FormFieldValidation } from '../../constants';
 import { OnlineFormBlock } from '../../types/RegistrationBlock';
 import Alert from 'react-bootstrap/Alert';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
-import { RegistrationResponse } from '../../types/api/user/Registration';
+import {
+  RegistrationResponse,
+  RegistrationPostalCodeAutofill,
+} from '../../types/api/user/Registration';
+import AutocompleteTextInput from '../AutocompleteTextInput';
+import { PostCodeInfo } from '../../types/api/user/Registration';
 
 interface Props {
   checkEmailAvailable: (email: string) => Promise<ValidateRegisterInput | null>;
   checkLoginAvailable: (login: string) => Promise<ValidateRegisterInput | null>;
   checkPersonalCode: (
     personalCode: string,
-  ) => Promise<ValidateRegisterPersonalCode | null>;
+  ) => Promise<RailsApiResponse<ValidateRegisterPersonalCode | null>>;
+  checkPostalCode: (
+    postCode: string,
+  ) => Promise<RailsApiResponse<RegistrationPostalCodeAutofill | null>>;
   handleRegisterSubmit: (
     form: any,
   ) => Promise<RailsApiResponse<RegistrationResponse | null>>;
@@ -74,6 +81,15 @@ const blocks = (
         id: 'postal_code',
         type: 'text',
         required: true,
+        validate: value => /^(?:(?:[1-9])(?:\d{3}))$/.test(value),
+        labelKey: (value: PostCodeInfo) => value.zip_code,
+        autoComplete: async value => {
+          const res = await props.checkPostalCode(value);
+          if (!res.Data?.result) {
+            throw res.Message || t('register_input_postal_code_invalid');
+          }
+          return Object.values(res.Data.result);
+        },
       },
       {
         id: 'phone_number',
@@ -216,22 +232,24 @@ const blocks = (
   },
 ];
 
-const OnlineForm = ({
-  checkEmailAvailable,
-  checkLoginAvailable,
-  handleRegisterSubmit,
-  checkPersonalCode,
-}: Props) => {
+const OnlineForm = (props: Props) => {
   const { t, jsxT } = useI18n();
   const [apiError, setApiError] = useState<string | null>(null);
   const [validationForms, setValidationForms] = useState<{
     [key: string]: FormFieldValidation;
   }>({});
-  const { register, handleSubmit, errors, watch, trigger, formState } = useForm(
-    {
-      mode: 'onBlur',
-    },
-  );
+  const {
+    register,
+    handleSubmit,
+    errors,
+    watch,
+    trigger,
+    formState,
+    setError,
+    clearErrors,
+  } = useForm({
+    mode: 'onBlur',
+  });
   const setValidation = (id: string, status: FormFieldValidation) =>
     setValidationForms({ ...validationForms, [id]: status });
   const validateRepeat = (id: string, value: string) => {
@@ -240,8 +258,15 @@ const OnlineForm = ({
   const triggerRepeat = (id: string) => {
     return watch(id, '') !== '' && trigger(id);
   };
-  const onSubmit = async ({ terms_and_conditions, ...data }) => {
-    const response = await handleRegisterSubmit({ ...data, city: 'tempCity' });
+  const onSubmit = async ({ terms_and_conditions, postal_code, ...data }) => {
+    const postal_info = await props.checkPostalCode(postal_code);
+    const city =
+      Object.values(postal_info.Data?.result || {})[0]?.locality || '';
+    const response = await props.handleRegisterSubmit({
+      ...data,
+      city,
+      postal_code,
+    });
     if (!response.Success) {
       return setApiError(response.Message);
     }
@@ -257,17 +282,7 @@ const OnlineForm = ({
         </u>
       </a>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        {blocks(
-          {
-            checkEmailAvailable,
-            checkLoginAvailable,
-            handleRegisterSubmit,
-            checkPersonalCode,
-          },
-          t,
-          setValidation,
-          validateRepeat,
-        ).map(block => (
+        {blocks(props, t, setValidation, validateRepeat).map(block => (
           <div key={block.title} className="reg-form__block">
             <p className="weight-500 mt-4 mb-3">
               {!!block.title && jsxT(`register_${block.title}`)}
@@ -295,6 +310,39 @@ const OnlineForm = ({
                 }
                 case 'password':
                 case 'text': {
+                  if (
+                    typeof field.autoComplete === 'function' &&
+                    field.labelKey
+                  ) {
+                    return (
+                      <AutocompleteTextInput
+                        ref={register({
+                          required:
+                            field.required && t('register_input_required'),
+                          validate: field.validate,
+                        })}
+                        type={field.type}
+                        error={errors[field.id]}
+                        setError={error =>
+                          error
+                            ? setError(field.name || field.id, {
+                                message: error,
+                                type: 'validate',
+                              })
+                            : clearErrors(field.name || field.id)
+                        }
+                        labelkey={field.labelKey}
+                        autoComplete={field.autoComplete}
+                        id={field.id}
+                        key={field.id}
+                        placeholder={t(`register_input_${field.id}`)}
+                        invalidTextError={t(
+                          `register_input_${field.id}_invalid`,
+                        )}
+                      />
+                    );
+                  }
+
                   return (
                     <TextInput
                       ref={register({
