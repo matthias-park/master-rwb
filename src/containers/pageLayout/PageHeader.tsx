@@ -91,6 +91,19 @@ const PageHeader = () => {
   const headerLinks = HEADER_ROUTES;
   const { backdrop } = useUIConfig();
   const desktopWidth = useDesktopWidth(1199);
+  const { pathname, hash } = useLocation();
+  const fullPath = `${pathname}${hash}`;
+  const [active, setActive] = useState<HTMLElement | null>(null);
+
+  const handleNavChange = (isExternal, ref) => {
+    if (isExternal || !desktopWidth) {
+      if (active === ref) {
+        setActive(null);
+      } else {
+        setActive(ref);
+      }
+    }
+  };
 
   return (
     <Navbar
@@ -136,6 +149,10 @@ const PageHeader = () => {
                       key={link.name}
                       data={link}
                       mobile={!desktopWidth}
+                      handleNavChange={handleNavChange}
+                      active={active}
+                      setActive={setActive}
+                      fullPath={fullPath}
                     />
                   );
                 })}

@@ -17,7 +17,7 @@ import { sortAscending } from '../../utils/index';
 const FooterHeader = () => {
   const { t } = useI18n();
   return (
-    <div className="row footer-pre align-items-center py-3">
+    <div className="row flex-column flex-sm-row footer-pre align-items-sm-center py-3">
       <div className="session-block mb-2 mb-sm-0">
         <span className="session-block__text text-14">
           {t('time_spent_in_website')}
@@ -27,7 +27,7 @@ const FooterHeader = () => {
           <SessionTimer />
         </span>
       </div>
-      <h3 className="text-gray-100 ml-auto mr-5 mb-0">
+      <h3 className="text-gray-100 ml-1 ml-sm-auto mr-md-5 mb-2 mb-sm-0">
         {t('moderation_gamble')}
       </h3>
       <div className="restrictions-block">
