@@ -290,6 +290,7 @@ const OnlineForm = ({
                       name={field.name || field.id}
                       label={jsxT(`register_input_${field.id}`)}
                       className="mb-4 custom-control-inline"
+                      isInvalid={errors[field.id]}
                     />
                   );
                 }
