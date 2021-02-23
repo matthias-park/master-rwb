@@ -6,11 +6,20 @@ import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
+import { useUIConfig } from '../../hooks/useUIConfig';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 
 interface HeaderNavLinkProps {
   data: HeaderLink;
   mobile: boolean;
+  handleNavChange: (
+    externalLink: boolean | undefined,
+    ref: HTMLElement | null,
+  ) => void;
+  active: HTMLElement | null;
+  setActive: (value: HTMLElement | null) => void;
+  setNavExpanded: (value: boolean) => void;
+  fullPath: string;
 }
 
 // export const HeaderNavCardLink = ({ data, mobile }: HeaderNavLinkProps) => {
@@ -102,22 +111,30 @@ interface HeaderNavLinkProps {
 //   );
 // };
 
-export const HeaderNavClassicLink = ({ data, mobile }: HeaderNavLinkProps) => {
+export const HeaderNavClassicLink = ({
+  data,
+  mobile,
+  handleNavChange,
+  active,
+  setActive,
+  setNavExpanded,
+  fullPath,
+}: HeaderNavLinkProps) => {
   const { t } = useI18n();
   const { locale, user } = useConfig();
-  const { pathname, hash } = useLocation();
-  const fullPath = `${pathname}${hash}`;
+  const { backdrop } = useUIConfig();
   const dropdownRef = useRef(null);
-  const [active, setActive] = useState(false);
-  useOnClickOutside(dropdownRef, () => setActive(false));
+  useOnClickOutside(dropdownRef, () => setActive(mobile ? active : null));
   const dropdownLinks = useMemo(
     () => data.links?.sort((a, b) => sortAscending(a.order, b.order)),
     [data.links],
   );
+
   const showDropdown =
-    (!!(data.path || data.prefix) &&
-      fullPath.startsWith(data.path || data.prefix || '')) ||
-    active;
+    !!(data.path || data.prefix) &&
+    fullPath.startsWith(data.path || data.prefix || '') &&
+    !active &&
+    !mobile;
 
   if (!mobile && data.mobileLink) {
     return null;
@@ -125,33 +142,62 @@ export const HeaderNavClassicLink = ({ data, mobile }: HeaderNavLinkProps) => {
   return (
     <Dropdown
       ref={ref => {
-        if (data.externalLink) dropdownRef.current = ref;
+        if (data.externalLink || mobile) dropdownRef.current = ref;
       }}
       as="li"
       className="header__nav-item"
-      show={showDropdown}
+      show={
+        (data.externalLink || mobile) && active === dropdownRef.current
+          ? true
+          : showDropdown
+      }
     >
-      <Dropdown.Toggle
-        as={
-          data.externalLink
-            ? 'div'
-            : (props: any): any => (
-                <Link
-                  to={data.path || dropdownLinks?.[0].path || '/'}
-                  {...props}
-                />
-              )
-        }
-        title={`${data.name} ▼}`}
-        className="header__nav-item-link cursor-pointer"
-        onClick={() => {
-          if (data.externalLink) {
-            setActive(!active);
+      {!mobile ? (
+        <Dropdown.Toggle
+          as={
+            data.externalLink
+              ? 'div'
+              : (props: any): any => (
+                  <Link
+                    to={data.path || dropdownLinks?.[0].path || '/'}
+                    {...props}
+                  />
+                )
           }
-        }}
-      >
-        {t(data.name)}
-      </Dropdown.Toggle>
+          className="header__nav-item-link cursor-pointer"
+          onClick={() => {
+            handleNavChange(data.externalLink, dropdownRef.current);
+          }}
+        >
+          {t(data.name)}
+        </Dropdown.Toggle>
+      ) : (
+        <div className="d-flex align-items-center w-100">
+          {data.externalLink ? (
+            <span className="header__nav-item-link cursor-pointer">
+              <span>{t(data.name)}</span>
+            </span>
+          ) : (
+            <Link
+              to={data.path || dropdownLinks?.[0].path || '/'}
+              className="header__nav-item-link cursor-pointer"
+              onClick={() => {
+                setNavExpanded(false);
+                backdrop.hide();
+              }}
+            >
+              <span>{t(data.name)}</span>
+            </Link>
+          )}
+          <Dropdown.Toggle
+            as={'i'}
+            className="header__nav-item-icon icon-down"
+            onClick={() => {
+              handleNavChange(data.externalLink, dropdownRef.current);
+            }}
+          ></Dropdown.Toggle>
+        </div>
+      )}
       <Dropdown.Menu>
         {dropdownLinks?.map(link => {
           if (link.onlyLoggedIn && !user.logged_in) return null;
@@ -161,7 +207,16 @@ export const HeaderNavClassicLink = ({ data, mobile }: HeaderNavLinkProps) => {
               as={
                 link.path.includes('https')
                   ? 'a'
-                  : (props: any): any => <Link to={link.path} {...props} />
+                  : (props: any): any => (
+                      <Link
+                        to={link.path}
+                        {...props}
+                        onClick={() => {
+                          setNavExpanded(false);
+                          backdrop.hide();
+                        }}
+                      />
+                    )
               }
               target={link.path.includes('https') ? '_blank' : undefined}
               className={clsx(link.path === fullPath && 'active')}

@@ -91,6 +91,20 @@ const PageHeader = () => {
   const headerLinks = HEADER_ROUTES;
   const { backdrop } = useUIConfig();
   const desktopWidth = useDesktopWidth(1199);
+  const { pathname, hash } = useLocation();
+  const fullPath = `${pathname}${hash}`;
+  const [active, setActive] = useState<HTMLElement | null>(null);
+  const [navExpanded, setNavExpanded] = useState(false);
+
+  const handleNavChange = (isExternal, ref) => {
+    if (isExternal || !desktopWidth) {
+      if (active === ref) {
+        setActive(null);
+      } else {
+        setActive(ref);
+      }
+    }
+  };
 
   return (
     <Navbar
@@ -100,7 +114,11 @@ const PageHeader = () => {
         'header',
         backdrop.ignoredComponents.includes(ComponentName.Header) && 'on-top',
       )}
-      onToggle={expanded => backdrop.toggle(expanded)}
+      expanded={navExpanded}
+      onToggle={expanded => {
+        backdrop.toggle(expanded);
+        setNavExpanded(!navExpanded);
+      }}
     >
       {!desktopWidth && (
         <>
@@ -136,6 +154,11 @@ const PageHeader = () => {
                       key={link.name}
                       data={link}
                       mobile={!desktopWidth}
+                      handleNavChange={handleNavChange}
+                      active={active}
+                      setActive={setActive}
+                      setNavExpanded={setNavExpanded}
+                      fullPath={fullPath}
                     />
                   );
                 })}

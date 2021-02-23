@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useToasts, AddToast } from 'react-toast-notifications';
 import { useConfig } from '../hooks/useConfig';
+import useDesktopWidth from '../hooks/useDesktopWidth';
+import clsx from 'clsx';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { getApi } from '../utils/apiUtils';
 import Config from '../types/Config';
@@ -151,6 +153,8 @@ const KambiSportsbook = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [sbLoading, setSbLoading] = useState(true);
   const [apiLoaded, setApiLoaded] = useState(false);
+  const desktopWidth = useDesktopWidth(1199);
+
   useEffect(() => {
     if (config.user.logged_in) {
       getSBParams(config, () => {
@@ -217,7 +221,7 @@ const KambiSportsbook = () => {
 
   return (
     <>
-      <div ref={containerRef} className="mt-5" />
+      <div ref={containerRef} className={clsx(desktopWidth && 'mt-5')} />
       {sbLoading && (
         <div style={{ minHeight: 100 }} className="position-relative mt-5">
           <div className="position-absolute w-100 d-flex justify-content-center pt-4 pb-3">

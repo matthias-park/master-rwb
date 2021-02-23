@@ -37,11 +37,10 @@
     }
     &__icons {
         position: absolute;
-        top: 0;
+        top: 4px;
         right: 5px;
         display: flex;
         align-items: center;
-        height: 100%;
         font-size: 32px;
         .icon-eye-on {
             color: $brand-light;
@@ -89,7 +88,6 @@
             color: $danger;
         }
         #{ $self }__icons {
-            top: -8px;
             .icon-exclamation {
                 display: inline-block;
             }
