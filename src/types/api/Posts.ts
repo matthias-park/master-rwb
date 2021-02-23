@@ -1,21 +1,8 @@
-export interface Posts {
-  data: PostItem[];
-  show_for_values: ShowForValue[];
-  franchise_id: number;
-  category: Category;
-  post_status: string;
-  country_code: string;
-}
-
-export enum Category {
-  Promotions = 'promotions',
-}
-
 export interface PostItem {
   id: number;
   user_id: number;
   language_id: number;
-  category: Category;
+  category: string;
   slug: string;
   title: string;
   body: string;
@@ -78,10 +65,4 @@ export interface ImageLarge {
   url: null;
   medium: ImageUrl;
   thumb_860_280: ImageUrl;
-}
-
-export interface ShowForValue {
-  value: number;
-  title: string;
-  show: string[];
 }

@@ -4,8 +4,9 @@ import { useI18n } from '../../hooks/useI18n';
 import { Tab, Tabs } from 'react-bootstrap';
 import useSWR from 'swr';
 import Card from 'react-bootstrap/Card';
-import { PostItem, Posts } from '../../types/api/Posts';
+import { PostItem } from '../../types/api/Posts';
 import Spinner from 'react-bootstrap/Spinner';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 const PromoItem = ({ item }: { item: PostItem }) => {
   const { pathname } = useLocation();
@@ -35,7 +36,9 @@ const PromoItem = ({ item }: { item: PostItem }) => {
 
 const PromotionsPage = () => {
   const [activeTab, setActiveTab] = useState<string | null>('all');
-  const { data, error } = useSWR<Posts>('/api/v1/posts.json');
+  const { data, error } = useSWR<RailsApiResponse<PostItem[]>>(
+    '/railsapi/v1/content/promotions',
+  );
   const { t } = useI18n();
   const isDataLoading = !data && !error;
   return (
@@ -54,7 +57,7 @@ const PromotionsPage = () => {
             </h2>
           )}
           <div className="d-flex mt-1">
-            {data?.data?.map(item => (
+            {data?.Data.map(item => (
               <PromoItem key={item.id} item={item} />
             ))}
           </div>

@@ -11,6 +11,7 @@ import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
 import Pagination from 'react-bootstrap/Pagination';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
 
 const questionItems = [
   {
@@ -178,7 +179,7 @@ const TransactionsDateFilter = ({
 
   const updateDate = () => {
     setUrl(
-      formatUrl('/transactions.json', {
+      formatUrl('/railsapi/v1/user/transactions', {
         to: dateTo.format('DD/MM/YYYY'),
         from: dateFrom.format('DD/MM/YYYY'),
       }),
@@ -217,7 +218,7 @@ const TransactionsDateFilter = ({
 const TransactionsPage = () => {
   const { t } = useI18n();
   const [url, setUrl] = useState<string | null>(null);
-  const { data } = useSWR<Transactions>(url);
+  const { data } = useSWR<RailsApiResponse<Transactions>>(url);
   const [periodSelected, setPeriodSelected] = useState(30);
   const [dateTo, setDateTo] = useState(dayjs());
   const [dateFrom, setDateFrom] = useState(
@@ -226,7 +227,7 @@ const TransactionsPage = () => {
 
   useEffect(() => {
     setUrl(
-      formatUrl('/transactions.json', {
+      formatUrl('/railsapi/v1/user/transactions', {
         to: dateTo.format('DD/MM/YYYY'),
         from: dateFrom.format('DD/MM/YYYY'),
       }),

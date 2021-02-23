@@ -123,7 +123,7 @@ export const HeaderNavClassicLink = ({
   useOnClickOutside(dropdownRef, () => setActive(mobile ? active : null));
   const dropdownLinks = useMemo(
     () => data.links?.sort((a, b) => sortAscending(a.order, b.order)),
-    [data],
+    [data.links],
   );
 
   const showDropdown =
@@ -132,15 +132,9 @@ export const HeaderNavClassicLink = ({
     !active &&
     !mobile;
 
-  // useEffect(() => {
-  //   if (showDropdown) {
-  //     contentStyle.set({ marginTop: '45px' });
-  //   }
-  // }, [showDropdown]);
   if (!mobile && data.mobileLink) {
     return null;
   }
-
   return (
     <Dropdown
       ref={ref => {
@@ -203,7 +197,7 @@ export const HeaderNavClassicLink = ({
             <Dropdown.Item
               key={link.path}
               as={
-                link.path.includes('https') || link.path.includes('#')
+                link.path.includes('https')
                   ? 'a'
                   : (props: any): any => <Link to={link.path} {...props} />
               }
