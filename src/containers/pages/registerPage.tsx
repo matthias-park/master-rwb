@@ -40,25 +40,6 @@ const RegisterPage = () => {
     },
     [],
   );
-  const checkLoginAvailable = useCallback(
-    async (login: string): Promise<ValidateRegisterInput | null> => {
-      const res = await postApi<ValidateRegisterInput>(
-        '/railsapi/v1/registration/check/login',
-        {
-          login,
-        },
-      ).catch(err => {
-        addToast(`Failed to check login`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-        console.log(err);
-        return null;
-      });
-      return res;
-    },
-    [],
-  );
   const checkPersonalCode = useCallback(async (personal_code: string): Promise<
     RailsApiResponse<ValidateRegisterPersonalCode | null>
   > => {
@@ -136,7 +117,6 @@ const RegisterPage = () => {
         <HelpBlock title="Hulp nodig?" blocks={['faq', 'phone', 'email']} />
         <OnlineForm
           checkEmailAvailable={checkEmailAvailable}
-          checkLoginAvailable={checkLoginAvailable}
           checkPersonalCode={checkPersonalCode}
           checkPostalCode={checkPostalCode}
           handleRegisterSubmit={handleRegisterSubmit}

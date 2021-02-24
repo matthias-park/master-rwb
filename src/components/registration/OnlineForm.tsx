@@ -21,7 +21,6 @@ import { PostCodeInfo } from '../../types/api/user/Registration';
 
 interface Props {
   checkEmailAvailable: (email: string) => Promise<ValidateRegisterInput | null>;
-  checkLoginAvailable: (login: string) => Promise<ValidateRegisterInput | null>;
   checkPersonalCode: (
     personalCode: string,
   ) => Promise<RailsApiResponse<ValidateRegisterPersonalCode | null>>;
@@ -42,26 +41,6 @@ const blocks = (
   {
     title: 'personal_info',
     fields: [
-      {
-        id: 'login',
-        type: 'text',
-        required: true,
-        validate: async value => {
-          let valid: string | boolean = true;
-          setValidation('login', FormFieldValidation.Validating);
-          const res = await props.checkLoginAvailable(value);
-          if (res?.Exists && !res.Message)
-            res.Message = t('register_already_taken');
-          valid = res?.Message || !res?.Exists;
-          setValidation(
-            'login',
-            res?.Exists ?? false
-              ? FormFieldValidation.Invalid
-              : FormFieldValidation.Valid,
-          );
-          return valid;
-        },
-      },
       {
         id: 'firstname',
         type: 'text',
@@ -273,6 +252,7 @@ const OnlineForm = (props: Props) => {
       Object.values(postal_info.Data?.result || {})[0]?.locality || '';
     const response = await props.handleRegisterSubmit({
       ...data,
+      login: data.email,
       city,
       postal_code: post_code,
     });
