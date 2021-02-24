@@ -85,7 +85,8 @@ const blocks = (
         labelKey: (value: PostCodeInfo) =>
           `${value.zip_code} - ${value.locality}`,
         autoComplete: async value => {
-          const res = await props.checkPostalCode(value);
+          const postCode = value.split(' - ')[0];
+          const res = await props.checkPostalCode(postCode);
           if (!res.Data?.result) {
             throw res.Message || t('register_input_postal_code_invalid');
           }
