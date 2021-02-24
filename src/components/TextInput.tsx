@@ -54,7 +54,12 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
       () => setShowPassword(prevValue => !prevValue),
       [],
     );
-    const inputType = !showPassword ? type : 'text';
+    const inputType =
+      inputFormatting?.numericOnly || inputFormatting?.numeral
+        ? 'tel'
+        : !showPassword
+        ? type
+        : 'text';
 
     return (
       <Form.Group
