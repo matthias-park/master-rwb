@@ -21,6 +21,7 @@
     "camelcase": "^6.1.0",
     "case-sensitive-paths-webpack-plugin": "2.3.0",
     "chalk": "4.1.0",
+    "cleave.js": "1.6.0",
     "clsx": "1.1.1",
     "config": "3.3.3",
     "css-loader": "4.3.0",
@@ -226,6 +227,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "11.0.2",
+    "@types/cleave.js": "1.4.4",
     "@types/jest": "25.1.4",
     "@types/loadable__component": "5.13.1",
     "@types/lockr": "0.8.6",

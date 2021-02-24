@@ -3,12 +3,34 @@ import React, { forwardRef, useState } from 'react';
 import { Form, Spinner } from 'react-bootstrap';
 import { FormFieldValidation } from '../constants';
 import { useCallback } from 'react';
+import Cleave from 'cleave.js/react';
+import { CleaveOptions } from 'cleave.js/options';
+import { useController } from 'react-hook-form';
 
 type Props = {
   error?: { message: string };
   validation?: FormFieldValidation;
   toggleVisibility?: boolean;
+  inputFormatting?: CleaveOptions;
+  rules?: any;
 } & React.ComponentProps<typeof Form.Control>;
+
+export const ControlledTextInput = (props: Props) => {
+  const { field } = useController({
+    name: props.name || props.id,
+    rules: props.rules,
+    defaultValue: '',
+  });
+
+  const onChange = event => {
+    if (props.inputFormatting) {
+      return field.onChange(event.target.rawValue);
+    }
+    return field.onChange(event.target.value);
+  };
+
+  return <TextInput {...props} {...field} onChange={onChange} />;
+};
 
 const TextInput = forwardRef<HTMLInputElement, Props>(
   (
@@ -21,6 +43,8 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
       validation,
       additionalIcons,
       toggleVisibility,
+      inputFormatting,
+      rules,
       ...props
     }: Props,
     ref,
@@ -31,6 +55,7 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
       [],
     );
     const inputType = !showPassword ? type : 'text';
+
     return (
       <Form.Group
         data-testid="container"
@@ -43,11 +68,12 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
       >
         <Form.Control
           {...props}
-          as="input"
           ref={ref}
+          as={inputFormatting ? Cleave : 'input'}
+          //@ts-ignore
+          options={inputFormatting}
           type={inputType}
           id={id}
-          name={name || id}
           placeholder=" "
           data-testid="input"
         />
