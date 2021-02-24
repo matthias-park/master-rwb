@@ -82,7 +82,8 @@ const blocks = (
         required: true,
         type: 'number',
         validate: value => /^(?:(?:[1-9])(?:\d{3}))$/.test(value),
-        labelKey: (value: PostCodeInfo) => value.zip_code,
+        labelKey: (value: PostCodeInfo) =>
+          `${value.zip_code} - ${value.locality}`,
         autoComplete: async value => {
           const res = await props.checkPostalCode(value);
           if (!res.Data?.result) {
