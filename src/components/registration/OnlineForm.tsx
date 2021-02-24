@@ -80,7 +80,7 @@ const blocks = (
       {
         id: 'postal_code',
         required: true,
-        type: 'number',
+        type: 'text',
         validate: value => /^(?:(?:[1-9])(?:\d{3}))$/.test(value),
         labelKey: (value: PostCodeInfo) =>
           `${value.zip_code} - ${value.locality}`,
@@ -266,13 +266,14 @@ const OnlineForm = (props: Props) => {
     return watch(id, '') !== '' && trigger(id);
   };
   const onSubmit = async ({ terms_and_conditions, postal_code, ...data }) => {
-    const postal_info = await props.checkPostalCode(postal_code);
+    const post_code = postal_code.split(' - ')[0];
+    const postal_info = await props.checkPostalCode(post_code);
     const city =
       Object.values(postal_info.Data?.result || {})[0]?.locality || '';
     const response = await props.handleRegisterSubmit({
       ...data,
       city,
-      postal_code,
+      postal_code: post_code,
     });
     if (!response.Success) {
       return setApiError(response.Message);
