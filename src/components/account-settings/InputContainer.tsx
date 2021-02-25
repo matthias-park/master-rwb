@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { enterKeyPress } from '../../utils/uiUtils';
 import Spinner from 'react-bootstrap/Spinner';
+import Cleave from 'cleave.js/react';
 
 interface Props {
   title: string;
@@ -31,8 +32,9 @@ const InputContainer = ({
 }: Props) => {
   const [inputValue, setInputValue] = useState<string>('');
   const handleSubmit = () => onSubmit(Number(inputValue));
-  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setInputValue(Number(e.target.value).toString());
+  const handleValueChange = e => {
+    setInputValue(e.target.rawValue);
+  };
   const handleOnBlur = () => {
     let value = Number(inputValue);
     const minNumber = Number(min);
@@ -65,11 +67,17 @@ const InputContainer = ({
           </Button>
         ))}
         <Form.Control
-          type="number"
+          as={Cleave}
+          options={{
+            numeral: true,
+            numeralPositiveOnly: true,
+            prefix: currency,
+            stripLeadingZeroes: true,
+            noImmediatePrefix: true,
+            rawValueTrimPrefix: true,
+          }}
           data-testid="input"
           placeholder={placeholder}
-          min={min}
-          max={max}
           value={inputValue}
           onBlur={handleOnBlur}
           onKeyUp={e => enterKeyPress(e, handleSubmit)}

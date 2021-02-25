@@ -1,4 +1,4 @@
-import TextInput from '../TextInput';
+import { ControlledTextInput } from '../TextInput';
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useI18n } from '../../hooks/useI18n';
@@ -6,7 +6,7 @@ import {
   ValidateRegisterInput,
   ValidateRegisterPersonalCode,
 } from '../../types/api/user/Registration';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Spinner } from 'react-bootstrap';
 import { FormFieldValidation } from '../../constants';
 import { OnlineFormBlock } from '../../types/RegistrationBlock';
@@ -21,7 +21,6 @@ import { PostCodeInfo } from '../../types/api/user/Registration';
 
 interface Props {
   checkEmailAvailable: (email: string) => Promise<ValidateRegisterInput | null>;
-  checkLoginAvailable: (login: string) => Promise<ValidateRegisterInput | null>;
   checkPersonalCode: (
     personalCode: string,
   ) => Promise<RailsApiResponse<ValidateRegisterPersonalCode | null>>;
@@ -43,26 +42,6 @@ const blocks = (
     title: 'personal_info',
     fields: [
       {
-        id: 'login',
-        type: 'text',
-        required: true,
-        validate: async value => {
-          let valid: string | boolean = true;
-          setValidation('login', FormFieldValidation.Validating);
-          const res = await props.checkLoginAvailable(value);
-          if (res?.Exists && !res.Message)
-            res.Message = t('register_already_taken');
-          valid = res?.Message || !res?.Exists;
-          setValidation(
-            'login',
-            res?.Exists ?? false
-              ? FormFieldValidation.Invalid
-              : FormFieldValidation.Valid,
-          );
-          return valid;
-        },
-      },
-      {
         id: 'firstname',
         type: 'text',
         required: true,
@@ -79,12 +58,14 @@ const blocks = (
       },
       {
         id: 'postal_code',
-        type: 'text',
         required: true,
+        type: 'text',
         validate: value => /^(?:(?:[1-9])(?:\d{3}))$/.test(value),
-        labelKey: (value: PostCodeInfo) => value.zip_code,
+        labelKey: (value: PostCodeInfo) =>
+          `${value.zip_code} - ${value.locality}`,
         autoComplete: async value => {
-          const res = await props.checkPostalCode(value);
+          const postCode = value.split(' - ')[0];
+          const res = await props.checkPostalCode(postCode);
           if (!res.Data?.result) {
             throw res.Message || t('register_input_postal_code_invalid');
           }
@@ -119,6 +100,11 @@ const blocks = (
               : FormFieldValidation.Valid,
           );
           return valid;
+        },
+        inputFormatting: {
+          delimiters: ['.', '.', '-', '.'],
+          blocks: [2, 2, 2, 3, 2],
+          numericOnly: true,
         },
       },
     ],
@@ -238,6 +224,9 @@ const OnlineForm = (props: Props) => {
   const [validationForms, setValidationForms] = useState<{
     [key: string]: FormFieldValidation;
   }>({});
+  const formMethods = useForm({
+    mode: 'onBlur',
+  });
   const {
     register,
     handleSubmit,
@@ -247,9 +236,7 @@ const OnlineForm = (props: Props) => {
     formState,
     setError,
     clearErrors,
-  } = useForm({
-    mode: 'onBlur',
-  });
+  } = formMethods;
   const setValidation = (id: string, status: FormFieldValidation) =>
     setValidationForms({ ...validationForms, [id]: status });
   const validateRepeat = (id: string, value: string) => {
@@ -259,13 +246,15 @@ const OnlineForm = (props: Props) => {
     return watch(id, '') !== '' && trigger(id);
   };
   const onSubmit = async ({ terms_and_conditions, postal_code, ...data }) => {
-    const postal_info = await props.checkPostalCode(postal_code);
+    const post_code = postal_code.split(' - ')[0];
+    const postal_info = await props.checkPostalCode(post_code);
     const city =
       Object.values(postal_info.Data?.result || {})[0]?.locality || '';
     const response = await props.handleRegisterSubmit({
       ...data,
+      login: data.email,
       city,
-      postal_code,
+      postal_code: post_code,
     });
     if (!response.Success) {
       return setApiError(response.Message);
@@ -281,132 +270,137 @@ const OnlineForm = (props: Props) => {
           <strong>{jsxT('register_know_more')}</strong>
         </u>
       </a>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        {blocks(props, t, setValidation, validateRepeat).map(block => (
-          <div key={block.title} className="reg-form__block">
-            <p className="weight-500 mt-4 mb-3">
-              {!!block.title && jsxT(`register_${block.title}`)}
-            </p>
-            {block.fields.map(field => {
-              switch (field.type) {
-                case 'checkbox':
-                case 'radio': {
-                  return (
-                    <Form.Check
-                      ref={register({
-                        required:
-                          field.required && t('register_input_required'),
-                        setValueAs: value => !!value,
-                      })}
-                      custom
-                      type={field.type}
-                      id={field.id}
-                      key={field.id}
-                      name={field.name || field.id}
-                      label={jsxT(`register_input_${field.id}`)}
-                      className="mb-4 custom-control-inline"
-                      isInvalid={errors[field.id]}
-                    />
-                  );
-                }
-                case 'password':
-                case 'text': {
-                  if (
-                    typeof field.autoComplete === 'function' &&
-                    field.labelKey
-                  ) {
+      <FormProvider {...formMethods}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          {blocks(props, t, setValidation, validateRepeat).map(block => (
+            <div key={block.title} className="reg-form__block">
+              <p className="weight-500 mt-4 mb-3">
+                {!!block.title && jsxT(`register_${block.title}`)}
+              </p>
+              {block.fields.map(field => {
+                switch (field.type) {
+                  case 'checkbox':
+                  case 'radio': {
                     return (
-                      <AutocompleteTextInput
+                      <Form.Check
                         ref={register({
                           required:
                             field.required && t('register_input_required'),
-                          validate: field.validate,
+                          setValueAs: value => !!value,
                         })}
+                        custom
                         type={field.type}
-                        error={errors[field.id]}
-                        setError={error =>
-                          error
-                            ? setError(field.name || field.id, {
-                                message: error,
-                                type: 'validate',
-                              })
-                            : clearErrors(field.name || field.id)
-                        }
-                        labelkey={field.labelKey}
-                        autoComplete={field.autoComplete}
                         id={field.id}
                         key={field.id}
-                        placeholder={t(`register_input_${field.id}`)}
-                        invalidTextError={t(
-                          `register_input_${field.id}_invalid`,
-                        )}
+                        name={field.name || field.id}
+                        label={jsxT(`register_input_${field.id}`)}
+                        className="mb-4 custom-control-inline"
+                        isInvalid={errors[field.id]}
                       />
                     );
                   }
+                  case 'number':
+                  case 'password':
+                  case 'text': {
+                    if (
+                      typeof field.autoComplete === 'function' &&
+                      field.labelKey
+                    ) {
+                      return (
+                        <AutocompleteTextInput
+                          rules={{
+                            required:
+                              field.required && t('register_input_required'),
+                            validate: field.validate,
+                          }}
+                          type={field.type}
+                          error={errors[field.id]}
+                          setError={error =>
+                            error
+                              ? setError(field.name || field.id, {
+                                  message: error,
+                                  type: 'validate',
+                                })
+                              : clearErrors(field.name || field.id)
+                          }
+                          labelkey={field.labelKey}
+                          autoComplete={field.autoComplete}
+                          id={field.id}
+                          key={field.id}
+                          placeholder={t(`register_input_${field.id}`)}
+                          invalidTextError={t(
+                            `register_input_${field.id}_invalid`,
+                          )}
+                        />
+                      );
+                    }
 
-                  return (
-                    <TextInput
-                      ref={register({
-                        required:
-                          field.required && t('register_input_required'),
-                        validate: field.validate,
-                      })}
-                      type={field.type}
-                      autoComplete={field.autoComplete}
-                      id={field.id}
-                      key={field.id}
-                      onBlur={() =>
-                        field.triggerId && triggerRepeat(field.triggerId)
-                      }
-                      validation={validationForms[field.id]}
-                      error={errors[field.id]}
-                      placeholder={t(`register_input_${field.id}`)}
-                      toggleVisibility={field.type === 'password'}
-                    />
-                  );
+                    return (
+                      <ControlledTextInput
+                        rules={{
+                          required:
+                            field.required && t('register_input_required'),
+                          validate: field.validate,
+                        }}
+                        type={field.type}
+                        autoComplete={field.autoComplete}
+                        id={field.id}
+                        key={field.id}
+                        onBlur={() =>
+                          field.triggerId && triggerRepeat(field.triggerId)
+                        }
+                        validation={validationForms[field.id]}
+                        error={errors[field.id]}
+                        placeholder={t(`register_input_${field.id}`)}
+                        toggleVisibility={field.type === 'password'}
+                        inputFormatting={field.inputFormatting}
+                      />
+                    );
+                  }
+                  case 'date': {
+                    return (
+                      <ControlledTextInput
+                        rules={register({
+                          required:
+                            field.required && t('register_input_required'),
+                          valueAsDate: true,
+                        })}
+                        id={field.id}
+                        error={errors[field.id]}
+                        type="date"
+                        placeholder={t(`register_input_${field.id}`)}
+                        inputFormatting={field.inputFormatting}
+                      />
+                    );
+                  }
                 }
-                case 'date': {
-                  return (
-                    <TextInput
-                      ref={register({
-                        required:
-                          field.required && t('register_input_required'),
-                        valueAsDate: true,
-                      })}
-                      id={field.id}
-                      error={errors[field.id]}
-                      type="date"
-                      placeholder={t(`register_input_${field.id}`)}
-                    />
-                  );
-                }
-              }
-            })}
-          </div>
-        ))}
-        {!!apiError && (
-          <Alert show={!!apiError} variant="danger">
-            {apiError}
-          </Alert>
-        )}
-        <button
-          disabled={formState.isSubmitting}
-          className="btn btn-primary d-block mx-auto mb-4"
-        >
-          {formState.isSubmitting && (
-            <>
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-              />{' '}
-            </>
+              })}
+            </div>
+          ))}
+          {!!apiError && (
+            <Alert show={!!apiError} variant="danger">
+              {apiError}
+            </Alert>
           )}
-          {jsxT('register_submit_btn')}
-        </button>
-      </Form>
+          <button
+            disabled={formState.isSubmitting}
+            className="btn btn-primary d-block mx-auto mb-4"
+          >
+            {formState.isSubmitting && (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />{' '}
+              </>
+            )}
+            {jsxT('register_submit_btn')}
+          </button>
+        </Form>
+      </FormProvider>
     </div>
   );
 };
