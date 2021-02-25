@@ -60,7 +60,10 @@ const blocks = (
         id: 'postal_code',
         required: true,
         type: 'text',
-        validate: value => /^(?:(?:[1-9])(?:\d{3}))$/.test(value),
+        validate: value =>
+          (/^(?:(?:[1-9])(?:\d{3}))$/.test(value.split(' - ')[0]) &&
+            value.split(' - ').length === 2) ||
+          t('register_input_postal_code_invalid'),
         labelKey: (value: PostCodeInfo) =>
           `${value.zip_code} - ${value.locality}`,
         autoComplete: async value => {
@@ -76,6 +79,12 @@ const blocks = (
         id: 'phone_number',
         type: 'text',
         required: true,
+        inputFormatting: {
+          phone: true,
+          phoneRegionCode: 'BE',
+          prefix: '+32',
+          rawValueTrimPrefix: true,
+        },
       },
     ],
   },
@@ -246,6 +255,7 @@ const OnlineForm = (props: Props) => {
     return watch(id, '') !== '' && trigger(id);
   };
   const onSubmit = async ({ terms_and_conditions, postal_code, ...data }) => {
+    console.log(postal_code);
     const post_code = postal_code.split(' - ')[0];
     const postal_info = await props.checkPostalCode(post_code);
     const city =
@@ -265,11 +275,6 @@ const OnlineForm = (props: Props) => {
     <div className="reg-form">
       <h1 className="reg-form__title">{jsxT('register_title')}</h1>
       <p className="reg-form__sub-title">{jsxT('register_desc')}</p>
-      <a href="#" className="text-14 text-primary-light">
-        <u>
-          <strong>{jsxT('register_know_more')}</strong>
-        </u>
-      </a>
       <FormProvider {...formMethods}>
         <Form onSubmit={handleSubmit(onSubmit)}>
           {blocks(props, t, setValidation, validateRepeat).map(block => (
@@ -377,11 +382,12 @@ const OnlineForm = (props: Props) => {
               })}
             </div>
           ))}
-          {!!apiError && (
-            <Alert show={!!apiError} variant="danger">
-              {apiError}
-            </Alert>
-          )}
+          <Alert
+            show={!!apiError || (formState.isSubmitted && !formState.isValid)}
+            variant="danger"
+          >
+            {apiError || t('register_page_submit_error')}
+          </Alert>
           <button
             disabled={formState.isSubmitting}
             className="btn btn-primary d-block mx-auto mb-4"

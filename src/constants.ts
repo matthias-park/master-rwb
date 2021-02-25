@@ -315,6 +315,7 @@ export const TRANSLATION_SYMBOLS = [
   'register_input_newsletter',
   'register_input_terms_and_conditions',
   'register_input_postal_code_invalid',
+  'register_page_submit_error',
   'nav_link_sports',
   'nav_link_winners',
   'nav_link_more_than_playing',
@@ -442,6 +443,8 @@ export const TRANSLATION_SYMBOLS = [
   'sitemap_sportsBettingHistory',
   'sitemap_sportsPromotions',
   'sitemap_bettingRules',
+  'login_failed_to_login',
+  'contact_page_field_required',
 ];
 
 export const HEAD_DATA: HeadData = {

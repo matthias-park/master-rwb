@@ -117,7 +117,8 @@ const ContactUsPage = () => {
                       field={field}
                       error={errors[field.id]}
                       ref={register({
-                        required: field.required && t('login_field_required'),
+                        required:
+                          field.required && t('contact_page_field_required'),
                       })}
                       formState={formState}
                     />

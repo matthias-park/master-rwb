@@ -6,6 +6,7 @@ import { useCallback } from 'react';
 import Cleave from 'cleave.js/react';
 import { CleaveOptions } from 'cleave.js/options';
 import { useController } from 'react-hook-form';
+import 'cleave.js/dist/addons/cleave-phone.be';
 
 type Props = {
   error?: { message: string };
@@ -16,7 +17,9 @@ type Props = {
 } & React.ComponentProps<typeof Form.Control>;
 
 export const ControlledTextInput = (props: Props) => {
-  const { field } = useController({
+  const {
+    field: { value, ...field },
+  } = useController({
     name: props.name || props.id,
     rules: props.rules,
     defaultValue: '',
@@ -29,7 +32,14 @@ export const ControlledTextInput = (props: Props) => {
     return field.onChange(event.target.value);
   };
 
-  return <TextInput {...props} {...field} onChange={onChange} />;
+  return (
+    <TextInput
+      {...props}
+      {...field}
+      value={props.inputFormatting ? undefined : value}
+      onChange={onChange}
+    />
+  );
 };
 
 const TextInput = forwardRef<HTMLInputElement, Props>(

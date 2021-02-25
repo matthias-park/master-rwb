@@ -96,7 +96,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
               />
             ))}
           </ul>
-          <div className="club-card">
+          {/* <div className="club-card">
             <img
               className="club-card__bg-img"
               src="/assets/images/lottery-club/bg.png"
@@ -116,7 +116,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
               />
               <p className="club-barcode__number">1700340334308</p>
             </span>
-          </div>
+          </div> */}
           <div
             className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
             onClick={onLogoutClick}

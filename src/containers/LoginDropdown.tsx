@@ -43,12 +43,7 @@ const LoginForm = ({
         password,
         remember_me,
       },
-    ).catch((res: RailsApiResponse<null>) => {
-      if (res.Fallback) {
-        addToast(`Failed to login`, { appearance: 'error', autoDismiss: true });
-      }
-      return res;
-    });
+    ).catch((res: RailsApiResponse<null>) => res);
     if (response.Success && response.Data?.PlayerId) {
       hideLoginDropdown();
       return mutateUser(
@@ -65,7 +60,7 @@ const LoginForm = ({
         true,
       );
     }
-    setApiError(response.Message);
+    setApiError(response.Message || t('login_failed_to_login'));
     setError('email', {
       type: 'manual',
     });
