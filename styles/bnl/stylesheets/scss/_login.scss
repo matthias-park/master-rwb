@@ -38,6 +38,9 @@
         &-link {
             color: $brand-text;
         }
+        .icon-tooltip {
+          transform: translateY(-2px);
+        }
         @include media-breakpoint-down(lg) {
             left: -187%;
             top: 55px;

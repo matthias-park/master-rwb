@@ -221,7 +221,7 @@ const WithdrawalPage = () => {
     [t],
   );
   return (
-    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4 pt-5">
+    <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />

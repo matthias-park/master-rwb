@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { getApi } from '../../utils/apiUtils';
@@ -15,6 +15,7 @@ import BrandLogo from '../../components/header/BrandLogo';
 import { useToasts } from 'react-toast-notifications';
 import LocaleSelector from '../../components/header/LocaleSelector';
 import { useI18n } from '../../hooks/useI18n';
+import useOnClickOutside from '../../hooks/useOnClickOutside';
 
 const SubNavLinks = () => {
   const { locales, locale, setLocale } = useConfig();
@@ -95,14 +96,14 @@ const PageHeader = () => {
   const fullPath = `${pathname}${hash}`;
   const [active, setActive] = useState<HTMLElement | null>(null);
   const [navExpanded, setNavExpanded] = useState(false);
+  const navbarRef = useRef(null);
+  useOnClickOutside(navbarRef, () => setActive(!desktopWidth ? active : null));
 
-  const handleNavChange = (isExternal, ref) => {
-    if (isExternal || !desktopWidth) {
-      if (active === ref) {
-        setActive(null);
-      } else {
-        setActive(ref);
-      }
+  const handleNavChange = ref => {
+    if (active === ref) {
+      setActive(null);
+    } else {
+      setActive(ref);
     }
   };
 
@@ -145,7 +146,7 @@ const PageHeader = () => {
           )}
           <SubNavLinks />
           <div className="row w-100 mt-0 mt-lg-2 align-items-end order-1 order-xl-2">
-            <ul className="header__nav header__nav--main">
+            <ul ref={navbarRef} className="header__nav header__nav--main">
               {headerLinks
                 .sort((a, b) => sortAscending(a.order!, b.order!))
                 .map(link => {
@@ -156,7 +157,6 @@ const PageHeader = () => {
                       mobile={!desktopWidth}
                       handleNavChange={handleNavChange}
                       active={active}
-                      setActive={setActive}
                       setNavExpanded={setNavExpanded}
                       fullPath={fullPath}
                     />

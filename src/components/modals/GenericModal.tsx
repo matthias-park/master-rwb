@@ -2,13 +2,22 @@ import React from 'react';
 import { useI18n } from '../../hooks/useI18n';
 import Modal from 'react-bootstrap/Modal';
 
+interface Props {
+  show: boolean;
+  children: JSX.Element | JSX.Element[];
+  hideCallback: () => void;
+  isCentered?: boolean;
+  isStatic?: boolean;
+  withoutClose?: boolean;
+}
 const GenericModal = ({
   show,
   children,
   hideCallback,
   isCentered,
   isStatic,
-}) => {
+  withoutClose,
+}: Props) => {
   const { t } = useI18n();
   return (
     <Modal
@@ -18,7 +27,12 @@ const GenericModal = ({
       centered={isCentered}
       dialogClassName="generic-modal-width"
     >
-      <i className="icon-close custom-modal__close" onClick={hideCallback}></i>
+      {!withoutClose && (
+        <i
+          className="icon-close custom-modal__close"
+          onClick={hideCallback}
+        ></i>
+      )}
       <Modal.Body className="custom-modal mt-2 text-center">
         {children}
         <div className="custom-modal__footer">

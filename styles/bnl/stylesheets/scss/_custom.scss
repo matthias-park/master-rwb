@@ -306,6 +306,10 @@ a:hover {
     cursor: pointer;
 }
 
+.events-none {
+  pointer-events: none;
+}
+
 .body-background {
     background-color: $white !important;
 }

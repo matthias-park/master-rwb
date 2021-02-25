@@ -7,17 +7,12 @@ import clsx from 'clsx';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
 import { useUIConfig } from '../../hooks/useUIConfig';
-import useOnClickOutside from '../../hooks/useOnClickOutside';
 
 interface HeaderNavLinkProps {
   data: HeaderLink;
   mobile: boolean;
-  handleNavChange: (
-    externalLink: boolean | undefined,
-    ref: HTMLElement | null,
-  ) => void;
+  handleNavChange: (ref: HTMLElement | null) => void;
   active: HTMLElement | null;
-  setActive: (value: HTMLElement | null) => void;
   setNavExpanded: (value: boolean) => void;
   fullPath: string;
 }
@@ -116,7 +111,6 @@ export const HeaderNavClassicLink = ({
   mobile,
   handleNavChange,
   active,
-  setActive,
   setNavExpanded,
   fullPath,
 }: HeaderNavLinkProps) => {
@@ -124,7 +118,6 @@ export const HeaderNavClassicLink = ({
   const { locale, user } = useConfig();
   const { backdrop } = useUIConfig();
   const dropdownRef = useRef(null);
-  useOnClickOutside(dropdownRef, () => setActive(mobile ? active : null));
   const dropdownLinks = useMemo(
     () => data.links?.sort((a, b) => sortAscending(a.order, b.order)),
     [data.links],
@@ -139,18 +132,13 @@ export const HeaderNavClassicLink = ({
   if (!mobile && data.mobileLink) {
     return null;
   }
+
   return (
     <Dropdown
-      ref={ref => {
-        if (data.externalLink || mobile) dropdownRef.current = ref;
-      }}
+      ref={dropdownRef}
       as="li"
       className="header__nav-item"
-      show={
-        (data.externalLink || mobile) && active === dropdownRef.current
-          ? true
-          : showDropdown
-      }
+      show={(!active && showDropdown) || active === dropdownRef.current}
     >
       {!mobile ? (
         <Dropdown.Toggle
@@ -166,7 +154,7 @@ export const HeaderNavClassicLink = ({
           }
           className="header__nav-item-link cursor-pointer"
           onClick={() => {
-            handleNavChange(data.externalLink, dropdownRef.current);
+            handleNavChange(dropdownRef.current);
           }}
         >
           {t(data.name)}
@@ -193,7 +181,7 @@ export const HeaderNavClassicLink = ({
             as={'i'}
             className="header__nav-item-icon icon-down"
             onClick={() => {
-              handleNavChange(data.externalLink, dropdownRef.current);
+              handleNavChange(dropdownRef.current);
             }}
           ></Dropdown.Toggle>
         </div>

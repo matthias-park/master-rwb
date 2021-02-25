@@ -14,7 +14,7 @@ const QuestionItem = ({ item, index }) => {
   return (
     <div className="questions-acr__item">
       <Accordion.Toggle
-        className="questions-acr__item-toggle"
+        className="questions-acr__item-toggle px-3"
         eventKey={`${index}`}
       >
         {item.title}
@@ -23,9 +23,9 @@ const QuestionItem = ({ item, index }) => {
         className="questions-acr__item-body"
         eventKey={`${index}`}
       >
-        <p>{item.body}</p>
+        <p className="px-3 py-2 mb-0">{item.body}</p>
       </Accordion.Collapse>
-      <i className="questions-acr__item-icon icon-down1"></i>
+      <i className="questions-acr__item-icon icon-down1 events-none"></i>
     </div>
   );
 };

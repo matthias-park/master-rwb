@@ -69,7 +69,7 @@ const SettingsPage = () => {
     return;
   };
   return (
-    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4 pt-5">
+    <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       <h1 className="mb-4">{t('settings_page_title')}</h1>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
