@@ -1,12 +1,17 @@
 import useLocalStorage from '../hooks/useLocalStorage';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useUIConfig } from '../hooks/useUIConfig';
+import { ComponentName } from '../constants';
+import { useI18n } from '../hooks/useI18n';
 
 const CookieConsent = () => {
+  const { setShowModal } = useUIConfig();
+  const { jsxT, t } = useI18n();
   const [cookiesAccepted, setCookiesAccepted] = useLocalStorage(
     'cookieConsent',
     false,
   );
+
   if (cookiesAccepted) {
     return null;
   }
@@ -14,8 +19,13 @@ const CookieConsent = () => {
   return (
     <nav className="navbar fixed-bottom navbar-dark bg-brand">
       <span className="navbar-text">
-        We use cookies on this site to enhance your user experience. Learn more
-        about <Link to="/cookie-policy">Cookies policy.</Link>
+        {jsxT('cookie_consent_desc')}{' '}
+        <span
+          className="cursor-pointer"
+          onClick={() => setShowModal(ComponentName.CookiesModal)}
+        >
+          {t('cookie_consent_open_policy')}
+        </span>
       </span>
       <button
         id="gdpr-snackbar-accept"
@@ -23,7 +33,7 @@ const CookieConsent = () => {
         className="btn btn-sm btn-success m-1 mr-5"
         onClick={handleAccept}
       >
-        I accept
+        {t('cookie_consent_accept')}
       </button>
     </nav>
   );

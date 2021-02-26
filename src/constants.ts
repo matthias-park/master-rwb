@@ -9,7 +9,6 @@ export enum ComponentName {
   Footer,
   LoginDropdown,
   HomePage,
-  CookiePolicyPage,
   FaqPage,
   SportsPage,
   RegisterPage,
@@ -436,6 +435,9 @@ export const TRANSLATION_SYMBOLS = [
   'sitemap_bettingRules',
   'login_failed_to_login',
   'contact_page_field_required',
+  'cookie_consent_desc',
+  'cookie_consent_open_policy',
+  'cookie_consent_accept',
 ];
 
 export const HEAD_DATA: HeadData = {
@@ -447,11 +449,6 @@ export const NAVIGATION_ROUTES: ConfigRoute[] = [
     path: '/',
     id: ComponentName.HomePage,
     name: 'home',
-  },
-  {
-    path: '/cookie-policy',
-    id: ComponentName.CookiePolicyPage,
-    name: 'cookiePolicy',
   },
   {
     path: '/faq',

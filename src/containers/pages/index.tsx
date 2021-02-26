@@ -16,7 +16,6 @@ const AsyncPage = (pageName: string) =>
   });
 
 const COMPONENT_PAGES = {
-  [ComponentName.CookiePolicyPage]: AsyncPage('cookiePolicyPage'),
   [ComponentName.DepositPage]: AsyncPage('depositPage'),
   [ComponentName.HomePage]: AsyncPage('homePage'),
   [ComponentName.LimitsPage]: AsyncPage('limitsPage'),
