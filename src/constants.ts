@@ -172,16 +172,7 @@ export const HEADER_ROUTES: HeaderLink[] = [
 ];
 
 export const TRANSLATION_SYMBOLS = [
-  'link_sports',
-  'live_betting',
-  'promotions',
-  'deposit',
-  'bonus',
-  'withdrawal',
-  'profile',
   'logout',
-  'login',
-  'play_now',
   'login_email',
   'login_password',
   'login_remember_me',

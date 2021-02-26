@@ -130,7 +130,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 className="mr-1"
               />
             )}
-            Logout
+            {t('logout')}
           </div>
         </div>
       </Dropdown.Menu>
