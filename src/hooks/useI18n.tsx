@@ -12,6 +12,7 @@ import { TRANSLATION_SYMBOLS, TestEnv } from '../constants';
 import { useConfig } from './useConfig';
 import { useToasts } from 'react-toast-notifications';
 import useSWR from 'swr';
+import useLocalStorage from './useLocalStorage';
 
 export const I18nContext = createContext<I18n | null>(null);
 
@@ -34,16 +35,10 @@ const createLocale = (locale = 'en', data: unknown) => {
   return current;
 };
 
-interface translationSymbol {
-  key: string;
-  translation: string;
-  lang: string;
-  franchizeid: number;
-}
-
 export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   const { addToast } = useToasts();
   const { locale } = useConfig();
+  const [i18nCache, setI18nCache] = useLocalStorage('translations', {});
   const params = useMemo(
     () => ({
       keys: TRANSLATION_SYMBOLS,
@@ -51,33 +46,28 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
     }),
     [locale],
   );
-  const { data } = useSWR<translationSymbol[]>(
+  const { data } = useSWR<{ [key: string]: string }>(
     !TestEnv ? ['/railsapi/v1/translations', params] : null,
     postApi,
     {
-      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+      onErrorRetry: () => {
         addToast(`Failed to fetch translations`, {
           appearance: 'error',
           autoDismiss: true,
         });
-        console.log(error);
+      },
+      onSuccess: data => {
+        setI18nCache(data);
       },
     },
   );
 
   const [translations, setTranslations] = useState(() =>
-    createLocale(locale, data),
+    createLocale(locale, data || i18nCache),
   );
 
   useEffect(() => {
-    setTranslations(
-      createLocale(locale, data),
-      // createLocale(locale, {
-      //   ...data,
-      //   register_input_newsletter:
-      //     'I would like to stay informed of news from the National Lottery. Do you want to be the first to discover our jackpots, games and promotions? Receive special offers and benefits directly in your mailbox? Then tick this box! You can unsubscribe or change your preferences at any time: see our {linkTo=/privacy-policy}privacy statement{linkTo}',
-      // }),
-    );
+    setTranslations(createLocale(locale, data));
   }, [data, locale]);
 
   return <I18nContext.Provider value={translations} {...props} />;
