@@ -34,6 +34,7 @@ export enum ComponentName {
   SitemapPage,
   CookiesModal,
   BettingRulesPage,
+  AddBankAccountModal,
   Null,
 }
 
@@ -438,6 +439,15 @@ export const TRANSLATION_SYMBOLS = [
   'cookie_consent_desc',
   'cookie_consent_open_policy',
   'cookie_consent_accept',
+  'add_bank_modal_title',
+  'add_bank_modal_text',
+  'add_bank_modal_account_number',
+  'add_bank_modal_swift',
+  'add_bank_modal_address',
+  'add_bank_modal_input_required',
+  'add_bank_modal_save',
+  'seo_site_name',
+  'seo_description',
 ];
 
 export const HEAD_DATA: HeadData = {

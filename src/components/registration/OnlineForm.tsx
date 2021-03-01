@@ -129,7 +129,7 @@ const blocks = (
         validate: async value => {
           let valid: string | boolean = true;
           setValidation('email', FormFieldValidation.Validating);
-          const emailRegex = /[a-zA-Z0-9.!\#$%&‘*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*/;
+          const emailRegex = /[a-zA-Z0-9.!#$%&‘*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*/;
           if (!emailRegex.test(value)) {
             setValidation('email', FormFieldValidation.Invalid);
             return t('register_email_bad_format');
@@ -378,6 +378,8 @@ const OnlineForm = (props: Props) => {
                       />
                     );
                   }
+                  default:
+                    return null;
                 }
               })}
             </div>

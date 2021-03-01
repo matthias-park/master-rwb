@@ -29,3 +29,7 @@ export const miliseconds = (
 ): number => {
   return (hrs * 60 * 60 + min * 60 + sec) * 1000;
 };
+export const removeFalsyFromObject = (obj: any) =>
+  Object.keys(obj).forEach(
+    k => !obj[k] && obj[k] !== undefined && delete obj[k],
+  );

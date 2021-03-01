@@ -4,12 +4,10 @@ import { postApi } from '../utils/apiUtils';
 import { useConfig } from '../hooks/useConfig';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../hooks/useUIConfig';
-import { ComponentName, RailsApiResponseFallback } from '../constants';
-import clsx from 'clsx';
+import { ComponentName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
 import { Link, useLocation } from 'react-router-dom';
 import { Spinner, OverlayTrigger, Tooltip, Form, Alert } from 'react-bootstrap';
-import { useToasts } from 'react-toast-notifications';
 import { useRoutePath } from '../hooks/index';
 import { NET_USER } from '../types/UserStatus';
 import { ControlledTextInput } from '../components/TextInput';
@@ -26,7 +24,6 @@ const LoginForm = ({
 }: {
   hideLoginDropdown: () => void;
 }) => {
-  const { addToast } = useToasts();
   const { t } = useI18n();
   const [apiError, setApiError] = useState<string | null>(null);
   const formMethods = useForm({
@@ -148,29 +145,29 @@ const LoginForm = ({
   );
 };
 
-const JoinLotteryClub = () => {
-  const { t } = useI18n();
-  return (
-    <div className="lottery-club">
-      <div className="lottery-club__image mr-2">
-        <img
-          src="/assets/images/lottery-club/logo.png"
-          width="90"
-          height="64"
-          alt=""
-        />
-      </div>
-      <div className="lottery-club__text">
-        <p className="text-14">{t('login_dont_have_lottery_acc')}</p>
-        <a href="#" className="text-14">
-          <u>
-            <strong>{t('login_register_with_card')}</strong>
-          </u>
-        </a>
-      </div>
-    </div>
-  );
-};
+// const JoinLotteryClub = () => {
+//   const { t } = useI18n();
+//   return (
+//     <div className="lottery-club">
+//       <div className="lottery-club__image mr-2">
+//         <img
+//           src="/assets/images/lottery-club/logo.png"
+//           width="90"
+//           height="64"
+//           alt=""
+//         />
+//       </div>
+//       <div className="lottery-club__text">
+//         <p className="text-14">{t('login_dont_have_lottery_acc')}</p>
+//         <a href="#" className="text-14">
+//           <u>
+//             <strong>{t('login_register_with_card')}</strong>
+//           </u>
+//         </a>
+//       </div>
+//     </div>
+//   );
+// };
 
 const RegistrationLink = () => {
   const { t } = useI18n();

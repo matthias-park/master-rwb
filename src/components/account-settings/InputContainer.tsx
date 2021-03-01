@@ -61,6 +61,7 @@ const InputContainer = ({
             size="sm"
             className="mr-1 mb-3 weight-500"
             onClick={() => setInputValue(value.toString())}
+            disabled={disabled}
           >
             {value}
             {currency}
@@ -76,6 +77,7 @@ const InputContainer = ({
             noImmediatePrefix: true,
             rawValueTrimPrefix: true,
           }}
+          disabled={disabled}
           data-testid="input"
           placeholder={placeholder}
           value={inputValue}

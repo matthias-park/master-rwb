@@ -54,7 +54,7 @@ const useUser = () => {
     user.loading = true;
   } else if (userData && !userError) {
     user = userData;
-    user.logged_in = true;
+    user.logged_in = !!user.id;
     user.loading = false;
   }
   return { user, mutateUser };

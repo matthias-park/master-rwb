@@ -14,11 +14,13 @@ import {
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import { useCallback } from 'react';
-import { postApi, getApi } from '../../utils/apiUtils';
+import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
 import Alert from 'react-bootstrap/Alert';
 import WithdrawalConfirmModal from '../../components/modals/WithdrawalConfirmModal';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
+import { ComponentName } from '../../constants';
+import { useUIConfig } from '../../hooks/useUIConfig';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -99,6 +101,7 @@ const WithdrawalPage = () => {
   const { t, set } = useI18n();
   const { user, locale } = useConfig();
   const { addToast } = useToasts();
+  const { setShowModal } = useUIConfig();
   const [submitResponse, setSubmitResponse] = useState<{
     success: boolean;
     msg: string | null;
@@ -108,22 +111,23 @@ const WithdrawalPage = () => {
     withdrawalConfirmData,
     setWithdrawalConfirmData,
   ] = useState<WithdrawalConfirmation | null>(null);
-  const { data, error, mutate } = useSWR<Withdrawal>(
+  const { data, error, mutate } = useSWR<RailsApiResponse<Withdrawal>>(
     '/railsapi/v1/withdrawals',
-    url =>
-      getApi<Withdrawal>(url).catch(
-        async (res: RailsApiResponse<Withdrawal>) => {
-          return (await res).Data;
-        },
-      ),
   );
   const isDataLoading = !data && !error;
   useEffect(() => {
-    if (data?.translations) {
+    if (user.logged_in && !user.bank_account) {
+      setShowModal(ComponentName.AddBankAccountModal);
+    } else {
+      mutate();
+    }
+  }, [user.bank_account]);
+  useEffect(() => {
+    if (data?.Data.translations) {
       set(
         locale,
-        Object.keys(data.translations).reduce((obj, key) => {
-          obj[`withdrawal_page_${key}`] = data.translations![key];
+        Object.keys(data.Data.translations).reduce((obj, key) => {
+          obj[`withdrawal_page_${key}`] = data.Data.translations![key];
           return obj;
         }, {}),
       );
@@ -156,7 +160,7 @@ const WithdrawalPage = () => {
   const requestWithdrawal = useCallback(
     async (amount: number) => {
       setWithdrawalLoading(true);
-      if (!data?.default_account) {
+      if (!data?.Data.default_account) {
         return addToast('account not found for withdrawal', {
           appearance: 'error',
           autoDismiss: true,
@@ -166,7 +170,7 @@ const WithdrawalPage = () => {
         WithdrawalConfirmation | Withdrawal | null
       >('/railsapi/v1/withdrawals', {
         amount: amount.toString(),
-        id: data?.default_account.uniq_id,
+        id: data?.Data.default_account.uniq_id,
       }).catch(() => {
         addToast('failed to withdraw amount', {
           appearance: 'error',
@@ -183,7 +187,7 @@ const WithdrawalPage = () => {
       return setWithdrawalConfirmData(response as WithdrawalConfirmation);
       // }
     },
-    [data?.default_account, user],
+    [data?.Data.default_account, user],
   );
   const confirmWithdrawal = useCallback(
     async (data: any) => {
@@ -211,7 +215,7 @@ const WithdrawalPage = () => {
         msg: response.Message,
       });
     },
-    [data?.default_account, user],
+    [data?.Data.default_account, user],
   );
   const questionItems = useMemo(
     () => [
@@ -229,13 +233,13 @@ const WithdrawalPage = () => {
       )}
       {data && (
         <>
-          <h1 className="mb-4">{data.title}</h1>
+          <h1 className="mb-4">{data.Data.title}</h1>
           <AmountContainer
             title={t('total_playable_amount')}
             amount={user.balance!}
             tooltip={t('playable_amount_tooltip')}
           />
-          {(!data?.default_account || submitResponse) && (
+          {(!data?.Data.default_account || submitResponse) && (
             <Alert
               show
               variant={
@@ -243,46 +247,46 @@ const WithdrawalPage = () => {
                   ? submitResponse.success
                     ? 'success'
                     : 'danger'
-                  : !data?.default_account
+                  : !data?.Data.default_account
                   ? 'info'
                   : 'danger'
               }
             >
-              {submitResponse?.msg || data.info}
+              {submitResponse?.msg || data.Message}
             </Alert>
           )}
           <InputContainer
             title={t('withdrawal_amount')}
             placeholder={`${user.currency || ''} 0`}
             buttonText={t('withdrawal_btn')}
-            min={data.default_account?.min_withdraw_amount}
-            max={data.default_account?.max_withdraw_amount}
+            min={data.Data.default_account?.min_withdraw_amount}
+            max={data.Data.default_account?.max_withdraw_amount}
             loading={!withdrawalConfirmData && withdrawalLoading}
             onSubmit={requestWithdrawal}
-            disabled={!data?.default_account}
+            disabled={!data?.Data.default_account}
             currency={user.currency}
           />
-          {!!data.default_account && (
+          {!!data.Data.default_account && (
             <div className="info-container mb-4">
               {/* <p className="info-container__info pb-0 mb-n1">
               <strong>Your bank account number</strong>
             </p> */}
               <p
                 className="info-container__info text-14 mb-0"
-                dangerouslySetInnerHTML={{ __html: data.info }}
+                dangerouslySetInnerHTML={{ __html: data.Data.info }}
               />
               <div className="info-container__text">
                 <ul className="list-unstyled mb-0">
                   <li className="mb-1">Your current bank account number:</li>
-                  <li className="mb-1">{data.default_account.uniq_id}</li>
+                  <li className="mb-1">{data.Data.default_account.uniq_id}</li>
                 </ul>
               </div>
             </div>
           )}
-          {!!data.requests && (
+          {!!data.Data.requests && (
             <WithdrawalRequests
               onCancelRequest={cancelRequest}
-              requests={data.requests}
+              requests={data.Data.requests}
             />
           )}
           <QuestionsContainer items={questionItems} />

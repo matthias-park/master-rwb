@@ -77,10 +77,15 @@ const FooterBottom = ({ data }: { data: SubFooter }) => {
       </ul>
       <ul className="footer-sub__nav flex-row justify-content-center h-auto pb-3 pb-lg-0">
         <li>
-          <img height="45" src="/assets/images/footer/kansspel.jpg" />
+          <img
+            alt="kansspel"
+            height="45"
+            src="/assets/images/footer/kansspel.jpg"
+          />
         </li>
         <li>
           <img
+            alt="loterij"
             className="ml-2 ml-lg-3"
             height="45"
             src="/assets/images/footer/loterij.jpg"
@@ -88,6 +93,7 @@ const FooterBottom = ({ data }: { data: SubFooter }) => {
         </li>
         <li>
           <img
+            alt="european"
             className="ml-2 ml-lg-3"
             height="45"
             src="/assets/images/footer/european.jpg"
@@ -95,6 +101,7 @@ const FooterBottom = ({ data }: { data: SubFooter }) => {
         </li>
         <li>
           <img
+            alt="becommerce"
             className="ml-2 ml-lg-3"
             height="45"
             src="/assets/images/footer/becommerce.jpg"
@@ -165,7 +172,11 @@ const SocialSection = ({
             .filter(Boolean)
             .map(([key, value]) => (
               <a key={key} href={value} className="section-social__icons-link">
-                <img height="42" src={`/assets/images/footer/${key}.jpg`} />
+                <img
+                  alt={`partner-${key}`}
+                  height="42"
+                  src={`/assets/images/footer/${key}.jpg`}
+                />
               </a>
             ))}
         </p>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Form } from 'react-bootstrap';
 import { useI18n } from '../../hooks/useI18n';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';

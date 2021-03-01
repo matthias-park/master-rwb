@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { getApi } from '../../utils/apiUtils';

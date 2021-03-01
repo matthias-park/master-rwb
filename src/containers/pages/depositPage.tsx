@@ -1,5 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import AmountContainer from '../../components/account-settings/AmountContainer';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import InputContainer from '../../components/account-settings/InputContainer';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
 import { getApi, postApi } from '../../utils/apiUtils';
@@ -8,13 +7,22 @@ import { DepositRequest, DepositResponse } from '../../types/api/user/Deposit';
 import { useToasts } from 'react-toast-notifications';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
+import { useUIConfig } from '../../hooks/useUIConfig';
+import { ComponentName } from '../../constants';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
   const { user } = useConfig();
+  const { setShowModal } = useUIConfig();
   const { t } = useI18n();
   const { bankResponse } = useParams<{ bankResponse?: string }>();
   const [depositLoading, setDepositLoading] = useState(false);
+
+  useEffect(() => {
+    if (user.logged_in && !user.bank_account) {
+      setShowModal(ComponentName.AddBankAccountModal);
+    }
+  }, [user.bank_account]);
 
   const questionItems = useMemo(
     () => [
@@ -25,6 +33,13 @@ const DepositPage = () => {
   );
 
   const handleRequestDeposit = useCallback(async (depositValue: number) => {
+    if (!user.bank_account) {
+      addToast(`No bank account`, {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+      return;
+    }
     setDepositLoading(true);
     const userIp: any = await getApi('/check-cf-ip').catch(err => {
       addToast(`Failed to get ip, using fallback`, {
@@ -88,6 +103,7 @@ const DepositPage = () => {
         onSubmit={handleRequestDeposit}
         quickAmounts={[10, 20, 50, 100]}
         currency={user.currency}
+        disabled={!user.bank_account}
       />
       <div className="info-container mb-4">
         <p className="info-container__info text-14 mb-0">

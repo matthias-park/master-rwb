@@ -4,17 +4,15 @@ import ErrorBoundary from './ErrorBoundary';
 import Routes from './pages';
 import { useConfig } from '../hooks/useConfig';
 import ApiHead from './ApiHead';
-import ResponsibleGamblingModal from '../components/modals/ResponsibleGamblingModal';
-import CookiePolicyModal from '../components/modals/CookiePolicyModal';
 import PageLayout from './pageLayout';
+import Modals from './Modals';
 
 const App = () => {
   const { locale } = useConfig();
   return (
     <BrowserRouter basename={`/${locale}`}>
       <ApiHead />
-      <ResponsibleGamblingModal />
-      <CookiePolicyModal />
+      <Modals />
       <PageLayout>
         <ErrorBoundary>
           <Routes />

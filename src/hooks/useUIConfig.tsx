@@ -5,6 +5,7 @@ import {
   createBackdropProviderValues,
 } from '../utils/uiUtils';
 import { UIBackdropState } from '../types/UIConfig';
+import { ComponentName } from '../constants';
 
 export const uiConfig = createContext<UIConfig | null>(null);
 
@@ -23,7 +24,7 @@ export const UIConfigProvider = props => {
     active: false,
     ignoredComponents: [],
   });
-  const [showModal, setShowModal] = useState(null);
+  const [showModal, setShowModal] = useState<ComponentName | null>(null);
 
   useEffect(() => {
     changeBackdropVisibility(backdrop.active);

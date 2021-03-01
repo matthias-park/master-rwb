@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import KambiSportsbook from '../KambiSportsbook';
-import ErrorBoundary from '../ErrorBoundary';
 
 const SportsPage = () => {
   useEffect(() => {
