@@ -123,7 +123,7 @@ const blocks = (
     fields: [
       {
         id: 'email',
-        type: 'text',
+        type: 'email',
         required: true,
         triggerId: 'repeat_email',
         validate: async value => {
@@ -147,7 +147,7 @@ const blocks = (
       },
       {
         id: 'repeat_email',
-        type: 'text',
+        type: 'email',
         required: true,
         validate: value => {
           let valid: string | boolean = true;

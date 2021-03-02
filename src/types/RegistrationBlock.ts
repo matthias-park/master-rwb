@@ -3,7 +3,14 @@ export interface OnlineFormBlockField {
   id: string;
   value?: string;
   name?: string;
-  type: 'radio' | 'password' | 'text' | 'date' | 'checkbox' | 'number';
+  type:
+    | 'radio'
+    | 'password'
+    | 'text'
+    | 'date'
+    | 'checkbox'
+    | 'number'
+    | 'email';
   required?: boolean;
   validate?: (value: string) => boolean | string | Promise<boolean | string>;
   triggerId?: string;

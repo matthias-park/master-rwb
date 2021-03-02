@@ -65,7 +65,9 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
       [],
     );
     const inputType =
-      inputFormatting?.numericOnly || inputFormatting?.numeral
+      inputFormatting?.numericOnly ||
+      inputFormatting?.numeral ||
+      inputFormatting?.phone
         ? 'tel'
         : !showPassword
         ? type
