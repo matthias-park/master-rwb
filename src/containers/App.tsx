@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import ErrorBoundary from './ErrorBoundary';
 import Routes from './pages';
 import { useConfig } from '../hooks/useConfig';
 import ApiHead from './ApiHead';
@@ -14,9 +13,7 @@ const App = () => {
       <ApiHead />
       <Modals />
       <PageLayout>
-        <ErrorBoundary>
-          <Routes />
-        </ErrorBoundary>
+        <Routes />
       </PageLayout>
     </BrowserRouter>
   );

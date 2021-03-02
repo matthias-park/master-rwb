@@ -45,8 +45,8 @@ const ApiHead = () => {
           </>
         ) : (
           <>
-            <title>{fallbackTitle}</title>
-            <meta name="description" content={t('seo_description')} />
+            {/* <title>{fallbackTitle}</title>
+            <meta name="description" content={t('seo_description')} /> */}
           </>
         )}
       </Helmet>

@@ -1,10 +1,11 @@
 import React from 'react';
 import loadable from '@loadable/component';
 import ProtectedRoute from './ProtectedRoute';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { ComponentName } from '../../constants';
 import Spinner from 'react-bootstrap/Spinner';
+import ErrorBoundary from '../ErrorBoundary';
 
 const AsyncPage = (pageName: string) =>
   loadable(() => import(`./${pageName}`), {
@@ -36,28 +37,31 @@ const COMPONENT_PAGES = {
 
 const Routes = () => {
   const { routes } = useConfig();
+  const { pathname } = useLocation();
 
   return (
-    <Switch>
-      {routes.map(route => {
-        const Page =
-          COMPONENT_PAGES[route.id] ||
-          COMPONENT_PAGES[ComponentName.TemplatePage];
+    <ErrorBoundary key={pathname}>
+      <Switch>
+        {routes.map(route => {
+          const Page =
+            COMPONENT_PAGES[route.id] ||
+            COMPONENT_PAGES[ComponentName.TemplatePage];
 
-        if (!Page) {
-          return null;
-        }
-        const RouteEl = route.protected ? ProtectedRoute : Route;
-        return (
-          <RouteEl
-            key={`${route.id}-${route.path}`}
-            exact={route.exact ?? true}
-            path={route.path}
-            component={Page}
-          />
-        );
-      })}
-    </Switch>
+          if (!Page) {
+            return null;
+          }
+          const RouteEl = route.protected ? ProtectedRoute : Route;
+          return (
+            <RouteEl
+              key={`${route.id}-${route.path}`}
+              exact={route.exact ?? true}
+              path={route.path}
+              component={Page}
+            />
+          );
+        })}
+      </Switch>
+    </ErrorBoundary>
   );
 };
 

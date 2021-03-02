@@ -450,10 +450,6 @@ export const TRANSLATION_SYMBOLS = [
   'seo_description',
 ];
 
-export const HEAD_DATA: HeadData = {
-  title: 'test header',
-};
-
 export const NAVIGATION_ROUTES: ConfigRoute[] = [
   {
     path: '/',
