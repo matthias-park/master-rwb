@@ -13,6 +13,7 @@ import { useConfig } from './useConfig';
 import { useToasts } from 'react-toast-notifications';
 import useSWR from 'swr';
 import useLocalStorage from './useLocalStorage';
+import RailsApiResponse from '../types/api/RailsApiResponse';
 
 export const I18nContext = createContext<I18n | null>(null);
 
@@ -39,8 +40,8 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   const { addToast } = useToasts();
   const { locale } = useConfig();
   const [i18nCache, setI18nCache] = useLocalStorage('translations', {});
-  const { data } = useSWR<{ [key: string]: string }>(
-    !TestEnv ? `/railsapi/v1/translations?locale=${locale}` : null,
+  const { data } = useSWR<RailsApiResponse<{ [key: string]: string }>>(
+    !TestEnv ? '/railsapi/v1/translations' : null,
     {
       onErrorRetry: () => {
         addToast(`Failed to fetch translations`, {
@@ -54,12 +55,12 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
     },
   );
   const [translations, setTranslations] = useState(() =>
-    createLocale(locale, data || i18nCache),
+    createLocale(locale, data?.Data || i18nCache),
   );
 
   useEffect(() => {
-    setTranslations(createLocale(locale, data || i18nCache));
-  }, [data, locale]);
+    setTranslations(createLocale(locale, data?.Data || i18nCache));
+  }, [data?.Data, locale]);
 
   return <I18nContext.Provider value={translations} {...props} />;
 };

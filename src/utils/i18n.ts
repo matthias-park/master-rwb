@@ -2,6 +2,7 @@ import { ConfigRoute } from '../types/Config';
 import Lockr from 'lockr';
 import { postApi } from './apiUtils';
 import { replaceStringTagsReact } from './reactUtils';
+import { mutate } from 'swr';
 
 type Symbols = { [key: string]: { [key: string]: string } };
 
@@ -65,6 +66,8 @@ export const getRedirectLocalePathname = (
     window.LOCALE = urlLocale;
     postApi('/railsapi/v1/locale', {
       locale: urlLocale,
+    }).then(() => {
+      mutate('/railsapi/v1/translations');
     });
   }
   return urlLocale;
