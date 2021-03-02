@@ -306,7 +306,8 @@ const OnlineForm = (props: Props) => {
                   }
                   case 'number':
                   case 'password':
-                  case 'text': {
+                  case 'text':
+                  case 'email': {
                     if (
                       typeof field.autoComplete === 'function' &&
                       field.labelKey
