@@ -1,7 +1,7 @@
-import { ComponentName } from '../constants';
+import { PagesName } from '../constants';
 import UserStatus from './UserStatus';
 export interface ConfigRoute {
-  id: ComponentName;
+  id: PagesName;
   path: string;
   protected?: boolean;
   exact?: boolean;

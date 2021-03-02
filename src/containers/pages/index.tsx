@@ -3,7 +3,7 @@ import loadable from '@loadable/component';
 import ProtectedRoute from './ProtectedRoute';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
-import { ComponentName } from '../../constants';
+import { ComponentName, PagesName } from '../../constants';
 import Spinner from 'react-bootstrap/Spinner';
 import ErrorBoundary from '../ErrorBoundary';
 
@@ -17,22 +17,22 @@ const AsyncPage = (pageName: string) =>
   });
 
 const COMPONENT_PAGES = {
-  [ComponentName.DepositPage]: AsyncPage('depositPage'),
-  [ComponentName.HomePage]: AsyncPage('homePage'),
-  [ComponentName.LimitsPage]: AsyncPage('limitsPage'),
-  [ComponentName.PromotionsPage]: AsyncPage('promotionsPage'),
-  [ComponentName.RegisterPage]: AsyncPage('registerPage'),
-  [ComponentName.SettingsPage]: AsyncPage('settingsPage'),
-  [ComponentName.SportsPage]: AsyncPage('sportsPage'),
-  [ComponentName.TransactionsPage]: AsyncPage('transactionsPage'),
-  [ComponentName.WithdrawalPage]: AsyncPage('withdrawalPage'),
-  [ComponentName.NotFoundPage]: AsyncPage('notFoundPage'),
-  [ComponentName.TemplatePage]: AsyncPage('templatePage'),
-  [ComponentName.ForgotPasswordPage]: AsyncPage('forgotPasswordPage'),
-  [ComponentName.ResetPasswordPage]: AsyncPage('resetPasswordPage'),
-  [ComponentName.ForgotLoginPage]: AsyncPage('forgotLoginPage'),
-  [ComponentName.ContactUsPage]: AsyncPage('contactUsPage'),
-  [ComponentName.SitemapPage]: AsyncPage('sitemapPage'),
+  [PagesName.DepositPage]: AsyncPage('depositPage'),
+  [PagesName.HomePage]: AsyncPage('homePage'),
+  [PagesName.LimitsPage]: AsyncPage('limitsPage'),
+  [PagesName.PromotionsPage]: AsyncPage('promotionsPage'),
+  [PagesName.RegisterPage]: AsyncPage('registerPage'),
+  [PagesName.SettingsPage]: AsyncPage('settingsPage'),
+  [PagesName.SportsPage]: AsyncPage('sportsPage'),
+  [PagesName.TransactionsPage]: AsyncPage('transactionsPage'),
+  [PagesName.WithdrawalPage]: AsyncPage('withdrawalPage'),
+  [PagesName.NotFoundPage]: AsyncPage('notFoundPage'),
+  [PagesName.TemplatePage]: AsyncPage('templatePage'),
+  [PagesName.ForgotPasswordPage]: AsyncPage('forgotPasswordPage'),
+  [PagesName.ResetPasswordPage]: AsyncPage('resetPasswordPage'),
+  [PagesName.ForgotLoginPage]: AsyncPage('forgotLoginPage'),
+  [PagesName.ContactUsPage]: AsyncPage('contactUsPage'),
+  [PagesName.SitemapPage]: AsyncPage('sitemapPage'),
 };
 
 const Routes = () => {
@@ -45,7 +45,7 @@ const Routes = () => {
         {routes.map(route => {
           const Page =
             COMPONENT_PAGES[route.id] ||
-            COMPONENT_PAGES[ComponentName.TemplatePage];
+            COMPONENT_PAGES[PagesName.TemplatePage];
 
           if (!Page) {
             return null;

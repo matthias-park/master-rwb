@@ -4,30 +4,31 @@ import PageFooter from './PageFooter';
 import CookieConsent from '../../components/CookieConsent';
 import { matchPath, useHistory, useLocation } from 'react-router-dom';
 import LayoutWithSidebar from './LayoutWithSidebar';
-import { ComponentName, NAVIGATION_ROUTES } from '../../constants';
+import { PagesName, NAVIGATION_ROUTES } from '../../constants';
 import { ConfigRoute } from '../../types/Config';
 import { usePrevious } from '../../hooks/index';
 import { useConfig } from '../../hooks/useConfig';
+import ErrorBoundary from '../ErrorBoundary';
 
 const pathsWithSidebar = NAVIGATION_ROUTES.filter(route =>
   [
-    ComponentName.DepositPage,
-    ComponentName.LimitsPage,
-    ComponentName.SettingsPage,
-    ComponentName.WithdrawalPage,
-    ComponentName.TransactionsPage,
-    ComponentName.FaqPage,
-    ComponentName.BettingRulesPage,
+    PagesName.DepositPage,
+    PagesName.LimitsPage,
+    PagesName.SettingsPage,
+    PagesName.WithdrawalPage,
+    PagesName.TransactionsPage,
+    PagesName.FaqPage,
+    PagesName.BettingRulesPage,
   ].includes(route.id),
 );
 
 const pathsWithRightSidebar = NAVIGATION_ROUTES.filter(route =>
   [
-    ComponentName.DepositPage,
-    ComponentName.LimitsPage,
-    ComponentName.SettingsPage,
-    ComponentName.WithdrawalPage,
-    ComponentName.TransactionsPage,
+    PagesName.DepositPage,
+    PagesName.LimitsPage,
+    PagesName.SettingsPage,
+    PagesName.WithdrawalPage,
+    PagesName.TransactionsPage,
   ].includes(route.id),
 );
 
@@ -62,7 +63,9 @@ const PageLayout = ({ children }) => {
 
   return (
     <>
-      <PageHeader />
+      <ErrorBoundary>
+        <PageHeader />
+      </ErrorBoundary>
       {sidebarLayout ? (
         <LayoutWithSidebar rightSidebar={rightSidebarLayout}>
           {children}
@@ -70,10 +73,14 @@ const PageLayout = ({ children }) => {
       ) : (
         <>
           {children}
-          <PageFooter />
+          <ErrorBoundary>
+            <PageFooter />
+          </ErrorBoundary>
         </>
       )}
-      <CookieConsent />
+      <ErrorBoundary>
+        <CookieConsent />
+      </ErrorBoundary>
     </>
   );
 };

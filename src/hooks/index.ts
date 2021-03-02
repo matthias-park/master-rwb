@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useConfig } from './useConfig';
-import { ComponentName } from '../constants';
+import { PagesName } from '../constants';
 
 export const usePrevious = <T>(value: T): T | undefined => {
   const ref = useRef<T>();
@@ -12,7 +12,7 @@ export const usePrevious = <T>(value: T): T | undefined => {
   return ref.current;
 };
 
-export const useRoutePath = (routeId: ComponentName): string => {
+export const useRoutePath = (routeId: PagesName): string => {
   const { routes } = useConfig();
   return useMemo(
     () => routes.find(route => route.id === routeId)?.path || '/',

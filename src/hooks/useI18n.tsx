@@ -7,7 +7,7 @@ import React, {
   useMemo,
 } from 'react';
 import i18n, { I18n } from '../utils/i18n';
-import { postApi } from '../utils/apiUtils';
+import { postApi, getApi } from '../utils/apiUtils';
 import { TRANSLATION_SYMBOLS, TestEnv } from '../constants';
 import { useConfig } from './useConfig';
 import { useToasts } from 'react-toast-notifications';
@@ -39,16 +39,8 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   const { addToast } = useToasts();
   const { locale } = useConfig();
   const [i18nCache, setI18nCache] = useLocalStorage('translations', {});
-  const params = useMemo(
-    () => ({
-      keys: TRANSLATION_SYMBOLS,
-      lang: locale,
-    }),
-    [locale],
-  );
   const { data } = useSWR<{ [key: string]: string }>(
-    !TestEnv ? ['/railsapi/v1/translations', params] : null,
-    postApi,
+    !TestEnv ? `/railsapi/v1/translations?locale=${locale}` : null,
     {
       onErrorRetry: () => {
         addToast(`Failed to fetch translations`, {

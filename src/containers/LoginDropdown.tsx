@@ -4,7 +4,7 @@ import { postApi } from '../utils/apiUtils';
 import { useConfig } from '../hooks/useConfig';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../hooks/useUIConfig';
-import { ComponentName } from '../constants';
+import { ComponentName, PagesName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
 import { Link, useLocation } from 'react-router-dom';
 import { Spinner, OverlayTrigger, Tooltip, Form, Alert } from 'react-bootstrap';
@@ -31,7 +31,7 @@ const LoginForm = ({
   });
   const { register, handleSubmit, errors, formState, setError } = formMethods;
   const { mutateUser } = useConfig();
-  const forgotPasswordRoute = useRoutePath(ComponentName.ForgotPasswordPage);
+  const forgotPasswordRoute = useRoutePath(PagesName.ForgotPasswordPage);
   const onSubmit = async ({ email, password, remember_me }) => {
     const response = await postApi<RailsApiResponse<NET_USER | null>>(
       '/railsapi/v1/user/login',
