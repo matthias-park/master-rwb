@@ -61,13 +61,12 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
       },
     },
   );
-
   const [translations, setTranslations] = useState(() =>
     createLocale(locale, data || i18nCache),
   );
 
   useEffect(() => {
-    setTranslations(createLocale(locale, data));
+    setTranslations(createLocale(locale, data || i18nCache));
   }, [data, locale]);
 
   return <I18nContext.Provider value={translations} {...props} />;
