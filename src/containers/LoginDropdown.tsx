@@ -82,7 +82,7 @@ const LoginForm = ({
             required: t('login_field_required'),
           }}
           id="email"
-          type="email"
+          // type="email"
           placeholder={t('login_email')}
           autoComplete="username"
           error={errors.email}
