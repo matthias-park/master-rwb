@@ -6,13 +6,12 @@ import useSWR from 'swr';
 import SeoPages from '../types/api/content/SeoPages';
 import { postApi } from '../utils/apiUtils';
 import RailsApiResponse from '../types/api/RailsApiResponse';
-import { useI18n } from '../hooks/useI18n';
 
 const ApiHead = () => {
-  const { locale, routes } = useConfig();
-  const { t } = useI18n();
+  const { locale } = useConfig();
+  // const { t } = useI18n();
   const { pathname } = useLocation();
-  const pathInfo = routes.find(route => route.path === pathname);
+  // const pathInfo = routes.find(route => route.path === pathname);
   const params = useMemo(
     () => ({
       slug: pathname,
@@ -28,8 +27,8 @@ const ApiHead = () => {
     },
   );
   const seoData = data?.Success ? data?.Data : null;
-  const fallbackTitle =
-    t(`sitemap_${pathInfo?.name}`) + ' - ' + t('seo_site_name');
+  // const fallbackTitle =
+  //   t(`sitemap_${pathInfo?.name}`) + ' - ' + t('seo_site_name');
   return (
     <>
       <Helmet htmlAttributes={{ lang: locale }}>

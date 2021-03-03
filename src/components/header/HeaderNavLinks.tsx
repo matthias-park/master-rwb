@@ -1,5 +1,4 @@
 import React, { useRef, useMemo } from 'react';
-import HeaderLink from '../../types/HeaderLinks';
 import { Dropdown } from 'react-bootstrap';
 import { sortAscending } from '../../utils/index';
 import { Link } from 'react-router-dom';
@@ -7,9 +6,10 @@ import clsx from 'clsx';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
 import { useUIConfig } from '../../hooks/useUIConfig';
+import { HeaderRoute } from '../../types/api/PageConfig';
 
 interface HeaderNavLinkProps {
-  data: HeaderLink;
+  data: HeaderRoute;
   mobile: boolean;
   handleNavChange: (ref: HTMLElement | null) => void;
   active: HTMLElement | null;
@@ -35,14 +35,10 @@ export const HeaderNavClassicLink = ({
   );
 
   const showDropdown =
-    !!(data.path || data.prefix) &&
-    fullPath.startsWith(data.path || data.prefix || '') &&
+    !!data.prefix &&
+    fullPath.startsWith(data.prefix || '') &&
     !active &&
     !mobile;
-
-  if (!mobile && data.mobileLink) {
-    return null;
-  }
 
   return (
     <Dropdown
@@ -57,10 +53,7 @@ export const HeaderNavClassicLink = ({
             data.externalLink
               ? 'div'
               : (props: any): any => (
-                  <Link
-                    to={data.path || dropdownLinks?.[0].path || '/'}
-                    {...props}
-                  />
+                  <Link to={dropdownLinks?.[0].path || '/'} {...props} />
                 )
           }
           className="header__nav-item-link cursor-pointer"
@@ -78,7 +71,7 @@ export const HeaderNavClassicLink = ({
             </span>
           ) : (
             <Link
-              to={data.path || dropdownLinks?.[0].path || '/'}
+              to={dropdownLinks?.[0].path || '/'}
               className="header__nav-item-link cursor-pointer"
               onClick={() => {
                 setNavExpanded(false);

@@ -3,7 +3,7 @@ import loadable from '@loadable/component';
 import ProtectedRoute from './ProtectedRoute';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
-import { ComponentName, PagesName } from '../../constants';
+import { PagesName } from '../../constants';
 import Spinner from 'react-bootstrap/Spinner';
 import ErrorBoundary from '../ErrorBoundary';
 

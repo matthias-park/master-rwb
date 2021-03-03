@@ -14,12 +14,11 @@ import {
   RegistrationResponse,
 } from '../../types/api/user/Registration';
 import dayjs from 'dayjs';
-import { AVAILABLE_LOCALES } from '../../constants';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { RegistrationPostalCodeAutofill } from '../../types/api/user/Registration';
 
 const RegisterPage = () => {
-  const { user, mutateUser, locale } = useConfig();
+  const { user, mutateUser, locale, locales } = useConfig();
   const { addToast } = useToasts();
   const checkEmailAvailable = useCallback(
     async (email: string): Promise<ValidateRegisterInput | null> => {
@@ -68,8 +67,7 @@ const RegisterPage = () => {
     async (
       form: PostRegistration,
     ): Promise<RailsApiResponse<RegistrationResponse | null>> => {
-      form.language_id =
-        AVAILABLE_LOCALES.find(lang => lang.iso === locale)?.id || 0;
+      form.language_id = locales.find(lang => lang.iso === locale)?.id || 0;
       const finalForm = Object.keys(form).reduce((obj, key) => {
         if (!key.includes('repeat')) {
           obj[key] = form[key];

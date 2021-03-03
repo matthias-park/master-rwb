@@ -16,12 +16,12 @@ exports[`default matches snapshot 1`] = `
     <input
       className="input-container__input form-control"
       data-testid="input"
-      min={0}
       onBlur={[Function]}
       onChange={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
       onKeyUp={[Function]}
       placeholder=""
-      type="number"
       value=""
     />
   </div>
@@ -53,12 +53,12 @@ exports[`with spinner matches snapshot 1`] = `
     <input
       className="input-container__input form-control"
       data-testid="input"
-      min={0}
       onBlur={[Function]}
       onChange={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
       onKeyUp={[Function]}
       placeholder=""
-      type="number"
       value=""
     />
   </div>

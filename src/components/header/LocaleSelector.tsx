@@ -1,9 +1,10 @@
 import clsx from 'clsx';
 import React from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { AvailableLocale } from '../../types/api/PageConfig';
 
 interface Props {
-  available: string[];
+  available: AvailableLocale[];
   current: string;
   setLocale: (locale: string) => void;
 }
@@ -24,15 +25,15 @@ const LocaleSelector = ({ available, current, setLocale }: Props) => (
       <Dropdown.Menu data-testid="available-desktop">
         {available.map(lang => (
           <Dropdown.Item
-            data-testid={`desktop-locale-${lang}`}
-            className={`lang-${lang} header__nav-item-link text-uppercase cursor-pointer`}
-            key={lang}
+            data-testid={`desktop-locale-${lang.iso}`}
+            className={`lang-${lang.iso} header__nav-item-link text-uppercase cursor-pointer`}
+            key={lang.id}
             as="div"
             onClick={() => {
-              setLocale(lang);
+              setLocale(lang.iso);
             }}
           >
-            {lang}
+            {lang.iso}
           </Dropdown.Item>
         ))}
       </Dropdown.Menu>
@@ -41,16 +42,16 @@ const LocaleSelector = ({ available, current, setLocale }: Props) => (
       {available.map(lang => (
         <div
           className={clsx(
-            `lang-${lang}`,
+            `lang-${lang.iso}`,
             'header__nav-item-link text-uppercase cursor-pointer',
-            lang === current && 'font-weight-bold',
+            lang.iso === current && 'font-weight-bold',
           )}
-          key={lang}
+          key={lang.id}
           onClick={() => {
-            setLocale(lang);
+            setLocale(lang.iso);
           }}
         >
-          {lang}
+          {lang.iso}
         </div>
       ))}
     </li>

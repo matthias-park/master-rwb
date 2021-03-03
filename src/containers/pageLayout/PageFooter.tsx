@@ -1,18 +1,19 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { FOOTER_DATA, iconName } from '../../constants';
-import {
-  FooterLink,
-  SocialLinks,
-  PartnerLinks,
-  SubFooter,
-} from '../../types/FooterData';
+import { iconName } from '../../constants';
 import Dropdown from 'react-bootstrap/Dropdown';
 import useDesktopWidth from '../../hooks/useDesktopWidth';
 import SessionTimer from '../../components/SessionTimer';
 import { useI18n } from '../../hooks/useI18n';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { sortAscending } from '../../utils/index';
+import { useConfig } from '../../hooks/useConfig';
+import {
+  SubFooter,
+  FooterDataLink,
+  Social,
+  Partners,
+} from '../../types/api/PageConfig';
 
 const FooterHeader = () => {
   const { t } = useI18n();
@@ -116,18 +117,18 @@ const SocialSection = ({
   social,
   partners,
 }: {
-  social: SocialLinks;
-  partners: PartnerLinks;
+  social: Social;
+  partners: Partners;
 }) => {
   const { t } = useI18n();
-  const { iosApp, androidApp, ...webSocial } = social;
+  const { ...webSocial } = social;
   return (
     <section className="footer-social-block d-flex ml-auto pt-4 mt-0 mt-md-4 mt-lg-0 pt-lg-0">
       <div className="section-social">
         <h2 className="section-social__head-title">
           {t('footer_social_title')}
         </h2>
-        {(androidApp || iosApp) && (
+        {/* {(androidApp || iosApp) && (
           <>
             <p className="section-social__title font-weight-500">
               {t('footer_download_the_app')}
@@ -153,7 +154,7 @@ const SocialSection = ({
               )}
             </div>
           </>
-        )}
+        )} */}
         <p className="section-social__title">{t('find_us_in_social')}</p>
         <p className="section-social__icons">
           {Object.entries(webSocial)
@@ -188,7 +189,7 @@ const SocialSection = ({
   );
 };
 
-const SortedFooterLinks = ({ links }: { links: FooterLink[] }): any => {
+const SortedFooterLinks = ({ links }: { links: FooterDataLink[] }): any => {
   const { t } = useI18n();
   const desktopWidth = useDesktopWidth(768);
   const FooterLink = useMemo(
@@ -237,19 +238,17 @@ const SortedFooterLinks = ({ links }: { links: FooterLink[] }): any => {
 };
 
 const PageFooter = () => {
-  const footerData = FOOTER_DATA;
+  const { footer } = useConfig();
+  if (!footer) return null;
   return (
     <footer>
       <div className="container-fluid">
         <FooterHeader />
         <div className="row footer-main pt-0 pt-md-4 pb-2 pb-lg-4 pt-lg-5">
-          <SortedFooterLinks links={footerData.links} />
-          <SocialSection
-            social={footerData.social}
-            partners={footerData.partners}
-          />
+          <SortedFooterLinks links={footer.links} />
+          <SocialSection social={footer.social} partners={footer.partners} />
         </div>
-        <FooterBottom data={footerData.subFooter} />
+        <FooterBottom data={footer.subFooter} />
       </div>
     </footer>
   );

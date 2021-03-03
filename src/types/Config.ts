@@ -1,21 +1,24 @@
 import { PagesName } from '../constants';
 import UserStatus from './UserStatus';
-export interface ConfigRoute {
-  id: PagesName;
-  path: string;
-  protected?: boolean;
-  exact?: boolean;
-  hiddenSitemap?: boolean;
-  name: string;
-}
+import { NavigationRoute } from './api/PageConfig';
+import {
+  HeaderRoute,
+  FooterData,
+  AvailableLocale,
+  Sidebar,
+} from './api/PageConfig';
 
 type Config = {
   user: UserStatus;
   mutateUser: (status?: UserStatus, shouldRevalidate?: boolean) => void;
   locale: string;
-  locales: string[];
+  locales: AvailableLocale[];
   setLocale: (lang: string) => void;
-  routes: ConfigRoute[];
+  routes: NavigationRoute[];
+  header?: HeaderRoute[];
+  footer?: FooterData;
+  sidebars?: Array<Sidebar[]>;
+  helpBlock?: PagesName[];
 };
 
 export default Config;

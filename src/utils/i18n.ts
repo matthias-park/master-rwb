@@ -1,8 +1,8 @@
-import { ConfigRoute } from '../types/Config';
 import Lockr from 'lockr';
 import { postApi } from './apiUtils';
 import { replaceStringTagsReact } from './reactUtils';
 import { mutate } from 'swr';
+import { NavigationRoute } from '../types/api/PageConfig';
 
 type Symbols = { [key: string]: { [key: string]: string } };
 
@@ -37,7 +37,7 @@ const i18n = () => {
 export const getRedirectLocalePathname = (
   availableLocales: string[],
   defaultLocale: string,
-  availableRoutes: ConfigRoute[],
+  availableRoutes: NavigationRoute[],
 ) => {
   const windowPaths = window.location.pathname.split('/');
   let urlPaths = `${window.location.pathname}${window.location.hash}`;

@@ -3,10 +3,16 @@ import { render, cleanup, fireEvent } from '../../../utils/testUtils';
 import renderer from 'react-test-renderer';
 import LocaleSelector from '../LocaleSelector';
 import { act } from 'react-dom/test-utils';
+import { AvailableLocale } from '../../../types/api/PageConfig';
 
 beforeEach(cleanup);
 
-const availableLocales = ['lt', 'en', 'de', 'fr'];
+const availableLocales: AvailableLocale[] = [
+  { id: 0, iso: 'lt' },
+  { id: 1, iso: 'en' },
+  { id: 2, iso: 'de' },
+  { id: 3, iso: 'fr' },
+];
 const current = 'en';
 
 test('displays current Locale', async () => {

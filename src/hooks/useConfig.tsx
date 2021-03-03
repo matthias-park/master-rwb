@@ -10,11 +10,12 @@ import { getApi } from '../utils/apiUtils';
 import Config from '../types/Config';
 import UserStatus from '../types/UserStatus';
 import { getRedirectLocalePathname, setLocalePathname } from '../utils/i18n';
-import { AVAILABLE_LOCALES, NAVIGATION_ROUTES, TestEnv } from '../constants';
+import { TestEnv } from '../constants';
 import { useToasts } from 'react-toast-notifications';
 import { usePrevious } from './index';
 import useLocalStorage from './useLocalStorage';
 import RailsApiResponse from '../types/api/RailsApiResponse';
+import { PageConfig } from '../types/api/PageConfig';
 
 const useUser = () => {
   const { addToast } = useToasts();
@@ -60,6 +61,22 @@ const useUser = () => {
   return { user, mutateUser };
 };
 
+const useConstants = (): PageConfig | null => {
+  const { addToast } = useToasts();
+  const { data } = useSWR<RailsApiResponse<PageConfig>>(
+    '/railsapi/v1/content/constants',
+    {
+      onErrorRetry: (err: RailsApiResponse<null>) => [
+        addToast('Failed to get page config', {
+          appearance: 'error',
+          autoDismiss: true,
+        }),
+      ],
+    },
+  );
+  return data?.Data || null;
+};
+
 export const configContext = createContext<Config | null>(null);
 
 export function useConfig(): Config {
@@ -75,22 +92,24 @@ export type ConfigProviderProps = {
 };
 
 export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
-  const routes = NAVIGATION_ROUTES;
-  const locales = AVAILABLE_LOCALES.map(locale => locale.iso);
+  const constants = useConstants();
+  const locales = constants?.available_locales.map(locale => locale.iso) || [];
   const { user, mutateUser } = useUser();
   const [storage] = useLocalStorage<Storage | null>('cookieSettings', null);
   const [locale, changeLocale] = useState(window.DEFAULT_LOCALE);
 
   useEffect(() => {
-    const detectedLocale = getRedirectLocalePathname(
-      locales,
-      window.DEFAULT_LOCALE,
-      routes,
-    );
-    if (locale !== detectedLocale) {
-      changeLocale(detectedLocale);
+    if (constants) {
+      const detectedLocale = getRedirectLocalePathname(
+        locales,
+        window.DEFAULT_LOCALE,
+        constants.navigation_routes,
+      );
+      if (locale !== detectedLocale) {
+        changeLocale(detectedLocale);
+      }
     }
-  }, [locale]);
+  }, [locale, constants]);
 
   const setLocale = (lang: string) => {
     setLocalePathname(lang, storage?.functional ?? true);
@@ -102,8 +121,12 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     mutateUser,
     locale,
     setLocale,
-    locales,
-    routes,
+    locales: constants?.available_locales || [],
+    routes: constants?.navigation_routes || [],
+    header: constants?.header_routes,
+    footer: constants?.footer_data,
+    sidebars: constants?.sidebars,
+    helpBlock: constants?.help_block,
   };
   return <configContext.Provider value={value} {...props} />;
 };

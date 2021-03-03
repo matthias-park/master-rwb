@@ -4,11 +4,9 @@ import React, {
   useState,
   useEffect,
   ReactNode,
-  useMemo,
 } from 'react';
 import i18n, { I18n } from '../utils/i18n';
-import { postApi, getApi } from '../utils/apiUtils';
-import { TRANSLATION_SYMBOLS, TestEnv } from '../constants';
+import { TestEnv } from '../constants';
 import { useConfig } from './useConfig';
 import { useToasts } from 'react-toast-notifications';
 import useSWR from 'swr';

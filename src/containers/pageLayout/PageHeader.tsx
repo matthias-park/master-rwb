@@ -6,7 +6,7 @@ import LoginDropdown from '../LoginDropdown';
 import UserInfoBlock from '../../components/header/UserInfoBlock';
 import { Navbar } from 'react-bootstrap';
 import { useUIConfig } from '../../hooks/useUIConfig';
-import { ComponentName, HEADER_ROUTES } from '../../constants';
+import { ComponentName } from '../../constants';
 import clsx from 'clsx';
 import useDesktopWidth from '../../hooks/useDesktopWidth';
 import { sortAscending } from '../../utils/index';
@@ -89,7 +89,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
 };
 
 const PageHeader = () => {
-  const headerLinks = HEADER_ROUTES;
+  const { header } = useConfig();
   const { backdrop } = useUIConfig();
   const desktopWidth = useDesktopWidth(1199);
   const { pathname, hash } = useLocation();
@@ -147,8 +147,8 @@ const PageHeader = () => {
           <SubNavLinks />
           <div className="row w-100 mt-0 mt-lg-2 align-items-end order-1 order-xl-2">
             <ul ref={navbarRef} className="header__nav header__nav--main">
-              {headerLinks
-                .sort((a, b) => sortAscending(a.order!, b.order!))
+              {header
+                ?.sort((a, b) => sortAscending(a.order!, b.order!))
                 .map(link => {
                   return (
                     <HeaderNavClassicLink
