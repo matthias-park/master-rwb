@@ -2,6 +2,7 @@ import { Request } from 'express';
 import fs from 'fs';
 import puppeteer, { Browser, HTTPRequest } from 'puppeteer';
 import path from 'path';
+import { DEVELOPMENT, MAX_PRERENDER_PAGES } from './constants';
 import {
   BUILD_FOLDER,
   PRERENDER_HEADER,
@@ -36,14 +37,18 @@ export const getRenderedPage = async (req: Request): Promise<string | null> => {
 
 let browser: Browser | null = null;
 let browserCloseTimeout: number = 0;
-
+let openTabs = 0;
 export const render = async (req: Request) => {
   if (!browser) {
     browser = await puppeteer.launch({
-      args: ['--disable-web-security'],
+      args: DEVELOPMENT ? ['--disable-web-security'] : [],
       headless: true,
     });
   }
+  if (openTabs > MAX_PRERENDER_PAGES) {
+    throw new Error('To many requests - 429');
+  }
+  openTabs++;
   const page = await browser.newPage();
   await page.setExtraHTTPHeaders({
     [PRERENDER_HEADER]: 'true',
@@ -88,6 +93,7 @@ export const render = async (req: Request) => {
     waitUntil: 'networkidle0',
   });
   let html = await page.content();
+  openTabs--;
   await page.close();
   if (browserCloseTimeout) clearTimeout(browserCloseTimeout);
   browserCloseTimeout = setTimeout(async () => {
