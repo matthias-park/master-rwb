@@ -114,6 +114,7 @@
     "build:stage": "NODE_ENV=stage npm run build",
     "test": "node scripts/test.js",
     "checkTs": "tsc --noEmit",
+    "checkServerTs": "tsc --build tsconfig.server.json",
     "eslint": "eslint --ext js,ts,tsx",
     "lint": "npm run eslint src",
     "lint:fix": "npm run eslint --fix src",

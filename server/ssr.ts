@@ -100,12 +100,14 @@ export const render = async (req: Request) => {
 
 const buildReqUrl = (req: Request) => {
   var protocol = req.secure ? 'https' : 'http';
-  if (req.header('cf-visitor')) {
-    var match = req.header('cf-visitor').match(/"scheme":"(http|https)"/);
+  const cfVisitorHeader = req.header('cf-visitor');
+  if (cfVisitorHeader) {
+    var match = cfVisitorHeader.match(/"scheme":"(http|https)"/);
     if (match) protocol = match[1];
   }
-  if (req.header('x-forwarded-proto')) {
-    protocol = req.header('x-forwarded-proto').split(',')[0];
+  const forwardedProto = req.header('x-forwarded-proto');
+  if (forwardedProto) {
+    protocol = forwardedProto.split(',')[0];
   }
   return (
     protocol +
