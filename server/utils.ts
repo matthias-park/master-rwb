@@ -1,10 +1,10 @@
 import { Request } from 'express';
-import { extensionsToIgnore } from './constants';
+import { extensionsToIgnore, PRERENDER_HEADER } from './constants';
 
 export const shouldPrerender = (req: Request) => {
-  const prerenderHeader = req.headers['x-prerender'];
+  const prerenderHeader = req.headers[PRERENDER_HEADER];
   if (!req.useragent || req.method !== 'GET' || prerenderHeader) return false;
-  // Don't prerender media files
+  // Don't prerender static files
   if (
     extensionsToIgnore.some(
       extension => req.url.toLowerCase().indexOf(extension) !== -1,

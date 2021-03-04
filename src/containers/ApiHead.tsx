@@ -33,29 +33,22 @@ const ApiHead = () => {
   return (
     <>
       <Helmet htmlAttributes={{ lang: locale }}>
-        {!!seoData ? (
-          <>
-            <title>{seoData.title} </title>
-            <meta name="description" content={seoData.description} />
-            <meta name="keywords" content={seoData.keywords} />
-            {!!seoData.canonical_tag && (
-              <link rel="canonical" href={seoData.canonical_tag} />
-            )}
-
-            <meta property="og:title" content={seoData.title} />
-          </>
-        ) : (
-          <>
-            {/* <title>{fallbackTitle}</title>
-            <meta name="description" content={t('seo_description')} /> */}
-            <meta property="og:title" content={fallbackTitle} />
-          </>
-        )}
-
+        <title>{seoData?.title || fallbackTitle}</title>
+        <meta property="og:title" content={seoData?.title || fallbackTitle} />
+        <meta
+          name="description"
+          content={seoData?.description || t('seo_description')}
+        />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.href} />
         <meta property="og:site_name" content={t('seo_site_name')} />
-        <meta property="og:image" content="/assets/images/logo/logo.svg" />
+        <meta property="og:image" content="/assets/images/logo/logo.png" />
+        {!!seoData?.keywords && (
+          <meta name="keywords" content={seoData.keywords} />
+        )}
+        {!!seoData?.canonical_tag && (
+          <link rel="canonical" href={seoData.canonical_tag} />
+        )}
       </Helmet>
       {!!seoData?.hidden_h1 && (
         <h1 style={{ display: 'none' }}>{seoData.hidden_h1}</h1>
