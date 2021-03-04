@@ -2,8 +2,9 @@ import { Request } from 'express';
 import fs from 'fs';
 import puppeteer, { Browser, HTTPRequest } from 'puppeteer';
 import path from 'path';
-import { BUILD_FOLDER, PRERENDER_HEADER } from './constants';
 import {
+  BUILD_FOLDER,
+  PRERENDER_HEADER,
   BROWSER_KEEP_ALIVE,
   HOLD_RENDERED_PAGE_INTERVAL,
   DOMAINS_TO_NAME,
@@ -45,7 +46,7 @@ export const render = async (req: Request) => {
   }
   const page = await browser.newPage();
   await page.setExtraHTTPHeaders({
-    PRERENDER_HEADER: 'true',
+    [PRERENDER_HEADER]: 'true',
   });
   await page.setViewport({
     width: req.useragent?.isMobile ? 375 : 1920,
