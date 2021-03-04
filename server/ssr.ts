@@ -2,7 +2,7 @@ import { Request } from 'express';
 import fs from 'fs';
 import puppeteer, { Browser, HTTPRequest } from 'puppeteer';
 import path from 'path';
-import { BUILD_FOLDER } from './constants';
+import { BUILD_FOLDER, PRERENDER_HEADER } from './constants';
 import {
   BROWSER_KEEP_ALIVE,
   HOLD_RENDERED_PAGE_INTERVAL,
@@ -45,7 +45,7 @@ export const render = async (req: Request) => {
   }
   const page = await browser.newPage();
   await page.setExtraHTTPHeaders({
-    'x-prerender': 'true',
+    PRERENDER_HEADER: 'true',
   });
   await page.setViewport({
     width: req.useragent?.isMobile ? 375 : 1920,
@@ -100,12 +100,12 @@ export const render = async (req: Request) => {
 
 const buildReqUrl = (req: Request) => {
   var protocol = req.secure ? 'https' : 'http';
-  if (req.headers['cf-visitor']) {
-    var match = req.header['cf-visitor'].match(/"scheme":"(http|https)"/);
+  if (req.header('cf-visitor')) {
+    var match = req.header('cf-visitor').match(/"scheme":"(http|https)"/);
     if (match) protocol = match[1];
   }
-  if (req.headers['x-forwarded-proto']) {
-    protocol = req.header['x-forwarded-proto'].split(',')[0];
+  if (req.header('x-forwarded-proto')) {
+    protocol = req.header('x-forwarded-proto').split(',')[0];
   }
   return (
     protocol +

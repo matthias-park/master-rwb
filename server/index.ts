@@ -7,10 +7,10 @@ import path from 'path';
 import { shouldPrerender } from './utils';
 import { getRenderedPage } from './ssr';
 import {
-  DEVELOPMENT,
   BASIC_AUTH,
   DOMAINS_TO_NAME,
   BUILD_FOLDER,
+  PRERENDER_HEADER,
 } from './constants';
 
 const app = express();
@@ -19,6 +19,7 @@ app.set('trust proxy', true);
 app.use(useragent.express());
 app.use((req, res, next) => {
   if (
+    req.header(PRERENDER_HEADER) ||
     !BASIC_AUTH ||
     !BASIC_AUTH.users ||
     !BASIC_AUTH.whitelistedIp ||

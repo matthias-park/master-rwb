@@ -37,7 +37,7 @@ const createLocale = (locale = 'en', data: unknown) => {
 export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   const { addToast } = useToasts();
   const { locale } = useConfig();
-  const [i18nCache, setI18nCache] = useLocalStorage('translations', {});
+  const [i18nCache, setI18nCache] = useLocalStorage('cacheTranslations', {});
   const { data } = useSWR<RailsApiResponse<{ [key: string]: string }>>(
     !TestEnv ? '/railsapi/v1/translations' : null,
     {

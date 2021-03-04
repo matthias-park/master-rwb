@@ -1,8 +1,7 @@
 import React from 'react';
-import { render, cleanup, fireEvent } from '../../../utils/testUtils';
+import { render, cleanup, fireEvent, act } from '../../../utils/testUtils';
 import renderer from 'react-test-renderer';
 import InputContainer from '../InputContainer';
-import { act } from 'react-dom/test-utils';
 
 beforeEach(cleanup);
 
@@ -71,7 +70,7 @@ test('submit value correctly', async () => {
     />,
   );
   fireEvent.change(getByTestId('input'), {
-    target: { value: newEnteredValue },
+    target: { rawValue: newEnteredValue },
   });
   fireEvent.blur(getByTestId('input'));
   await act(async () => {
@@ -94,7 +93,7 @@ test('submit value less than min', async () => {
     />,
   );
   fireEvent.change(getByTestId('input'), {
-    target: { value: newEnteredValue },
+    target: { rawValue: newEnteredValue },
   });
   fireEvent.blur(getByTestId('input'));
   await act(async () => {
@@ -117,7 +116,7 @@ test('submit value more than max', async () => {
     />,
   );
   fireEvent.change(getByTestId('input'), {
-    target: { value: newEnteredValue },
+    target: { rawValue: newEnteredValue },
   });
   fireEvent.blur(getByTestId('input'));
   await act(async () => {

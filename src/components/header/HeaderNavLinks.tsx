@@ -52,9 +52,13 @@ export const HeaderNavClassicLink = ({
           as={
             data.externalLink
               ? 'div'
-              : (props: any): any => (
-                  <Link to={dropdownLinks?.[0].path || '/'} {...props} />
-                )
+              : React.forwardRef((props: any, ref): any => (
+                  <Link
+                    ref={ref}
+                    to={dropdownLinks?.[0].path || '/'}
+                    {...props}
+                  />
+                ))
           }
           className="header__nav-item-link cursor-pointer"
           onClick={() => {

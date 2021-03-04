@@ -63,6 +63,10 @@ const useUser = () => {
 
 const useConstants = (): PageConfig | null => {
   const { addToast } = useToasts();
+  const [cache, setCache] = useLocalStorage<PageConfig | null>(
+    'cacheConstants',
+    null,
+  );
   const { data } = useSWR<RailsApiResponse<PageConfig>>(
     '/railsapi/v1/content/constants',
     {
@@ -72,9 +76,12 @@ const useConstants = (): PageConfig | null => {
           autoDismiss: true,
         }),
       ],
+      onSuccess: data => {
+        setCache(data.Data);
+      },
     },
   );
-  return data?.Data || null;
+  return data?.Data || cache;
 };
 
 export const configContext = createContext<Config | null>(null);

@@ -78,3 +78,4 @@ export const BUILD_FOLDER = path.join(
   '../',
   DEVELOPMENT ? 'build/' : '',
 );
+export const PRERENDER_HEADER = 'x-seo-prerender';

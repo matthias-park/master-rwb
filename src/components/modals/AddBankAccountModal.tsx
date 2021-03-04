@@ -37,6 +37,7 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
             {['account_number', 'swift', 'address'].map(id => (
               <ControlledTextInput
                 id={id}
+                key={id}
                 placeholder={t(`add_bank_modal_${id}`)}
                 error={formMethods.errors[id]}
                 rules={{

@@ -60,7 +60,7 @@ const CookiePolicyModal = () => {
         <p className="text-gray-700">{t('cookie_modal_text')}</p>
         <Accordion defaultActiveKey="0" className="cookies-accordion mt-3">
           {cookiesId.map((id, index) => (
-            <div className="position-relative">
+            <div key={id} className="position-relative">
               <Accordion.Toggle
                 eventKey={index.toString()}
                 className="cookies-accordion__toggle"
