@@ -2,13 +2,13 @@ import { Request } from 'express';
 import fs from 'fs';
 import puppeteer, { Browser, HTTPRequest } from 'puppeteer';
 import path from 'path';
-import { DEVELOPMENT, MAX_PRERENDER_PAGES } from './constants';
 import {
   BUILD_FOLDER,
   PRERENDER_HEADER,
   BROWSER_KEEP_ALIVE,
   HOLD_RENDERED_PAGE_INTERVAL,
   DOMAINS_TO_NAME,
+  MAX_PRERENDER_PAGES,
 } from './constants';
 
 const RENDERED_PAGES_CACHE: {
@@ -41,7 +41,7 @@ let openTabs = 0;
 export const render = async (req: Request) => {
   if (!browser) {
     browser = await puppeteer.launch({
-      args: DEVELOPMENT ? ['--disable-web-security'] : [],
+      args: ['--disable-web-security'],
       headless: true,
     });
   }
@@ -87,6 +87,14 @@ export const render = async (req: Request) => {
     }
     req.continue();
   });
+  // .on('console', message =>
+  //   console.log(
+  //     `${message.type().substr(0, 3).toUpperCase()} ${message.text()}`,
+  //   ),
+  // )
+  // .on('requestfailed', request =>
+  //   console.log(`${request.failure().errorText} ${request.url()}`),
+  // );
 
   const fullUrl = buildReqUrl(req);
   await page.goto(fullUrl, {
