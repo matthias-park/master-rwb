@@ -6,7 +6,11 @@ import React, {
   useEffect,
 } from 'react';
 import useSWR from 'swr';
-import { getApi } from '../utils/apiUtils';
+import {
+  getApi,
+  formatSuccesfullRailsApiResponse,
+  postApi,
+} from '../utils/apiUtils';
 import Config from '../types/Config';
 import UserStatus from '../types/UserStatus';
 import { getRedirectLocalePathname, setLocalePathname } from '../utils/i18n';
@@ -28,13 +32,15 @@ const useUser = () => {
     url => getApi<RailsApiResponse<UserStatus>>(url).then(res => res.Data),
     {
       revalidateOnFocus: true,
-      refreshInterval: 300000, // 5 min
+      refreshInterval: 30000, //300000, // 5 min
       onErrorRetry: (err: RailsApiResponse<null>) => {
         if (err.Code !== 401) {
           addToast(`Failed to fetch user data`, {
             appearance: 'error',
             autoDismiss: true,
           });
+        } else {
+          return;
         }
       },
     },
@@ -61,7 +67,7 @@ const useUser = () => {
   return { user, mutateUser };
 };
 
-const useConstants = (): PageConfig | null => {
+const useConstants = (): PageConfig | undefined => {
   const { addToast } = useToasts();
   const [cache, setCache] = useLocalStorage<PageConfig | null>(
     'cacheConstants',
@@ -70,6 +76,10 @@ const useConstants = (): PageConfig | null => {
   const { data } = useSWR<RailsApiResponse<PageConfig>>(
     '/railsapi/v1/content/constants',
     {
+      initialData: cache
+        ? formatSuccesfullRailsApiResponse<PageConfig>(cache)
+        : undefined,
+      revalidateOnMount: true,
       onErrorRetry: (err: RailsApiResponse<null>) => [
         addToast('Failed to get page config', {
           appearance: 'error',
@@ -81,7 +91,7 @@ const useConstants = (): PageConfig | null => {
       },
     },
   );
-  return data?.Data || cache;
+  return data?.Data;
 };
 
 export const configContext = createContext<Config | null>(null);
@@ -103,24 +113,39 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   const locales = constants?.available_locales.map(locale => locale.iso) || [];
   const { user, mutateUser } = useUser();
   const [storage] = useLocalStorage<Storage | null>('cookieSettings', null);
-  const [locale, changeLocale] = useState(window.DEFAULT_LOCALE);
-
+  const [cachedLocale, setCachedLocale] = useLocalStorage<string | null>(
+    'locale',
+    null,
+  );
+  const [locale, changeLocale] = useState(
+    cachedLocale || constants?.locale || window.DEFAULT_LOCALE,
+  );
+  const [configLoaded, setConfigLoaded] = useState(false);
   useEffect(() => {
     if (constants) {
       const detectedLocale = getRedirectLocalePathname(
+        constants.locale,
         locales,
         window.DEFAULT_LOCALE,
         constants.navigation_routes,
       );
       if (locale !== detectedLocale) {
-        changeLocale(detectedLocale);
+        postApi('/railsapi/v1/locale', {
+          locale: detectedLocale,
+        }).then(() => setLocale(detectedLocale, false));
+      } else {
+        setConfigLoaded(true);
       }
     }
-  }, [locale, constants]);
+  }, [!!constants]);
 
-  const setLocale = (lang: string) => {
-    setLocalePathname(lang, storage?.functional ?? true);
+  const setLocale = async (lang: string, changeUrl: boolean = true) => {
+    if (changeUrl) {
+      setLocalePathname(lang, storage?.functional ?? true);
+    }
     changeLocale(lang);
+    setCachedLocale(lang);
+    setConfigLoaded(true);
   };
 
   const value: Config = {
@@ -134,6 +159,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     footer: constants?.footer_data,
     sidebars: constants?.sidebars,
     helpBlock: constants?.help_block,
+    configLoaded,
   };
   return <configContext.Provider value={value} {...props} />;
 };

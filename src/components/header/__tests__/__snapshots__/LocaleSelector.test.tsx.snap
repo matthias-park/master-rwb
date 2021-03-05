@@ -16,6 +16,7 @@ Array [
       onClick={[Function]}
       type="button"
     >
+      
       <strong
         className="text-uppercase"
         data-testid="current"

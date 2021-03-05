@@ -85,3 +85,12 @@ export const SwrFetcherConfig: ConfigInterface<
   //   console.log(error, `retry count - ${retryCount}`);
   // },
 };
+
+export const formatSuccesfullRailsApiResponse = <T>(
+  data: T,
+): RailsApiResponse<T> => ({
+  Code: 0,
+  Data: data,
+  Message: '',
+  Success: true,
+});

@@ -20,7 +20,7 @@ test('displays current Locale', async () => {
     <LocaleSelector
       available={availableLocales}
       current={current}
-      setLocale={() => {}}
+      setLocale={() => Promise.resolve()}
     />,
   );
   expect(getByTestId('current')).toHaveTextContent(current);
@@ -31,7 +31,7 @@ test('displays mobile list', async () => {
     <LocaleSelector
       available={availableLocales}
       current={current}
-      setLocale={() => {}}
+      setLocale={() => Promise.resolve()}
     />,
   );
   expect(getByTestId('available-mobile').children).toHaveLength(
@@ -43,7 +43,7 @@ test('displays desktop list', async () => {
     <LocaleSelector
       available={availableLocales}
       current={current}
-      setLocale={() => {}}
+      setLocale={() => Promise.resolve()}
     />,
   );
   await act(async () => {
@@ -59,9 +59,7 @@ test('set new locale callback', async () => {
     <LocaleSelector
       available={availableLocales}
       current={current}
-      setLocale={locale => {
-        expect(locale).toBe('fr');
-      }}
+      setLocale={locale => Promise.resolve(expect(locale).toBe('fr'))}
     />,
   );
   await act(async () => {
@@ -78,7 +76,7 @@ test('matches snapshot', () => {
     <LocaleSelector
       available={availableLocales}
       current={current}
-      setLocale={() => {}}
+      setLocale={() => Promise.resolve()}
     />,
   );
   expect(dom).toMatchSnapshot();

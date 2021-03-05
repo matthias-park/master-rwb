@@ -16,7 +16,6 @@ const ApiHead = () => {
   const params = useMemo(
     () => ({
       slug: pathname,
-      locale,
     }),
     [pathname, locale],
   );

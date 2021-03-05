@@ -255,7 +255,6 @@ const OnlineForm = (props: Props) => {
     return watch(id, '') !== '' && trigger(id);
   };
   const onSubmit = async ({ terms_and_conditions, postal_code, ...data }) => {
-    console.log(postal_code);
     const post_code = postal_code.split(' - ')[0];
     const postal_info = await props.checkPostalCode(post_code);
     const city =

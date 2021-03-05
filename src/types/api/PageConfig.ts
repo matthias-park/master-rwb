@@ -7,6 +7,7 @@ export interface PageConfig {
   footer_data: FooterData;
   sidebars: Array<Sidebar[]>;
   help_block: PagesName[];
+  locale: string;
 }
 
 export interface Sidebar {

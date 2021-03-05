@@ -126,10 +126,6 @@ const insertKambiBootstrap = async (): Promise<WidgetAPI | null> => {
       resolve(null);
     }
   }).then(async () => {
-    //@ts-ignore
-    window.KambiWapi?.subscribe((response, wapi) => {
-      console.log({ response, wapi });
-    });
     document.body.classList.add('body-background');
     const scriptElement = document.createElement('script');
     scriptElement.setAttribute('type', 'text/javascript');

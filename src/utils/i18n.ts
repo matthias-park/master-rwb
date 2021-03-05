@@ -1,8 +1,7 @@
 import Lockr from 'lockr';
-import { postApi } from './apiUtils';
 import { replaceStringTagsReact } from './reactUtils';
-import { mutate } from 'swr';
 import { NavigationRoute } from '../types/api/PageConfig';
+import { PagesName } from '../constants';
 
 type Symbols = { [key: string]: { [key: string]: string } };
 
@@ -35,13 +34,14 @@ const i18n = () => {
 };
 
 export const getRedirectLocalePathname = (
+  currentLocale: string,
   availableLocales: string[],
   defaultLocale: string,
   availableRoutes: NavigationRoute[],
 ) => {
   const windowPaths = window.location.pathname.split('/');
   let urlPaths = `${window.location.pathname}${window.location.hash}`;
-  let urlLocale = Lockr.get('locale', defaultLocale);
+  let urlLocale = Lockr.get('locale', currentLocale);
   if (availableLocales.includes(windowPaths[1])) {
     urlLocale = windowPaths[1];
   } else if (availableRoutes.some(route => urlPaths.startsWith(route.path))) {
@@ -49,8 +49,10 @@ export const getRedirectLocalePathname = (
   } else {
     const urlPathWithoutFirstPath = urlPaths.replace(`/${windowPaths[1]}`, '');
     if (
-      availableRoutes.some(route =>
-        urlPathWithoutFirstPath.startsWith(route.path),
+      availableRoutes.some(
+        route =>
+          route.id !== PagesName.NotFoundPage &&
+          urlPathWithoutFirstPath.startsWith(route.path),
       )
     ) {
       urlPaths = `/${urlLocale}${urlPathWithoutFirstPath}`;
@@ -61,14 +63,6 @@ export const getRedirectLocalePathname = (
 
   if (window.location.pathname !== urlPaths) {
     window.history.replaceState({}, '', urlPaths);
-  }
-  if (!window.LOCALE || window.LOCALE !== urlLocale) {
-    window.LOCALE = urlLocale;
-    postApi('/railsapi/v1/locale', {
-      locale: urlLocale,
-    }).then(() => {
-      mutate('/railsapi/v1/translations');
-    });
   }
   return urlLocale;
 };

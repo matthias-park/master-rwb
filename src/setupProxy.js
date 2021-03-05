@@ -12,9 +12,14 @@ const domainToName = franchises.reduce((obj, fr) => {
   return obj;
 }, {});
 
+const proxyDelayRequest = (req, res, next) => {
+  setTimeout(next, 2000);
+};
+
 module.exports = function (app) {
   app.use(
     '/rails/**',
+    // proxyDelayRequest,
     createProxyMiddleware({
       target: franchises[0].api,
       pathRewrite: function (path, req) {

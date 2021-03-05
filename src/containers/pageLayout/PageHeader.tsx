@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
-import { getApi } from '../../utils/apiUtils';
+import { getApi, postApi } from '../../utils/apiUtils';
 import LoginDropdown from '../LoginDropdown';
 import UserInfoBlock from '../../components/header/UserInfoBlock';
 import { Navbar } from 'react-bootstrap';
@@ -20,6 +20,11 @@ import useOnClickOutside from '../../hooks/useOnClickOutside';
 const SubNavLinks = () => {
   const { locales, locale, setLocale } = useConfig();
   const { t } = useI18n();
+  const changeLocale = async (lang: string) => {
+    return postApi('/railsapi/v1/locale', {
+      locale: lang,
+    }).then(() => setLocale(lang));
+  };
   return (
     <div className="row w-100 align-items-start order-2 order-xl-1">
       <ul className="header__nav header__nav--secondary mr-auto mr-lg-0 ml-lg-auto">
@@ -44,7 +49,7 @@ const SubNavLinks = () => {
         <LocaleSelector
           available={locales}
           current={locale}
-          setLocale={setLocale}
+          setLocale={changeLocale}
         />
       </ul>
     </div>

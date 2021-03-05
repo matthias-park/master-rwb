@@ -74,16 +74,23 @@ export const render = async (req: Request) => {
     }
     const reqUrl = new URL(req.url());
     const frName = DOMAINS_TO_NAME[reqUrl.hostname];
-    if (frName && reqUrl.pathname.endsWith('.js')) {
-      return req.respond({
-        headers: {},
-        status: 200,
-        contentType: 'application/javascript; charset=UTF-8',
-        body: fs.readFileSync(
-          path.join(BUILD_FOLDER, reqUrl.pathname),
-          'utf-8',
-        ),
-      });
+    if (frName) {
+      const jsFile = reqUrl.pathname.endsWith('.js');
+      const contentType = `${
+        jsFile ? 'application/javascript' : 'text/html'
+      }; charset=UTF-8`;
+      const filePath = path.join(
+        BUILD_FOLDER,
+        jsFile ? reqUrl.pathname : `/${frName}.html`,
+      );
+      if (fs.existsSync(filePath)) {
+        return req.respond({
+          headers: {},
+          status: 200,
+          contentType,
+          body: fs.readFileSync(filePath, 'utf-8'),
+        });
+      }
     }
     req.continue();
   });

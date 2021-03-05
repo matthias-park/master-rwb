@@ -19,6 +19,7 @@ type Config = {
   footer?: FooterData;
   sidebars?: Array<Sidebar[]>;
   helpBlock?: PagesName[];
+  configLoaded: boolean;
 };
 
 export default Config;

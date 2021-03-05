@@ -12,6 +12,7 @@ import { useToasts } from 'react-toast-notifications';
 import useSWR from 'swr';
 import useLocalStorage from './useLocalStorage';
 import RailsApiResponse from '../types/api/RailsApiResponse';
+import { formatSuccesfullRailsApiResponse } from '../utils/apiUtils';
 
 export const I18nContext = createContext<I18n | null>(null);
 
@@ -33,14 +34,24 @@ const createLocale = (locale = 'en', data: unknown) => {
   current.locale(locale);
   return current;
 };
+interface Translations {
+  [key: string]: string;
+}
 
 export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   const { addToast } = useToasts();
-  const { locale } = useConfig();
-  const [i18nCache, setI18nCache] = useLocalStorage('cacheTranslations', {});
-  const { data } = useSWR<RailsApiResponse<{ [key: string]: string }>>(
-    !TestEnv ? '/railsapi/v1/translations' : null,
+  const { locale, configLoaded } = useConfig();
+  const [cache, setCache] = useLocalStorage<Translations | null>(
+    'cacheTranslations',
+    null,
+  );
+  const { data, mutate } = useSWR<RailsApiResponse<Translations>>(
+    !TestEnv && configLoaded ? '/railsapi/v1/translations' : null,
     {
+      initialData: cache
+        ? formatSuccesfullRailsApiResponse<Translations>(cache)
+        : undefined,
+      // revalidateOnMount: true,
       onErrorRetry: () => {
         addToast(`Failed to fetch translations`, {
           appearance: 'error',
@@ -48,17 +59,23 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
         });
       },
       onSuccess: data => {
-        setI18nCache(data);
+        setCache(data.Data);
       },
     },
   );
   const [translations, setTranslations] = useState(() =>
-    createLocale(locale, data?.Data || i18nCache),
+    createLocale(locale, data?.Data),
   );
 
   useEffect(() => {
-    setTranslations(createLocale(locale, data?.Data || i18nCache));
-  }, [data?.Data, locale]);
+    if (data?.Success) {
+      mutate();
+    }
+  }, [locale]);
+
+  useEffect(() => {
+    setTranslations(createLocale(locale, data?.Data));
+  }, [data?.Data]);
 
   return <I18nContext.Provider value={translations} {...props} />;
 };
