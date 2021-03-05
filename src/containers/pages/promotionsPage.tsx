@@ -22,6 +22,8 @@ const PromoItem = ({ item }: { item: PostItem }) => {
       <LinkEl>
         <Card.Img
           variant="top"
+          height={300}
+          width={300}
           style={{ height: 300, width: 300 }}
           src={item.image.thumb_300_300.url ?? undefined}
         />

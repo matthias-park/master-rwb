@@ -114,7 +114,12 @@ export const HeaderNavClassicLink = ({
                       />
                     )
               }
-              target={link.path.includes('https') ? '_blank' : undefined}
+              {...(link.path.includes('https')
+                ? {
+                    rel: 'noopener',
+                    target: '_blank',
+                  }
+                : {})}
               className={clsx(link.path === fullPath && 'active')}
               href={link.path.replace('{__locale__}', locale)}
             >

@@ -68,7 +68,7 @@
     "postcss-safe-parser": "5.0.2",
     "prettier": "2.1.1",
     "puppeteer": "8.0.0",
-    "react": "16.13.1",
+    "react": "17.0.1",
     "react-app-polyfill": "^2.0.0",
     "react-bootstrap": "1.4.0",
     "react-bootstrap-typeahead": "5.1.4",

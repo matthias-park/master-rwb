@@ -11,5 +11,5 @@ export const shouldPrerender = (req: Request) => {
     )
   )
     return false;
-  if (req.useragent.isBot) return true;
+  return req.useragent.isBot;
 };
