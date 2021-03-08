@@ -81,9 +81,6 @@ export const SwrFetcherConfig: ConfigInterface<
   revalidateOnFocus: false,
   revalidateOnReconnect: false,
   errorRetryCount: 2,
-  // onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-  //   console.log(error, `retry count - ${retryCount}`);
-  // },
 };
 
 export const formatSuccesfullRailsApiResponse = <T>(

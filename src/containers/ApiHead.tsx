@@ -2,11 +2,11 @@ import React, { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useConfig } from '../hooks/useConfig';
 import { useLocation } from 'react-router-dom';
-import useSWR from 'swr';
 import SeoPages from '../types/api/content/SeoPages';
 import { postApi } from '../utils/apiUtils';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { useI18n } from '../hooks/useI18n';
+import useApi from '../hooks/useApi';
 
 const ApiHead = () => {
   const { locale, routes } = useConfig();
@@ -19,7 +19,7 @@ const ApiHead = () => {
     }),
     [pathname, locale],
   );
-  const { data } = useSWR<RailsApiResponse<SeoPages>>(
+  const { data } = useApi<RailsApiResponse<SeoPages>>(
     ['/railsapi/v1/content/seo_pages', params],
     postApi,
     {

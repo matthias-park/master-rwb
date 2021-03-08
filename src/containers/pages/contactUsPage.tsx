@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import useSWR from 'swr';
 import { JSONFormPage } from '../../types/api/JsonFormPage';
 import Spinner from 'react-bootstrap/Spinner';
 import Form from 'react-bootstrap/Form';
@@ -13,6 +12,7 @@ import SeoPages from '../../types/api/content/SeoPages';
 import HelpBlock from '../../components/HelpBlock';
 import Alert from 'react-bootstrap/Alert';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
+import useApi from '../../hooks/useApi';
 
 const loggedInHiddenFields = ['first_name', 'last_name', 'email_address'];
 
@@ -27,7 +27,7 @@ const ContactUsPage = () => {
     success: boolean;
     msg: string | null;
   } | null>(null);
-  const { data, error } = useSWR<JSONFormPage>(`/railsapi/v1/contact_us/form`);
+  const { data, error } = useApi<JSONFormPage>(`/railsapi/v1/contact_us/form`);
   const isDataLoading = !data && !error;
 
   const onSubmit = async ({ file, ...fields }) => {

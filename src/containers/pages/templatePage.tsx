@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
-import useSWR from 'swr';
 import Spinner from 'react-bootstrap/Spinner';
 import JsonPage from '../../types/api/JsonPage';
 import { makeCollapsible } from '../../utils/uiUtils';
 import { useParams, useLocation } from 'react-router-dom';
 import NotFoundPage from './notFoundPage';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
+import useApi from '../../hooks/useApi';
 
 const TemplatePage = () => {
   const { slug } = useParams<{ slug?: string }>();
   const { pathname } = useLocation();
   const page = slug || pathname.substring(1).replaceAll('/', '_');
-  const { data, error } = useSWR<RailsApiResponse<JsonPage>>(
+  const { data, error } = useApi<RailsApiResponse<JsonPage>>(
     `/railsapi/v1/content/page/${page}`,
   );
   const isDataLoading = !data && !error;

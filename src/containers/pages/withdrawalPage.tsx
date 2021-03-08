@@ -4,7 +4,6 @@ import InputContainer from '../../components/account-settings/InputContainer';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
-import useSWR from 'swr';
 import Spinner from 'react-bootstrap/Spinner';
 import {
   Withdrawal,
@@ -21,6 +20,7 @@ import WithdrawalConfirmModal from '../../components/modals/WithdrawalConfirmMod
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { ComponentName } from '../../constants';
 import { useUIConfig } from '../../hooks/useUIConfig';
+import useApi from '../../hooks/useApi';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -111,7 +111,7 @@ const WithdrawalPage = () => {
     withdrawalConfirmData,
     setWithdrawalConfirmData,
   ] = useState<WithdrawalConfirmation | null>(null);
-  const { data, error, mutate } = useSWR<RailsApiResponse<Withdrawal>>(
+  const { data, error, mutate } = useApi<RailsApiResponse<Withdrawal>>(
     '/railsapi/v1/withdrawals',
   );
   const isDataLoading = !data && !error;

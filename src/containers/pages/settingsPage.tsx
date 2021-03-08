@@ -1,5 +1,4 @@
 import React from 'react';
-import useSWR from 'swr';
 import loadable from '@loadable/component';
 import Accordion from 'react-bootstrap/Accordion';
 import Spinner from 'react-bootstrap/Spinner';
@@ -10,6 +9,7 @@ import { useI18n } from '../../hooks/useI18n';
 import { useToasts } from 'react-toast-notifications';
 import { useConfig } from '../../hooks/useConfig';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
+import useApi from '../../hooks/useApi';
 
 const LoadableMarketingSettingsAccordion = loadable(
   () => import('../../components/account-settings/MarketingSettingsAccordion'),
@@ -27,7 +27,7 @@ const SettingsPage = () => {
   const { t } = useI18n();
   const { user, mutateUser } = useConfig();
   const { addToast } = useToasts();
-  const { data, error, mutate } = useSWR<ProfileSettings>(
+  const { data, error, mutate } = useApi<ProfileSettings>(
     '/railsapi/v1/user/profile',
     {
       onErrorRetry: (error, key) => {

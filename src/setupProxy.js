@@ -19,7 +19,7 @@ const proxyDelayRequest = (req, res, next) => {
 module.exports = function (app) {
   app.use(
     '/rails/**',
-    // proxyDelayRequest,
+    proxyDelayRequest,
     createProxyMiddleware({
       target: franchises[0].api,
       pathRewrite: function (path, req) {

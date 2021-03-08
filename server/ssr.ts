@@ -68,6 +68,9 @@ export const render = async (req: Request) => {
       '/gtag/js',
       'ga.js',
       'analytics.js',
+      'kambi.com',
+      'kambi-widget-api.js',
+      'kambi-bootstrap.js',
     ];
     if (blocklist.find(regex => req.url().match(regex))) {
       return req.abort();
@@ -88,7 +91,12 @@ export const render = async (req: Request) => {
           headers: {},
           status: 200,
           contentType,
-          body: fs.readFileSync(filePath, 'utf-8'),
+          body: fs
+            .readFileSync(filePath, 'utf-8')
+            .replace(
+              '</head>',
+              '<script>window.PRERENDER_CACHE={};</script></head>',
+            ),
         });
       }
     }
@@ -107,7 +115,17 @@ export const render = async (req: Request) => {
   await page.goto(fullUrl, {
     waitUntil: 'networkidle0',
   });
+  console.log(`ssr done rendering ${req.url}`);
+  //@ts-ignore
+  const cache = await page.evaluate(() => window.PRERENDER_CACHE);
   let html = await page.content();
+  html = html.replace(
+    'window.PRERENDER_CACHE={}',
+    `window.PRERENDER_CACHE=JSON.parse("${JSON.stringify(cache).replaceAll(
+      '"',
+      '\\"',
+    )}")`,
+  );
   openTabs--;
   await page.close();
   if (browserCloseTimeout) clearTimeout(browserCloseTimeout);
@@ -116,8 +134,8 @@ export const render = async (req: Request) => {
       await browser.close();
     }
   }, BROWSER_KEEP_ALIVE);
-
-  return htmlCleanup(html);
+  return html;
+  // return htmlCleanup(html);
 };
 
 const buildReqUrl = (req: Request) => {

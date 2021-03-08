@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useI18n } from '../../hooks/useI18n';
 import { Tab, Tabs } from 'react-bootstrap';
-import useSWR from 'swr';
 import Card from 'react-bootstrap/Card';
 import { PostItem } from '../../types/api/Posts';
 import Spinner from 'react-bootstrap/Spinner';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
+import useApi from '../../hooks/useApi';
 
 const PromoItem = ({ item }: { item: PostItem }) => {
   const { pathname } = useLocation();
@@ -38,7 +38,7 @@ const PromoItem = ({ item }: { item: PostItem }) => {
 
 const PromotionsPage = () => {
   const [activeTab, setActiveTab] = useState<string | null>('all');
-  const { data, error } = useSWR<RailsApiResponse<PostItem[]>>(
+  const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
     '/railsapi/v1/content/promotions',
   );
   const { t } = useI18n();

@@ -5,7 +5,6 @@ import React, {
   useState,
   useEffect,
 } from 'react';
-import useSWR from 'swr';
 import {
   getApi,
   formatSuccesfullRailsApiResponse,
@@ -20,6 +19,7 @@ import { usePrevious } from './index';
 import useLocalStorage from './useLocalStorage';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { PageConfig } from '../types/api/PageConfig';
+import useApi from './useApi';
 
 const useUser = () => {
   const { addToast } = useToasts();
@@ -27,7 +27,7 @@ const useUser = () => {
     data: userData,
     error: userError,
     mutate: mutateUser,
-  } = useSWR<UserStatus | null>(
+  } = useApi<UserStatus | null>(
     !TestEnv ? '/railsapi/v1/user/status' : null,
     url => getApi<RailsApiResponse<UserStatus>>(url).then(res => res.Data),
     {
@@ -73,7 +73,7 @@ const useConstants = (): PageConfig | undefined => {
     'cacheConstants',
     null,
   );
-  const { data } = useSWR<RailsApiResponse<PageConfig>>(
+  const { data } = useApi<RailsApiResponse<PageConfig>>(
     '/railsapi/v1/content/constants',
     {
       initialData: cache

@@ -7,8 +7,7 @@ export declare global {
   interface Window {
     API_URL: string;
     DEFAULT_LOCALE: string;
-    LOCALE?: string;
-    BASIC_AUTH?: string;
+    PRERENDER_CACHE?: { [key: string]: any };
     customerSettings?: CustomerSettings;
     _kc?: KambiConfig;
     _kbc?: { dispose: any };

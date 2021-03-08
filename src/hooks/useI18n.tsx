@@ -9,10 +9,10 @@ import i18n, { I18n } from '../utils/i18n';
 import { TestEnv } from '../constants';
 import { useConfig } from './useConfig';
 import { useToasts } from 'react-toast-notifications';
-import useSWR from 'swr';
 import useLocalStorage from './useLocalStorage';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { formatSuccesfullRailsApiResponse } from '../utils/apiUtils';
+import useApi from './useApi';
 
 export const I18nContext = createContext<I18n | null>(null);
 
@@ -45,13 +45,13 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
     'cacheTranslations',
     null,
   );
-  const { data, mutate } = useSWR<RailsApiResponse<Translations>>(
+  const { data, mutate } = useApi<RailsApiResponse<Translations>>(
     !TestEnv && configLoaded ? '/railsapi/v1/translations' : null,
     {
       initialData: cache
         ? formatSuccesfullRailsApiResponse<Translations>(cache)
         : undefined,
-      // revalidateOnMount: true,
+      revalidateOnMount: true,
       onErrorRetry: () => {
         addToast(`Failed to fetch translations`, {
           appearance: 'error',

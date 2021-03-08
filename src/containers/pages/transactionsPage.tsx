@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
-import useSWR from 'swr';
 import { formatUrl } from '../../utils/apiUtils';
 import { useI18n } from '../../hooks/useI18n';
 import dayjs from 'dayjs';
@@ -12,6 +11,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Pagination from 'react-bootstrap/Pagination';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
+import useApi from '../../hooks/useApi';
 
 const questionItems = [
   {
@@ -218,7 +218,7 @@ const TransactionsDateFilter = ({
 const TransactionsPage = () => {
   const { t } = useI18n();
   const [url, setUrl] = useState<string | null>(null);
-  const { data } = useSWR<RailsApiResponse<Transactions>>(url);
+  const { data } = useApi<RailsApiResponse<Transactions>>(url);
   const [periodSelected, setPeriodSelected] = useState(30);
   const [dateTo, setDateTo] = useState(dayjs());
   const [dateFrom, setDateFrom] = useState(
