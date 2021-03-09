@@ -98,7 +98,7 @@ app.use(async (req, res, next) => {
   if (!railsContants) return next();
   const urlWithoutLocale = req.url.replace(
     new RegExp(
-      `^/${railsContants.available_locales.map(lang => lang.iso).join('|')}`,
+      `^/(${railsContants.available_locales.map(lang => lang.iso).join('|')})`,
       'g',
     ),
     '',
