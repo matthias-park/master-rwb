@@ -1,6 +1,6 @@
 import config from 'config';
 import path from 'path';
-interface FranchiseConfig {
+export interface FranchiseConfig {
   name: string;
   domain: string;
   theme: string;
@@ -70,6 +70,12 @@ export const DOMAINS_TO_NAME = config
     obj[fr.domain] = fr.name;
     return obj;
   }, {});
+export const DOMAINS_TO_FRANCHISE: {
+  [key: string]: FranchiseConfig;
+} = config.get<FranchiseConfig[]>('franchises').reduce((obj, fr) => {
+  obj[fr.domain] = fr;
+  return obj;
+}, {});
 export const BASIC_AUTH =
   config.has('basicAuth') && config.get<basicAuthConfig>('basicAuth');
 
