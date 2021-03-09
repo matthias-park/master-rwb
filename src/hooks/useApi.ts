@@ -16,7 +16,7 @@ export const useApi: typeof useSWR = (key, ...options: any[]) => {
     : config?.revalidateOnMount;
   newConfig.onSuccess = (...props) => {
     if (window.PRERENDER_CACHE) window.PRERENDER_CACHE[key || ''] = props[0];
-    if (config.onSuccess) config.onSuccess(...props);
+    if (config?.onSuccess) config.onSuccess(...props);
   };
   swrOptions.push(newConfig);
   return useSWR(key, ...swrOptions);

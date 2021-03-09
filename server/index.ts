@@ -1,25 +1,14 @@
 import config from 'config';
 import express from 'express';
 import auth from 'basic-auth';
-import useragent, { reset } from 'express-useragent';
+import useragent from 'express-useragent';
 import fs from 'fs';
 import path from 'path';
 import { shouldPrerender, getCache } from './utils';
 import { getRenderedPage } from './ssr';
-import { DOMAINS_TO_FRANCHISE, FranchiseConfig } from './constants';
+import { DOMAINS_TO_FRANCHISE } from './constants';
 import fetch from 'isomorphic-unfetch';
-import { PageConfig } from '../src/types/api/PageConfig';
 import { BASIC_AUTH, BUILD_FOLDER, PRERENDER_HEADER } from './constants';
-import { PagesName } from '../src/constants';
-import RailsApiResponse from '../src/types/api/RailsApiResponse';
-
-declare global {
-  namespace Express {
-    interface Request {
-      franchise: FranchiseConfig;
-    }
-  }
-}
 
 const app = express();
 
@@ -86,17 +75,16 @@ app.use(express.static(BUILD_FOLDER));
 
 app.use(async (req, res, next) => {
   // 2 hour cache
-  const railsContants = await getCache<PageConfig | null>(
+  const railsContants = await getCache(
     `${req.franchise.name}-rails-constants`,
     7200000,
     () =>
       fetch(`${req.franchise.api}/railsapi/v1/content/constants`).then(
         async res => {
           if (res.ok) {
-            const data: RailsApiResponse<PageConfig> = await res.json();
+            const data = await res.json();
             const navigation_routes = data.Data.navigation_routes.filter(
-              route =>
-                route.id !== PagesName.NotFoundPage && route.path !== '*',
+              route => route.id !== 14 && route.path !== '*',
             );
             return {
               ...data.Data,

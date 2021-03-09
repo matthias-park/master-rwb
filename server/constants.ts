@@ -1,12 +1,6 @@
 import config from 'config';
 import path from 'path';
-export interface FranchiseConfig {
-  name: string;
-  domain: string;
-  theme: string;
-  api: string;
-  defaultLocale: string;
-}
+import { FranchiseConfig } from './types/custom';
 interface basicAuthConfig {
   whitelistedIp: string[];
   users: {
