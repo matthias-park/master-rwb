@@ -1,14 +1,16 @@
 import config from 'config';
 import express from 'express';
 import auth from 'basic-auth';
-import useragent from 'express-useragent';
+import useragent, { reset } from 'express-useragent';
 import fs from 'fs';
 import path from 'path';
-import { shouldPrerender, getCache } from './utils';
+import { shouldPrerender, getRailsConstants } from './utils';
 import { getRenderedPage } from './ssr';
-import { DOMAINS_TO_FRANCHISE } from './constants';
+import { DOMAINS_TO_FRANCHISE, DEVELOPMENT } from './constants';
 import fetch from 'isomorphic-unfetch';
 import { BASIC_AUTH, BUILD_FOLDER, PRERENDER_HEADER } from './constants';
+import { SitemapStream, streamToPromise } from 'sitemap';
+import { Readable } from 'stream';
 
 const app = express();
 
@@ -48,13 +50,16 @@ app.use((req, res, next) => {
 app.use('/server/*.js', (_, res) => {
   return res.sendStatus(404);
 });
-app.use((req, _, next) => {
+app.use((req, res, next) => {
   const fr = DOMAINS_TO_FRANCHISE[req.hostname];
+  if (!fr) {
+    return res.sendStatus(404);
+  }
   req.franchise = fr;
   next();
 });
 
-app.use('/robots.txt', async (req, res) => {
+app.get('/robots.txt', async (req, res) => {
   return fetch(`${req.franchise.api}/robots.txt`)
     .then(async result => {
       const text = await result.text();
@@ -65,6 +70,37 @@ app.use('/robots.txt', async (req, res) => {
       return res.status(500);
     });
 });
+
+app.get('/sitemap.xml', async (req, res) => {
+  const railsContants = await getRailsConstants(req);
+  const nowDate = new Date();
+  const links = railsContants?.navigation_routes
+    ?.map(
+      route =>
+        !route.hiddenSitemap &&
+        !route.protected && {
+          url: route.path,
+          changefreq: 'weekly',
+          priority: 0.5,
+          lastmod: nowDate,
+        },
+    )
+    .filter(Boolean);
+  if (!links) return res.sendStatus(404);
+  const hostname = DEVELOPMENT
+    ? `http://${req.franchise.domain}`
+    : req.franchise.domain;
+  const stream = new SitemapStream({
+    hostname: hostname,
+    lastmodDateOnly: true,
+  });
+  Readable.from(links).pipe(stream);
+  res.header('Content-Type', 'application/xml');
+  return stream.pipe(res).on('error', e => {
+    console.log(e);
+  });
+});
+
 app.use((req, _, next) => {
   if (req.path.includes('/assets/')) {
     req.url = req.url.replace('/assets/', `/${req.franchise.name}/`);
@@ -74,27 +110,7 @@ app.use((req, _, next) => {
 app.use(express.static(BUILD_FOLDER));
 
 app.use(async (req, res, next) => {
-  // 2 hour cache
-  const railsContants = await getCache(
-    `${req.franchise.name}-rails-constants`,
-    7200000,
-    () =>
-      fetch(`${req.franchise.api}/railsapi/v1/content/constants`).then(
-        async res => {
-          if (res.ok) {
-            const data = await res.json();
-            const navigation_routes = data.Data.navigation_routes.filter(
-              route => route.id !== 14 && route.path !== '*',
-            );
-            return {
-              ...data.Data,
-              navigation_routes,
-            };
-          }
-          return null;
-        },
-      ),
-  );
+  const railsContants = await getRailsConstants(req);
   if (!railsContants) return next();
   const urlWithoutLocale = req.url.replace(
     new RegExp(

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { useI18n } from '../../hooks/useI18n';
 import Modal from 'react-bootstrap/Modal';
@@ -8,6 +8,7 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { ControlledTextInput } from '../TextInput';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+import Alert from 'react-bootstrap/Alert';
 
 interface Props {
   onSubmit: SubmitHandler<Record<string, any>>;
@@ -15,10 +16,20 @@ interface Props {
 
 const AddBankAccountModal = ({ onSubmit }: Props) => {
   const { t } = useI18n();
+  const [apiError, setApiErr] = useState('');
   const { showModal, setShowModal } = useUIConfig();
   const formMethods = useForm({
     mode: 'onBlur',
   });
+  const handleSubmit = async data => {
+    const result = await onSubmit(data);
+    if (typeof result === 'string') {
+      return setApiErr(result);
+    }
+    if (result) {
+      return setShowModal(null);
+    }
+  };
   return (
     <Modal
       centered
@@ -33,7 +44,17 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
         <h2 className="mb-2 text-gray-800">{t('add_bank_modal_title')}</h2>
         <p className="text-gray-700">{t('add_bank_modal_text')}</p>
         <FormProvider {...formMethods}>
-          <Form onSubmit={formMethods.handleSubmit(onSubmit)}>
+          <Form onSubmit={formMethods.handleSubmit(handleSubmit)}>
+            <Alert
+              show={
+                !!apiError ||
+                (formMethods.formState.isSubmitted &&
+                  !formMethods.formState.isValid)
+              }
+              variant="danger"
+            >
+              {apiError || t('register_page_submit_error')}
+            </Alert>
             {['account_number', 'swift', 'address'].map(id => (
               <ControlledTextInput
                 id={id}

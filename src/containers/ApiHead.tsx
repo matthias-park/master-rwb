@@ -9,7 +9,7 @@ import { useI18n } from '../hooks/useI18n';
 import useApi from '../hooks/useApi';
 
 const ApiHead = () => {
-  const { locale, routes } = useConfig();
+  const { locales, locale, routes } = useConfig();
   const { t } = useI18n();
   const { pathname } = useLocation();
   const pathInfo = routes.find(route => route.path === pathname);
@@ -48,6 +48,17 @@ const ApiHead = () => {
         {!!seoData?.canonical_tag && (
           <link rel="canonical" href={seoData.canonical_tag} />
         )}
+        {locales.map(lang => {
+          if (lang.iso === locale) return null;
+          return (
+            <link
+              key={lang.id}
+              rel="alternate"
+              hrefLang={lang.iso}
+              href={`${window.location.origin}/${lang.iso}`}
+            />
+          );
+        })}
       </Helmet>
       {!!seoData?.hidden_h1 && (
         <h1 style={{ display: 'none' }}>{seoData.hidden_h1}</h1>

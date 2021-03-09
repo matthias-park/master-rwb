@@ -8,10 +8,11 @@ import { removeFalsyFromObject } from '../utils/index';
 
 const addBankAccountSubmit = async data => {
   removeFalsyFromObject(data);
-  const res = await postApi('/railsapi/v1/user/bank', data).catch(
-    (err: RailsApiResponse<null>) => err,
-  );
-  return console.log(res);
+  const res = await postApi<RailsApiResponse<null>>(
+    '/railsapi/v1/user/bank',
+    data,
+  ).catch((err: RailsApiResponse<null>) => err);
+  return res.Success || res.Message || false;
 };
 
 const Modals = () => {

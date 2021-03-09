@@ -31,3 +31,23 @@ export const getCache = <T>(
     return data;
   });
 };
+
+export const getRailsConstants = (req: Request) =>
+  // 2 hour cache
+  getCache(`${req.franchise.name}-rails-constants`, 7200000, () =>
+    fetch(`${req.franchise.api}/railsapi/v1/content/constants`).then(
+      async res => {
+        if (res.ok) {
+          const data = await res.json();
+          const navigation_routes = data.Data.navigation_routes.filter(
+            route => route.id !== 14 && route.path !== '*',
+          );
+          return {
+            ...data.Data,
+            navigation_routes,
+          };
+        }
+        return null;
+      },
+    ),
+  );
