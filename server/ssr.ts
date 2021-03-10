@@ -10,29 +10,18 @@ import {
   DOMAINS_TO_NAME,
   MAX_PRERENDER_PAGES,
 } from './constants';
-
-const RENDERED_PAGES_CACHE: {
-  [key: string]: { html: string; date: number };
-} = {};
+import logger from './logger';
+import { getCache } from './utils';
 
 export const getRenderedPage = async (req: Request): Promise<string | null> => {
   const cacheKey = req.url;
-  const cachedPage = RENDERED_PAGES_CACHE[cacheKey];
-  if (
-    cachedPage &&
-    new Date().getTime() - cachedPage.date < HOLD_RENDERED_PAGE_INTERVAL
-  ) {
-    return cachedPage.html;
-  }
-  const html = await render(req).catch(err => {
-    console.log(err);
-    return null;
-  });
-  if (html) {
-    RENDERED_PAGES_CACHE[cacheKey] = { html, date: new Date().getTime() };
-    return html;
-  }
-  return null;
+  const html = getCache(cacheKey, HOLD_RENDERED_PAGE_INTERVAL, async () =>
+    render(req).catch(err => {
+      logger.error(err);
+      return null;
+    }),
+  );
+  return html;
 };
 
 let browser: Browser | null = null;
@@ -40,14 +29,16 @@ let browserCloseTimeout: number = 0;
 let openTabs = 0;
 export const render = async (req: Request) => {
   if (!browser) {
+    logger.info('Starting puppeteer');
     browser = await puppeteer.launch({
       args: ['--disable-web-security'],
       headless: true,
     });
   }
   if (openTabs > MAX_PRERENDER_PAGES) {
-    throw new Error('To many requests - 429');
+    throw new Error(`To many prerender requests - ${openTabs + 1} tabs open`);
   }
+  logger.profile(`page rendered ${req.url}`);
   openTabs++;
   const page = await browser.newPage();
   await page.setExtraHTTPHeaders({
@@ -115,7 +106,6 @@ export const render = async (req: Request) => {
   await page.goto(fullUrl, {
     waitUntil: 'networkidle0',
   });
-  console.log(`ssr done rendering ${req.url}`);
   //@ts-ignore
   const cache = await page.evaluate(() => window.PRERENDER_CACHE);
   let html = await page.content();
@@ -128,9 +118,11 @@ export const render = async (req: Request) => {
   );
   openTabs--;
   await page.close();
+  logger.profile(`page rendered ${req.url}`);
   if (browserCloseTimeout) clearTimeout(browserCloseTimeout);
   browserCloseTimeout = setTimeout(async () => {
     if (browser) {
+      logger.info('Stopping puppeteer');
       await browser.close();
     }
   }, BROWSER_KEEP_ALIVE);

@@ -126,13 +126,17 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
       const detectedLocale = getRedirectLocalePathname(
         constants.locale,
         locales,
-        window.DEFAULT_LOCALE,
         constants.navigation_routes,
       );
       if (locale !== detectedLocale) {
-        postApi('/railsapi/v1/locale', {
-          locale: detectedLocale,
-        }).then(() => setLocale(detectedLocale, false));
+        (async () => {
+          if (!window.PRERENDER_CACHE) {
+            await postApi('/railsapi/v1/locale', {
+              locale: detectedLocale,
+            });
+          }
+          setLocale(detectedLocale, false);
+        })();
       } else {
         setConfigLoaded(true);
       }

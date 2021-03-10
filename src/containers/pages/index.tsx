@@ -57,6 +57,7 @@ const Routes = () => {
               exact={route.exact ?? true}
               path={route.path}
               component={Page}
+              sensitive
             />
           );
         })}

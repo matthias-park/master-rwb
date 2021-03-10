@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { extensionsToIgnore, PRERENDER_HEADER } from './constants';
+import fetch from 'isomorphic-unfetch';
 
 export const shouldPrerender = (req: Request) => {
   const prerenderHeader = req.headers[PRERENDER_HEADER];

@@ -36,13 +36,15 @@ const i18n = () => {
 export const getRedirectLocalePathname = (
   currentLocale: string,
   availableLocales: string[],
-  defaultLocale: string,
   availableRoutes: NavigationRoute[],
 ) => {
   const windowPaths = window.location.pathname.split('/');
   let urlPaths = `${window.location.pathname}${window.location.hash}`;
   let urlLocale = Lockr.get('locale', currentLocale);
-  if (availableLocales.includes(windowPaths[1])) {
+  if (
+    availableLocales.includes(windowPaths[1]) ||
+    currentLocale === windowPaths[1]
+  ) {
     urlLocale = windowPaths[1];
   } else if (availableRoutes.some(route => urlPaths.startsWith(route.path))) {
     urlPaths = `/${urlLocale}${urlPaths}`;
