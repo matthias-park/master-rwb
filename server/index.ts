@@ -87,9 +87,7 @@ app.get('/sitemap.xml', async (req, res) => {
     )
     .filter(Boolean);
   if (!links) return res.sendStatus(404);
-  const hostname = DEVELOPMENT
-    ? `http://${req.franchise.domain}`
-    : req.franchise.domain;
+  const hostname = `http${req.secure ? 's' : ''}://${req.franchise.domain}`;
   const stream = new SitemapStream({
     hostname: hostname,
     lastmodDateOnly: true,
