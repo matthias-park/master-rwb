@@ -44,7 +44,7 @@ const ForgotLoginPage = () => {
       event: 'LoginUsernameFormSubmit',
     });
     const result = await postApi<RailsApiResponse<ForgotPasswordResponse>>(
-      '/railsapi/v1/user/forgot_login',
+      '/railsapi/v1/user/login/forgot_login',
       {
         email,
       },

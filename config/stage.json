@@ -5,7 +5,8 @@
       "domain": "bnl-rj.tglab.dev",
       "theme": "bnl",
       "api": "https://bnl-dev.tglab.dev",
-      "defaultLocale": "nl"
+      "defaultLocale": "nl",
+      "gtmId": "GTM-PGRW8BQ"
     }
   ],
   "port": 3800,
