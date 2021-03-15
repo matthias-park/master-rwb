@@ -9,7 +9,12 @@ import { useI18n } from '../hooks/useI18n';
 import useApi from '../hooks/useApi';
 
 const ApiHead = () => {
-  const { locales, locale, routes } = useConfig();
+  const { locales, locale, routes } = useConfig((prev, next) => {
+    const localeEqual = prev.locale === next.locale;
+    const localesEqual = prev.locales.length === next.locales.length;
+    const routesEqual = prev.routes.length === next.routes.length;
+    return localeEqual && localesEqual && routesEqual;
+  });
   const { t } = useI18n();
   const { pathname } = useLocation();
   const pathInfo = routes.find(route => route.path === pathname);
@@ -28,7 +33,9 @@ const ApiHead = () => {
   );
   const seoData = data?.Success ? data?.Data : null;
   const fallbackTitle =
-    t(`sitemap_${pathInfo?.name}`) + ' - ' + t('seo_site_name');
+    t(`sitemap_${pathInfo?.name}`) + t(`sitemap_${pathInfo?.name}`)
+      ? ' - '
+      : '' + t('seo_site_name');
   return (
     <>
       <Helmet htmlAttributes={{ lang: locale }}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useI18n } from '../../hooks/useI18n';
 import { ControlledTextInput } from '../../components/TextInput';
 import Button from 'react-bootstrap/Button';
@@ -12,6 +12,8 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useConfig } from '../../hooks/useConfig';
 import { Redirect } from 'react-router-dom';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
+import useGTM from '../../hooks/useGTM';
+import { isEqual } from 'lodash';
 
 const ForgotLoginPage = () => {
   const formMethods = useForm({
@@ -24,13 +26,23 @@ const ForgotLoginPage = () => {
   } | null>(null);
   const { t } = useI18n();
   const { addToast } = useToasts();
-  const { user } = useConfig();
+  const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
+  const sendDataToGTM = useGTM();
+
+  useEffect(() => {
+    sendDataToGTM({
+      event: 'ForgottenPassword',
+    });
+  }, []);
 
   if (user.logged_in) {
     return <Redirect to="/" />;
   }
 
   const onSubmit = async ({ email }) => {
+    sendDataToGTM({
+      event: 'LoginUsernameFormSubmit',
+    });
     const result = await postApi<RailsApiResponse<ForgotPasswordResponse>>(
       '/railsapi/v1/user/forgot_login',
       {

@@ -7,7 +7,9 @@ import Lockr from 'lockr';
 import { stringToMiliseconds } from '../../utils/index';
 
 const ResponsibleGamblingModal = () => {
-  const { user } = useConfig();
+  const { user } = useConfig(
+    (prev, next) => prev.user.logged_in === next.user.logged_in,
+  );
   const { t } = useI18n();
   const intervalRef = useRef(0);
   const [showModal, setShowModal] = useState(false);

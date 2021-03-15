@@ -7,12 +7,13 @@ import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { HeaderRoute } from '../../types/api/PageConfig';
+import useGTM from '../../hooks/useGTM';
 
 interface HeaderNavLinkProps {
   data: HeaderRoute;
   mobile: boolean;
-  handleNavChange: (ref: HTMLElement | null) => void;
-  active: HTMLElement | null;
+  handleNavChange: (id: string) => void;
+  active: string | null;
   setNavExpanded: (value: boolean) => void;
   fullPath: string;
 }
@@ -26,13 +27,27 @@ export const HeaderNavClassicLink = ({
   fullPath,
 }: HeaderNavLinkProps) => {
   const { t } = useI18n();
-  const { locale, user } = useConfig();
+  const { locale, user } = useConfig((prev, next) => {
+    const localeEqual = prev.locale === next.locale;
+    const userEqual = prev.user.logged_in === next.user.logged_in;
+    return localeEqual && userEqual;
+  });
   const { backdrop } = useUIConfig();
   const dropdownRef = useRef(null);
+  const sendDataToGTM = useGTM();
   const dropdownLinks = useMemo(
     () => data.links?.sort((a, b) => sortAscending(a.order, b.order)),
     [data.links],
   );
+
+  const onGtmLinkClick = (name: string, subHeader: boolean = false) => {
+    sendDataToGTM({
+      event: mobile
+        ? 'BurgerMenuClick'
+        : `${subHeader ? 'Sub' : ''}MainNavigationClick`,
+      'tglab.ItemClicked': t(name),
+    });
+  };
 
   const showDropdown =
     !!data.prefix &&
@@ -45,7 +60,7 @@ export const HeaderNavClassicLink = ({
       ref={dropdownRef}
       as="li"
       className="header__nav-item"
-      show={(!active && showDropdown) || active === dropdownRef.current}
+      show={(!active && showDropdown) || active === (data.prefix || data.name)}
     >
       {!mobile ? (
         <Dropdown.Toggle
@@ -62,7 +77,7 @@ export const HeaderNavClassicLink = ({
           }
           className="header__nav-item-link cursor-pointer"
           onClick={() => {
-            handleNavChange(dropdownRef.current);
+            handleNavChange(data.prefix || data.name);
           }}
         >
           {t(data.name)}
@@ -78,6 +93,7 @@ export const HeaderNavClassicLink = ({
               to={dropdownLinks?.[0].path || '/'}
               className="header__nav-item-link cursor-pointer"
               onClick={() => {
+                onGtmLinkClick(data.name);
                 setNavExpanded(false);
                 backdrop.hide();
               }}
@@ -89,7 +105,7 @@ export const HeaderNavClassicLink = ({
             as={'i'}
             className="header__nav-item-icon icon-down"
             onClick={() => {
-              handleNavChange(dropdownRef.current);
+              handleNavChange(data.prefix || data.name);
             }}
           ></Dropdown.Toggle>
         </div>
@@ -108,6 +124,7 @@ export const HeaderNavClassicLink = ({
                         to={link.path}
                         {...props}
                         onClick={() => {
+                          onGtmLinkClick(link.text, true);
                           setNavExpanded(false);
                           backdrop.hide();
                         }}

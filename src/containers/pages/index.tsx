@@ -36,12 +36,12 @@ const COMPONENT_PAGES = {
 };
 
 const Routes = () => {
-  const { routes } = useConfig();
+  const { routes } = useConfig((prev, next) => !!prev.routes === !!next.routes);
   const { pathname } = useLocation();
 
   return (
     <ErrorBoundary key={pathname}>
-      <Switch>
+      <Switch key={pathname}>
         {routes.map(route => {
           const Page =
             COMPONENT_PAGES[route.id] ||

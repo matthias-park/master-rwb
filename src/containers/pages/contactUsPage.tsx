@@ -13,12 +13,13 @@ import HelpBlock from '../../components/HelpBlock';
 import Alert from 'react-bootstrap/Alert';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
+import { isEqual } from 'lodash';
 
 const loggedInHiddenFields = ['first_name', 'last_name', 'email_address'];
 
 const ContactUsPage = () => {
   const { t } = useI18n();
-  const { user } = useConfig();
+  const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
   const { addToast } = useToasts();
   const { register, handleSubmit, errors, formState } = useForm({
     mode: 'onBlur',

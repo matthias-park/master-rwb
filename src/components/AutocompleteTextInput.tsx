@@ -16,6 +16,7 @@ interface Props {
   labelkey: (value: any) => string;
   invalidTextError: string;
   rules?: any;
+  onBlur?: () => void;
 }
 
 const AutocompleteTextInput = (props: Props) => {
@@ -62,6 +63,7 @@ const AutocompleteTextInput = (props: Props) => {
               gotFocus.current = false;
               controlProps.onChange(selectedValue.current);
               controlProps.onBlur();
+              props.onBlur?.();
               if (
                 props.setError &&
                 !options.some(

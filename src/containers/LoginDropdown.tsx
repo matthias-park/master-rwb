@@ -12,6 +12,7 @@ import { useRoutePath } from '../hooks/index';
 import { NET_USER } from '../types/UserStatus';
 import { ControlledTextInput } from '../components/TextInput';
 import RailsApiResponse from '../types/api/RailsApiResponse';
+import useGTM from '../hooks/useGTM';
 
 interface Props {
   dropdownClasses?: string;
@@ -31,8 +32,12 @@ const LoginForm = ({
   });
   const { register, handleSubmit, errors, formState, setError } = formMethods;
   const { mutateUser } = useConfig();
+  const sendDataToGTM = useGTM();
   const forgotPasswordRoute = useRoutePath(PagesName.ForgotPasswordPage);
   const onSubmit = async ({ email, password, remember_me }) => {
+    sendDataToGTM({
+      event: 'LoginSubmitted',
+    });
     const response = await postApi<RailsApiResponse<NET_USER | null>>(
       '/railsapi/v1/user/login',
       {
@@ -43,6 +48,10 @@ const LoginForm = ({
     ).catch((res: RailsApiResponse<null>) => res);
     if (response.Success && response.Data?.PlayerId) {
       hideLoginDropdown();
+      sendDataToGTM({
+        'tglab.GUID': response.Data.PlayerId!,
+        event: 'SuccessfulLogin',
+      });
       return mutateUser(
         {
           id: response.Data.PlayerId,
@@ -57,6 +66,10 @@ const LoginForm = ({
         true,
       );
     }
+    sendDataToGTM({
+      'tglab.Error': response.Message || t('login_failed_to_login'),
+      event: 'LoginFailed',
+    });
     setApiError(response.Message || t('login_failed_to_login'));
     setError('email', {
       type: 'manual',
@@ -196,7 +209,7 @@ const LoginDropdown = ({
   const location = useLocation();
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const { backdrop } = useUIConfig();
-
+  const sendDataToGTM = useGTM();
   useEffect(() => {
     setShowDropdown(false);
   }, [location.pathname]);
@@ -209,11 +222,20 @@ const LoginDropdown = ({
     setShowDropdown(prev => !prev);
   }, []);
 
+  const toggleDropdown = isOpen => {
+    if (isOpen) {
+      sendDataToGTM({
+        event: 'LoginIntention',
+      });
+    }
+    setShowDropdown(isOpen);
+  };
+
   return (
     <Dropdown
       className={`login-dropdown ${dropdownClasses}`}
       show={showDropdown}
-      onToggle={isOpen => setShowDropdown(isOpen)}
+      onToggle={toggleDropdown}
     >
       <Dropdown.Toggle
         variant="primary"

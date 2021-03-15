@@ -9,10 +9,11 @@ import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName } from '../../constants';
+import { isEqual } from 'lodash';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
-  const { user } = useConfig();
+  const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
   const { setShowModal } = useUIConfig();
   const { t } = useI18n();
   const { bankResponse } = useParams<{ bankResponse?: string }>();

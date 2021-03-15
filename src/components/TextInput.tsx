@@ -31,12 +31,17 @@ export const ControlledTextInput = (props: Props) => {
     }
     return field.onChange(event.target.value);
   };
+  const onBlur = () => {
+    if (props.onBlur) props.onBlur();
+    field.onBlur();
+  };
 
   return (
     <TextInput
       {...props}
       {...field}
       value={props.inputFormatting ? undefined : value}
+      onBlur={onBlur}
       onChange={onChange}
     />
   );
@@ -72,7 +77,6 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
         : !showPassword
         ? type
         : 'text';
-
     return (
       <Form.Group
         data-testid="container"

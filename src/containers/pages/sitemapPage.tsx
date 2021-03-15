@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { useI18n } from '../../hooks/useI18n';
+import { isEqual } from 'lodash';
 
 interface SitemapListItem {
   path: string;
@@ -42,7 +43,11 @@ const TreeItem = ({ route }: { route: SitemapListItem }) => {
 
 const SitemapPage = () => {
   const { t } = useI18n();
-  const { routes, user } = useConfig();
+  const { routes, user } = useConfig((prev, next) => {
+    const routesEqual = !!prev.routes === !!next.routes;
+    const userEqual = isEqual(prev.user, next.user);
+    return routesEqual && userEqual;
+  });
 
   const sitemapList = useMemo(() => {
     const list: SitemapListItem[] = [];

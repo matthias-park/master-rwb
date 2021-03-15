@@ -173,6 +173,7 @@ module.exports = function (webpackEnv) {
           franchiseTheme: `static/css/theme-${franchise.theme}.css`,
           apiUrl: franchise.api,
           defaultLocale: franchise.defaultLocale,
+          gtmId: franchise.gtmId,
         },
         isEnvProduction
           ? {

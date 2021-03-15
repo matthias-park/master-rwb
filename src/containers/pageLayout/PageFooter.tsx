@@ -8,6 +8,7 @@ import { useI18n } from '../../hooks/useI18n';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { sortAscending } from '../../utils/index';
 import { useConfig } from '../../hooks/useConfig';
+import useGTM from '../../hooks/useGTM';
 import {
   SubFooter,
   FooterDataLink,
@@ -192,6 +193,7 @@ const SocialSection = ({
 const SortedFooterLinks = ({ links }: { links: FooterDataLink[] }): any => {
   const { t } = useI18n();
   const desktopWidth = useDesktopWidth(768);
+  const sendDataToGTM = useGTM();
   const FooterLink = useMemo(
     () => ({
       Container: desktopWidth ? 'div' : Dropdown,
@@ -200,6 +202,13 @@ const SortedFooterLinks = ({ links }: { links: FooterDataLink[] }): any => {
     }),
     [desktopWidth],
   );
+  const onGtmLinkClick = (name: string) => {
+    sendDataToGTM({
+      'tglab.ItemClicked': t(name),
+      event: 'BottomNavigationClick',
+    });
+  };
+
   return links
     .sort((a, b) => sortAscending(a.order, b.order))
     .map((column, index) => (
@@ -221,6 +230,7 @@ const SortedFooterLinks = ({ links }: { links: FooterDataLink[] }): any => {
                     <Link
                       key={child.name}
                       to={child.link || '#'}
+                      onClick={() => onGtmLinkClick(child.name)}
                       className={
                         child.button
                           ? 'btn btn-outline-light btn-sm mt-3'
@@ -238,7 +248,7 @@ const SortedFooterLinks = ({ links }: { links: FooterDataLink[] }): any => {
 };
 
 const PageFooter = () => {
-  const { footer } = useConfig();
+  const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
   if (!footer) return null;
   return (
     <footer>

@@ -4,6 +4,7 @@ import React, {
   ReactNode,
   useState,
   useEffect,
+  useMemo,
 } from 'react';
 import {
   getApi,
@@ -20,6 +21,7 @@ import useLocalStorage from './useLocalStorage';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { PageConfig } from '../types/api/PageConfig';
 import useApi from './useApi';
+import useMemoCompare from './useMemoCompare';
 
 const useUser = () => {
   const { addToast } = useToasts();
@@ -96,12 +98,14 @@ const useConstants = (): PageConfig | undefined => {
 
 export const configContext = createContext<Config | null>(null);
 
-export function useConfig(): Config {
+export function useConfig(
+  compare?: (prev: Config, next: Config) => boolean,
+): Config {
   const instance = useContext<Config | null>(configContext);
   if (!instance) {
     throw new Error('There was an error getting config instance from context');
   }
-  return instance;
+  return useMemoCompare<Config>(instance, compare);
 }
 
 export type ConfigProviderProps = {
@@ -152,18 +156,21 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     setConfigLoaded(true);
   };
 
-  const value: Config = {
-    user,
-    mutateUser,
-    locale,
-    setLocale,
-    locales: constants?.available_locales || [],
-    routes: constants?.navigation_routes || [],
-    header: constants?.header_routes,
-    footer: constants?.footer_data,
-    sidebars: constants?.sidebars,
-    helpBlock: constants?.help_block,
-    configLoaded,
-  };
+  const value: Config = useMemo(
+    () => ({
+      user,
+      mutateUser,
+      locale,
+      setLocale,
+      locales: constants?.available_locales || [],
+      routes: constants?.navigation_routes || [],
+      header: constants?.header_routes,
+      footer: constants?.footer_data,
+      sidebars: constants?.sidebars,
+      helpBlock: constants?.help_block,
+      configLoaded,
+    }),
+    [user, locale, !!constants],
+  );
   return <configContext.Provider value={value} {...props} />;
 };

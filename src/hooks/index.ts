@@ -13,7 +13,7 @@ export const usePrevious = <T>(value: T): T | undefined => {
 };
 
 export const useRoutePath = (routeId: PagesName): string => {
-  const { routes } = useConfig();
+  const { routes } = useConfig((prev, next) => !!prev.routes === !!next.routes);
   return useMemo(
     () => routes.find(route => route.id === routeId)?.path || '/',
     [routes],

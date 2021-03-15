@@ -6,8 +6,8 @@ import Lockr from 'lockr';
 
 const defaultCookies: Storage = {
   essential: true,
-  functional: true,
-  thirdParty: true,
+  functional: false,
+  thirdParty: false,
 };
 
 const useStorage = () => {
@@ -15,14 +15,14 @@ const useStorage = () => {
     'cookieSettings',
     null,
   );
-  const config = useConfig();
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
 
   const saveCookies = (cookies: Storage) => {
     if (!cookies.functional) {
       Lockr.rm('locale');
     }
     if (cookies.functional) {
-      Lockr.set('locale', config.locale);
+      Lockr.set('locale', locale);
     }
     setStorageCookies(cookies);
   };

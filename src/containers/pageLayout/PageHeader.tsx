@@ -16,19 +16,52 @@ import { useToasts } from 'react-toast-notifications';
 import LocaleSelector from '../../components/header/LocaleSelector';
 import { useI18n } from '../../hooks/useI18n';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
+import useGTM from '../../hooks/useGTM';
 
 const SubNavLinks = () => {
   const { locales, locale, setLocale } = useConfig();
   const { t } = useI18n();
+  const sendDataToGTM = useGTM();
   const changeLocale = async (lang: string) => {
     return postApi('/railsapi/v1/locale', {
       locale: lang,
     }).then(() => setLocale(lang));
   };
+  const navLinkClick = (linkName: string) => {
+    sendDataToGTM({
+      event: 'TopNavigationClick',
+      'tglab.ItemClicked': t(linkName),
+    });
+  };
   return (
     <div className="row w-100 align-items-start order-2 order-xl-1">
       <ul className="header__nav header__nav--secondary mr-auto mr-lg-0 ml-lg-auto">
-        <li className="header__nav-item">
+        {[
+          {
+            name: 'sub_header_help',
+            link: '/help',
+          },
+          {
+            name: 'sub_header_where_to_play',
+            link: '/',
+          },
+          {
+            name: 'sub_header_play_responsibly',
+            link: '/',
+          },
+        ].map(link => (
+          <li key={link.name} className="header__nav-item">
+            <Link
+              key={`${link.name}-${link.link}`}
+              onClick={() => navLinkClick(link.name)}
+              className="header__nav-item-link"
+              to={link.link}
+            >
+              {t(link.name)}
+            </Link>
+          </li>
+        ))}
+        {/* <li className="header__nav-item">
           <Link className="header__nav-item-link" to="/help">
             {t('sub_header_help')}
           </Link>
@@ -42,7 +75,7 @@ const SubNavLinks = () => {
           <Link className="header__nav-item-link" to="/">
             {t('sub_header_play_responsibly')}
           </Link>
-        </li>
+        </li> */}
         <li className="header-search">
           <i className="icon-search-nav"></i>
         </li>
@@ -94,21 +127,20 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
 };
 
 const PageHeader = () => {
-  const { header } = useConfig();
+  const { header } = useConfig((prev, next) => !!prev.header === !!next.header);
   const { backdrop } = useUIConfig();
   const desktopWidth = useDesktopWidth(1199);
   const { pathname, hash } = useLocation();
   const fullPath = `${pathname}${hash}`;
-  const [active, setActive] = useState<HTMLElement | null>(null);
+  const [active, setActive] = useState<string | null>(null);
   const [navExpanded, setNavExpanded] = useState(false);
   const navbarRef = useRef(null);
   useOnClickOutside(navbarRef, () => setActive(!desktopWidth ? active : null));
-
-  const handleNavChange = ref => {
-    if (active === ref) {
+  const handleNavChange = (id: string) => {
+    if (active === id) {
       setActive(null);
     } else {
-      setActive(ref);
+      setActive(id);
     }
   };
 
@@ -157,7 +189,7 @@ const PageHeader = () => {
                 .map(link => {
                   return (
                     <HeaderNavClassicLink
-                      key={link.name}
+                      key={`${link.name}-${link.prefix}-${link.order}`}
                       data={link}
                       mobile={!desktopWidth}
                       handleNavChange={handleNavChange}

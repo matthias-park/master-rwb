@@ -21,6 +21,7 @@ import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { ComponentName } from '../../constants';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import useApi from '../../hooks/useApi';
+import { isEqual } from 'lodash';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -99,7 +100,11 @@ const WithdrawalRequests = ({
 
 const WithdrawalPage = () => {
   const { t, set } = useI18n();
-  const { user, locale } = useConfig();
+  const { user, locale } = useConfig((prev, next) => {
+    const userEqual = isEqual(prev.user, next.user);
+    const localeEqual = prev.locale === next.locale;
+    return userEqual && localeEqual;
+  });
   const { addToast } = useToasts();
   const { setShowModal } = useUIConfig();
   const [submitResponse, setSubmitResponse] = useState<{

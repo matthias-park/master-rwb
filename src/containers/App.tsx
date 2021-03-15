@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Routes from './pages';
 import { useConfig } from '../hooks/useConfig';
@@ -7,10 +7,8 @@ import PageLayout from './pageLayout';
 import Modals from './Modals';
 
 const App = () => {
-  const { locale, configLoaded } = useConfig();
-  if (!configLoaded) {
-    return null;
-  }
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+
   return (
     <BrowserRouter basename={`/${locale}`}>
       <ApiHead />

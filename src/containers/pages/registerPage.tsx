@@ -16,10 +16,27 @@ import {
 import dayjs from 'dayjs';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { RegistrationPostalCodeAutofill } from '../../types/api/user/Registration';
+import useGTM from '../../hooks/useGTM';
+import { isEqual } from 'lodash';
+import { useI18n } from '../../hooks/useI18n';
 
 const RegisterPage = () => {
-  const { user, mutateUser, locale, locales } = useConfig();
+  const { t } = useI18n();
+  const { user, mutateUser, locale, locales } = useConfig((prev, next) => {
+    const userEqual = isEqual(prev.user, next.user);
+    const localeEqual = prev.locale === next.locale;
+    const localesEqual = !!prev.locales === !!next.locales;
+    return userEqual && localeEqual && localesEqual;
+  });
   const { addToast } = useToasts();
+  const sendDataToGTM = useGTM();
+  const fieldChange = (FieldName: string) => {
+    if (FieldName.startsWith('repeat_')) return;
+    sendDataToGTM({
+      event: 'RegistrationFieldChange',
+      'tglab.FieldName': FieldName,
+    });
+  };
   const checkEmailAvailable = useCallback(
     async (email: string): Promise<ValidateRegisterInput | null> => {
       const res = await postApi<ValidateRegisterInput>(
@@ -67,6 +84,9 @@ const RegisterPage = () => {
     async (
       form: PostRegistration,
     ): Promise<RailsApiResponse<RegistrationResponse | null>> => {
+      sendDataToGTM({
+        event: 'RegistrationSubmitted',
+      });
       form.language_id = locales.find(lang => lang.iso === locale)?.id || 0;
       const finalForm = Object.keys(form).reduce((obj, key) => {
         if (!key.includes('repeat')) {
@@ -100,6 +120,16 @@ const RegisterPage = () => {
           },
           true,
         );
+
+        sendDataToGTM({
+          'tglab.GUID': res.Data.PlayerId,
+          event: 'ConfirmedRegistration',
+        });
+      } else {
+        sendDataToGTM({
+          'tglab.Error': res.Message || t('register_page_submit_error'),
+          event: 'FailedAccountDetails',
+        });
       }
       return res;
     },
@@ -114,6 +144,7 @@ const RegisterPage = () => {
       <div className="reg-block">
         <HelpBlock title="Hulp nodig?" blocks={['faq', 'phone', 'email']} />
         <OnlineForm
+          fieldChange={fieldChange}
           checkEmailAvailable={checkEmailAvailable}
           checkPersonalCode={checkPersonalCode}
           checkPostalCode={checkPostalCode}

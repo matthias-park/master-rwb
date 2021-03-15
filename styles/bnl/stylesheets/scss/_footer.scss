@@ -1,4 +1,4 @@
-footer {
+footer:not(.KambiBC-footer) {
     position: relative;
     @include full-bg($brand-light);
     .footer-pre {

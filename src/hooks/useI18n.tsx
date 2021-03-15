@@ -40,7 +40,11 @@ interface Translations {
 
 export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   const { addToast } = useToasts();
-  const { locale, configLoaded } = useConfig();
+  const { locale, configLoaded } = useConfig((prev, next) => {
+    const localeEqual = prev.locale === next.locale;
+    const loadedEqual = prev.configLoaded === next.configLoaded;
+    return localeEqual && loadedEqual;
+  });
   const [cache, setCache] = useLocalStorage<Translations | null>(
     'cacheTranslations',
     null,
@@ -74,7 +78,11 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   }, [locale]);
 
   useEffect(() => {
-    setTranslations(createLocale(locale, data?.Data));
+    if (translations) {
+      translations.set(locale, data?.Data);
+    } else {
+      setTranslations(createLocale(locale, data?.Data));
+    }
   }, [data?.Data]);
 
   return <I18nContext.Provider value={translations} {...props} />;

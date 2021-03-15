@@ -10,6 +10,7 @@ import { useToasts } from 'react-toast-notifications';
 import { useConfig } from '../../hooks/useConfig';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
+import { isEqual } from 'lodash';
 
 const LoadableMarketingSettingsAccordion = loadable(
   () => import('../../components/account-settings/MarketingSettingsAccordion'),
@@ -25,7 +26,9 @@ export const COMPONENTS_BY_SETTINGS = {
 
 const SettingsPage = () => {
   const { t } = useI18n();
-  const { user, mutateUser } = useConfig();
+  const { user, mutateUser } = useConfig((prev, next) =>
+    isEqual(prev.user, next.user),
+  );
   const { addToast } = useToasts();
   const { data, error, mutate } = useApi<ProfileSettings>(
     '/railsapi/v1/user/profile',

@@ -30,6 +30,7 @@ interface Props {
   handleRegisterSubmit: (
     form: any,
   ) => Promise<RailsApiResponse<RegistrationResponse | null>>;
+  fieldChange: (fieldName: string) => void;
 }
 
 const blocks = (
@@ -246,6 +247,7 @@ const OnlineForm = (props: Props) => {
     setError,
     clearErrors,
   } = formMethods;
+
   const setValidation = (id: string, status: FormFieldValidation) =>
     setValidationForms({ ...validationForms, [id]: status });
   const validateRepeat = (id: string, value: string) => {
@@ -328,6 +330,7 @@ const OnlineForm = (props: Props) => {
                                 })
                               : clearErrors(field.name || field.id)
                           }
+                          onBlur={() => props.fieldChange(field.id)}
                           labelkey={field.labelKey}
                           autoComplete={field.autoComplete}
                           id={field.id}
@@ -351,9 +354,10 @@ const OnlineForm = (props: Props) => {
                         autoComplete={field.autoComplete}
                         id={field.id}
                         key={field.id}
-                        onBlur={() =>
-                          field.triggerId && triggerRepeat(field.triggerId)
-                        }
+                        onBlur={() => {
+                          props.fieldChange(field.id);
+                          field.triggerId && triggerRepeat(field.triggerId);
+                        }}
                         validation={validationForms[field.id]}
                         error={errors[field.id]}
                         placeholder={t(`register_input_${field.id}`)}
@@ -373,6 +377,7 @@ const OnlineForm = (props: Props) => {
                         id={field.id}
                         error={errors[field.id]}
                         type="date"
+                        onBlur={() => props.fieldChange(field.id)}
                         placeholder={t(`register_input_${field.id}`)}
                         inputFormatting={field.inputFormatting}
                       />

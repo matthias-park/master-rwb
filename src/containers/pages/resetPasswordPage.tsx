@@ -13,6 +13,8 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useConfig } from '../../hooks/useConfig';
 import ForgotPasswordResponse from '../../types/api/user/ForgotPassword';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
+import useGTM from '../../hooks/useGTM';
+import { isEqual } from 'lodash';
 
 const ForgotPasswordPage = () => {
   const { code } = useParams<{ code?: string }>();
@@ -26,7 +28,8 @@ const ForgotPasswordPage = () => {
   } | null>(null);
   const { t } = useI18n();
   const { addToast } = useToasts();
-  const { user } = useConfig();
+  const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
+  const sendDataToGTM = useGTM();
 
   if (user.logged_in) {
     return <Redirect to="/" />;
@@ -47,6 +50,11 @@ const ForgotPasswordPage = () => {
       }
       return res;
     });
+    if (result.Success) {
+      sendDataToGTM({
+        event: 'LoginPasswordChange',
+      });
+    }
     return setApiResponse({
       success: result.Success,
       msg: result.Message || '',
