@@ -71,10 +71,10 @@ const ForgotPasswordPage = () => {
         <FormProvider {...formMethods}>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Alert
-              show={typeof apiResponse === 'boolean'}
-              variant={apiResponse ? 'success' : 'danger'}
+              show={!!apiResponse?.success}
+              variant={apiResponse?.success ? 'success' : 'danger'}
             >
-              {t(`forgot_password_${apiResponse ? 'success' : 'failed'}`)}
+              {t(`forgot_password_${apiResponse?.msg ? 'success' : 'failed'}`)}
             </Alert>
             <ControlledTextInput
               rules={{
