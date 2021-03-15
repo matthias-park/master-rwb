@@ -12,10 +12,13 @@ const getDataLayerSnippet = (
     IDataLayer,
     'dataLayerName'
   >['dataLayerName'] = 'dataLayer',
-): Pick<ISnippets, 'gtmDataLayer'>['gtmDataLayer'] =>
-  `window.${dataLayerName} = window.${dataLayerName} || []; window.${dataLayerName}.push(${JSON.stringify(
-    dataLayer,
-  )})`;
+): Pick<ISnippets, 'gtmDataLayer'>['gtmDataLayer'] => {
+  let snippet = `window.${dataLayerName} = window.${dataLayerName} || [];`;
+  if (dataLayer) {
+    snippet += ` window.${dataLayerName}.push(${JSON.stringify(dataLayer)})`;
+  }
+  return snippet;
+};
 
 const getIframeSnippet = (
   id: Pick<ISnippetsParams, 'id'>['id'],
@@ -107,7 +110,7 @@ export const initGTM = ({
   const dataLayerScript = gtm.getDataLayerScript();
   const script = gtm.getScript();
   const noScript = gtm.getNoScript();
-
+  console.log(dataLayerScript, document.head.childNodes[0]);
   document.head.insertBefore(script, document.head.childNodes[0]);
   document.head.insertBefore(dataLayerScript, document.head.childNodes[0]);
   document.body.insertBefore(noScript, document.body.childNodes[0]);

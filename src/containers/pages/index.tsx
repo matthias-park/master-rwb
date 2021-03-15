@@ -36,7 +36,9 @@ const COMPONENT_PAGES = {
 };
 
 const Routes = () => {
-  const { routes } = useConfig((prev, next) => !!prev.routes === !!next.routes);
+  const { routes } = useConfig(
+    (prev, next) => prev.routes.length === next.routes.length,
+  );
   const { pathname } = useLocation();
 
   return (

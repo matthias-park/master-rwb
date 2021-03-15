@@ -33,9 +33,9 @@ const ApiHead = () => {
   );
   const seoData = data?.Success ? data?.Data : null;
   const fallbackTitle =
-    t(`sitemap_${pathInfo?.name}`) + t(`sitemap_${pathInfo?.name}`)
-      ? ' - '
-      : '' + t('seo_site_name');
+    t(`sitemap_${pathInfo?.name}`) +
+    (t(`sitemap_${pathInfo?.name}`).length ? ' - ' : '') +
+    t('seo_site_name');
   return (
     <>
       <Helmet htmlAttributes={{ lang: locale }}>
