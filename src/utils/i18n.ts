@@ -1,7 +1,6 @@
 import Lockr from 'lockr';
 import { replaceStringTagsReact } from './reactUtils';
-import { NavigationRoute } from '../types/api/PageConfig';
-import { PagesName } from '../constants';
+import { ALL_LOCALES } from '../constants';
 
 type Symbols = { [key: string]: { [key: string]: string } };
 
@@ -33,53 +32,32 @@ const i18n = () => {
   };
 };
 
-export const getRedirectLocalePathname = (
+export const getWindowUrlLocale = (
   currentLocale: string,
   availableLocales: string[],
-  availableRoutes: NavigationRoute[],
-) => {
-  const windowPaths = window.location.pathname.split('/');
-  let urlPaths = `${window.location.pathname}${window.location.hash}`;
-  let urlLocale = Lockr.get('locale', currentLocale);
-  if (
-    availableLocales.includes(windowPaths[1]) ||
-    currentLocale === windowPaths[1]
-  ) {
-    urlLocale = windowPaths[1];
-  } else if (availableRoutes.some(route => urlPaths.startsWith(route.path))) {
-    urlPaths = `/${urlLocale}${urlPaths}`;
-  } else {
-    const urlPathWithoutFirstPath = urlPaths.replace(`/${windowPaths[1]}`, '');
-    if (
-      availableRoutes.some(
-        route =>
-          route.id !== PagesName.NotFoundPage &&
-          urlPathWithoutFirstPath.startsWith(route.path),
-      )
-    ) {
-      urlPaths = `/${urlLocale}${urlPathWithoutFirstPath}`;
-    } else {
-      urlPaths = `/${urlLocale}`;
-    }
+): string | null => {
+  const savedLocale = Lockr.get('locale', null);
+  if (!savedLocale) {
+    return null;
   }
 
-  if (window.location.pathname !== urlPaths) {
-    window.history.replaceState({}, '', urlPaths);
+  const windowPaths = window.location.pathname.split('/');
+  let urlLocale = windowPaths[1];
+  if (ALL_LOCALES.includes(urlLocale.toLocaleLowerCase())) {
+    return urlLocale;
   }
-  return urlLocale;
+  return null;
 };
 
-export const setLocalePathname = (
-  newlocale: string,
-  saveToStorage?: boolean,
-) => {
+export const setLocalePathname = (newlocale: string) => {
   const paths = window.location.pathname.split('/');
-  paths[1] = newlocale;
+  if (ALL_LOCALES.includes(paths[1].toLocaleLowerCase())) {
+    paths[1] = newlocale;
+  } else {
+    paths.splice(1, 0, newlocale);
+  }
   const newPath = paths.join('/');
   window.history.pushState({}, '', newPath);
-  if (saveToStorage) {
-    Lockr.set('locale', newlocale);
-  }
 };
 
 export type I18n = ReturnType<typeof i18n>;

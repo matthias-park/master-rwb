@@ -12,14 +12,6 @@ const routeExistCheck = async (
   const localeUrlMatch = req.url.match(/^\/([a-z]{2}-[a-z]{2}|[a-z]{2})\//i);
   const locale = localeUrlMatch?.[1];
   const urlWithoutLocale = req.url.replace(`/${locale}/`, '/');
-  // if (
-  //   !locale ||
-  //   (ALL_LOCALES_ISO.includes(locale) &&
-  //     !railsContants.available_locales.some(lang => lang.iso === locale))
-  // ) {
-  //   const newUrl = `/${req.franchise.defaultLocale}${urlWithoutLocale}`;
-  //   return res.redirect(newUrl);
-  // }
   if (
     railsContants.navigation_routes.some(
       route => route.path === urlWithoutLocale,

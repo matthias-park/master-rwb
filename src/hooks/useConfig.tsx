@@ -13,7 +13,7 @@ import {
 } from '../utils/apiUtils';
 import Config from '../types/Config';
 import UserStatus from '../types/UserStatus';
-import { getRedirectLocalePathname, setLocalePathname } from '../utils/i18n';
+import { setLocalePathname, getWindowUrlLocale } from '../utils/i18n';
 import { TestEnv } from '../constants';
 import { useToasts } from 'react-toast-notifications';
 import { usePrevious } from './index';
@@ -22,6 +22,7 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { PageConfig } from '../types/api/PageConfig';
 import useApi from './useApi';
 import useMemoCompare from './useMemoCompare';
+import Lockr from 'lockr';
 
 const useUser = () => {
   const { addToast } = useToasts();
@@ -122,34 +123,39 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     null,
   );
   const [locale, changeLocale] = useState(
-    cachedLocale || constants?.locale || window.DEFAULT_LOCALE,
+    cachedLocale || constants?.locale || '',
   );
   const [configLoaded, setConfigLoaded] = useState(false);
   useEffect(() => {
     if (constants) {
-      const detectedLocale = getRedirectLocalePathname(
-        constants.locale,
-        locales,
-        constants.navigation_routes,
-      );
-      if (locale !== detectedLocale) {
+      const appLocale = locale || constants.locale;
+      const detectedLocale = getWindowUrlLocale(constants.locale, locales);
+      if (detectedLocale && appLocale !== detectedLocale) {
         (async () => {
-          if (!window.PRERENDER_CACHE) {
+          const detectedLocaleAvailable = locales.includes(
+            detectedLocale.toLocaleLowerCase(),
+          );
+          if (!window.PRERENDER_CACHE && detectedLocaleAvailable) {
             await postApi('/railsapi/v1/locale', {
               locale: detectedLocale,
             });
           }
-          setLocale(detectedLocale, false);
+          setLocale(detectedLocaleAvailable ? detectedLocale : appLocale);
         })();
       } else {
-        setConfigLoaded(true);
+        if (locale !== appLocale || !detectedLocale) {
+          setLocale(appLocale);
+        } else {
+          setConfigLoaded(true);
+        }
       }
     }
   }, [!!constants]);
 
-  const setLocale = async (lang: string, changeUrl: boolean = true) => {
-    if (changeUrl) {
-      setLocalePathname(lang, storage?.functional ?? true);
+  const setLocale = async (lang: string) => {
+    setLocalePathname(lang);
+    if (storage?.functional ?? true) {
+      Lockr.set('locale', lang);
     }
     changeLocale(lang);
     setCachedLocale(lang);

@@ -8,7 +8,9 @@ import Modals from './Modals';
 
 const App = () => {
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
-
+  if (!locale) {
+    return null;
+  }
   return (
     <BrowserRouter basename={`/${locale}`}>
       <ApiHead />

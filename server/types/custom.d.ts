@@ -3,7 +3,6 @@ export interface FranchiseConfig {
   domain: string;
   theme: string;
   api: string;
-  defaultLocale: string;
 }
 declare global {
   namespace Express {

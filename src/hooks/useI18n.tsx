@@ -78,11 +78,7 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   }, [locale]);
 
   useEffect(() => {
-    if (translations) {
-      translations.set(locale, data?.Data);
-    } else {
-      setTranslations(createLocale(locale, data?.Data));
-    }
+    setTranslations(createLocale(locale, data?.Data));
   }, [data?.Data]);
 
   return <I18nContext.Provider value={translations} {...props} />;

@@ -6,7 +6,6 @@ import KambiConfig, {
 export declare global {
   interface Window {
     API_URL: string;
-    DEFAULT_LOCALE: string;
     GTM_ID?: string;
     PRERENDER_CACHE?: { [key: string]: any };
     customerSettings?: CustomerSettings;
