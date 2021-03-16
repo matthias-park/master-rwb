@@ -9,6 +9,14 @@ export interface NET_USER {
   error?: string;
 }
 
+export enum VALIDATOR_STATUS {
+  OK = 0,
+  SMALL_ERROR = 1,
+  BIG_ERROR = 2,
+  EPIS_DANGER = 3,
+  NONE = 4,
+}
+
 export interface UserStatus {
   loading: boolean;
   logout?: true;
@@ -22,6 +30,7 @@ export interface UserStatus {
   first_name?: string;
   last_name?: string;
   bank_account?: boolean;
+  validator_status?: VALIDATOR_STATUS;
 }
 
 export default UserStatus;

@@ -9,6 +9,7 @@ export declare global {
       apiUrl: string;
       gtmId?: string;
       buildId: string;
+      sentryDsn?: string;
     };
     PRERENDER_CACHE?: { [key: string]: any };
     customerSettings?: CustomerSettings;

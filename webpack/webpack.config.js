@@ -175,6 +175,7 @@ module.exports = function (webpackEnv) {
           config: JSON.stringify({
             apiUrl: franchise.api,
             gtmId: franchise.gtmId,
+            sentryDsn: franchise.sentryDsn,
             buildId: uuid(),
           }),
         },

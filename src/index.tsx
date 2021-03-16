@@ -17,11 +17,11 @@ import * as Sentry from '@sentry/react';
 
 buildIdChangeCheck();
 
-if (process.env.NODE_ENV !== 'development') {
+if (process.env.NODE_ENV !== 'development' && window.__config__.sentryDsn) {
   Sentry.init({
-    dsn: 'https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17',
+    dsn: window.__config__.sentryDsn,
+    environment: process.env.NODE_ENV,
   });
-  Sentry.setTag('environment', process.env.NODE_ENV);
   Sentry.setTag('buildId', window.__config__.buildId);
 }
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
