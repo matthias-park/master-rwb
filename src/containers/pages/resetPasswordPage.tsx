@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useI18n } from '../../hooks/useI18n';
 import { ControlledTextInput } from '../../components/TextInput';
-import Button from 'react-bootstrap/Button';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
 import Alert from 'react-bootstrap/Alert';
@@ -9,12 +8,12 @@ import Form from 'react-bootstrap/Form';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Redirect, useParams } from 'react-router-dom';
 import NotFoundPage from './notFoundPage';
-import Spinner from 'react-bootstrap/Spinner';
 import { useConfig } from '../../hooks/useConfig';
 import ForgotPasswordResponse from '../../types/api/user/ForgotPassword';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useGTM from '../../hooks/useGTM';
 import { isEqual } from 'lodash';
+import LoadingButton from '../../components/LoadingButton';
 
 const ForgotPasswordPage = () => {
   const { code } = useParams<{ code?: string }>();
@@ -104,6 +103,7 @@ const ForgotPasswordPage = () => {
             id="password"
             type="password"
             placeholder={t('reset_password_field')}
+            toggleVisibility
           />
           <ControlledTextInput
             rules={{
@@ -116,26 +116,17 @@ const ForgotPasswordPage = () => {
             id="repeat_password"
             type="password"
             placeholder={t('reset_password_repeat_field')}
+            toggleVisibility
           />
-          <Button
+          <LoadingButton
             variant="primary"
-            disabled={!!formState.isSubmitting || !!errors.email}
+            disabled={!!errors.email || !formState.isValid}
+            loading={formState.isSubmitting}
             type="submit"
             data-testid="button"
           >
-            {!!formState.isSubmitting && (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />{' '}
-              </>
-            )}
             {t('forgot_password_submit_btn')}
-          </Button>
+          </LoadingButton>
         </Form>
       </FormProvider>
     </main>

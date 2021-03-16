@@ -6,7 +6,7 @@ import {
 import { useI18n } from '../../hooks/useI18n';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
+import LoadingButton from '../LoadingButton';
 
 interface WithdrawalConfirmProps {
   data: WithdrawalConfirmation;
@@ -40,25 +40,16 @@ const WithdrawalConfirmModal = ({
         <Button onClick={onCancel} variant="secondary" className="mx-auto">
           {t('withdrawal_page_cancel')}
         </Button>
-        <Button
+        <LoadingButton
           onClick={() => {
             onConfirm(data.params);
           }}
           variant="primary"
           className="mx-auto"
+          loading={loading}
         >
-          {loading && (
-            <Spinner
-              data-testid="spinner"
-              as="span"
-              animation="border"
-              size="sm"
-              role="status"
-              className="mr-1"
-            />
-          )}
           {t('withdrawal_page_confirm')}
-        </Button>
+        </LoadingButton>
       </Modal.Footer>
     </Modal>
   );

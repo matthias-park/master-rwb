@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useI18n } from '../../hooks/useI18n';
 import { ControlledTextInput } from '../../components/TextInput';
-import Button from 'react-bootstrap/Button';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
 import ForgotPasswordResponse from '../../types/api/user/ForgotPassword';
 import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import { FormProvider, useForm } from 'react-hook-form';
-import Spinner from 'react-bootstrap/Spinner';
 import { useConfig } from '../../hooks/useConfig';
 import { Redirect } from 'react-router-dom';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useGTM from '../../hooks/useGTM';
 import { isEqual } from 'lodash';
+import LoadingButton from '../../components/LoadingButton';
 
 const ForgotLoginPage = () => {
   const formMethods = useForm({
@@ -70,10 +69,10 @@ const ForgotLoginPage = () => {
         <FormProvider {...formMethods}>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Alert
-              show={!!apiResponse?.success}
+              show={!!apiResponse}
               variant={apiResponse?.success ? 'success' : 'danger'}
             >
-              {t(`forgot_login_${apiResponse?.msg ? 'success' : 'failed'}`)}
+              {apiResponse?.msg}
             </Alert>
             <ControlledTextInput
               rules={{
@@ -89,26 +88,16 @@ const ForgotLoginPage = () => {
               id="email"
               placeholder={t('forgot_password_email_field')}
             />
-            <Button
+            <LoadingButton
               variant="primary"
-              disabled={!!formState.isSubmitting || !!errors.email}
+              disabled={!!errors.email}
+              loading={formState.isSubmitting}
               type="submit"
               data-testid="button"
               className="mt-3"
             >
-              {!!formState.isSubmitting && (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />{' '}
-                </>
-              )}
               {t('forgot_password_submit_btn')}
-            </Button>
+            </LoadingButton>
           </Form>
         </FormProvider>
       </div>

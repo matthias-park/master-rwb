@@ -34,7 +34,7 @@ const useUser = () => {
     url => getApi<RailsApiResponse<UserStatus>>(url).then(res => res.Data),
     {
       revalidateOnFocus: true,
-      refreshInterval: 30000, //300000, // 5 min
+      refreshInterval: 300000, // 5 min
       onErrorRetry: (err: RailsApiResponse<null>) => {
         if (err.Code !== 401) {
           addToast(`Failed to fetch user data`, {

@@ -6,9 +6,8 @@ import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName } from '../../constants';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { ControlledTextInput } from '../TextInput';
-import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
+import LoadingButton from '../LoadingButton';
 
 interface Props {
   onSubmit: SubmitHandler<Record<string, any>>;
@@ -68,20 +67,14 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
                 }}
               />
             ))}
-            <Button className="mt-2" variant="primary" type="submit">
-              {formMethods.formState.isSubmitting && (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />{' '}
-                </>
-              )}
+            <LoadingButton
+              loading={formMethods.formState.isSubmitting}
+              className="mt-2"
+              variant="primary"
+              type="submit"
+            >
               {t('add_bank_modal_save')}
-            </Button>
+            </LoadingButton>
           </Form>
         </FormProvider>
       </Modal.Body>

@@ -13,6 +13,7 @@ import { NET_USER } from '../types/UserStatus';
 import { ControlledTextInput } from '../components/TextInput';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import useGTM from '../hooks/useGTM';
+import LoadingButton from '../components/LoadingButton';
 
 interface Props {
   dropdownClasses?: string;
@@ -137,23 +138,14 @@ const LoginForm = ({
             <u>{t('login_forgot_password')}</u>
           </Link>
         </div>
-        <button
-          disabled={formState.isSubmitting || !formState.isDirty}
+        <LoadingButton
+          disabled={!formState.isDirty}
           className="btn btn-primary d-block mx-auto mt-4 px-5"
+          type="submit"
+          loading={formState.isSubmitting}
         >
-          {formState.isSubmitting && (
-            <>
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-              />{' '}
-            </>
-          )}
-          {'login_submit'}
-        </button>
+          {t('login_submit')}
+        </LoadingButton>
       </Form>
     </FormProvider>
   );

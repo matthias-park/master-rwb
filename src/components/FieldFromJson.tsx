@@ -1,11 +1,10 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
 import { Form as Field } from '../types/api/JsonFormPage';
 import { FormState } from 'react-hook-form';
 import clsx from 'clsx';
 import { useI18n } from '../hooks/useI18n';
+import LoadingButton from './LoadingButton';
 
 interface Props {
   field: Field;
@@ -20,27 +19,16 @@ const FieldFromJson = React.forwardRef(
 
     if (field.type === 'submit') {
       return (
-        <Button
+        <LoadingButton
           data-testid="sumbit"
           key={field.id}
-          disabled={formState.isSubmitting}
           className="mt-2"
           variant="primary"
           type="submit"
+          loading={formState.isSubmitting}
         >
-          {formState.isSubmitting && (
-            <>
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-              />{' '}
-            </>
-          )}
           {field.title}
-        </Button>
+        </LoadingButton>
       );
     }
     if (field.type === 'file') {

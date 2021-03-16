@@ -7,7 +7,6 @@ import {
   ValidateRegisterPersonalCode,
 } from '../../types/api/user/Registration';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Spinner } from 'react-bootstrap';
 import { FormFieldValidation } from '../../constants';
 import { OnlineFormBlock } from '../../types/RegistrationBlock';
 import Alert from 'react-bootstrap/Alert';
@@ -18,6 +17,7 @@ import {
 } from '../../types/api/user/Registration';
 import AutocompleteTextInput from '../AutocompleteTextInput';
 import { PostCodeInfo } from '../../types/api/user/Registration';
+import LoadingButton from '../LoadingButton';
 
 interface Props {
   checkEmailAvailable: (email: string) => Promise<ValidateRegisterInput | null>;
@@ -395,23 +395,13 @@ const OnlineForm = (props: Props) => {
           >
             {apiError || t('register_page_submit_error')}
           </Alert>
-          <button
-            disabled={formState.isSubmitting}
+          <LoadingButton
+            loading={formState.isSubmitting}
+            type="submit"
             className="btn btn-primary d-block mx-auto mb-4"
           >
-            {formState.isSubmitting && (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />{' '}
-              </>
-            )}
             {jsxT('register_submit_btn')}
-          </button>
+          </LoadingButton>
         </Form>
       </FormProvider>
     </div>

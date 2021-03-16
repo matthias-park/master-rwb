@@ -11,7 +11,6 @@ import {
   WithdrawalConfirmation,
 } from '../../types/api/user/Withdrawal';
 import Table from 'react-bootstrap/Table';
-import Button from 'react-bootstrap/Button';
 import { useCallback } from 'react';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
@@ -22,6 +21,7 @@ import { ComponentName } from '../../constants';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import useApi from '../../hooks/useApi';
 import { isEqual } from 'lodash';
+import LoadingButton from '../../components/LoadingButton';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -45,10 +45,16 @@ const WithdrawalRequests = ({
         <Table hover>
           <thead>
             <tr>
-              <th>ID</th>
-              <th className="text-sm-center">Account</th>
-              <th className="text-sm-center">Amount</th>
-              <th className="d-block text-sm-right mr-1">Request cancel</th>
+              <th>{t('withdrawal_requests_id')}</th>
+              <th className="text-sm-center">
+                {t('withdrawal_requests_account')}
+              </th>
+              <th className="text-sm-center">
+                {t('withdrawal_requests_amount')}
+              </th>
+              <th className="d-block text-sm-right mr-1">
+                {t('withdrawal_requests_cancel')}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -57,36 +63,35 @@ const WithdrawalRequests = ({
               return (
                 <tr key={index}>
                   <td>
-                    <strong className="heading-sm">ID</strong>
+                    <strong className="heading-sm">
+                      {t('withdrawal_requests_id')}
+                    </strong>
                     {request.id}
                   </td>
                   <td className="text-sm-center">
-                    <strong className="heading-sm">{t('action')}</strong>
+                    <strong className="heading-sm">
+                      {t('withdrawal_requests_account')}
+                    </strong>
                     {request.account}
                   </td>
                   <td className="text-sm-center">
-                    <strong className="heading-sm">{t('account')}</strong>
+                    <strong className="heading-sm">
+                      {t('withdrawal_requests_amount')}
+                    </strong>
                     {request.amount}
                   </td>
                   <td className="text-sm-right py-2">
-                    <strong className="heading-sm">{t('amount')}</strong>
-                    <Button
+                    <strong className="heading-sm">
+                      {t('withdrawal_requests_cancel')}
+                    </strong>
+                    <LoadingButton
                       variant="outline-danger"
                       size="sm"
                       onClick={() => handleCancel(request.id)}
+                      loading={cancelLoading === request.id}
                     >
-                      {cancelLoading === request.id && (
-                        <Spinner
-                          data-testid="spinner"
-                          as="span"
-                          animation="border"
-                          size="sm"
-                          role="status"
-                          className="mr-1"
-                        />
-                      )}
-                      Cancel
-                    </Button>
+                      {t('withdrawal_requests_cancel_btn')}
+                    </LoadingButton>
                   </td>
                 </tr>
               );

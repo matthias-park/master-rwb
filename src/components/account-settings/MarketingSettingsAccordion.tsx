@@ -10,9 +10,8 @@ import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import Card from 'react-bootstrap/Card';
 import clsx from 'clsx';
 import Accordion from 'react-bootstrap/Accordion';
-import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
 import { useI18n } from '../../hooks/useI18n';
+import LoadingButton from '../LoadingButton';
 
 interface SettingProps {
   form: SettingsForm;
@@ -161,25 +160,14 @@ const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                 ) : null,
               )}
             </div>
-            <Button
-              disabled={formState.isSubmitting}
+            <LoadingButton
+              loading={formState.isSubmitting}
               className="mt-3"
               variant="primary"
               type="submit"
             >
-              {formState.isSubmitting && (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />{' '}
-                </>
-              )}
               {fields.button.title}
-            </Button>
+            </LoadingButton>
           </Form>
         </Card.Body>
       </Accordion.Collapse>

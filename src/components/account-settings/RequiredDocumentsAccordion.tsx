@@ -10,9 +10,8 @@ import { useForm } from 'react-hook-form';
 import Card from 'react-bootstrap/Card';
 import clsx from 'clsx';
 import Accordion from 'react-bootstrap/Accordion';
-import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
 import { useI18n } from '../../hooks/useI18n';
+import LoadingButton from '../LoadingButton';
 
 interface SettingProps {
   form: SettingsForm;
@@ -115,23 +114,14 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
               </div>
             )}
             {!!fields.submit_button && (
-              <Button
-                disabled={formState.isSubmitting}
+              <LoadingButton
+                loading={formState.isSubmitting}
                 className="mt-3"
                 variant="primary"
                 type="submit"
               >
-                {formState.isSubmitting && (
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                )}
                 {fields.submit_button.title}
-              </Button>
+              </LoadingButton>
             )}
           </Form>
         </Card.Body>

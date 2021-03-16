@@ -6,9 +6,8 @@ import Accordion from 'react-bootstrap/Accordion';
 import AccordionContext from 'react-bootstrap/AccordionContext';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
+import LoadingButton from '../LoadingButton';
 
 interface SettingProps {
   form: SettingsForm;
@@ -116,27 +115,16 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                   }
                   if (field.id === 'submit_button') {
                     return (
-                      <Button
+                      <LoadingButton
                         key={field.id}
                         data-testid={field.id}
-                        disabled={formState.isSubmitting}
+                        loading={formState.isSubmitting}
                         className="mt-2"
                         variant="primary"
                         type="submit"
                       >
-                        {formState.isSubmitting && (
-                          <>
-                            <Spinner
-                              as="span"
-                              animation="border"
-                              size="sm"
-                              role="status"
-                              aria-hidden="true"
-                            />{' '}
-                          </>
-                        )}
                         {field.title}
-                      </Button>
+                      </LoadingButton>
                     );
                   }
                   const isFieldSelect = field.type === 'select';

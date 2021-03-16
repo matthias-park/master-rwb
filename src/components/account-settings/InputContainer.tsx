@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { enterKeyPress } from '../../utils/uiUtils';
-import Spinner from 'react-bootstrap/Spinner';
 import Cleave from 'cleave.js/react';
+import LoadingButton from '../LoadingButton';
 
 interface Props {
   title: string;
@@ -87,26 +87,15 @@ const InputContainer = ({
           className="input-container__input"
         />
       </Form.Group>
-      <Button
+      <LoadingButton
         variant="primary"
-        disabled={
-          !inputValue.length || inputValue === '0' || loading || disabled
-        }
+        disabled={!inputValue.length || inputValue === '0' || disabled}
         onClick={handleSubmit}
         data-testid="button"
+        loading={loading}
       >
-        {loading && (
-          <Spinner
-            data-testid="spinner"
-            as="span"
-            animation="border"
-            size="sm"
-            role="status"
-            className="mr-1"
-          />
-        )}
         {buttonText}
-      </Button>
+      </LoadingButton>
     </div>
   );
 };
