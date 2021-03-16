@@ -26,6 +26,7 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const config = require('config');
 const postcssNormalize = require('postcss-normalize');
 const uuid = require('uuid').v4;
+// const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 
 const appPackageJson = require(paths.appPackageJson);
 
@@ -691,6 +692,16 @@ module.exports = function (webpackEnv) {
           },
         },
       }),
+      // new SentryWebpackPlugin({
+      //   // sentry-cli configuration
+      //   authToken: '',
+      //   org: '',
+      //   project: '',
+
+      //   // webpack specific configuration
+      //   include: '.',
+      //   ignore: ['node_modules', 'webpack.config.js'],
+      // }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell webpack to provide empty mocks for them so importing them works.

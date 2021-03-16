@@ -6,6 +6,7 @@
     "@babel/core": "7.12.3",
     "@loadable/component": "5.14.1",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
+    "@sentry/react": "6.2.2",
     "@svgr/webpack": "5.4.0",
     "@testing-library/jest-dom": "5.11.4",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
@@ -235,6 +236,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "@sentry/webpack-plugin": "1.14.2",
     "@testing-library/react": "11.0.2",
     "@types/cleave.js": "1.4.4",
     "@types/config": "0.0.38",
