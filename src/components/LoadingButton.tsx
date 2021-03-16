@@ -8,20 +8,19 @@ type Props = {
 
 const LoadingButton = (props: Props) => {
   return (
-    <Button {...props} disabled={props.disabled || props.loading || true}>
-      {props.loading ||
-        (true && (
-          <>
-            <Spinner
-              as="span"
-              animation="border"
-              size="sm"
-              role="status"
-              aria-hidden="true"
-              className="mr-1"
-            />
-          </>
-        ))}
+    <Button {...props} disabled={props.disabled || props.loading}>
+      {props.loading && (
+        <>
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+            className="mr-1"
+          />
+        </>
+      )}
       {props.children}
     </Button>
   );
