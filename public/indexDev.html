@@ -15,7 +15,10 @@
       link.rel = "stylesheet";
       link.href = '/static/css/theme-' + franchise.theme + '.css';
       head.appendChild(link);
-      window.API_URL = '/rails';
+      window.__config__ = {
+        apiUrl: '/rails',
+        buildId: 'dev'
+      }
     </script>
     <title></title>
   </head>

@@ -5,8 +5,11 @@ import KambiConfig, {
 
 export declare global {
   interface Window {
-    API_URL: string;
-    GTM_ID?: string;
+    __config__: {
+      apiUrl: string;
+      gtmId?: string;
+      buildId: string;
+    };
     PRERENDER_CACHE?: { [key: string]: any };
     customerSettings?: CustomerSettings;
     _kc?: KambiConfig;

@@ -6,13 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="manifest" href="%PUBLIC_URL%/assets/manifest.json" />
     <link rel="stylesheet" href="%PUBLIC_URL%/<%= htmlWebpackPlugin.options.franchiseTheme %>">
-    <script>
-      window.API_URL = '<%= htmlWebpackPlugin.options.apiUrl %>';
-      window.GTM_ID = '<%= htmlWebpackPlugin.options.gtmId %>';
-    </script>
     <title></title>
     <script>
-      window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () {}
+      window.__config__ = '<%= htmlWebpackPlugin.options.config %>';
+      if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === 'object') {
+        window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () {}
+      }
     </script>
   </head>
   <body>

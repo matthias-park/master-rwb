@@ -25,6 +25,7 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const config = require('config');
 const postcssNormalize = require('postcss-normalize');
+const uuid = require('uuid').v4;
 
 const appPackageJson = require(paths.appPackageJson);
 
@@ -170,8 +171,11 @@ module.exports = function (webpackEnv) {
           chunks: ['main'],
           filename: `${franchise.name}.html`,
           franchiseTheme: `static/css/theme-${franchise.theme}.css`,
-          apiUrl: franchise.api,
-          gtmId: franchise.gtmId,
+          config: {
+            apiUrl: franchise.api,
+            gtmId: franchise.gtmId,
+            buildId: uuid(),
+          },
         },
         isEnvProduction
           ? {

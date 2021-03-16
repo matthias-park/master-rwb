@@ -12,6 +12,9 @@ import { SwrFetcherConfig } from './utils/apiUtils';
 import { UIConfigProvider } from './hooks/useUIConfig';
 import { ToastProvider } from 'react-toast-notifications';
 import { GtmProvider } from './hooks/useGTM';
+import { buildIdChangeCheck } from './utils/index';
+
+buildIdChangeCheck();
 
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 

@@ -76,10 +76,10 @@ export const GtmProvider = ({ ...props }: GTMHookProviderProps) => {
     }
   }, [dataLayerState]);
   useEffect(() => {
-    if (configLoaded && window.GTM_ID) {
+    if (configLoaded && window.__config__.gtmId) {
       setDataLayerState(state => ({
         ...state,
-        id: window.GTM_ID!,
+        id: window.__config__.gtmId!,
       }));
     }
   }, [configLoaded]);

@@ -22,7 +22,7 @@ export const getApi = <T>(url: string): Promise<T> => {
     credentials: 'include',
     headers: new Headers(),
   };
-  return fetch(`${window.API_URL}${url}`, config).then(res => {
+  return fetch(`${window.__config__.apiUrl}${url}`, config).then(res => {
     if (!res.ok && res.status !== 400) {
       return Promise.reject<RailsApiResponse<null>>({
         ...RailsApiResponseFallback,
@@ -60,7 +60,9 @@ export const postApi = <T>(
       (config.headers as Headers).append('Content-Type', 'application/json');
     }
   }
-  const postUrl = url.startsWith('http') ? url : `${window.API_URL}${url}`;
+  const postUrl = url.startsWith('http')
+    ? url
+    : `${window.__config__.apiUrl}${url}`;
   return fetch(postUrl, config).then(res => {
     if (!res.ok && res.status !== 400) {
       return Promise.reject<RailsApiResponse<null>>({

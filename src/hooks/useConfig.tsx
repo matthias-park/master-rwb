@@ -22,7 +22,6 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { PageConfig } from '../types/api/PageConfig';
 import useApi from './useApi';
 import useMemoCompare from './useMemoCompare';
-import Lockr from 'lockr';
 
 const useUser = () => {
   const { addToast } = useToasts();
@@ -117,7 +116,6 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   const constants = useConstants();
   const locales = constants?.available_locales.map(locale => locale.iso) || [];
   const { user, mutateUser } = useUser();
-  const [storage] = useLocalStorage<Storage | null>('cookieSettings', null);
   const [cachedLocale, setCachedLocale] = useLocalStorage<string | null>(
     'locale',
     null,
@@ -154,9 +152,6 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
 
   const setLocale = async (lang: string) => {
     setLocalePathname(lang);
-    if (storage?.functional ?? true) {
-      Lockr.set('locale', lang);
-    }
     changeLocale(lang);
     setCachedLocale(lang);
     setConfigLoaded(true);
