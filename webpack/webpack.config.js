@@ -171,11 +171,11 @@ module.exports = function (webpackEnv) {
           chunks: ['main'],
           filename: `${franchise.name}.html`,
           franchiseTheme: `static/css/theme-${franchise.theme}.css`,
-          config: {
+          config: JSON.stringify({
             apiUrl: franchise.api,
             gtmId: franchise.gtmId,
             buildId: uuid(),
-          },
+          }),
         },
         isEnvProduction
           ? {

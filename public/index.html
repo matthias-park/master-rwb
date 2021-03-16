@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="%PUBLIC_URL%/<%= htmlWebpackPlugin.options.franchiseTheme %>">
     <title></title>
     <script>
-      window.__config__ = '<%= htmlWebpackPlugin.options.config %>';
+      window.__config__ = JSON.parse('<%= htmlWebpackPlugin.options.config %>');
       if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === 'object') {
         window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () {}
       }
