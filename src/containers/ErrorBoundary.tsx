@@ -3,15 +3,14 @@ import * as Sentry from '@sentry/react';
 
 interface Props {
   children: React.ReactNode;
+  fallback?: React.ReactNode;
 }
 
-const ErrorBoundary = ({ children }: Props) => {
-  return (
-    <Sentry.ErrorBoundary
-      fallback={'An error has occurred'}
-      children={children}
-    />
-  );
-};
+const ErrorBoundary = ({ children, fallback }: Props) => (
+  <Sentry.ErrorBoundary
+    fallback={fallback || <h1>An error has occurred</h1>}
+    children={children}
+  />
+);
 
 export default ErrorBoundary;

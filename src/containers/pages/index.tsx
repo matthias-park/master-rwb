@@ -6,6 +6,7 @@ import { useConfig } from '../../hooks/useConfig';
 import { PagesName } from '../../constants';
 import Spinner from 'react-bootstrap/Spinner';
 import ErrorBoundary from '../ErrorBoundary';
+import { useI18n } from '../../hooks/useI18n';
 
 const AsyncPage = (pageName: string) =>
   loadable(() => import(`./${pageName}`), {
@@ -36,13 +37,21 @@ const COMPONENT_PAGES = {
 };
 
 const Routes = () => {
+  const { jsxT } = useI18n();
   const { routes } = useConfig(
     (prev, next) => prev.routes.length === next.routes.length,
   );
   const { pathname } = useLocation();
 
   return (
-    <ErrorBoundary key={pathname}>
+    <ErrorBoundary
+      key={pathname}
+      fallback={
+        <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
+          <h1 className="mb-4 text-center">{jsxT('page_error_fallback')}</h1>
+        </main>
+      }
+    >
       <Switch key={pathname}>
         {routes.map(route => {
           const Page =
