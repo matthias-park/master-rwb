@@ -14,6 +14,7 @@ import { ToastProvider } from 'react-toast-notifications';
 import { GtmProvider } from './hooks/useGTM';
 import { buildIdChangeCheck } from './utils/index';
 import * as Sentry from '@sentry/react';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 buildIdChangeCheck();
 
@@ -46,3 +47,8 @@ ReactDOM.render(
   </SWRConfig>,
   MOUNT_NODE,
 );
+if (localStorage.getItem('worker')) {
+  serviceWorkerRegistration.register();
+} else {
+  serviceWorkerRegistration.unregister();
+}

@@ -6,6 +6,7 @@ import KambiConfig, {
 export declare global {
   interface Window {
     __config__: {
+      name: string;
       apiUrl: string;
       gtmId?: string;
       buildId: string;

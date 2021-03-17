@@ -173,6 +173,7 @@ module.exports = function (webpackEnv) {
           filename: `${franchise.name}.html`,
           franchiseTheme: `static/css/theme-${franchise.theme}.css`,
           config: JSON.stringify({
+            name: franchise.name,
             apiUrl: franchise.api,
             gtmId: franchise.gtmId,
             sentryDsn: franchise.sentryDsn,
@@ -632,8 +633,8 @@ module.exports = function (webpackEnv) {
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the webpack build.
-      isEnvProduction &&
-        fs.existsSync(swSrc) &&
+      // isEnvProduction &&
+      fs.existsSync(swSrc) &&
         new WorkboxWebpackPlugin.InjectManifest({
           swSrc,
           dontCacheBustURLsMatching: /\.[0-9a-f]{8}\./,
