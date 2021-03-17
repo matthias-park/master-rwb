@@ -25,7 +25,6 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const config = require('config');
 const postcssNormalize = require('postcss-normalize');
-const uuid = require('uuid').v4;
 // const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 
 const appPackageJson = require(paths.appPackageJson);
@@ -177,7 +176,6 @@ module.exports = function (webpackEnv) {
             apiUrl: franchise.api,
             gtmId: franchise.gtmId,
             sentryDsn: franchise.sentryDsn,
-            buildId: uuid(),
           }),
         },
         isEnvProduction

@@ -35,10 +35,3 @@ export const removeFalsyFromObject = (obj: any) =>
   Object.keys(obj).forEach(
     k => !obj[k] && obj[k] !== undefined && delete obj[k],
   );
-export const buildIdChangeCheck = () => {
-  const currentBuildId = Lockr.get('build', null);
-  if (window.__config__.buildId !== currentBuildId) {
-    Lockr.flush();
-    Lockr.set('build', window.__config__.buildId);
-  }
-};

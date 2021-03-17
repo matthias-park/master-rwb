@@ -9,7 +9,6 @@ export declare global {
       name: string;
       apiUrl: string;
       gtmId?: string;
-      buildId: string;
       sentryDsn?: string;
     };
     PRERENDER_CACHE?: { [key: string]: any };

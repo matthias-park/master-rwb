@@ -12,18 +12,14 @@ import { SwrFetcherConfig } from './utils/apiUtils';
 import { UIConfigProvider } from './hooks/useUIConfig';
 import { ToastProvider } from 'react-toast-notifications';
 import { GtmProvider } from './hooks/useGTM';
-import { buildIdChangeCheck } from './utils/index';
 import * as Sentry from '@sentry/react';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-
-buildIdChangeCheck();
 
 if (process.env.NODE_ENV !== 'development' && window.__config__.sentryDsn) {
   Sentry.init({
     dsn: window.__config__.sentryDsn,
     environment: process.env.NODE_ENV,
   });
-  Sentry.setTag('buildId', window.__config__.buildId);
 }
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
@@ -47,8 +43,5 @@ ReactDOM.render(
   </SWRConfig>,
   MOUNT_NODE,
 );
-if (localStorage.getItem('worker')) {
-  serviceWorkerRegistration.register();
-} else {
-  serviceWorkerRegistration.unregister();
-}
+
+serviceWorkerRegistration.register();

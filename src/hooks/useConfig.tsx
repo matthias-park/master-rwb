@@ -71,16 +71,9 @@ const useUser = () => {
 
 const useConstants = (): PageConfig | undefined => {
   const { addToast } = useToasts();
-  const [cache, setCache] = useLocalStorage<PageConfig | null>(
-    'cacheConstants',
-    null,
-  );
   const { data } = useApi<RailsApiResponse<PageConfig>>(
     '/railsapi/v1/content/constants',
     {
-      initialData: cache
-        ? formatSuccesfullRailsApiResponse<PageConfig>(cache)
-        : undefined,
       revalidateOnMount: true,
       onErrorRetry: (err: RailsApiResponse<null>) => [
         addToast('Failed to get page config', {
@@ -88,9 +81,6 @@ const useConstants = (): PageConfig | undefined => {
           autoDismiss: true,
         }),
       ],
-      onSuccess: data => {
-        setCache(data.Data);
-      },
     },
   );
   return data?.Data;
