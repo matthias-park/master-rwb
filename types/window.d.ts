@@ -1,3 +1,4 @@
+import { AddToast } from 'react-toast-notifications';
 import KambiConfig, {
   CustomerSettings,
   WidgetAPI,
@@ -11,6 +12,7 @@ export declare global {
       gtmId?: string;
       sentryDsn?: string;
     };
+    toast?: AddToast;
     PRERENDER_CACHE?: { [key: string]: any };
     customerSettings?: CustomerSettings;
     _kc?: KambiConfig;

@@ -13,7 +13,7 @@ import { UIConfigProvider } from './hooks/useUIConfig';
 import { ToastProvider } from 'react-toast-notifications';
 import { GtmProvider } from './hooks/useGTM';
 import * as Sentry from '@sentry/react';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import { Workbox } from 'workbox-window';
 
 if (process.env.NODE_ENV !== 'development' && window.__config__.sentryDsn) {
   Sentry.init({
@@ -44,4 +44,18 @@ ReactDOM.render(
   MOUNT_NODE,
 );
 
-serviceWorkerRegistration.register();
+if (process.env.NODE_ENV !== 'development' && 'serviceWorker' in navigator) {
+  const wb = new Workbox(`/service-worker.js?name=${window.__config__.name}`);
+
+  wb.addEventListener('installed', event => {
+    if (event.isUpdate) {
+      window.toast?.('Website update available', {
+        appearance: 'success',
+        autoDismiss: false,
+        onDismiss: () => window.location.reload(),
+      });
+    }
+  });
+
+  wb.register();
+}

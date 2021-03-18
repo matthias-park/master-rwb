@@ -6,11 +6,7 @@ import React, {
   useEffect,
   useMemo,
 } from 'react';
-import {
-  getApi,
-  formatSuccesfullRailsApiResponse,
-  postApi,
-} from '../utils/apiUtils';
+import { getApi, postApi } from '../utils/apiUtils';
 import Config from '../types/Config';
 import UserStatus from '../types/UserStatus';
 import { setLocalePathname, getWindowUrlLocale } from '../utils/i18n';
@@ -71,18 +67,27 @@ const useUser = () => {
 
 const useConstants = (): PageConfig | undefined => {
   const { addToast } = useToasts();
-  const { data } = useApi<RailsApiResponse<PageConfig>>(
-    '/railsapi/v1/content/constants',
-    {
-      revalidateOnMount: true,
-      onErrorRetry: (err: RailsApiResponse<null>) => [
-        addToast('Failed to get page config', {
-          appearance: 'error',
-          autoDismiss: true,
-        }),
-      ],
-    },
-  );
+  const constantsUrl = '/railsapi/v1/content/constants';
+  const { data } = useApi<RailsApiResponse<PageConfig>>(constantsUrl, {
+    revalidateOnMount: true,
+    onErrorRetry: (err: RailsApiResponse<null>) => [
+      addToast('Failed to get page config', {
+        appearance: 'error',
+        autoDismiss: true,
+      }),
+    ],
+  });
+  useEffect(() => {
+    navigator.serviceWorker.addEventListener('message', async ({ data }) => {
+      if (
+        data.meta === 'workbox-broadcast-update' &&
+        data.payload.updatedURL.includes(constantsUrl)
+      ) {
+        console.log('constants updated');
+        // mutate();
+      }
+    });
+  }, []);
   return data?.Data;
 };
 
@@ -106,6 +111,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   const constants = useConstants();
   const locales = constants?.available_locales.map(locale => locale.iso) || [];
   const { user, mutateUser } = useUser();
+  const { addToast } = useToasts();
   const [cachedLocale, setCachedLocale] = useLocalStorage<string | null>(
     'locale',
     null,
@@ -114,6 +120,9 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     cachedLocale || constants?.locale || '',
   );
   const [configLoaded, setConfigLoaded] = useState(false);
+  useEffect(() => {
+    window.toast = addToast;
+  }, []);
   useEffect(() => {
     if (constants) {
       const appLocale = locale || constants.locale;
