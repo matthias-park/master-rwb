@@ -176,12 +176,13 @@ const WithdrawalPage = () => {
           autoDismiss: true,
         });
       }
-      const response = await postApi<
-        WithdrawalConfirmation | Withdrawal | null
-      >('/railsapi/v1/withdrawals', {
-        amount: amount.toString(),
-        id: data?.Data.default_account.uniq_id,
-      }).catch(() => {
+      const response = await postApi<RailsApiResponse<WithdrawalConfirmation>>(
+        '/railsapi/v1/withdrawals',
+        {
+          amount: amount.toString(),
+          id: data?.Data.default_account.uniq_id,
+        },
+      ).catch(() => {
         addToast('failed to withdraw amount', {
           appearance: 'error',
           autoDismiss: true,
@@ -194,7 +195,7 @@ const WithdrawalPage = () => {
       // } else if (response) {
       // const { error, ...withoutErrorData } = data!;
       mutate(data, false);
-      return setWithdrawalConfirmData(response as WithdrawalConfirmation);
+      return setWithdrawalConfirmData(response?.Data || null);
       // }
     },
     [data?.Data.default_account, user],
