@@ -7,14 +7,10 @@ import PageLayout from './pageLayout';
 import Modals from './Modals';
 
 const App = () => {
-  const { locale, configLoaded } = useConfig((prev, next) => {
+  const { locale } = useConfig((prev, next) => {
     const localeEqual = prev.locale === next.locale;
-    const configLoadedEqual = prev.configLoaded === next.configLoaded;
-    return localeEqual && configLoadedEqual;
+    return localeEqual;
   });
-  if (!locale || !configLoaded) {
-    return null;
-  }
   return (
     <BrowserRouter basename={`/${locale}`}>
       <ApiHead />

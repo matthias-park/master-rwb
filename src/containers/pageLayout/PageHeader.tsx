@@ -17,6 +17,7 @@ import LocaleSelector from '../../components/header/LocaleSelector';
 import { useI18n } from '../../hooks/useI18n';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useGTM from '../../hooks/useGTM';
+import ReactPlaceholder from 'react-placeholder';
 
 const SubNavLinks = () => {
   const { locales, locale, setLocale } = useConfig();
@@ -76,14 +77,20 @@ const SubNavLinks = () => {
             {t('sub_header_play_responsibly')}
           </Link>
         </li> */}
-        <li className="header-search">
+        {/* <li className="header-search">
           <i className="icon-search-nav"></i>
-        </li>
-        <LocaleSelector
-          available={locales}
-          current={locale}
-          setLocale={changeLocale}
-        />
+        </li> */}
+        <ReactPlaceholder
+          type="text"
+          ready={!!locales && !!locale}
+          style={{ width: 40 }}
+        >
+          <LocaleSelector
+            available={locales}
+            current={locale}
+            setLocale={changeLocale}
+          />
+        </ReactPlaceholder>
       </ul>
     </div>
   );
@@ -126,7 +133,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
   );
 };
 
-const PageHeader = () => {
+const PageHeader = React.forwardRef<HTMLElement>((_, ref) => {
   const { header } = useConfig((prev, next) => !!prev.header === !!next.header);
   const { backdrop } = useUIConfig();
   const desktopWidth = useDesktopWidth(1199);
@@ -146,6 +153,7 @@ const PageHeader = () => {
 
   return (
     <Navbar
+      ref={ref}
       variant="dark"
       expand="xl"
       className={clsx(
@@ -154,6 +162,7 @@ const PageHeader = () => {
       )}
       expanded={navExpanded}
       onToggle={expanded => {
+        if (!header) return;
         backdrop.toggle(expanded);
         setNavExpanded(!navExpanded);
       }}
@@ -183,29 +192,38 @@ const PageHeader = () => {
           )}
           <SubNavLinks />
           <div className="row w-100 mt-0 mt-lg-2 align-items-end order-1 order-xl-2">
-            <ul ref={navbarRef} className="header__nav header__nav--main">
-              {header
-                ?.sort((a, b) => sortAscending(a.order!, b.order!))
-                .map(link => {
-                  return (
-                    <HeaderNavClassicLink
-                      key={`${link.name}-${link.prefix}-${link.order}`}
-                      data={link}
-                      mobile={!desktopWidth}
-                      handleNavChange={handleNavChange}
-                      active={active}
-                      setNavExpanded={setNavExpanded}
-                      fullPath={fullPath}
-                    />
-                  );
-                })}
-            </ul>
+            <ReactPlaceholder
+              className="header__nav header__nav--main"
+              type="text"
+              ready={!!header}
+              showLoadingAnimation
+              rows={1}
+              style={{ width: '50%' }}
+            >
+              <ul ref={navbarRef} className="header__nav header__nav--main">
+                {header
+                  ?.sort((a, b) => sortAscending(a.order!, b.order!))
+                  .map(link => {
+                    return (
+                      <HeaderNavClassicLink
+                        key={`${link.name}-${link.prefix}-${link.order}`}
+                        data={link}
+                        mobile={!desktopWidth}
+                        handleNavChange={handleNavChange}
+                        active={active}
+                        setNavExpanded={setNavExpanded}
+                        fullPath={fullPath}
+                      />
+                    );
+                  })}
+              </ul>
+            </ReactPlaceholder>
             {desktopWidth && <UserBlock mobile={false} />}
           </div>
         </Navbar.Collapse>
       </div>
     </Navbar>
   );
-};
+});
 
 export default PageHeader;

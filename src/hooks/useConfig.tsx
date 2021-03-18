@@ -77,17 +77,17 @@ const useConstants = (): PageConfig | undefined => {
       }),
     ],
   });
-  useEffect(() => {
-    navigator.serviceWorker.addEventListener('message', async ({ data }) => {
-      if (
-        data.meta === 'workbox-broadcast-update' &&
-        data.payload.updatedURL.includes(constantsUrl)
-      ) {
-        console.log('constants updated');
-        // mutate();
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   navigator.serviceWorker.addEventListener('message', async ({ data }) => {
+  //     if (
+  //       data.meta === 'workbox-broadcast-update' &&
+  //       data.payload.updatedURL.includes(constantsUrl)
+  //     ) {
+  //       console.log('constants updated');
+  //       // mutate();
+  //     }
+  //   });
+  // }, []);
   return data?.Data;
 };
 

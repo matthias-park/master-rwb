@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import PageHeader from './PageHeader';
 import PageFooter from './PageFooter';
 import CookieConsent from '../../components/CookieConsent';
@@ -8,14 +8,26 @@ import { useConfig } from '../../hooks/useConfig';
 import ErrorBoundary from '../ErrorBoundary';
 import { useI18n } from '../../hooks/useI18n';
 import useGTM from '../../hooks/useGTM';
+import Spinner from 'react-bootstrap/Spinner';
 
 let prevPathname: string | null = null;
 
+const PageLoadingSpinner = ({ height }: { height: number }) => (
+  <div
+    className="w-100 d-flex justify-content-center"
+    style={{ height: height > 0 ? height : 60 }}
+  >
+    <Spinner animation="border" variant="black" className="m-auto" />
+  </div>
+);
+
 const PageLayout = ({ children }) => {
+  const headerRef = useRef<HTMLElement | null>(null);
+  const footerRef = useRef<HTMLElement | null>(null);
   const sendDataToGTM = useGTM();
   const { t } = useI18n();
   const { pathname } = useLocation();
-  const { user, helpBlock, sidebars, routes, locale } = useConfig(
+  const { user, helpBlock, sidebars, routes, locale, configLoaded } = useConfig(
     (prev, next) => {
       const userEqual = prev.user.loading === next.user.loading;
       const configLoaded = prev.configLoaded === next.configLoaded;
@@ -57,21 +69,44 @@ const PageLayout = ({ children }) => {
     window.scrollTo(0, Number(savedScroll));
     prevPathname = pathname;
   }, [pathname]);
+  console.log(
+    window.innerHeight,
+    headerRef.current?.offsetHeight,
+    footerRef.current?.offsetHeight,
+  );
+  const placeholderHeight =
+    window.innerHeight -
+    (headerRef.current?.offsetHeight || 0) -
+    (footerRef.current?.offsetHeight || 0);
 
+  console.log(
+    window.innerHeight,
+    headerRef.current?.offsetHeight,
+    footerRef.current?.offsetHeight,
+    placeholderHeight,
+  );
   return (
     <>
       <ErrorBoundary>
-        <PageHeader />
+        <PageHeader ref={headerRef} />
       </ErrorBoundary>
       {sidebar ? (
         <LayoutWithSidebar sidebar={sidebar} rightSidebar={rightSidebarLayout}>
-          {children}
+          {configLoaded ? (
+            children
+          ) : (
+            <PageLoadingSpinner height={placeholderHeight} />
+          )}
         </LayoutWithSidebar>
       ) : (
         <>
-          {children}
+          {configLoaded ? (
+            children
+          ) : (
+            <PageLoadingSpinner height={placeholderHeight} />
+          )}
           <ErrorBoundary>
-            <PageFooter />
+            <PageFooter ref={footerRef} />
           </ErrorBoundary>
         </>
       )}

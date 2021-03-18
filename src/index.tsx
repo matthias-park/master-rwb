@@ -14,6 +14,7 @@ import { ToastProvider } from 'react-toast-notifications';
 import { GtmProvider } from './hooks/useGTM';
 import * as Sentry from '@sentry/react';
 import { Workbox } from 'workbox-window';
+import 'react-placeholder/lib/reactPlaceholder.css';
 
 if (process.env.TARGET_ENV !== 'development' && window.__config__.sentryDsn) {
   Sentry.init({
