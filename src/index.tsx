@@ -15,10 +15,10 @@ import { GtmProvider } from './hooks/useGTM';
 import * as Sentry from '@sentry/react';
 import { Workbox } from 'workbox-window';
 
-if (process.env.NODE_ENV !== 'development' && window.__config__.sentryDsn) {
+if (process.env.TARGET_ENV !== 'development' && window.__config__.sentryDsn) {
   Sentry.init({
     dsn: window.__config__.sentryDsn,
-    environment: process.env.NODE_ENV,
+    environment: process.env.TARGET_ENV,
   });
 }
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
@@ -44,7 +44,7 @@ ReactDOM.render(
   MOUNT_NODE,
 );
 
-if (process.env.NODE_ENV !== 'development' && 'serviceWorker' in navigator) {
+if (process.env.TARGET_ENV !== 'development' && 'serviceWorker' in navigator) {
   const wb = new Workbox(`/service-worker.js?name=${window.__config__.name}`);
 
   wb.addEventListener('installed', event => {

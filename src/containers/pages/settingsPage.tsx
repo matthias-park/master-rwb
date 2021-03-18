@@ -10,7 +10,7 @@ import { useToasts } from 'react-toast-notifications';
 import { useConfig } from '../../hooks/useConfig';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 
 const LoadableMarketingSettingsAccordion = loadable(
   () => import('../../components/account-settings/MarketingSettingsAccordion'),

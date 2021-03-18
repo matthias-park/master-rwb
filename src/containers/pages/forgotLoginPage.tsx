@@ -11,7 +11,7 @@ import { useConfig } from '../../hooks/useConfig';
 import { Redirect } from 'react-router-dom';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useGTM from '../../hooks/useGTM';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 import LoadingButton from '../../components/LoadingButton';
 
 const ForgotLoginPage = () => {

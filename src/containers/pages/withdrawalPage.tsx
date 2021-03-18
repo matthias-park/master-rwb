@@ -20,7 +20,7 @@ import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { ComponentName } from '../../constants';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import useApi from '../../hooks/useApi';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 import LoadingButton from '../../components/LoadingButton';
 
 interface WithdrawalRequestsProps {

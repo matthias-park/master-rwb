@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { useI18n } from '../../hooks/useI18n';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 
 interface SitemapListItem {
   path: string;

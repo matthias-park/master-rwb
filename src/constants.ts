@@ -1,6 +1,6 @@
 import RailsApiResponse from './types/api/RailsApiResponse';
 
-export const TestEnv = process.env.NODE_ENV === 'test';
+export const TestEnv = process.env.TARGET_ENV === 'test';
 export enum ComponentName {
   Header,
   Footer,

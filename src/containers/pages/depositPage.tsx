@@ -9,7 +9,7 @@ import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName } from '../../constants';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 
 const DepositPage = () => {
   const { addToast } = useToasts();

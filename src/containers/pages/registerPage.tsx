@@ -17,7 +17,7 @@ import dayjs from 'dayjs';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { RegistrationPostalCodeAutofill } from '../../types/api/user/Registration';
 import useGTM from '../../hooks/useGTM';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 import { useI18n } from '../../hooks/useI18n';
 
 const RegisterPage = () => {

@@ -4,7 +4,7 @@ import { useConfig } from '../../hooks/useConfig';
 import { useRoutePath } from '../../hooks/index';
 import { REDIRECT_PROTECTED_NOT_LOGGED_IN } from '../../constants';
 import Spinner from 'react-bootstrap/Spinner';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 
 interface Props extends RouteProps {
   redirectTo?: string;

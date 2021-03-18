@@ -13,7 +13,7 @@ import HelpBlock from '../../components/HelpBlock';
 import Alert from 'react-bootstrap/Alert';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 
 const loggedInHiddenFields = ['first_name', 'last_name', 'email_address'];
 
