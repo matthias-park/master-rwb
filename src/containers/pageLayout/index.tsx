@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import PageHeader from './PageHeader';
 import PageFooter from './PageFooter';
 import CookieConsent from '../../components/CookieConsent';
-import { useHistory, useLocation } from 'react-router-dom';
+import { matchPath, useHistory, useLocation } from 'react-router-dom';
 import LayoutWithSidebar from './LayoutWithSidebar';
 import { useConfig } from '../../hooks/useConfig';
 import ErrorBoundary from '../ErrorBoundary';
@@ -39,13 +39,15 @@ const PageLayout = ({ children }) => {
   const sidebar = useMemo(
     () =>
       !user.loading &&
-      sidebars?.find(sidebar => sidebar.some(link => link.link === pathname)),
+      sidebars?.find(sidebar =>
+        sidebar.some(link => pathname.includes(link.link)),
+      ),
     [sidebars, pathname, user.loading],
   );
-  const route = useMemo(() => routes.find(route => route.path === pathname), [
-    routes,
-    pathname,
-  ]);
+  const route = useMemo(
+    () => routes.find(route => !!matchPath(pathname, route)),
+    [routes, pathname],
+  );
   const rightSidebarLayout = useMemo(() => {
     return !!helpBlock && !!route && helpBlock.includes(route.id);
   }, [pathname, route, helpBlock]);

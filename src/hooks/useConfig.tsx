@@ -18,6 +18,7 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { PageConfig } from '../types/api/PageConfig';
 import useApi from './useApi';
 import useMemoCompare from './useMemoCompare';
+import { sortDescending } from '../utils/index';
 
 const useUser = () => {
   const { addToast } = useToasts();
@@ -155,7 +156,6 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     setCachedLocale(lang);
     setConfigLoaded(true);
   };
-
   const value: Config = useMemo(
     () => ({
       user,
@@ -163,7 +163,12 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
       locale,
       setLocale,
       locales: constants?.available_locales || [],
-      routes: constants?.navigation_routes || [],
+      routes:
+        constants?.navigation_routes.sort((a, b) => {
+          if (a.path === '*') return 1;
+          if (b.path === '*') return -1;
+          return sortDescending(a.path.length, b.path.length);
+        }) || [],
       header: constants?.header_routes,
       footer: constants?.footer_data,
       sidebars: constants?.sidebars,
