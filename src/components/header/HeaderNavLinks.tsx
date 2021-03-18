@@ -1,13 +1,13 @@
 import React, { useRef, useMemo } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { sortAscending } from '../../utils/index';
-import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { HeaderRoute } from '../../types/api/PageConfig';
 import useGTM from '../../hooks/useGTM';
+import Link from '../Link';
 
 interface HeaderNavLinkProps {
   data: HeaderRoute;

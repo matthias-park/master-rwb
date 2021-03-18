@@ -1,6 +1,7 @@
 import React from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useI18n } from '../hooks/useI18n';
+import Link from './Link';
 
 interface Props {
   links: {

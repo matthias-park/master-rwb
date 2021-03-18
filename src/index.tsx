@@ -50,6 +50,7 @@ if (process.env.TARGET_ENV !== 'development' && 'serviceWorker' in navigator) {
 
   wb.addEventListener('installed', event => {
     if (event.isUpdate) {
+      window._wbUpdate = true;
       window.toast?.('Website update available', {
         appearance: 'success',
         autoDismiss: false,
@@ -57,6 +58,10 @@ if (process.env.TARGET_ENV !== 'development' && 'serviceWorker' in navigator) {
       });
     }
   });
+
+  setInterval(() => {
+    wb.update();
+  }, 3600000); // 1hour
 
   wb.register();
 }

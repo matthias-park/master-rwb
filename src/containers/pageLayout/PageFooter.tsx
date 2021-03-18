@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { iconName } from '../../constants';
 import Dropdown from 'react-bootstrap/Dropdown';
 import useDesktopWidth from '../../hooks/useDesktopWidth';
@@ -16,6 +15,7 @@ import {
   Partners,
 } from '../../types/api/PageConfig';
 import ReactPlaceholder from 'react-placeholder/lib';
+import Link from '../../components/Link';
 
 const FooterHeader = () => {
   const { t } = useI18n();

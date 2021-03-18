@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useI18n } from '../../hooks/useI18n';
 import { Tab, Tabs } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
@@ -7,6 +7,7 @@ import { PostItem } from '../../types/api/Posts';
 import Spinner from 'react-bootstrap/Spinner';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
+import Link from '../../components/Link';
 
 const PromoItem = ({ item }: { item: PostItem }) => {
   const { pathname } = useLocation();

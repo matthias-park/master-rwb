@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { getApi, postApi } from '../../utils/apiUtils';
 import LoginDropdown from '../LoginDropdown';
@@ -18,6 +18,7 @@ import { useI18n } from '../../hooks/useI18n';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useGTM from '../../hooks/useGTM';
 import ReactPlaceholder from 'react-placeholder';
+import Link from '../../components/Link';
 
 const SubNavLinks = () => {
   const { locales, locale, setLocale } = useConfig();

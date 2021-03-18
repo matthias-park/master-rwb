@@ -13,6 +13,7 @@ export declare global {
       sentryDsn?: string;
     };
     toast?: AddToast;
+    _wbUpdate?: boolean;
     PRERENDER_CACHE?: { [key: string]: any };
     customerSettings?: CustomerSettings;
     _kc?: KambiConfig;

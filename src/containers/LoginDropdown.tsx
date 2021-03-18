@@ -6,7 +6,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../hooks/useUIConfig';
 import { ComponentName, PagesName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Spinner, OverlayTrigger, Tooltip, Form, Alert } from 'react-bootstrap';
 import { useRoutePath } from '../hooks/index';
 import { NET_USER } from '../types/UserStatus';
@@ -14,6 +14,7 @@ import { ControlledTextInput } from '../components/TextInput';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import useGTM from '../hooks/useGTM';
 import LoadingButton from '../components/LoadingButton';
+import Link from '../components/Link';
 
 interface Props {
   dropdownClasses?: string;

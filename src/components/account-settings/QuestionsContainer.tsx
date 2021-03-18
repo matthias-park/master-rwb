@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Accordion from 'react-bootstrap/Accordion';
 import { useI18n } from '../../hooks/useI18n';
+import Link from '../Link';
 
 interface Props {
   items: {

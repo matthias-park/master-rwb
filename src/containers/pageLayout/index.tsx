@@ -71,22 +71,10 @@ const PageLayout = ({ children }) => {
     window.scrollTo(0, Number(savedScroll));
     prevPathname = pathname;
   }, [pathname]);
-  console.log(
-    window.innerHeight,
-    headerRef.current?.offsetHeight,
-    footerRef.current?.offsetHeight,
-  );
   const placeholderHeight =
     window.innerHeight -
     (headerRef.current?.offsetHeight || 0) -
     (footerRef.current?.offsetHeight || 0);
-
-  console.log(
-    window.innerHeight,
-    headerRef.current?.offsetHeight,
-    footerRef.current?.offsetHeight,
-    placeholderHeight,
-  );
   return (
     <>
       <ErrorBoundary>

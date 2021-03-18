@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName } from '../../constants';
 import { useI18n } from '../../hooks/useI18n';
 import Spinner from 'react-bootstrap/Spinner';
+import Link from '../Link';
 
 const UserMenuLink = ({ link, name, setShowDropdown }) => (
   <li className="user-menu__list-item">
