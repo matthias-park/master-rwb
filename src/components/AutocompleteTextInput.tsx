@@ -75,16 +75,19 @@ const AutocompleteTextInput = (props: Props) => {
               }
             }}
             highlightOnlyResult
-            renderInput={({ inputRef, referenceElementRef, ...inputProps }) => (
-              <TextInput
-                {...inputProps}
-                {...props}
-                ref={ref => {
-                  inputRef(ref);
-                  referenceElementRef(ref);
-                }}
-              />
-            )}
+            renderInput={({ inputRef, referenceElementRef, ...inputProps }) => {
+              const { autoComplete, onBlur, ...textProps } = props;
+              return (
+                <TextInput
+                  {...inputProps}
+                  {...textProps}
+                  ref={ref => {
+                    inputRef(ref);
+                    referenceElementRef(ref);
+                  }}
+                />
+              );
+            }}
             onSearch={(query: string) => {
               setIsLoading(true);
               props

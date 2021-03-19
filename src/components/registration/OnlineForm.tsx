@@ -73,7 +73,7 @@ const blocks = (
           if (!res.Data?.result) {
             throw res.Message || t('register_input_postal_code_invalid');
           }
-          return Object.values(res.Data.result);
+          return res.Data.result;
         },
       },
       {
