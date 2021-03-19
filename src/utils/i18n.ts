@@ -22,11 +22,11 @@ const i18n = () => {
     },
 
     t(key: string, lang?: string) {
-      const val = symbols?.[lang || locale]?.[key] || `missing symbol: ${key}`;
+      const val = symbols?.[lang || locale]?.[key] || ''; //`missing symbol: ${key}`;
       return val;
     },
     jsxT(key: string, lang?: string) {
-      const val = symbols?.[lang || locale]?.[key] || `missing symbol: ${key}`;
+      const val = symbols?.[lang || locale]?.[key] || ''; //`missing symbol: ${key}`;
       return replaceStringTagsReact(val);
     },
   };
@@ -48,7 +48,8 @@ export const setLocalePathname = (newlocale: string) => {
   } else {
     paths.splice(1, 0, newlocale);
   }
-  const newPath = paths.join('/');
+  const newPath = paths.join('/') + window.location.hash;
+  console.log(newPath);
   window.history.pushState({}, '', newPath);
 };
 

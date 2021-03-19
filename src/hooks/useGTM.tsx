@@ -40,12 +40,15 @@ const useGTMHookContext = createContext<ISnippetsParams | undefined>(
 );
 
 const useGTM = (): ((data: IDataGTM) => void) => {
+  const { configLoaded } = useConfig(
+    (prev, next) => prev.configLoaded === next.configLoaded,
+  );
   const gtmContextState = useContext(useGTMHookContext);
 
   const sendDataToGTM = useCallback(
     (data: IDataGTM): void => {
-      console.log(data);
-      if (gtmContextState?.id) {
+      // if (configLoaded) console.log(data);
+      if (configLoaded && gtmContextState?.id) {
         sendToGTM({ data, dataLayerName: gtmContextState.dataLayerName! });
       }
     },

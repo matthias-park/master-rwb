@@ -18,6 +18,7 @@ import { PageConfig } from '../types/api/PageConfig';
 import useApi from './useApi';
 import useMemoCompare from './useMemoCompare';
 import { sortDescending } from '../utils/index';
+import useLocalStorage from './useLocalStorage';
 
 const useUser = () => {
   const { addToast } = useToasts();
@@ -116,10 +117,10 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   const locales = constants?.available_locales.map(locale => locale.iso) || [];
   const { user, mutateUser } = useUser();
   const { addToast } = useToasts();
-  // const [cachedLocale, setCachedLocale] = useLocalStorage<string | null>(
-  //   'locale',
-  //   null,
-  // );
+  const [cachedLocale, setCachedLocale] = useLocalStorage<string | null>(
+    'locale',
+    null,
+  );
   const [locale, changeLocale] = useState(constants?.locale || '');
   const [configLoaded, setConfigLoaded] = useState(false);
   useEffect(() => {
@@ -129,7 +130,8 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     if (constants) {
       const appLocale = locale || constants.locale;
       const detectedLocale = getWindowUrlLocale();
-      if (detectedLocale && appLocale !== detectedLocale) {
+
+      if (detectedLocale && appLocale !== detectedLocale && !!cachedLocale) {
         (async () => {
           const detectedLocaleAvailable = locales.includes(
             detectedLocale.toLocaleLowerCase(),
@@ -156,7 +158,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   const setLocale = async (lang: string) => {
     changeLocale(lang);
     setLocalePathname(lang);
-    // setCachedLocale(lang);
+    setCachedLocale(lang);
     setConfigLoaded(true);
   };
   const value: Config = useMemo(

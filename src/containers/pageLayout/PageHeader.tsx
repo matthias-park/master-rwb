@@ -19,7 +19,6 @@ import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useGTM from '../../hooks/useGTM';
 import ReactPlaceholder from 'react-placeholder';
 import Link from '../../components/Link';
-import { mutate } from 'swr';
 
 const SubNavLinks = () => {
   const { locales, locale, setLocale } = useConfig();
@@ -30,7 +29,7 @@ const SubNavLinks = () => {
       locale: lang,
     })
       .then(() => setLocale(lang))
-      .then(() => mutate('/railsapi/v1/content/constants'));
+      .then(() => window.location.reload());
   };
   const navLinkClick = (linkName: string) => {
     sendDataToGTM({
