@@ -16,6 +16,7 @@ interface SetCustomerSettingsProps {
   updateBalance: () => void;
   addToast: AddToast;
   sbLoaded?: () => void;
+  retryLogin?: () => void;
 }
 
 interface KambiSportsbookProps {
@@ -43,8 +44,8 @@ let sportsbookRendered = false;
 const setCustomerSettings = ({
   getApiBalance,
   updateBalance,
-  addToast,
   sbLoaded,
+  retryLogin,
 }: SetCustomerSettingsProps) => {
   window.customerSettings = {
     getBalance: function (successFunc, failureFunc, $) {
@@ -68,11 +69,8 @@ const setCustomerSettings = ({
           break;
         }
         case 'loginRequestDone': {
-          if (!event.data) {
-            addToast('KAMBI failed to authenticate user', {
-              appearance: 'error',
-              autoDismiss: true,
-            });
+          if (!event.data && retryLogin) {
+            retryLogin();
           }
           break;
         }
@@ -152,7 +150,7 @@ const KambiSportsbook = () => {
   const [apiLoaded, setApiLoaded] = useState(false);
   const desktopWidth = useDesktopWidth(1199);
 
-  useEffect(() => {
+  const sendKambiLoginChangeRequest = () => {
     if (config.user.logged_in) {
       getSBParams(config, () => {
         addToast(`Failed to get user token`, {
@@ -160,6 +158,7 @@ const KambiSportsbook = () => {
           autoDismiss: true,
         });
       }).then(kambiConfig => {
+        //@ts-ignore
         window.KambiWapi?.request(window.KambiWapi?.LOGIN, {
           punterId: kambiConfig.playerId,
           ticket: kambiConfig.ticket,
@@ -171,6 +170,9 @@ const KambiSportsbook = () => {
     } else {
       window.KambiWapi?.request(window.KambiWapi?.LOGOUT);
     }
+  };
+  useEffect(() => {
+    sendKambiLoginChangeRequest();
   }, [config.user.logged_in, apiLoaded]);
 
   useEffect(() => {
@@ -192,6 +194,7 @@ const KambiSportsbook = () => {
           getApiBalance: kambiConfig?.getApiBalance,
           updateBalance: () => config.mutateUser(),
           sbLoaded: () => setSbLoading(false),
+          retryLogin: sendKambiLoginChangeRequest,
         });
         const kambiContainer = document.createElement('div');
         kambiContainer.id = 'KambiBC';

@@ -116,9 +116,10 @@ const LoginForm = ({
         <div className="d-flex align-items-center flex-wrap">
           <Form.Check
             ref={register({
-              setValueAs: value => Boolean(value),
+              setValueAs: value => !!value,
             })}
             custom
+            id="remember_me"
             name="remember_me"
             label={t('login_remember_me')}
           />
