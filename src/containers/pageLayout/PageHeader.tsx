@@ -163,7 +163,6 @@ const PageHeader = React.forwardRef<HTMLElement>((_, ref) => {
       )}
       expanded={navExpanded}
       onToggle={expanded => {
-        if (!header) return;
         backdrop.toggle(expanded);
         setNavExpanded(!navExpanded);
       }}

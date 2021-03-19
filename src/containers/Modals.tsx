@@ -5,6 +5,7 @@ import AddBankAccountModal from '../components/modals/AddBankAccountModal';
 import { postApi } from '../utils/apiUtils';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { removeFalsyFromObject } from '../utils/index';
+import ValidationFailedModal from '../components/modals/ValidationFailedModal';
 
 const addBankAccountSubmit = async data => {
   removeFalsyFromObject(data);
@@ -21,6 +22,7 @@ const Modals = () => {
       <ResponsibleGamblingModal />
       <CookiePolicyModal />
       <AddBankAccountModal onSubmit={addBankAccountSubmit} />
+      <ValidationFailedModal />
     </>
   );
 };
