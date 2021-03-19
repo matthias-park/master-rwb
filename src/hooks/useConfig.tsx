@@ -69,7 +69,7 @@ const useUser = () => {
 const useConstants = (): PageConfig | undefined => {
   const { addToast } = useToasts();
   const constantsUrl = '/railsapi/v1/content/constants';
-  const { data } = useApi<RailsApiResponse<PageConfig>>(constantsUrl, {
+  const { data, mutate } = useApi<RailsApiResponse<PageConfig>>(constantsUrl, {
     revalidateOnMount: true,
     onErrorRetry: (err: RailsApiResponse<null>) => [
       addToast('Failed to get page config', {
@@ -78,17 +78,21 @@ const useConstants = (): PageConfig | undefined => {
       }),
     ],
   });
-  // useEffect(() => {
-  //   navigator.serviceWorker.addEventListener('message', async ({ data }) => {
-  //     if (
-  //       data.meta === 'workbox-broadcast-update' &&
-  //       data.payload.updatedURL.includes(constantsUrl)
-  //     ) {
-  //       console.log('constants updated');
-  //       // mutate();
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    navigator.serviceWorker?.addEventListener('message', async ({ data }) => {
+      if (
+        data.meta === 'workbox-broadcast-update' &&
+        data.payload.updatedURL.includes(constantsUrl)
+      ) {
+        const { cacheName, updatedUrl } = data.payload;
+        const cache = await caches.open(cacheName);
+        const updatedResponse = await cache.match(updatedUrl);
+        const updatedJson = updatedResponse && (await updatedResponse.json());
+        mutate(updatedJson, false);
+        console.log('constants updated');
+      }
+    });
+  }, []);
   return data?.Data;
 };
 

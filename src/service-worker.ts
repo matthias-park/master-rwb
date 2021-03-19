@@ -124,7 +124,7 @@ registerRoute(
     plugins: [
       // Ensure that once this runtime cache reaches a maximum size the
       // least-recently used images are removed.
-      new BroadcastUpdatePlugin({ headersToCheck: ['cf-request-id'] }),
+      new BroadcastUpdatePlugin({ headersToCheck: ['last-modified'] }),
     ],
   }),
 );

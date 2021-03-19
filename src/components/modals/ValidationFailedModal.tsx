@@ -13,11 +13,13 @@ const ValidationFailedModal = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    setShowModal(
+    if (
       [VALIDATOR_STATUS.EPIS_DANGER, VALIDATOR_STATUS.BIG_ERROR].includes(
         user.validator_status || 0,
-      ),
-    );
+      )
+    ) {
+      setShowModal(true);
+    }
   }, [user]);
 
   const hideModal = () => setShowModal(false);

@@ -43,10 +43,9 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
     const loadedEqual = prev.configLoaded === next.configLoaded;
     return localeEqual && loadedEqual;
   });
+  const translationsUrl = `/railsapi/v1/translations?locale=${locale}`;
   const { data, mutate } = useApi<RailsApiResponse<Translations>>(
-    !TestEnv && configLoaded
-      ? `/railsapi/v1/translations?locale=${locale}`
-      : null,
+    !TestEnv && configLoaded ? translationsUrl : null,
     {
       revalidateOnMount: true,
       onErrorRetry: () => {
@@ -57,6 +56,23 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
       },
     },
   );
+
+  useEffect(() => {
+    navigator.serviceWorker?.addEventListener('message', async ({ data }) => {
+      if (
+        data.meta === 'workbox-broadcast-update' &&
+        data.payload.updatedURL.includes(translationsUrl)
+      ) {
+        const { cacheName, updatedUrl } = data.payload;
+        const cache = await caches.open(cacheName);
+        const updatedResponse = await cache.match(updatedUrl);
+        const updatedJson = updatedResponse && (await updatedResponse.json());
+        mutate(updatedJson, false);
+        console.log('translations updated');
+      }
+    });
+  }, []);
+
   const [translations, setTranslations] = useState(() =>
     createLocale(locale, data?.Data),
   );
