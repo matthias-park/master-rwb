@@ -41,6 +41,8 @@ const updateWindowKambiConfig = (params: KambiSportsbookProps) => {
   };
 };
 let sportsbookRendered = false;
+let kambiLoginRetries = 0;
+let kambiRetryTimeout = 0;
 const setCustomerSettings = ({
   getApiBalance,
   updateBalance,
@@ -70,7 +72,20 @@ const setCustomerSettings = ({
         }
         case 'loginRequestDone': {
           if (!event.data && retryLogin) {
-            retryLogin();
+            const retry = () => {
+              kambiLoginRetries++;
+              retryLogin();
+            };
+            if (kambiLoginRetries > 2) {
+              kambiRetryTimeout = setTimeout(() => {
+                retry();
+              }, 60000);
+            } else {
+              retry();
+            }
+          } else {
+            kambiLoginRetries = 0;
+            clearTimeout(kambiRetryTimeout);
           }
           break;
         }
