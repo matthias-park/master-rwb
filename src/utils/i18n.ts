@@ -32,15 +32,7 @@ const i18n = () => {
   };
 };
 
-export const getWindowUrlLocale = (
-  currentLocale: string,
-  availableLocales: string[],
-): string | null => {
-  const savedLocale = Lockr.get('locale', null);
-  if (!savedLocale) {
-    return null;
-  }
-
+export const getWindowUrlLocale = (): string | null => {
   const windowPaths = window.location.pathname.split('/');
   let urlLocale = windowPaths[1];
   if (ALL_LOCALES.includes(urlLocale.toLocaleLowerCase())) {

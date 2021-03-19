@@ -12,7 +12,7 @@ const App = () => {
     return localeEqual;
   });
   return (
-    <BrowserRouter basename={`/${locale}`}>
+    <BrowserRouter key={locale} basename={`/${locale}`}>
       <ApiHead />
       <Modals />
       <PageLayout>

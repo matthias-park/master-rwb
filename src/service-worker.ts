@@ -28,7 +28,6 @@ cleanupOutdatedCaches();
 // Their URLs are injected into the manifest variable below.
 // This variable must be present somewhere in your service worker file,
 // even if you decide not to use precaching. See https://cra.link/PWA
-console.log(self.__WB_MANIFEST);
 precacheAndRoute(self.__WB_MANIFEST);
 // let array = Array.from(self.__WB_MANIFEST) as any;
 // array = array.find(

@@ -13,7 +13,6 @@ import { setLocalePathname, getWindowUrlLocale } from '../utils/i18n';
 import { TestEnv } from '../constants';
 import { useToasts } from 'react-toast-notifications';
 import { usePrevious } from './index';
-import useLocalStorage from './useLocalStorage';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { PageConfig } from '../types/api/PageConfig';
 import useApi from './useApi';
@@ -66,7 +65,7 @@ const useUser = () => {
   return { user, mutateUser };
 };
 
-const useConstants = (): PageConfig | undefined => {
+const useConstants = () => {
   const { addToast } = useToasts();
   const constantsUrl = '/railsapi/v1/content/constants';
   const { data, mutate } = useApi<RailsApiResponse<PageConfig>>(constantsUrl, {
@@ -93,7 +92,7 @@ const useConstants = (): PageConfig | undefined => {
       }
     });
   }, []);
-  return data?.Data;
+  return { constants: data?.Data, updateConstants: mutate };
 };
 
 export const configContext = createContext<Config | null>(null);
@@ -113,17 +112,15 @@ export type ConfigProviderProps = {
 };
 
 export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
-  const constants = useConstants();
+  const { constants, updateConstants } = useConstants();
   const locales = constants?.available_locales.map(locale => locale.iso) || [];
   const { user, mutateUser } = useUser();
   const { addToast } = useToasts();
-  const [cachedLocale, setCachedLocale] = useLocalStorage<string | null>(
-    'locale',
-    null,
-  );
-  const [locale, changeLocale] = useState(
-    cachedLocale || constants?.locale || '',
-  );
+  // const [cachedLocale, setCachedLocale] = useLocalStorage<string | null>(
+  //   'locale',
+  //   null,
+  // );
+  const [locale, changeLocale] = useState(constants?.locale || '');
   const [configLoaded, setConfigLoaded] = useState(false);
   useEffect(() => {
     window.toast = addToast;
@@ -131,7 +128,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   useEffect(() => {
     if (constants) {
       const appLocale = locale || constants.locale;
-      const detectedLocale = getWindowUrlLocale(constants.locale, locales);
+      const detectedLocale = getWindowUrlLocale();
       if (detectedLocale && appLocale !== detectedLocale) {
         (async () => {
           const detectedLocaleAvailable = locales.includes(
@@ -140,6 +137,8 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
           if (!window.PRERENDER_CACHE && detectedLocaleAvailable) {
             await postApi('/railsapi/v1/locale', {
               locale: detectedLocale,
+            }).then(() => {
+              updateConstants();
             });
           }
           setLocale(detectedLocaleAvailable ? detectedLocale : appLocale);
@@ -155,9 +154,9 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   }, [!!constants]);
 
   const setLocale = async (lang: string) => {
-    setLocalePathname(lang);
     changeLocale(lang);
-    setCachedLocale(lang);
+    setLocalePathname(lang);
+    // setCachedLocale(lang);
     setConfigLoaded(true);
   };
   const value: Config = useMemo(
