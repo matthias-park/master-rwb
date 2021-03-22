@@ -21,28 +21,22 @@ const CookiePolicyModal = () => {
 
   const toggleCookie = (e: React.SyntheticEvent<EventTarget>, id: string) => {
     e.stopPropagation();
-    if ('essential' === id) return;
-    if ('all' === id) {
-      return setCookieSettings(
+    setCookieSettings({ ...cookieSettings, [id]: !cookieSettings[id] });
+  };
+  const isChecked = (id: string): boolean => {
+    return cookieSettings[id];
+  };
+  const handleBtnClick = (id: string) => {
+    if (id === 'all') {
+      setCookieSettings(
         cookiesId.reduce((obj, id) => {
-          obj[id] = id === 'essential' || !isChecked('all');
+          obj[id] = true;
           return obj;
         }, {}) as Storage,
       );
     }
-    setCookieSettings({ ...cookieSettings, [id]: !cookieSettings[id] });
-  };
-  const isChecked = (id: string): boolean => {
-    if (id === 'all') {
-      return cookiesId.every(id => cookieSettings[id]);
-    }
-    return cookieSettings[id];
-  };
-  const handleBtnClick = (id: string) => {
-    if (id === 'cancel') {
-      return setCookieSettings(storage.cookies);
-    }
-    return storage.save(cookieSettings);
+    storage.save(cookieSettings);
+    return setShowModal(null);
   };
 
   return (
@@ -108,7 +102,7 @@ const CookiePolicyModal = () => {
           <Button
             className="mt-2"
             variant="primary"
-            onClick={e => toggleCookie(e, 'all')}
+            onClick={e => handleBtnClick('all')}
           >
             {t('cookies_btn_all')}
           </Button>
