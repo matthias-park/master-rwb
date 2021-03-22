@@ -1,4 +1,3 @@
-import Lockr from 'lockr';
 import { replaceStringTagsReact } from './reactUtils';
 import { ALL_LOCALES } from '../constants';
 
