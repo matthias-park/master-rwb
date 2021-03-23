@@ -6,9 +6,9 @@ namespace :npm do
     if ENV['NOBUILD']
       puts 'Skipping building bundles (NOBUILD set)'
     else
-      on roles([:betslip, 'next-web']) do
+      on roles(['next-web', 'next-web-test']) do
         within release_path do
-          execute :npm, :run, "build:#{fetch(:stage)}"
+          execute :npm, :run, "build:#{fetch(env)}"
         end
       end
     end
