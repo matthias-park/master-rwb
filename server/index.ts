@@ -14,8 +14,8 @@ const app = express();
 
 app.set('trust proxy', true);
 app.use(middleware.useragent);
-app.use(middleware.basicAuth);
 app.use(middleware.franchiseIdentify);
+app.use(middleware.basicAuth);
 app.use(middleware.assetsToFranchise);
 
 app.use('/server/*', (_, res) => {
