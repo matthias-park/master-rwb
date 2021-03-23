@@ -16,7 +16,11 @@ const LayoutWithSidebar = ({ sidebar, rightSidebar, children }: Props) => (
       {children}
       {rightSidebar && (
         <div className="right-sidebar">
-          <HelpBlock title={'user_help_title'} blocks={['phone']} />
+          <HelpBlock
+            title={'user_help_title'}
+            blocks={['phone']}
+            className={'default'}
+          />
         </div>
       )}
     </div>
