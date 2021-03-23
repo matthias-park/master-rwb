@@ -28,10 +28,7 @@ const GenericModal = ({
       dialogClassName="generic-modal-width"
     >
       {!withoutClose && (
-        <i
-          className="icon-close custom-modal__close"
-          onClick={hideCallback}
-        ></i>
+        <i className="icon-close custom-modal__close" onClick={hideCallback} />
       )}
       <Modal.Body className="custom-modal mt-2 text-center">
         {children}
