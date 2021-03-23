@@ -10,7 +10,7 @@ set :nvm_map_bins, %w{node npm pm2}
 append :linked_dirs, 'node_modules'
 
 set :default_env, {
-  NODE_ENV: :stage,
+  NODE_ENV: :testing,
 }
 
-set :branch, ENV['branch'] || ask('Branch name to deploy?', :develop)
+set :branch, ENV['branch'] || ask('Branch name to deploy?', :master)
