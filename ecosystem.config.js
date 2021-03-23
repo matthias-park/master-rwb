@@ -24,8 +24,8 @@ module.exports = {
       pid_file: '/home/tonybet/next-web-test/current/pids/web.pid',
       out_file: '/dev/null',
       error_file: '/dev/null',
-      env_test: {
-        NODE_ENV: 'test',
+      env_testing: {
+        NODE_ENV: 'testing',
       },
     },
   ],
