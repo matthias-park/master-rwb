@@ -18,4 +18,18 @@ module.exports = {
       },
     },
   ],
+  deploy: {
+    stage: {
+      user: 'tonybet',
+      host: ['192.168.109.27'],
+      ref: 'origin/develop',
+      repo: 'ssh://tonybet@ph.tonybet.com/diffusion/NNW/nodejs-next-web.git',
+      path: '/home/tonybet/next-web',
+      'post-deploy':
+        'npm install && pm2 startOrRestart ecosystem.json --env stage',
+      env: {
+        NODE_ENV: 'stage',
+      },
+    },
+  },
 };
