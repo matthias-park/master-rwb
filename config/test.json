@@ -1,0 +1,26 @@
+{
+  "franchises": [
+    {
+      "name": "bnl",
+      "domain": "bnl-rjtest.tglab.dev",
+      "theme": "bnl",
+      "api": "https://bnl-dev.tglab.dev",
+      "gtmId": "GTM-PGRW8BQ",
+      "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17"
+    }
+  ],
+  "port": 3805,
+  "basicAuth": {
+    "whitelistedIp": ["88.119.158.27"],
+    "users": [
+      {
+        "username": "tbtest",
+        "password": "B3st.P4ssword"
+      },
+      {
+        "username": "tbtest",
+        "password": "wCrXilO_iq!N"
+      }
+    ]
+  }
+}

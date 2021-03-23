@@ -119,6 +119,7 @@
     "build:server": "tsc --build server/tsconfig.json",
     "build:production": "NODE_ENV=production npm run build",
     "build:stage": "NODE_ENV=stage npm run build",
+    "build:test": "NODE_ENV=test npm run build",
     "test": "node scripts/test.js",
     "checkTs": "tsc --noEmit",
     "checkServerTs": "tsc --build server/tsconfig.json",

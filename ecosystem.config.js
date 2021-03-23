@@ -17,5 +17,16 @@ module.exports = {
         NODE_ENV: 'production',
       },
     },
+    {
+      name: 'next-web-test',
+      script: 'build/server/index.js',
+      cwd: '/home/tonybet/next-web-test/current',
+      pid_file: '/home/tonybet/next-web-test/current/pids/web.pid',
+      out_file: '/dev/null',
+      error_file: '/dev/null',
+      env_test: {
+        NODE_ENV: 'test',
+      },
+    },
   ],
 };
