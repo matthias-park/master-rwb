@@ -26,29 +26,6 @@
   a {
     color: $brand-text;
   }
-  .help-block {
-    &__title {
-      color: $black-custom;
-    }
-    &__body {
-      background-color: rgba(255,255,255,0.08);
-      border: 1px solid #dfdfdf;
-      padding: 16px 6px 4px 16px;
-      &-item {
-        &-icon{
-          color: $gray-400;
-          opacity: 1;
-          font-size: 36px;
-        }
-        &-text {
-          color: $black-custom;
-          .gray {
-            color: $black-custom;
-          }
-        }
-      }
-    }
-  }
 }
 
 .amount-container {

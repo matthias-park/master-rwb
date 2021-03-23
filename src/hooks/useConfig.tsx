@@ -79,7 +79,7 @@ const useConstants = () => {
     ],
   });
   useEffect(() => {
-    navigator.serviceWorker?.addEventListener('message', async ({ data }) => {
+    /*navigator.serviceWorker.addEventListener('message', async ({ data }) => {
       if (
         data.meta === 'workbox-broadcast-update' &&
         data.payload.updatedURL.includes(constantsUrl)
@@ -91,7 +91,7 @@ const useConstants = () => {
         mutate(updatedJson, false);
         console.log('constants updated');
       }
-    });
+    });*/
   }, []);
   return { constants: data?.Data, updateConstants: mutate };
 };
