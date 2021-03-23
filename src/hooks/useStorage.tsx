@@ -5,9 +5,10 @@ import { useConfig } from './useConfig';
 import Lockr from 'lockr';
 
 const defaultCookies: Storage = {
-  essential: true,
-  functional: false,
-  thirdParty: false,
+  functional: true,
+  analytics: false,
+  marketing: false,
+  personalization: false,
 };
 
 const useStorage = () => {

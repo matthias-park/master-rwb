@@ -353,6 +353,7 @@ a:hover {
     font-size: 18px;
     color: $primary;
     cursor: pointer;
+    z-index: 2;
   }
   &__footer {
     display: flex;

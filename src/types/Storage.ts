@@ -1,7 +1,8 @@
 export interface Storage {
-  essential: boolean;
   functional: boolean;
-  thirdParty: boolean;
+  marketing: boolean;
+  analytics: boolean;
+  personalization: boolean;
 }
 export interface StorageSettings {
   cookies: Storage;

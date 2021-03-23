@@ -9,11 +9,10 @@ import { Storage } from '../../types/Storage';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName } from '../../constants';
 
-const cookiesId = ['essential', 'functional', 'thirdParty'];
-
 const CookiePolicyModal = () => {
   const { t } = useI18n();
   const storage = useStorage();
+  const cookiesId = Object.keys(storage.cookies);
   const [cookieSettings, setCookieSettings] = useState<Storage>(
     storage.cookies,
   );
@@ -60,7 +59,7 @@ const CookiePolicyModal = () => {
                 className="cookies-accordion__toggle"
               >
                 <div className="d-flex align-items-center">
-                  {id === 'essential' ? (
+                  {id === 'functional' ? (
                     <i className="icon-check mx-3"></i>
                   ) : (
                     <CustomToggleCheck
