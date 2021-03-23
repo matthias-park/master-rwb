@@ -37,9 +37,21 @@ module.exports = {
       repo: 'ssh://tonybet@ph.tonybet.com/diffusion/NNW/nodejs-next-web.git',
       path: '/home/tonybet/next-web',
       'post-deploy':
-        'npm install && pm2 startOrRestart ecosystem.json --env stage',
+        'npm install && npm run build:stage && pm2 startOrRestart ecosystem.json --env stage',
       env: {
         NODE_ENV: 'stage',
+      },
+    },
+    testing: {
+      user: 'tonybet',
+      host: ['192.168.109.27'],
+      ref: 'origin/master',
+      repo: 'ssh://tonybet@ph.tonybet.com/diffusion/NNW/nodejs-next-web.git',
+      path: '/home/tonybet/next-web-test',
+      'post-deploy':
+        'npm install && npm run build:test && pm2 startOrRestart ecosystem.json --env test',
+      env: {
+        NODE_ENV: 'test',
       },
     },
   },

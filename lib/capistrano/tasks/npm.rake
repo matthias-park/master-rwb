@@ -8,7 +8,7 @@ namespace :npm do
     else
       on roles(['next-web', 'next-web-test']) do
         within release_path do
-          execute :npm, :run, "build:#{fetch(env)}"
+          execute :npm, :run, "build:#{rails_env}"
         end
       end
     end
