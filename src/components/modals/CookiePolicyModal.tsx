@@ -69,7 +69,7 @@ const CookiePolicyModal = () => {
                       onChange={e => toggleCookie(e, id)}
                     ></CustomToggleCheck>
                   )}
-                  <div className="ml-2">
+                  <div className="ml-3 text-left">
                     <h4 className="mb-0 text-14 weight-500 text-gray-800">
                       {t(`cookies_check_${id}_title`)}
                     </h4>
@@ -93,14 +93,14 @@ const CookiePolicyModal = () => {
         </Accordion>
         <div className="d-flex flex-column align-items-center mt-3">
           <Button
-            className="mt-2"
+            className="mt-2 col-6"
             variant="primary"
             onClick={() => handleBtnClick('save')}
           >
             {t('cookies_btn_save')}
           </Button>
           <Button
-            className="mt-2"
+            className="mt-2 col-6"
             variant="primary"
             onClick={e => handleBtnClick('all')}
           >
