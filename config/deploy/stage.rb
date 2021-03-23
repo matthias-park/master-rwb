@@ -6,7 +6,7 @@ set :deploy_to, '/home/tonybet/next-web'
 set :nvm_type, :user
 set :nvm_node, 'v15.4.0'
 set :nvm_map_bins, %w{node npm pm2}
-set :build_env, :env
+ENV['build_env'] = :env
 
 append :linked_dirs, 'node_modules'
 
