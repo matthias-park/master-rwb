@@ -15,6 +15,7 @@ import { GtmProvider } from './hooks/useGTM';
 import * as Sentry from '@sentry/react';
 import { Workbox } from 'workbox-window';
 import 'react-placeholder/lib/reactPlaceholder.css';
+import Lockr from 'lockr';
 
 if (process.env.TARGET_ENV !== 'development' && window.__config__.sentryDsn) {
   Sentry.init({
@@ -45,23 +46,27 @@ ReactDOM.render(
   MOUNT_NODE,
 );
 
-// if (process.env.TARGET_ENV !== 'development' && 'serviceWorker' in navigator) {
-// const wb = new Workbox(`/service-worker.js?name=${window.__config__.name}`);
+if (
+  Lockr.get('service-worker') &&
+  process.env.TARGET_ENV !== 'development' &&
+  'serviceWorker' in navigator
+) {
+  const wb = new Workbox(`/service-worker.js?name=${window.__config__.name}`);
 
-// wb.addEventListener('installed', event => {
-//   if (event.isUpdate) {
-//     window._wbUpdate = true;
-//     window.toast?.('Website update available', {
-//       appearance: 'success',
-//       autoDismiss: false,
-//       onDismiss: () => window.location.reload(),
-//     });
-//   }
-// });
+  wb.addEventListener('installed', event => {
+    if (event.isUpdate) {
+      window._wbUpdate = true;
+      window.toast?.('Website update available', {
+        appearance: 'success',
+        autoDismiss: false,
+        onDismiss: () => window.location.reload(),
+      });
+    }
+  });
 
-// setInterval(() => {
-//   wb.update();
-// }, 3600000); // 1hour
+  setInterval(() => {
+    wb.update();
+  }, 3600000); // 1hour
 
-// wb.register();
-// }
+  wb.register();
+}
