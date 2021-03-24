@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useParams, Redirect } from 'react-router-dom';
 import { useI18n } from '../../hooks/useI18n';
 import { Tab, Tabs } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
@@ -8,6 +8,10 @@ import Spinner from 'react-bootstrap/Spinner';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
 import Link from '../../components/Link';
+import JsonPage from '../../types/api/JsonPage';
+import { makeCollapsible } from '../../utils/uiUtils';
+import { useConfig } from '../../hooks/useConfig';
+import { PagesName } from '../../constants';
 
 const PromoItem = ({ item }: { item: PostItem }) => {
   const { pathname } = useLocation();
@@ -37,7 +41,7 @@ const PromoItem = ({ item }: { item: PostItem }) => {
   );
 };
 
-const PromotionsPage = () => {
+const PromotionsList = () => {
   const [activeTab, setActiveTab] = useState<string | null>('all');
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
     '/railsapi/v1/content/promotions',
@@ -68,6 +72,59 @@ const PromotionsPage = () => {
       </Tabs>
     </main>
   );
+};
+
+const PromotionPage = ({ slug }: { slug: string }) => {
+  const { routes } = useConfig(
+    (prev, next) => prev.routes.length === next.routes.length,
+  );
+  const { data, error } = useApi<RailsApiResponse<JsonPage>>(
+    `/railsapi/v1/content/promotion/${slug}`,
+  );
+  const isDataLoading = !data && !error;
+
+  useEffect(() => {
+    makeCollapsible('card', 'collapse', 'card-header');
+  }, [data]);
+
+  if (!isDataLoading && (error || !data?.Success)) {
+    const promotionsListRoute = routes.find(
+      route =>
+        route.id === PagesName.PromotionsPage && !route.path.endsWith(':slug'),
+    );
+    return promotionsListRoute ? (
+      <Redirect to={promotionsListRoute.path} />
+    ) : (
+      <PromotionsList />
+    );
+  }
+
+  return (
+    <main className="container-fluid px-3 pr-sm-4 pl-sm-5 py-4 pt-5">
+      {isDataLoading && (
+        <div className="d-flex justify-content-center pt-4 pb-3">
+          <Spinner animation="border" variant="black" className="mx-auto" />
+        </div>
+      )}
+      {!!data && (
+        <>
+          <h1 className="mb-4">{data.Data.title || data.Data.headline}</h1>
+          {!!data.Data.body && (
+            <div dangerouslySetInnerHTML={{ __html: data.Data.body }} />
+          )}
+        </>
+      )}
+    </main>
+  );
+};
+
+const PromotionsPage = () => {
+  const { slug } = useParams<{ slug?: string }>();
+
+  if (slug) {
+    return <PromotionPage slug={slug} />;
+  }
+  return <PromotionsList />;
 };
 
 export default PromotionsPage;
