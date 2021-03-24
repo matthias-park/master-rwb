@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import Dropdown from 'react-bootstrap/Dropdown';
-import JsonPage from '../../types/api/JsonPage';
+import JsonPageTemplate from '../../types/api/JsonPageTemplate';
 import { makeCollapsible } from '../../utils/uiUtils';
 import { useParams, useLocation } from 'react-router-dom';
-import clsx from 'clsx';
 import NotFoundPage from './notFoundPage';
 import Sidebar from '../../components/Sidebar';
 import HelpBlock from '../../components/HelpBlock';
@@ -18,7 +17,7 @@ const TemplatePage = () => {
   const [active, setActive] = useState('');
   const [dropdownShow, setDropdownShow] = useState(false);
   const page = slug || pathname.substring(1).replaceAll('/', '_');
-  const { data, error } = useApi<RailsApiResponse<JsonPage>>(
+  const { data, error } = useApi<RailsApiResponse<JsonPageTemplate>>(
     `/railsapi/v1/content/page/${page}`,
   );
   const isDataLoading = !data && !error;
@@ -27,12 +26,10 @@ const TemplatePage = () => {
   useEffect(() => {
     makeCollapsible('card', 'collapse', 'card-header');
     if (data !== undefined) {
-      const menuLinks = data?.Data.structure.content
-        .slice(1)
-        .map(el => ({
-          link: el.section.menu_item.value,
-          name: el.section.menu_item.value,
-        }));
+      const menuLinks = data?.Data.structure.content.slice(1).map(el => ({
+        link: el.section.menu_item.value,
+        name: el.section.menu_item.value,
+      }));
       setLinks(menuLinks);
       setActive(data.Data.structure.content[1].section?.menu_item.value);
     }
