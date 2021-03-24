@@ -10,7 +10,7 @@ const basicAuth = (req: Request, res: Response, next: NextFunction) => {
         `${req.franchise.domain}/service-worker.js?name=${req.franchise.name}`,
       )
   )
-    next();
+    return next();
   if (
     req.header(PRERENDER_HEADER) ||
     !BASIC_AUTH ||
