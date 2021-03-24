@@ -69,4 +69,12 @@ if (
   }, 3600000); // 1hour
 
   wb.register();
+} else {
+  window.navigator.serviceWorker
+    ?.getRegistrations()
+    ?.then(function (registrations) {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
 }
