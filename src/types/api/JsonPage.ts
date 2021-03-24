@@ -1,13 +1,36 @@
 interface JsonPage {
-  id: null;
-  slug: string;
-  title: string;
-  description: string | null;
-  meta: string | null;
-  body: string;
-  headline: string;
   meta_description: string;
-  seo_title: string;
+  meta_title: string;
+  name: string;
+  slug: string;
+  structure: {
+    content: {
+      standart: {
+        page_title: {
+          id: number;
+          value: string;
+        };
+      };
+      section: {
+        menu_item: {
+          id: number;
+          value: string;
+        };
+        section_content: {
+          id: number;
+          value: string;
+        };
+        section_title: {
+          id: number;
+          value: string;
+        };
+        section_image_url: {
+          id: number;
+          value: string;
+        };
+      };
+    }[];
+  };
 }
 
 export default JsonPage;
