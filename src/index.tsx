@@ -73,8 +73,11 @@ if (
   window.navigator.serviceWorker
     ?.getRegistrations()
     ?.then(function (registrations) {
-      for (let registration of registrations) {
-        registration.unregister();
+      if (registrations.length) {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
+        window.location.reload();
       }
     });
 }
