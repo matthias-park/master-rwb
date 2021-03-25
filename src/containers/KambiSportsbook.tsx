@@ -119,7 +119,7 @@ const getSBParams = async (config: Config, error: () => void) => {
     ticket: data?.Data || '',
     currency: 'EUR',
     market: 'BE',
-    getApiBalance: `${window.__config__.apiUrl}/players/get_balance/true`,
+    getApiBalance: `${window.__config__.apiUrl}/railsapi/v1/user/balance`,
   };
 };
 
