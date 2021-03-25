@@ -25,13 +25,13 @@ const TemplatePage = () => {
 
   useEffect(() => {
     makeCollapsible('card', 'collapse', 'card-header');
-    if (data !== undefined) {
-      const menuLinks = data?.Data.structure.content.slice(1).map(el => ({
+    if (data?.Data) {
+      const menuLinks = data.Data.structure?.content.slice(1).map(el => ({
         link: el.section.menu_item.value,
         name: el.section.menu_item.value,
       }));
       setLinks(menuLinks);
-      setActive(data.Data.structure.content[1].section?.menu_item.value);
+      setActive(data.Data?.structure?.content[1].section?.menu_item.value);
     }
   }, [data]);
 

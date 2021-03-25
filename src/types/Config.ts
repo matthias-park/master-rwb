@@ -8,6 +8,12 @@ import {
   Sidebar,
 } from './api/PageConfig';
 
+export enum ConfigLoaded {
+  Loading = 0,
+  Loaded = 1,
+  Error = 2,
+}
+
 type Config = {
   user: UserStatus;
   mutateUser: (status?: UserStatus, shouldRevalidate?: boolean) => void;
@@ -19,7 +25,7 @@ type Config = {
   footer?: FooterData;
   sidebars?: Array<Sidebar[]>;
   helpBlock?: PagesName[];
-  configLoaded: boolean;
+  configLoaded: ConfigLoaded;
 };
 
 export default Config;

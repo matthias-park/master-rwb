@@ -11,6 +11,7 @@ import { useConfig } from './useConfig';
 import { useToasts } from 'react-toast-notifications';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import useApi from './useApi';
+import { ConfigLoaded } from '../types/Config';
 
 export const I18nContext = createContext<I18n | null>(null);
 
@@ -45,7 +46,9 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   });
   const translationsUrl = `/railsapi/v1/translations?locale=${locale}`;
   const { data, mutate } = useApi<RailsApiResponse<Translations>>(
-    !TestEnv && configLoaded && locale ? translationsUrl : null,
+    !TestEnv && configLoaded === ConfigLoaded.Loaded && locale
+      ? translationsUrl
+      : null,
     {
       revalidateOnMount: true,
       onErrorRetry: () => {

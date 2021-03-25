@@ -7,7 +7,7 @@ import React, {
   useMemo,
 } from 'react';
 import { getApi, postApi } from '../utils/apiUtils';
-import Config from '../types/Config';
+import Config, { ConfigLoaded } from '../types/Config';
 import UserStatus from '../types/UserStatus';
 import { setLocalePathname, getWindowUrlLocale } from '../utils/i18n';
 import { TestEnv } from '../constants';
@@ -69,15 +69,18 @@ const useUser = () => {
 const useConstants = () => {
   const { addToast } = useToasts();
   const constantsUrl = '/railsapi/v1/content/constants';
-  const { data, mutate } = useApi<RailsApiResponse<PageConfig>>(constantsUrl, {
-    revalidateOnMount: true,
-    onErrorRetry: (err: RailsApiResponse<null>) => [
-      addToast('Failed to get page config', {
-        appearance: 'error',
-        autoDismiss: true,
-      }),
-    ],
-  });
+  const { data, mutate, error } = useApi<RailsApiResponse<PageConfig>>(
+    constantsUrl,
+    {
+      revalidateOnMount: true,
+      onErrorRetry: (err: RailsApiResponse<null>) => [
+        addToast('Failed to get page config', {
+          appearance: 'error',
+          autoDismiss: true,
+        }),
+      ],
+    },
+  );
   useEffect(() => {
     /*navigator.serviceWorker.addEventListener('message', async ({ data }) => {
       if (
@@ -93,7 +96,11 @@ const useConstants = () => {
       }
     });*/
   }, []);
-  return { constants: data?.Data, updateConstants: mutate };
+  return {
+    constants: data?.Data,
+    updateConstants: mutate,
+    constantsError: error,
+  };
 };
 
 export const configContext = createContext<Config | null>(null);
@@ -113,7 +120,7 @@ export type ConfigProviderProps = {
 };
 
 export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
-  const { constants, updateConstants } = useConstants();
+  const { constants, updateConstants, constantsError } = useConstants();
   const locales = constants?.available_locales.map(locale => locale.iso) || [];
   const { user, mutateUser } = useUser();
   const { addToast } = useToasts();
@@ -122,7 +129,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     null,
   );
   const [locale, changeLocale] = useState(constants?.locale || '');
-  const [configLoaded, setConfigLoaded] = useState(false);
+  const [configLoaded, setConfigLoaded] = useState(ConfigLoaded.Loading);
   useEffect(() => {
     window.toast = addToast;
   }, []);
@@ -152,17 +159,19 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
         if (appLocale && (locale !== appLocale || !detectedLocale)) {
           setLocale(appLocale);
         } else {
-          setConfigLoaded(true);
+          setConfigLoaded(ConfigLoaded.Loaded);
         }
       }
+    } else if (constantsError) {
+      setConfigLoaded(ConfigLoaded.Error);
     }
-  }, [!!constants]);
+  }, [!!constants, !!constantsError]);
 
   const setLocale = async (lang: string) => {
     changeLocale(lang);
     setLocalePathname(lang);
     setCachedLocale(lang);
-    setConfigLoaded(true);
+    setConfigLoaded(ConfigLoaded.Loaded);
   };
   const value: Config = useMemo(
     () => ({

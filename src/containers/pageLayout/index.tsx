@@ -10,6 +10,8 @@ import { useI18n } from '../../hooks/useI18n';
 import useGTM from '../../hooks/useGTM';
 import Spinner from 'react-bootstrap/Spinner';
 import { PagesName } from '../../constants';
+import { ConfigLoaded } from '../../types/Config';
+import NotFoundPage from '../pages/notFoundPage';
 
 let prevPathname: string | null = null;
 
@@ -53,7 +55,11 @@ const PageLayout = ({ children }) => {
     return !!helpBlock && !!route && helpBlock.includes(route.id);
   }, [pathname, route, helpBlock]);
   useEffect(() => {
-    if (prevPathname !== pathname && locale) {
+    if (
+      prevPathname !== pathname &&
+      locale &&
+      route?.id !== PagesName.LocaleSelectPage
+    ) {
       sendDataToGTM({
         'tglab.VirtualUrl': `/${locale}${pathname}`,
         'tglab.VirtualTitle': route ? `${t(`sitemap_${route.name}`)}` : '',
@@ -80,9 +86,6 @@ const PageLayout = ({ children }) => {
     if (!locale && localeSelectRoute && pathname !== localeSelectRoute.path) {
       history.push(localeSelectRoute.path);
     }
-    if (locale && route?.id === localeSelectRoute?.id) {
-      history.push('/');
-    }
   }, [locale, routes]);
 
   const placeholderHeight =
@@ -90,7 +93,7 @@ const PageLayout = ({ children }) => {
     (headerRef.current?.offsetHeight || 0) -
     (footerRef.current?.offsetHeight || 0);
 
-  if (configLoaded && !locale) {
+  if (configLoaded === ConfigLoaded.Loaded && !locale) {
     return children;
   }
   return (
@@ -108,11 +111,11 @@ const PageLayout = ({ children }) => {
         </LayoutWithSidebar>
       ) : (
         <>
-          {configLoaded ? (
-            children
-          ) : (
+          {configLoaded === ConfigLoaded.Loading && (
             <PageLoadingSpinner height={placeholderHeight} />
           )}
+          {configLoaded === ConfigLoaded.Loaded && children}
+          {configLoaded === ConfigLoaded.Error && <NotFoundPage />}
           <ErrorBoundary>
             <PageFooter ref={footerRef} />
           </ErrorBoundary>

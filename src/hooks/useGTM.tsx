@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { ConfigLoaded } from '../types/Config';
 import { ISnippetsParams, IDataGTM } from '../types/GoogleTagManager';
 import { sendToGTM, initGTM } from '../utils/GoogleTagManager';
 import { useConfig } from './useConfig';
@@ -48,7 +49,7 @@ const useGTM = (): ((data: IDataGTM) => void) => {
   const sendDataToGTM = useCallback(
     (data: IDataGTM): void => {
       // if (configLoaded) console.log(data);
-      if (configLoaded && gtmContextState?.id) {
+      if (configLoaded === ConfigLoaded.Loaded && gtmContextState?.id) {
         sendToGTM({ data, dataLayerName: gtmContextState.dataLayerName! });
       }
     },

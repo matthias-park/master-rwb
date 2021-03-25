@@ -39,9 +39,11 @@ const COMPONENT_PAGES = {
 
 const Routes = () => {
   const { jsxT } = useI18n();
-  const { routes } = useConfig(
-    (prev, next) => prev.routes.length === next.routes.length,
-  );
+  const { routes, locale } = useConfig((prev, next) => {
+    const routesEqual = prev.routes.length === next.routes.length;
+    const localeExist = !!prev.locale === !!next.locale;
+    return routesEqual && localeExist;
+  });
   const { pathname } = useLocation();
 
   return (
@@ -59,7 +61,7 @@ const Routes = () => {
             COMPONENT_PAGES[route.id] ||
             COMPONENT_PAGES[PagesName.TemplatePage];
 
-          if (!Page) {
+          if (!Page || (locale && route.id === PagesName.LocaleSelectPage)) {
             return null;
           }
           const RouteEl = route.protected ? ProtectedRoute : Route;
