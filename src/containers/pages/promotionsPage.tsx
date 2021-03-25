@@ -15,9 +15,9 @@ import { PagesName } from '../../constants';
 
 const PromoItem = ({ item }: { item: PostItem }) => {
   const { pathname } = useLocation();
-  const slug = new URL(item.alternative_url).pathname; //getPath();
+  const slug = item.alternative_url && new URL(item.alternative_url).pathname; //getPath();
   const LinkEl = ({ children }) =>
-    item.use_alternative_url ? (
+    item.use_alternative_url && slug ? (
       <Link to={`${pathname}${slug}`}>{children}</Link>
     ) : (
       children
