@@ -37,6 +37,7 @@ export enum PagesName {
   SitemapPage = 17,
   BettingRulesPage = 18,
   Null = 19,
+  LocaleSelectPage = 20,
 }
 
 export enum FormFieldValidation {

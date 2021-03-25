@@ -130,23 +130,26 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     if (constants) {
       const appLocale = locale || constants.locale;
       const detectedLocale = getWindowUrlLocale();
-
-      if (detectedLocale && appLocale !== detectedLocale && !!cachedLocale) {
+      const detectedLocaleAvailable =
+        detectedLocale && locales.includes(detectedLocale.toLocaleLowerCase());
+      if (
+        appLocale &&
+        detectedLocaleAvailable &&
+        appLocale !== detectedLocale &&
+        !!cachedLocale
+      ) {
         (async () => {
-          const detectedLocaleAvailable = locales.includes(
-            detectedLocale.toLocaleLowerCase(),
-          );
           if (!window.PRERENDER_CACHE && detectedLocaleAvailable) {
             await postApi('/railsapi/v1/locale', {
-              locale: detectedLocale,
+              locale: detectedLocale!,
             }).then(() => {
               updateConstants();
             });
           }
-          setLocale(detectedLocaleAvailable ? detectedLocale : appLocale);
+          setLocale(detectedLocaleAvailable ? detectedLocale! : appLocale!);
         })();
       } else {
-        if (locale !== appLocale || !detectedLocale) {
+        if (appLocale && (locale !== appLocale || !detectedLocale)) {
           setLocale(appLocale);
         } else {
           setConfigLoaded(true);

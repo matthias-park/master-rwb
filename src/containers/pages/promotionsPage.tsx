@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useParams, Redirect } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useI18n } from '../../hooks/useI18n';
 import { Tab, Tabs } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
@@ -10,8 +10,7 @@ import useApi from '../../hooks/useApi';
 import Link from '../../components/Link';
 import JsonPage from '../../types/api/JsonPage';
 import { makeCollapsible } from '../../utils/uiUtils';
-import { useConfig } from '../../hooks/useConfig';
-import { PagesName } from '../../constants';
+import NotFoundPage from './notFoundPage';
 
 const PromoItem = ({ item }: { item: PostItem }) => {
   const { pathname } = useLocation();
@@ -74,9 +73,6 @@ const PromotionsList = () => {
 };
 
 const PromotionPage = ({ slug }: { slug: string }) => {
-  const { routes } = useConfig(
-    (prev, next) => prev.routes.length === next.routes.length,
-  );
   const { data, error } = useApi<RailsApiResponse<JsonPage>>(
     `/railsapi/v1/content/promotion/${slug}`,
   );
@@ -87,15 +83,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
   }, [data]);
 
   if (!isDataLoading && (error || !data?.Success)) {
-    const promotionsListRoute = routes.find(
-      route =>
-        route.id === PagesName.PromotionsPage && !route.path.endsWith(':slug'),
-    );
-    return promotionsListRoute ? (
-      <Redirect to={promotionsListRoute.path} />
-    ) : (
-      <PromotionsList />
-    );
+    return <NotFoundPage />;
   }
 
   return (

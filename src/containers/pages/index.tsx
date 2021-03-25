@@ -34,6 +34,7 @@ const COMPONENT_PAGES = {
   [PagesName.ForgotLoginPage]: AsyncPage('forgotLoginPage'),
   [PagesName.ContactUsPage]: AsyncPage('contactUsPage'),
   [PagesName.SitemapPage]: AsyncPage('sitemapPage'),
+  [PagesName.LocaleSelectPage]: AsyncPage('localeSelectPage'),
 };
 
 const Routes = () => {

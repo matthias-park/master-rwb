@@ -9,6 +9,7 @@ import ErrorBoundary from '../ErrorBoundary';
 import { useI18n } from '../../hooks/useI18n';
 import useGTM from '../../hooks/useGTM';
 import Spinner from 'react-bootstrap/Spinner';
+import { PagesName } from '../../constants';
 
 let prevPathname: string | null = null;
 
@@ -52,7 +53,7 @@ const PageLayout = ({ children }) => {
     return !!helpBlock && !!route && helpBlock.includes(route.id);
   }, [pathname, route, helpBlock]);
   useEffect(() => {
-    if (prevPathname !== pathname) {
+    if (prevPathname !== pathname && locale) {
       sendDataToGTM({
         'tglab.VirtualUrl': `/${locale}${pathname}`,
         'tglab.VirtualTitle': route ? `${t(`sitemap_${route.name}`)}` : '',
@@ -71,10 +72,27 @@ const PageLayout = ({ children }) => {
     window.scrollTo(0, Number(savedScroll));
     prevPathname = pathname;
   }, [pathname]);
+
+  useEffect(() => {
+    const localeSelectRoute = routes.find(
+      route => route.id === PagesName.LocaleSelectPage,
+    );
+    if (!locale && localeSelectRoute && pathname !== localeSelectRoute.path) {
+      history.push(localeSelectRoute.path);
+    }
+    if (locale && route?.id === localeSelectRoute?.id) {
+      history.push('/');
+    }
+  }, [locale, routes]);
+
   const placeholderHeight =
     window.innerHeight -
     (headerRef.current?.offsetHeight || 0) -
     (footerRef.current?.offsetHeight || 0);
+
+  if (configLoaded && !locale) {
+    return children;
+  }
   return (
     <>
       <ErrorBoundary>

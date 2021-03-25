@@ -45,7 +45,7 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   });
   const translationsUrl = `/railsapi/v1/translations?locale=${locale}`;
   const { data, mutate } = useApi<RailsApiResponse<Translations>>(
-    !TestEnv && configLoaded ? translationsUrl : null,
+    !TestEnv && configLoaded && locale ? translationsUrl : null,
     {
       revalidateOnMount: true,
       onErrorRetry: () => {
