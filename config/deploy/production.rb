@@ -1,6 +1,6 @@
 require 'net/ssh/proxy/command'
 
-server '192.168.20.121', user: 'tonybet', roles: %w(next-web prod-release)
+# server '192.168.20.121', user: 'tonybet', roles: %w(next-web prod-release)
 
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, '/home/tonybet/next-web'
