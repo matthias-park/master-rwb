@@ -1,20 +1,14 @@
 module.exports = {
   apps: [
     {
-      name: 'next-web',
+      name: 'next-web-stage',
       script: 'build/server/index.js',
       cwd: '/home/tonybet/next-web/current',
       pid_file: '/home/tonybet/next-web/current/pids/web.pid',
       out_file: '/dev/null',
       error_file: '/dev/null',
-      env: {
-        NODE_ENV: 'development',
-      },
       env_stage: {
         NODE_ENV: 'stage',
-      },
-      env_production: {
-        NODE_ENV: 'production',
       },
     },
     {
@@ -26,6 +20,20 @@ module.exports = {
       error_file: '/dev/null',
       env_testing: {
         NODE_ENV: 'testing',
+      },
+    },
+    {
+      name: 'next-web',
+      script: 'build/server/index.js',
+      cwd: '/home/tonybet/next-web/current',
+      instances: 4,
+      pid_file: '/home/tonybet/next-web/current/pids/web.pid',
+      exec_mode: 'cluster',
+      out_file: '/dev/null',
+      error_file: '/dev/null',
+      env_production: {
+        NODE_ENV: 'production',
+        NODE_APP_INSTANCE: 4,
       },
     },
   ],

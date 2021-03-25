@@ -1,4 +1,4 @@
-server '192.168.109.27', user: 'tonybet', roles: %w(next-web stage-release)
+server '192.168.109.27', user: 'tonybet', roles: %w(next-web-stage stage-release)
 
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, '/home/tonybet/next-web'
