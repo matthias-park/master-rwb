@@ -23,7 +23,7 @@ const ProtectedRoute = ({ children, redirectTo, ...props }: Props) => {
       </div>
     );
   }
-  if (true) {
+  if (user.logged_in) {
     return <Route {...props} />;
   }
   return (

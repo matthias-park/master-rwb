@@ -289,7 +289,7 @@ const WithdrawalPage = () => {
               <div className="info-container__text">
                 <ul className="list-unstyled mb-0">
                   <li className="mb-1">Your current bank account number:</li>
-                  <li className="mb-1">{data.Data.default_account.uniq_id}</li>
+                  <li className="mb-1">{data.Data.default_account.account}</li>
                 </ul>
               </div>
             </div>
