@@ -35,106 +35,108 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   };
 
   return (
-    <Dropdown
-      className={`header__user-menu user-menu-dropdown ${dropdownClasses}`}
-      show={showDropdown}
-      onToggle={isOpen => showUserMenu(isOpen)}
-    >
-      <div className="header__user-menu-info">
-        <div className="header__user-menu-info-balance">
-          <span>
-            {user.balance} {user.currency}
-          </span>
-          <Link to="/deposit" className="mt-1">
-            <i className="icon-add-action-1 ml-2"></i>
-          </Link>
-        </div>
-        <strong className="header__user-menu-info-name">{user.name}</strong>
-      </div>
-      <i className="header__user-menu-icon icon-account ml-2"></i>
-      <Dropdown.Toggle
-        as="button"
-        className="header__user-menu-toggle user-menu-dropdown"
+    <div className="d-flex justify-content-end flex-grow-1">
+      <Dropdown
+        className={`header__user-menu user-menu-dropdown ${dropdownClasses}`}
+        show={showDropdown}
+        onToggle={isOpen => showUserMenu(isOpen)}
       >
-        <i
-          className={`icon-${
-            showDropdown ? 'up' : 'down'
-          } header__user-menu-toggle-icon`}
-        ></i>
-      </Dropdown.Toggle>
-      <Dropdown.Menu className="dropdown-menu user-menu">
-        <div className="user-menu__wrp">
-          <Dropdown.Item as="div">
-            <Link
-              to="/deposit"
-              className="btn btn-outline-brand btn-lg text-14 px-3 mb-2"
-            >
-              <i className="icon-card"></i>
-              {t('deposit_link')}
+        <div className="header__user-menu-info">
+          <div className="header__user-menu-info-balance">
+            <span>
+              {user.balance} {user.currency}
+            </span>
+            <Link to="/deposit" className="mt-1">
+              <i className="icon-add-action-1 ml-2"></i>
             </Link>
-          </Dropdown.Item>
-          <ul className="user-menu__list">
-            {[
-              {
-                link: '/withdrawal',
-                name: 'withdrawal_link',
-              },
-              {
-                link: '/settings',
-                name: 'settings_link',
-              },
-              {
-                link: '/transactions',
-                name: 'transactions_link',
-              },
-            ].map(link => (
-              <UserMenuLink
-                key={link.link}
-                link={link.link}
-                name={t(link.name)}
-                setShowDropdown={showUserMenu}
-              />
-            ))}
-          </ul>
-          {/* <div className="club-card">
-            <img
-              className="club-card__bg-img"
-              src="/assets/images/lottery-club/bg.png"
-              alt=""
-            />
-            <img
-              className="club-card__img"
-              src="/assets/images/lottery-club/logo.png"
-              alt=""
-            />
-            <span className="club-card__text club-barcode mt-n3">
-              <p className="club-barcode__text">My lottery Club Card</p>
+          </div>
+          <strong className="header__user-menu-info-name">{user.name}</strong>
+        </div>
+        <i className="header__user-menu-icon icon-account ml-2"></i>
+        <Dropdown.Toggle
+          as="button"
+          className="header__user-menu-toggle user-menu-dropdown"
+        >
+          <i
+            className={`icon-${
+              showDropdown ? 'up' : 'down'
+            } header__user-menu-toggle-icon`}
+          ></i>
+        </Dropdown.Toggle>
+        <Dropdown.Menu className="dropdown-menu user-menu">
+          <div className="user-menu__wrp">
+            <Dropdown.Item as="div">
+              <Link
+                to="/deposit"
+                className="btn btn-outline-brand btn-lg text-14 px-3 mb-2"
+              >
+                <i className="icon-card"></i>
+                {t('deposit_link')}
+              </Link>
+            </Dropdown.Item>
+            <ul className="user-menu__list">
+              {[
+                {
+                  link: '/withdrawal',
+                  name: 'withdrawal_link',
+                },
+                {
+                  link: '/settings',
+                  name: 'settings_link',
+                },
+                {
+                  link: '/transactions',
+                  name: 'transactions_link',
+                },
+              ].map(link => (
+                <UserMenuLink
+                  key={link.link}
+                  link={link.link}
+                  name={t(link.name)}
+                  setShowDropdown={showUserMenu}
+                />
+              ))}
+            </ul>
+            {/* <div className="club-card">
               <img
-                className="club-barcode__img"
-                src="/assets/images/lottery-club/barcode.png"
+                className="club-card__bg-img"
+                src="/assets/images/lottery-club/bg.png"
                 alt=""
               />
-              <p className="club-barcode__number">1700340334308</p>
-            </span>
-          </div> */}
-          <div
-            className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
-            onClick={onLogoutClick}
-          >
-            {loggingOut && (
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                className="mr-1"
+              <img
+                className="club-card__img"
+                src="/assets/images/lottery-club/logo.png"
+                alt=""
               />
-            )}
-            {t('logout')}
+              <span className="club-card__text club-barcode mt-n3">
+                <p className="club-barcode__text">My lottery Club Card</p>
+                <img
+                  className="club-barcode__img"
+                  src="/assets/images/lottery-club/barcode.png"
+                  alt=""
+                />
+                <p className="club-barcode__number">1700340334308</p>
+              </span>
+            </div> */}
+            <div
+              className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
+              onClick={onLogoutClick}
+            >
+              {loggingOut && (
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  className="mr-1"
+                />
+              )}
+              {t('logout')}
+            </div>
           </div>
-        </div>
-      </Dropdown.Menu>
-    </Dropdown>
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
   );
 };
 export default HeaderUserInfo;

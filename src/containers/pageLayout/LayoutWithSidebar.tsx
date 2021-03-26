@@ -11,7 +11,11 @@ interface Props {
 }
 const LayoutWithSidebar = ({ sidebar, rightSidebar, children }: Props) => (
   <>
-    <div className={rightSidebar ? 'account-settings pb-4' : 'page-container'}>
+    <div
+      className={
+        rightSidebar ? 'account-settings pb-4' : 'page-container pt-xl-4'
+      }
+    >
       <Sidebar links={sidebar} />
       {children}
       {rightSidebar && (

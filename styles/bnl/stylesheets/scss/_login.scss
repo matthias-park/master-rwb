@@ -1,4 +1,7 @@
 .login-dropdown {
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
     position: relative;
     top: 5px;
     @include media-breakpoint-down(lg) {

@@ -35,7 +35,7 @@ const Sidebar = ({ links, scroll, onClick, active }: Props) => {
                 duration={500}
                 activeClass="active"
                 spy={true}
-                offset={-10}
+                offset={-50}
                 onSetActive={() => onClick?.(link.name)}
                 onClick={() => setTimeout(() => onClick?.(link.name), 550)}
               >
