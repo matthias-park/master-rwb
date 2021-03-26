@@ -143,10 +143,12 @@ const PageHeader = React.forwardRef<HTMLElement>((_, ref) => {
   const desktopWidth = useDesktopWidth(1199);
   const { pathname, hash } = useLocation();
   const fullPath = `${pathname}${hash}`;
-  const [active, setActive] = useState<string | null>(null);
+  const [active, setActive] = useState<string | null>('/sports');
   const [navExpanded, setNavExpanded] = useState(false);
   const navbarRef = useRef(null);
-  useOnClickOutside(navbarRef, () => setActive(!desktopWidth ? active : null));
+  useOnClickOutside(navbarRef, () =>
+    setActive(!desktopWidth || active === '/sports' ? active : null),
+  );
   const handleNavChange = (id: string) => {
     if (active === id) {
       setActive(null);

@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import Dropdown from 'react-bootstrap/Dropdown';
 import JsonPageTemplate from '../../types/api/JsonPageTemplate';
+import JsonPage from '../../types/api/JsonPage';
 import { makeCollapsible } from '../../utils/uiUtils';
+import { useConfig } from '../../hooks/useConfig';
 import { useParams, useLocation } from 'react-router-dom';
 import NotFoundPage from './notFoundPage';
 import Sidebar from '../../components/Sidebar';
@@ -17,21 +19,27 @@ const TemplatePage = () => {
   const [active, setActive] = useState('');
   const [dropdownShow, setDropdownShow] = useState(false);
   const page = slug || pathname.substring(1).replaceAll('/', '_');
-  const { data, error } = useApi<RailsApiResponse<JsonPageTemplate>>(
-    `/railsapi/v1/content/page/${page}`,
+  const { sidebars } = useConfig();
+  const htmlPages = sidebars?.slice(1)[0].map(el => el.link.replace(/\//g, ''));
+  const { data, error } = useApi<RailsApiResponse<any>>(
+    htmlPages?.includes(page)
+      ? `/railsapi/v1/content/promotion/${page}`
+      : `/railsapi/v1/content/page/${page}`,
   );
   const isDataLoading = !data && !error;
   const [links, setLinks] = useState<{ link: string; name: string }[]>([]);
 
   useEffect(() => {
     makeCollapsible('card', 'collapse', 'card-header');
-    if (data?.Data) {
-      const menuLinks = data.Data.structure?.content.slice(1).map(el => ({
+    if (data?.Data && !htmlPages?.includes(page)) {
+      const menuLinks = data.Data?.structure?.content.slice(1).map(el => ({
         link: el.section.menu_item.value,
         name: el.section.menu_item.value,
       }));
       setLinks(menuLinks);
-      setActive(data.Data?.structure?.content[1].section?.menu_item.value);
+      const firstMenuItem =
+        data.Data?.structure?.content[1].section?.menu_item.value;
+      setActive(firstMenuItem);
     }
   }, [data]);
 
@@ -40,14 +48,14 @@ const TemplatePage = () => {
   }
 
   return (
-    <div className="page-container justify-content-between">
+    <>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3 mx-auto">
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
       )}
-      {!!data && links && (
-        <>
+      {!!data && links && !htmlPages?.includes(page) && (
+        <div className="page-container justify-content-between pt-xl-4">
           <Sidebar
             links={links}
             scroll={true}
@@ -56,7 +64,7 @@ const TemplatePage = () => {
           />
           <div className="w-100 ml-0 ml-md-5 ml-xl-0 d-flex flex-column flex-xl-row mx-auto">
             <main className="container px-0 px-4 pl-xxl-150 mb-4 pt-4 pt-sm-5">
-              <h1 className="mb-3 text-brand-text">
+              <h1 className="mb-3 text-brand-text mt-xl-2">
                 {data.Data.structure.content[0].standart?.page_title.value}
               </h1>
               {data.Data.structure.content.slice(1).map((el, index) => (
@@ -66,13 +74,19 @@ const TemplatePage = () => {
                       <h2 className="template-page-block__title">
                         {el.section?.section_title.value}
                       </h2>
-                      <p className="template-page-block__text mb-3">
-                        {el.section?.section_content.value}
-                      </p>
-                      <img src={el.section?.section_image_url.value} />
+                      <div
+                        className="template-page-block__text mb-3"
+                        dangerouslySetInnerHTML={{
+                          __html: el.section?.section_content.value,
+                        }}
+                      ></div>
+                      <img
+                        className="template-page-block__img"
+                        src={el.section?.section_image_url.value}
+                      />
                     </div>
                   </Element>
-                  {index == 0 && (
+                  {index === 0 && (
                     <Dropdown
                       className="custom-dropdown mb-3 d-block d-md-none"
                       show={dropdownShow}
@@ -111,9 +125,14 @@ const TemplatePage = () => {
               />
             </div>
           </div>
-        </>
+        </div>
       )}
-    </div>
+      {!!data && htmlPages?.includes(page) && (
+        <main className="container-fluid mb-4 pt-5">
+          <div dangerouslySetInnerHTML={{ __html: data?.Data?.body }}></div>
+        </main>
+      )}
+    </>
   );
 };
 
