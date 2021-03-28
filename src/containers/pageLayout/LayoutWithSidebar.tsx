@@ -13,7 +13,9 @@ const LayoutWithSidebar = ({ sidebar, rightSidebar, children }: Props) => (
   <>
     <div
       className={
-        rightSidebar ? 'account-settings pb-4' : 'page-container pt-xl-4'
+        rightSidebar
+          ? 'account-settings pb-4 pt-xl-4'
+          : 'page-container pt-xl-4'
       }
     >
       <Sidebar links={sidebar} />
