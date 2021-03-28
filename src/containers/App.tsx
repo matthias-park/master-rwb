@@ -5,6 +5,7 @@ import { useConfig } from '../hooks/useConfig';
 import ApiHead from './ApiHead';
 import PageLayout from './pageLayout';
 import Modals from './Modals';
+import { UIConfigProvider } from '../hooks/useUIConfig';
 
 const App = () => {
   const { locale } = useConfig((prev, next) => {
@@ -13,11 +14,13 @@ const App = () => {
   });
   return (
     <BrowserRouter key={locale} basename={`/${locale}`}>
-      <ApiHead />
-      <Modals />
-      <PageLayout>
-        <Routes />
-      </PageLayout>
+      <UIConfigProvider>
+        <ApiHead />
+        <Modals />
+        <PageLayout>
+          <Routes />
+        </PageLayout>
+      </UIConfigProvider>
     </BrowserRouter>
   );
 };

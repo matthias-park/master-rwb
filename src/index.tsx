@@ -9,7 +9,6 @@ import { ConfigProvider } from './hooks/useConfig';
 import { I18nProvider } from './hooks/useI18n';
 import { SWRConfig } from 'swr';
 import { SwrFetcherConfig } from './utils/apiUtils';
-import { UIConfigProvider } from './hooks/useUIConfig';
 import { ToastProvider } from 'react-toast-notifications';
 import { GtmProvider } from './hooks/useGTM';
 import * as Sentry from '@sentry/react';
@@ -32,11 +31,9 @@ ReactDOM.render(
         <I18nProvider>
           <GtmProvider>
             <HelmetProvider>
-              <UIConfigProvider>
-                <React.StrictMode>
-                  <App />
-                </React.StrictMode>
-              </UIConfigProvider>
+              <React.StrictMode>
+                <App />
+              </React.StrictMode>
             </HelmetProvider>
           </GtmProvider>
         </I18nProvider>

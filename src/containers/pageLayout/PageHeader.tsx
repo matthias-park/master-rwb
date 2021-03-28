@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { getApi, postApi } from '../../utils/apiUtils';
 import LoginDropdown from '../LoginDropdown';
@@ -139,23 +138,16 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
 
 const PageHeader = React.forwardRef<HTMLElement>((_, ref) => {
   const { header } = useConfig((prev, next) => !!prev.header === !!next.header);
-  const { backdrop } = useUIConfig();
+  const { backdrop, headerNav } = useUIConfig();
   const desktopWidth = useDesktopWidth(1199);
-  const { pathname, hash } = useLocation();
-  const fullPath = `${pathname}${hash}`;
-  const [active, setActive] = useState<string | null>('/sports');
   const [navExpanded, setNavExpanded] = useState(false);
   const navbarRef = useRef(null);
-  useOnClickOutside(navbarRef, () =>
-    setActive(!desktopWidth || active === '/sports' ? active : null),
+  useOnClickOutside(
+    navbarRef,
+    () =>
+      headerNav.active?.startsWith('click:') &&
+      headerNav.toggle(headerNav.active),
   );
-  const handleNavChange = (id: string) => {
-    if (active === id) {
-      setActive(null);
-    } else {
-      setActive(id);
-    }
-  };
 
   return (
     <Navbar
@@ -214,10 +206,9 @@ const PageHeader = React.forwardRef<HTMLElement>((_, ref) => {
                         key={`${link.name}-${link.prefix}-${link.order}`}
                         data={link}
                         mobile={!desktopWidth}
-                        handleNavChange={handleNavChange}
-                        active={active}
+                        active={headerNav.active}
                         setNavExpanded={setNavExpanded}
-                        fullPath={fullPath}
+                        toggleActive={headerNav.toggle}
                       />
                     );
                   })}

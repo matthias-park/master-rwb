@@ -9,10 +9,16 @@ export type UIBackdrop = {
   hide: () => void;
 } & UIBackdropState;
 
+export type HeaderActiveNav = {
+  active: string | null;
+  toggle: (name?: string | null) => void;
+};
+
 type UIConfig = {
   backdrop: UIBackdrop;
   showModal: ComponentName | null;
   setShowModal: (ComponentName) => void;
+  headerNav: HeaderActiveNav;
 };
 
 export default UIConfig;

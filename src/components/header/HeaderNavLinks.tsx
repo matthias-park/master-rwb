@@ -8,23 +8,22 @@ import { useUIConfig } from '../../hooks/useUIConfig';
 import { HeaderRoute } from '../../types/api/PageConfig';
 import useGTM from '../../hooks/useGTM';
 import Link from '../Link';
+import { useLocation } from 'react-router';
 
 interface HeaderNavLinkProps {
   data: HeaderRoute;
   mobile: boolean;
-  handleNavChange: (id: string) => void;
   active: string | null;
   setNavExpanded: (value: boolean) => void;
-  fullPath: string;
+  toggleActive: (name?: string | null) => void;
 }
 
 export const HeaderNavClassicLink = ({
   data,
   mobile,
-  handleNavChange,
   active,
   setNavExpanded,
-  fullPath,
+  toggleActive,
 }: HeaderNavLinkProps) => {
   const { t } = useI18n();
   const { locale, user } = useConfig((prev, next) => {
@@ -32,6 +31,7 @@ export const HeaderNavClassicLink = ({
     const userEqual = prev.user.logged_in === next.user.logged_in;
     return localeEqual && userEqual;
   });
+  const { pathname, hash } = useLocation();
   const { backdrop } = useUIConfig();
   const dropdownRef = useRef(null);
   const sendDataToGTM = useGTM();
@@ -49,18 +49,12 @@ export const HeaderNavClassicLink = ({
     });
   };
 
-  const showDropdown =
-    !!data.prefix &&
-    fullPath.startsWith(data.prefix || '') &&
-    !active &&
-    !mobile;
-
   return (
     <Dropdown
       ref={dropdownRef}
       as="li"
       className="header__nav-item"
-      show={(!active && showDropdown) || active === (data.prefix || data.name)}
+      show={active?.includes(`${mobile ? 'click:' : ''}${data.name}`)}
     >
       {!mobile ? (
         <Dropdown.Toggle
@@ -77,7 +71,7 @@ export const HeaderNavClassicLink = ({
           }
           className="header__nav-item-link cursor-pointer"
           onClick={() => {
-            handleNavChange(data.prefix || data.name);
+            toggleActive(data.name);
           }}
         >
           {t(data.name)}
@@ -105,7 +99,7 @@ export const HeaderNavClassicLink = ({
             as={'i'}
             className="header__nav-item-icon icon-down"
             onClick={() => {
-              handleNavChange(data.prefix || data.name);
+              toggleActive(data.name);
             }}
           ></Dropdown.Toggle>
         </div>
@@ -137,7 +131,7 @@ export const HeaderNavClassicLink = ({
                     target: '_blank',
                   }
                 : {})}
-              className={clsx(link.path === fullPath && 'active')}
+              className={clsx(link.path === `${pathname}${hash}` && 'active')}
               href={link.path.replace('{__locale__}', locale)}
             >
               {t(link.text)}

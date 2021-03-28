@@ -1,6 +1,10 @@
-import { UIBackdrop, UIBackdropState } from '../types/UIConfig';
+import {
+  HeaderActiveNav,
+  UIBackdrop,
+  UIBackdropState,
+} from '../types/UIConfig';
 import { ComponentName } from '../constants';
-import { throttle } from './index';
+import { HeaderRoute } from '../types/api/PageConfig';
 
 export const changeBackdropVisibility = (visibility: boolean) => {
   const SHOW_CLASS = 'show';
@@ -21,31 +25,52 @@ export const changeBodyScroll = (enabledScroll: boolean) => {
   return classList.add(DISABLED_SCROLL_CLASS);
 };
 
-let setNewBackdropCallback;
 export const createBackdropProviderValues = (
   backdrop: UIBackdropState,
   setBackdrop: (newState: UIBackdropState) => void,
 ): UIBackdrop => {
-  if (!setNewBackdropCallback) {
-    setNewBackdropCallback = throttle(setBackdrop, 300);
-  }
   const toggle = (show?: boolean, ignoredComponents: ComponentName[] = []) => {
     const active = show ?? !backdrop.active;
-    setNewBackdropCallback({
+    setBackdrop({
       active,
       ignoredComponents: active ? ignoredComponents : [],
     });
   };
   const show = (ignoredComponents: ComponentName[] = []) =>
-    setNewBackdropCallback({ active: true, ignoredComponents });
-  const hide = () =>
-    setNewBackdropCallback({ active: false, ignoredComponents: [] });
+    setBackdrop({ active: true, ignoredComponents });
+  const hide = () => setBackdrop({ active: false, ignoredComponents: [] });
 
   return {
     ...backdrop,
     toggle,
     show,
     hide,
+  };
+};
+
+export const createHeaderNavProviderValues = (
+  activeHeaderNav: string | null,
+  setActiveHeaderNav: (newState: string | null) => void,
+  currentRoute?: string,
+  headerLinks?: HeaderRoute[],
+): HeaderActiveNav => {
+  const toggle = (name?: string | null) => {
+    const navName = name && (name.includes('click:') ? name : `click:${name}`);
+    let activeRouteName =
+      navName && navName !== activeHeaderNav ? navName : null;
+    console.log(name, navName, activeRouteName);
+    if (!activeRouteName && currentRoute && headerLinks) {
+      activeRouteName =
+        headerLinks.find(
+          link => !!link.prefix && currentRoute.startsWith(link.prefix),
+        )?.name || null;
+    }
+    setActiveHeaderNav(activeRouteName);
+  };
+
+  return {
+    active: activeHeaderNav,
+    toggle,
   };
 };
 
