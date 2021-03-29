@@ -8,14 +8,20 @@ interface Props {
   sidebar: SidebarProps[];
   rightSidebar: boolean;
   children: React.ReactNode;
+  spacingClasses: string | null;
 }
-const LayoutWithSidebar = ({ sidebar, rightSidebar, children }: Props) => (
+const LayoutWithSidebar = ({
+  sidebar,
+  rightSidebar,
+  children,
+  spacingClasses,
+}: Props) => (
   <>
     <div
       className={
         rightSidebar
-          ? 'account-settings pb-4 pt-xl-4'
-          : 'page-container pt-xl-4'
+          ? `account-settings pb-4 ${spacingClasses}`
+          : `page-container ${spacingClasses}`
       }
     >
       <Sidebar links={sidebar} />

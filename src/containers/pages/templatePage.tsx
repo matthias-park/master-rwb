@@ -5,12 +5,14 @@ import JsonPageTemplate from '../../types/api/JsonPageTemplate';
 import JsonPage from '../../types/api/JsonPage';
 import { makeCollapsible } from '../../utils/uiUtils';
 import { useConfig } from '../../hooks/useConfig';
+import { useUIConfig } from '../../hooks/useUIConfig';
 import { useParams, useLocation } from 'react-router-dom';
 import NotFoundPage from './notFoundPage';
 import Sidebar from '../../components/Sidebar';
 import HelpBlock from '../../components/HelpBlock';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
+import clsx from 'clsx';
 import { Element, Link as ScrollLink } from 'react-scroll';
 
 const TemplatePage = () => {
@@ -20,6 +22,7 @@ const TemplatePage = () => {
   const [dropdownShow, setDropdownShow] = useState(false);
   const page = slug || pathname.substring(1).replaceAll('/', '_');
   const { sidebars } = useConfig();
+  const { headerNav } = useUIConfig();
   const htmlPages = sidebars?.slice(1)[0].map(el => el.link.replace(/\//g, ''));
   const { data, error } = useApi<RailsApiResponse<any>>(
     htmlPages?.includes(page)
@@ -55,7 +58,12 @@ const TemplatePage = () => {
         </div>
       )}
       {!!data && links && !htmlPages?.includes(page) && (
-        <div className="page-container justify-content-between pt-xl-4">
+        <div
+          className={clsx(
+            'page-container justify-content-between',
+            headerNav.active && 'pt-xl-4',
+          )}
+        >
           <Sidebar
             links={links}
             scroll={true}

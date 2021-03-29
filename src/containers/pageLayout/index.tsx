@@ -5,6 +5,7 @@ import CookieConsent from '../../components/CookieConsent';
 import { matchPath, useHistory, useLocation } from 'react-router-dom';
 import LayoutWithSidebar from './LayoutWithSidebar';
 import { useConfig } from '../../hooks/useConfig';
+import { useUIConfig } from '../../hooks/useUIConfig';
 import ErrorBoundary from '../ErrorBoundary';
 import { useI18n } from '../../hooks/useI18n';
 import useGTM from '../../hooks/useGTM';
@@ -30,6 +31,7 @@ const PageLayout = ({ children }) => {
   const sendDataToGTM = useGTM();
   const { t } = useI18n();
   const { pathname } = useLocation();
+  const { headerNav } = useUIConfig();
   const { user, helpBlock, sidebars, routes, locale, configLoaded } = useConfig(
     (prev, next) => {
       const userEqual = prev.user.loading === next.user.loading;
@@ -102,7 +104,11 @@ const PageLayout = ({ children }) => {
         <PageHeader ref={headerRef} />
       </ErrorBoundary>
       {sidebar ? (
-        <LayoutWithSidebar sidebar={sidebar} rightSidebar={rightSidebarLayout}>
+        <LayoutWithSidebar
+          sidebar={sidebar}
+          rightSidebar={rightSidebarLayout}
+          spacingClasses={headerNav.active && 'pt-xl-4'}
+        >
           {configLoaded ? (
             children
           ) : (
