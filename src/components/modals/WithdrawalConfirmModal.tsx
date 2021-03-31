@@ -5,6 +5,7 @@ import {
 } from '../../types/api/user/Withdrawal';
 import { useI18n } from '../../hooks/useI18n';
 import Modal from 'react-bootstrap/Modal';
+import GenericModal from '../../components/modals/GenericModal';
 import Button from 'react-bootstrap/Button';
 import LoadingButton from '../LoadingButton';
 
@@ -23,35 +24,40 @@ const WithdrawalConfirmModal = ({
 }: WithdrawalConfirmProps) => {
   const { t } = useI18n();
   return (
-    <Modal show={true} onHide={onCancel} backdrop="static" centered>
-      <Modal.Header closeButton>
-        <Modal.Title>{t('withdrawal_page_withdrawal_confirm')}</Modal.Title>
-      </Modal.Header>
-
-      <Modal.Body>
+    <GenericModal
+      show={true}
+      hideCallback={onCancel}
+      isStatic={true}
+      isCentered={true}
+    >
+      <div>
+        <h2>{t('withdrawal_page_withdrawal_confirm')}</h2>
         {Object.keys(data.confirm_info).map(key => (
           <div key={key}>
             {t(`withdrawal_page_${key}`)}: {data.confirm_info[key]}
           </div>
         ))}
-      </Modal.Body>
-
-      <Modal.Footer>
-        <Button onClick={onCancel} variant="secondary" className="mx-auto">
-          {t('withdrawal_page_cancel')}
-        </Button>
-        <LoadingButton
-          onClick={() => {
-            onConfirm(data.params);
-          }}
-          variant="primary"
-          className="mx-auto"
-          loading={loading}
-        >
-          {t('withdrawal_page_confirm')}
-        </LoadingButton>
-      </Modal.Footer>
-    </Modal>
+        <div className="d-flex flex-column flex-sm-row mt-3">
+          <LoadingButton
+            onClick={() => {
+              onConfirm(data.params);
+            }}
+            variant="primary"
+            className="mr-sm-2"
+            loading={loading}
+          >
+            {t('withdrawal_page_confirm')}
+          </LoadingButton>
+          <Button
+            onClick={onCancel}
+            variant="secondary"
+            className="mt-2 mt-sm-0"
+          >
+            {t('withdrawal_page_cancel')}
+          </Button>
+        </div>
+      </div>
+    </GenericModal>
   );
 };
 

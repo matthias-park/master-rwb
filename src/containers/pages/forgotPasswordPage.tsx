@@ -4,7 +4,7 @@ import { ControlledTextInput } from '../../components/TextInput';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
 import ForgotPasswordResponse from '../../types/api/user/ForgotPassword';
-import Alert from 'react-bootstrap/Alert';
+import CustomAlert from '../../components/CustomAlert';
 import Form from 'react-bootstrap/Form';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Redirect } from 'react-router-dom';
@@ -63,18 +63,18 @@ const ForgotPasswordPage = () => {
     });
   };
   return (
-    <main className="page-container pt-5">
-      <div className="page-inner">
+    <main className="page-container">
+      <div className="page-inner page-inner--small">
         <h2 className="mb-4">{t('forgot_password_page_title')}</h2>
+        <CustomAlert
+          show={!!apiResponse}
+          variant={apiResponse?.success ? 'success' : 'danger'}
+        >
+          {apiResponse?.msg}
+        </CustomAlert>
         <p className="text-14 mb-3">{t('forgot_password_text')}</p>
         <FormProvider {...formMethods}>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <Alert
-              show={!!apiResponse}
-              variant={apiResponse?.success ? 'success' : 'danger'}
-            >
-              {apiResponse?.msg}
-            </Alert>
             <ControlledTextInput
               rules={{
                 required: t('login_field_required'),

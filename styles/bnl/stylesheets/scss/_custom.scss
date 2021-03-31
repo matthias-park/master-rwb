@@ -345,6 +345,7 @@ a:hover {
 .page-container {
   display: flex;
   justify-content: center;
+  align-items: center;
   background-color: $gray-custom-200;
   margin: 0 -80px;
   min-height: 70vh;
@@ -363,6 +364,9 @@ a:hover {
         max-width: 450px;
       }
   }
+  @include media-breakpoint-down(md) {
+    align-items: unset;
+  }
   .page-inner {
     width: 70%;
     min-width: 850px;
@@ -371,6 +375,10 @@ a:hover {
     padding: 40px;
     margin: 40px 0;
     border-radius: 4px;
+    &--small {
+      width: 35%;
+      min-width: 350px;
+    }
     @include media-breakpoint-down(md) {
       min-width: unset;
       width: 100%;
@@ -458,7 +466,7 @@ a:hover {
     justify-content: space-between;
     align-items: center;
     border-top: 2px solid $gray-200;
-    padding-top: 35px;
+    padding-top: 20px;
     margin-top: 45px;
     text-align: left;
     @include media-breakpoint-down(sm) {
@@ -485,6 +493,61 @@ a:hover {
   @include media-breakpoint-down(sm) {
     width: 96%;
     margin: auto;
+  }
+}
+
+.action-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $gray-custom;
+  padding: 30px 40px;
+  border-radius: 8px;
+  &__text {
+    color: $gray-700;
+  }
+}
+
+.custom-alert {
+  display: flex;
+  align-items: center;
+  padding: 20px 15px;
+  $self: &;
+  &__icon {
+    display: flex;
+    border-radius: 50%;
+    height: 32px;
+    min-width: 32px;
+    color: $white;
+    font-size: 24px;
+    i {
+      margin: auto;
+    }
+  }
+  &__content {
+    color: $gray-700;
+    font-size: 14px;
+    padding: 0 15px;
+    line-height: 20px;
+    margin-bottom: 0;
+  }
+  &--danger {
+    background-color: rgba($danger, 0.1);
+    #{ $self }__icon {
+      background-color: $danger;
+    }
+  }
+  &--success {
+    background-color: rgba($success, 0.1);
+    #{ $self }__icon {
+      background-color: $success;
+    }
+  }
+  &--info {
+    background-color: rgba($info, 0.1);
+    #{ $self }__icon {
+      background-color: $info;
+    }
   }
 }
 

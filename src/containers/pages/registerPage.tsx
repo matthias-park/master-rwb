@@ -1,10 +1,13 @@
 import React, { useCallback } from 'react';
 import HelpBlock from '../../components/HelpBlock';
 import OnlineForm from '../../components/registration/OnlineForm';
+import RegWelcome from '../../components/registration/RegWelcome';
 import { useConfig } from '../../hooks/useConfig';
+import { useUIConfig } from '../../hooks/useUIConfig';
 import { Redirect } from 'react-router-dom';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
+import clsx from 'clsx';
 import {
   PostRegistration,
   ValidateRegisterPersonalCode,
@@ -28,6 +31,7 @@ const RegisterPage = () => {
     const localesEqual = !!prev.locales === !!next.locales;
     return userEqual && localeEqual && localesEqual;
   });
+  const { headerNav } = useUIConfig();
   const { addToast } = useToasts();
   const sendDataToGTM = useGTM();
   const fieldChange = (FieldName: string) => {
@@ -136,20 +140,21 @@ const RegisterPage = () => {
     [],
   );
 
-  if (user.id) {
-    return <Redirect to="/" />;
-  }
   return (
-    <main className="registration pt-5">
-      <div className="reg-block">
+    <main className="registration">
+      <div className={clsx('reg-block', headerNav.active && 'mt-5')}>
         <HelpBlock title="Hulp nodig?" blocks={['faq', 'phone', 'email']} />
-        <OnlineForm
-          fieldChange={fieldChange}
-          checkEmailAvailable={checkEmailAvailable}
-          checkPersonalCode={checkPersonalCode}
-          checkPostalCode={checkPostalCode}
-          handleRegisterSubmit={handleRegisterSubmit}
-        />
+        {user.id ? (
+          <RegWelcome />
+        ) : (
+          <OnlineForm
+            fieldChange={fieldChange}
+            checkEmailAvailable={checkEmailAvailable}
+            checkPersonalCode={checkPersonalCode}
+            checkPostalCode={checkPostalCode}
+            handleRegisterSubmit={handleRegisterSubmit}
+          />
+        )}
       </div>
     </main>
   );

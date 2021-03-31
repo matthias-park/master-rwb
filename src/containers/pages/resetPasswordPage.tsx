@@ -3,7 +3,7 @@ import { useI18n } from '../../hooks/useI18n';
 import { ControlledTextInput } from '../../components/TextInput';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
-import Alert from 'react-bootstrap/Alert';
+import CustomAlert from '../../components/CustomAlert';
 import Form from 'react-bootstrap/Form';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Redirect, useParams } from 'react-router-dom';
@@ -63,72 +63,75 @@ const ForgotPasswordPage = () => {
     return <NotFoundPage />;
   }
   return (
-    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4 pt-5">
-      <h1 className="mb-4">{t('reset_password_page_title')}</h1>
-      <FormProvider {...formMethods}>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <Alert
-            show={!!apiResponse}
-            variant={apiResponse?.success ? 'success' : 'danger'}
-          >
-            <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />
-          </Alert>
-          <ControlledTextInput
-            rules={{
-              required: t('login_field_required'),
-              validate: value => {
-                const valueValid = value.length > 7;
-                const hasLowerCase = /[a-z]/.test(value);
-                const hasUpperCase = /[A-Z]/.test(value);
-                const hasNumbers = /\d/.test(value);
-                const hasSpecialCharacters = /[!@#$%^&*(),.?":{}|<>]/.test(
-                  value,
-                );
-                const mixOfThree =
-                  [
-                    hasLowerCase,
-                    hasUpperCase,
-                    hasNumbers,
-                    hasSpecialCharacters,
-                  ].filter(Boolean).length > 2;
-                return (
-                  (valueValid && mixOfThree) || t('register_password_weak')
-                );
-              },
-            }}
-            error={errors.password}
-            onBlur={() =>
-              watch('repeat_password') && trigger('repeat_password')
-            }
-            id="password"
-            type="password"
-            placeholder={t('reset_password_field')}
-            toggleVisibility
-          />
-          <ControlledTextInput
-            rules={{
-              required: t('login_field_required'),
-              validate: value =>
-                value === watch('password') ||
-                t('reset_password_need_match_password'),
-            }}
-            error={errors.repeat_password}
-            id="repeat_password"
-            type="password"
-            placeholder={t('reset_password_repeat_field')}
-            toggleVisibility
-          />
-          <LoadingButton
-            variant="primary"
-            disabled={!!errors.email || !formState.isValid}
-            loading={formState.isSubmitting}
-            type="submit"
-            data-testid="button"
-          >
-            {t('forgot_password_submit_btn')}
-          </LoadingButton>
-        </Form>
-      </FormProvider>
+    <main className="page-container">
+      <div className="page-inner page-inner--small">
+        <h2 className="mb-4">{t('reset_password_page_title')}</h2>
+        <CustomAlert
+          show={!!apiResponse}
+          variant={apiResponse?.success ? 'success' : 'danger'}
+        >
+          <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />
+        </CustomAlert>
+        <FormProvider {...formMethods}>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <ControlledTextInput
+              rules={{
+                required: t('login_field_required'),
+                validate: value => {
+                  const valueValid = value.length > 7;
+                  const hasLowerCase = /[a-z]/.test(value);
+                  const hasUpperCase = /[A-Z]/.test(value);
+                  const hasNumbers = /\d/.test(value);
+                  const hasSpecialCharacters = /[!@#$%^&*(),.?":{}|<>]/.test(
+                    value,
+                  );
+                  const mixOfThree =
+                    [
+                      hasLowerCase,
+                      hasUpperCase,
+                      hasNumbers,
+                      hasSpecialCharacters,
+                    ].filter(Boolean).length > 2;
+                  return (
+                    (valueValid && mixOfThree) || t('register_password_weak')
+                  );
+                },
+              }}
+              error={errors.password}
+              onBlur={() =>
+                watch('repeat_password') && trigger('repeat_password')
+              }
+              id="password"
+              type="password"
+              placeholder={t('reset_password_field')}
+              toggleVisibility
+            />
+            <ControlledTextInput
+              rules={{
+                required: t('login_field_required'),
+                validate: value =>
+                  value === watch('password') ||
+                  t('reset_password_need_match_password'),
+              }}
+              error={errors.repeat_password}
+              id="repeat_password"
+              type="password"
+              placeholder={t('reset_password_repeat_field')}
+              toggleVisibility
+            />
+            <LoadingButton
+              variant="primary"
+              disabled={!!errors.email || !formState.isValid}
+              loading={formState.isSubmitting}
+              type="submit"
+              data-testid="button"
+              className="mt-3"
+            >
+              {t('forgot_password_submit_btn')}
+            </LoadingButton>
+          </Form>
+        </FormProvider>
+      </div>
     </main>
   );
 };

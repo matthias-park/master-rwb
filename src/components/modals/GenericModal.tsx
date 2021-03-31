@@ -1,6 +1,7 @@
 import React from 'react';
 import { useI18n } from '../../hooks/useI18n';
 import Modal from 'react-bootstrap/Modal';
+import clsx from 'clsx';
 
 interface Props {
   show: boolean;
@@ -9,6 +10,7 @@ interface Props {
   isCentered?: boolean;
   isStatic?: boolean;
   withoutClose?: boolean;
+  className?: string;
 }
 const GenericModal = ({
   show,
@@ -17,6 +19,7 @@ const GenericModal = ({
   isCentered,
   isStatic,
   withoutClose,
+  className,
 }: Props) => {
   const { t } = useI18n();
   return (
@@ -30,7 +33,7 @@ const GenericModal = ({
       {!withoutClose && (
         <i className="icon-close custom-modal__close" onClick={hideCallback} />
       )}
-      <Modal.Body className="custom-modal mt-2 text-center">
+      <Modal.Body className={clsx('custom-modal mt-2 pb-4', className)}>
         {children}
         <div className="custom-modal__footer">
           <span className="text-14 font-weight-bold text-gray-700 mr-1 mr-sm-3">

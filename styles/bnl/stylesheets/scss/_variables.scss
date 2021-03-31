@@ -79,9 +79,9 @@ $brand-text:  #031442;
 $secondary:     $gray-600 !default;
 $success:     #32ba62;
 $success-alt: #4be48c;
-$info:          $cyan !default;
+$info:          #FFB140;
 $warning:       $yellow !default;
-$danger:        #ff0000;
+$danger:        #e73636;
 $danger-bg:     #fef5f5;      
 $light:         $white;
 $dark:          $gray-800 !default;
@@ -992,8 +992,8 @@ $modal-content-border-color:        $white;
 $modal-content-border-width:        $border-width !default;
 $modal-content-border-radius:       8px;
 $modal-content-inner-border-radius: subtract($modal-content-border-radius, $modal-content-border-width) !default;
-$modal-content-box-shadow-xs:       0 .25rem .5rem rgba($black, .3);
-$modal-content-box-shadow-sm-up:    0 .5rem 1rem rgba($black, .3);
+$modal-content-box-shadow-xs:       0 0 .5rem rgba($black, .2);
+$modal-content-box-shadow-sm-up:    0 0 .5rem rgba($black, .2);
 
 $modal-backdrop-bg:                 $black !default;
 $modal-backdrop-opacity:            .25 !default;
@@ -1178,3 +1178,4 @@ $user-selects: all, auto, none !default;
 
 $print-page-size:                   a3 !default;
 $print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
+

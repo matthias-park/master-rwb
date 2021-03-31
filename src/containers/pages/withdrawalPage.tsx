@@ -14,7 +14,7 @@ import Table from 'react-bootstrap/Table';
 import { useCallback } from 'react';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
-import Alert from 'react-bootstrap/Alert';
+import CustomAlert from '../../components/CustomAlert';
 import WithdrawalConfirmModal from '../../components/modals/WithdrawalConfirmModal';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { ComponentName } from '../../constants';
@@ -251,7 +251,7 @@ const WithdrawalPage = () => {
             tooltip={t('playable_amount_tooltip')}
           />
           {(!data?.Data.default_account || submitResponse) && (
-            <Alert
+            <CustomAlert
               show
               variant={
                 submitResponse
@@ -264,7 +264,7 @@ const WithdrawalPage = () => {
               }
             >
               {submitResponse?.msg || data.Message}
-            </Alert>
+            </CustomAlert>
           )}
           <InputContainer
             title={t('withdrawal_amount')}

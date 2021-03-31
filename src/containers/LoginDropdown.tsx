@@ -7,7 +7,8 @@ import { useUIConfig } from '../hooks/useUIConfig';
 import { ComponentName, PagesName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
 import { useLocation } from 'react-router-dom';
-import { Spinner, OverlayTrigger, Tooltip, Form, Alert } from 'react-bootstrap';
+import CustomAlert from '../components/CustomAlert';
+import { Spinner, OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
 import { useRoutePath } from '../hooks/index';
 import { NET_USER } from '../types/UserStatus';
 import { ControlledTextInput } from '../components/TextInput';
@@ -86,12 +87,12 @@ const LoginForm = ({
         className="pb-4 mb-4 login-dropdown__menu-form"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Alert
+        <CustomAlert
           show={formState.isSubmitted && !formState.isSubmitSuccessful}
           variant="danger"
         >
           <div dangerouslySetInnerHTML={{ __html: apiError || '' }} />
-        </Alert>
+        </CustomAlert>
         <ControlledTextInput
           rules={{
             required: t('login_field_required'),

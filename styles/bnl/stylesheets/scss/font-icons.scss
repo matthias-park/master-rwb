@@ -393,13 +393,16 @@
     margin-left: -1em;
     color: rgb(0, 0, 0);
   }
-  .icon-check:before {
+  .icon-check:before,
+  .icon-success:before {
     content: "\e952";
   }
   .icon-date-navigation:before {
     content: "\e953";
   }
-  .icon-exclamation:before {
+  .icon-exclamation:before,
+  .icon-danger:before,
+  .icon-info:before {
     content: "\e954";
   }
   .icon-location:before {

@@ -34,7 +34,8 @@
     &:hover,
     &:active,
     &:focus {
-        color: $brand-text;
+        background-color: $white;
+        color: $brand-text !important;
     }
 }
 

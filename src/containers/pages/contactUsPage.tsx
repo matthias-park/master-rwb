@@ -10,7 +10,7 @@ import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
 import SeoPages from '../../types/api/content/SeoPages';
 import HelpBlock from '../../components/HelpBlock';
-import Alert from 'react-bootstrap/Alert';
+import CustomAlert from '../../components/CustomAlert';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
 import isEqual from 'lodash.isequal';
@@ -96,12 +96,12 @@ const ContactUsPage = () => {
               </ul>
               <small className="d-block mb-4">{t('use_form_below')}</small>
               {!!submitResponse && (
-                <Alert
+                <CustomAlert
                   show={!!submitResponse}
                   variant={submitResponse.success ? 'success' : 'danger'}
                 >
                   {submitResponse.msg || t('contact_page_success')}
-                </Alert>
+                </CustomAlert>
               )}
               <Form onSubmit={handleSubmit(onSubmit)}>
                 <small className="d-block mb-3">{t('contact_form_text')}</small>

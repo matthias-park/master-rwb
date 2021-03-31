@@ -1,7 +1,8 @@
 import { ControlledTextInput } from '../TextInput';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useI18n } from '../../hooks/useI18n';
+import { animateScroll as scroll } from 'react-scroll';
 import {
   ValidateRegisterInput,
   ValidateRegisterPersonalCode,
@@ -9,7 +10,7 @@ import {
 import { FormProvider, useForm } from 'react-hook-form';
 import { FormFieldValidation } from '../../constants';
 import { OnlineFormBlock } from '../../types/RegistrationBlock';
-import Alert from 'react-bootstrap/Alert';
+import CustomAlert from '../CustomAlert';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import {
   RegistrationResponse,
@@ -268,12 +269,20 @@ const OnlineForm = (props: Props) => {
       postal_code: post_code,
     });
     if (!response.Success) {
+      scroll.scrollToTop();
       return setApiError(response.Message);
     }
     return setApiError(null);
   };
   return (
     <div className="reg-form">
+      <CustomAlert
+        show={!!apiError || (formState.isSubmitted && !formState.isValid)}
+        variant="danger"
+        className="mb-3"
+      >
+        {apiError || t('register_page_submit_error')}
+      </CustomAlert>
       <h1 className="reg-form__title">{jsxT('register_title')}</h1>
       <p className="reg-form__sub-title">{jsxT('register_desc')}</p>
       <FormProvider {...formMethods}>
@@ -389,12 +398,6 @@ const OnlineForm = (props: Props) => {
               })}
             </div>
           ))}
-          <Alert
-            show={!!apiError || (formState.isSubmitted && !formState.isValid)}
-            variant="danger"
-          >
-            {apiError || t('register_page_submit_error')}
-          </Alert>
           <LoadingButton
             loading={formState.isSubmitting}
             type="submit"
