@@ -4,7 +4,7 @@
       "name": "bnl",
       "domain": "bnl-rjtest.tglab.dev",
       "theme": "bnl",
-      "api": "https://bnl-dev.tglab.dev",
+      "api": "https://bnl-test-rails.tglab.com",
       "gtmId": "GTM-PGRW8BQ",
       "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17"
     }
