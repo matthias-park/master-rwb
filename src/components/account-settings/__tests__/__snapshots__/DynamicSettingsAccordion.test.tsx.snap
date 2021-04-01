@@ -102,6 +102,7 @@ exports[`default matches snapshot 1`] = `
               className="mt-2 btn btn-primary"
               data-testid="submit_button"
               disabled={false}
+              loading={false}
               type="submit"
             >
               Set

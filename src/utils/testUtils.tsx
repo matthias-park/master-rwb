@@ -14,9 +14,7 @@ const AllTheProviders = ({ children }) => {
       <ToastProvider>
         <ConfigProvider>
           <I18nProvider>
-            <HelmetProvider>
-              <UIConfigProvider>{children}</UIConfigProvider>
-            </HelmetProvider>
+            <HelmetProvider>{children}</HelmetProvider>
           </I18nProvider>
         </ConfigProvider>
       </ToastProvider>

@@ -16,8 +16,8 @@ const i18n = () => {
       return (locale = lang || locale);
     },
 
-    table(lang: string) {
-      return symbols[lang];
+    table(lang?: string) {
+      return symbols[lang || locale];
     },
 
     t(key: string, lang?: string) {

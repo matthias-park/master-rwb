@@ -98,7 +98,7 @@ const DepositPage = () => {
       )}
       <InputContainer
         title={t('select_amount')}
-        placeholder={`${user.currency || ''} 0`}
+        defaultValue="0"
         buttonText={t('deposit_btn')}
         loading={depositLoading}
         onSubmit={handleRequestDeposit}

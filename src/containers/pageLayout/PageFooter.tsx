@@ -14,7 +14,6 @@ import {
   Social,
   Partners,
 } from '../../types/api/PageConfig';
-import ReactPlaceholder from 'react-placeholder/lib';
 import Link from '../../components/Link';
 
 const FooterHeader = () => {
@@ -60,33 +59,24 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
   const { setShowModal } = useUIConfig();
   return (
     <div className="row no-gutters footer-sub">
-      <ReactPlaceholder
-        className="footer-sub__nav mr-auto"
-        style={{ width: '20%' }}
-        showLoadingAnimation
-        rows={1}
-        type="text"
-        ready={!!data}
-      >
-        <ul className="footer-sub__nav mr-auto">
-          {data?.links
-            .sort((a, b) => sortAscending(a.order, b.order))
-            .map(link => (
-              <li
-                key={`${link.name}-${link.link}`}
-                className="footer-sub__nav-link"
-              >
-                {link.link ? (
-                  <Link to={link.link}>{t(link.name)}</Link>
-                ) : (
-                  <span onClick={() => setShowModal(link.modal)}>
-                    {t(link.name)}
-                  </span>
-                )}
-              </li>
-            ))}
-        </ul>
-      </ReactPlaceholder>
+      <ul className="footer-sub__nav mr-auto">
+        {data?.links
+          .sort((a, b) => sortAscending(a.order, b.order))
+          .map(link => (
+            <li
+              key={`${link.name}-${link.link}`}
+              className="footer-sub__nav-link"
+            >
+              {link.link ? (
+                <Link to={link.link}>{t(link.name)}</Link>
+              ) : (
+                <span onClick={() => setShowModal(link.modal)}>
+                  {t(link.name)}
+                </span>
+              )}
+            </li>
+          ))}
+      </ul>
       <ul className="footer-sub__nav flex-row justify-content-center h-auto pb-3 pb-lg-0">
         <li>
           <img
@@ -137,16 +127,10 @@ const SocialSection = ({
   return (
     <section className="footer-social-block d-flex ml-auto pt-4 mt-0 mt-md-4 mt-lg-0 pt-lg-0">
       <div className="section-social">
-        <ReactPlaceholder
-          rows={5}
-          type="text"
-          showLoadingAnimation
-          ready={!!social && !!partners}
-        >
-          <h2 className="section-social__head-title">
-            {t('footer_social_title')}
-          </h2>
-          {/* {(androidApp || iosApp) && (
+        <h2 className="section-social__head-title">
+          {t('footer_social_title')}
+        </h2>
+        {/* {(androidApp || iosApp) && (
           <>
             <p className="section-social__title font-weight-500">
               {t('footer_download_the_app')}
@@ -173,43 +157,42 @@ const SocialSection = ({
             </div>
           </>
         )} */}
-          <p className="section-social__title">{t('find_us_in_social')}</p>
-          <p className="section-social__icons">
-            {!!webSocial &&
-              Object.entries(webSocial)
-                .filter(Boolean)
-                .map(([key, value]) => (
-                  <a
-                    key={key}
-                    href={value}
-                    className="section-social__icons-link"
-                  >
-                    <i className={`icon-${iconName[key] || key}`}></i>
-                  </a>
-                ))}
-          </p>
-          <h2 className="section-social__head-title mt-4">
-            {t('official_partners_title')}
-          </h2>
-          <p className="section-social__icons d-flex align-items-center">
-            {!!partners &&
-              Object.entries(partners)
-                .filter(Boolean)
-                .map(([key, value]) => (
-                  <a
-                    key={key}
-                    href={value}
-                    className="section-social__icons-link"
-                  >
-                    <img
-                      alt={`partner-${key}`}
-                      height="42"
-                      src={`/assets/images/footer/${key}.jpg`}
-                    />
-                  </a>
-                ))}
-          </p>
-        </ReactPlaceholder>
+        <p className="section-social__title">{t('find_us_in_social')}</p>
+        <p className="section-social__icons">
+          {!!webSocial &&
+            Object.entries(webSocial)
+              .filter(Boolean)
+              .map(([key, value]) => (
+                <a
+                  key={key}
+                  href={value}
+                  className="section-social__icons-link"
+                >
+                  <i className={`icon-${iconName[key] || key}`}></i>
+                </a>
+              ))}
+        </p>
+        <h2 className="section-social__head-title mt-4">
+          {t('official_partners_title')}
+        </h2>
+        <p className="section-social__icons d-flex align-items-center">
+          {!!partners &&
+            Object.entries(partners)
+              .filter(Boolean)
+              .map(([key, value]) => (
+                <a
+                  key={key}
+                  href={value}
+                  className="section-social__icons-link"
+                >
+                  <img
+                    alt={`partner-${key}`}
+                    height="42"
+                    src={`/assets/images/footer/${key}.jpg`}
+                  />
+                </a>
+              ))}
+        </p>
       </div>
       <div className="footer-info-text d-none d-xxl-flex align-items-end ml-3 mb-2">
         <p>{t('footer_info_text')}</p>
@@ -236,23 +219,9 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
       event: 'BottomNavigationClick',
     });
   };
-
-  if (!links) {
-    return (
-      <section className="footer-links-block">
-        <ReactPlaceholder
-          rows={7}
-          showLoadingAnimation
-          type="text"
-          ready={false}
-          style={{ maxWidth: '90%' }}
-          children={<div />}
-        />
-      </section>
-    );
-  }
+  if (!links) return null;
   return links
-    ?.sort((a, b) => sortAscending(a.order, b.order))
+    .sort((a, b) => sortAscending(a.order, b.order))
     .map((column, index) => (
       <section key={index} className="footer-links-block">
         {column.children
@@ -289,10 +258,10 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
     ));
 };
 
-const PageFooter = React.forwardRef<HTMLElement>((_, ref) => {
+const PageFooter = () => {
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
   return (
-    <footer ref={ref}>
+    <footer>
       <div className="container-fluid">
         <FooterHeader />
         <div className="row footer-main pt-0 pt-md-4 pb-2 pb-lg-4 pt-lg-5">
@@ -303,6 +272,6 @@ const PageFooter = React.forwardRef<HTMLElement>((_, ref) => {
       </div>
     </footer>
   );
-});
+};
 
 export default PageFooter;

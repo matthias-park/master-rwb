@@ -13,7 +13,6 @@ test('displays title correctly', async () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      placeholder=""
       onSubmit={() => {}}
     />,
   );
@@ -25,7 +24,6 @@ test('displays button correctly', async () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      placeholder=""
       onSubmit={() => {}}
     />,
   );
@@ -37,7 +35,6 @@ test("doesn't display spinner correctly", async () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      placeholder=""
       onSubmit={() => {}}
       loading={false}
     />,
@@ -49,7 +46,6 @@ test('displays spinner correctly', async () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      placeholder=""
       onSubmit={() => {}}
       loading={true}
     />,
@@ -62,7 +58,6 @@ test('submit value correctly', async () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      placeholder=""
       onSubmit={value => {
         expect(value).toBe(Number(newEnteredValue));
       }}
@@ -84,7 +79,6 @@ test('submit value less than min', async () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      placeholder=""
       min="200"
       onSubmit={value => {
         expect(value).toBe(Number(200));
@@ -107,7 +101,6 @@ test('submit value more than max', async () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      placeholder=""
       max="200"
       onSubmit={value => {
         expect(value).toBe(Number(200));
@@ -128,7 +121,6 @@ test('submit value on disabled prop', async () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      placeholder=""
       disabled
       onSubmit={value => {
         expect(value).toBe(Number(200));
@@ -144,7 +136,6 @@ test('default matches snapshot', () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      placeholder=""
       onSubmit={() => {}}
       loading={false}
       currency="€"
@@ -157,7 +148,6 @@ test('with spinner matches snapshot', () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      placeholder=""
       onSubmit={() => {}}
       loading={true}
       currency="€"

@@ -118,7 +118,7 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                       <LoadingButton
                         key={field.id}
                         data-testid={field.id}
-                        loading={formState.isSubmitting}
+                        loading={!!formState.isSubmitting}
                         className="mt-2"
                         variant="primary"
                         type="submit"

@@ -1,5 +1,5 @@
 import { ControlledTextInput } from '../TextInput';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useI18n } from '../../hooks/useI18n';
 import { animateScroll as scroll } from 'react-scroll';
@@ -82,10 +82,8 @@ const blocks = (
         type: 'text',
         required: true,
         inputFormatting: {
-          phone: true,
-          phoneRegionCode: 'BE',
-          prefix: '+32',
-          rawValueTrimPrefix: true,
+          format: '+32 # ### ## ##',
+          placeholder: '+32',
         },
       },
     ],
@@ -113,9 +111,8 @@ const blocks = (
           return valid;
         },
         inputFormatting: {
-          delimiters: ['.', '.', '-', '.'],
-          blocks: [2, 2, 2, 3, 2],
-          numericOnly: true,
+          format: '##.##.##-###.##',
+          mask: '_',
         },
       },
     ],
@@ -260,6 +257,7 @@ const OnlineForm = (props: Props) => {
   const onSubmit = async ({ terms_and_conditions, postal_code, ...data }) => {
     const post_code = postal_code.split(' - ')[0];
     const postal_info = await props.checkPostalCode(post_code);
+    const phone_number = `+32${data.phone_number}`;
     const city =
       Object.values(postal_info.Data?.result || {})[0]?.locality || '';
     const response = await props.handleRegisterSubmit({
@@ -267,6 +265,7 @@ const OnlineForm = (props: Props) => {
       login: data.email,
       city,
       postal_code: post_code,
+      phone_number,
     });
     if (!response.Success) {
       scroll.scrollToTop();

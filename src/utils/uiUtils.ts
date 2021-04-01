@@ -58,7 +58,6 @@ export const createHeaderNavProviderValues = (
     const navName = name && (name.includes('click:') ? name : `click:${name}`);
     let activeRouteName =
       navName && navName !== activeHeaderNav ? navName : null;
-    console.log(name, navName, activeRouteName);
     if (!activeRouteName && currentRoute && headerLinks) {
       activeRouteName =
         headerLinks.find(
@@ -107,4 +106,9 @@ export const makeCollapsible = (
       }
     });
   });
+};
+
+export const removePageLoadingSpinner = () => {
+  const spinnerEl = document.getElementById('page-loading-spinner');
+  spinnerEl?.remove();
 };

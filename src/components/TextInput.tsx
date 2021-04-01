@@ -3,16 +3,22 @@ import React, { forwardRef, useState } from 'react';
 import { Form, Spinner } from 'react-bootstrap';
 import { FormFieldValidation } from '../constants';
 import { useCallback } from 'react';
-import Cleave from 'cleave.js/react';
-import { CleaveOptions } from 'cleave.js/options';
 import { useController } from 'react-hook-form';
-import 'cleave.js/dist/addons/cleave-phone.be';
+import loadable from '@loadable/component';
+
+const LoadableNumberFormat = loadable(() => import('react-number-format'), {
+  fallback: <input />,
+});
 
 type Props = {
   error?: { message: string };
   validation?: FormFieldValidation;
   toggleVisibility?: boolean;
-  inputFormatting?: CleaveOptions;
+  inputFormatting?: {
+    format?: string;
+    placeholder?: string;
+    mask?: string;
+  };
   rules?: any;
 } & React.ComponentProps<typeof Form.Control>;
 
@@ -26,10 +32,9 @@ export const ControlledTextInput = (props: Props) => {
   });
 
   const onChange = event => {
-    if (props.inputFormatting) {
-      return field.onChange(event.target.rawValue);
-    }
-    return field.onChange(event.target.value);
+    return field.onChange(
+      typeof event === 'string' ? event : event.target.value,
+    );
   };
   const onBlur = () => {
     if (props.onBlur) props.onBlur();
@@ -69,14 +74,7 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
       () => setShowPassword(prevValue => !prevValue),
       [],
     );
-    const inputType =
-      inputFormatting?.numericOnly ||
-      inputFormatting?.numeral ||
-      inputFormatting?.phone
-        ? 'tel'
-        : !showPassword
-        ? type
-        : 'text';
+    const inputType = inputFormatting ? 'tel' : !showPassword ? type : 'text';
     return (
       <Form.Group
         data-testid="container"
@@ -90,13 +88,23 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
         <Form.Control
           {...props}
           ref={ref}
-          as={inputFormatting ? Cleave : 'input'}
-          //@ts-ignore
-          options={inputFormatting}
+          as={inputFormatting ? LoadableNumberFormat : 'input'}
           type={inputType}
           id={id}
           placeholder=" "
           data-testid="input"
+          onChange={inputFormatting ? undefined : props.onChange}
+          //@ts-ignore
+          onValueChange={
+            inputFormatting
+              ? values => {
+                  props.onChange?.(values.value);
+                }
+              : undefined
+          }
+          format={inputFormatting?.format}
+          allowEmptyFormatting={inputFormatting?.placeholder ? true : undefined}
+          mask={inputFormatting?.mask}
         />
         <label htmlFor={id} data-testid="placeholder" className="text-14">
           {placeholder}

@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { enterKeyPress } from '../../utils/uiUtils';
-import Cleave from 'cleave.js/react';
 import LoadingButton from '../LoadingButton';
+import NumberFormat from 'react-number-format';
 
 interface Props {
   title: string;
-  placeholder: string;
+  defaultValue?: number | string;
   buttonText: string;
   loading?: boolean;
   min?: number | string;
@@ -20,7 +20,7 @@ interface Props {
 
 const InputContainer = ({
   title,
-  placeholder,
+  defaultValue = '',
   buttonText,
   loading,
   onSubmit,
@@ -30,10 +30,15 @@ const InputContainer = ({
   disabled,
   currency,
 }: Props) => {
-  const [inputValue, setInputValue] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string>(defaultValue.toString());
   const handleSubmit = () => onSubmit(Number(inputValue));
-  const handleValueChange = e => {
-    setInputValue(e.target.rawValue);
+  const handleValueChange = val => {
+    setInputValue(val.value);
+  };
+  const handleOnFocus = () => {
+    if (inputValue === defaultValue.toString()) {
+      setInputValue('');
+    }
   };
   const handleOnBlur = () => {
     let value = Number(inputValue);
@@ -43,6 +48,9 @@ const InputContainer = ({
       value = minNumber;
     } else if (maxNumber && value > maxNumber) {
       value = maxNumber;
+    }
+    if (!inputValue.length) {
+      return setInputValue(defaultValue.toString());
     }
     if (value !== Number(inputValue)) {
       setInputValue(value.toString());
@@ -67,23 +75,18 @@ const InputContainer = ({
             {currency}
           </Button>
         ))}
-        <Form.Control
-          as={Cleave}
-          options={{
-            numeral: true,
-            numeralPositiveOnly: true,
-            prefix: currency,
-            stripLeadingZeroes: true,
-            noImmediatePrefix: true,
-            rawValueTrimPrefix: true,
-          }}
+        <NumberFormat
+          customInput={Form.Control}
+          thousandSeparator
+          prefix={`${currency} `}
           disabled={disabled}
           data-testid="input"
-          placeholder={placeholder}
+          allowEmptyFormatting
           value={inputValue}
           onBlur={handleOnBlur}
+          onFocus={handleOnFocus}
           onKeyUp={e => enterKeyPress(e, handleSubmit)}
-          onChange={handleValueChange}
+          onValueChange={handleValueChange}
           className="input-container__input"
         />
       </Form.Group>
@@ -92,7 +95,7 @@ const InputContainer = ({
         disabled={!inputValue.length || inputValue === '0' || disabled}
         onClick={handleSubmit}
         data-testid="button"
-        loading={loading}
+        loading={!!loading}
       >
         {buttonText}
       </LoadingButton>

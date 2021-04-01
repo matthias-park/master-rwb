@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PageHeader from './PageHeader';
 import PageFooter from './PageFooter';
 import CookieConsent from '../../components/CookieConsent';
@@ -9,25 +9,13 @@ import { useUIConfig } from '../../hooks/useUIConfig';
 import ErrorBoundary from '../ErrorBoundary';
 import { useI18n } from '../../hooks/useI18n';
 import useGTM from '../../hooks/useGTM';
-import Spinner from 'react-bootstrap/Spinner';
 import { PagesName } from '../../constants';
 import { ConfigLoaded } from '../../types/Config';
 import NotFoundPage from '../pages/notFoundPage';
 
 let prevPathname: string | null = null;
 
-const PageLoadingSpinner = ({ height }: { height: number }) => (
-  <div
-    className="w-100 d-flex justify-content-center"
-    style={{ height: height > 0 ? height : 60 }}
-  >
-    <Spinner animation="border" variant="black" className="m-auto" />
-  </div>
-);
-
 const PageLayout = ({ children }) => {
-  const headerRef = useRef<HTMLElement | null>(null);
-  const footerRef = useRef<HTMLElement | null>(null);
   const sendDataToGTM = useGTM();
   const { t } = useI18n();
   const { pathname } = useLocation();
@@ -90,18 +78,16 @@ const PageLayout = ({ children }) => {
     }
   }, [locale, routes]);
 
-  const placeholderHeight =
-    window.innerHeight -
-    (headerRef.current?.offsetHeight || 0) -
-    (footerRef.current?.offsetHeight || 0);
-
+  if (configLoaded === ConfigLoaded.Loading) {
+    return null;
+  }
   if (configLoaded === ConfigLoaded.Loaded && !locale) {
     return children;
   }
   return (
     <>
       <ErrorBoundary>
-        <PageHeader ref={headerRef} />
+        <PageHeader />
       </ErrorBoundary>
       {sidebar ? (
         <LayoutWithSidebar
@@ -109,21 +95,14 @@ const PageLayout = ({ children }) => {
           rightSidebar={rightSidebarLayout}
           spacingClasses={headerNav.active && 'pt-xl-4'}
         >
-          {configLoaded ? (
-            children
-          ) : (
-            <PageLoadingSpinner height={placeholderHeight} />
-          )}
+          {children}
         </LayoutWithSidebar>
       ) : (
         <>
-          {configLoaded === ConfigLoaded.Loading && (
-            <PageLoadingSpinner height={placeholderHeight} />
-          )}
           {configLoaded === ConfigLoaded.Loaded && children}
           {configLoaded === ConfigLoaded.Error && <NotFoundPage />}
           <ErrorBoundary>
-            <PageFooter ref={footerRef} />
+            <PageFooter />
           </ErrorBoundary>
         </>
       )}

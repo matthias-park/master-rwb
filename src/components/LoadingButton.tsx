@@ -18,6 +18,7 @@ const LoadingButton = (props: Props) => {
             role="status"
             aria-hidden="true"
             className="mr-1"
+            data-testid="spinner"
           />
         </>
       )}

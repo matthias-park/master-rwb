@@ -1,4 +1,3 @@
-import { CleaveOptions } from 'cleave.js/options';
 export interface OnlineFormBlockField {
   id: string;
   value?: string;
@@ -16,7 +15,11 @@ export interface OnlineFormBlockField {
   triggerId?: string;
   autoComplete?: ((value: string) => Promise<any>) | string;
   labelKey?: (value: any) => string;
-  inputFormatting?: CleaveOptions;
+  inputFormatting?: {
+    format?: string;
+    placeholder?: string;
+    mask?: string;
+  };
 }
 
 export interface OnlineFormBlock {

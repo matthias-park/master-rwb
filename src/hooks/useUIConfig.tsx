@@ -3,12 +3,15 @@ import UIConfig from '../types/UIConfig';
 import {
   changeBackdropVisibility,
   createBackdropProviderValues,
+  removePageLoadingSpinner,
 } from '../utils/uiUtils';
 import { UIBackdropState } from '../types/UIConfig';
 import { ComponentName } from '../constants';
 import { useConfig } from './useConfig';
 import { useLocation } from 'react-router';
 import { createHeaderNavProviderValues } from '../utils/uiUtils';
+import { useI18n } from './useI18n';
+import { ConfigLoaded } from '../types/Config';
 
 export const uiConfig = createContext<UIConfig | null>(null);
 
@@ -23,11 +26,15 @@ export function useUIConfig(): UIConfig {
 }
 
 export const UIConfigProvider = props => {
-  const { header } = useConfig(
-    (prev, next) => prev.header?.length === next.header?.length,
-  );
+  const { header, configLoaded } = useConfig((prev, next) => {
+    const headerEqual = prev.header?.length === next.header?.length;
+    const configLoadedEqual = prev.configLoaded === next.configLoaded;
+    return headerEqual && configLoadedEqual;
+  });
+  const { table } = useI18n();
   const location = useLocation();
   const [activeHeaderNav, setActiveHeaderNav] = useState<string | null>(null);
+  const [initPageSpinner, setInitPageSpinner] = useState<boolean>(true);
   const [backdrop, setBackdrop] = useState<UIBackdropState>({
     active: false,
     ignoredComponents: [],
@@ -40,8 +47,18 @@ export const UIConfigProvider = props => {
     header,
   );
   useEffect(() => {
-    changeBackdropVisibility(backdrop.active);
-  }, [backdrop]);
+    changeBackdropVisibility(initPageSpinner || backdrop.active);
+  }, [backdrop, initPageSpinner]);
+
+  useEffect(() => {
+    if (
+      [ConfigLoaded.Loaded, ConfigLoaded.Error].includes(configLoaded) &&
+      Object.keys(table()).length
+    ) {
+      removePageLoadingSpinner();
+      setInitPageSpinner(false);
+    }
+  }, [configLoaded, table]);
 
   useEffect(() => {
     if (!activeHeaderNav?.includes('click:')) {

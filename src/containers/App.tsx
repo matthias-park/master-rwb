@@ -8,10 +8,8 @@ import Modals from './Modals';
 import { UIConfigProvider } from '../hooks/useUIConfig';
 
 const App = () => {
-  const { locale } = useConfig((prev, next) => {
-    const localeEqual = prev.locale === next.locale;
-    return localeEqual;
-  });
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+
   return (
     <BrowserRouter key={locale} basename={`/${locale}`}>
       <UIConfigProvider>
