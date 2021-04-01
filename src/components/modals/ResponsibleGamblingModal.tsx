@@ -39,6 +39,7 @@ const ResponsibleGamblingModal = () => {
       hideCallback={hideModal}
       isCentered={true}
       isStatic={true}
+      className="text-center"
     >
       <h2 className="mb-3 mt-4">{t('responsible_gambling_title')}</h2>
       <p>{t('responsible_gambling_body')}</p>

@@ -4,7 +4,6 @@ import {
   WithdrawalConfirmationParams,
 } from '../../types/api/user/Withdrawal';
 import { useI18n } from '../../hooks/useI18n';
-import Modal from 'react-bootstrap/Modal';
 import GenericModal from '../../components/modals/GenericModal';
 import Button from 'react-bootstrap/Button';
 import LoadingButton from '../LoadingButton';
