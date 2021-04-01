@@ -9,7 +9,7 @@ const RegError = ({
   errMsg: string;
   onClose: (msg: string | null) => void;
 }) => {
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
 
   return (
     <>
@@ -25,12 +25,17 @@ const RegError = ({
       <CustomAlert show={true} variant="danger" className="mb-3">
         {t('register_page_submit_error')}
       </CustomAlert>
+      <p>{jsxT('reg_error_info')}</p>
       <p className="mt-4">
         <b>{t('reg_error_reasons')}</b>
       </p>
       <ul className="pt-2 pl-4">
         <li className="mb-2">{errMsg}</li>
       </ul>
+      <div className="info-block mt-4">
+        <h4 className="info-block__title">{t('reg_error_info_block_title')}</h4>
+        <p className="info-block__text">{jsxT('reg_error_info_block_text')}</p>
+      </div>
     </>
   );
 };
