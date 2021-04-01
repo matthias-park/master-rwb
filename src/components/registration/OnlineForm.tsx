@@ -19,6 +19,7 @@ import {
 import AutocompleteTextInput from '../AutocompleteTextInput';
 import { PostCodeInfo } from '../../types/api/user/Registration';
 import LoadingButton from '../LoadingButton';
+import RegError from './RegError';
 
 interface Props {
   checkEmailAvailable: (email: string) => Promise<ValidateRegisterInput | null>;
@@ -274,139 +275,140 @@ const OnlineForm = (props: Props) => {
     }
     return setApiError(null);
   };
+
   return (
     <div className="reg-form">
-      <CustomAlert
-        show={!!apiError || (formState.isSubmitted && !formState.isValid)}
-        variant="danger"
-        className="mb-3"
-      >
-        {apiError || t('register_page_submit_error')}
-      </CustomAlert>
-      <h1 className="reg-form__title">{jsxT('register_title')}</h1>
-      <p className="reg-form__sub-title">{jsxT('register_desc')}</p>
-      <FormProvider {...formMethods}>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          {blocks(props, t, setValidation, validateRepeat).map(block => (
-            <div key={block.title} className="reg-form__block">
-              <p className="weight-500 mt-4 mb-3">
-                {!!block.title && jsxT(`register_${block.title}`)}
-              </p>
-              {block.fields.map(field => {
-                switch (field.type) {
-                  case 'checkbox':
-                  case 'radio': {
-                    return (
-                      <Form.Check
-                        ref={register({
-                          required:
-                            field.required && t('register_input_required'),
-                          setValueAs: value => !!value,
-                        })}
-                        custom
-                        type={field.type}
-                        id={field.id}
-                        key={field.id}
-                        name={field.name || field.id}
-                        label={jsxT(`register_input_${field.id}`)}
-                        className="mb-4 custom-control-inline"
-                        isInvalid={errors[field.id]}
-                      />
-                    );
-                  }
-                  case 'number':
-                  case 'password':
-                  case 'text':
-                  case 'email': {
-                    if (
-                      typeof field.autoComplete === 'function' &&
-                      field.labelKey
-                    ) {
-                      return (
-                        <AutocompleteTextInput
-                          rules={{
-                            required:
-                              field.required && t('register_input_required'),
-                            validate: field.validate,
-                          }}
-                          type={field.type}
-                          error={errors[field.id]}
-                          setError={error =>
-                            error
-                              ? setError(field.name || field.id, {
-                                  message: error,
-                                  type: 'validate',
-                                })
-                              : clearErrors(field.name || field.id)
-                          }
-                          onBlur={() => props.fieldChange(field.id)}
-                          labelkey={field.labelKey}
-                          autoComplete={field.autoComplete}
-                          id={field.id}
-                          key={field.id}
-                          placeholder={t(`register_input_${field.id}`)}
-                          invalidTextError={t(
-                            `register_input_${field.id}_invalid`,
-                          )}
-                        />
-                      );
-                    }
+      {apiError ? (
+        <RegError errMsg={apiError} onClose={setApiError} />
+      ) : (
+        <>
+          <h1 className="reg-form__title">{jsxT('register_title')}</h1>
+          <p className="reg-form__sub-title">{jsxT('register_desc')}</p>
+          <FormProvider {...formMethods}>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+              {blocks(props, t, setValidation, validateRepeat).map(block => (
+                <div key={block.title} className="reg-form__block">
+                  <p className="weight-500 mt-4 mb-3">
+                    {!!block.title && jsxT(`register_${block.title}`)}
+                  </p>
+                  {block.fields.map(field => {
+                    switch (field.type) {
+                      case 'checkbox':
+                      case 'radio': {
+                        return (
+                          <Form.Check
+                            ref={register({
+                              required:
+                                field.required && t('register_input_required'),
+                              setValueAs: value => !!value,
+                            })}
+                            custom
+                            type={field.type}
+                            id={field.id}
+                            key={field.id}
+                            name={field.name || field.id}
+                            label={jsxT(`register_input_${field.id}`)}
+                            className="mb-4 custom-control-inline"
+                            isInvalid={errors[field.id]}
+                          />
+                        );
+                      }
+                      case 'number':
+                      case 'password':
+                      case 'text':
+                      case 'email': {
+                        if (
+                          typeof field.autoComplete === 'function' &&
+                          field.labelKey
+                        ) {
+                          return (
+                            <AutocompleteTextInput
+                              rules={{
+                                required:
+                                  field.required &&
+                                  t('register_input_required'),
+                                validate: field.validate,
+                              }}
+                              type={field.type}
+                              error={errors[field.id]}
+                              setError={error =>
+                                error
+                                  ? setError(field.name || field.id, {
+                                      message: error,
+                                      type: 'validate',
+                                    })
+                                  : clearErrors(field.name || field.id)
+                              }
+                              onBlur={() => props.fieldChange(field.id)}
+                              labelkey={field.labelKey}
+                              autoComplete={field.autoComplete}
+                              id={field.id}
+                              key={field.id}
+                              placeholder={t(`register_input_${field.id}`)}
+                              invalidTextError={t(
+                                `register_input_${field.id}_invalid`,
+                              )}
+                            />
+                          );
+                        }
 
-                    return (
-                      <ControlledTextInput
-                        rules={{
-                          required:
-                            field.required && t('register_input_required'),
-                          validate: field.validate,
-                        }}
-                        type={field.type}
-                        autoComplete={field.autoComplete}
-                        id={field.id}
-                        key={field.id}
-                        onBlur={() => {
-                          props.fieldChange(field.id);
-                          field.triggerId && triggerRepeat(field.triggerId);
-                        }}
-                        validation={validationForms[field.id]}
-                        error={errors[field.id]}
-                        placeholder={t(`register_input_${field.id}`)}
-                        toggleVisibility={field.type === 'password'}
-                        inputFormatting={field.inputFormatting}
-                      />
-                    );
-                  }
-                  case 'date': {
-                    return (
-                      <ControlledTextInput
-                        rules={register({
-                          required:
-                            field.required && t('register_input_required'),
-                          valueAsDate: true,
-                        })}
-                        id={field.id}
-                        error={errors[field.id]}
-                        type="date"
-                        onBlur={() => props.fieldChange(field.id)}
-                        placeholder={t(`register_input_${field.id}`)}
-                        inputFormatting={field.inputFormatting}
-                      />
-                    );
-                  }
-                  default:
-                    return null;
-                }
-              })}
-            </div>
-          ))}
-          <LoadingButton
-            loading={formState.isSubmitting}
-            type="submit"
-            className="btn btn-primary d-block mx-auto mb-4"
-          >
-            {jsxT('register_submit_btn')}
-          </LoadingButton>
-        </Form>
-      </FormProvider>
+                        return (
+                          <ControlledTextInput
+                            rules={{
+                              required:
+                                field.required && t('register_input_required'),
+                              validate: field.validate,
+                            }}
+                            type={field.type}
+                            autoComplete={field.autoComplete}
+                            id={field.id}
+                            key={field.id}
+                            onBlur={() => {
+                              props.fieldChange(field.id);
+                              field.triggerId && triggerRepeat(field.triggerId);
+                            }}
+                            validation={validationForms[field.id]}
+                            error={errors[field.id]}
+                            placeholder={t(`register_input_${field.id}`)}
+                            toggleVisibility={field.type === 'password'}
+                            inputFormatting={field.inputFormatting}
+                          />
+                        );
+                      }
+                      case 'date': {
+                        return (
+                          <ControlledTextInput
+                            rules={register({
+                              required:
+                                field.required && t('register_input_required'),
+                              valueAsDate: true,
+                            })}
+                            id={field.id}
+                            error={errors[field.id]}
+                            type="date"
+                            onBlur={() => props.fieldChange(field.id)}
+                            placeholder={t(`register_input_${field.id}`)}
+                            inputFormatting={field.inputFormatting}
+                          />
+                        );
+                      }
+                      default:
+                        return null;
+                    }
+                  })}
+                </div>
+              ))}
+              <LoadingButton
+                loading={formState.isSubmitting}
+                type="submit"
+                className="btn btn-primary d-block mx-auto mb-4"
+              >
+                {jsxT('register_submit_btn')}
+              </LoadingButton>
+            </Form>
+          </FormProvider>
+        </>
+      )}
     </div>
   );
 };
