@@ -114,7 +114,7 @@ const getSBParams = async (config: Config, error: () => void) => {
       })
     : null;
   return {
-    locale: KambiSbLocales[config.locale.toLocaleUpperCase()] || 'en_GB',
+    locale: KambiSbLocales[config.locale.toLocaleLowerCase()] || 'en_GB',
     playerId,
     ticket: data?.Data || '',
     currency: 'EUR',
