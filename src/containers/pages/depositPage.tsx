@@ -10,6 +10,7 @@ import { useConfig } from '../../hooks/useConfig';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName } from '../../constants';
 import isEqual from 'lodash.isequal';
+import CustomAlert from '../../components/CustomAlert';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
@@ -18,7 +19,7 @@ const DepositPage = () => {
   const { t } = useI18n();
   const { bankResponse } = useParams<{ bankResponse?: string }>();
   const [depositLoading, setDepositLoading] = useState(false);
-
+  const [apiError, setApiError] = useState<string | null>(null);
   useEffect(() => {
     if (user.logged_in && !user.bank_account) {
       setShowModal(ComponentName.AddBankAccountModal);
@@ -42,6 +43,7 @@ const DepositPage = () => {
       return;
     }
     setDepositLoading(true);
+    setApiError(null);
     const userIp: any = await getApi('/check-cf-ip').catch(err => {
       addToast(`Failed to get ip, using fallback`, {
         appearance: 'warning',
@@ -71,8 +73,11 @@ const DepositPage = () => {
       console.log(err);
       return null;
     });
-    if (response?.Success) {
+    if (response?.Success && response.RedirectUrl) {
       return (window.location.href = response.RedirectUrl);
+    }
+    if (response?.PaymentResultMessage) {
+      setApiError(response.PaymentResultMessage);
     }
     addToast(`Failed to redirect to bank`, {
       appearance: 'error',
@@ -89,6 +94,9 @@ const DepositPage = () => {
         amount={user.balance!}
         tooltip={t('playable_amount_tooltip')}
       /> */}
+      <CustomAlert show={!!apiError} variant="danger">
+        {apiError}
+      </CustomAlert>
       {!!bankResponse && (
         <div className="amount-container mb-4">
           <h2 className="amount-container__amount">
