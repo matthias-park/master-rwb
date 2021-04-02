@@ -156,8 +156,11 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
           setLocale(detectedLocaleAvailable ? detectedLocale! : appLocale!);
         })();
       } else {
-        if (appLocale && (locale !== appLocale || !detectedLocale)) {
-          setLocale(appLocale);
+        if (
+          (appLocale || cachedLocale) &&
+          (locale !== appLocale || !detectedLocale)
+        ) {
+          setLocale(appLocale || cachedLocale!);
         } else {
           setConfigLoaded(ConfigLoaded.Loaded);
         }
