@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { Form as Field } from '../types/api/JsonFormPage';
 import { FormState } from 'react-hook-form';
@@ -16,6 +16,7 @@ interface Props {
 const FieldFromJson = React.forwardRef(
   ({ field, formState, error, size }: Props, ref: any) => {
     const { t } = useI18n();
+    const [filename, setFilename] = useState('');
 
     if (field.type === 'submit') {
       return (
@@ -33,12 +34,21 @@ const FieldFromJson = React.forwardRef(
     }
     if (field.type === 'file') {
       return (
-        <Form.File custom className="mt-auto">
-          <Form.File.Label>
-            {field.title}
-            <Form.File.Input data-testid="file" ref={ref} name={field.id} />
-          </Form.File.Label>
-        </Form.File>
+        <Form.Group>
+          <Form.File
+            ref={ref}
+            custom
+            className="mt-auto "
+            name={field.id}
+            id={field.id}
+            data-testid="file"
+            label={filename || field.title}
+            onChange={e => {
+              const file = e.target.files?.[0];
+              setFilename(file?.name);
+            }}
+          />
+        </Form.Group>
       );
     }
     const isFieldSelect = field.type === 'select';
