@@ -6,6 +6,7 @@ import { postApi } from '../utils/apiUtils';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { removeFalsyFromObject } from '../utils/index';
 import ValidationFailedModal from '../components/modals/ValidationFailedModal';
+import { useI18n } from '../hooks/useI18n';
 
 const addBankAccountSubmit = async data => {
   removeFalsyFromObject(data);
@@ -17,6 +18,10 @@ const addBankAccountSubmit = async data => {
 };
 
 const Modals = () => {
+  const { table } = useI18n();
+  if (!Object.keys(table()).length) {
+    return null;
+  }
   return (
     <>
       <ResponsibleGamblingModal />

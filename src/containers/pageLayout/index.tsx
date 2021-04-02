@@ -73,7 +73,12 @@ const PageLayout = ({ children }) => {
     const localeSelectRoute = routes.find(
       route => route.id === PagesName.LocaleSelectPage,
     );
-    if (!locale && localeSelectRoute && pathname !== localeSelectRoute.path) {
+    if (
+      configLoaded !== ConfigLoaded.Loading &&
+      !locale &&
+      localeSelectRoute &&
+      pathname !== localeSelectRoute.path
+    ) {
       history.push(localeSelectRoute.path);
     }
   }, [locale, routes]);
