@@ -30,6 +30,7 @@ const LoginForm = ({
 }) => {
   const { t } = useI18n();
   const [apiError, setApiError] = useState<string | null>(null);
+  const { setShowModal } = useUIConfig();
   const formMethods = useForm({
     mode: 'onBlur',
   });
@@ -55,6 +56,7 @@ const LoginForm = ({
         'tglab.GUID': response.Data.PlayerId!,
         event: 'SuccessfulLogin',
       });
+      setShowModal(ComponentName.ResponsibleGamblingModal);
       return mutateUser(
         {
           id: response.Data.PlayerId,

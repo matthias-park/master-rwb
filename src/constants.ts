@@ -14,6 +14,7 @@ export enum ComponentName {
   DisablingYourAccount,
   AddBankAccountModal,
   Null,
+  ResponsibleGamblingModal,
   CookiesModal = 'cookiesModal',
 }
 

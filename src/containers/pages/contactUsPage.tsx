@@ -16,6 +16,18 @@ import useApi from '../../hooks/useApi';
 import isEqual from 'lodash.isequal';
 
 const loggedInHiddenFields = ['first_name', 'last_name', 'email_address'];
+const fieldValidations = {
+  first_name: (value: string) =>
+    /^[a-z]*$/gi.test(value) || 'field_only_letters',
+  last_name: (value: string) =>
+    /^[a-z]*$/gi.test(value) || 'field_only_letters',
+  email_address: (value: string) =>
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+      value,
+    ) || 'email_invalid',
+  text: (value: string) =>
+    !!value.trim().length || 'contact_page_field_required',
+};
 
 const ContactUsPage = () => {
   const { t } = useI18n();
@@ -57,14 +69,12 @@ const ContactUsPage = () => {
         Message: null,
       };
     });
-    return setSubmitResponse(
-      response?.Success || response?.Message
-        ? {
-            success: response.Success,
-            msg: response.Message,
-          }
-        : null,
-    );
+
+    console.log(response);
+    return setSubmitResponse({
+      success: response.Success,
+      msg: response.Message,
+    });
   };
 
   return (
@@ -100,7 +110,12 @@ const ContactUsPage = () => {
                   show={!!submitResponse}
                   variant={submitResponse.success ? 'success' : 'danger'}
                 >
-                  {submitResponse.msg || t('contact_page_success')}
+                  {submitResponse.msg ||
+                    t(
+                      `contact_page_${
+                        submitResponse.success ? 'success' : 'failed'
+                      }`,
+                    )}
                 </CustomAlert>
               )}
               <Form onSubmit={handleSubmit(onSubmit)}>
@@ -120,6 +135,10 @@ const ContactUsPage = () => {
                       ref={register({
                         required:
                           field.required && t('contact_page_field_required'),
+                        validate: value => {
+                          const valid = fieldValidations[field.id]?.(value);
+                          return typeof valid === 'string' ? t(valid) : valid;
+                        },
                       })}
                       formState={formState}
                     />
