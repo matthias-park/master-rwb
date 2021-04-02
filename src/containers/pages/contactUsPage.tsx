@@ -22,7 +22,9 @@ const fieldValidations = {
   last_name: (value: string) =>
     /^[a-z]*$/gi.test(value) || 'field_only_letters',
   email_address: (value: string) =>
-    /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/gi.test(value) || 'email_invalid',
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+      value,
+    ) || 'email_invalid',
   text: (value: string) =>
     !!value.trim().length || 'contact_page_field_required',
 };
