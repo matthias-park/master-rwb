@@ -45,21 +45,21 @@
           transform: translateY(-2px);
         }
         @include media-breakpoint-down(lg) {
-            left: -187%;
+            right: -50px;
             top: 55px;
             &:after {
                 right: 21%;
             }
         }
         @include media-breakpoint-down(xs) {
-            left: -174%;
+            left: unset;
             width: 96vw;
             max-width: 365px;
             &:after {
-                left: 70.5%;
+                left: 74.5%;
             }
         }
-        @media only screen and (max-width: 375px) {
+        @media only screen and (max-width: 390px) {
           position: fixed;
           left: 50%;
           transform: translateX(-50%);
