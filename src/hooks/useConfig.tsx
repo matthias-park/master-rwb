@@ -139,7 +139,18 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
       const detectedLocale = getWindowUrlLocale();
       const detectedLocaleAvailable =
         detectedLocale && locales.includes(detectedLocale.toLocaleLowerCase());
-      if (
+      if (!appLocale && cachedLocale) {
+        (async () => {
+          if (!window.PRERENDER_CACHE) {
+            await postApi('/railsapi/v1/locale', {
+              locale: cachedLocale,
+            }).then(() => {
+              updateConstants();
+            });
+          }
+          setLocale(cachedLocale);
+        })();
+      } else if (
         appLocale &&
         detectedLocaleAvailable &&
         appLocale !== detectedLocale &&
