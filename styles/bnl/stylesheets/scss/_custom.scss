@@ -379,10 +379,14 @@ a:hover {
       width: 35%;
       min-width: 350px;
     }
+    &--top {
+      align-self: flex-start;
+    }
     @include media-breakpoint-down(md) {
       min-width: unset;
       width: 100%;
       margin: 0;
+      align-self: auto;
     }
     @include media-breakpoint-down(sm) {
       padding: 25px;
