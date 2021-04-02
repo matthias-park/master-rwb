@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import HelpBlock from '../../components/HelpBlock';
 import OnlineForm from '../../components/registration/OnlineForm';
 import RegWelcome from '../../components/registration/RegWelcome';
 import { useConfig } from '../../hooks/useConfig';
 import { useUIConfig } from '../../hooks/useUIConfig';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory, useLocation } from 'react-router-dom';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
 import clsx from 'clsx';
@@ -22,15 +22,26 @@ import { RegistrationPostalCodeAutofill } from '../../types/api/user/Registratio
 import useGTM from '../../hooks/useGTM';
 import isEqual from 'lodash.isequal';
 import { useI18n } from '../../hooks/useI18n';
+import { PagesName, REDIRECT_PROTECTED_NOT_LOGGED_IN } from '../../constants';
+import NotFoundPage from './notFoundPage';
+
+interface SuccessRegistrationPathState {
+  welcomeScreen?: boolean;
+}
 
 const RegisterPage = () => {
   const { t } = useI18n();
-  const { user, mutateUser, locale, locales } = useConfig((prev, next) => {
-    const userEqual = isEqual(prev.user, next.user);
-    const localeEqual = prev.locale === next.locale;
-    const localesEqual = !!prev.locales === !!next.locales;
-    return userEqual && localeEqual && localesEqual;
-  });
+  const location = useLocation<SuccessRegistrationPathState>();
+  const history = useHistory<SuccessRegistrationPathState>();
+  const { user, mutateUser, locale, locales, routes } = useConfig(
+    (prev, next) => {
+      const userEqual = isEqual(prev.user, next.user);
+      const localeEqual = prev.locale === next.locale;
+      const localesEqual = !!prev.locales === !!next.locales;
+      const routesEqual = prev.routes.length === next.routes.length;
+      return userEqual && localeEqual && localesEqual && routesEqual;
+    },
+  );
   const { headerNav } = useUIConfig();
   const { addToast } = useToasts();
   const sendDataToGTM = useGTM();
@@ -41,6 +52,16 @@ const RegisterPage = () => {
       'tglab.FieldName': FieldName,
     });
   };
+
+  const successRegisterRoute = useMemo(
+    () =>
+      routes.find(
+        route =>
+          route.id === PagesName.RegisterPage &&
+          route.name === 'registerWelcome',
+      ),
+    [routes],
+  );
   const checkEmailAvailable = useCallback(
     async (email: string): Promise<ValidateRegisterInput | null> => {
       const res = await postApi<ValidateRegisterInput>(
@@ -129,6 +150,9 @@ const RegisterPage = () => {
           'tglab.GUID': res.Data.PlayerId,
           event: 'ConfirmedRegistration',
         });
+        if (successRegisterRoute) {
+          history.push(successRegisterRoute.path, { welcomeScreen: true });
+        }
       } else {
         sendDataToGTM({
           'tglab.Error': res.Message || t('register_page_submit_error'),
@@ -140,11 +164,24 @@ const RegisterPage = () => {
     [],
   );
 
+  if (user.logged_in && !location?.state?.welcomeScreen) {
+    const redirectRoute = routes.find(
+      route => route.id === REDIRECT_PROTECTED_NOT_LOGGED_IN,
+    );
+    return <Redirect to={redirectRoute?.path || '/'} />;
+  }
+  if (
+    location.pathname === successRegisterRoute?.path &&
+    !location?.state?.welcomeScreen
+  ) {
+    return <NotFoundPage />;
+  }
+
   return (
     <main className="registration">
       <div className={clsx('reg-block', headerNav.active && 'mt-5')}>
         <HelpBlock title="Hulp nodig?" blocks={['faq', 'phone', 'email']} />
-        {user.id ? (
+        {location?.state?.welcomeScreen ? (
           <RegWelcome />
         ) : (
           <OnlineForm
