@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import HelpBlock from '../../components/HelpBlock';
 import OnlineForm from '../../components/registration/OnlineForm';
 import RegWelcome from '../../components/registration/RegWelcome';
@@ -23,6 +23,7 @@ import useGTM from '../../hooks/useGTM';
 import isEqual from 'lodash.isequal';
 import { useI18n } from '../../hooks/useI18n';
 import { PagesName, REDIRECT_PROTECTED_NOT_LOGGED_IN } from '../../constants';
+import NotFoundPage from './notFoundPage';
 
 interface SuccessRegistrationPathState {
   welcomeScreen?: boolean;
@@ -51,6 +52,16 @@ const RegisterPage = () => {
       'tglab.FieldName': FieldName,
     });
   };
+
+  const successRegisterRoute = useMemo(
+    () =>
+      routes.find(
+        route =>
+          route.id === PagesName.RegisterPage &&
+          route.name === 'registerWelcome',
+      ),
+    [routes],
+  );
   const checkEmailAvailable = useCallback(
     async (email: string): Promise<ValidateRegisterInput | null> => {
       const res = await postApi<ValidateRegisterInput>(
@@ -139,11 +150,6 @@ const RegisterPage = () => {
           'tglab.GUID': res.Data.PlayerId,
           event: 'ConfirmedRegistration',
         });
-        const successRegisterRoute = routes.find(
-          route =>
-            route.id === PagesName.RegisterPage &&
-            route.name === 'registerWelcome',
-        );
         if (successRegisterRoute) {
           history.push(successRegisterRoute.path, { welcomeScreen: true });
         }
@@ -163,6 +169,12 @@ const RegisterPage = () => {
       route => route.id === REDIRECT_PROTECTED_NOT_LOGGED_IN,
     );
     return <Redirect to={redirectRoute?.path || '/'} />;
+  }
+  if (
+    location.pathname === successRegisterRoute?.path &&
+    !location?.state?.welcomeScreen
+  ) {
+    return <NotFoundPage />;
   }
 
   return (
