@@ -26,10 +26,11 @@ export function useUIConfig(): UIConfig {
 }
 
 export const UIConfigProvider = props => {
-  const { header, configLoaded } = useConfig((prev, next) => {
+  const { header, configLoaded, locale } = useConfig((prev, next) => {
     const headerEqual = prev.header?.length === next.header?.length;
     const configLoadedEqual = prev.configLoaded === next.configLoaded;
-    return headerEqual && configLoadedEqual;
+    const localeEqual = prev.locale === next.locale;
+    return headerEqual && configLoadedEqual && localeEqual;
   });
   const { table } = useI18n();
   const location = useLocation();
@@ -53,7 +54,7 @@ export const UIConfigProvider = props => {
   useEffect(() => {
     if (
       [ConfigLoaded.Loaded, ConfigLoaded.Error].includes(configLoaded) &&
-      Object.keys(table()).length
+      (!locale || Object.keys(table()).length)
     ) {
       removePageLoadingSpinner();
       setInitPageSpinner(false);
