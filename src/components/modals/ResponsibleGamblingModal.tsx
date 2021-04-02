@@ -1,41 +1,39 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import GenericModal from './GenericModal';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
 import Lockr from 'lockr';
 import { stringToMiliseconds } from '../../utils/index';
-import { usePrevious } from '../../hooks/index';
+import { useUIConfig } from '../../hooks/useUIConfig';
+import { ComponentName } from '../../constants';
 
 const ResponsibleGamblingModal = () => {
   const { user } = useConfig(
     (prev, next) => prev.user.logged_in === next.user.logged_in,
   );
-  const prevUserLoggedIn = usePrevious(user.logged_in);
   const { t } = useI18n();
   const intervalRef = useRef(0);
-  const [showModal, setShowModal] = useState(false);
+  const { showModal, setShowModal } = useUIConfig();
 
   useEffect(() => {
     const setModal = () => {
-      setShowModal(user.logged_in);
+      setShowModal(ComponentName.ResponsibleGamblingModal);
     };
     const interval = stringToMiliseconds(
       Lockr.get('responsibleGamlingInterval', '0:20:0'),
     );
-    if (!prevUserLoggedIn && user.logged_in) {
-      setModal();
-    } else if (!showModal && user.logged_in && interval) {
+    if (!showModal && user.logged_in && interval) {
       intervalRef.current = setInterval(setModal, interval);
     }
     return () => clearInterval(intervalRef.current);
   }, [showModal, user]);
 
-  const hideModal = () => setShowModal(false);
+  const hideModal = () => setShowModal(null);
 
   return (
     <GenericModal
-      show={showModal}
+      show={showModal === ComponentName.ResponsibleGamblingModal}
       hideCallback={hideModal}
       isCentered={true}
       isStatic={true}
