@@ -491,7 +491,7 @@
     z-index: 1100;
     box-shadow: 0 -2px 20px 0 rgba(0, 0, 0, 0.3);
     @include media-breakpoint-down(lg) {
-      left: 40%;
+      left: 30%;
     }
     &__wrp {
       padding: 25px 20px;
@@ -615,7 +615,7 @@
         content: '';
         position: absolute;
         top: -7px;
-        right: 7%;
+        right: 11%;
         width: 0; 
         height: 0; 
         border-left: 8px solid transparent;
@@ -623,15 +623,14 @@
         border-bottom: 8px solid $light-gray-bg;
         border-radius: 2px;
         @include media-breakpoint-down(lg) {
-            right: 20.5%;
+            right: 18.5%;
         }
         @include media-breakpoint-down(xs) {
             right: 69px;
         }
     }
     @include media-breakpoint-down(xs) {
-        width: 100vw;
-        max-width: 400px;
+        width: 97.5vw;
         right: -62px;
         left: auto;
         transform: none;
