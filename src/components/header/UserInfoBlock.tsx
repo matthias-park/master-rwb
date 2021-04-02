@@ -22,9 +22,10 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const { t } = useI18n();
   const [loggingOut, setLoggingOut] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const { backdrop } = useUIConfig();
+  const { backdrop, showModal } = useUIConfig();
 
   const showUserMenu = isOpen => {
+    if (!!showModal) return;
     setShowDropdown(isOpen);
     backdrop.toggle(isOpen, [ComponentName.Header]);
   };
