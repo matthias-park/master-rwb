@@ -17,6 +17,7 @@ const insertSitemapChildren = (listItem: SitemapListItem, route) => {
     const mapItem = listItem.children.find(item =>
       route.path.startsWith(item.path),
     );
+    console.log(route, mapItem);
     if (mapItem) {
       return insertSitemapChildren(mapItem, route);
     }
@@ -58,7 +59,9 @@ const SitemapPage = () => {
         (route.protected && !user.logged_in)
       )
         continue;
-      const mapItem = list.find(item => route.path.startsWith(item.path));
+      const mapItem = list.find(
+        item => route.path.startsWith(item.path) && route.name !== item.name,
+      );
       if (mapItem) {
         insertSitemapChildren(mapItem, route);
       } else {
