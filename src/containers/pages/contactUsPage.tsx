@@ -14,21 +14,17 @@ import CustomAlert from '../../components/CustomAlert';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
 import isEqual from 'lodash.isequal';
-import { REGEX_EXPRESSION } from '../../constants';
 
 const loggedInHiddenFields = ['first_name', 'last_name', 'email_address'];
 const fieldValidations = {
   first_name: (value: string) =>
-    REGEX_EXPRESSION.LETTERS_WITH_SEPERATORS.test(value) ||
-    'field_only_letters',
+    /^[a-z]*$/gi.test(value) || 'field_only_letters',
   last_name: (value: string) =>
-    REGEX_EXPRESSION.LETTERS_WITH_SEPERATORS.test(value) ||
-    'field_only_letters',
+    /^[a-z]*$/gi.test(value) || 'field_only_letters',
   email_address: (value: string) =>
-    (REGEX_EXPRESSION.EMAIL.test(value) &&
-      value.split('@')?.[0]?.length < 65 &&
-      value.split('@')?.[1]?.length < 255) ||
-    'email_invalid',
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+      value,
+    ) || 'email_invalid',
   text: (value: string) =>
     !!value.trim().length || 'contact_page_field_required',
 };
