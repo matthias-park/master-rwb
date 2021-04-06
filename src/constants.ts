@@ -388,3 +388,8 @@ export const ALL_LOCALES = [
   'zh-tw',
   'zu',
 ];
+
+export const REGEX_EXPRESSION = {
+  LETTERS_WITH_SEPERATORS: /^[\p{L}'-]*$/iu,
+  EMAIL: /[a-z0-9]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/i,
+};
