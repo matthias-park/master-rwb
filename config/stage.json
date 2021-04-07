@@ -11,7 +11,7 @@
   ],
   "port": 3800,
   "basicAuth": {
-    "whitelistedIp": ["88.119.158.27"],
+    "whitelistedIp": ["88.119.158.27", "88.119.17.78"],
     "users": [
       {
         "username": "tbtest",
