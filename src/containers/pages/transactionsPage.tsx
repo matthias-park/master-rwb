@@ -33,7 +33,7 @@ interface Transactions {
     date: string;
     title: string;
     amount: string;
-    account_number?: string;
+    account_number: string;
   }[];
 }
 
@@ -49,7 +49,7 @@ const TransactionsTable = ({
 
   useEffect(() => {
     setUrl(
-      formatUrl('/transactions.json', {
+      formatUrl('/railsapi/v1/user/transactions.json', {
         to: dateTo.format('DD/MM/YYYY'),
         from: dateFrom.format('DD/MM/YYYY'),
         page: currentPage.toString(),
@@ -92,9 +92,7 @@ const TransactionsTable = ({
                     </td>
                     <td>
                       <strong className="heading-sm">{t('account')}</strong>
-                      {transaction.account_number
-                        ? transaction.account_number
-                        : '-'}
+                      {transaction.account_number || '-'}
                     </td>
                     <td>
                       <strong className="heading-sm">{t('amount')}</strong>
