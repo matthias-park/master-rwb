@@ -16,10 +16,11 @@ export interface OnlineFormBlockField {
   autoComplete?: ((value: string) => Promise<any>) | string;
   labelKey?: (value: any) => string;
   inputFormatting?: {
-    format?: string;
+    format?: string | ((value: string) => string);
     placeholder?: string;
     mask?: string;
   };
+  disableCopyPaste?: boolean;
 }
 
 export interface OnlineFormBlock {

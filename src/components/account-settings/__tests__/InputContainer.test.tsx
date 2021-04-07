@@ -13,7 +13,7 @@ test('displays title correctly', async () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      onSubmit={() => {}}
+      onSubmit={() => Promise.resolve()}
     />,
   );
   expect(getByTestId('title')).toHaveTextContent(titleContent);
@@ -24,7 +24,7 @@ test('displays button correctly', async () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      onSubmit={() => {}}
+      onSubmit={() => Promise.resolve()}
     />,
   );
   expect(getByTestId('button')).toHaveTextContent(buttonContent);
@@ -35,7 +35,7 @@ test("doesn't display spinner correctly", async () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      onSubmit={() => {}}
+      onSubmit={() => Promise.resolve()}
       loading={false}
     />,
   );
@@ -46,7 +46,7 @@ test('displays spinner correctly', async () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      onSubmit={() => {}}
+      onSubmit={() => Promise.resolve()}
       loading={true}
     />,
   );
@@ -59,7 +59,7 @@ test('submit value correctly', async () => {
       title={titleContent}
       buttonText={buttonContent}
       onSubmit={value => {
-        expect(value).toBe(Number(newEnteredValue));
+        return Promise.resolve(expect(value).toBe(Number(newEnteredValue)));
       }}
       loading={false}
     />,
@@ -81,7 +81,7 @@ test('submit value less than min', async () => {
       buttonText={buttonContent}
       min="200"
       onSubmit={value => {
-        expect(value).toBe(Number(200));
+        return Promise.resolve(expect(value).toBe(Number(200)));
       }}
       loading={false}
     />,
@@ -103,7 +103,7 @@ test('submit value more than max', async () => {
       buttonText={buttonContent}
       max="200"
       onSubmit={value => {
-        expect(value).toBe(Number(200));
+        return Promise.resolve(expect(value).toBe(Number(200)));
       }}
       loading={false}
     />,
@@ -123,7 +123,7 @@ test('submit value on disabled prop', async () => {
       buttonText={buttonContent}
       disabled
       onSubmit={value => {
-        expect(value).toBe(Number(200));
+        return Promise.resolve(expect(value).toBe(Number(200)));
       }}
       loading={false}
     />,
@@ -136,7 +136,7 @@ test('default matches snapshot', () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      onSubmit={() => {}}
+      onSubmit={() => Promise.resolve()}
       loading={false}
       currency="€"
     />,
@@ -148,7 +148,7 @@ test('with spinner matches snapshot', () => {
     <InputContainer
       title={titleContent}
       buttonText={buttonContent}
-      onSubmit={() => {}}
+      onSubmit={() => Promise.resolve()}
       loading={true}
       currency="€"
     />,

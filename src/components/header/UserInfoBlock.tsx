@@ -5,6 +5,7 @@ import { ComponentName } from '../../constants';
 import { useI18n } from '../../hooks/useI18n';
 import Spinner from 'react-bootstrap/Spinner';
 import Link from '../Link';
+import { cache as SWRCache } from 'swr';
 
 const UserMenuLink = ({ link, name, setShowDropdown }) => (
   <li className="user-menu__list-item">
@@ -33,6 +34,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
     setLoggingOut(true);
     await handleLogout();
     setLoggingOut(false);
+    SWRCache.clear();
   };
 
   return (

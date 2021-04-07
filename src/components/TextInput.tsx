@@ -14,8 +14,9 @@ type Props = {
   error?: { message: string };
   validation?: FormFieldValidation;
   toggleVisibility?: boolean;
+  disableCopyPaste?: boolean;
   inputFormatting?: {
-    format?: string;
+    format?: string | ((value: string) => string);
     placeholder?: string;
     mask?: string;
   };
@@ -64,6 +65,7 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
       additionalIcons,
       toggleVisibility,
       inputFormatting,
+      disableCopyPaste,
       rules,
       ...props
     }: Props,
@@ -75,6 +77,13 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
       [],
     );
     const inputType = inputFormatting ? 'tel' : !showPassword ? type : 'text';
+    const preventCopyPaste = disableCopyPaste
+      ? e => {
+          e.preventDefault();
+          e.nativeEvent.stopImmediatePropagation();
+        }
+      : undefined;
+
     return (
       <Form.Group
         data-testid="container"
@@ -94,6 +103,8 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
           placeholder=" "
           data-testid="input"
           onChange={inputFormatting ? undefined : props.onChange}
+          onCopy={preventCopyPaste}
+          onPaste={preventCopyPaste}
           //@ts-ignore
           onValueChange={
             inputFormatting

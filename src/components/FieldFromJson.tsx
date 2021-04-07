@@ -5,6 +5,8 @@ import { FormState } from 'react-hook-form';
 import clsx from 'clsx';
 import { useI18n } from '../hooks/useI18n';
 import LoadingButton from './LoadingButton';
+import ReactDatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface Props {
   field: Field;
@@ -51,6 +53,19 @@ const FieldFromJson = React.forwardRef(
         </Form.Group>
       );
     }
+    if (field.type === 'date') {
+      return (
+        <ReactDatePicker
+          minDate={field.dateFrom ? new Date(field.dateFrom, 1) : null}
+          maxDate={field.dateTo ? new Date(field.dateTo, 1) : null}
+          showMonthDropdown
+          showYearDropdown
+          onChange={date => {
+            console.log(date);
+          }}
+        />
+      );
+    }
     const isFieldSelect = field.type === 'select';
     const formGroupAs = isFieldSelect
       ? 'select'
@@ -60,7 +75,7 @@ const FieldFromJson = React.forwardRef(
     const formGroupType = isFieldSelect ? 'text' : field.type;
     const formGroupChildren =
       field.type === 'select'
-        ? field.default?.map(option => (
+        ? field.values?.map(option => (
             <option key={option.id} value={option.title}>
               {option.title}
             </option>
