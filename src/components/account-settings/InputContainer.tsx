@@ -12,7 +12,7 @@ interface Props {
   loading?: boolean;
   min?: number | string;
   max?: number | string;
-  onSubmit: (inputValue: number) => void;
+  onSubmit: (inputValue: number) => Promise<string | void>;
   quickAmounts?: number[];
   disabled?: boolean;
   currency?: string;
@@ -31,7 +31,10 @@ const InputContainer = ({
   currency,
 }: Props) => {
   const [inputValue, setInputValue] = useState<string>(defaultValue.toString());
-  const handleSubmit = () => onSubmit(Number(inputValue));
+  const handleSubmit = async () => {
+    await onSubmit(Number(inputValue));
+    return setInputValue(defaultValue.toString());
+  };
   const handleValueChange = val => {
     setInputValue(val.value);
   };

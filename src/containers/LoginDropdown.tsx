@@ -34,7 +34,7 @@ const LoginForm = ({
   const formMethods = useForm({
     mode: 'onBlur',
   });
-  const { register, handleSubmit, errors, formState, setError } = formMethods;
+  const { register, handleSubmit, formState, setError } = formMethods;
   const { mutateUser } = useConfig();
   const sendDataToGTM = useGTM();
   const forgotPasswordRoute = useRoutePath(PagesName.ForgotPasswordPage);
@@ -103,7 +103,7 @@ const LoginForm = ({
           // type="email"
           placeholder={t('login_email')}
           autoComplete="username"
-          error={errors.email}
+          error={formState.errors.email}
         />
         <ControlledTextInput
           rules={{
@@ -114,13 +114,11 @@ const LoginForm = ({
           placeholder={t('login_password')}
           autoComplete="current-password"
           toggleVisibility
-          error={errors.password}
+          error={formState.errors.password}
         />
         <div className="d-flex align-items-center flex-wrap">
           <Form.Check
-            ref={register({
-              setValueAs: value => !!value,
-            })}
+            {...register('remember_me', { setValueAs: value => !!value })}
             custom
             id="remember_me"
             name="remember_me"

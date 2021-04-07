@@ -9,12 +9,16 @@ export interface Form {
   id: string;
   title: string;
   type: string;
-  default?: Default[];
+  default?: string | Value | null;
   style?: string;
   required?: boolean;
+  values?: Value[];
+  dateFrom?: number;
+  dateTo?: number;
+  disabled?: boolean;
 }
 
-export interface Default {
+export interface Value {
   id: number;
   title: string;
 }

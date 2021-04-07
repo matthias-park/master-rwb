@@ -390,6 +390,30 @@ export const ALL_LOCALES = [
 ];
 
 export const REGEX_EXPRESSION = {
-  LETTERS_WITH_SEPERATORS: /^[\p{L}'-]*$/iu,
-  EMAIL: /[a-z0-9]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/i,
+  LETTERS_WITH_SEPERATORS: /^[\p{L} '-]*$/iu,
+  EMAIL: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/i,
+};
+
+export const VALIDATIONS: { [key: string]: (value: string) => boolean } = {
+  name: value =>
+    (value.length > 1 &&
+      REGEX_EXPRESSION.LETTERS_WITH_SEPERATORS.test(value.trim())) ||
+    value === '*',
+  email: value =>
+    REGEX_EXPRESSION.EMAIL.test(value.trim()) &&
+    value.split('@')?.[0]?.length < 65 &&
+    value.split('@')?.[1]?.length < 255,
+  passwordMixOfThree: value => {
+    const valueValid = value.length > 7;
+    const hasLowerCase = /[a-z]/.test(value);
+    const hasUpperCase = /[A-Z]/.test(value);
+    const hasNumbers = /\d/.test(value);
+    const hasSpecialCharacters = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+    return (
+      valueValid &&
+      [hasLowerCase, hasUpperCase, hasNumbers, hasSpecialCharacters].filter(
+        Boolean,
+      ).length > 2
+    );
+  },
 };

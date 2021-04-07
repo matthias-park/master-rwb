@@ -22,7 +22,7 @@ const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
   const { t } = useI18n();
   const currentEventKey = useContext(AccordionContext);
   const accordionOnClick = useAccordionToggle(form.id);
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState } = useForm<any, any>({
     defaultValues: form.fields
       .filter(field => field.default !== undefined && field.default !== null)
       .reduce((obj, value) => {
@@ -107,7 +107,7 @@ const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                         <span>{fields[id].title}</span>
                         <div className="settings-radios ml-auto">
                           <input
-                            ref={register}
+                            {...register(id)}
                             className="settings-radios__input"
                             type="radio"
                             id={`${id}-yes`}
@@ -122,7 +122,7 @@ const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                             {t('settings_yes')}
                           </label>
                           <input
-                            ref={register}
+                            {...register(id)}
                             className="settings-radios__input"
                             type="radio"
                             id={`${id}-no`}
@@ -150,7 +150,7 @@ const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                     <h3 className="mt-3">{fields[id].title}</h3>
                     <p>{fields[id].text}</p>
                     <Form.Check
-                      ref={register}
+                      {...register(id)}
                       name={id}
                       custom
                       id={id}

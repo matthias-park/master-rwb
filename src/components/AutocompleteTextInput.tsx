@@ -30,7 +30,7 @@ const AutocompleteTextInput = (props: Props) => {
       name={props.name || props.id}
       rules={props.rules}
       defaultValue=""
-      render={controlProps => {
+      render={({ field: controlProps }) => {
         const open =
           !isLoading &&
           gotFocus.current &&

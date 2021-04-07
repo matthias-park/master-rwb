@@ -8,9 +8,8 @@ import {
   ValidateRegisterPersonalCode,
 } from '../../types/api/user/Registration';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormFieldValidation } from '../../constants';
+import { FormFieldValidation, VALIDATIONS } from '../../constants';
 import { OnlineFormBlock } from '../../types/RegistrationBlock';
-import CustomAlert from '../CustomAlert';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import {
   RegistrationResponse,
@@ -48,11 +47,13 @@ const blocks = (
         id: 'firstname',
         type: 'text',
         required: true,
+        validate: value => VALIDATIONS.name(value) || t('field_only_letters'),
       },
       {
         id: 'lastname',
         type: 'text',
         required: true,
+        validate: value => VALIDATIONS.name(value) || t('field_only_letters'),
       },
       {
         id: 'street',
@@ -68,7 +69,7 @@ const blocks = (
             value.split(' - ').length === 2) ||
           t('register_input_postal_code_invalid'),
         labelKey: (value: PostCodeInfo) =>
-          `${value.zip_code} - ${value.locality}`,
+          `${value.zip_code} - ${value.locality_name}`,
         autoComplete: async value => {
           const postCode = value.split(' - ')[0];
           const res = await props.checkPostalCode(postCode);
@@ -81,11 +82,15 @@ const blocks = (
       {
         id: 'phone_number',
         type: 'text',
-        required: true,
-        inputFormatting: {
-          format: '+32 # ### ## ##',
-          placeholder: '+32',
-        },
+        required: false,
+        // inputFormatting: {
+        //   format: value => {
+        //     // if(/^\+32/.test(value)) {
+        //     //   if (value)
+        //     // }
+        //     return '+32 #########';
+        //   },
+        // },
       },
     ],
   },
@@ -114,6 +119,7 @@ const blocks = (
         inputFormatting: {
           format: '##.##.##-###.##',
           mask: '_',
+          placeholder: '_',
         },
       },
     ],
@@ -125,12 +131,12 @@ const blocks = (
         id: 'email',
         type: 'email',
         required: true,
+        disableCopyPaste: true,
         triggerId: 'repeat_email',
         validate: async value => {
           let valid: string | boolean = true;
           setValidation('email', FormFieldValidation.Validating);
-          const emailRegex = /[a-zA-Z0-9.!#$%&‘*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*/;
-          if (!emailRegex.test(value)) {
+          if (!VALIDATIONS.email(value)) {
             setValidation('email', FormFieldValidation.Invalid);
             return t('register_email_bad_format');
           }
@@ -149,6 +155,7 @@ const blocks = (
         id: 'repeat_email',
         type: 'email',
         required: true,
+        disableCopyPaste: true,
         validate: value => {
           let valid: string | boolean = true;
           setValidation('repeat_email', FormFieldValidation.Validating);
@@ -170,35 +177,24 @@ const blocks = (
       {
         id: 'password',
         type: 'password',
+        disableCopyPaste: true,
         autoComplete: 'new-password',
         triggerId: 'repeat_password',
         required: true,
         validate: value => {
-          const valueValid = value.length > 7;
-          const hasLowerCase = /[a-z]/.test(value);
-          const hasUpperCase = /[A-Z]/.test(value);
-          const hasNumbers = /\d/.test(value);
-          const hasSpecialCharacters = /[!@#$%^&*(),.?":{}|<>]/.test(value);
-          const mixOfThree =
-            [
-              hasLowerCase,
-              hasUpperCase,
-              hasNumbers,
-              hasSpecialCharacters,
-            ].filter(Boolean).length > 2;
+          const valid = VALIDATIONS.passwordMixOfThree(value);
           setValidation(
             'password',
-            valueValid && mixOfThree
-              ? FormFieldValidation.Valid
-              : FormFieldValidation.Invalid,
+            valid ? FormFieldValidation.Valid : FormFieldValidation.Invalid,
           );
-          return (valueValid && mixOfThree) || t('register_password_weak');
+          return valid || t('register_password_weak');
         },
       },
       {
         id: 'repeat_password',
         required: true,
         type: 'password',
+        disableCopyPaste: true,
         validate: value => {
           const valid = validateRepeat('password', value);
           setValidation(
@@ -239,7 +235,6 @@ const OnlineForm = (props: Props) => {
   const {
     register,
     handleSubmit,
-    errors,
     watch,
     trigger,
     formState,
@@ -258,9 +253,10 @@ const OnlineForm = (props: Props) => {
   const onSubmit = async ({ terms_and_conditions, postal_code, ...data }) => {
     const post_code = postal_code.split(' - ')[0];
     const postal_info = await props.checkPostalCode(post_code);
+    //add formatting prefix
     const phone_number = `+32${data.phone_number}`;
     const city =
-      Object.values(postal_info.Data?.result || {})[0]?.locality || '';
+      Object.values(postal_info.Data?.result || {})[0]?.locality_name || '';
     const response = await props.handleRegisterSubmit({
       ...data,
       login: data.email,
@@ -296,7 +292,7 @@ const OnlineForm = (props: Props) => {
                       case 'radio': {
                         return (
                           <Form.Check
-                            ref={register({
+                            {...register(field.name || field.id, {
                               required:
                                 field.required && t('register_input_required'),
                               setValueAs: value => !!value,
@@ -308,7 +304,7 @@ const OnlineForm = (props: Props) => {
                             name={field.name || field.id}
                             label={jsxT(`register_input_${field.id}`)}
                             className="mb-4 custom-control-inline"
-                            isInvalid={errors[field.id]}
+                            isInvalid={formState.errors[field.id]}
                           />
                         );
                       }
@@ -329,7 +325,7 @@ const OnlineForm = (props: Props) => {
                                 validate: field.validate,
                               }}
                               type={field.type}
-                              error={errors[field.id]}
+                              error={formState.errors[field.id]}
                               setError={error =>
                                 error
                                   ? setError(field.name || field.id, {
@@ -366,8 +362,9 @@ const OnlineForm = (props: Props) => {
                               props.fieldChange(field.id);
                               field.triggerId && triggerRepeat(field.triggerId);
                             }}
+                            disableCopyPaste={field.disableCopyPaste}
                             validation={validationForms[field.id]}
-                            error={errors[field.id]}
+                            error={formState.errors[field.id]}
                             placeholder={t(`register_input_${field.id}`)}
                             toggleVisibility={field.type === 'password'}
                             inputFormatting={field.inputFormatting}
@@ -377,13 +374,13 @@ const OnlineForm = (props: Props) => {
                       case 'date': {
                         return (
                           <ControlledTextInput
-                            rules={register({
+                            rules={{
                               required:
                                 field.required && t('register_input_required'),
                               valueAsDate: true,
-                            })}
+                            }}
                             id={field.id}
-                            error={errors[field.id]}
+                            error={formState.errors[field.id]}
                             type="date"
                             onBlur={() => props.fieldChange(field.id)}
                             placeholder={t(`register_input_${field.id}`)}

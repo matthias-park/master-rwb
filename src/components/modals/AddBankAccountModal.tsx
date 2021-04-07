@@ -49,18 +49,14 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
       <p className="text-gray-700 mb-3">{t('add_bank_modal_text')}</p>
       <FormProvider {...formMethods}>
         <Form onSubmit={formMethods.handleSubmit(handleSubmit)}>
-          {['account_number', 'swift', 'address'].map(id => (
-            <ControlledTextInput
-              id={id}
-              key={id}
-              placeholder={t(`add_bank_modal_${id}`)}
-              error={formMethods.errors[id]}
-              rules={{
-                required:
-                  id === 'account_number' && t('add_bank_modal_input_required'),
-              }}
-            />
-          ))}
+          <ControlledTextInput
+            id="account_number"
+            placeholder={t('add_bank_modal_account_number')}
+            error={formMethods.formState.errors.account_number}
+            rules={{
+              required: t('add_bank_modal_input_required'),
+            }}
+          />
           <LoadingButton
             loading={formMethods.formState.isSubmitting}
             className="mt-3"

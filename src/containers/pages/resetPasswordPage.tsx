@@ -20,7 +20,7 @@ const ForgotPasswordPage = () => {
   const formMethods = useForm({
     mode: 'onBlur',
   });
-  const { handleSubmit, errors, formState, watch, trigger } = formMethods;
+  const { handleSubmit, formState, watch, trigger } = formMethods;
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
     msg: string;
@@ -97,7 +97,7 @@ const ForgotPasswordPage = () => {
                   );
                 },
               }}
-              error={errors.password}
+              error={formState.errors.password}
               onBlur={() =>
                 watch('repeat_password') && trigger('repeat_password')
               }
@@ -113,7 +113,7 @@ const ForgotPasswordPage = () => {
                   value === watch('password') ||
                   t('reset_password_need_match_password'),
               }}
-              error={errors.repeat_password}
+              error={formState.errors.repeat_password}
               id="repeat_password"
               type="password"
               placeholder={t('reset_password_repeat_field')}
@@ -121,7 +121,7 @@ const ForgotPasswordPage = () => {
             />
             <LoadingButton
               variant="primary"
-              disabled={!!errors.email || !formState.isValid}
+              disabled={!!formState.errors.email || !formState.isValid}
               loading={formState.isSubmitting}
               type="submit"
               data-testid="button"

@@ -28,7 +28,7 @@ const FormsWithUpdateUser = [
 const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
   const currentEventKey = useContext(AccordionContext);
   const accordionOnClick = useAccordionToggle(form.id);
-  const { register, handleSubmit, watch, formState } = useForm({
+  const { register, handleSubmit, watch, formState } = useForm<any, any>({
     defaultValues: form.fields
       .filter(field => field.default ?? false)
       .reduce((obj, value) => {
@@ -142,7 +142,7 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                     <Form.Group key={field.id}>
                       <Form.Control
                         data-testid={field.id}
-                        ref={register}
+                        {...register(field.id)}
                         as={formGroupAs}
                         disabled={field.disabled}
                         size="sm"
