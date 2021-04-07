@@ -141,7 +141,7 @@ const TemplatePage = () => {
         </div>
       )}
       {!!data && htmlPages?.includes(page) && (
-        <main className="container-fluid mb-4 pt-5">
+        <main className="container-fluid mb-4 pt-5 pb-4">
           <div dangerouslySetInnerHTML={{ __html: data?.Data?.body }}></div>
         </main>
       )}

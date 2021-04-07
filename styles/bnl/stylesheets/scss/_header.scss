@@ -2,7 +2,9 @@
     position: relative;
     padding: 14px 0 22px 0;
     @include media-breakpoint-down(lg) {
-      padding: 0;
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
     }
     @include full-bg($brand);
     &__nav-toggler {
@@ -33,7 +35,7 @@
         }
     }
     &__mobile-logo {
-      transform: translateY(-3px);
+      transform: translateY(-1px) translateX(-5px);
     }
     &__collapse-wrp {
         @extend .collapse;
@@ -48,8 +50,9 @@
             position: fixed;
             top: 0;
             right: -345px;
-            bottom: 0;
             width: 100%;
+            min-height: 100vh;
+            max-height: 100vh;
             max-width: 345px;
             background-color: $white;
             transition: right 0.3s;
@@ -386,12 +389,6 @@
             display: flex;
             align-items: center;
             font-size: 13px;
-            &-name {
-              width: 70px;
-              @include media-breakpoint-down(lg) {
-                display: none;
-              }
-            }
             &-balance {
                 display: flex;
                 align-items: center;
@@ -431,42 +428,42 @@
                     z-index: 1;
                   }
                 }
-                span:nth-of-type(2) {
-                    position: relative;
-                    margin-left: 25px;
-                    &:after {
-                        content: '';
-                        position: absolute;
-                        top: 7px;
-                        left: -14px;
-                        height: 3px;
-                        width: 3px;
-                        background-color: $primary;
-                        border-radius: 50%;
-                    }
-                }
             }
         }
         &-toggle {
-            @extend .dropdown-toggle;
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 27px;
-            height: 100%;
-            border: none;
-            background-color: $primary;
-            color: $white;
-            font-size: 28px;
-            padding: 0;
-            border-top-right-radius: 16px;
-            border-bottom-right-radius: 16px;
-            &:after {
+            display: flex;
+            align-items: center;
+            &-name {
+              width: 65px;
+              font-size: 13px;
+              @include media-breakpoint-down(lg) {
                 display: none;
+              }
+            }
+            &-button {
+              @extend .dropdown-toggle;
+              position: absolute;
+              top: 0;
+              right: 0;
+              width: 27px;
+              height: 100%;
+              border: none;
+              background-color: $primary;
+              color: $white;
+              font-size: 28px;
+              padding: 0;
+              border-top-right-radius: 16px;
+              border-bottom-right-radius: 16px;
+              &:after {
+                display: none;
+              }
             }
             &-icon {
                 display: inline-block;
-                transform: translateX(-1px) translateY(4px);
+                transform: translateX(-1px) translateY(12px);
+                @include media-breakpoint-down(lg) {
+                  transform: translateX(-1px) translateY(5px);
+                }
             }
         }
         &-icon {
@@ -623,7 +620,7 @@
         border-bottom: 8px solid $light-gray-bg;
         border-radius: 2px;
         @include media-breakpoint-down(lg) {
-            right: 18.5%;
+            right: 16%;
         }
         @include media-breakpoint-down(xs) {
             right: 69px;

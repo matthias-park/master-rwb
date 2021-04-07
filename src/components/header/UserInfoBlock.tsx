@@ -43,26 +43,23 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
         onToggle={isOpen => showUserMenu(isOpen)}
       >
         <div className="header__user-menu-info">
-          <div className="header__user-menu-info-balance">
+          <Link to="/deposit" className="header__user-menu-info-balance">
             <span>
               {user.balance} {user.currency}
             </span>
-            <Link to="/deposit" className="mt-1">
-              <i className="icon-add-action-1 ml-2"></i>
-            </Link>
-          </div>
-          <strong className="header__user-menu-info-name">{user.name}</strong>
+            <i className="icon-add-action-1 ml-2"></i>
+          </Link>
         </div>
-        <i className="header__user-menu-icon icon-account ml-2"></i>
-        <Dropdown.Toggle
-          as="button"
-          className="header__user-menu-toggle user-menu-dropdown"
-        >
-          <i
-            className={`icon-${
-              showDropdown ? 'up' : 'down'
-            } header__user-menu-toggle-icon`}
-          ></i>
+        <Dropdown.Toggle as="a" bsPrefix="header__user-menu-toggle">
+          <strong className="header__user-menu-toggle-name">{user.name}</strong>
+          <i className="header__user-menu-icon icon-account ml-2"></i>
+          <div className="header__user-menu-toggle-button user-menu-dropdown">
+            <i
+              className={`icon-${
+                showDropdown ? 'up' : 'down'
+              } header__user-menu-toggle-icon`}
+            ></i>
+          </div>
         </Dropdown.Toggle>
         <Dropdown.Menu className="dropdown-menu user-menu">
           <div className="user-menu__wrp">

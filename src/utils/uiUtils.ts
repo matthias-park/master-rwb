@@ -98,9 +98,11 @@ export const makeCollapsible = (
       if (collapseEl) {
         if (collapseEl.classList.contains('show')) {
           collapseEl.classList.remove('show');
+          currentEl.classList.remove('active');
           collapseHeader.classList.remove('active');
         } else {
           collapseEl.classList.add('show');
+          currentEl.classList.add('active');
           collapseHeader.classList.add('active');
         }
       }
