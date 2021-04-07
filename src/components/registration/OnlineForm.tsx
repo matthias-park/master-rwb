@@ -69,7 +69,7 @@ const blocks = (
             value.split(' - ').length === 2) ||
           t('register_input_postal_code_invalid'),
         labelKey: (value: PostCodeInfo) =>
-          `${value.zip_code} - ${value.locality}`,
+          `${value.zip_code} - ${value.locality_name}`,
         autoComplete: async value => {
           const postCode = value.split(' - ')[0];
           const res = await props.checkPostalCode(postCode);
@@ -83,14 +83,14 @@ const blocks = (
         id: 'phone_number',
         type: 'text',
         required: false,
-        inputFormatting: {
-          format: value => {
-            // if(/^\+32/.test(value)) {
-            //   if (value)
-            // }
-            return '+32 #########';
-          },
-        },
+        // inputFormatting: {
+        //   format: value => {
+        //     // if(/^\+32/.test(value)) {
+        //     //   if (value)
+        //     // }
+        //     return '+32 #########';
+        //   },
+        // },
       },
     ],
   },
@@ -235,7 +235,6 @@ const OnlineForm = (props: Props) => {
   const {
     register,
     handleSubmit,
-    errors,
     watch,
     trigger,
     formState,
@@ -257,7 +256,7 @@ const OnlineForm = (props: Props) => {
     //add formatting prefix
     const phone_number = `+32${data.phone_number}`;
     const city =
-      Object.values(postal_info.Data?.result || {})[0]?.locality || '';
+      Object.values(postal_info.Data?.result || {})[0]?.locality_name || '';
     const response = await props.handleRegisterSubmit({
       ...data,
       login: data.email,
@@ -293,7 +292,7 @@ const OnlineForm = (props: Props) => {
                       case 'radio': {
                         return (
                           <Form.Check
-                            ref={register({
+                            {...register(field.name || field.id, {
                               required:
                                 field.required && t('register_input_required'),
                               setValueAs: value => !!value,
@@ -305,7 +304,7 @@ const OnlineForm = (props: Props) => {
                             name={field.name || field.id}
                             label={jsxT(`register_input_${field.id}`)}
                             className="mb-4 custom-control-inline"
-                            isInvalid={errors[field.id]}
+                            isInvalid={formState.errors[field.id]}
                           />
                         );
                       }
@@ -326,7 +325,7 @@ const OnlineForm = (props: Props) => {
                                 validate: field.validate,
                               }}
                               type={field.type}
-                              error={errors[field.id]}
+                              error={formState.errors[field.id]}
                               setError={error =>
                                 error
                                   ? setError(field.name || field.id, {
@@ -365,7 +364,7 @@ const OnlineForm = (props: Props) => {
                             }}
                             disableCopyPaste={field.disableCopyPaste}
                             validation={validationForms[field.id]}
-                            error={errors[field.id]}
+                            error={formState.errors[field.id]}
                             placeholder={t(`register_input_${field.id}`)}
                             toggleVisibility={field.type === 'password'}
                             inputFormatting={field.inputFormatting}
@@ -375,13 +374,13 @@ const OnlineForm = (props: Props) => {
                       case 'date': {
                         return (
                           <ControlledTextInput
-                            rules={register({
+                            rules={{
                               required:
                                 field.required && t('register_input_required'),
                               valueAsDate: true,
-                            })}
+                            }}
                             id={field.id}
-                            error={errors[field.id]}
+                            error={formState.errors[field.id]}
                             type="date"
                             onBlur={() => props.fieldChange(field.id)}
                             placeholder={t(`register_input_${field.id}`)}

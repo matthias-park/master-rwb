@@ -18,7 +18,7 @@ const ForgotLoginPage = () => {
   const formMethods = useForm({
     mode: 'onBlur',
   });
-  const { handleSubmit, errors, formState } = formMethods;
+  const { handleSubmit, formState } = formMethods;
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
     msg: string;
@@ -84,13 +84,13 @@ const ForgotLoginPage = () => {
                   );
                 },
               }}
-              error={errors.email}
+              error={formState.errors.email}
               id="email"
               placeholder={t('forgot_password_email_field')}
             />
             <LoadingButton
               variant="primary"
-              disabled={!!errors.email}
+              disabled={!!formState.errors.email}
               loading={formState.isSubmitting}
               type="submit"
               data-testid="button"

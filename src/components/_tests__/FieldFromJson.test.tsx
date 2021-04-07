@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, cleanup } from '../../utils/testUtils';
-import TextInput from '../TextInput';
-import { FormFieldValidation } from '../../constants';
 import FieldFromJson from '../FieldFromJson';
+import { Form } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
 
 beforeEach(cleanup);
 
@@ -65,7 +65,7 @@ const fields = [
     id: 'subject',
     title: 'Subject',
     type: 'select',
-    default: [{ id: 126, title: 'test' }],
+    default: { id: 126, title: 'test' },
     required: true,
   },
   { id: 'text', title: 'Text', type: 'text', required: true },
@@ -74,26 +74,20 @@ const fields = [
 ];
 
 test('displays fields correctly', async () => {
+  const { handleSubmit, control } = useForm({
+    mode: 'onBlur',
+  });
   const { getByTestId } = render(
     <>
-      {fields.map(field => (
-        <FieldFromJson
-          key={field.id}
-          field={field}
-          formState={{
-            isDirty: false,
-            dirtyFields: [],
-            errors: [],
-            isSubmitSuccessful: false,
-            isSubmitted: false,
-            isSubmitting: false,
-            isValid: true,
-            isValidating: false,
-            submitCount: 0,
-            touched: [],
-          }}
-        />
-      ))}
+      <Form
+        onSubmit={handleSubmit(() => {
+          return;
+        })}
+      >
+        {fields.map(field => (
+          <FieldFromJson key={field.id} control={control} field={field} />
+        ))}
+      </Form>
     </>,
   );
   expect(getByTestId('select')).toBeInTheDocument();

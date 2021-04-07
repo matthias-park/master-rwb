@@ -81,7 +81,7 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
                             className={clsx(uploadedFilename && 'text-primary')}
                           >
                             {t('settings_file_upload')}
-                            <Form.File.Input ref={register} name={id} />
+                            <Form.File.Input {...register(id)} name={id} />
                           </Form.File.Label>
                         </Form.File>
                       )}
@@ -95,7 +95,7 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
               <div className="row mx-0 mt-2">
                 <Form.Group>
                   <Form.Control
-                    ref={register}
+                    {...register('password')}
                     size="sm"
                     type="password"
                     name="password"

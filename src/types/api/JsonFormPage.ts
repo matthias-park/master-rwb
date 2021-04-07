@@ -9,7 +9,7 @@ export interface Form {
   id: string;
   title: string;
   type: string;
-  default?: string | Value[] | null;
+  default?: string | Value | null;
   style?: string;
   required?: boolean;
   values?: Value[];

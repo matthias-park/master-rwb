@@ -52,7 +52,7 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
           <ControlledTextInput
             id="account_number"
             placeholder={t('add_bank_modal_account_number')}
-            error={formMethods.errors.account_number}
+            error={formMethods.formState.errors.account_number}
             rules={{
               required: t('add_bank_modal_input_required'),
             }}

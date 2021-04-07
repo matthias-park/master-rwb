@@ -30,7 +30,7 @@ const ContactUsPage = () => {
   const { t } = useI18n();
   const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
   const { addToast } = useToasts();
-  const { register, handleSubmit, errors, formState } = useForm({
+  const { handleSubmit, control } = useForm({
     mode: 'onBlur',
   });
   const [submitResponse, setSubmitResponse] = useState<{
@@ -128,16 +128,15 @@ const ContactUsPage = () => {
                     <FieldFromJson
                       key={field.id}
                       field={field}
-                      error={errors[field.id]}
-                      ref={register({
+                      control={control}
+                      rules={{
                         required:
                           field.required && t('contact_page_field_required'),
                         validate: value => {
                           const valid = fieldValidations[field.id]?.(value);
                           return typeof valid === 'string' ? t(valid) : valid;
                         },
-                      })}
-                      formState={formState}
+                      }}
                     />
                   );
                 })}
