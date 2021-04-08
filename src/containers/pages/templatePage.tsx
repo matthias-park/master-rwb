@@ -6,6 +6,7 @@ import JsonPage from '../../types/api/JsonPage';
 import { makeCollapsible } from '../../utils/uiUtils';
 import { useConfig } from '../../hooks/useConfig';
 import { useUIConfig } from '../../hooks/useUIConfig';
+import { useI18n } from '../../hooks/useI18n';
 import { useParams, useLocation } from 'react-router-dom';
 import NotFoundPage from './notFoundPage';
 import Sidebar from '../../components/Sidebar';
@@ -23,6 +24,7 @@ const TemplatePage = () => {
   const page = slug || pathname.substring(1).replaceAll('/', '_');
   const { sidebars } = useConfig();
   const { headerNav } = useUIConfig();
+  const { t } = useI18n();
   const htmlPages = sidebars?.slice(1)[0].map(el => el.link.replace(/\//g, ''));
   const { data, error } = useApi<RailsApiResponse<any>>(
     htmlPages?.includes(page)
@@ -109,12 +111,15 @@ const TemplatePage = () => {
                         variant="brand-light"
                         id="dropdown-basic"
                       >
-                        Dropdown Button
+                        {data.Data.structure.content[0].standart
+                          ?.dropdown_button_translations?.value ||
+                          t('default_dropdown_title')}
                         <i className="icon-down1"></i>
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
                         {links.map(link => (
                           <Dropdown.Item
+                            className="text-wrap"
                             as={ScrollLink}
                             key={link.link}
                             to={link.link}
