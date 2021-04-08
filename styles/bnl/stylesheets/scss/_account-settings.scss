@@ -284,9 +284,9 @@
   font-size: 12px;
   $self: &;
   &:hover:not(.active) {
-    background-color: rgba($gray-100, 0.2);
+    background-color: rgba($gray-100, 0.4);
     #{ $self }__header {
-      background-color: rgba($gray-100, 0.2);
+      background-color: rgba($gray-100, 0.4);
     }
   }
   &__header {
