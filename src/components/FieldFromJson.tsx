@@ -11,11 +11,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 interface Props {
   field: Field;
   rules?: any;
+  register: any;
   control: any;
   size?: 'sm' | 'lg' | undefined;
 }
 
-const FieldFromJson = ({ field, size, control, rules }: Props) => {
+const FieldFromJson = ({ field, size, control, rules, register }: Props) => {
   const { t } = useI18n();
   const [filename, setFilename] = useState('');
 
@@ -38,33 +39,23 @@ const FieldFromJson = ({ field, size, control, rules }: Props) => {
   }
   if (field.type === 'file') {
     return (
-      <Controller
-        name={field.id}
-        control={control}
-        rules={rules}
-        defaultValue={field.default}
-        render={({ field: controlField }) => (
-          <Form.Group>
-            <Form.File
-              name={controlField.name}
-              onBlur={controlField.onBlur}
-              disabled={field.disabled}
-              custom
-              className="mt-auto "
-              id={field.id}
-              data-testid="file"
-              label={filename || field.title}
-              onChange={e => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  controlField.onChange(file);
-                  setFilename(file.name);
-                }
-              }}
-            />
-          </Form.Group>
-        )}
-      />
+      <Form.Group>
+        <Form.File
+          {...register(field.id, rules)}
+          disabled={field.disabled}
+          custom
+          className="mt-auto "
+          id={field.id}
+          data-testid="file"
+          label={filename || field.title}
+          onChange={e => {
+            const file = e.target.files?.[0];
+            if (file) {
+              setFilename(file.name);
+            }
+          }}
+        />
+      </Form.Group>
     );
   }
   if (field.type === 'date') {
@@ -79,18 +70,33 @@ const FieldFromJson = ({ field, size, control, rules }: Props) => {
             : null
         }
         render={({ field: controlField }) => (
-          <Form.Group>
-            <ReactDatePicker
-              {...controlField}
-              minDate={field.dateFrom ? new Date(field.dateFrom, 1) : null}
-              maxDate={field.dateTo ? new Date(field.dateTo, 1) : null}
-              selected={controlField.value}
-              showMonthDropdown
-              disabled={field.disabled}
-              showYearDropdown
-              placeholderText={field.title}
-            />
-          </Form.Group>
+          <ReactDatePicker
+            {...controlField}
+            minDate={field.dateFrom ? new Date(field.dateFrom, 1) : null}
+            maxDate={field.dateTo ? new Date(field.dateTo, 1) : null}
+            selected={controlField.value}
+            customInput={
+              <Form.Group key={field.id}>
+                <Form.Control
+                  size={size}
+                  id={field.id}
+                  name={field.id}
+                  value={controlField.value}
+                  placeholder=" "
+                />
+                <label
+                  data-testid={`${field.id}-title`}
+                  htmlFor="amount"
+                  className="text-14"
+                >
+                  {field.title}
+                </label>
+              </Form.Group>
+            }
+            showMonthDropdown
+            disabled={field.disabled}
+            showYearDropdown
+          />
         )}
       />
     );
@@ -104,30 +110,36 @@ const FieldFromJson = ({ field, size, control, rules }: Props) => {
   const formGroupType = isFieldSelect ? 'text' : field.type;
   const formGroupChildren =
     field.type === 'select'
-      ? (
-          field.values ||
-          (field.default
-            ? Array.isArray(field.default)
-              ? field.default
-              : [field.default as Value]
-            : [])
-        )?.map(option => (
-          <option key={option.id} value={option.title}>
-            {option.title}
-          </option>
-        ))
+      ? (field.values || (field.default ? [field.default as Value] : []))?.map(
+          option => (
+            <option key={option.id} value={option.title}>
+              {option.title}
+            </option>
+          ),
+        )
       : null;
+  if (formGroupChildren && !field.default) {
+    formGroupChildren.splice(
+      0,
+      0,
+      <option key="-1" value="-1">
+        {field.title}
+      </option>,
+    );
+  }
   return (
     <Controller
       name={field.id}
       control={control}
-      rules={rules}
+      rules={{
+        ...rules,
+        validate: value => {
+          if (isFieldSelect && value === '-1') return 'value not selected';
+          return rules.validate?.(value);
+        },
+      }}
       defaultValue={
-        field.default
-          ? Array.isArray(field.default)
-            ? (field.default[0] as Value).title
-            : (field.default as Value).title
-          : null
+        typeof field.default === 'object' ? field.default?.title : field.default
       }
       render={({ field: controlField, formState }) => (
         <Form.Group
@@ -141,6 +153,7 @@ const FieldFromJson = ({ field, size, control, rules }: Props) => {
             disabled={
               field.disabled || (field.type === 'select' && !field.values)
             }
+            isInvalid={isFieldSelect ? formState.errors[field.id] : undefined}
             size={size}
             type={formGroupType}
             autoComplete={

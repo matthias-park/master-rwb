@@ -9,11 +9,12 @@ import { useI18n } from '../hooks/useI18n';
 import useApi from '../hooks/useApi';
 
 const ApiHead = () => {
-  const { locales, locale, routes } = useConfig((prev, next) => {
+  const { locales, locale, routes, configLoaded } = useConfig((prev, next) => {
     const localeEqual = prev.locale === next.locale;
     const localesEqual = prev.locales.length === next.locales.length;
     const routesEqual = prev.routes.length === next.routes.length;
-    return localeEqual && localesEqual && routesEqual;
+    const configLoadedEqual = prev.configLoaded === next.configLoaded;
+    return localeEqual && localesEqual && routesEqual && configLoadedEqual;
   });
   const { t } = useI18n();
   const { pathname } = useLocation();
@@ -25,7 +26,7 @@ const ApiHead = () => {
     [pathname, locale],
   );
   const { data } = useApi<RailsApiResponse<SeoPages>>(
-    ['/railsapi/v1/content/seo_pages', params],
+    configLoaded ? ['/railsapi/v1/content/seo_pages', params] : null,
     postApi,
     {
       errorRetryCount: 0,

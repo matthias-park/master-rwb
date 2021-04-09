@@ -392,9 +392,11 @@ export const ALL_LOCALES = [
 export const REGEX_EXPRESSION = {
   LETTERS_WITH_SEPERATORS: /^[\p{L} '-]*$/iu,
   EMAIL: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/i,
+  PHONE_NUMBER_NORMALIZE: /\s|\.|\/|[(][0-9][)]?|^0+/g,
+  PHONE_NUMBER: /^\+?[1-9]\d{1,14}$/,
 };
 
-export const VALIDATIONS: { [key: string]: (value: string) => boolean } = {
+export const VALIDATIONS = {
   name: value =>
     (value.length > 1 &&
       REGEX_EXPRESSION.LETTERS_WITH_SEPERATORS.test(value.trim())) ||
@@ -403,6 +405,12 @@ export const VALIDATIONS: { [key: string]: (value: string) => boolean } = {
     REGEX_EXPRESSION.EMAIL.test(value.trim()) &&
     value.split('@')?.[0]?.length < 65 &&
     value.split('@')?.[1]?.length < 255,
+  phone: value => {
+    const phone = value
+      .trim()
+      .replaceAll(REGEX_EXPRESSION.PHONE_NUMBER_NORMALIZE, '');
+    return REGEX_EXPRESSION.PHONE_NUMBER.test(phone);
+  },
   passwordMixOfThree: value => {
     const valueValid = value.length > 7;
     const hasLowerCase = /[a-z]/.test(value);

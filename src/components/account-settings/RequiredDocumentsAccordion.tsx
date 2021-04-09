@@ -73,14 +73,13 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
                       <p className="mb-3">
                         {fields[id].status &&
                           `${fields[id].status} ${fields[id].date}`}
-                        {uploadedFilename}
                       </p>
                       {!fields[id].date && (
                         <Form.File custom className="mt-auto">
                           <Form.File.Label
                             className={clsx(uploadedFilename && 'text-primary')}
                           >
-                            {t('settings_file_upload')}
+                            {uploadedFilename || t('settings_file_upload')}
                             <Form.File.Input {...register(id)} name={id} />
                           </Form.File.Label>
                         </Form.File>

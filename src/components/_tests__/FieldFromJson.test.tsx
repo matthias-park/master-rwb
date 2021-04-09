@@ -74,7 +74,7 @@ const fields = [
 ];
 
 test('displays fields correctly', async () => {
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, register } = useForm({
     mode: 'onBlur',
   });
   const { getByTestId } = render(
@@ -85,7 +85,12 @@ test('displays fields correctly', async () => {
         })}
       >
         {fields.map(field => (
-          <FieldFromJson key={field.id} control={control} field={field} />
+          <FieldFromJson
+            key={field.id}
+            register={register}
+            control={control}
+            field={field}
+          />
         ))}
       </Form>
     </>,

@@ -83,14 +83,8 @@ const blocks = (
         id: 'phone_number',
         type: 'text',
         required: false,
-        // inputFormatting: {
-        //   format: value => {
-        //     // if(/^\+32/.test(value)) {
-        //     //   if (value)
-        //     // }
-        //     return '+32 #########';
-        //   },
-        // },
+        validate: value =>
+          VALIDATIONS.phone(value) || t('phone_number_invalid'),
       },
     ],
   },
