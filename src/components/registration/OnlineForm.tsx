@@ -84,7 +84,9 @@ const blocks = (
         type: 'text',
         required: false,
         validate: value =>
-          VALIDATIONS.phone(value) || t('phone_number_invalid'),
+          !value.length ||
+          VALIDATIONS.phone(value) ||
+          t('phone_number_invalid'),
       },
     ],
   },

@@ -394,6 +394,7 @@ export const REGEX_EXPRESSION = {
   EMAIL: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/i,
   PHONE_NUMBER_NORMALIZE: /\s|\.|\/|[(][0-9][)]?|^0+/g,
   PHONE_NUMBER: /^\+?[1-9]\d{1,14}$/,
+  BANK_IBAN: /^(BE)[0-9]{2}([ ]?[0-9]{4}){3}$/g,
 };
 
 export const VALIDATIONS = {
@@ -411,6 +412,7 @@ export const VALIDATIONS = {
       .replaceAll(REGEX_EXPRESSION.PHONE_NUMBER_NORMALIZE, '');
     return REGEX_EXPRESSION.PHONE_NUMBER.test(phone);
   },
+  bank_account: value => REGEX_EXPRESSION.BANK_IBAN.test(value.trim()),
   passwordMixOfThree: value => {
     const valueValid = value.length > 7;
     const hasLowerCase = /[a-z]/.test(value);
