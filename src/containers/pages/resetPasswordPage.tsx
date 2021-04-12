@@ -75,8 +75,9 @@ const ForgotPasswordPage = () => {
         <FormProvider {...formMethods}>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <ControlledTextInput
+              disableCopyPaste
               rules={{
-                required: t('login_field_required'),
+                required: t('reset_password_field_required'),
                 validate: value => {
                   const valueValid = value.length > 7;
                   const hasLowerCase = /[a-z]/.test(value);
@@ -107,8 +108,9 @@ const ForgotPasswordPage = () => {
               toggleVisibility
             />
             <ControlledTextInput
+              disableCopyPaste
               rules={{
-                required: t('login_field_required'),
+                required: t('reset_password_field_required'),
                 validate: value =>
                   value === watch('password') ||
                   t('reset_password_need_match_password'),

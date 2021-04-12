@@ -92,7 +92,6 @@ const LoginForm = ({
       type: 'manual',
     });
   };
-  console.log(!formState.isDirty, !formState.isValid);
   return (
     <FormProvider {...formMethods}>
       <Form
@@ -154,7 +153,11 @@ const LoginForm = ({
           </Link>
         </div>
         <LoadingButton
-          disabled={!formState.isDirty || !formState.isValid}
+          disabled={
+            !formState.isDirty ||
+            !!formState.errors.email ||
+            !!formState.errors.password
+          }
           className="btn btn-primary d-block mx-auto mt-4 px-5"
           type="submit"
           loading={formState.isSubmitting}

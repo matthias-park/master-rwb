@@ -17,8 +17,10 @@ const ApiHead = () => {
     return localeEqual && localesEqual && routesEqual && configLoadedEqual;
   });
   const { t } = useI18n();
-  const { pathname } = useLocation();
-  const pathInfo = routes.find(route => route.path === pathname);
+  const { pathname, hash } = useLocation();
+  const pathInfo = routes.find(
+    route => route.path === `${pathname}${hash}` || route.path === pathname,
+  );
   const params = useMemo(
     () => ({
       slug: pathname,

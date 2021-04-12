@@ -238,11 +238,6 @@ const OnlineForm = (props: Props) => {
     clearErrors,
   } = formMethods;
 
-  useEffect(() => {
-    //@ts-ignore
-    window.test = () => setApiError('test');
-  });
-
   const setValidation = (id: string, status: FormFieldValidation) =>
     setValidationForms({ ...validationForms, [id]: status });
   const validateRepeat = (id: string, value: string) => {
