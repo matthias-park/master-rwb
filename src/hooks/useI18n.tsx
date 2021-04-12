@@ -44,7 +44,7 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
     const loadedEqual = prev.configLoaded === next.configLoaded;
     return localeEqual && loadedEqual;
   });
-  const translationsUrl = `/railsapi/v1/translations?locale=${locale}`;
+  const translationsUrl = `/railsapi/v1/translations`;
   const { data, mutate } = useApi<RailsApiResponse<Translations>>(
     !TestEnv && configLoaded === ConfigLoaded.Loaded && locale
       ? translationsUrl
