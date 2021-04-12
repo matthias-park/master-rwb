@@ -1,5 +1,5 @@
 import { ControlledTextInput } from '../TextInput';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useI18n } from '../../hooks/useI18n';
 import { animateScroll as scroll } from 'react-scroll';
@@ -237,6 +237,11 @@ const OnlineForm = (props: Props) => {
     setError,
     clearErrors,
   } = formMethods;
+
+  useEffect(() => {
+    //@ts-ignore
+    window.test = () => setApiError('test');
+  });
 
   const setValidation = (id: string, status: FormFieldValidation) =>
     setValidationForms({ ...validationForms, [id]: status });

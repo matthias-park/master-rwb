@@ -31,8 +31,17 @@ const LoginForm = ({
   const { t } = useI18n();
   const [apiError, setApiError] = useState<string | null>(null);
   const { setShowModal } = useUIConfig();
-  const formMethods = useForm({
-    mode: 'onBlur',
+  const formMethods = useForm<{
+    email: string;
+    password: string;
+    remember_me: boolean;
+  }>({
+    mode: 'all',
+    defaultValues: {
+      email: '',
+      password: '',
+      remember_me: false,
+    },
   });
   const { register, handleSubmit, formState, setError } = formMethods;
   const { mutateUser } = useConfig();
@@ -83,6 +92,7 @@ const LoginForm = ({
       type: 'manual',
     });
   };
+  console.log(!formState.isDirty, !formState.isValid);
   return (
     <FormProvider {...formMethods}>
       <Form
@@ -90,14 +100,16 @@ const LoginForm = ({
         onSubmit={handleSubmit(onSubmit)}
       >
         <CustomAlert
-          show={formState.isSubmitted && !formState.isSubmitSuccessful}
+          show={
+            formState.isSubmitted && !formState.isSubmitSuccessful && !!apiError
+          }
           variant="danger"
         >
           <div dangerouslySetInnerHTML={{ __html: apiError || '' }} />
         </CustomAlert>
         <ControlledTextInput
           rules={{
-            required: t('login_field_required'),
+            validate: value => !!value.trim() || t('login_field_required'),
           }}
           id="email"
           // type="email"
@@ -107,7 +119,7 @@ const LoginForm = ({
         />
         <ControlledTextInput
           rules={{
-            required: t('login_field_required'),
+            validate: value => !!value.trim() || t('login_field_required'),
           }}
           id="password"
           type={'password'}
@@ -142,7 +154,7 @@ const LoginForm = ({
           </Link>
         </div>
         <LoadingButton
-          disabled={!formState.isDirty}
+          disabled={!formState.isDirty || !formState.isValid}
           className="btn btn-primary d-block mx-auto mt-4 px-5"
           type="submit"
           loading={formState.isSubmitting}

@@ -126,12 +126,12 @@ const WithdrawalPage = () => {
   );
   const isDataLoading = !data && !error;
   useEffect(() => {
-    if (user.logged_in && !user.bank_account) {
+    if (user.logged_in && data && !data.Data.default_account) {
       setShowModal(ComponentName.AddBankAccountModal);
     } else {
       mutate();
     }
-  }, [user.bank_account]);
+  }, [data]);
   useEffect(() => {
     if (data?.Data.translations) {
       set(

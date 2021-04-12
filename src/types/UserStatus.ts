@@ -29,8 +29,11 @@ export interface UserStatus {
   email?: string;
   first_name?: string;
   last_name?: string;
-  bank_account?: boolean;
   validator_status?: VALIDATOR_STATUS;
+}
+
+export interface UserBankAccount {
+  bank_account: boolean;
 }
 
 export default UserStatus;

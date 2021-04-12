@@ -30,6 +30,7 @@ const ValidationFailedModal = () => {
       hideCallback={hideModal}
       isCentered={true}
       isStatic={true}
+      className="text-center"
     >
       <h2 className="mb-3 mt-4">{t('validation_failed_title')}</h2>
       <p>{t(`validation_failed_body_${user.validator_status}`)}</p>
