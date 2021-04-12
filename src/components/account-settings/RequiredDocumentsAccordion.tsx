@@ -60,7 +60,7 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
             <div className="row mx-0 flex-column flex-sm-row">
               {fileIds.map(id => {
                 if (!fields[id]) return null;
-                const uploadedFilename = watch(id, [])[0]?.name;
+                const uploadedFilename = watch(id, [])?.[0]?.name;
                 return (
                   <div
                     key={id}
