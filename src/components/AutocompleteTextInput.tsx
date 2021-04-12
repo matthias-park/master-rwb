@@ -59,6 +59,7 @@ const AutocompleteTextInput = (props: Props) => {
             }}
             searchText=""
             emptyLabel=""
+            defaultInputValue={controlProps.value}
             onBlur={() => {
               gotFocus.current = false;
               controlProps.onChange(selectedValue.current);

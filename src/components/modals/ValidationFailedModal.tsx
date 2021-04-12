@@ -14,7 +14,7 @@ const ValidationFailedModal = () => {
 
   useEffect(() => {
     if (
-      [VALIDATOR_STATUS.EPIS_DANGER, VALIDATOR_STATUS.BIG_ERROR].includes(
+      [VALIDATOR_STATUS.MINOR_ERROR, VALIDATOR_STATUS.MAJOR_ERROR].includes(
         user.validator_status || 0,
       )
     ) {

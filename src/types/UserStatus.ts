@@ -12,8 +12,8 @@ export interface NET_USER {
 export enum VALIDATOR_STATUS {
   OK = 0,
   SMALL_ERROR = 1,
-  BIG_ERROR = 2,
-  EPIS_DANGER = 3,
+  MINOR_ERROR = 2,
+  MAJOR_ERROR = 3,
   NONE = 4,
 }
 
