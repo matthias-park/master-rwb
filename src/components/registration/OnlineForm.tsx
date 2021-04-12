@@ -249,8 +249,6 @@ const OnlineForm = (props: Props) => {
   const onSubmit = async ({ terms_and_conditions, postal_code, ...data }) => {
     const post_code = postal_code.split(' - ')[0];
     const postal_info = await props.checkPostalCode(post_code);
-    //add formatting prefix
-    const phone_number = `+32${data.phone_number}`;
     const city =
       Object.values(postal_info.Data?.result || {})[0]?.locality_name || '';
     const response = await props.handleRegisterSubmit({
@@ -258,7 +256,6 @@ const OnlineForm = (props: Props) => {
       login: data.email,
       city,
       postal_code: post_code,
-      phone_number,
     });
     if (!response.Success) {
       scroll.scrollToTop();
