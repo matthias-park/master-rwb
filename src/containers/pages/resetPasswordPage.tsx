@@ -14,6 +14,7 @@ import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useGTM from '../../hooks/useGTM';
 import isEqual from 'lodash.isequal';
 import LoadingButton from '../../components/LoadingButton';
+import { VALIDATIONS } from '../../constants';
 
 const ForgotPasswordPage = () => {
   const { code } = useParams<{ code?: string }>();
@@ -79,25 +80,9 @@ const ForgotPasswordPage = () => {
               disabled={!!apiResponse?.success}
               rules={{
                 required: t('reset_password_field_required'),
-                validate: value => {
-                  const valueValid = value.length > 7;
-                  const hasLowerCase = /[a-z]/.test(value);
-                  const hasUpperCase = /[A-Z]/.test(value);
-                  const hasNumbers = /\d/.test(value);
-                  const hasSpecialCharacters = /[!@#$%^&*(),.?":{}|<>]/.test(
-                    value,
-                  );
-                  const mixOfThree =
-                    [
-                      hasLowerCase,
-                      hasUpperCase,
-                      hasNumbers,
-                      hasSpecialCharacters,
-                    ].filter(Boolean).length > 2;
-                  return (
-                    (valueValid && mixOfThree) || t('register_password_weak')
-                  );
-                },
+                validate: value =>
+                  VALIDATIONS.passwordMixOfThree(value) ||
+                  t('register_password_weak'),
               }}
               error={formState.errors.password}
               onBlur={() =>

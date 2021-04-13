@@ -63,9 +63,9 @@ const DepositPage = () => {
       BankId: 160,
       Ip: userIp.ip || '0.0.0.0',
       Amount: depositValue,
-      ReturnSuccessUrl: `${depositBaseUrl}/success`,
-      ReturnCancelUrl: `${depositBaseUrl}/cancel`,
-      ReturnErrorUrl: `${depositBaseUrl}/error`,
+      ReturnSuccessUrl: `${window.location.origin}${depositBaseUrl}/success`,
+      ReturnCancelUrl: `${window.location.origin}${depositBaseUrl}/cancel`,
+      ReturnErrorUrl: `${window.location.origin}${depositBaseUrl}/error`,
     };
     const response: DepositResponse | null = await postApi<DepositResponse>(
       `/tgbetapi/franchises/38/players/_player_id_/deposit_request`,
