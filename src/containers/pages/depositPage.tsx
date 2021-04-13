@@ -8,10 +8,11 @@ import { useToasts } from 'react-toast-notifications';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
 import { useUIConfig } from '../../hooks/useUIConfig';
-import { ComponentName } from '../../constants';
+import { ComponentName, PagesName } from '../../constants';
 import isEqual from 'lodash.isequal';
 import CustomAlert from '../../components/CustomAlert';
 import useUserBankAccountModal from '../../hooks/useUserBankAccountModal';
+import { useRoutePath } from '../../hooks';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
@@ -22,6 +23,7 @@ const DepositPage = () => {
   const { bankResponse } = useParams<{ bankResponse?: string }>();
   const [depositLoading, setDepositLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const depositBaseUrl = useRoutePath(PagesName.DepositPage, true);
   useEffect(() => {
     console.log(
       user.logged_in && !bankAccount.loading && !bankAccount.hasBankAccount,
@@ -61,9 +63,9 @@ const DepositPage = () => {
       BankId: 160,
       Ip: userIp.ip || '0.0.0.0',
       Amount: depositValue,
-      ReturnSuccessUrl: `${window.location.href}/success`,
-      ReturnCancelUrl: `${window.location.href}/cancel`,
-      ReturnErrorUrl: `${window.location.href}/error`,
+      ReturnSuccessUrl: `${depositBaseUrl}/success`,
+      ReturnCancelUrl: `${depositBaseUrl}/cancel`,
+      ReturnErrorUrl: `${depositBaseUrl}/error`,
     };
     const response: DepositResponse | null = await postApi<DepositResponse>(
       `/tgbetapi/franchises/38/players/_player_id_/deposit_request`,
@@ -105,7 +107,7 @@ const DepositPage = () => {
       {!!bankResponse && (
         <div className="amount-container mb-4">
           <h2 className="amount-container__amount">
-            {bankResponse.toUpperCase()} deposit
+            {t(`deposit_page_${bankResponse.toLocaleLowerCase()}`)}
           </h2>
         </div>
       )}

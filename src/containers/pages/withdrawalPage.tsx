@@ -105,7 +105,7 @@ const WithdrawalRequests = ({
 
 const WithdrawalPage = () => {
   const { t, set } = useI18n();
-  const { user, locale } = useConfig((prev, next) => {
+  const { user, locale, mutateUser } = useConfig((prev, next) => {
     const userEqual = isEqual(prev.user, next.user);
     const localeEqual = prev.locale === next.locale;
     return userEqual && localeEqual;
@@ -221,6 +221,7 @@ const WithdrawalPage = () => {
       setWithdrawalLoading(false);
       setWithdrawalConfirmData(null);
       mutate();
+      mutateUser();
       return setSubmitResponse({
         success: response.Success,
         msg: response.Message,

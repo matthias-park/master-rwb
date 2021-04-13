@@ -12,10 +12,16 @@ export const usePrevious = <T>(value: T): T | undefined => {
   return ref.current;
 };
 
-export const useRoutePath = (routeId: PagesName): string => {
+export const useRoutePath = (
+  routeId: PagesName,
+  visiblePage = false,
+): string => {
   const { routes } = useConfig((prev, next) => !!prev.routes === !!next.routes);
   return useMemo(
-    () => routes.find(route => route.id === routeId)?.path || '/',
+    () =>
+      routes.find(
+        route => route.id === routeId && (!visiblePage || !route.hiddenSitemap),
+      )?.path || '/',
     [routes],
   );
 };
