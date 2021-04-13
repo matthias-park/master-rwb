@@ -54,8 +54,7 @@ export const UIConfigProvider = props => {
   useEffect(() => {
     if (
       [ConfigLoaded.Loaded, ConfigLoaded.Error].includes(configLoaded) &&
-      locale &&
-      Object.keys(table()).length
+      (!locale || Object.keys(table()).length)
     ) {
       removePageLoadingSpinner();
       setInitPageSpinner(false);

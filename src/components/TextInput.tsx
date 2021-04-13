@@ -75,14 +75,14 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
           e.nativeEvent.stopImmediatePropagation();
         }
       : undefined;
-
+    const hasErrorClass =
+      (error && (!validation || validation === FormFieldValidation.Invalid)) ||
+      validation === FormFieldValidation.Invalid;
     return (
       <Form.Group
         data-testid="container"
         className={clsx(
-          error &&
-            (!validation || validation === FormFieldValidation.Invalid) &&
-            'has-error',
+          hasErrorClass && 'has-error',
           validation === FormFieldValidation.Valid && 'success',
         )}
       >

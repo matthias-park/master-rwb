@@ -356,7 +356,13 @@ const OnlineForm = (props: Props) => {
                               field.triggerId && triggerRepeat(field.triggerId);
                             }}
                             disableCopyPaste={field.disableCopyPaste}
-                            validation={validationForms[field.id]}
+                            validation={
+                              validationForms[
+                                field.id.replace('repeat_', '')
+                              ] === FormFieldValidation.Invalid
+                                ? FormFieldValidation.Invalid
+                                : validationForms[field.id]
+                            }
                             error={formState.errors[field.id]}
                             placeholder={t(`register_input_${field.id}`)}
                             toggleVisibility={field.type === 'password'}
