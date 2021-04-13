@@ -1,5 +1,5 @@
 import { ControlledTextInput } from '../TextInput';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useI18n } from '../../hooks/useI18n';
 import { animateScroll as scroll } from 'react-scroll';

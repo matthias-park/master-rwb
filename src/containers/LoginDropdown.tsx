@@ -48,6 +48,7 @@ const LoginForm = ({
   const sendDataToGTM = useGTM();
   const forgotPasswordRoute = useRoutePath(PagesName.ForgotPasswordPage);
   const onSubmit = async ({ email, password, remember_me }) => {
+    setApiError(null);
     sendDataToGTM({
       event: 'LoginSubmitted',
     });

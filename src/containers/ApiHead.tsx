@@ -19,7 +19,8 @@ const ApiHead = () => {
   const { t } = useI18n();
   const { pathname, hash } = useLocation();
   const pathInfo = routes.find(
-    route => route.path === `${pathname}${hash}` || route.path === pathname,
+    route =>
+      `${pathname}${hash}`.startsWith(route.path) || route.path === pathname,
   );
   const params = useMemo(
     () => ({

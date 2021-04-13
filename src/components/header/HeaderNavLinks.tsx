@@ -32,6 +32,11 @@ export const HeaderNavClassicLink = ({
     return localeEqual && userEqual;
   });
   const { pathname, hash } = useLocation();
+  const fullPath = /^\/sports#bethistory\/[\d]{4}(-[\d]{2}){2}$/i.test(
+    `${pathname}${hash}`,
+  )
+    ? '/sports#bethistory'
+    : `${pathname}${hash}`;
   const { backdrop } = useUIConfig();
   const dropdownRef = useRef(null);
   const sendDataToGTM = useGTM();
@@ -131,7 +136,7 @@ export const HeaderNavClassicLink = ({
                     target: '_blank',
                   }
                 : {})}
-              className={clsx(link.path === `${pathname}${hash}` && 'active')}
+              className={clsx(link.path === fullPath && 'active')}
               href={link.path.replace('{__locale__}', locale)}
             >
               {t(link.text)}
