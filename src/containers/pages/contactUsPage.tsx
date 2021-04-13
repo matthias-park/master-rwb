@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { JSONFormPage } from '../../types/api/JsonFormPage';
 import Spinner from 'react-bootstrap/Spinner';
 import Form from 'react-bootstrap/Form';
@@ -7,21 +7,21 @@ import { useI18n } from '../../hooks/useI18n';
 import FieldFromJson from '../../components/FieldFromJson';
 import { useConfig } from '../../hooks/useConfig';
 import { postApi } from '../../utils/apiUtils';
-import { useToasts } from 'react-toast-notifications';
 import SeoPages from '../../types/api/content/SeoPages';
 import HelpBlock from '../../components/HelpBlock';
 import CustomAlert from '../../components/CustomAlert';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
 import isEqual from 'lodash.isequal';
-import { VALIDATIONS } from '../../constants';
+import { REGEX_EXPRESSION, VALIDATIONS } from '../../constants';
 
-const loggedInHiddenFields = ['first_name', 'last_name', 'email_address'];
 const fieldValidations = {
   first_name: (value: string) =>
     VALIDATIONS.name(value) || 'field_only_letters',
   last_name: (value: string) => VALIDATIONS.name(value) || 'field_only_letters',
   email_address: (value: string) => VALIDATIONS.email(value) || 'email_invalid',
+  phone_number: (value: string) =>
+    VALIDATIONS.phone(value) || 'phone_number_invalid',
   text: (value: string) =>
     !!value.trim().length || 'contact_page_field_required',
 };
@@ -29,25 +29,45 @@ const fieldValidations = {
 const ContactUsPage = () => {
   const { t } = useI18n();
   const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
-  const { addToast } = useToasts();
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, register, setValue } = useForm({
     mode: 'onBlur',
   });
   const [submitResponse, setSubmitResponse] = useState<{
     success: boolean;
     msg: string | null;
   } | null>(null);
-  const { data, error } = useApi<JSONFormPage>(`/railsapi/v1/contact_us/form`);
+  const { data, error, mutate } = useApi<JSONFormPage>(
+    `/railsapi/v1/contact_us/form`,
+  );
   const isDataLoading = !data && !error;
 
-  const onSubmit = async ({ file, ...fields }) => {
+  useEffect(() => {
+    mutate();
+  }, [user.logged_in]);
+  useEffect(() => {
+    if (data?.form) {
+      for (const field of data.form) {
+        if (field.disabled && field.default) {
+          setValue(
+            field.id,
+            typeof field.default === 'object'
+              ? field.default.title
+              : field.default,
+          );
+        }
+      }
+    }
+  }, [data]);
+
+  const onSubmit = async ({ file, phone_number, ...fields }) => {
     if (file?.length) {
       fields.file = file[0];
     }
-    if (user.logged_in) {
-      fields.first_name = user.first_name;
-      fields.last_name = user.last_name;
-      fields.email_address = user.email;
+    if (phone_number) {
+      fields.phone_number = phone_number.replaceAll(
+        REGEX_EXPRESSION.PHONE_NUMBER_NORMALIZE,
+        '',
+      );
     }
     const response = await postApi<RailsApiResponse<SeoPages>>(
       data!.action,
@@ -55,19 +75,13 @@ const ContactUsPage = () => {
       {
         formData: true,
       },
-    ).catch(err => {
-      addToast('failed to send form', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
+    ).catch(() => {
       return {
         Success: false,
         Code: -1,
         Message: null,
       };
     });
-
-    console.log(response);
     return setSubmitResponse({
       success: response.Success,
       msg: response.Message,
@@ -118,10 +132,7 @@ const ContactUsPage = () => {
               <Form onSubmit={handleSubmit(onSubmit)}>
                 <small className="d-block mb-3">{t('contact_form_text')}</small>
                 {data.form.map(field => {
-                  if (
-                    user.logged_in &&
-                    loggedInHiddenFields.includes(field.id)
-                  ) {
+                  if (field.disabled) {
                     return null;
                   }
                   return (
@@ -129,6 +140,7 @@ const ContactUsPage = () => {
                       key={field.id}
                       field={field}
                       control={control}
+                      register={register}
                       rules={{
                         required:
                           field.required && t('contact_page_field_required'),

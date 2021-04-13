@@ -138,7 +138,9 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
       const appLocale = locale || constants.locale;
       const detectedLocale = getWindowUrlLocale();
       const detectedLocaleAvailable =
-        detectedLocale && locales.includes(detectedLocale.toLocaleLowerCase());
+        detectedLocale?.toLocaleLowerCase() === 'en' ||
+        (detectedLocale &&
+          locales.includes(detectedLocale.toLocaleLowerCase()));
       if (!appLocale && cachedLocale) {
         (async () => {
           if (!window.PRERENDER_CACHE) {

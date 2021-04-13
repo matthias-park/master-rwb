@@ -3,10 +3,13 @@ import React from 'react';
 import { useUIConfig } from '../hooks/useUIConfig';
 import { ComponentName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
+import useStorage from '../hooks/useStorage';
+import { Storage } from '../types/Storage';
 
 const CookieConsent = () => {
   const { setShowModal } = useUIConfig();
   const { jsxT, t } = useI18n();
+  const storage = useStorage();
   const [cookiesAccepted, setCookiesAccepted] = useLocalStorage(
     'cookieConsent',
     false,
@@ -15,7 +18,15 @@ const CookieConsent = () => {
   if (cookiesAccepted) {
     return null;
   }
-  const handleAccept = () => setCookiesAccepted(true);
+  const handleAccept = () => {
+    storage.save(
+      Object.keys(storage.cookies).reduce((obj, id) => {
+        obj[id] = true;
+        return obj;
+      }, {}) as Storage,
+    );
+    setCookiesAccepted(true);
+  };
   return (
     <nav className="navbar fixed-bottom navbar-dark bg-brand">
       <span className="navbar-text">

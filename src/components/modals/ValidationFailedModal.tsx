@@ -14,7 +14,7 @@ const ValidationFailedModal = () => {
 
   useEffect(() => {
     if (
-      [VALIDATOR_STATUS.EPIS_DANGER, VALIDATOR_STATUS.BIG_ERROR].includes(
+      [VALIDATOR_STATUS.MINOR_ERROR, VALIDATOR_STATUS.MAJOR_ERROR].includes(
         user.validator_status || 0,
       )
     ) {
@@ -30,6 +30,7 @@ const ValidationFailedModal = () => {
       hideCallback={hideModal}
       isCentered={true}
       isStatic={true}
+      className="text-center"
     >
       <h2 className="mb-3 mt-4">{t('validation_failed_title')}</h2>
       <p>{t(`validation_failed_body_${user.validator_status}`)}</p>

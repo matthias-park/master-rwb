@@ -83,14 +83,10 @@ const blocks = (
         id: 'phone_number',
         type: 'text',
         required: false,
-        // inputFormatting: {
-        //   format: value => {
-        //     // if(/^\+32/.test(value)) {
-        //     //   if (value)
-        //     // }
-        //     return '+32 #########';
-        //   },
-        // },
+        validate: value =>
+          !value.length ||
+          VALIDATIONS.phone(value) ||
+          t('phone_number_invalid'),
       },
     ],
   },
@@ -106,7 +102,7 @@ const blocks = (
           setValidation('personal_code', FormFieldValidation.Validating);
           const res = await props.checkPersonalCode(value);
           if (!res?.Success) {
-            valid = t('register_personal_code_invalid');
+            valid = res?.Message || t('register_personal_code_invalid');
           }
           setValidation(
             'personal_code',
@@ -253,8 +249,6 @@ const OnlineForm = (props: Props) => {
   const onSubmit = async ({ terms_and_conditions, postal_code, ...data }) => {
     const post_code = postal_code.split(' - ')[0];
     const postal_info = await props.checkPostalCode(post_code);
-    //add formatting prefix
-    const phone_number = `+32${data.phone_number}`;
     const city =
       Object.values(postal_info.Data?.result || {})[0]?.locality_name || '';
     const response = await props.handleRegisterSubmit({
@@ -262,7 +256,6 @@ const OnlineForm = (props: Props) => {
       login: data.email,
       city,
       postal_code: post_code,
-      phone_number,
     });
     if (!response.Success) {
       scroll.scrollToTop();
@@ -363,7 +356,13 @@ const OnlineForm = (props: Props) => {
                               field.triggerId && triggerRepeat(field.triggerId);
                             }}
                             disableCopyPaste={field.disableCopyPaste}
-                            validation={validationForms[field.id]}
+                            validation={
+                              validationForms[
+                                field.id.replace('repeat_', '')
+                              ] === FormFieldValidation.Invalid
+                                ? FormFieldValidation.Invalid
+                                : validationForms[field.id]
+                            }
                             error={formState.errors[field.id]}
                             placeholder={t(`register_input_${field.id}`)}
                             toggleVisibility={field.type === 'password'}

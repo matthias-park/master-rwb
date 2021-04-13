@@ -11,20 +11,25 @@ import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName } from '../../constants';
 import isEqual from 'lodash.isequal';
 import CustomAlert from '../../components/CustomAlert';
+import useUserBankAccountModal from '../../hooks/useUserBankAccountModal';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
   const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
+  const bankAccount = useUserBankAccountModal();
   const { setShowModal } = useUIConfig();
   const { t } = useI18n();
   const { bankResponse } = useParams<{ bankResponse?: string }>();
   const [depositLoading, setDepositLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   useEffect(() => {
-    if (user.logged_in && !user.bank_account) {
+    console.log(
+      user.logged_in && !bankAccount.loading && !bankAccount.hasBankAccount,
+    );
+    if (user.logged_in && !bankAccount.loading && !bankAccount.hasBankAccount) {
       setShowModal(ComponentName.AddBankAccountModal);
     }
-  }, [user.bank_account]);
+  }, [bankAccount.loading]);
 
   const questionItems = useMemo(
     () => [
@@ -35,7 +40,7 @@ const DepositPage = () => {
   );
 
   const handleRequestDeposit = useCallback(async (depositValue: number) => {
-    if (!user.bank_account) {
+    if (!bankAccount.loading && !bankAccount.hasBankAccount) {
       addToast(`No bank account`, {
         appearance: 'error',
         autoDismiss: true,
@@ -112,7 +117,7 @@ const DepositPage = () => {
         onSubmit={handleRequestDeposit}
         quickAmounts={[10, 20, 50, 100]}
         currency={user.currency}
-        disabled={!user.bank_account}
+        disabled={!bankAccount.hasBankAccount}
       />
       <div className="info-container mb-4">
         <p className="info-container__info text-14 mb-0">

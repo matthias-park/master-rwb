@@ -20,8 +20,8 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
   const formMethods = useForm({
     mode: 'onBlur',
   });
-  const handleSubmit = async data => {
-    const result = await onSubmit(data);
+  const handleSubmit = async ({ account_number }) => {
+    const result = await onSubmit({ account_number: `BE${account_number}` });
     if (typeof result === 'string') {
       return setApiErr(result);
     }
@@ -53,8 +53,15 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
             id="account_number"
             placeholder={t('add_bank_modal_account_number')}
             error={formMethods.formState.errors.account_number}
+            inputFormatting={{
+              format: 'BE## #### #### ####',
+              mask: '_',
+              placeholder: 'BE',
+            }}
             rules={{
               required: t('add_bank_modal_input_required'),
+              validate: (value: string) =>
+                value.length === 14 || t('bank_account_bad_format'),
             }}
           />
           <LoadingButton

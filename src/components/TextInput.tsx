@@ -3,7 +3,7 @@ import React, { forwardRef, useState } from 'react';
 import { Form, Spinner } from 'react-bootstrap';
 import { FormFieldValidation } from '../constants';
 import { useCallback } from 'react';
-import { useController } from 'react-hook-form';
+import { FieldError, useController } from 'react-hook-form';
 import loadable from '@loadable/component';
 
 const LoadableNumberFormat = loadable(() => import('react-number-format'), {
@@ -11,7 +11,7 @@ const LoadableNumberFormat = loadable(() => import('react-number-format'), {
 });
 
 type Props = {
-  error?: { message: string };
+  error?: FieldError;
   validation?: FormFieldValidation;
   toggleVisibility?: boolean;
   disableCopyPaste?: boolean;
@@ -24,9 +24,7 @@ type Props = {
 } & React.ComponentProps<typeof Form.Control>;
 
 export const ControlledTextInput = (props: Props) => {
-  const {
-    field: { value, ...field },
-  } = useController({
+  const { field } = useController({
     name: props.name || props.id,
     rules: props.rules,
     defaultValue: '',
@@ -43,13 +41,7 @@ export const ControlledTextInput = (props: Props) => {
   };
 
   return (
-    <TextInput
-      {...props}
-      {...field}
-      value={props.inputFormatting ? undefined : value}
-      onBlur={onBlur}
-      onChange={onChange}
-    />
+    <TextInput {...props} {...field} onBlur={onBlur} onChange={onChange} />
   );
 };
 
@@ -83,14 +75,14 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
           e.nativeEvent.stopImmediatePropagation();
         }
       : undefined;
-
+    const hasErrorClass =
+      (error && (!validation || validation === FormFieldValidation.Invalid)) ||
+      validation === FormFieldValidation.Invalid;
     return (
       <Form.Group
         data-testid="container"
         className={clsx(
-          error &&
-            (!validation || validation === FormFieldValidation.Invalid) &&
-            'has-error',
+          hasErrorClass && 'has-error',
           validation === FormFieldValidation.Valid && 'success',
         )}
       >

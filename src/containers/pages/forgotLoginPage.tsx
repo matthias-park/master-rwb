@@ -58,7 +58,7 @@ const ForgotLoginPage = () => {
     });
     return setApiResponse({
       success: result.Success,
-      msg: result.Message || '',
+      msg: result.Message || t('api_response_failed'),
     });
   };
   return (
