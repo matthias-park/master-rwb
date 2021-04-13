@@ -84,7 +84,7 @@ export const enterKeyPress = (e: any, callback: any) => {
 export const makeCollapsible = (
   mainElClass: string,
   collapseElClass: string,
-  headerElClass,
+  headerElClass: string,
 ) => {
   Array.from(document.getElementsByClassName(mainElClass)).forEach(el => {
     el.addEventListener('click', e => {
