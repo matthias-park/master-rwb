@@ -1,85 +1,151 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useI18n } from '../../hooks/useI18n';
-import { Tab, Tabs } from 'react-bootstrap';
-import Card from 'react-bootstrap/Card';
+import useDesktopWidth from '../../hooks/useDesktopWidth';
+import Button from 'react-bootstrap/Button';
 import { PostItem } from '../../types/api/Posts';
 import Spinner from 'react-bootstrap/Spinner';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
 import Link from '../../components/Link';
-import JsonPage from '../../types/api/JsonPage';
 import { makeCollapsible } from '../../utils/uiUtils';
 import NotFoundPage from './notFoundPage';
+import clsx from 'clsx';
 
-const PromoItem = ({ item }: { item: PostItem }) => {
+const PromoLinkEl = ({
+  item,
+  className,
+  children,
+}: {
+  item: PostItem;
+  className?: string;
+  children: JSX.Element | JSX.Element[];
+}) => {
   const { pathname } = useLocation();
-  const LinkEl = ({ children }) =>
-    item.slug ? (
-      <Link to={`${pathname}/${item.slug}`}>{children}</Link>
-    ) : (
-      children
-    );
+  const linkTo = `${
+    pathname.split('/')[2] ? `/${pathname.split('/')[1]}` : pathname
+  }/${item.slug}`;
+
   return (
-    <Card className="mx-1 mt-1">
-      <LinkEl>
-        <Card.Img
-          variant="top"
-          height={300}
-          width={300}
-          style={{ height: 300, width: 300 }}
-          src={item.image.thumb_300_300.url ?? undefined}
-        />
-      </LinkEl>
-      <Card.Body>
-        <Card.Title>{item.title}</Card.Title>
-        <Card.Body>{item.body}</Card.Body>
-      </Card.Body>
-    </Card>
+    <>
+      {item.slug ? (
+        <Link className={className} to={linkTo}>
+          {children}
+        </Link>
+      ) : (
+        children
+      )}
+    </>
+  );
+};
+
+const PromoItem = ({ item, variant }: { item: PostItem; variant?: string }) => {
+  return (
+    <PromoLinkEl
+      item={item}
+      className={clsx('promotion-block', `promotion-block--${variant}`)}
+    >
+      <img
+        className="promotion-block__img"
+        src={item.image.url || '/assets/images/promo/promo-front.png'}
+      ></img>
+      <div className="promotion-block__body">
+        {item.title && (
+          <h3 className="promotion-block__body-subtitle">{item.title}</h3>
+        )}
+        <h2 className="promotion-block__body-title">{item.page_title}</h2>
+        {item.button_text && (
+          <button className="promo-button promotion-block__body-button">
+            {item.button_text}
+          </button>
+        )}
+      </div>
+    </PromoLinkEl>
   );
 };
 
 const PromotionsList = () => {
-  const [activeTab, setActiveTab] = useState<string | null>('all');
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
     '/railsapi/v1/content/promotions',
   );
   const { t } = useI18n();
   const isDataLoading = !data && !error;
+
   return (
-    <main className="container-fluid mb-4 pt-5">
-      <h1 className="mb-4">{t('promotions_page_title')}</h1>
-      <Tabs activeKey={activeTab} onSelect={key => setActiveTab(key)}>
-        <Tab eventKey="all" title="All" mountOnEnter unmountOnExit>
-          {isDataLoading && (
-            <div className="d-flex justify-content-center pt-4 pb-3">
-              <Spinner animation="border" variant="black" className="mx-auto" />
-            </div>
-          )}
-          {!!error && (
-            <h2 className="mt-3 mb-5 text-center">
-              {t('promotions_failed_to_load')}
-            </h2>
-          )}
-          <div className="d-flex mt-1">
-            {data?.Data.map(item => (
-              <PromoItem key={item.id} item={item} />
-            ))}
-          </div>
-        </Tab>
-      </Tabs>
+    <main className="mb-5 pt-0 pt-xl-5">
+      {isDataLoading && (
+        <div className="d-flex justify-content-center pt-4 pb-3">
+          <Spinner animation="border" variant="black" className="mx-auto" />
+        </div>
+      )}
+      {!!error && (
+        <h2 className="mt-3 mb-5 text-center">
+          {t('promotions_failed_to_load')}
+        </h2>
+      )}
+      <div className="promotions-list mt-4">
+        {data?.Data.map(item => (
+          <PromoItem key={item.id} item={item} />
+        ))}
+      </div>
     </main>
   );
 };
 
-const PromotionPage = ({ slug }: { slug: string }) => {
-  const { data, error } = useApi<RailsApiResponse<JsonPage>>(
-    `/railsapi/v1/content/promotion/${slug}`,
+const PromotionsListBlock = ({ currentSlug }) => {
+  const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
+    '/railsapi/v1/content/promotions',
   );
   const isDataLoading = !data && !error;
 
+  return (
+    <>
+      {isDataLoading && (
+        <div className="d-flex justify-content-center pt-4 pb-3">
+          <Spinner animation="border" variant="black" className="mx-auto" />
+        </div>
+      )}
+      <div className="promo-cards">
+        {data?.Data.map(
+          item =>
+            item.slug != currentSlug && (
+              <div key={item.id} className="promo-card">
+                <PromoItem item={item} variant="sm" />
+                <div className="promo-card__body">
+                  <h5 className="promo-card__body-title">{item.page_title}</h5>
+                  <h6 className="promo-card__body-subtitle">{item.title}</h6>
+                  <p className="promo-card__body-text">
+                    {item.short_description}
+                  </p>
+                  <PromoLinkEl item={item}>
+                    <Button variant="primary">
+                      {item.button_text || 'Details'}
+                    </Button>
+                  </PromoLinkEl>
+                </div>
+              </div>
+            ),
+        )}
+      </div>
+    </>
+  );
+};
+
+const PromotionPage = ({ slug }: { slug: string }) => {
+  const { data, error } = useApi<RailsApiResponse<PostItem>>(
+    `/railsapi/v1/content/promotion/${slug}`,
+  );
+  const desktopWidth = useDesktopWidth(568);
+  const isDataLoading = !data && !error;
+  const bannerImg = desktopWidth
+    ? data?.Data.bg_image.url
+    : data?.Data.bg_image_mobile.url;
+  const fallbackBannerImg = desktopWidth
+    ? '/assets/images/promo/promo-inner-lg.png'
+    : '/assets/images/promo/promo-inner-sm.png';
+
   useEffect(() => {
-    makeCollapsible('card', 'collapse', 'card-header');
+    makeCollapsible('terms', 'terms-body', 'terms-toggle');
   }, [data]);
 
   if (!isDataLoading && (error || !data?.Success)) {
@@ -87,19 +153,42 @@ const PromotionPage = ({ slug }: { slug: string }) => {
   }
 
   return (
-    <main className="container-fluid px-3 pr-sm-4 pl-sm-5 py-4 pt-5">
+    <main className="pt-xl-5">
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
       )}
       {!!data && (
-        <>
-          <h1 className="mb-4">{data.Data.title || data.Data.headline}</h1>
-          {!!data.Data.body && (
-            <div dangerouslySetInnerHTML={{ __html: data.Data.body }} />
-          )}
-        </>
+        <div className="promotion-inner">
+          <div className="promotion-inner__banner">
+            <img
+              className="promotion-inner__banner-img"
+              src={bannerImg || fallbackBannerImg}
+            ></img>
+            <div className="promo-bg-text">
+              {data?.Data.title && (
+                <h3 className="promo-bg-text__subtitle">{data?.Data?.title}</h3>
+              )}
+              <h2 className="promo-bg-text__title">{data?.Data?.page_title}</h2>
+              {data?.Data.button_text && data?.Data.inner_page_button_link && (
+                <Link
+                  to={data?.Data?.inner_page_button_link}
+                  className="promo-button promo-bg-text__button d-inline-block"
+                >
+                  {data?.Data.button_text}
+                </Link>
+              )}
+            </div>
+          </div>
+          <div className="promotion-inner__body promo-container">
+            <p className="promotion-inner__body-short">
+              {data?.Data.short_description}
+            </p>
+            <div dangerouslySetInnerHTML={{ __html: data?.Data.body || '' }} />
+            <PromotionsListBlock currentSlug={data?.Data.slug} />
+          </div>
+        </div>
       )}
     </main>
   );
