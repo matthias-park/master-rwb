@@ -102,7 +102,7 @@ const blocks = (
           setValidation('personal_code', FormFieldValidation.Validating);
           const res = await props.checkPersonalCode(value);
           if (!res?.Success) {
-            valid = t('register_personal_code_invalid');
+            valid = res?.Message || t('register_personal_code_invalid');
           }
           setValidation(
             'personal_code',
