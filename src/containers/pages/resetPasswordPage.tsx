@@ -76,6 +76,7 @@ const ForgotPasswordPage = () => {
           <Form onSubmit={handleSubmit(onSubmit)}>
             <ControlledTextInput
               disableCopyPaste
+              disabled={!!apiResponse?.success}
               rules={{
                 required: t('reset_password_field_required'),
                 validate: value => {
@@ -109,6 +110,7 @@ const ForgotPasswordPage = () => {
             />
             <ControlledTextInput
               disableCopyPaste
+              disabled={!!apiResponse?.success}
               rules={{
                 required: t('reset_password_field_required'),
                 validate: value =>
@@ -123,7 +125,11 @@ const ForgotPasswordPage = () => {
             />
             <LoadingButton
               variant="primary"
-              disabled={!!formState.errors.email || !formState.isValid}
+              disabled={
+                !!formState.errors.email ||
+                !formState.isValid ||
+                !!apiResponse?.success
+              }
               loading={formState.isSubmitting}
               type="submit"
               data-testid="button"
