@@ -287,7 +287,10 @@ const OnlineForm = (props: Props) => {
                           <Form.Check
                             {...register(field.name || field.id, {
                               required:
-                                field.required && t('register_input_required'),
+                                field.required &&
+                                `${t(`register_input_${field.id}`)} ${t(
+                                  'register_input_required',
+                                )}`,
                               setValueAs: value => !!value,
                             })}
                             custom
@@ -314,7 +317,9 @@ const OnlineForm = (props: Props) => {
                               rules={{
                                 required:
                                   field.required &&
-                                  t('register_input_required'),
+                                  `${t(`register_input_${field.id}`)} ${t(
+                                    'register_input_required',
+                                  )}`,
                                 validate: field.validate,
                               }}
                               type={field.type}
@@ -344,7 +349,10 @@ const OnlineForm = (props: Props) => {
                           <ControlledTextInput
                             rules={{
                               required:
-                                field.required && t('register_input_required'),
+                                field.required &&
+                                `${t(`register_input_${field.id}`)} ${t(
+                                  'register_input_required',
+                                )}`,
                               validate: field.validate,
                             }}
                             type={field.type}
@@ -375,7 +383,10 @@ const OnlineForm = (props: Props) => {
                           <ControlledTextInput
                             rules={{
                               required:
-                                field.required && t('register_input_required'),
+                                field.required &&
+                                `${t(`register_input_${field.id}`)} ${t(
+                                  'register_input_required',
+                                )}`,
                               valueAsDate: true,
                             }}
                             id={field.id}

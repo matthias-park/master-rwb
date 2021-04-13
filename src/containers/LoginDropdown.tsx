@@ -55,7 +55,7 @@ const LoginForm = ({
     const response = await postApi<RailsApiResponse<NET_USER | null>>(
       '/railsapi/v1/user/login',
       {
-        login: email,
+        login: email.trim(),
         password,
         remember_me,
       },

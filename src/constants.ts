@@ -414,6 +414,7 @@ export const VALIDATIONS = {
   },
   bank_account: value => REGEX_EXPRESSION.BANK_IBAN.test(value.trim()),
   passwordMixOfThree: value => {
+    if (value.includes(' ')) return false;
     const valueValid = value.length > 7;
     const hasLowerCase = /[a-z]/.test(value);
     const hasUpperCase = /[A-Z]/.test(value);
