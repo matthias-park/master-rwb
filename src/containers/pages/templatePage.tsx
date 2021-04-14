@@ -36,7 +36,7 @@ const TemplatePage = () => {
 
   useEffect(() => {
     makeCollapsible('card', 'collapse', 'card-header');
-    if (!!data?.Data.structure.content && !htmlPages?.includes(page)) {
+    if (!!data?.Data?.structure?.content && !htmlPages?.includes(page)) {
       const menuLinks = data.Data?.structure?.content.slice(1).map(el => ({
         link: el.section?.menu_item?.value,
         name: el.section?.menu_item?.value,
