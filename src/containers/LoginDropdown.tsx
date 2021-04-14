@@ -4,7 +4,7 @@ import { postApi } from '../utils/apiUtils';
 import { useConfig } from '../hooks/useConfig';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../hooks/useUIConfig';
-import { ComponentName, PagesName } from '../constants';
+import { ComponentName, FormFieldValidation, PagesName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
 import { useLocation } from 'react-router-dom';
 import CustomAlert from '../components/CustomAlert';
@@ -43,7 +43,7 @@ const LoginForm = ({
       remember_me: false,
     },
   });
-  const { register, handleSubmit, formState, setError } = formMethods;
+  const { register, handleSubmit, formState, watch } = formMethods;
   const { mutateUser } = useConfig();
   const sendDataToGTM = useGTM();
   const forgotPasswordRoute = useRoutePath(PagesName.ForgotPasswordPage);
@@ -86,12 +86,7 @@ const LoginForm = ({
       event: 'LoginFailed',
     });
     setApiError(response.Message || t('login_failed_to_login'));
-    setError('email', {
-      type: 'manual',
-    });
-    return setError('password', {
-      type: 'manual',
-    });
+    return;
   };
   return (
     <FormProvider {...formMethods}>
@@ -100,9 +95,7 @@ const LoginForm = ({
         onSubmit={handleSubmit(onSubmit)}
       >
         <CustomAlert
-          show={
-            formState.isSubmitted && !formState.isSubmitSuccessful && !!apiError
-          }
+          show={formState.isSubmitted && !!apiError}
           variant="danger"
         >
           <div dangerouslySetInnerHTML={{ __html: apiError || '' }} />
@@ -115,12 +108,14 @@ const LoginForm = ({
           // type="email"
           placeholder={t('login_email')}
           autoComplete="username"
+          validation={apiError ? FormFieldValidation.Invalid : undefined}
           error={formState.errors.email}
         />
         <ControlledTextInput
           rules={{
             validate: value => !!value.trim() || t('login_field_required'),
           }}
+          validation={apiError ? FormFieldValidation.Invalid : undefined}
           id="password"
           type={'password'}
           placeholder={t('login_password')}
@@ -154,11 +149,7 @@ const LoginForm = ({
           </Link>
         </div>
         <LoadingButton
-          disabled={
-            !formState.isDirty ||
-            !!formState.errors.email ||
-            !!formState.errors.password
-          }
+          disabled={!formState.isDirty || !watch('email') || !watch('password')}
           className="btn btn-primary d-block mx-auto mt-4 px-5"
           type="submit"
           loading={formState.isSubmitting}

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { SettingsForm } from '../../types/api/user/ProfileSettings';
 import { useForm } from 'react-hook-form';
 import clsx from 'clsx';
@@ -8,6 +8,7 @@ import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import LoadingButton from '../LoadingButton';
+import { useI18n } from '../../hooks/useI18n';
 
 interface SettingProps {
   form: SettingsForm;
@@ -26,9 +27,12 @@ const FormsWithUpdateUser = [
 ];
 
 const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
+  const { t } = useI18n();
+  const [showPassword, setShowPassword] = useState(false);
   const currentEventKey = useContext(AccordionContext);
   const accordionOnClick = useAccordionToggle(form.id);
   const { register, handleSubmit, watch, formState } = useForm<any, any>({
+    mode: 'onChange',
     defaultValues: form.fields
       .filter(field => field.default ?? false)
       .reduce((obj, value) => {
@@ -119,6 +123,9 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                         key={field.id}
                         data-testid={field.id}
                         loading={!!formState.isSubmitting}
+                        disabled={Object.values(watchAllFields).some(
+                          value => !value,
+                        )}
                         className="mt-2"
                         variant="primary"
                         type="submit"
@@ -129,7 +136,8 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                   }
                   const isFieldSelect = field.type === 'select';
                   const formGroupAs = isFieldSelect ? 'select' : 'input';
-                  const formGroupType = isFieldSelect ? 'text' : field.type;
+                  const formGroupType =
+                    isFieldSelect || showPassword ? 'text' : field.type;
                   const formGroupChildren =
                     field.type === 'select'
                       ? field.values?.map(option => (
@@ -142,16 +150,20 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                     <Form.Group key={field.id}>
                       <Form.Control
                         data-testid={field.id}
-                        {...register(field.id)}
+                        {...register(field.id, {
+                          validate: value =>
+                            !!value.trim() ||
+                            `${field.title} ${t('settings_field_required')}`,
+                        })}
                         as={formGroupAs}
                         disabled={field.disabled}
                         size="sm"
                         type={formGroupType}
-                        autoComplete={
-                          field.type === 'password'
-                            ? 'current-password'
-                            : undefined
-                        }
+                        // autoComplete={
+                        //   field.type === 'password'
+                        //     ? 'current-password'
+                        //     : undefined
+                        // }
                         id={field.id}
                         name={field.id}
                         placeholder=" "
@@ -167,6 +179,12 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                             {field.title}
                           </label>
                           <div className="form-group__icons">
+                            {field.type === 'password' && (
+                              <i
+                                className="icon-eye-on show-password"
+                                onClick={() => setShowPassword(!showPassword)}
+                              />
+                            )}
                             <i className="icon-check"></i>
                             <i className="icon-exclamation"></i>
                           </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import loadable from '@loadable/component';
 import Accordion from 'react-bootstrap/Accordion';
 import Spinner from 'react-bootstrap/Spinner';
@@ -11,6 +11,7 @@ import { useConfig } from '../../hooks/useConfig';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
 import isEqual from 'lodash.isequal';
+import CustomAlert from '../../components/CustomAlert';
 
 const LoadableMarketingSettingsAccordion = loadable(
   () => import('../../components/account-settings/MarketingSettingsAccordion'),
@@ -29,6 +30,10 @@ const SettingsPage = () => {
   const { user, mutateUser } = useConfig((prev, next) =>
     isEqual(prev.user, next.user),
   );
+  const [apiResponse, setApiResponse] = useState<{
+    success: boolean;
+    msg: string;
+  } | null>(null);
   const { addToast } = useToasts();
   const { data, error, mutate } = useApi<ProfileSettings>(
     '/railsapi/v1/user/profile',
@@ -49,6 +54,7 @@ const SettingsPage = () => {
     formBody: boolean = false,
     updateUser: boolean = false,
   ): Promise<void> => {
+    setApiResponse(null);
     body.authenticity_token = user.token!;
     const res = await postApi<RailsApiResponse<null>>(url, body, {
       formData: formBody,
@@ -61,9 +67,9 @@ const SettingsPage = () => {
       }
       return res;
     });
-    addToast(res.Message, {
-      appearance: res.Success ? 'success' : 'error',
-      autoDismiss: true,
+    setApiResponse({
+      success: res.Success,
+      msg: res.Message || t('api_response_failed'),
     });
     setTimeout(() => mutate(), 1000);
     if (updateUser) {
@@ -74,6 +80,12 @@ const SettingsPage = () => {
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       <h1 className="mb-4">{t('settings_page_title')}</h1>
+      <CustomAlert
+        show={!!apiResponse}
+        variant={apiResponse?.success ? 'success' : 'danger'}
+      >
+        <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />
+      </CustomAlert>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />
