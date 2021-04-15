@@ -74,7 +74,7 @@ const TemplatePage = () => {
           <Sidebar
             links={links}
             scroll={true}
-            onClick={setActive}
+            setActive={setActive}
             active={active}
           />
           <div className="w-100 ml-0 ml-md-5 ml-xl-0 d-flex flex-column flex-xl-row mx-auto">
