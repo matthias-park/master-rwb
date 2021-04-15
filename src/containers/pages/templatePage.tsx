@@ -38,14 +38,14 @@ const TemplatePage = () => {
 
   useEffect(() => {
     makeCollapsible('card', 'collapse', 'card-header');
-    if (data?.Data && !htmlPages?.includes(page)) {
+    if (!!data?.Data?.structure?.content && !htmlPages?.includes(page)) {
       const menuLinks = data.Data?.structure?.content.slice(1).map(el => ({
-        link: el.section.menu_item.value,
-        name: el.section.menu_item.value,
+        link: el.section?.menu_item?.value,
+        name: el.section?.menu_item?.value,
       }));
       setLinks(menuLinks);
       const firstMenuItem =
-        data.Data?.structure?.content[1].section?.menu_item.value;
+        data.Data?.structure?.content[1]?.section?.menu_item?.value;
       setActive(firstMenuItem);
     }
   }, [data]);
@@ -76,66 +76,70 @@ const TemplatePage = () => {
           <Sidebar
             links={links}
             scroll={true}
-            onClick={setActive}
+            setActive={setActive}
             active={active}
           />
           <div className="w-100 ml-0 ml-md-5 ml-xl-0 d-flex flex-column flex-xl-row mx-auto">
             <main className="container px-0 px-4 pl-xxl-150 mb-4 pt-4 pt-sm-5">
-              <h1 className="mb-3 text-brand-text mt-xl-2">
-                {data.Data.structure.content[0].standart?.page_title.value}
-              </h1>
-              {data.Data.structure.content.slice(1).map((el, index) => (
-                <div key={index}>
-                  <Element name={el.section?.menu_item.value}>
-                    <div className="template-page-block pb-3">
-                      <h2 className="template-page-block__title">
-                        {el.section?.section_title.value}
-                      </h2>
-                      <div
-                        className="template-page-block__text mb-3"
-                        dangerouslySetInnerHTML={{
-                          __html: el.section?.section_content.value,
-                        }}
-                      ></div>
-                      <img
-                        className="template-page-block__img"
-                        src={el.section?.section_image_url.value}
-                      />
-                    </div>
-                  </Element>
-                  {index === 0 && (
-                    <Dropdown
-                      className="custom-dropdown mb-3 d-block d-md-none"
-                      show={dropdownShow}
-                      onToggle={() => setDropdownShow(!dropdownShow)}
-                    >
-                      <Dropdown.Toggle
-                        variant="brand-light"
-                        id="dropdown-basic"
-                      >
-                        {data.Data.structure.content[0].standart
-                          ?.dropdown_button_translations?.value ||
-                          t('default_dropdown_title')}
-                        <i className="icon-down1"></i>
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        {links.map(link => (
-                          <Dropdown.Item
-                            className="text-wrap"
-                            as={ScrollLink}
-                            key={link.link}
-                            to={link.link}
-                            smooth={true}
-                            onClick={() => setDropdownShow(false)}
+              {!!data.Data.structure.content && (
+                <>
+                  <h1 className="mb-3 text-brand-text mt-xl-2">
+                    {data.Data.structure.content[0].standart?.page_title?.value}
+                  </h1>
+                  {data.Data.structure.content.slice(1).map((el, index) => (
+                    <div key={index}>
+                      <Element name={el.section?.menu_item?.value}>
+                        <div className="template-page-block pb-3">
+                          <h2 className="template-page-block__title">
+                            {el.section?.section_title?.value}
+                          </h2>
+                          <div
+                            className="template-page-block__text mb-3"
+                            dangerouslySetInnerHTML={{
+                              __html: el.section?.section_content?.value,
+                            }}
+                          ></div>
+                          <img
+                            className="template-page-block__img"
+                            src={el.section?.section_image_url?.value}
+                          />
+                        </div>
+                      </Element>
+                      {index === 0 && data.Data.structure.content.length > 1 && (
+                        <Dropdown
+                          className="custom-dropdown mb-3 d-block d-md-none"
+                          show={dropdownShow}
+                          onToggle={() => setDropdownShow(!dropdownShow)}
+                        >
+                          <Dropdown.Toggle
+                            variant="brand-light"
+                            id="dropdown-basic"
                           >
-                            {link.name}
-                          </Dropdown.Item>
-                        ))}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  )}
-                </div>
-              ))}
+                            {data.Data.structure.content[0].standart
+                              ?.dropdown_button_translations?.value ||
+                              t('default_dropdown_title')}
+                            <i className="icon-down1"></i>
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            {links.map(link => (
+                              <Dropdown.Item
+                                className="text-wrap"
+                                as={ScrollLink}
+                                key={link.link}
+                                to={link.link}
+                                smooth={true}
+                                onClick={() => setDropdownShow(false)}
+                              >
+                                {link.name}
+                              </Dropdown.Item>
+                            ))}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      )}
+                    </div>
+                  ))}
+                </>
+              )}
             </main>
             <div className="right-sidebar px-4 px-xl-0">
               <HelpBlock

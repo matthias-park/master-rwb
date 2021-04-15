@@ -11,11 +11,11 @@ interface Props {
     name: string;
   }[];
   scroll?: boolean;
-  onClick?: (active: string) => void;
+  setActive?: (active: string) => void;
   active?: string;
 }
 
-const Sidebar = ({ links, scroll, onClick, active }: Props) => {
+const Sidebar = ({ links, scroll, setActive, active }: Props) => {
   const { pathname } = useLocation();
   const { t } = useI18n();
 
@@ -23,36 +23,42 @@ const Sidebar = ({ links, scroll, onClick, active }: Props) => {
     <div className="left-sidebar sticky">
       <ul className="sidebar-list">
         {links.map(link => (
-          <li key={link.link} className={`sidebar-list__item`}>
+          <>
             {scroll ? (
-              <ScrollLink
-                to={link.link}
+              <li
+                key={link.link}
                 className={clsx(
-                  'sidebar-list__item-link',
+                  `sidebar-list__item`,
                   active === link.name ? 'active' : 'inactive',
                 )}
-                smooth={true}
-                duration={500}
-                activeClass="active"
-                spy={true}
-                offset={-50}
-                onSetActive={() => onClick?.(link.name)}
-                onClick={() => setTimeout(() => onClick?.(link.name), 550)}
               >
-                {link.name}
-              </ScrollLink>
+                <ScrollLink
+                  to={link.link}
+                  className="sidebar-list__item-link"
+                  smooth={true}
+                  duration={500}
+                  spy={true}
+                  offset={-50}
+                  onSetActive={() => setActive?.(link.name)}
+                  onClick={() => setTimeout(() => setActive?.(link.name), 550)}
+                >
+                  {link.name}
+                </ScrollLink>
+              </li>
             ) : (
-              <Link
-                to={link.link}
+              <li
+                key={link.link}
                 className={clsx(
-                  'sidebar-list__item-link',
-                  link.link === pathname ? 'active' : '',
+                  `sidebar-list__item`,
+                  link.link === pathname ? 'active' : 'inactive',
                 )}
               >
-                {t(link.name)}
-              </Link>
+                <Link to={link.link} className="sidebar-list__item-link">
+                  {t(link.name)}
+                </Link>
+              </li>
             )}
-          </li>
+          </>
         ))}
       </ul>
     </div>
