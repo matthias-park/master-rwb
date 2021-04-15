@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import InputContainer from '../../components/account-settings/InputContainer';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
-import { getApi, postApi } from '../../utils/apiUtils';
+import { postApi } from '../../utils/apiUtils';
 import { useParams } from 'react-router-dom';
 import { DepositRequest, DepositResponse } from '../../types/api/user/Deposit';
 import { useToasts } from 'react-toast-notifications';
@@ -42,6 +42,7 @@ const DepositPage = () => {
   );
 
   const handleRequestDeposit = useCallback(async (depositValue: number) => {
+    setApiError(null);
     if (!bankAccount.loading && !bankAccount.hasBankAccount) {
       addToast(`No bank account`, {
         appearance: 'error',
@@ -50,7 +51,6 @@ const DepositPage = () => {
       return;
     }
     setDepositLoading(true);
-    setApiError(null);
     const depositParams: DepositRequest = {
       BankId: 160,
       Amount: depositValue,
@@ -61,24 +61,15 @@ const DepositPage = () => {
     const response: DepositResponse | null = await postApi<DepositResponse>(
       '/railsapi/v1/deposits/perform',
       depositParams,
-    ).catch(err => {
-      addToast(`Failed to redirect to bank`, {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-      console.log(err);
+    ).catch(() => {
       return null;
     });
     if (response?.Success && response.RedirectUrl) {
-      // return (window.location.href = response.RedirectUrl);
+      return (window.location.href = response.RedirectUrl);
     }
-    if (response?.PaymentResultMessage) {
-      setApiError(response.PaymentResultMessage);
+    if (!response || response.PaymentResultMessage) {
+      setApiError(response?.PaymentResultMessage || t('api_response_failed'));
     }
-    addToast(`Failed to redirect to bank`, {
-      appearance: 'error',
-      autoDismiss: true,
-    });
     setDepositLoading(false);
   }, []);
 
