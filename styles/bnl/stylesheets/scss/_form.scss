@@ -35,6 +35,9 @@
             }
         }
     }
+    select.form-control {
+      padding-left: 8px;
+    }
     &__icons {
         position: absolute;
         top: 4px;
@@ -63,6 +66,11 @@
           right: 6px;
         }
     }
+    select {
+      + #{ $self }__icons {
+        right: 10px; 
+      }
+    }
     &__error-msg {
         display: none;
         font-size: 12px;
@@ -88,10 +96,15 @@
     }
     &.has-error {
         input,
-        textarea {
+        textarea,
+        select {
             border: 1px solid $danger;
+            background-image: none;
             background-color: $danger-bg;
             color: $danger;
+            + label {
+              color: $danger;
+            }
         }
         #{ $self }__icons {
             .icon-exclamation {
@@ -108,6 +121,27 @@
     }
 }
 
+.react-datepicker-wrapper {
+  .form-group {
+    .form-control {
+      max-width: unset;
+      border-color: $gray-200;
+      height: 38px;
+      padding-left: 12px;
+      font-size: 15px;
+    }
+  }
+  + .react-datepicker {
+    &__tab-loop {
+      .react-datepicker-popper {
+        z-index: 2;
+      }
+      .react-datepicker__triangle {
+        left: 15% !important;
+      }
+    }
+  }
+}
 
 .custom-checkbox {
     label {

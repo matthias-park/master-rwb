@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import { Form as Field, Value } from '../types/api/JsonFormPage';
 import { Controller, useFormState } from 'react-hook-form';
 import clsx from 'clsx';
+import dayjs from 'dayjs';
 import { useI18n } from '../hooks/useI18n';
 import LoadingButton from './LoadingButton';
 import ReactDatePicker from 'react-datepicker';
@@ -75,13 +76,17 @@ const FieldFromJson = ({ field, size, control, rules, register }: Props) => {
             minDate={field.dateFrom ? new Date(field.dateFrom, 1) : null}
             maxDate={field.dateTo ? new Date(field.dateTo, 1) : null}
             selected={controlField.value}
+            wrapperClassName="d-block"
             customInput={
               <Form.Group key={field.id}>
                 <Form.Control
                   size={size}
                   id={field.id}
                   name={field.id}
-                  value={controlField.value}
+                  value={
+                    controlField.value &&
+                    dayjs(controlField.value).format('YYYY-MM-DD')
+                  }
                   placeholder=" "
                 />
                 <label
@@ -166,25 +171,23 @@ const FieldFromJson = ({ field, size, control, rules, register }: Props) => {
             {formGroupChildren}
           </Form.Control>
           {!isFieldSelect && (
-            <>
-              <label
-                data-testid={`${field.id}-title`}
-                htmlFor="amount"
-                className="text-14"
-              >
-                {field.title}
-              </label>
-              <div className="form-group__icons">
-                <i className="icon-check"></i>
-                <i className="icon-exclamation"></i>
-              </div>
-              <small className="form-group__error-msg">
-                {formState.errors[field.id]
-                  ? formState.errors[field.id].message
-                  : t('input_generic_error_msg')}
-              </small>
-            </>
+            <label
+              data-testid={`${field.id}-title`}
+              htmlFor="amount"
+              className="text-14"
+            >
+              {field.title}
+            </label>
           )}
+          <div className="form-group__icons">
+            <i className="icon-check"></i>
+            <i className="icon-exclamation"></i>
+          </div>
+          <small className="form-group__error-msg">
+            {formState.errors[field.id]
+              ? formState.errors[field.id].message
+              : t('input_generic_error_msg')}
+          </small>
         </Form.Group>
       )}
     />

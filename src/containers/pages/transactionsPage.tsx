@@ -174,6 +174,10 @@ const TransactionsDateFilter = ({
   setPeriodSelected,
 }) => {
   const { t } = useI18n();
+  const validDate =
+    dayjs().diff(dateTo) >= 0 &&
+    dayjs().diff(dateFrom) >= 0 &&
+    dateTo.diff(dateFrom) >= 0;
 
   const updateDate = () => {
     setUrl(
@@ -205,6 +209,7 @@ const TransactionsDateFilter = ({
       <Button
         className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3 btn--small-radius"
         variant="primary"
+        disabled={!validDate}
         onClick={() => updateDate()}
       >
         {t('search')}

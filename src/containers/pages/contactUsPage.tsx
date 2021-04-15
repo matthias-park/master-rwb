@@ -89,7 +89,7 @@ const ContactUsPage = () => {
   };
 
   return (
-    <main className="page-container pt-5">
+    <main className="page-container pt-4">
       <div className="page-inner">
         {isDataLoading && (
           <div className="d-flex justify-content-center pt-4 pb-3">
