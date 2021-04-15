@@ -111,29 +111,17 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
                         )}`,
                     }}
                   />
-                  {/* // <Form.Group>
-                //   <Form.Control
-                //     {...register('password')}
-                //     size="sm"
-                //     type="password"
-                //     name="password"
-                //     id="password"
-                //     placeholder=" "
-                //   />
-                //   <label htmlFor="password">{fields.password.title}</label>
-                //   <div className="form-group__icons">
-                //     <i className="icon-check"></i>
-                //     <i className="icon-exclamation"></i>
-                //   </div>
-                //   {fields.password.errors?.map(error => (
-                //     <small className="form-group__error-msg">{error}</small>
-                //   ))}
-                // </Form.Group> */}
                 </div>
               )}
               {!!fields.submit_button && (
                 <LoadingButton
                   loading={formState.isSubmitting}
+                  disabled={
+                    !fileIds.some(id => {
+                      console.log(id, !!watch(id, []).length);
+                      return !!watch(id, []).length;
+                    }) || !watch('password')
+                  }
                   className="mt-3"
                   variant="primary"
                   type="submit"

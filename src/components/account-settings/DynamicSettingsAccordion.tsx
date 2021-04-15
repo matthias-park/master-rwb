@@ -125,7 +125,7 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                         data-testid={field.id}
                         loading={!!formState.isSubmitting}
                         disabled={Object.values(watchAllFields).some(
-                          value => !value,
+                          value => !value || value === 'default',
                         )}
                         className="mt-2"
                         variant="primary"

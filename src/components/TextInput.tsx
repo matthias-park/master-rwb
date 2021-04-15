@@ -75,15 +75,14 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
           e.nativeEvent.stopImmediatePropagation();
         }
       : undefined;
-    const hasErrorClass =
-      (error && (!validation || validation === FormFieldValidation.Invalid)) ||
-      validation === FormFieldValidation.Invalid;
+    const hasErrorClass = error || validation === FormFieldValidation.Invalid;
+    const hasSuccessClass = !error && validation === FormFieldValidation.Valid;
     return (
       <Form.Group
         data-testid="container"
         className={clsx(
           hasErrorClass && 'has-error',
-          validation === FormFieldValidation.Valid && 'success',
+          hasSuccessClass && 'success',
         )}
       >
         <Form.Control
@@ -134,12 +133,11 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
           <i className="icon-check"></i>
           <i className="icon-exclamation"></i>
         </div>
-        {!!error?.message &&
-          (!validation || validation === FormFieldValidation.Invalid) && (
-            <small data-testid="error" className="form-group__error-msg">
-              {error.message}
-            </small>
-          )}
+        {!!error?.message && (
+          <small data-testid="error" className="form-group__error-msg">
+            {error.message}
+          </small>
+        )}
       </Form.Group>
     );
   },

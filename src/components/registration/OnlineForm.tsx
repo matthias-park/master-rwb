@@ -19,7 +19,6 @@ import AutocompleteTextInput from '../AutocompleteTextInput';
 import { PostCodeInfo } from '../../types/api/user/Registration';
 import LoadingButton from '../LoadingButton';
 import RegError from './RegError';
-
 interface Props {
   checkEmailAvailable: (email: string) => Promise<ValidateRegisterInput | null>;
   checkPersonalCode: (
@@ -315,11 +314,10 @@ const OnlineForm = (props: Props) => {
                           return (
                             <AutocompleteTextInput
                               rules={{
-                                required:
-                                  field.required &&
-                                  `${t(`register_input_${field.id}`)} ${t(
-                                    'register_input_required',
-                                  )}`,
+                                required: field.required && 'baddd',
+                                // `${t(`register_input_${field.id}`)} ${t(
+                                //   'register_input_required',
+                                // )}`,
                                 validate: field.validate,
                               }}
                               type={field.type}
