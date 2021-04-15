@@ -3,11 +3,14 @@ import { useConfig } from '../../hooks/useConfig';
 import { useI18n } from '../../hooks/useI18n';
 import isEqual from 'lodash.isequal';
 import Link from '../../components/Link';
+import { PagesName } from '../../constants';
+import { sortAscending } from '../../utils';
 
 interface SitemapListItem {
   path: string;
   children?: SitemapListItem[];
   name: string;
+  emptyRoute?: boolean;
 }
 
 const insertSitemapChildren = (listItem: SitemapListItem, route) => {
@@ -17,7 +20,6 @@ const insertSitemapChildren = (listItem: SitemapListItem, route) => {
     const mapItem = listItem.children.find(item =>
       route.path.startsWith(item.path),
     );
-    console.log(route, mapItem);
     if (mapItem) {
       return insertSitemapChildren(mapItem, route);
     }
@@ -30,9 +32,14 @@ const insertSitemapChildren = (listItem: SitemapListItem, route) => {
 
 const TreeItem = ({ route }: { route: SitemapListItem }) => {
   const { t } = useI18n();
+  if (!t(`sitemap_${route.name}`)) return null;
   return (
     <li>
-      <Link to={route.path}>{t(`sitemap_${route.name}`)}</Link>
+      {route.emptyRoute ? (
+        <div>{t(`sitemap_${route.name}`)}</div>
+      ) : (
+        <Link to={route.path}>{t(`sitemap_${route.name}`)}</Link>
+      )}
       {route.children?.map(subRoute => (
         <ul key={subRoute.path}>
           <TreeItem route={subRoute} />
@@ -52,11 +59,22 @@ const SitemapPage = () => {
 
   const sitemapList = useMemo(() => {
     const list: SitemapListItem[] = [];
-    for (const route of routes) {
+    for (const route of routes.sort((a, b) =>
+      sortAscending(a.path.length, b.path.length),
+    )) {
       if (
         route.hiddenSitemap ||
         route.path === '/' ||
         (route.protected && !user.logged_in)
+      )
+        continue;
+      if (
+        user.logged_in &&
+        [
+          PagesName.ForgotLoginPage,
+          PagesName.ForgotPasswordPage,
+          PagesName.RegisterPage,
+        ].includes(route.id)
       )
         continue;
       const mapItem = list.find(
@@ -68,6 +86,7 @@ const SitemapPage = () => {
         list.push({
           path: route.path,
           name: route.name,
+          emptyRoute: route.id === PagesName.Null,
         });
       }
     }

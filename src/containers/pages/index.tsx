@@ -7,6 +7,7 @@ import { PagesName } from '../../constants';
 import Spinner from 'react-bootstrap/Spinner';
 import ErrorBoundary from '../ErrorBoundary';
 import { useI18n } from '../../hooks/useI18n';
+import { sortDescending } from '../../utils';
 
 const AsyncPage = (pageName: string) =>
   loadable(() => import(`./${pageName}`), {
@@ -56,25 +57,27 @@ const Routes = () => {
       }
     >
       <Switch key={pathname}>
-        {routes.map(route => {
-          const Page =
-            COMPONENT_PAGES[route.id] ||
-            COMPONENT_PAGES[PagesName.TemplatePage];
+        {routes
+          .sort((a, b) => sortDescending(a.path.length, b.path.length))
+          .map(route => {
+            const Page =
+              COMPONENT_PAGES[route.id] ||
+              COMPONENT_PAGES[PagesName.TemplatePage];
 
-          if (!Page || (locale && route.id === PagesName.LocaleSelectPage)) {
-            return null;
-          }
-          const RouteEl = route.protected ? ProtectedRoute : Route;
-          return (
-            <RouteEl
-              key={`${route.id}-${route.path}`}
-              exact={route.exact ?? true}
-              path={route.path}
-              component={Page}
-              sensitive
-            />
-          );
-        })}
+            if (!Page || (locale && route.id === PagesName.LocaleSelectPage)) {
+              return null;
+            }
+            const RouteEl = route.protected ? ProtectedRoute : Route;
+            return (
+              <RouteEl
+                key={`${route.id}-${route.path}`}
+                exact={route.exact ?? true}
+                path={route.path}
+                component={Page}
+                sensitive
+              />
+            );
+          })}
       </Switch>
     </ErrorBoundary>
   );

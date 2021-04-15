@@ -25,7 +25,9 @@ const TemplatePage = () => {
   const { sidebars } = useConfig();
   const { headerNav } = useUIConfig();
   const { t } = useI18n();
-  const htmlPages = sidebars?.slice(1)[0].map(el => el.link.replace(/\//g, ''));
+  const htmlPages = sidebars
+    ?.slice(1)[0]
+    .map(el => el.link.replaceAll(/\//g, '_').substring(1));
   const { data, error } = useApi<RailsApiResponse<any>>(
     htmlPages?.includes(page)
       ? `/railsapi/v1/content/promotion/${page}`

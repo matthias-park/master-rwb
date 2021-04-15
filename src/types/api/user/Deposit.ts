@@ -11,8 +11,8 @@ export interface DepositResponse {
 }
 
 export interface DepositRequest {
+  [key: string]: number | string;
   BankId: number;
-  Ip: string;
   Amount: number;
   ReturnSuccessUrl: string;
   ReturnCancelUrl: string;

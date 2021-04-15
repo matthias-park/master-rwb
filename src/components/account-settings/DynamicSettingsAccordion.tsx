@@ -9,6 +9,7 @@ import Card from 'react-bootstrap/Card';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import LoadingButton from '../LoadingButton';
 import { useI18n } from '../../hooks/useI18n';
+import { VALIDATIONS } from '../../constants';
 
 interface SettingProps {
   form: SettingsForm;
@@ -32,7 +33,7 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
   const currentEventKey = useContext(AccordionContext);
   const accordionOnClick = useAccordionToggle(form.id);
   const { register, handleSubmit, watch, formState } = useForm<any, any>({
-    mode: 'onChange',
+    mode: 'onBlur',
     defaultValues: form.fields
       .filter(field => field.default ?? false)
       .reduce((obj, value) => {
@@ -136,8 +137,15 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                   }
                   const isFieldSelect = field.type === 'select';
                   const formGroupAs = isFieldSelect ? 'select' : 'input';
-                  const formGroupType =
-                    isFieldSelect || showPassword ? 'text' : field.type;
+                  let formGroupType = field.type;
+                  if (isFieldSelect || showPassword) {
+                    formGroupType = 'text';
+                  } else if (
+                    field.id === 'phone_number' ||
+                    field.id.includes('amount')
+                  ) {
+                    formGroupType = 'tel';
+                  }
                   const formGroupChildren =
                     field.type === 'select'
                       ? field.values?.map(option => (
@@ -147,13 +155,36 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                         ))
                       : null;
                   return (
-                    <Form.Group key={field.id}>
+                    <Form.Group
+                      key={field.id}
+                      className={clsx(
+                        formState.errors[field.id] && 'has-error',
+                      )}
+                    >
                       <Form.Control
                         data-testid={field.id}
                         {...register(field.id, {
-                          validate: value =>
-                            !!value.trim() ||
-                            `${field.title} ${t('settings_field_required')}`,
+                          validate: value => {
+                            if (
+                              [
+                                'new_password',
+                                'new_password_confirmation',
+                              ].includes(field.id)
+                            )
+                              return (
+                                VALIDATIONS.passwordMixOfThree(value) ||
+                                t('register_password_weak')
+                              );
+                            if (field.id === 'phone_number')
+                              return (
+                                VALIDATIONS.phone(value) ||
+                                t('phone_number_invalid')
+                              );
+                            return (
+                              !!value.trim() ||
+                              `${field.title} ${t('settings_field_required')}`
+                            );
+                          },
                         })}
                         as={formGroupAs}
                         disabled={field.disabled}
@@ -190,7 +221,11 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                           </div>
                         </>
                       )}
-
+                      {!!formState.errors[field.id] && (
+                        <small className="form-group__error-msg">
+                          {formState.errors[field.id].message}
+                        </small>
+                      )}
                       {field.errors?.map(error => (
                         <small
                           data-testid={`${field.id}-error`}

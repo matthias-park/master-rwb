@@ -51,27 +51,16 @@ const DepositPage = () => {
     }
     setDepositLoading(true);
     setApiError(null);
-    const userIp: any = await getApi('/check-cf-ip').catch(err => {
-      addToast(`Failed to get ip, using fallback`, {
-        appearance: 'warning',
-        autoDismiss: true,
-      });
-      console.log(err);
-      return {};
-    });
     const depositParams: DepositRequest = {
       BankId: 160,
-      Ip: userIp.ip || '0.0.0.0',
       Amount: depositValue,
       ReturnSuccessUrl: `${window.location.origin}${depositBaseUrl}/success`,
       ReturnCancelUrl: `${window.location.origin}${depositBaseUrl}/cancel`,
       ReturnErrorUrl: `${window.location.origin}${depositBaseUrl}/error`,
     };
     const response: DepositResponse | null = await postApi<DepositResponse>(
-      `/tgbetapi/franchises/38/players/_player_id_/deposit_request`,
-      {
-        tgbet_params: JSON.stringify(depositParams),
-      },
+      '/railsapi/v1/deposits/perform',
+      depositParams,
     ).catch(err => {
       addToast(`Failed to redirect to bank`, {
         appearance: 'error',
@@ -81,7 +70,7 @@ const DepositPage = () => {
       return null;
     });
     if (response?.Success && response.RedirectUrl) {
-      return (window.location.href = response.RedirectUrl);
+      // return (window.location.href = response.RedirectUrl);
     }
     if (response?.PaymentResultMessage) {
       setApiError(response.PaymentResultMessage);

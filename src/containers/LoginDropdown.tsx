@@ -113,7 +113,7 @@ const LoginForm = ({
         />
         <ControlledTextInput
           rules={{
-            validate: value => !!value.trim() || t('login_field_required'),
+            validate: value => !!value.trim() || t('login_password_required'),
           }}
           validation={apiError ? FormFieldValidation.Invalid : undefined}
           id="password"
