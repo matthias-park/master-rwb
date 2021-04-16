@@ -19,7 +19,7 @@
     width: calc(100% + 40px);
   }
   @include media-breakpoint-down(md) {
-    min-height: 800px;
+    min-height: 850px;
   }
   .lang-figure-1 {
     position: absolute;
@@ -50,6 +50,12 @@
     position: absolute;
     bottom: 20px;
     left: 80px;
+    &__text {
+      width: 400px;
+      @include media-breakpoint-down(xs) {
+        width: unset;
+      }
+    }
     @include media-breakpoint-down(lg) {
       left: 20px;
     }
@@ -62,10 +68,14 @@
         bottom: -90px;
         right: 28px;
         text-align: center;
-        @include media-breakpoint-down(xs) {
-          right: 50%;
-          transform: translateX(50%);
-        }
+      }
+    }
+    @include media-breakpoint-down(xs) {
+      width: 96%;
+      p {
+        right: 50%;
+        transform: translateX(50%);
+        width: 320px;
       }
     }
   }
@@ -147,7 +157,6 @@
     font-size: 11px;
     line-height: 1.5;
     color: rgba($white, 0.6);
-    width: 400px;
     @include media-breakpoint-down(xs) {
       font-size: 9px;
     }

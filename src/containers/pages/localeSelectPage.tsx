@@ -3,23 +3,25 @@ import { useConfig } from '../../hooks/useConfig';
 import { useI18n } from '../../hooks/useI18n';
 import { postApi } from '../../utils/apiUtils';
 import LoadingButton from '../../components/LoadingButton';
-import Link from '../../components/Link';
 
 const LANGUAGE = {
   nl: {
     message: 'Welcom',
     full_name: 'Nederlands',
     link_text: 'Gebruiksvoorwaarden',
+    link: 'terms_of_use',
   },
   fr: {
     message: 'Bienvenue',
-    full_name: 'français',
+    full_name: 'Français',
     link_text: 'Nutzungsbedingungen',
+    link: 'terms_of_use',
   },
   de: {
-    message: 'willkommen',
+    message: 'Willkommen',
     full_name: 'Deutsch',
     link_text: "Conditions d'utilisation",
+    link: 'terms_of_use',
   },
 };
 
@@ -30,13 +32,17 @@ const LocaleSelectPage = () => {
     (prev, next) => prev.locales.length === next.locales.length,
   );
 
-  const changeLocale = async (lang: string) => {
+  const changeLocale = async (lang: string, link?: string) => {
     setButtonLoading(lang);
     return postApi('/railsapi/v1/locale', {
       locale: lang,
     })
       .then(() => setLocale(lang))
-      .then(() => (window.location.pathname = `/${lang}/`));
+      .then(() =>
+        link
+          ? (window.location.pathname = `/${lang}/${link}`)
+          : (window.location.pathname = `/${lang}/`),
+      );
   };
 
   return (
@@ -77,9 +83,11 @@ const LocaleSelectPage = () => {
           />
           <small className="lang-info__text">
             Minderjarigen mogen niet deelnemen aan de spelen van de Nationale
-            Loterij. Les mindeurs d’âge ne peuvent pas jouer aux jeux de la
-            loterie Nationale. Minderjahrige dürfen nicht an den spielen der
-            Nationallotterie teilnehmen.
+            Loterij.<br></br>
+            Les mindeurs d’âge ne peuvent pas jouer aux jeux de la loterie
+            Nationale.<br></br>
+            Minderjahrige dürfen nicht an den spielen der Nationallotterie
+            teilnehmen.
           </small>
         </div>
         <p className="lang-info__text lang-info__text--big">
@@ -88,9 +96,12 @@ const LocaleSelectPage = () => {
       </div>
       <div className="lang-conditions">
         {locales.map(locale => (
-          <Link to={t('conditions_link')} className="lang-condition">
+          <a
+            onClick={() => changeLocale(locale.iso, LANGUAGE[locale.iso].link)}
+            className="lang-condition"
+          >
             {LANGUAGE[locale.iso].link_text}
-          </Link>
+          </a>
         ))}
       </div>
     </div>
