@@ -180,7 +180,11 @@ const RegisterPage = () => {
   return (
     <main className="registration">
       <div className={clsx('reg-block', headerNav.active && 'mt-5')}>
-        <HelpBlock title="Hulp nodig?" blocks={['faq', 'phone', 'email']} />
+        <HelpBlock
+          title="Hulp nodig?"
+          blocks={['faq', 'phone', 'email']}
+          className="default"
+        />
         {location?.state?.welcomeScreen ? (
           <RegWelcome />
         ) : (

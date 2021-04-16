@@ -38,11 +38,12 @@ interface Transactions {
 }
 
 const TransactionsTable = ({
-  dateTo,
-  dateFrom,
+  setDateTo,
+  setDateFrom,
   data,
   setUrl,
   periodSelected,
+  currentDate,
 }) => {
   const { t } = useI18n();
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,11 +51,13 @@ const TransactionsTable = ({
   useEffect(() => {
     setUrl(
       formatUrl('/railsapi/v1/user/transactions.json', {
-        to: dateTo.format('DD/MM/YYYY'),
-        from: dateFrom.format('DD/MM/YYYY'),
+        to: currentDate.to.format('DD/MM/YYYY'),
+        from: currentDate.from.format('DD/MM/YYYY'),
         page: currentPage.toString(),
       }),
     );
+    setDateTo(currentDate.to);
+    setDateFrom(currentDate.from);
   }, [currentPage]);
 
   useEffect(() => {
@@ -84,7 +87,7 @@ const TransactionsTable = ({
                   <tr key={index}>
                     <td>
                       <strong className="heading-sm">{t('_date')}</strong>
-                      {dayjs(new Date(transaction.date)).format('DD/MM/YYYY')}
+                      {dayjs(new Date(transaction.date)).format('YYYY-MM-DD')}
                     </td>
                     <td>
                       <strong className="heading-sm">{t('action')}</strong>
@@ -174,6 +177,7 @@ const TransactionsDateFilter = ({
   setPeriodSelected,
 }) => {
   const { t } = useI18n();
+  const validDate = dateTo.diff(dateFrom) >= 0;
 
   const updateDate = () => {
     setUrl(
@@ -191,6 +195,8 @@ const TransactionsDateFilter = ({
         <DatePicker
           selected={dateFrom.toDate()}
           onChange={date => setDateFrom(dayjs(date as Date))}
+          dateFormat="yyyy-MM-dd"
+          maxDate={dayjs().toDate()}
         />
         <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
       </div>
@@ -199,12 +205,15 @@ const TransactionsDateFilter = ({
         <DatePicker
           selected={dateTo.toDate()}
           onChange={date => setDateTo(dayjs(date as Date))}
+          dateFormat="yyyy-MM-dd"
+          maxDate={dayjs().toDate()}
         />
         <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
       </div>
       <Button
         className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3 btn--small-radius"
         variant="primary"
+        disabled={!validDate}
         onClick={() => updateDate()}
       >
         {t('search')}
@@ -222,6 +231,10 @@ const TransactionsPage = () => {
   const [dateFrom, setDateFrom] = useState(
     dayjs().subtract(periodSelected, 'day'),
   );
+  const [currentDate, setCurrentDate] = useState({
+    from: dateFrom,
+    to: dateTo,
+  });
 
   useEffect(() => {
     setUrl(
@@ -234,6 +247,7 @@ const TransactionsPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setCurrentDate({ from: dateFrom, to: dateTo });
   }, [url]);
 
   return (
@@ -256,11 +270,12 @@ const TransactionsPage = () => {
         />
       </div>
       <TransactionsTable
-        dateTo={dateTo}
-        dateFrom={dateFrom}
+        setDateTo={setDateTo}
+        setDateFrom={setDateFrom}
         data={data}
         setUrl={setUrl}
         periodSelected={periodSelected}
+        currentDate={currentDate}
       />
       <QuestionsContainer items={questionItems} />
     </main>
