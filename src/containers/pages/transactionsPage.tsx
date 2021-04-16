@@ -38,6 +38,8 @@ interface Transactions {
 }
 
 const TransactionsTable = ({
+  dateTo,
+  dateFrom,
   setDateTo,
   setDateFrom,
   data,
@@ -49,15 +51,19 @@ const TransactionsTable = ({
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
+    const periodInDateFilter = dateTo.diff(dateFrom, 'day');
+    const to = periodSelected === periodInDateFilter ? dateTo : currentDate.to;
+    const from =
+      periodSelected === periodInDateFilter ? dateFrom : currentDate.from;
     setUrl(
       formatUrl('/railsapi/v1/user/transactions.json', {
-        to: currentDate.to.format('DD/MM/YYYY'),
-        from: currentDate.from.format('DD/MM/YYYY'),
+        to: to.format('DD/MM/YYYY'),
+        from: from.format('DD/MM/YYYY'),
         page: currentPage.toString(),
       }),
     );
-    setDateTo(currentDate.to);
-    setDateFrom(currentDate.from);
+    setDateTo(to);
+    setDateFrom(from);
   }, [currentPage]);
 
   useEffect(() => {
@@ -270,6 +276,8 @@ const TransactionsPage = () => {
         />
       </div>
       <TransactionsTable
+        dateTo={dateTo}
+        dateFrom={dateFrom}
         setDateTo={setDateTo}
         setDateFrom={setDateFrom}
         data={data}
