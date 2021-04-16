@@ -107,7 +107,7 @@ const getSBParams = async (config: Config, error: () => void) => {
     ? await getApi<RailsApiResponse<string>>(
         '/railsapi/v1/kambi/get_token',
       ).catch((res: RailsApiResponse<null>) => {
-        if (res.Fallback) {
+        if (res.Fallback && config.user.logged_in) {
           error();
         }
         return res;

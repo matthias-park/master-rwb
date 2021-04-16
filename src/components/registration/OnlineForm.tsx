@@ -19,6 +19,7 @@ import AutocompleteTextInput from '../AutocompleteTextInput';
 import { PostCodeInfo } from '../../types/api/user/Registration';
 import LoadingButton from '../LoadingButton';
 import RegError from './RegError';
+import { cache } from 'swr';
 interface Props {
   checkEmailAvailable: (email: string) => Promise<ValidateRegisterInput | null>;
   checkPersonalCode: (
@@ -63,19 +64,43 @@ const blocks = (
         id: 'postal_code',
         required: true,
         type: 'text',
-        validate: value =>
-          (/^(?:(?:[1-9])(?:\d{3}))$/.test(value.split(' - ')[0]) &&
-            value.split(' - ').length === 2) ||
-          t('register_input_postal_code_invalid'),
+        validate: async value => {
+          const postCode = value.split('-')[0]?.trim();
+          const cacheId = `registration_post_code_${postCode}`;
+          let response = cache.has(cacheId) && cache.get(cacheId);
+          if (!response) {
+            response = await props.checkPostalCode(postCode);
+            if (response.Success) {
+              cache.set(cacheId, response);
+            }
+          }
+          if (!response.Success) {
+            return t('api_response_failed');
+          }
+          if (
+            response.Data?.result.some(
+              post => `${post.zip_code} - ${post.locality_name}` === value,
+            )
+          )
+            return true;
+          return t('register_input_postal_code_invalid');
+        },
         labelKey: (value: PostCodeInfo) =>
           `${value.zip_code} - ${value.locality_name}`,
         autoComplete: async value => {
-          const postCode = value.split(' - ')[0];
-          const res = await props.checkPostalCode(postCode);
-          if (!res.Data?.result) {
-            throw res.Message || t('register_input_postal_code_invalid');
+          const postCode = value.split('-')[0]?.trim();
+          const cacheId = `registration_post_code_${postCode}`;
+          let response = cache.has(cacheId) && cache.get(cacheId);
+          if (!response) {
+            response = await props.checkPostalCode(postCode);
+            if (response.Success) {
+              cache.set(cacheId, response);
+            }
           }
-          return res.Data.result;
+          if (!response.Data?.result) {
+            throw response.Message || t('register_input_postal_code_invalid');
+          }
+          return response.Data.result;
         },
       },
       {
@@ -314,10 +339,11 @@ const OnlineForm = (props: Props) => {
                           return (
                             <AutocompleteTextInput
                               rules={{
-                                required: field.required && 'baddd',
-                                // `${t(`register_input_${field.id}`)} ${t(
-                                //   'register_input_required',
-                                // )}`,
+                                required:
+                                  field.required &&
+                                  `${t(`register_input_${field.id}`)} ${t(
+                                    'register_input_required',
+                                  )}`,
                                 validate: field.validate,
                               }}
                               type={field.type}

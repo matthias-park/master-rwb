@@ -47,7 +47,5 @@ export interface PostCodeInfo {
 
 export interface RegistrationPostalCodeAutofill {
   valid: boolean;
-  result: {
-    [key: string]: PostCodeInfo;
-  };
+  result: PostCodeInfo[];
 }

@@ -21,11 +21,11 @@ const i18n = () => {
     },
 
     t(key: string, lang?: string) {
-      const val = symbols?.[lang || locale]?.[key] || ''; //`missing symbol: ${key}`;
+      const val = symbols?.[lang || locale]?.[key] || `missing symbol: ${key}`;
       return val;
     },
     jsxT(key: string, lang?: string) {
-      const val = symbols?.[lang || locale]?.[key] || ''; //`missing symbol: ${key}`;
+      const val = symbols?.[lang || locale]?.[key] || `missing symbol: ${key}`;
       return replaceStringTagsReact(val);
     },
   };

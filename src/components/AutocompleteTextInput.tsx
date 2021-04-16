@@ -20,10 +20,26 @@ interface Props {
 }
 
 const AutocompleteTextInput = (props: Props) => {
-  const selectedValue = useRef('');
   const gotFocus = useRef(false);
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<PostCodeInfo[]>([]);
+
+  const search = (query: string) => {
+    setIsLoading(true);
+    props
+      .autoComplete(query)
+      .then((result: PostCodeInfo[]) => {
+        setIsLoading(false);
+        setOptions(result);
+        if (props.error && props.setError) props.setError(null);
+      })
+      .catch(err => {
+        console.log(err);
+        setIsLoading(false);
+        props.setError?.(err);
+        if (options.length) setOptions([]);
+      });
+  };
 
   return (
     <Controller
@@ -31,12 +47,19 @@ const AutocompleteTextInput = (props: Props) => {
       rules={props.rules}
       defaultValue=""
       render={({ field: controlProps }) => {
+        const filteredOptions = options.filter(option => {
+          const formatedLabel = props.labelkey(option);
+          return (
+            formatedLabel.includes(controlProps.value) &&
+            formatedLabel !== controlProps.value
+          );
+        });
         const open =
           !isLoading &&
           gotFocus.current &&
-          (options.length > 1 ||
-            (!!options.length &&
-              props.labelkey(options[0]) !== selectedValue.current));
+          !!filteredOptions.length &&
+          controlProps.value.length > 1;
+
         return (
           <AsyncTypeahead
             isLoading={isLoading}
@@ -47,13 +70,15 @@ const AutocompleteTextInput = (props: Props) => {
             open={open}
             onChange={values => {
               if (values.length) {
-                selectedValue.current = props.labelkey(values[0]);
+                controlProps.onChange(props.labelkey(values[0]));
                 setOptions(values);
               } else {
-                selectedValue.current = '';
+                controlProps.onChange('');
               }
             }}
-            onInputChange={value => (selectedValue.current = value)}
+            onInputChange={value => {
+              controlProps.onChange(value);
+            }}
             onFocus={() => {
               gotFocus.current = true;
             }}
@@ -62,13 +87,12 @@ const AutocompleteTextInput = (props: Props) => {
             defaultInputValue={controlProps.value}
             onBlur={() => {
               gotFocus.current = false;
-              controlProps.onChange(selectedValue.current);
               controlProps.onBlur();
               props.onBlur?.();
               if (
                 props.setError &&
                 !options.some(
-                  option => props.labelkey(option) === selectedValue.current,
+                  option => props.labelkey(option) === controlProps.value,
                 ) &&
                 !props.error
               ) {
@@ -89,22 +113,7 @@ const AutocompleteTextInput = (props: Props) => {
                 />
               );
             }}
-            onSearch={(query: string) => {
-              setIsLoading(true);
-              props
-                .autoComplete(query)
-                .then((result: PostCodeInfo[]) => {
-                  setIsLoading(false);
-                  setOptions(result);
-                  if (props.error && props.setError) props.setError(null);
-                })
-                .catch(err => {
-                  console.log(err);
-                  setIsLoading(false);
-                  props.setError?.(err);
-                  if (options.length) setOptions([]);
-                });
-            }}
+            onSearch={search}
             options={options}
           />
         );
