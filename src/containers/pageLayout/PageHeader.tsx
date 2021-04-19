@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useConfig } from '../../hooks/useConfig';
 import { getApi, postApi } from '../../utils/apiUtils';
+import { setPageLoadingSpinner } from '../../utils/uiUtils';
 import LoginDropdown from '../LoginDropdown';
 import UserInfoBlock from '../../components/header/UserInfoBlock';
 import { Navbar } from 'react-bootstrap';
@@ -26,6 +27,7 @@ const SubNavLinks = () => {
     return postApi('/railsapi/v1/locale', {
       locale: lang,
     })
+      .then(() => setPageLoadingSpinner())
       .then(() => setLocale(lang))
       .then(() => window.location.reload());
   };
