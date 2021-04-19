@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { Form as Field, Value } from '../types/api/JsonFormPage';
 import { Controller, useFormState } from 'react-hook-form';
@@ -20,7 +20,7 @@ interface Props {
 const FieldFromJson = ({ field, size, control, rules, register }: Props) => {
   const { t } = useI18n();
   const [filename, setFilename] = useState('');
-
+  const datePickerRawInput = useRef('');
   const { isSubmitting } = useFormState({
     control,
   });
@@ -64,21 +64,37 @@ const FieldFromJson = ({ field, size, control, rules, register }: Props) => {
       <Controller
         name={field.id}
         control={control}
-        rules={rules}
+        rules={{
+          validate: (value: string) => {
+            if (!datePickerRawInput.current?.trim()) return rules.required;
+            return rules.validate?.(datePickerRawInput.current);
+          },
+        }}
         defaultValue={
           field.default && typeof field.default === 'string'
             ? new Date(field.default)
             : null
         }
-        render={({ field: controlField }) => (
+        render={({ field: controlField, formState }) => (
           <ReactDatePicker
             {...controlField}
             minDate={field.dateFrom ? new Date(field.dateFrom, 1) : null}
             maxDate={field.dateTo ? new Date(field.dateTo, 1) : null}
             selected={controlField.value}
+            onSelect={controlField.onBlur}
+            onChange={date => {
+              if (date) {
+                datePickerRawInput.current = date.toString();
+                controlField.onChange(date);
+              }
+            }}
+            onChangeRaw={e => (datePickerRawInput.current = e.target.value)}
             wrapperClassName="d-block"
             customInput={
-              <Form.Group key={field.id}>
+              <Form.Group
+                key={field.id}
+                className={clsx(formState.errors[field.id] && 'has-error')}
+              >
                 <Form.Control
                   size={size}
                   id={field.id}
@@ -96,6 +112,11 @@ const FieldFromJson = ({ field, size, control, rules, register }: Props) => {
                 >
                   {field.title}
                 </label>
+                <small className="form-group__error-msg">
+                  {formState.errors[field.id]
+                    ? `${field.title} ${formState.errors[field.id].message}`
+                    : t('input_generic_error_msg')}
+                </small>
               </Form.Group>
             }
             showMonthDropdown
@@ -139,7 +160,8 @@ const FieldFromJson = ({ field, size, control, rules, register }: Props) => {
       rules={{
         ...rules,
         validate: value => {
-          if (isFieldSelect && value === '-1') return 'value not selected';
+          if (isFieldSelect && value === '-1')
+            return t('contact_us_select_required');
           return rules.validate?.(value);
         },
       }}
@@ -185,7 +207,7 @@ const FieldFromJson = ({ field, size, control, rules, register }: Props) => {
           </div>
           <small className="form-group__error-msg">
             {formState.errors[field.id]
-              ? formState.errors[field.id].message
+              ? `${field.title} ${formState.errors[field.id].message}`
               : t('input_generic_error_msg')}
           </small>
         </Form.Group>

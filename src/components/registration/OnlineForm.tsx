@@ -74,7 +74,7 @@ const blocks = (
               cache.set(cacheId, response);
             }
           }
-          if (!response.Success) {
+          if (response.Fallback) {
             return t('api_response_failed');
           }
           if (

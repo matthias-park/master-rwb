@@ -117,10 +117,8 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
                 <LoadingButton
                   loading={formState.isSubmitting}
                   disabled={
-                    !fileIds.some(id => {
-                      console.log(id, !!watch(id, []).length);
-                      return !!watch(id, []).length;
-                    }) || !watch('password')
+                    !fileIds.some(id => !!watch(id, [])?.length) ||
+                    !watch('password')
                   }
                   className="mt-3"
                   variant="primary"

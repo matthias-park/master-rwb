@@ -14,6 +14,7 @@ import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
 import isEqual from 'lodash.isequal';
 import { REGEX_EXPRESSION, VALIDATIONS } from '../../constants';
+import { isValid as isDateValid } from 'date-fns';
 
 const fieldValidations = {
   first_name: (value: string) =>
@@ -24,6 +25,8 @@ const fieldValidations = {
     VALIDATIONS.phone(value) || 'phone_number_invalid',
   text: (value: string) =>
     !!value.trim().length || 'contact_page_field_required',
+  date_of_birth: (value: string) =>
+    isDateValid(new Date(value)) || 'contact_us_invalid_date',
 };
 
 const ContactUsPage = () => {
