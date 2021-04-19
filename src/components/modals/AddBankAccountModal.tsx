@@ -16,7 +16,7 @@ interface Props {
 const AddBankAccountModal = ({ onSubmit }: Props) => {
   const { t } = useI18n();
   const [apiError, setApiErr] = useState('');
-  const { isModalActive, disableModal } = useModal();
+  const { activeModal, disableModal } = useModal();
   const formMethods = useForm({
     mode: 'onBlur',
   });
@@ -32,7 +32,7 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
   return (
     <GenericModal
       isCentered
-      show={isModalActive(ComponentName.AddBankAccountModal)}
+      show={activeModal === ComponentName.AddBankAccountModal}
       hideCallback={() => disableModal(ComponentName.AddBankAccountModal)}
     >
       <h2 className="mb-2 text-gray-800">{t('add_bank_modal_title')}</h2>

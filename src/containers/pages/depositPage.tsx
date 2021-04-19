@@ -18,14 +18,14 @@ const DepositPage = () => {
   const { addToast } = useToasts();
   const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
   const bankAccount = useUserBankAccountModal();
-  const { enableModal, activeModals } = useModal();
+  const { enableModal, allActiveModals } = useModal();
   const { t } = useI18n();
   const { bankResponse } = useParams<{ bankResponse?: string }>();
   const [depositLoading, setDepositLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const depositBaseUrl = useRoutePath(PagesName.DepositPage, true);
   const addBankAccountModalActivePrevious = usePrevious(
-    activeModals.includes(ComponentName.AddBankAccountModal),
+    allActiveModals.includes(ComponentName.AddBankAccountModal),
   );
 
   useEffect(() => {
@@ -35,12 +35,12 @@ const DepositPage = () => {
   }, [bankAccount.loading]);
   useEffect(() => {
     if (
-      !activeModals.includes(ComponentName.AddBankAccountModal) &&
+      !allActiveModals.includes(ComponentName.AddBankAccountModal) &&
       addBankAccountModalActivePrevious
     ) {
       bankAccount.refresh();
     }
-  }, [activeModals]);
+  }, [allActiveModals]);
 
   const questionItems = useMemo(
     () => [

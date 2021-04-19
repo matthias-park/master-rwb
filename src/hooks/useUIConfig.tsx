@@ -6,7 +6,6 @@ import {
   removePageLoadingSpinner,
 } from '../utils/uiUtils';
 import { UIBackdropState } from '../types/UIConfig';
-import { ComponentName } from '../constants';
 import { useConfig } from './useConfig';
 import { useLocation } from 'react-router';
 import { createHeaderNavProviderValues } from '../utils/uiUtils';

@@ -1,6 +1,5 @@
 import useLocalStorage from '../hooks/useLocalStorage';
 import React from 'react';
-import { useUIConfig } from '../hooks/useUIConfig';
 import { ComponentName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
 import useStorage from '../hooks/useStorage';

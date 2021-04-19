@@ -1,50 +1,13 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { ComponentName } from '../constants';
 
-enum ModalContextActionType {
-  ON,
-  OFF,
-}
-interface ModalContextState {
-  modals: ComponentName[];
-}
+type ModalContextState = ComponentName[];
 interface ModalContext {
-  activeModals: ComponentName[];
-  isModalActive: (name: ComponentName) => boolean;
+  allActiveModals: ComponentName[];
+  activeModal?: ComponentName;
   enableModal: (name: ComponentName) => void;
   disableModal: (name: ComponentName) => void;
 }
-interface ModalContextAction {
-  type: ModalContextActionType;
-  name?: ComponentName;
-}
-
-const initialState: ModalContextState = {
-  modals: [],
-};
-
-const reducer = (
-  state: ModalContextState,
-  { type, name }: ModalContextAction,
-) => {
-  const { modals } = state;
-  switch (type) {
-    case ModalContextActionType.ON: {
-      if (name && !modals.includes(name)) {
-        modals.push(name);
-      }
-      break;
-    }
-    case ModalContextActionType.OFF: {
-      if (name && modals.includes(name)) {
-        const elIndex = modals.indexOf(name);
-        modals.splice(elIndex, 1);
-      }
-      break;
-    }
-  }
-  return state;
-};
 
 export const modalContext = createContext<ModalContext | null>(null);
 
@@ -59,14 +22,28 @@ export function useModal(): ModalContext {
 }
 
 export const ModalProvider = props => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [modals, setModals] = useState<ModalContextState>([]);
+
+  const enableModal = (name: ComponentName) => {
+    if (name && !modals.includes(name)) {
+      setModals([...modals, name]);
+    }
+  };
+
+  const disableModal = (name: ComponentName) => {
+    if (name && modals.includes(name)) {
+      const elIndex = modals.indexOf(name);
+      const newModals = [...modals];
+      newModals.splice(elIndex, 1);
+      setModals(newModals);
+    }
+  };
+
   const value = {
-    activeModals: state.modals,
-    isModalActive: (name: ComponentName) => state.modals[0] === name,
-    enableModal: (name: ComponentName) =>
-      dispatch({ type: ModalContextActionType.ON, name }),
-    disableModal: (name: ComponentName) =>
-      dispatch({ type: ModalContextActionType.OFF, name }),
+    allActiveModals: modals,
+    activeModal: modals[0],
+    enableModal,
+    disableModal,
   };
   return (
     <modalContext.Provider value={value}>

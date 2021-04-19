@@ -18,11 +18,11 @@ import CustomAlert from '../../components/CustomAlert';
 import WithdrawalConfirmModal from '../../components/modals/WithdrawalConfirmModal';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { ComponentName } from '../../constants';
-import { useUIConfig } from '../../hooks/useUIConfig';
 import useApi from '../../hooks/useApi';
 import isEqual from 'lodash.isequal';
 import LoadingButton from '../../components/LoadingButton';
 import { useModal } from '../../hooks/useModal';
+import { usePrevious } from '../../hooks';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -112,7 +112,7 @@ const WithdrawalPage = () => {
     return userEqual && localeEqual;
   });
   const { addToast } = useToasts();
-  const { enableModal } = useModal();
+  const { enableModal, allActiveModals } = useModal();
   const [submitResponse, setSubmitResponse] = useState<{
     success: boolean;
     msg: string | null;
@@ -122,6 +122,9 @@ const WithdrawalPage = () => {
     withdrawalConfirmData,
     setWithdrawalConfirmData,
   ] = useState<WithdrawalConfirmation | null>(null);
+  const addBankAccountModalActivePrevious = usePrevious(
+    allActiveModals.includes(ComponentName.AddBankAccountModal),
+  );
   const { data, error, mutate } = useApi<RailsApiResponse<Withdrawal>>(
     '/railsapi/v1/withdrawals',
   );
@@ -133,6 +136,14 @@ const WithdrawalPage = () => {
       mutate();
     }
   }, [data]);
+  useEffect(() => {
+    if (
+      !allActiveModals.includes(ComponentName.AddBankAccountModal) &&
+      addBankAccountModalActivePrevious
+    ) {
+      mutate();
+    }
+  }, [allActiveModals]);
   useEffect(() => {
     if (data?.Data.translations) {
       set(

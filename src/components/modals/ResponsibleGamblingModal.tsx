@@ -14,8 +14,8 @@ const ResponsibleGamblingModal = () => {
   );
   const { t } = useI18n();
   const intervalRef = useRef(0);
-  const { isModalActive, enableModal, disableModal } = useModal();
-  const modalActive = isModalActive(ComponentName.ResponsibleGamblingModal);
+  const { activeModal, enableModal, disableModal } = useModal();
+  const modalActive = activeModal === ComponentName.ResponsibleGamblingModal;
   useEffect(() => {
     const setModal = () => {
       enableModal(ComponentName.ResponsibleGamblingModal);

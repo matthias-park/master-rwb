@@ -16,7 +16,7 @@ const CookiePolicyModal = () => {
   const [cookieSettings, setCookieSettings] = useState<Storage>(
     storage.cookies,
   );
-  const { isModalActive, disableModal } = useModal();
+  const { activeModal, disableModal } = useModal();
   const toggleCookie = (e: React.SyntheticEvent<EventTarget>, id: string) => {
     e.stopPropagation();
     setCookieSettings({ ...cookieSettings, [id]: !cookieSettings[id] });
@@ -40,7 +40,7 @@ const CookiePolicyModal = () => {
   return (
     <Modal
       centered
-      show={isModalActive(ComponentName.CookiesModal)}
+      show={activeModal === ComponentName.CookiesModal}
       onHide={() => disableModal(ComponentName.CookiesModal)}
     >
       <Modal.Body className="custom-modal">
