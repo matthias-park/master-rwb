@@ -25,9 +25,6 @@ const DepositPage = () => {
   const [apiError, setApiError] = useState<string | null>(null);
   const depositBaseUrl = useRoutePath(PagesName.DepositPage, true);
   useEffect(() => {
-    console.log(
-      user.logged_in && !bankAccount.loading && !bankAccount.hasBankAccount,
-    );
     if (user.logged_in && !bankAccount.loading && !bankAccount.hasBankAccount) {
       setShowModal(ComponentName.AddBankAccountModal);
     }

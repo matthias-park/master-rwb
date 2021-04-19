@@ -16,7 +16,7 @@ const ApiHead = () => {
     const configLoadedEqual = prev.configLoaded === next.configLoaded;
     return localeEqual && localesEqual && routesEqual && configLoadedEqual;
   });
-  const { t } = useI18n();
+  const { t, table } = useI18n();
   const { pathname, hash } = useLocation();
   const pathInfo = routes.find(
     route =>
@@ -36,6 +36,7 @@ const ApiHead = () => {
     },
   );
   const seoData = data?.Success ? data?.Data : null;
+  const translationsLoaded = !!Object.keys(table()).length;
   const fallbackTitle =
     t(`sitemap_${pathInfo?.name}`) +
     (t(`sitemap_${pathInfo?.name}`).length ? ' - ' : '') +
@@ -43,7 +44,7 @@ const ApiHead = () => {
   return (
     <>
       <Helmet htmlAttributes={{ lang: locale }}>
-        <title>{seoData?.title || fallbackTitle}</title>
+        {translationsLoaded && <title>{seoData?.title || fallbackTitle}</title>}
         <meta property="og:title" content={seoData?.title || fallbackTitle} />
         <meta
           name="description"
