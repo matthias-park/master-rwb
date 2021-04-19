@@ -99,6 +99,7 @@ const FieldFromJson = ({ field, size, control, rules, register }: Props) => {
                   size={size}
                   id={field.id}
                   name={field.id}
+                  isInvalid={formState.errors[field.id]}
                   value={
                     controlField.value &&
                     dayjs(controlField.value).format('YYYY-MM-DD')
@@ -112,6 +113,10 @@ const FieldFromJson = ({ field, size, control, rules, register }: Props) => {
                 >
                   {field.title}
                 </label>
+                <div className="form-group__icons">
+                  <i className="icon-check"></i>
+                  <i className="icon-exclamation"></i>
+                </div>
                 <small className="form-group__error-msg">
                   {formState.errors[field.id]
                     ? `${field.title} ${formState.errors[field.id].message}`

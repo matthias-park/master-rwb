@@ -1,5 +1,7 @@
 import React from 'react';
 import Accordion from 'react-bootstrap/Accordion';
+import { PagesName } from '../../constants';
+import { useRoutePath } from '../../hooks';
 import { useI18n } from '../../hooks/useI18n';
 import Link from '../Link';
 
@@ -32,6 +34,7 @@ const QuestionItem = ({ item, index }) => {
 
 const QuestionsContainer = ({ items }: Props) => {
   const { t } = useI18n();
+  const faqRoute = useRoutePath(PagesName.FaqPage);
   return (
     <>
       <h3 className="mb-3">{t('user_questions')}</h3>
@@ -41,7 +44,7 @@ const QuestionsContainer = ({ items }: Props) => {
         })}
       </Accordion>
       <u className="d-block text-center my-3 text-14 font-weight-bold">
-        <Link to="/">{t('user_all_faq')}</Link>
+        <Link to={faqRoute}>{t('user_all_faq')}</Link>
       </u>
     </>
   );
