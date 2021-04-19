@@ -5,8 +5,8 @@ import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
 import Lockr from 'lockr';
 import { stringToMiliseconds } from '../../utils/index';
-import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName } from '../../constants';
+import { useModal } from '../../hooks/useModal';
 
 const ResponsibleGamblingModal = () => {
   const { user } = useConfig(
@@ -14,26 +14,26 @@ const ResponsibleGamblingModal = () => {
   );
   const { t } = useI18n();
   const intervalRef = useRef(0);
-  const { showModal, setShowModal } = useUIConfig();
-
+  const { isModalActive, enableModal, disableModal } = useModal();
+  const modalActive = isModalActive(ComponentName.ResponsibleGamblingModal);
   useEffect(() => {
     const setModal = () => {
-      setShowModal(ComponentName.ResponsibleGamblingModal);
+      enableModal(ComponentName.ResponsibleGamblingModal);
     };
     const interval = stringToMiliseconds(
       Lockr.get('responsibleGamlingInterval', '0:20:0'),
     );
-    if (!showModal && user.logged_in && interval) {
+    if (!modalActive && user.logged_in && interval) {
       intervalRef.current = setInterval(setModal, interval);
     }
     return () => clearInterval(intervalRef.current);
-  }, [showModal, user]);
+  }, [modalActive, user]);
 
-  const hideModal = () => setShowModal(null);
+  const hideModal = () => disableModal(ComponentName.ResponsibleGamblingModal);
 
   return (
     <GenericModal
-      show={showModal === ComponentName.ResponsibleGamblingModal}
+      show={modalActive}
       hideCallback={hideModal}
       isCentered={true}
       isStatic={true}

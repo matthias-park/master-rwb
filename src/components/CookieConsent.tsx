@@ -5,9 +5,10 @@ import { ComponentName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
 import useStorage from '../hooks/useStorage';
 import { Storage } from '../types/Storage';
+import { useModal } from '../hooks/useModal';
 
 const CookieConsent = () => {
-  const { setShowModal } = useUIConfig();
+  const { enableModal } = useModal();
   const { jsxT, t } = useI18n();
   const storage = useStorage();
   const [cookiesAccepted, setCookiesAccepted] = useLocalStorage(
@@ -33,7 +34,7 @@ const CookieConsent = () => {
         {jsxT('cookie_consent_desc')}{' '}
         <span
           className="cursor-pointer"
-          onClick={() => setShowModal(ComponentName.CookiesModal)}
+          onClick={() => enableModal(ComponentName.CookiesModal)}
         >
           {t('cookie_consent_open_policy')}
         </span>

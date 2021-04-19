@@ -6,6 +6,7 @@ import { useI18n } from '../../hooks/useI18n';
 import Spinner from 'react-bootstrap/Spinner';
 import Link from '../Link';
 import { cache as SWRCache } from 'swr';
+import { useModal } from '../../hooks/useModal';
 
 const UserMenuLink = ({ link, name, setShowDropdown }) => (
   <li className="user-menu__list-item">
@@ -23,10 +24,11 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const { t } = useI18n();
   const [loggingOut, setLoggingOut] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const { backdrop, showModal } = useUIConfig();
+  const { backdrop } = useUIConfig();
+  const { activeModals } = useModal();
 
   const showUserMenu = isOpen => {
-    if (!!showModal) return;
+    if (!!activeModals.length) return;
     setShowDropdown(isOpen);
     backdrop.toggle(isOpen, [ComponentName.Header]);
   };

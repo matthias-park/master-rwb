@@ -22,6 +22,7 @@ import { useUIConfig } from '../../hooks/useUIConfig';
 import useApi from '../../hooks/useApi';
 import isEqual from 'lodash.isequal';
 import LoadingButton from '../../components/LoadingButton';
+import { useModal } from '../../hooks/useModal';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -111,7 +112,7 @@ const WithdrawalPage = () => {
     return userEqual && localeEqual;
   });
   const { addToast } = useToasts();
-  const { setShowModal } = useUIConfig();
+  const { enableModal } = useModal();
   const [submitResponse, setSubmitResponse] = useState<{
     success: boolean;
     msg: string | null;
@@ -127,7 +128,7 @@ const WithdrawalPage = () => {
   const isDataLoading = !data && !error;
   useEffect(() => {
     if (user.logged_in && data && !data.Data.default_account) {
-      setShowModal(ComponentName.AddBankAccountModal);
+      enableModal(ComponentName.AddBankAccountModal);
     } else {
       mutate();
     }

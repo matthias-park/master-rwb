@@ -1,6 +1,6 @@
 import { Request, NextFunction, Response } from 'express';
 import { getRailsConstants } from '../utils';
-// import { ALL_LOCALES_ISO } from '../constants';
+import { matchPath } from 'react-router-dom';
 
 const routeExistCheck = async (
   req: Request,
@@ -13,8 +13,8 @@ const routeExistCheck = async (
   const locale = localeUrlMatch?.[1];
   const urlWithoutLocale = req.url.replace(`/${locale}/`, '/');
   if (
-    railsContants.navigation_routes.some(
-      route => route.path === urlWithoutLocale,
+    railsContants.navigation_routes.some(route =>
+      matchPath(urlWithoutLocale, route.path),
     )
   ) {
     return next();

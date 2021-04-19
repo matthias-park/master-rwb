@@ -6,19 +6,22 @@ import ApiHead from './ApiHead';
 import PageLayout from './pageLayout';
 import Modals from './Modals';
 import { UIConfigProvider } from '../hooks/useUIConfig';
+import { ModalProvider } from '../hooks/useModal';
 
 const App = () => {
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
 
   return (
     <BrowserRouter key={locale} basename={`/${locale}`}>
-      <UIConfigProvider>
-        <ApiHead />
-        <Modals />
-        <PageLayout>
-          <Routes />
-        </PageLayout>
-      </UIConfigProvider>
+      <ModalProvider>
+        <UIConfigProvider>
+          <ApiHead />
+          <Modals />
+          <PageLayout>
+            <Routes />
+          </PageLayout>
+        </UIConfigProvider>
+      </ModalProvider>
     </BrowserRouter>
   );
 };

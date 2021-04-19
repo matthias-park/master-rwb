@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { useI18n } from '../../hooks/useI18n';
-import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName } from '../../constants';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { ControlledTextInput } from '../TextInput';
 import CustomAlert from '../CustomAlert';
 import LoadingButton from '../LoadingButton';
 import GenericModal from '../../components/modals/GenericModal';
+import { useModal } from '../../hooks/useModal';
 
 interface Props {
   onSubmit: SubmitHandler<Record<string, any>>;
@@ -16,7 +16,7 @@ interface Props {
 const AddBankAccountModal = ({ onSubmit }: Props) => {
   const { t } = useI18n();
   const [apiError, setApiErr] = useState('');
-  const { showModal, setShowModal } = useUIConfig();
+  const { isModalActive, disableModal } = useModal();
   const formMethods = useForm({
     mode: 'onBlur',
   });
@@ -26,14 +26,14 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
       return setApiErr(result);
     }
     if (result) {
-      return setShowModal(null);
+      return disableModal(ComponentName.AddBankAccountModal);
     }
   };
   return (
     <GenericModal
       isCentered
-      show={showModal === ComponentName.AddBankAccountModal}
-      hideCallback={() => setShowModal(null)}
+      show={isModalActive(ComponentName.AddBankAccountModal)}
+      hideCallback={() => disableModal(ComponentName.AddBankAccountModal)}
     >
       <h2 className="mb-2 text-gray-800">{t('add_bank_modal_title')}</h2>
       <CustomAlert

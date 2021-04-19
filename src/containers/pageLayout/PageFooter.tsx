@@ -4,7 +4,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import useDesktopWidth from '../../hooks/useDesktopWidth';
 import SessionTimer from '../../components/SessionTimer';
 import { useI18n } from '../../hooks/useI18n';
-import { useUIConfig } from '../../hooks/useUIConfig';
 import { sortAscending } from '../../utils/index';
 import { useConfig } from '../../hooks/useConfig';
 import useGTM from '../../hooks/useGTM';
@@ -15,6 +14,7 @@ import {
   Partners,
 } from '../../types/api/PageConfig';
 import Link from '../../components/Link';
+import { useModal } from '../../hooks/useModal';
 
 const FooterHeader = () => {
   const { t } = useI18n();
@@ -56,7 +56,7 @@ const FooterHeader = () => {
 
 const FooterBottom = ({ data }: { data?: SubFooter }) => {
   const { t } = useI18n();
-  const { setShowModal } = useUIConfig();
+  const { enableModal } = useModal();
   return (
     <div className="row no-gutters footer-sub">
       <ul className="footer-sub__nav mr-auto">
@@ -70,7 +70,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
               {link.link ? (
                 <Link to={link.link}>{t(link.name)}</Link>
               ) : (
-                <span onClick={() => setShowModal(link.modal)}>
+                <span onClick={() => link.modal && enableModal(link.modal)}>
                   {t(link.name)}
                 </span>
               )}

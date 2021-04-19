@@ -16,8 +16,6 @@ export type HeaderActiveNav = {
 
 type UIConfig = {
   backdrop: UIBackdrop;
-  showModal: ComponentName | null;
-  setShowModal: (ComponentName) => void;
   headerNav: HeaderActiveNav;
 };
 

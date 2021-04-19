@@ -6,8 +6,8 @@ import Accordion from 'react-bootstrap/Accordion';
 import CustomToggleCheck from '../CustomToggleCheck';
 import useStorage from '../../hooks/useStorage';
 import { Storage } from '../../types/Storage';
-import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName } from '../../constants';
+import { useModal } from '../../hooks/useModal';
 
 const CookiePolicyModal = () => {
   const { t } = useI18n();
@@ -16,8 +16,7 @@ const CookiePolicyModal = () => {
   const [cookieSettings, setCookieSettings] = useState<Storage>(
     storage.cookies,
   );
-  const { showModal, setShowModal } = useUIConfig();
-
+  const { isModalActive, disableModal } = useModal();
   const toggleCookie = (e: React.SyntheticEvent<EventTarget>, id: string) => {
     e.stopPropagation();
     setCookieSettings({ ...cookieSettings, [id]: !cookieSettings[id] });
@@ -35,19 +34,19 @@ const CookiePolicyModal = () => {
       );
     }
     storage.save(cookieSettings);
-    return setShowModal(null);
+    return disableModal(ComponentName.CookiesModal);
   };
 
   return (
     <Modal
       centered
-      show={showModal === ComponentName.CookiesModal}
-      onHide={() => setShowModal(null)}
+      show={isModalActive(ComponentName.CookiesModal)}
+      onHide={() => disableModal(ComponentName.CookiesModal)}
     >
       <Modal.Body className="custom-modal">
         <i
           className="icon-close custom-modal__close"
-          onClick={() => setShowModal(null)}
+          onClick={() => disableModal(ComponentName.CookiesModal)}
         ></i>
         <h2 className="mb-2 text-gray-800">{t('cookie_modal_title')}</h2>
         <p className="text-gray-700">{t('cookie_modal_text')}</p>

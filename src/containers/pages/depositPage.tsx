@@ -7,28 +7,40 @@ import { DepositRequest, DepositResponse } from '../../types/api/user/Deposit';
 import { useToasts } from 'react-toast-notifications';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
-import { useUIConfig } from '../../hooks/useUIConfig';
 import { ComponentName, PagesName } from '../../constants';
 import isEqual from 'lodash.isequal';
 import CustomAlert from '../../components/CustomAlert';
 import useUserBankAccountModal from '../../hooks/useUserBankAccountModal';
-import { useRoutePath } from '../../hooks';
+import { usePrevious, useRoutePath } from '../../hooks';
+import { useModal } from '../../hooks/useModal';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
   const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
   const bankAccount = useUserBankAccountModal();
-  const { setShowModal } = useUIConfig();
+  const { enableModal, activeModals } = useModal();
   const { t } = useI18n();
   const { bankResponse } = useParams<{ bankResponse?: string }>();
   const [depositLoading, setDepositLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const depositBaseUrl = useRoutePath(PagesName.DepositPage, true);
+  const addBankAccountModalActivePrevious = usePrevious(
+    activeModals.includes(ComponentName.AddBankAccountModal),
+  );
+
   useEffect(() => {
     if (user.logged_in && !bankAccount.loading && !bankAccount.hasBankAccount) {
-      setShowModal(ComponentName.AddBankAccountModal);
+      enableModal(ComponentName.AddBankAccountModal);
     }
   }, [bankAccount.loading]);
+  useEffect(() => {
+    if (
+      !activeModals.includes(ComponentName.AddBankAccountModal) &&
+      addBankAccountModalActivePrevious
+    ) {
+      bankAccount.refresh();
+    }
+  }, [activeModals]);
 
   const questionItems = useMemo(
     () => [

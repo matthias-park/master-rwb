@@ -40,7 +40,6 @@ export const UIConfigProvider = props => {
     active: false,
     ignoredComponents: [],
   });
-  const [showModal, setShowModal] = useState<ComponentName | null>(null);
   const headerNav = createHeaderNavProviderValues(
     activeHeaderNav,
     setActiveHeaderNav,
@@ -69,8 +68,6 @@ export const UIConfigProvider = props => {
 
   const value: UIConfig = {
     backdrop: createBackdropProviderValues(backdrop, setBackdrop),
-    showModal: showModal,
-    setShowModal: setShowModal,
     headerNav,
   };
   return <uiConfig.Provider value={value}>{props.children}</uiConfig.Provider>;

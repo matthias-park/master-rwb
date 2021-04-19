@@ -16,6 +16,7 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import useGTM from '../hooks/useGTM';
 import LoadingButton from '../components/LoadingButton';
 import Link from '../components/Link';
+import { useModal } from '../hooks/useModal';
 
 interface Props {
   dropdownClasses?: string;
@@ -30,7 +31,7 @@ const LoginForm = ({
 }) => {
   const { t } = useI18n();
   const [apiError, setApiError] = useState<string | null>(null);
-  const { setShowModal } = useUIConfig();
+  const { enableModal } = useModal();
   const formMethods = useForm<{
     email: string;
     password: string;
@@ -66,7 +67,7 @@ const LoginForm = ({
         'tglab.GUID': response.Data.PlayerId!,
         event: 'SuccessfulLogin',
       });
-      setShowModal(ComponentName.ResponsibleGamblingModal);
+      enableModal(ComponentName.ResponsibleGamblingModal);
       return mutateUser(
         {
           id: response.Data.PlayerId,
