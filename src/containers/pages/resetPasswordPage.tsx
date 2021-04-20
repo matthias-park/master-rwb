@@ -111,11 +111,7 @@ const ForgotPasswordPage = () => {
             />
             <LoadingButton
               variant="primary"
-              disabled={
-                !!formState.errors.email ||
-                !formState.isValid ||
-                !!apiResponse?.success
-              }
+              disabled={!watch('password') || !watch('repeat_password')}
               loading={formState.isSubmitting}
               type="submit"
               data-testid="button"

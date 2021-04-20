@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useConfig } from '../hooks/useConfig';
-import { useLocation } from 'react-router-dom';
+import { useLocation, matchPath } from 'react-router-dom';
 import SeoPages from '../types/api/content/SeoPages';
 import { postApi } from '../utils/apiUtils';
 import RailsApiResponse from '../types/api/RailsApiResponse';
@@ -18,9 +18,8 @@ const ApiHead = () => {
   });
   const { t, table } = useI18n();
   const { pathname, hash } = useLocation();
-  const pathInfo = routes.find(
-    route =>
-      `${pathname}${hash}`.startsWith(route.path) || route.path === pathname,
+  const pathInfo = routes.find(route =>
+    matchPath(`${pathname}${hash}`, route.path),
   );
   const params = useMemo(
     () => ({
