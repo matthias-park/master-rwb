@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useConfig } from '../../hooks/useConfig';
 import { useI18n } from '../../hooks/useI18n';
 import { postApi } from '../../utils/apiUtils';
+import { setPageLoadingSpinner } from '../../utils/uiUtils';
 import LoadingButton from '../../components/LoadingButton';
 
 const LANGUAGE = {
@@ -37,6 +38,7 @@ const LocaleSelectPage = () => {
     return postApi('/railsapi/v1/locale', {
       locale: lang,
     })
+      .then(() => setPageLoadingSpinner())
       .then(() => setLocale(lang))
       .then(() =>
         link
