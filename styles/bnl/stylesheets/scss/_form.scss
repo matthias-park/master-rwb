@@ -66,7 +66,8 @@
           right: 8px;
         }
     }
-    select {
+    select,
+    select.is-invalid {
       + #{ $self }__icons {
         right: 10px; 
       }
@@ -140,6 +141,9 @@
       height: 38px;
       padding-left: 12px;
       font-size: 15px;
+      &.is-invalid {
+        border-color: $danger;
+      }
     }
   }
   + .react-datepicker {

@@ -93,7 +93,10 @@ const FieldFromJson = ({ field, size, control, rules, register }: Props) => {
             customInput={
               <Form.Group
                 key={field.id}
-                className={clsx(formState.errors[field.id] && 'has-error')}
+                className={clsx(
+                  formState.errors[field.id] && 'has-error',
+                  formState.errors[field.id]?.message && 'with-message',
+                )}
               >
                 <Form.Control
                   size={size}
@@ -176,7 +179,10 @@ const FieldFromJson = ({ field, size, control, rules, register }: Props) => {
       render={({ field: controlField, formState }) => (
         <Form.Group
           key={field.id}
-          className={clsx(formState.errors[field.id] && 'has-error')}
+          className={clsx(
+            formState.errors[field.id] && 'has-error',
+            formState.errors[field.id]?.message && 'with-message',
+          )}
         >
           <Form.Control
             data-testid={formGroupAs}
