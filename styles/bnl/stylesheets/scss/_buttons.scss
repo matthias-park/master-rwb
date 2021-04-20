@@ -24,20 +24,6 @@
     }
 }
 
-.btn-header {
-  min-height: 44px;
-  border-radius: 16px;
-  padding: 0 20px;
-  font-size: 13px;
-  min-width: 85px;
-  @include media-breakpoint-down(lg) {
-    min-height: 39px;
-  }
-  @include media-breakpoint-down(xs) {
-    padding: 0 12px;
-  }
-}
-
 .btn-primary,
 .btn-primary.disabled,
 .btn-primary:disabled {
@@ -54,11 +40,10 @@
 }
 
 .btn-light {
-    color: $brand-light;
     &:hover,
     &:active,
     &:focus {
-        background-color: $brand-light;
+        background-color: $primary;
         color: $white;
     }
 }

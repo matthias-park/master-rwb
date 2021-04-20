@@ -124,6 +124,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
   return (
     <LoginDropdown
       dropdownClasses={mobile ? 'ml-auto mr-0' : 'ml-auto mt-0 mt-lg-2'}
+      toggleClasses={clsx(mobile && 'ml-auto')}
       userLoading={user.loading}
     />
   );

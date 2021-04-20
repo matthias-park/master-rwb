@@ -240,18 +240,13 @@ const LoginDropdown = ({
       show={showDropdown}
       onToggle={toggleDropdown}
     >
-      <Link
-        className="btn btn-light btn-header mr-2 mr-xl-3 ml-auto"
-        to="/register"
-      >
-        {t('register_btn')}
-      </Link>
       <Dropdown.Toggle
         variant="primary"
-        className={`dropdown-toggle login-dropdown__toggle btn-header ${toggleClasses}`}
+        className={`dropdown-toggle login-dropdown__toggle ${toggleClasses}`}
         disabled={userLoading}
       >
         {t('login_btn')}
+        <i className="icon-account mr-0 ml-2"></i>
         {userLoading && (
           <Spinner
             as="span"
