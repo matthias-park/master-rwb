@@ -19,7 +19,10 @@ const ApiHead = () => {
   const { t, table } = useI18n();
   const { pathname, hash } = useLocation();
   const pathInfo = routes.find(route =>
-    matchPath(`${pathname}${hash}`, route.path),
+    matchPath(`${pathname}${hash}`, {
+      path: route.path,
+      exact: route.exact ?? true,
+    }),
   );
   const params = useMemo(
     () => ({

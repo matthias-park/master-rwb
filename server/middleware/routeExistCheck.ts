@@ -14,7 +14,10 @@ const routeExistCheck = async (
   const urlWithoutLocale = req.url.replace(`/${locale}/`, '/');
   if (
     railsContants.navigation_routes.some(route =>
-      matchPath(urlWithoutLocale, route.path),
+      matchPath(urlWithoutLocale, {
+        path: route.path,
+        exact: route.exact ?? true,
+      }),
     )
   ) {
     return next();
