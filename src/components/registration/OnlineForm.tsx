@@ -322,9 +322,10 @@ const OnlineForm = (props: Props) => {
                             id={field.id}
                             key={field.id}
                             name={field.name || field.id}
-                            label={jsxT(`register_input_${field.id}`)}
-                            className="mb-4 custom-control-inline"
+                            label={jsxT(`register_input_${field.id}_label`)}
+                            className={'mb-4'}
                             isInvalid={formState.errors[field.id]}
+                            feedback={formState.errors[field.id]?.message}
                           />
                         );
                       }
@@ -399,6 +400,7 @@ const OnlineForm = (props: Props) => {
                             placeholder={t(`register_input_${field.id}`)}
                             toggleVisibility={field.type === 'password'}
                             inputFormatting={field.inputFormatting}
+                            tooltip={field.id === 'personal_code'}
                           />
                         );
                       }
