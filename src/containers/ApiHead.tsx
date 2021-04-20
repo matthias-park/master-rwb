@@ -7,6 +7,7 @@ import { postApi } from '../utils/apiUtils';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { useI18n } from '../hooks/useI18n';
 import useApi from '../hooks/useApi';
+import { sortDescending } from '../utils';
 
 const ApiHead = () => {
   const { locales, locale, routes, configLoaded } = useConfig((prev, next) => {
@@ -18,12 +19,16 @@ const ApiHead = () => {
   });
   const { t, table } = useI18n();
   const { pathname, hash } = useLocation();
-  const pathInfo = routes.find(route =>
-    matchPath(`${pathname}${hash}`, {
-      path: route.path,
-      exact: route.exact ?? true,
-    }),
-  );
+  const pathInfo = routes
+    .sort((a, b) => sortDescending(a.path.length, b.path.length))
+    .find(route => {
+      const match = (path: string) =>
+        matchPath(path, {
+          path: route.path,
+          exact: route.exact ?? true,
+        });
+      return match(`${pathname}${hash}`) || match(`${pathname}`);
+    });
   const params = useMemo(
     () => ({
       slug: pathname,
