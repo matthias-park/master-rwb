@@ -16,14 +16,10 @@ interface Props {
 const AddBankAccountModal = ({ onSubmit }: Props) => {
   const { t } = useI18n();
   const [apiError, setApiErr] = useState('');
-  const { activeModal, disableModal } = useModal();
+  const { disableModal } = useModal();
   const formMethods = useForm({
     mode: 'onBlur',
   });
-  const isModalActive = activeModal === ComponentName.AddBankAccountModal;
-  useEffect(() => {
-    formMethods.reset();
-  }, [isModalActive]);
   const handleSubmit = async ({ account_number }) => {
     const result = await onSubmit({ account_number: `BE${account_number}` });
     if (typeof result === 'string') {
@@ -36,7 +32,7 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
   return (
     <GenericModal
       isCentered
-      show={isModalActive}
+      show
       hideCallback={() => disableModal(ComponentName.AddBankAccountModal)}
     >
       <h2 className="mb-2 text-gray-800">{t('add_bank_modal_title')}</h2>

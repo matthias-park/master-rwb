@@ -400,7 +400,7 @@ export const REGEX_EXPRESSION = {
 
 export const VALIDATIONS = {
   name: value =>
-    (value.length > 1 &&
+    (!!value.length &&
       REGEX_EXPRESSION.LETTERS_WITH_SEPERATORS.test(value.trim())) ||
     value === '*',
   email: value =>

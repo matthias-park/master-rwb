@@ -6,5 +6,5 @@ export interface Storage {
 }
 export interface StorageSettings {
   cookies: Storage;
-  save: (cookies: Storage) => void;
+  saveCookies: (cookies: Storage) => void;
 }

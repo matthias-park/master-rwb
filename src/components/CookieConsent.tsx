@@ -19,7 +19,7 @@ const CookieConsent = () => {
     return null;
   }
   const handleAccept = () => {
-    storage.save(
+    storage.saveCookies(
       Object.keys(storage.cookies).reduce((obj, id) => {
         obj[id] = true;
         return obj;

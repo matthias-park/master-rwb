@@ -32,19 +32,20 @@ const fieldValidations = {
 const ContactUsPage = () => {
   const { t } = useI18n();
   const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
-  const { handleSubmit, control, register, setValue } = useForm({
+  const { handleSubmit, control, register, setValue, reset } = useForm({
     mode: 'onBlur',
   });
   const [submitResponse, setSubmitResponse] = useState<{
     success: boolean;
     msg: string | null;
   } | null>(null);
-  const { data, error, mutate } = useApi<JSONFormPage>(
+  const { data, error, mutate, isValidating } = useApi<JSONFormPage>(
     `/railsapi/v1/contact_us/form`,
   );
-  const isDataLoading = !data && !error;
+  const isDataLoading = (!data && !error) || isValidating;
 
   useEffect(() => {
+    reset();
     mutate();
   }, [user.logged_in]);
   useEffect(() => {
@@ -104,7 +105,7 @@ const ContactUsPage = () => {
             {t('contact_page_failed_to_load')}
           </h2>
         )}
-        {!!data && (
+        {!!data && !isValidating && (
           <div className="d-flex flex-column flex-md-row">
             <div className="flex-grow-1 mr-0 mr-md-5">
               <h2 className="mb-4">{data.title}</h2>

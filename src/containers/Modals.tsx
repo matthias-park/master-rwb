@@ -7,6 +7,8 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { removeFalsyFromObject } from '../utils/index';
 import ValidationFailedModal from '../components/modals/ValidationFailedModal';
 import { useI18n } from '../hooks/useI18n';
+import { useModal } from '../hooks/useModal';
+import { ComponentName } from '../constants';
 
 const addBankAccountSubmit = async data => {
   removeFalsyFromObject(data);
@@ -19,15 +21,18 @@ const addBankAccountSubmit = async data => {
 
 const Modals = () => {
   const { table } = useI18n();
+  const { activeModal } = useModal();
   if (!Object.keys(table()).length) {
     return null;
   }
   return (
     <>
       <ResponsibleGamblingModal />
-      <CookiePolicyModal />
-      <AddBankAccountModal onSubmit={addBankAccountSubmit} />
       <ValidationFailedModal />
+      {activeModal === ComponentName.CookiesModal && <CookiePolicyModal />}
+      {activeModal === ComponentName.AddBankAccountModal && (
+        <AddBankAccountModal onSubmit={addBankAccountSubmit} />
+      )}
     </>
   );
 };
