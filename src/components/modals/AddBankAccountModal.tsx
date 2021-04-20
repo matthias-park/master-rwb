@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { useI18n } from '../../hooks/useI18n';
 import { ComponentName } from '../../constants';
@@ -20,6 +20,10 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
   const formMethods = useForm({
     mode: 'onBlur',
   });
+  const isModalActive = activeModal === ComponentName.AddBankAccountModal;
+  useEffect(() => {
+    formMethods.reset();
+  }, [isModalActive]);
   const handleSubmit = async ({ account_number }) => {
     const result = await onSubmit({ account_number: `BE${account_number}` });
     if (typeof result === 'string') {
@@ -32,19 +36,12 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
   return (
     <GenericModal
       isCentered
-      show={activeModal === ComponentName.AddBankAccountModal}
+      show={isModalActive}
       hideCallback={() => disableModal(ComponentName.AddBankAccountModal)}
     >
       <h2 className="mb-2 text-gray-800">{t('add_bank_modal_title')}</h2>
-      <CustomAlert
-        show={
-          !!apiError ||
-          (formMethods.formState.isSubmitted && !formMethods.formState.isValid)
-        }
-        variant="danger"
-        className="mt-2"
-      >
-        {apiError || t('register_page_submit_error')}
+      <CustomAlert show={!!apiError} variant="danger" className="mt-2">
+        {apiError!}
       </CustomAlert>
       <p className="text-gray-700 mb-3">{t('add_bank_modal_text')}</p>
       <FormProvider {...formMethods}>
@@ -59,7 +56,9 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
               placeholder: 'BE',
             }}
             rules={{
-              required: t('add_bank_modal_input_required'),
+              required: `${t('add_bank_modal_account_number')} ${t(
+                'add_bank_modal_input_required',
+              )}`,
               validate: (value: string) =>
                 value.length === 14 || t('bank_account_bad_format'),
             }}

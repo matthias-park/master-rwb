@@ -23,6 +23,7 @@ import isEqual from 'lodash.isequal';
 import LoadingButton from '../../components/LoadingButton';
 import { useModal } from '../../hooks/useModal';
 import { usePrevious } from '../../hooks';
+import useUserBankAccountModal from '../../hooks/useUserBankAccountModal';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -113,6 +114,7 @@ const WithdrawalPage = () => {
   });
   const { addToast } = useToasts();
   const { enableModal, allActiveModals } = useModal();
+  const bankAccount = useUserBankAccountModal();
   const [submitResponse, setSubmitResponse] = useState<{
     success: boolean;
     msg: string | null;
@@ -130,17 +132,16 @@ const WithdrawalPage = () => {
   );
   const isDataLoading = !data && !error;
   useEffect(() => {
-    if (user.logged_in && data && !data.Data.default_account) {
+    if (user.logged_in && !bankAccount.loading && !bankAccount.hasBankAccount) {
       enableModal(ComponentName.AddBankAccountModal);
-    } else {
-      mutate();
     }
-  }, [data]);
+  }, [bankAccount.loading]);
   useEffect(() => {
     if (
       !allActiveModals.includes(ComponentName.AddBankAccountModal) &&
       addBankAccountModalActivePrevious
     ) {
+      bankAccount.refresh();
       mutate();
     }
   }, [allActiveModals]);
