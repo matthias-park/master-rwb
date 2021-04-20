@@ -506,6 +506,7 @@
     }
     &__list {
         padding-left: 0;
+        margin-bottom: 0;
         &-item {
             position: relative;
             left: -20px;
@@ -562,18 +563,6 @@
                   }
               }
             }
-            &:last-of-type {
-                #{ $self }-link {
-                    height: 72px;
-                    &:before {
-                        height: 8px;
-                        border-top: 1px solid $black;
-                        border-bottom: 1px solid $black;
-                        background-color: rgba(0, 0, 0, 0.2);
-                        opacity: 0.3;
-                    }
-                }
-            }
         }
         &-sub-item {
             position: relative;
@@ -612,7 +601,7 @@
         content: '';
         position: absolute;
         top: -7px;
-        right: 9%;
+        right: 7.5%;
         width: 0; 
         height: 0; 
         border-left: 8px solid transparent;
