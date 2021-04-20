@@ -48,10 +48,15 @@ const ApiHead = () => {
     t(`sitemap_${pathInfo?.name}`) +
     (t(`sitemap_${pathInfo?.name}`).length ? ' - ' : '') +
     t('seo_site_name');
+  const title = translationsLoaded ? seoData?.title || fallbackTitle : '';
   return (
     <>
-      <Helmet htmlAttributes={{ lang: locale }}>
-        {translationsLoaded && <title>{seoData?.title || fallbackTitle}</title>}
+      <Helmet
+        title={title}
+        defer={false}
+        async
+        htmlAttributes={{ lang: locale }}
+      >
         <meta property="og:title" content={seoData?.title || fallbackTitle} />
         <meta
           name="description"
