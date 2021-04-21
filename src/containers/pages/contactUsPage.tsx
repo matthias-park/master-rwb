@@ -15,6 +15,7 @@ import useApi from '../../hooks/useApi';
 import isEqual from 'lodash.isequal';
 import { REGEX_EXPRESSION, VALIDATIONS } from '../../constants';
 import { isValid as isDateValid } from 'date-fns';
+import dayjs from 'dayjs';
 
 const fieldValidations = {
   first_name: (value: string) =>
@@ -63,7 +64,7 @@ const ContactUsPage = () => {
     }
   }, [data]);
 
-  const onSubmit = async ({ file, phone_number, ...fields }) => {
+  const onSubmit = async ({ file, phone_number, date_of_birth, ...fields }) => {
     if (file?.length) {
       fields.file = file[0];
     }
@@ -72,6 +73,9 @@ const ContactUsPage = () => {
         REGEX_EXPRESSION.PHONE_NUMBER_NORMALIZE,
         '',
       );
+    }
+    if (date_of_birth) {
+      fields.date_of_birth = dayjs(date_of_birth).format('YYYY-MM-DD');
     }
     const response = await postApi<RailsApiResponse<SeoPages>>(
       data!.action,
