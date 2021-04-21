@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { useI18n } from '../../hooks/useI18n';
 import { ComponentName } from '../../constants';

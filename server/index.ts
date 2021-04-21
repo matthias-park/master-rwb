@@ -26,7 +26,11 @@ app.get('/robots.txt', getRobots);
 
 app.get('/sitemap.xml', getSitemap);
 
-app.use(express.static(BUILD_FOLDER));
+app.use(
+  express.static(BUILD_FOLDER, {
+    maxAge: '7 days',
+  }),
+);
 app.use(middleware.routeExistCheck);
 
 app.get('*', async (req, res) => {
