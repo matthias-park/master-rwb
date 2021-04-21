@@ -8,10 +8,6 @@
       top: 0;
     }
     &__toggle {
-      min-height: 44px;
-      border-radius: 16px;
-      padding: 0 20px;
-      font-size: 13px;
       &:after {
           content: none;
       }
@@ -27,7 +23,7 @@
             content: '';
             position: absolute;
             top: -7px;
-            right: 7%;
+            right: 10%;
             width: 0; 
             height: 0; 
             border-left: 8px solid transparent;
@@ -48,7 +44,7 @@
             right: -50px;
             top: 55px;
             &:after {
-                right: 21%;
+                right: 24%;
             }
         }
         @include media-breakpoint-down(xs) {
@@ -56,16 +52,16 @@
             width: 96vw;
             max-width: 365px;
             &:after {
-                left: 74.5%;
+                left: 71.5%;
             }
         }
         @media only screen and (max-width: 390px) {
           position: fixed;
           left: 50%;
           transform: translateX(-50%);
-          top: 72px;
+          top: 65px;
           &:after {
-            right: 87px;
+            right: 93px;
             left: unset;
           }
         }
