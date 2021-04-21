@@ -1,9 +1,10 @@
 import clsx from 'clsx';
 import React, { forwardRef, useState } from 'react';
-import { Form, Spinner } from 'react-bootstrap';
+import { Form, Spinner, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FormFieldValidation } from '../constants';
 import { useCallback } from 'react';
 import { FieldError, useController } from 'react-hook-form';
+import { useI18n } from '../hooks/useI18n';
 import loadable from '@loadable/component';
 
 const LoadableNumberFormat = loadable(() => import('react-number-format'), {
@@ -21,6 +22,7 @@ type Props = {
     mask?: string;
   };
   rules?: any;
+  tooltip?: boolean;
 } & React.ComponentProps<typeof Form.Control>;
 
 export const ControlledTextInput = (props: Props) => {
@@ -59,6 +61,7 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
       inputFormatting,
       disableCopyPaste,
       rules,
+      tooltip,
       ...props
     }: Props,
     ref,
@@ -77,12 +80,14 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
       : undefined;
     const hasErrorClass = error || validation === FormFieldValidation.Invalid;
     const hasSuccessClass = !error && validation === FormFieldValidation.Valid;
+    const { t } = useI18n();
     return (
       <Form.Group
         data-testid="container"
         className={clsx(
           hasErrorClass && 'has-error',
           hasSuccessClass && 'success',
+          !!error?.message && 'with-message',
         )}
       >
         <Form.Control
@@ -115,12 +120,6 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
           data-testid="icons"
           className={clsx('form-group__icons', type === 'date' && 'mr-4')}
         >
-          {toggleVisibility && (
-            <i
-              className="icon-eye-on show-password"
-              onClick={togglePasswordVisibility}
-            />
-          )}
           {validation === FormFieldValidation.Validating && (
             <Spinner
               as="span"
@@ -128,6 +127,26 @@ const TextInput = forwardRef<HTMLInputElement, Props>(
               animation="border"
               role="status"
               size="sm"
+            />
+          )}
+          {tooltip && (
+            <OverlayTrigger
+              placement={'bottom'}
+              overlay={
+                <Tooltip id={`tooltip-${id}`} className="tooltip--big">
+                  <div
+                    dangerouslySetInnerHTML={{ __html: t(`tooltip_${id}`) }}
+                  ></div>
+                </Tooltip>
+              }
+            >
+              <i className="icon-tooltip"></i>
+            </OverlayTrigger>
+          )}
+          {toggleVisibility && (
+            <i
+              className="icon-eye-on show-password"
+              onClick={togglePasswordVisibility}
             />
           )}
           <i className="icon-check"></i>

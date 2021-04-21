@@ -159,6 +159,7 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                       key={field.id}
                       className={clsx(
                         formState.errors[field.id] && 'has-error',
+                        formState.errors[field.id]?.message && 'with-message',
                       )}
                     >
                       <Form.Control

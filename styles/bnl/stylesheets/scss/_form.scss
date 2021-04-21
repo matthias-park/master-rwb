@@ -40,8 +40,9 @@
     }
     &__icons {
         position: absolute;
-        top: 4px;
-        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 8px;
         display: flex;
         align-items: center;
         font-size: 32px;
@@ -62,11 +63,11 @@
         }
         .spinner-border {
           position: relative;
-          top: 7px;
-          right: 6px;
+          right: 8px;
         }
     }
-    select {
+    select,
+    select.is-invalid {
       + #{ $self }__icons {
         right: 10px; 
       }
@@ -89,6 +90,7 @@
     }
     &.success {
         #{ $self }__icons {
+            right: 0;
             .icon-check {
                 display: inline-block;
             }
@@ -107,6 +109,7 @@
             }
         }
         #{ $self }__icons {
+            right: 0;
             .icon-exclamation {
                 display: inline-block;
             }
@@ -119,6 +122,15 @@
             display: block;
         }
     }
+    &.has-error.with-message {
+      #{ $self }__icons {
+        top: calc(50% - 8px);
+      }
+    }
+}
+
+.invalid-feedback {
+  font-size: 12px;
 }
 
 .react-datepicker-wrapper {
@@ -129,6 +141,9 @@
       height: 38px;
       padding-left: 12px;
       font-size: 15px;
+      &.is-invalid {
+        border-color: $danger;
+      }
     }
   }
   + .react-datepicker {
@@ -147,6 +162,9 @@
     label {
         font-size: 14px;
         line-height: 1.5;
+        a {
+          text-decoration: underline;
+        }
     }
     .custom-control-input {
         z-index: 1;
@@ -157,6 +175,13 @@
                     border-color: transparent;
                 }
             }
+        }
+        &.is-invalid {
+          + label {
+            a {
+              color: $danger;
+            }
+          }
         }
     }
     &.has-error {
