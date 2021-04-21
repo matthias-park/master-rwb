@@ -9,6 +9,7 @@ import { HeaderRoute } from '../../types/api/PageConfig';
 import useGTM from '../../hooks/useGTM';
 import Link from '../Link';
 import { useLocation } from 'react-router';
+import useDesktopWidth from '../../hooks/useDesktopWidth';
 
 interface HeaderNavLinkProps {
   data: HeaderRoute;
@@ -38,6 +39,7 @@ export const HeaderNavClassicLink = ({
     ? '/sports#bethistory'
     : `${pathname}${hash}`;
   const { backdrop } = useUIConfig();
+  const desktopWidth = useDesktopWidth(1199);
   const dropdownRef = useRef(null);
   const sendDataToGTM = useGTM();
   const dropdownLinks = useMemo(
@@ -59,7 +61,9 @@ export const HeaderNavClassicLink = ({
       ref={dropdownRef}
       as="li"
       className="header__nav-item"
-      show={active?.includes(`${mobile ? 'click:' : ''}${data.name}`)}
+      show={active?.includes(`${mobile ? 'hover:' : ''}${data.name}`)}
+      onMouseEnter={() => desktopWidth && toggleActive(data.name)}
+      onMouseLeave={() => desktopWidth && toggleActive(null)}
     >
       {!mobile ? (
         <Dropdown.Toggle
@@ -82,32 +86,18 @@ export const HeaderNavClassicLink = ({
           {t(data.name)}
         </Dropdown.Toggle>
       ) : (
-        <div className="d-flex align-items-center w-100">
-          {data.externalLink ? (
-            <span className="header__nav-item-link cursor-pointer">
-              <span>{t(data.name)}</span>
-            </span>
-          ) : (
-            <Link
-              to={dropdownLinks?.[0].path || '/'}
-              className="header__nav-item-link cursor-pointer"
-              onClick={() => {
-                onGtmLinkClick(data.name);
-                setNavExpanded(false);
-                backdrop.hide();
-              }}
-            >
-              <span>{t(data.name)}</span>
-            </Link>
-          )}
-          <Dropdown.Toggle
-            as={'i'}
-            className="header__nav-item-icon icon-down"
-            onClick={() => {
-              toggleActive(data.name);
-            }}
-          ></Dropdown.Toggle>
-        </div>
+        <Dropdown.Toggle
+          as="div"
+          className="d-flex align-items-center w-100 cursor-pointer"
+          onClick={() => {
+            toggleActive(data.name);
+          }}
+        >
+          <span className="header__nav-item-link cursor-pointer">
+            <span>{t(data.name)}</span>
+          </span>
+          <i className="header__nav-item-icon icon-down"></i>
+        </Dropdown.Toggle>
       )}
       <Dropdown.Menu>
         {dropdownLinks?.map(link => {
