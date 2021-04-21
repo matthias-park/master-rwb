@@ -25,15 +25,16 @@ const CookiePolicyModal = () => {
     return cookieSettings[id];
   };
   const handleBtnClick = (id: string) => {
+    let newCookies: Storage;
     if (id === 'all') {
-      setCookieSettings(
-        cookiesId.reduce((obj, id) => {
-          obj[id] = true;
-          return obj;
-        }, {}) as Storage,
-      );
+      newCookies = cookiesId.reduce((obj, id) => {
+        obj[id] = true;
+        return obj;
+      }, {}) as Storage;
+    } else {
+      newCookies = cookieSettings;
     }
-    storage.saveCookies(cookieSettings);
+    storage.saveCookies(newCookies);
     return disableModal(ComponentName.CookiesModal);
   };
 

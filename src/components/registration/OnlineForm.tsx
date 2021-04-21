@@ -154,21 +154,13 @@ const blocks = (
         disableCopyPaste: true,
         triggerId: 'repeat_email',
         validate: async value => {
-          let valid: string | boolean = true;
           setValidation('email', FormFieldValidation.Validating);
           if (!VALIDATIONS.email(value)) {
             setValidation('email', FormFieldValidation.Invalid);
             return t('register_email_bad_format');
           }
-          const res = await props.checkEmailAvailable(value);
-          valid = res?.Success || res?.Message || t('register_already_taken');
-          setValidation(
-            'email',
-            typeof valid === 'boolean' && valid
-              ? FormFieldValidation.Valid
-              : FormFieldValidation.Invalid,
-          );
-          return valid;
+          setValidation('email', FormFieldValidation.Valid);
+          return true;
         },
       },
       {
@@ -271,6 +263,19 @@ const OnlineForm = (props: Props) => {
     return watch(id, '') !== '' && trigger(id);
   };
   const onSubmit = async ({ terms_and_conditions, postal_code, ...data }) => {
+    setApiError(null);
+    setValidation('email', FormFieldValidation.Validating);
+    const emailExistValidation = await props.checkEmailAvailable(data.email);
+    if (!emailExistValidation?.Success) {
+      setValidation('email', FormFieldValidation.Invalid);
+      setValidation('repeat_email', FormFieldValidation.Invalid);
+      setError('email', {
+        type: 'manual',
+        message: emailExistValidation?.Message || t('register_already_taken'),
+      });
+      return;
+    }
+    setValidation('email', FormFieldValidation.Valid);
     const post_code = postal_code.split(' - ')[0];
     const postal_info = await props.checkPostalCode(post_code);
     const city =
