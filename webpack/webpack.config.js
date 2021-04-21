@@ -67,6 +67,19 @@ const hasJsxRuntime = (() => {
   }
 })();
 
+const makeHash = length => {
+  var result = [];
+  var characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result.push(
+      characters.charAt(Math.floor(Math.random() * charactersLength)),
+    );
+  }
+  return result.join('');
+};
+const buildHash = makeHash(7);
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
 module.exports = function (webpackEnv) {
@@ -170,7 +183,7 @@ module.exports = function (webpackEnv) {
           template: paths.appBuildHtml,
           chunks: ['main'],
           filename: `${franchise.name}.html`,
-          franchiseTheme: `static/css/theme-${franchise.theme}.css`,
+          franchiseTheme: `static/css/theme-${franchise.theme}.${buildHash}.css`,
           config: JSON.stringify({
             name: franchise.name,
             apiUrl: franchise.api,
@@ -597,7 +610,7 @@ module.exports = function (webpackEnv) {
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
-        filename: 'static/css/[name].css',
+        filename: `static/css/[name].${buildHash}.css`,
       }),
       // Generate an asset manifest file with the following content:
       // - "files" key: Mapping of all asset filenames to their corresponding
