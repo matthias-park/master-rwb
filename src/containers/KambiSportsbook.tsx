@@ -50,19 +50,14 @@ const setCustomerSettings = ({
   retryLogin,
 }: SetCustomerSettingsProps) => {
   window.customerSettings = {
-    getBalance: function (successFunc, failureFunc, $) {
-      $.ajax({
-        url: getApiBalance,
-        xhrFields: {
-          withCredentials: true,
-        },
-        success: function (response) {
-          successFunc(parseFloat(response));
-        },
-        error: function (xhr) {
-          failureFunc(xhr);
-        },
-      });
+    getBalance: function (successFunc, failureFunc) {
+      getApi<string>(getApiBalance)
+        .then(res => {
+          successFunc(parseFloat(res));
+        })
+        .catch(e => {
+          failureFunc(e);
+        });
     },
     notification: event => {
       switch (event.name) {

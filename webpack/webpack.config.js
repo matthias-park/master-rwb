@@ -610,7 +610,9 @@ module.exports = function (webpackEnv) {
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
-        filename: `static/css/[name].${buildHash}.css`,
+        filename: `static/css/[name]${
+          isEnvProduction ? '.' + buildHash : ''
+        }.css`,
       }),
       // Generate an asset manifest file with the following content:
       // - "files" key: Mapping of all asset filenames to their corresponding
