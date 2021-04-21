@@ -55,7 +55,7 @@ export const createHeaderNavProviderValues = (
   headerLinks?: HeaderRoute[],
 ): HeaderActiveNav => {
   const toggle = (name?: string | null) => {
-    const navName = name && (name.includes('click:') ? name : `click:${name}`);
+    const navName = name && (name.includes('hover:') ? name : `hover:${name}`);
     let activeRouteName =
       navName && navName !== activeHeaderNav ? navName : null;
     if (!activeRouteName && currentRoute && headerLinks) {

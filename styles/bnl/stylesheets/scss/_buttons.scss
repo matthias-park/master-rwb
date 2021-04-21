@@ -48,7 +48,7 @@
     &:hover,
     &:active,
     &:focus {
-        background-color: $white;
+        background-color: $white !important;
         color: $brand-text !important;
     }
 }
@@ -58,7 +58,7 @@
     &:hover,
     &:active,
     &:focus {
-        background-color: $brand-light;
-        color: $white;
+        background-color: $brand-light !important;
+        color: $white !important;
     }
 }
