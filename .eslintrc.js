@@ -11,6 +11,7 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error', prettierOptions],
     'react-hooks/exhaustive-deps': 'off',
+    'no-control-regex': 0,
   },
   overrides: [
     {

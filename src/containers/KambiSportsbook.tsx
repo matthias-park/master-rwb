@@ -101,15 +101,12 @@ const setCustomerSettings = ({
   };
 };
 
-const getSBParams = async (config: Config, error: () => void) => {
+const getSBParams = async (config: Config) => {
   const playerId = config.user.id ? config.user.id.toString() : '';
   const data = playerId
     ? await getApi<RailsApiResponse<string>>(
         '/railsapi/v1/kambi/get_token',
       ).catch((res: RailsApiResponse<null>) => {
-        if (res.Fallback && config.user.logged_in) {
-          error();
-        }
         return res;
       })
     : null;
@@ -167,12 +164,7 @@ const KambiSportsbook = () => {
 
   const sendKambiLoginChangeRequest = () => {
     if (config.user.logged_in) {
-      getSBParams(config, () => {
-        addToast(`Failed to get user token`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      }).then(kambiConfig => {
+      getSBParams(config).then(kambiConfig => {
         //@ts-ignore
         window.KambiWapi?.request(window.KambiWapi?.LOGIN, {
           punterId: kambiConfig.playerId,
@@ -198,12 +190,7 @@ const KambiSportsbook = () => {
 
   useEffect(() => {
     if (!window.KambiWapi && !document.getElementById(kambiId)) {
-      getSBParams(config, () => {
-        addToast(`Failed to get user token`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      }).then(kambiConfig => {
+      getSBParams(config).then(kambiConfig => {
         setCustomerSettings({
           addToast,
           getApiBalance: kambiConfig?.getApiBalance,
