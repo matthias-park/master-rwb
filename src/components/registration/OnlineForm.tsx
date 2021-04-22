@@ -122,6 +122,21 @@ const blocks = (
         id: 'personal_code',
         type: 'text',
         required: true,
+        validate: async value => {
+          let valid: string | boolean = true;
+          setValidation('personal_code', FormFieldValidation.Validating);
+          const res = await props.checkPersonalCode(value);
+          if (!res?.Success) {
+            valid = res?.Message || t('register_personal_code_invalid');
+          }
+          setValidation(
+            'personal_code',
+            !res?.Success
+              ? FormFieldValidation.Invalid
+              : FormFieldValidation.Valid,
+          );
+          return valid;
+        },
         inputFormatting: {
           format: '##.##.##-###.##',
           mask: '_',
@@ -242,29 +257,16 @@ const OnlineForm = (props: Props) => {
   };
   const onSubmit = async ({ terms_and_conditions, postal_code, ...data }) => {
     setApiError(null);
-    setValidation('personal_code', FormFieldValidation.Validating);
-    const personalCodeRailsValidation = await props.checkPersonalCode(
-      data.personal_code,
-    );
-    if (!personalCodeRailsValidation?.Success) {
-      setValidation('personal_code', FormFieldValidation.Invalid);
-      return setError('personal_code', {
-        type: 'manual',
-        message:
-          personalCodeRailsValidation?.Message ||
-          t('register_personal_code_invalid'),
-      });
-    }
-    setValidation('personal_code', FormFieldValidation.Valid);
     setValidation('email', FormFieldValidation.Validating);
     const emailExistValidation = await props.checkEmailAvailable(data.email);
     if (!emailExistValidation?.Success) {
       setValidation('email', FormFieldValidation.Invalid);
       setValidation('repeat_email', FormFieldValidation.Invalid);
-      return setError('email', {
+      setError('email', {
         type: 'manual',
         message: emailExistValidation?.Message || t('register_already_taken'),
       });
+      return;
     }
     setValidation('email', FormFieldValidation.Valid);
     const post_code = postal_code.split(' - ')[0];
