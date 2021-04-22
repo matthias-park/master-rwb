@@ -318,6 +318,10 @@ a:hover {
     &-text {
       font-size: 14px;
       line-height: 1.4;
+      a {
+        color: $gray-custom-200;
+        text-decoration: underline;
+      }
     }
     @include media-breakpoint-down(xs) {
       margin-left: 35px;
