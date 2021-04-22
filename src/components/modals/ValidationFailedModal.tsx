@@ -20,7 +20,6 @@ const ValidationFailedModal = () => {
     enableModal,
     disableModal,
   } = useModal();
-  console.log(user);
   useEffect(() => {
     if (
       [VALIDATOR_STATUS.MINOR_ERROR, VALIDATOR_STATUS.MAJOR_ERROR].includes(

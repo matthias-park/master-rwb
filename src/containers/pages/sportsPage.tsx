@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
+import { hideKambiSportsbook, showKambiSportsbook } from '../../utils/uiUtils';
 import KambiSportsbook from '../KambiSportsbook';
 
 const SportsPage = () => {
   useEffect(() => {
-    document.getElementById('root')?.classList.remove('sb-hidden');
+    showKambiSportsbook();
     return () => {
-      document.getElementById('root')?.classList.add('sb-hidden');
+      hideKambiSportsbook();
     };
   }, []);
   return <KambiSportsbook />;

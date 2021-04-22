@@ -44,7 +44,6 @@ const AutocompleteTextInput = ({
   });
 
   const search = useCallback((query: string) => {
-    console.log(query);
     setIsLoading(true);
     autoComplete(query)
       .then((result: any[]) => {
@@ -107,7 +106,6 @@ const AutocompleteTextInput = ({
       }}
       highlightOnlyResult
       renderInput={({ inputRef, referenceElementRef, ...inputProps }) => {
-        console.log(inputProps);
         return (
           <UncontrolledTextInput
             {...inputProps}

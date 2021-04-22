@@ -138,7 +138,6 @@ const TextInput = ({
     rules: {
       ...rules,
       validate: (value: string) => {
-        console.log(value);
         if ((!value || !value.trim()) && rules.required) return rules.required;
         return rules.validate?.(value);
       },

@@ -10,6 +10,7 @@ import { WidgetAPI } from '../types/KambiConfig';
 import Spinner from 'react-bootstrap/Spinner';
 import { KambiSbLocales } from '../constants';
 import { useLocation } from 'react-router-dom';
+import { hideKambiSportsbook, showKambiSportsbook } from '../utils/uiUtils';
 
 interface SetCustomerSettingsProps {
   getApiBalance: string;
@@ -17,6 +18,7 @@ interface SetCustomerSettingsProps {
   addToast: AddToast;
   sbLoaded?: () => void;
   retryLogin?: () => void;
+  loginSuccessful?: () => void;
 }
 
 interface KambiSportsbookProps {
@@ -43,6 +45,7 @@ const updateWindowKambiConfig = (params: KambiSportsbookProps) => {
 let sportsbookRendered = false;
 let kambiLoginRetries = 0;
 let kambiRetryTimeout = 0;
+let kambiUserLoggedIn = false;
 const setCustomerSettings = ({
   getApiBalance,
   updateBalance,
@@ -82,6 +85,13 @@ const setCustomerSettings = ({
             kambiLoginRetries = 0;
             clearTimeout(kambiRetryTimeout);
           }
+          kambiUserLoggedIn = !!event.data;
+          showKambiSportsbook();
+          sbLoaded?.();
+          break;
+        }
+        case 'sessionTimedOut': {
+          kambiUserLoggedIn = false;
           break;
         }
         case 'pageRendered': {
@@ -95,7 +105,6 @@ const setCustomerSettings = ({
     enableOddsFormatSelector: true,
   };
 };
-
 const getSBParams = async (config: Config) => {
   const playerId = config.user.id ? config.user.id.toString() : '';
   const data = playerId
@@ -159,6 +168,8 @@ const KambiSportsbook = () => {
 
   const sendKambiLoginChangeRequest = () => {
     if (config.user.logged_in) {
+      setSbLoading(true);
+      hideKambiSportsbook();
       getSBParams(config).then(kambiConfig => {
         //@ts-ignore
         window.KambiWapi?.request(window.KambiWapi?.LOGIN, {
@@ -174,7 +185,8 @@ const KambiSportsbook = () => {
     }
   };
   useEffect(() => {
-    sendKambiLoginChangeRequest();
+    if (apiLoaded && config.user.logged_in !== kambiUserLoggedIn)
+      sendKambiLoginChangeRequest();
   }, [config.user.logged_in, apiLoaded]);
 
   useEffect(() => {

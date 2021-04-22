@@ -127,3 +127,19 @@ export const setPageLoadingSpinner = () => {
     body?.appendChild(spinnerEl);
   }
 };
+
+export const hideKambiSportsbook = () => {
+  document.getElementById('root')?.classList.add('sb-hidden');
+  if (window.KambiWapi) {
+    window.KambiWapi.set(window.KambiWapi.CLIENT_HIDE);
+    window.KambiWapi.set(window.KambiWapi.BETSLIP_HIDE);
+  }
+};
+
+export const showKambiSportsbook = () => {
+  document.getElementById('root')?.classList.remove('sb-hidden');
+  if (window.KambiWapi) {
+    window.KambiWapi.set(window.KambiWapi.CLIENT_SHOW);
+    window.KambiWapi.set(window.KambiWapi.BETSLIP_SHOW);
+  }
+};

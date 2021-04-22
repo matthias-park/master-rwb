@@ -253,7 +253,7 @@ const OnlineForm = (props: Props) => {
   const formMethods = useForm({
     mode: 'onBlur',
   });
-  const { handleSubmit, watch, trigger, formState, setError } = formMethods;
+  const { handleSubmit, watch, trigger, formState } = formMethods;
 
   const setValidation = (id: string, status: FormFieldValidation) =>
     setValidationForms({ ...validationForms, [id]: status });
