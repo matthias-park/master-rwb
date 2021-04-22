@@ -1,6 +1,6 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { SettingsForm } from '../../types/api/user/ProfileSettings';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import clsx from 'clsx';
 import Accordion from 'react-bootstrap/Accordion';
 import AccordionContext from 'react-bootstrap/AccordionContext';
@@ -10,7 +10,8 @@ import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import LoadingButton from '../LoadingButton';
 import { useI18n } from '../../hooks/useI18n';
 import { VALIDATIONS } from '../../constants';
-
+import SelectInput from '../customFormInputs/SelectInput';
+import TextInput from '../customFormInputs/TextInput';
 interface SettingProps {
   form: SettingsForm;
   onSubmit: (
@@ -29,18 +30,12 @@ const FormsWithUpdateUser = [
 
 const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
   const { t } = useI18n();
-  const [showPassword, setShowPassword] = useState(false);
   const currentEventKey = useContext(AccordionContext);
   const accordionOnClick = useAccordionToggle(form.id);
-  const { register, handleSubmit, watch, formState } = useForm<any, any>({
+  const formMethods = useForm<any, any>({
     mode: 'onBlur',
-    defaultValues: form.fields
-      .filter(field => field.default ?? false)
-      .reduce((obj, value) => {
-        obj[value.id] = value.default;
-        return obj;
-      }, {}),
   });
+  const { handleSubmit, watch, formState } = formMethods;
   const watchAllFields = watch();
   const visibilityOverrideFields = useMemo(
     () =>
@@ -92,155 +87,113 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
       </Card.Header>
       <Accordion.Collapse className="settings-card__body" eventKey={form.id}>
         <Card.Body className="pt-2">
-          <Form onSubmit={handleSubmit(updateSettingsSubmit)}>
-            {!!form.note && (
-              <p
-                data-testid="form-note"
-                dangerouslySetInnerHTML={{ __html: form.note }}
-              />
-            )}
+          <FormProvider {...formMethods}>
+            <Form onSubmit={handleSubmit(updateSettingsSubmit)}>
+              {!!form.note && (
+                <p
+                  data-testid="form-note"
+                  dangerouslySetInnerHTML={{ __html: form.note }}
+                />
+              )}
 
-            <div className="row mt-3">
-              <div data-testid="form-container" className="col-12 col-sm-6">
-                {form.fields.map(field => {
-                  const visibilityOverrideField =
-                    visibilityOverrideFields[field.id];
-                  const visibilityOverride =
-                    visibilityOverrideField &&
-                    Object.keys(visibilityOverrideField).some(key =>
-                      visibilityOverrideField[key].includes(
-                        watchAllFields[key],
-                      ),
-                    );
-                  if (
-                    !(field.visible ?? true) &&
-                    !(visibilityOverride ?? false)
-                  ) {
-                    return null;
-                  }
-                  if (field.id === 'submit_button') {
-                    return (
-                      <LoadingButton
-                        key={field.id}
-                        data-testid={field.id}
-                        loading={!!formState.isSubmitting}
-                        disabled={Object.values(watchAllFields).some(
-                          value => !value || value === 'default',
-                        )}
-                        className="mt-2"
-                        variant="primary"
-                        type="submit"
-                      >
-                        {field.title}
-                      </LoadingButton>
-                    );
-                  }
-                  const isFieldSelect = field.type === 'select';
-                  const formGroupAs = isFieldSelect ? 'select' : 'input';
-                  let formGroupType = field.type;
-                  if (isFieldSelect || showPassword) {
-                    formGroupType = 'text';
-                  } else if (
-                    field.id === 'phone_number' ||
-                    field.id.includes('amount')
-                  ) {
-                    formGroupType = 'tel';
-                  }
-                  const formGroupChildren =
-                    field.type === 'select'
-                      ? field.values?.map(option => (
-                          <option key={option.id} value={option.id}>
-                            {option.title}
-                          </option>
-                        ))
-                      : null;
-                  return (
-                    <Form.Group
-                      key={field.id}
-                      className={clsx(
-                        formState.errors[field.id] && 'has-error',
-                        formState.errors[field.id]?.message && 'with-message',
-                      )}
-                    >
-                      <Form.Control
-                        data-testid={field.id}
-                        {...register(field.id, {
-                          validate: value => {
-                            if (
-                              [
-                                'new_password',
-                                'new_password_confirmation',
-                              ].includes(field.id)
-                            )
-                              return (
-                                VALIDATIONS.passwordMixOfThree(value) ||
-                                t('register_password_weak')
-                              );
-                            if (field.id === 'phone_number')
-                              return (
-                                VALIDATIONS.phone(value) ||
-                                t('phone_number_invalid')
-                              );
-                            return (
-                              !!value.trim() ||
-                              `${field.title} ${t('settings_field_required')}`
-                            );
-                          },
-                        })}
-                        as={formGroupAs}
-                        disabled={field.disabled}
-                        size="sm"
-                        type={formGroupType}
-                        // autoComplete={
-                        //   field.type === 'password'
-                        //     ? 'current-password'
-                        //     : undefined
-                        // }
-                        id={field.id}
-                        name={field.id}
-                        placeholder=" "
-                      >
-                        {formGroupChildren}
-                      </Form.Control>
-                      {!isFieldSelect && (
-                        <>
-                          <label
-                            data-testid={`${field.id}-title`}
-                            htmlFor="amount"
+              <div className="row mt-3">
+                <div data-testid="form-container" className="col-12 col-sm-6">
+                  {form.fields.map(field => {
+                    const visibilityOverrideField =
+                      visibilityOverrideFields[field.id];
+                    const visibilityOverride =
+                      visibilityOverrideField &&
+                      Object.keys(visibilityOverrideField).some(key =>
+                        visibilityOverrideField[key].includes(
+                          watchAllFields[key],
+                        ),
+                      );
+                    if (
+                      !(field.visible ?? true) &&
+                      !(visibilityOverride ?? false)
+                    ) {
+                      return null;
+                    }
+                    switch (field.id) {
+                      case 'submit_button': {
+                        return (
+                          <LoadingButton
+                            key={field.id}
+                            data-testid={field.id}
+                            loading={!!formState.isSubmitting}
+                            disabled={Object.values(watchAllFields).some(
+                              value => !value || value === 'default',
+                            )}
+                            className="mt-2"
+                            variant="primary"
+                            type="submit"
                           >
                             {field.title}
-                          </label>
-                          <div className="form-group__icons">
-                            {field.type === 'password' && (
-                              <i
-                                className="icon-eye-on show-password"
-                                onClick={() => setShowPassword(!showPassword)}
-                              />
-                            )}
-                            <i className="icon-check"></i>
-                            <i className="icon-exclamation"></i>
-                          </div>
-                        </>
-                      )}
-                      {!!formState.errors[field.id] && (
-                        <small className="form-group__error-msg">
-                          {formState.errors[field.id].message}
-                        </small>
-                      )}
-                      {field.errors?.map(error => (
-                        <small
-                          data-testid={`${field.id}-error`}
-                          className="form-group__error-msg"
-                        >
-                          {error}
-                        </small>
-                      ))}
-                    </Form.Group>
-                  );
-                })}
+                          </LoadingButton>
+                        );
+                      }
+                      case 'select': {
+                        return (
+                          <SelectInput
+                            key={field.id}
+                            id={field.id}
+                            rules={{
+                              required: `${field.title} ${t(
+                                'settings_field_required',
+                              )}`,
+                            }}
+                            disabled={field.disabled}
+                            defaultValue={field.default}
+                            values={
+                              field.values?.map(option => ({
+                                value: option.id,
+                                text: option.title,
+                              })) || []
+                            }
+                            title={field.title}
+                          />
+                        );
+                      }
+                      default: {
+                        const isPassword = [
+                          'new_password',
+                          'new_password_confirmation',
+                        ].includes(field.id);
+                        return (
+                          <TextInput
+                            id={field.id}
+                            rules={{
+                              required: `${field.title} ${t(
+                                'settings_field_required',
+                              )}`,
+                              validate: value => {
+                                if (isPassword)
+                                  return (
+                                    VALIDATIONS.passwordMixOfThree(value) ||
+                                    t('register_password_weak')
+                                  );
+                                if (field.id === 'phone_number')
+                                  return (
+                                    VALIDATIONS.phone(value) ||
+                                    t('phone_number_invalid')
+                                  );
+                                return true;
+                              },
+                            }}
+                            defaultValue={field.default}
+                            disabled={field.disabled}
+                            title={field.title}
+                            toggleVisibility={isPassword}
+                            type={field.type}
+                          />
+                        );
+                      }
+                    }
+                  })}
+                </div>
               </div>
-            </div>
-          </Form>
+            </Form>
+          </FormProvider>
         </Card.Body>
       </Accordion.Collapse>
       <i

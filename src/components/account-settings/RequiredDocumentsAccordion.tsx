@@ -8,11 +8,11 @@ import {
 } from '../../types/api/user/ProfileSettings';
 import { FormProvider, useForm } from 'react-hook-form';
 import Card from 'react-bootstrap/Card';
-import clsx from 'clsx';
 import Accordion from 'react-bootstrap/Accordion';
 import { useI18n } from '../../hooks/useI18n';
 import LoadingButton from '../LoadingButton';
-import { ControlledTextInput } from '../TextInput';
+import TextInput from '../customFormInputs/TextInput';
+import FileInput from '../customFormInputs/FileInput';
 
 interface SettingProps {
   form: SettingsForm;
@@ -26,7 +26,7 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
   const currentEventKey = useContext(AccordionContext);
   const accordionOnClick = useAccordionToggle(form.id);
   const formMethods = useForm();
-  const { register, handleSubmit, formState, watch } = formMethods;
+  const { handleSubmit, formState, watch } = formMethods;
   const fields: { [key: string]: SettingsField } = useMemo(
     () =>
       form.fields.reduce((obj, value) => {
@@ -63,7 +63,6 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
               <div className="row mx-0 flex-column flex-sm-row">
                 {fileIds.map(id => {
                   if (!fields[id]) return null;
-                  const uploadedFilename = watch(id, [])?.[0]?.name;
                   return (
                     <div
                       key={id}
@@ -78,16 +77,13 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
                             `${fields[id].status} ${fields[id].date}`}
                         </p>
                         {!fields[id].date && (
-                          <Form.File custom className="mt-auto">
-                            <Form.File.Label
-                              className={clsx(
-                                uploadedFilename && 'text-primary',
-                              )}
-                            >
-                              {uploadedFilename || t('settings_file_upload')}
-                              <Form.File.Input {...register(id)} name={id} />
-                            </Form.File.Label>
-                          </Form.File>
+                          <FileInput
+                            key={id}
+                            id={id}
+                            disabled={fields[id].disabled}
+                            className="mt-auto"
+                            title={fields[id].title}
+                          />
                         )}
                       </div>
                     </div>
@@ -97,19 +93,17 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
               {!!form.footer && <p className="mb-3">{form.footer}</p>}
               {!!fields.password && (
                 <div className="row mx-0 mt-2">
-                  <ControlledTextInput
-                    size="sm"
-                    type="password"
+                  <TextInput
                     id="password"
-                    placeholder={fields.password.title}
+                    type="password"
+                    title={fields.password.title}
                     toggleVisibility
                     rules={{
-                      validation: value =>
-                        !!value.trim() ||
-                        `${fields.password.title} ${t(
-                          'settings_field_required',
-                        )}`,
+                      required: `${fields.password.title} ${t(
+                        'settings_field_required',
+                      )}`,
                     }}
+                    size="sm"
                   />
                 </div>
               )}

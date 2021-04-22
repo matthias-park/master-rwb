@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useI18n } from '../../hooks/useI18n';
-import { ControlledTextInput } from '../../components/TextInput';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
 import CustomAlert from '../../components/CustomAlert';
@@ -15,6 +14,7 @@ import useGTM from '../../hooks/useGTM';
 import isEqual from 'lodash.isequal';
 import LoadingButton from '../../components/LoadingButton';
 import { VALIDATIONS } from '../../constants';
+import TextInput from '../../components/customFormInputs/TextInput';
 
 const ForgotPasswordPage = () => {
   const { code } = useParams<{ code?: string }>();
@@ -76,37 +76,39 @@ const ForgotPasswordPage = () => {
         </CustomAlert>
         <FormProvider {...formMethods}>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <ControlledTextInput
+            <TextInput
               disableCopyPaste
               disabled={!!apiResponse?.success}
               rules={{
-                required: t('reset_password_field_required'),
+                required: `${t('reset_password_field')} ${t(
+                  'reset_password_field_required',
+                )}`,
                 validate: value =>
                   VALIDATIONS.passwordMixOfThree(value) ||
                   t('register_password_weak'),
               }}
-              error={formState.errors.password}
               onBlur={() =>
                 watch('repeat_password') && trigger('repeat_password')
               }
               id="password"
               type="password"
-              placeholder={t('reset_password_field')}
+              title={t('reset_password_field')}
               toggleVisibility
             />
-            <ControlledTextInput
+            <TextInput
               disableCopyPaste
               disabled={!!apiResponse?.success}
               rules={{
-                required: t('reset_password_field_required'),
+                required: `${t('reset_password_field')} ${t(
+                  'reset_password_field_required',
+                )}`,
                 validate: value =>
                   value === watch('password') ||
                   t('reset_password_need_match_password'),
               }}
-              error={formState.errors.repeat_password}
               id="repeat_password"
               type="password"
-              placeholder={t('reset_password_repeat_field')}
+              title={t('reset_password_repeat_field')}
               toggleVisibility
             />
             <LoadingButton

@@ -11,12 +11,12 @@ import CustomAlert from '../components/CustomAlert';
 import { Spinner, OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
 import { useRoutePath } from '../hooks/index';
 import { NET_USER } from '../types/UserStatus';
-import { ControlledTextInput } from '../components/TextInput';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import useGTM from '../hooks/useGTM';
 import LoadingButton from '../components/LoadingButton';
 import Link from '../components/Link';
 import { useModal } from '../hooks/useModal';
+import TextInput from '../components/customFormInputs/TextInput';
 
 interface Props {
   dropdownClasses?: string;
@@ -101,28 +101,26 @@ const LoginForm = ({
         >
           <div dangerouslySetInnerHTML={{ __html: apiError || '' }} />
         </CustomAlert>
-        <ControlledTextInput
+        <TextInput
           rules={{
-            validate: value => !!value.trim() || t('login_field_required'),
+            required: t('login_field_required'),
           }}
           id="email"
           // type="email"
-          placeholder={t('login_email')}
-          autoComplete="username"
+          title={t('login_email')}
+          // autoComplete="username"
           validation={apiError ? FormFieldValidation.Invalid : undefined}
-          error={formState.errors.email}
         />
-        <ControlledTextInput
+        <TextInput
           rules={{
-            validate: value => !!value.trim() || t('login_password_required'),
+            required: t('login_password_required'),
           }}
           validation={apiError ? FormFieldValidation.Invalid : undefined}
           id="password"
-          type={'password'}
-          placeholder={t('login_password')}
-          autoComplete="current-password"
+          type="password"
+          title={t('login_password')}
+          // autoComplete="current-password"
           toggleVisibility
-          error={formState.errors.password}
         />
         <div className="d-flex align-items-center flex-wrap">
           <Form.Check

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useI18n } from '../../hooks/useI18n';
-import { ControlledTextInput } from '../../components/TextInput';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
 import ForgotPasswordResponse from '../../types/api/user/ForgotPassword';
@@ -13,6 +12,7 @@ import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useGTM from '../../hooks/useGTM';
 import isEqual from 'lodash.isequal';
 import LoadingButton from '../../components/LoadingButton';
+import TextInput from '../../components/customFormInputs/TextInput';
 
 const ForgotLoginPage = () => {
   const formMethods = useForm({
@@ -74,9 +74,11 @@ const ForgotLoginPage = () => {
         <p className="text-14 mb-3">{t('forgot_login_text')}</p>
         <FormProvider {...formMethods}>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <ControlledTextInput
+            <TextInput
               rules={{
-                required: t('login_field_required'),
+                required: `${t('forgot_password_email_field')} ${t(
+                  'login_field_required',
+                )}`,
                 validate: async value => {
                   const emailRegex = /[a-zA-Z0-9.!#$%&‘*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*/;
                   return (
@@ -84,9 +86,8 @@ const ForgotLoginPage = () => {
                   );
                 },
               }}
-              error={formState.errors.email}
               id="email"
-              placeholder={t('forgot_password_email_field')}
+              title={t('forgot_password_email_field')}
             />
             <LoadingButton
               variant="primary"

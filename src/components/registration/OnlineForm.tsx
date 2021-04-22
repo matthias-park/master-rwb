@@ -1,4 +1,3 @@
-import { ControlledTextInput } from '../TextInput';
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useI18n } from '../../hooks/useI18n';
@@ -15,11 +14,13 @@ import {
   RegistrationResponse,
   RegistrationPostalCodeAutofill,
 } from '../../types/api/user/Registration';
-import AutocompleteTextInput from '../AutocompleteTextInput';
+import AutocompleteTextInput from '../customFormInputs/AutocompleteTextInput';
 import { PostCodeInfo } from '../../types/api/user/Registration';
 import LoadingButton from '../LoadingButton';
 import RegError from './RegError';
 import { cache } from 'swr';
+import TextInput from '../customFormInputs/TextInput';
+import CheckboxInput from '../customFormInputs/CheckboxInput';
 interface Props {
   checkEmailAvailable: (email: string) => Promise<ValidateRegisterInput | null>;
   checkPersonalCode: (
@@ -78,7 +79,7 @@ const blocks = (
             return t('api_response_failed');
           }
           if (
-            response.Data?.result.some(
+            response.Data?.result?.some(
               post => `${post.zip_code} - ${post.locality_name}` === value,
             )
           )
@@ -124,7 +125,7 @@ const blocks = (
         inputFormatting: {
           format: '##.##.##-###.##',
           mask: '_',
-          placeholder: '_',
+          allowEmptyFormatting: true,
         },
       },
     ],
@@ -229,15 +230,7 @@ const OnlineForm = (props: Props) => {
   const formMethods = useForm({
     mode: 'onBlur',
   });
-  const {
-    register,
-    handleSubmit,
-    watch,
-    trigger,
-    formState,
-    setError,
-    clearErrors,
-  } = formMethods;
+  const { handleSubmit, watch, trigger, formState, setError } = formMethods;
 
   const setValidation = (id: string, status: FormFieldValidation) =>
     setValidationForms({ ...validationForms, [id]: status });
@@ -308,27 +301,20 @@ const OnlineForm = (props: Props) => {
                   </p>
                   {block.fields.map(field => {
                     switch (field.type) {
-                      case 'checkbox':
-                      case 'radio': {
+                      case 'checkbox': {
                         return (
-                          <Form.Check
-                            {...register(field.name || field.id, {
+                          <CheckboxInput
+                            id={field.id}
+                            key={field.id}
+                            title={jsxT(`register_input_${field.id}_label`)}
+                            rules={{
                               required:
                                 field.required &&
                                 `${t(`register_input_${field.id}`)} ${t(
                                   'register_input_required',
                                 )}`,
-                              setValueAs: value => !!value,
-                            })}
-                            custom
-                            type={field.type}
-                            id={field.id}
-                            key={field.name || field.id}
-                            name={field.name || field.id}
-                            label={jsxT(`register_input_${field.id}_label`)}
-                            className={'mb-4'}
-                            isInvalid={formState.errors[field.id]}
-                            feedback={formState.errors[field.id]?.message}
+                            }}
+                            className="mb-4"
                           />
                         );
                       }
@@ -342,6 +328,14 @@ const OnlineForm = (props: Props) => {
                         ) {
                           return (
                             <AutocompleteTextInput
+                              id={field.id}
+                              key={field.id}
+                              autoComplete={field.autoComplete}
+                              invalidTextError={t(
+                                `register_input_${field.id}_invalid`,
+                              )}
+                              labelkey={field.labelKey}
+                              title={t(`register_input_${field.id}`)}
                               rules={{
                                 required:
                                   field.required &&
@@ -350,31 +344,14 @@ const OnlineForm = (props: Props) => {
                                   )}`,
                                 validate: field.validate,
                               }}
-                              type={field.type}
-                              error={formState.errors[field.id]}
-                              setError={error =>
-                                error
-                                  ? setError(field.name || field.id, {
-                                      message: error,
-                                      type: 'validate',
-                                    })
-                                  : clearErrors(field.name || field.id)
-                              }
                               onBlur={() => props.fieldChange(field.id)}
-                              labelkey={field.labelKey}
-                              autoComplete={field.autoComplete}
-                              id={field.id}
-                              key={field.id}
-                              placeholder={t(`register_input_${field.id}`)}
-                              invalidTextError={t(
-                                `register_input_${field.id}_invalid`,
-                              )}
                             />
                           );
                         }
-
                         return (
-                          <ControlledTextInput
+                          <TextInput
+                            key={field.id}
+                            id={field.id}
                             rules={{
                               required:
                                 field.required &&
@@ -383,15 +360,15 @@ const OnlineForm = (props: Props) => {
                                 )}`,
                               validate: field.validate,
                             }}
-                            type={field.type}
-                            autoComplete={field.autoComplete}
-                            id={field.id}
-                            key={field.id}
-                            onBlur={() => {
-                              props.fieldChange(field.id);
-                              field.triggerId && triggerRepeat(field.triggerId);
-                            }}
                             disableCopyPaste={field.disableCopyPaste}
+                            toggleVisibility={field.type === 'password'}
+                            type={field.type}
+                            title={t(`register_input_${field.id}`)}
+                            tooltip={
+                              field.id === 'personal_code'
+                                ? t(`tooltip_${field.id}`)
+                                : undefined
+                            }
                             validation={
                               validationForms[
                                 field.id.replace('repeat_', '')
@@ -399,31 +376,11 @@ const OnlineForm = (props: Props) => {
                                 ? FormFieldValidation.Invalid
                                 : validationForms[field.id]
                             }
-                            error={formState.errors[field.id]}
-                            placeholder={t(`register_input_${field.id}`)}
-                            toggleVisibility={field.type === 'password'}
-                            inputFormatting={field.inputFormatting}
-                            tooltip={field.id === 'personal_code'}
-                          />
-                        );
-                      }
-                      case 'date': {
-                        return (
-                          <ControlledTextInput
-                            rules={{
-                              required:
-                                field.required &&
-                                `${t(`register_input_${field.id}`)} ${t(
-                                  'register_input_required',
-                                )}`,
-                              valueAsDate: true,
+                            onBlur={() => {
+                              props.fieldChange(field.id);
+                              field.triggerId && triggerRepeat(field.triggerId);
                             }}
-                            id={field.id}
-                            error={formState.errors[field.id]}
-                            type="date"
-                            onBlur={() => props.fieldChange(field.id)}
-                            placeholder={t(`register_input_${field.id}`)}
-                            inputFormatting={field.inputFormatting}
+                            maskedInput={field.inputFormatting}
                           />
                         );
                       }

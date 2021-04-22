@@ -22,7 +22,7 @@ export interface SettingsField {
   id: string;
   type: string;
   text?: string;
-  title?: string;
+  title: string;
   errors?: any[];
   date?: string;
   status?: string[];

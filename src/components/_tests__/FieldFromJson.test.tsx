@@ -2,7 +2,7 @@ import React from 'react';
 import { render, cleanup } from '../../utils/testUtils';
 import FieldFromJson from '../FieldFromJson';
 import { Form } from 'react-bootstrap';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 beforeEach(cleanup);
 
@@ -74,25 +74,22 @@ const fields = [
 ];
 
 test('displays fields correctly', async () => {
-  const { handleSubmit, control, register } = useForm({
+  const formMethods = useForm({
     mode: 'onBlur',
   });
   const { getByTestId } = render(
     <>
-      <Form
-        onSubmit={handleSubmit(() => {
-          return;
-        })}
-      >
-        {fields.map(field => (
-          <FieldFromJson
-            key={field.id}
-            register={register}
-            control={control}
-            field={field}
-          />
-        ))}
-      </Form>
+      <FormProvider {...formMethods}>
+        <Form
+          onSubmit={formMethods.handleSubmit(() => {
+            return;
+          })}
+        >
+          {fields.map(field => (
+            <FieldFromJson key={field.id} field={field} />
+          ))}
+        </Form>
+      </FormProvider>
     </>,
   );
   expect(getByTestId('select')).toBeInTheDocument();

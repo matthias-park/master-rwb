@@ -3,11 +3,11 @@ import { Form } from 'react-bootstrap';
 import { useI18n } from '../../hooks/useI18n';
 import { ComponentName } from '../../constants';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { ControlledTextInput } from '../TextInput';
 import CustomAlert from '../CustomAlert';
 import LoadingButton from '../LoadingButton';
 import GenericModal from '../../components/modals/GenericModal';
 import { useModal } from '../../hooks/useModal';
+import TextInput from '../customFormInputs/TextInput';
 
 interface Props {
   onSubmit: SubmitHandler<Record<string, any>>;
@@ -42,14 +42,13 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
       <p className="text-gray-700 mb-3">{t('add_bank_modal_text')}</p>
       <FormProvider {...formMethods}>
         <Form onSubmit={formMethods.handleSubmit(handleSubmit)}>
-          <ControlledTextInput
+          <TextInput
             id="account_number"
-            placeholder={t('add_bank_modal_account_number')}
-            error={formMethods.formState.errors.account_number}
-            inputFormatting={{
+            title={t('add_bank_modal_account_number')}
+            maskedInput={{
               format: 'BE## #### #### ####',
               mask: '_',
-              placeholder: 'BE',
+              allowEmptyFormatting: true,
             }}
             rules={{
               required: `${t('add_bank_modal_account_number')} ${t(

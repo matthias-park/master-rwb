@@ -17,7 +17,7 @@ export interface OnlineFormBlockField {
   labelKey?: (value: any) => string;
   inputFormatting?: {
     format?: string | ((value: string) => string);
-    placeholder?: string;
+    allowEmptyFormatting?: boolean;
     mask?: string;
   };
   disableCopyPaste?: boolean;

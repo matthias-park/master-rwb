@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useI18n } from '../../hooks/useI18n';
-import { ControlledTextInput } from '../../components/TextInput';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
 import ForgotPasswordResponse from '../../types/api/user/ForgotPassword';
@@ -14,6 +13,7 @@ import useGTM from '../../hooks/useGTM';
 import isEqual from 'lodash.isequal';
 import LoadingButton from '../../components/LoadingButton';
 import { VALIDATIONS } from '../../constants';
+import TextInput from '../../components/customFormInputs/TextInput';
 
 const ForgotPasswordPage = () => {
   const formMethods = useForm({
@@ -76,15 +76,16 @@ const ForgotPasswordPage = () => {
         <p className="text-14 mb-3">{t('forgot_password_text')}</p>
         <FormProvider {...formMethods}>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <ControlledTextInput
+            <TextInput
               rules={{
-                required: t('login_field_required'),
+                required: `${t('forgot_password_email_field')} ${t(
+                  'login_field_required',
+                )}`,
                 validate: async value =>
                   VALIDATIONS.email(value) || t('register_email_bad_format'),
               }}
-              error={formState.errors.email}
               id="email"
-              placeholder={t('forgot_password_email_field')}
+              title={t('forgot_password_email_field')}
             />
             <LoadingButton
               variant="primary"

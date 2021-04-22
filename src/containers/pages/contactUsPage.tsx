@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { JSONFormPage } from '../../types/api/JsonFormPage';
 import Spinner from 'react-bootstrap/Spinner';
 import Form from 'react-bootstrap/Form';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useI18n } from '../../hooks/useI18n';
 import FieldFromJson from '../../components/FieldFromJson';
 import { useConfig } from '../../hooks/useConfig';
@@ -33,9 +33,10 @@ const fieldValidations = {
 const ContactUsPage = () => {
   const { t } = useI18n();
   const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
-  const { handleSubmit, control, register, setValue, reset } = useForm({
+  const formMethods = useForm({
     mode: 'onBlur',
   });
+  const { handleSubmit, setValue, reset } = formMethods;
   const [submitResponse, setSubmitResponse] = useState<{
     success: boolean;
     msg: string | null;
@@ -137,30 +138,37 @@ const ContactUsPage = () => {
                     )}
                 </CustomAlert>
               )}
-              <Form onSubmit={handleSubmit(onSubmit)}>
-                <small className="d-block mb-3">{t('contact_form_text')}</small>
-                {data.form.map(field => {
-                  if (field.disabled) {
-                    return null;
-                  }
-                  return (
-                    <FieldFromJson
-                      key={field.id}
-                      field={field}
-                      control={control}
-                      register={register}
-                      rules={{
-                        required:
-                          field.required && t('contact_page_field_required'),
-                        validate: value => {
-                          const valid = fieldValidations[field.id]?.(value);
-                          return typeof valid === 'string' ? t(valid) : valid;
-                        },
-                      }}
-                    />
-                  );
-                })}
-              </Form>
+              <FormProvider {...formMethods}>
+                <Form onSubmit={handleSubmit(onSubmit)}>
+                  <small className="d-block mb-3">
+                    {t('contact_form_text')}
+                  </small>
+                  {data.form.map(field => {
+                    if (field.disabled) {
+                      return null;
+                    }
+                    return (
+                      <FieldFromJson
+                        key={field.id}
+                        field={field}
+                        rules={{
+                          required:
+                            field.required &&
+                            `${field.title} ${t(
+                              field.type === 'select'
+                                ? 'contact_us_select_required'
+                                : 'contact_page_field_required',
+                            )}`,
+                          validate: value => {
+                            const valid = fieldValidations[field.id]?.(value);
+                            return typeof valid === 'string' ? t(valid) : valid;
+                          },
+                        }}
+                      />
+                    );
+                  })}
+                </Form>
+              </FormProvider>
             </div>
             <HelpBlock
               blocks={['faq', 'phone', 'email']}
