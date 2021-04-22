@@ -164,12 +164,12 @@ a:hover {
     }
   }
   &__unchecked {
-    right: 24%;
+    right: 20%;
     opacity: 0.6;
   }
   &__checked {
     display: none;
-    left: 20%;
+    left: 24%;
   }
   &__checked,
   &__unchecked {
@@ -285,6 +285,61 @@ a:hover {
     font-size: 30px;
     color: $gray-200;
     transition: transform 0.2s;
+  }
+}
+
+.cookies-nav {
+  position: fixed;
+  display: flex;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1030;
+  background-color: $brand-light;
+  color: $gray-custom-200;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 20px 6% 14px 6%;
+  box-shadow: 0 0px 12px rgba($white, 0.2);
+  @include media-breakpoint-down(xs) {
+    flex-direction: column;
+  }
+  &__icon {
+    font-size: 25px;
+    margin-right: 15px;
+    @include media-breakpoint-down(xs) {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+  }
+  &__body {
+    flex-grow: 2;
+    &-text {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    @include media-breakpoint-down(xs) {
+      margin-left: 35px;
+      margin-bottom: 15px;
+    }
+  }
+  &__buttons {
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    @include media-breakpoint-down(xs) {
+      margin-left: 35px;
+    }
+    .btn.btn-sm {
+      padding-top: 6px;
+      padding-bottom: 6px;
+      max-height: 34px;
+      white-space: nowrap;
+    }
+    button:first-of-type {
+      margin-bottom: 10px;
+    }
   }
 }
 
@@ -499,6 +554,7 @@ a:hover {
   }
   button {
     min-width: 200px;
+    white-space: nowrap;
   }
 }
 
