@@ -28,7 +28,7 @@ const InputContainer = ({
   min = 0,
   max,
   disabled,
-  currency = '',
+  currency,
 }: Props) => {
   const [inputValue, setInputValue] = useState<string>(defaultValue.toString());
   const handleSubmit = async () => {
