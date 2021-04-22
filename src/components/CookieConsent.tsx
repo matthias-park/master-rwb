@@ -5,6 +5,7 @@ import { useI18n } from '../hooks/useI18n';
 import useStorage from '../hooks/useStorage';
 import { Storage } from '../types/Storage';
 import { useModal } from '../hooks/useModal';
+import Button from 'react-bootstrap/Button';
 
 const CookieConsent = () => {
   const { enableModal } = useModal();
@@ -28,24 +29,31 @@ const CookieConsent = () => {
     setCookiesAccepted(true);
   };
   return (
-    <nav className="navbar fixed-bottom navbar-dark bg-brand">
-      <span className="navbar-text">
-        {jsxT('cookie_consent_desc')}{' '}
-        <span
-          className="cursor-pointer"
+    <nav className="cookies-nav">
+      <i className="icon-cookies cookies-nav__icon"></i>
+      <div className="cookies-nav__body">
+        <h3 className="cookies-nav__body-title">cookies title</h3>
+        <p className="cookies-nav__body-text">
+          {jsxT('cookie_consent_desc')} {jsxT('cookie_consent_open_policy')}
+        </p>
+      </div>
+      <div className="cookies-nav__buttons">
+        <Button
+          size="sm"
+          variant="primary"
           onClick={() => enableModal(ComponentName.CookiesModal)}
         >
-          {t('cookie_consent_open_policy')}
-        </span>
-      </span>
-      <button
-        id="gdpr-snackbar-accept"
-        type="button"
-        className="btn btn-sm btn-success m-1 mr-5"
-        onClick={handleAccept}
-      >
-        {t('cookie_consent_accept')}
-      </button>
+          show modal
+        </Button>
+        <Button
+          size="sm"
+          id="gdpr-snackbar-accept"
+          variant="outline-light"
+          onClick={handleAccept}
+        >
+          {t('cookie_consent_accept')}
+        </Button>
+      </div>
     </nav>
   );
 };
