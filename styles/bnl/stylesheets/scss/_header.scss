@@ -110,6 +110,15 @@
                     &:after {
                       content: none;
                     }
+                    i {
+                      font-size: 23px;
+                      vertical-align: text-bottom;
+                      color: rgba($white, 0.85);
+                      @include media-breakpoint-down(xl) {
+                        transform: translateX(25px);
+                        color: rgba($brand-text, 0.85);
+                      }
+                    }
                 }
                 &-icon {
                     font-size: 30px;
@@ -126,7 +135,7 @@
                     .dropdown-menu {
                       position: absolute;
                       align-items: center;
-                      top: 133px;
+                      top: 134px;
                       left: -80px;
                       border-radius: 0;
                       width: calc(100% + 160px);
@@ -159,7 +168,7 @@
                         &:before {
                           content: "";
                           position: absolute;
-                          bottom: -22px;
+                          bottom: -23px;
                           left: 50%;
                           transform: translateX(-50%);
                           width: 0;

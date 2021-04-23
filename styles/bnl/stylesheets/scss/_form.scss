@@ -46,9 +46,14 @@
         display: flex;
         align-items: center;
         font-size: 32px;
-        .icon-eye-on {
+        .icon-eye-off {
             color: $brand-light;
             cursor: pointer;
+            &.show {
+              &:before {
+                content: '\e978';
+              }
+            }
         }
         .icon-check {
             display: none;
@@ -79,15 +84,6 @@
         margin-top: 3px;
         text-align: left;
     }
-    &.show-pass {
-        #{ $self }__icons {
-            .icon-eye-on {
-                &:before {
-                    content: '\e977';
-                }
-            }
-        }
-    }
     &.success {
         #{ $self }__icons {
             right: 0;
@@ -113,6 +109,7 @@
             .icon-exclamation {
                 display: inline-block;
             }
+            .icon-eye-off,
             .icon-eye-on {
                 position: relative;
                 right: -6px;
