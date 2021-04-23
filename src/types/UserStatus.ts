@@ -21,6 +21,7 @@ export interface UserStatus {
   loading: boolean;
   logout?: true;
   logged_in: boolean;
+  login_click?: boolean;
   token?: string;
   id?: number;
   name?: string;

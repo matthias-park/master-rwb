@@ -110,6 +110,7 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
             currency: 'EUR',
           }),
           logged_in: true,
+          login_click: true,
           loading: false,
           name: res.Data!.Login,
         },
@@ -124,9 +125,7 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
     return { success: res.Success, message: res.Message };
   };
   const signout = async () => {
-    await getApi('/railsapi/v1/user/logout').catch(err => {
-      addToast('Failed to logout', { appearance: 'error', autoDismiss: true });
-    });
+    await getApi('/railsapi/v1/user/logout').catch(err => err);
     mutate({
       loading: false,
       logged_in: false,

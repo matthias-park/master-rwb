@@ -19,7 +19,6 @@ import useGTM from '../../hooks/useGTM';
 import Link from '../../components/Link';
 import { useAuth } from '../../hooks/useAuth';
 import { usePrevious } from '../../hooks';
-import { useModal } from '../../hooks/useModal';
 
 const SubNavLinks = () => {
   const { locales, locale, setLocale } = useConfig();
@@ -100,12 +99,10 @@ interface UserBlockProps {
 const UserBlock = ({ mobile }: UserBlockProps) => {
   const { user, signout } = useAuth();
   const { backdrop } = useUIConfig();
-  const { enableModal } = useModal();
   const prevUser = usePrevious(user.logged_in);
   useEffect(() => {
     if (user.logged_in && !prevUser) {
       backdrop.hide();
-      enableModal(ComponentName.ResponsibleGamblingModal);
     }
   }, [user]);
   if (user.id) {

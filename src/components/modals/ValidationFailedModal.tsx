@@ -29,7 +29,7 @@ const ValidationFailedModal = () => {
     ) {
       disableModal(ComponentName.ValidationFailedModal);
     }
-  }, [user]);
+  }, [user.validator_status]);
 
   const hideModal = () => disableModal(ComponentName.ValidationFailedModal);
 
