@@ -8,11 +8,13 @@ import useStorage from '../../hooks/useStorage';
 import { Storage } from '../../types/Storage';
 import { ComponentName } from '../../constants';
 import { useModal } from '../../hooks/useModal';
+import useGTM from '../../hooks/useGTM';
 
 const CookiePolicyModal = () => {
   const { t } = useI18n();
   const storage = useStorage();
   const cookiesId = Object.keys(storage.cookies);
+  const sendDataToGTM = useGTM();
   const [cookieSettings, setCookieSettings] = useState<Storage>(
     storage.cookies,
   );
@@ -34,6 +36,13 @@ const CookiePolicyModal = () => {
       );
     }
     storage.saveCookies(cookieSettings);
+    sendDataToGTM({
+      event: 'cookiePreferencesChange',
+      'tglab.cookies.analytics': cookieSettings.analytics,
+      'tglab.cookies.functional': cookieSettings.functional,
+      'tglab.cookies.marketing': cookieSettings.marketing,
+      'tglab.cookies.personalization': cookieSettings.personalization,
+    });
     return disableModal(ComponentName.CookiesModal);
   };
 

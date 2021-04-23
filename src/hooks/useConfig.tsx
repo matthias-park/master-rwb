@@ -153,7 +153,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
       helpBlock: constants?.help_block,
       configLoaded,
     }),
-    [locale, !!constants],
+    [locale, !!constants, configLoaded],
   );
   return <configContext.Provider value={value} {...props} />;
 };

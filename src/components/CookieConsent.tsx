@@ -6,11 +6,13 @@ import useStorage from '../hooks/useStorage';
 import { Storage } from '../types/Storage';
 import { useModal } from '../hooks/useModal';
 import Button from 'react-bootstrap/Button';
+import useGTM from '../hooks/useGTM';
 
 const CookieConsent = () => {
   const { enableModal } = useModal();
   const { jsxT, t } = useI18n();
   const storage = useStorage();
+  const sendDataToGTM = useGTM();
   const [cookiesAccepted, setCookiesAccepted] = useLocalStorage(
     'cookieConsent',
     false,
@@ -26,6 +28,13 @@ const CookieConsent = () => {
         return obj;
       }, {}) as Storage,
     );
+    sendDataToGTM({
+      event: 'cookiePreferencesChange',
+      'tglab.cookies.analytics': true,
+      'tglab.cookies.functional': true,
+      'tglab.cookies.marketing': true,
+      'tglab.cookies.personalization': true,
+    });
     setCookiesAccepted(true);
   };
   return (

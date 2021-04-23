@@ -7,6 +7,8 @@ import UserStatus, { NET_USER } from '../types/UserStatus';
 import { getApi, postApi } from '../utils/apiUtils';
 import { usePrevious } from '.';
 import useGTM from './useGTM';
+import { useConfig } from './useConfig';
+import { isMobile } from 'react-device-detect';
 
 export interface UserAuth {
   user: UserStatus;
@@ -36,6 +38,7 @@ export type I18nProviderProps = {
 export const AuthProvider = ({ ...props }: I18nProviderProps) => {
   const { addToast } = useToasts();
   const sendDataToGTM = useGTM();
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { data, error, mutate } = useApi<UserStatus | null>(
     !TestEnv ? '/railsapi/v1/user/status' : null,
     url => getApi<RailsApiResponse<UserStatus>>(url).then(res => res.Data),
@@ -56,14 +59,6 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
   );
 
   const prevUser = usePrevious(data);
-  useEffect(() => {
-    if (!data?.logout && !data?.logged_in && prevUser?.logged_in) {
-      addToast(`User session ended`, {
-        appearance: 'warning',
-        autoDismiss: true,
-      });
-    }
-  }, [data, prevUser]);
 
   let user: UserStatus = { logged_in: false, loading: false };
   if (!data && !error) {
@@ -73,6 +68,22 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
     user.logged_in = !!user.id;
     user.loading = false;
   }
+
+  useEffect(() => {
+    if (!data?.logout && !data?.logged_in && prevUser?.logged_in) {
+      addToast(`User session ended`, {
+        appearance: 'warning',
+        autoDismiss: true,
+      });
+    }
+    sendDataToGTM({
+      'tglab.user.LoginStatus': user.logged_in ? 'LoggedIn' : 'LoggedIout',
+      'tglab.user.Platform': isMobile ? 'Mobile' : 'Desktop',
+      'tglab.user.Language': locale,
+      event: 'userStatusChange',
+    });
+  }, [data, prevUser]);
+
   const signin = async (
     email: string,
     password: string,
