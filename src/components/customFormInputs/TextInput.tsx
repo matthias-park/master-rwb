@@ -97,7 +97,10 @@ export const UncontrolledTextInput = React.forwardRef(
           )}
           {props.toggleVisibility && (
             <i
-              className="icon-eye-on show-password"
+              className={clsx(
+                'icon-eye-off show-password',
+                showPassword && 'show',
+              )}
               onClick={togglePasswordVisibility}
             />
           )}

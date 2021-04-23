@@ -34,7 +34,7 @@ const CheckboxInput = ({
       disabled={disabled}
       className={className}
       onChange={e => {
-        field.onChange(!!e.target.value);
+        field.onChange(!!(e.target as HTMLInputElement).value);
       }}
       custom
       type="checkbox"
