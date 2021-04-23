@@ -82,6 +82,7 @@ export const HeaderNavClassicLink = ({
           }}
         >
           {t(data.name)}
+          {data.externalLink && <i className="icon-redirect"></i>}
         </Dropdown.Toggle>
       ) : (
         <Dropdown.Toggle
@@ -93,6 +94,7 @@ export const HeaderNavClassicLink = ({
         >
           <span className="header__nav-item-link cursor-pointer">
             <span>{t(data.name)}</span>
+            {data.externalLink && <i className="icon-redirect"></i>}
           </span>
           <i className="header__nav-item-icon icon-down"></i>
         </Dropdown.Toggle>

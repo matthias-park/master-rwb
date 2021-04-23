@@ -105,7 +105,7 @@ const StoreForm = () => {
               Wachtwoord
             </label>
             <div className="form-group__icons">
-              <i className="icon-eye-on show-password"></i>
+              <i className="icon-eye-off show-password"></i>
               <i className="icon-check"></i>
               <i className="icon-exclamation"></i>
             </div>
@@ -117,7 +117,7 @@ const StoreForm = () => {
               Herhaal Wachtwoord
             </label>
             <div className="form-group__icons">
-              <i className="icon-eye-on show-password"></i>
+              <i className="icon-eye-off show-password"></i>
               <i className="icon-check"></i>
               <i className="icon-exclamation"></i>
             </div>

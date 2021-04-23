@@ -18,7 +18,24 @@ body {
         padding: 0 20px;
     }
     &.modal-open {
-      overflow: hidden;
+      max-width: calc(100vw - 17px);
+      margin: 0;
+      padding-right: 80px !important;
+      .header:before {
+        margin-right: -97px;
+      }
+      @include media-breakpoint-down(xl) {
+        padding-right: 45px !important;
+        .header:before {
+          margin-right: -62px;
+        }
+      }
+      @include media-breakpoint-down(lg) {
+          padding-right: 20px !important;
+          .header:before {
+            margin-right: -37px;
+          }
+      }
     }
 }
 
@@ -651,6 +668,10 @@ a:hover {
     @include media-breakpoint-down(lg) {
       width: calc(100% + 40px) !important;
       transform: translateX(-20px);
+      height: calc(100vh - 65px) !important;
+      .KambiBC-view-wrapper {
+        height: calc(100% - 65px) !important;
+      }
     }
 }
 
