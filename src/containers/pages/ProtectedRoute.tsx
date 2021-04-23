@@ -1,17 +1,16 @@
 import React from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
-import { useConfig } from '../../hooks/useConfig';
 import { useRoutePath } from '../../hooks/index';
 import { REDIRECT_PROTECTED_NOT_LOGGED_IN } from '../../constants';
 import Spinner from 'react-bootstrap/Spinner';
-import isEqual from 'lodash.isequal';
+import { useAuth } from '../../hooks/useAuth';
 
 interface Props extends RouteProps {
   redirectTo?: string;
 }
 
 const ProtectedRoute = ({ children, redirectTo, ...props }: Props) => {
-  const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
+  const { user } = useAuth();
   const redirectToPath = useRoutePath(REDIRECT_PROTECTED_NOT_LOGGED_IN);
   if (user.loading) {
     return (

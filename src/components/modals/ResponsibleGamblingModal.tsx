@@ -2,16 +2,14 @@ import React, { useEffect, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import GenericModal from './GenericModal';
 import { useI18n } from '../../hooks/useI18n';
-import { useConfig } from '../../hooks/useConfig';
 import Lockr from 'lockr';
 import { stringToMiliseconds } from '../../utils/index';
 import { ComponentName } from '../../constants';
 import { useModal } from '../../hooks/useModal';
+import { useAuth } from '../../hooks/useAuth';
 
 const ResponsibleGamblingModal = () => {
-  const { user } = useConfig(
-    (prev, next) => prev.user.logged_in === next.user.logged_in,
-  );
+  const { user } = useAuth();
   const { t } = useI18n();
   const intervalRef = useRef(0);
   const { activeModal, enableModal, disableModal } = useModal();

@@ -1,5 +1,4 @@
 import { PagesName } from '../constants';
-import UserStatus from './UserStatus';
 import { NavigationRoute } from './api/PageConfig';
 import {
   HeaderRoute,
@@ -15,8 +14,6 @@ export enum ConfigLoaded {
 }
 
 type Config = {
-  user: UserStatus;
-  mutateUser: (status?: UserStatus, shouldRevalidate?: boolean) => void;
   locale: string;
   locales: AvailableLocale[];
   setLocale: (lang: string) => void;

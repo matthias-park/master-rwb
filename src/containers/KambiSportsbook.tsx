@@ -11,6 +11,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { KambiSbLocales } from '../constants';
 import { useLocation } from 'react-router-dom';
 import { hideKambiSportsbook, showKambiSportsbook } from '../utils/uiUtils';
+import { useAuth } from '../hooks/useAuth';
 
 interface SetCustomerSettingsProps {
   getApiBalance: string;
@@ -105,8 +106,7 @@ const setCustomerSettings = ({
     enableOddsFormatSelector: true,
   };
 };
-const getSBParams = async (config: Config) => {
-  const playerId = config.user.id ? config.user.id.toString() : '';
+const getSBParams = async (config: Config, playerId) => {
   const data = playerId
     ? await getApi<RailsApiResponse<string>>(
         '/railsapi/v1/kambi/get_token',
@@ -160,6 +160,7 @@ const kambiId = 'KambiBC';
 const KambiSportsbook = () => {
   const { addToast } = useToasts();
   const config = useConfig();
+  const { user, updateUser } = useAuth();
   const { hash, key: locationKey } = useLocation();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [sbLoading, setSbLoading] = useState(!sportsbookRendered);
@@ -167,10 +168,10 @@ const KambiSportsbook = () => {
   const desktopWidth = useDesktopWidth(1199);
 
   const sendKambiLoginChangeRequest = () => {
-    if (config.user.logged_in) {
+    if (user.logged_in) {
       setSbLoading(true);
       hideKambiSportsbook();
-      getSBParams(config).then(kambiConfig => {
+      getSBParams(config, user.id?.toString()).then(kambiConfig => {
         //@ts-ignore
         window.KambiWapi?.request(window.KambiWapi?.LOGIN, {
           punterId: kambiConfig.playerId,
@@ -185,9 +186,9 @@ const KambiSportsbook = () => {
     }
   };
   useEffect(() => {
-    if (apiLoaded && config.user.logged_in !== kambiUserLoggedIn)
+    if (!!window.KambiWidget && user.logged_in !== kambiUserLoggedIn)
       sendKambiLoginChangeRequest();
-  }, [config.user.logged_in, apiLoaded]);
+  }, [user.logged_in]);
 
   useEffect(() => {
     if (locationKey && hash.length && window.KambiWapi) {
@@ -197,11 +198,11 @@ const KambiSportsbook = () => {
 
   useEffect(() => {
     if (!window.KambiWapi && !document.getElementById(kambiId)) {
-      getSBParams(config).then(kambiConfig => {
+      getSBParams(config, user.id?.toString()).then(kambiConfig => {
         setCustomerSettings({
           addToast,
           getApiBalance: kambiConfig?.getApiBalance,
-          updateBalance: () => config.mutateUser(),
+          updateBalance: () => updateUser(),
           sbLoaded: () => setSbLoading(false),
           retryLogin: sendKambiLoginChangeRequest,
         });

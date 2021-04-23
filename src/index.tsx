@@ -14,6 +14,7 @@ import { GtmProvider } from './hooks/useGTM';
 import * as Sentry from '@sentry/react';
 import { Workbox } from 'workbox-window';
 import Lockr from 'lockr';
+import { AuthProvider } from './hooks/useAuth';
 
 if (process.env.TARGET_ENV !== 'development' && window.__config__.sentryDsn) {
   Sentry.init({
@@ -29,11 +30,13 @@ ReactDOM.render(
       <ConfigProvider>
         <I18nProvider>
           <GtmProvider>
-            <HelmetProvider>
-              <React.StrictMode>
-                <App />
-              </React.StrictMode>
-            </HelmetProvider>
+            <AuthProvider>
+              <HelmetProvider>
+                <React.StrictMode>
+                  <App />
+                </React.StrictMode>
+              </HelmetProvider>
+            </AuthProvider>
           </GtmProvider>
         </I18nProvider>
       </ConfigProvider>

@@ -2,17 +2,13 @@ import React, { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import GenericModal from './GenericModal';
 import { useI18n } from '../../hooks/useI18n';
-import { useConfig } from '../../hooks/useConfig';
 import { VALIDATOR_STATUS } from '../../types/UserStatus';
 import { useModal } from '../../hooks/useModal';
 import { ComponentName } from '../../constants';
+import { useAuth } from '../../hooks/useAuth';
 
 const ValidationFailedModal = () => {
-  const { user } = useConfig(
-    (prev, next) =>
-      prev.user.validator_status === next.user.validator_status &&
-      prev.user.logged_in === next.user.logged_in,
-  );
+  const { user } = useAuth();
   const { t } = useI18n();
   const {
     activeModal,

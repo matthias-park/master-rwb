@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { postApi } from '../utils/apiUtils';
-import { useConfig } from '../hooks/useConfig';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../hooks/useUIConfig';
 import { ComponentName, FormFieldValidation, PagesName } from '../constants';
@@ -10,25 +8,21 @@ import { useLocation } from 'react-router-dom';
 import CustomAlert from '../components/CustomAlert';
 import { Spinner, OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
 import { useRoutePath } from '../hooks/index';
-import { NET_USER } from '../types/UserStatus';
-import RailsApiResponse from '../types/api/RailsApiResponse';
 import useGTM from '../hooks/useGTM';
 import LoadingButton from '../components/LoadingButton';
 import Link from '../components/Link';
 import { useModal } from '../hooks/useModal';
 import TextInput from '../components/customFormInputs/TextInput';
+import { useAuth } from '../hooks/useAuth';
 
 interface Props {
   dropdownClasses?: string;
   toggleClasses?: string;
   userLoading?: boolean;
+  toggleBackdrop: (active: boolean, ignoredCompoents: ComponentName[]) => void;
 }
 
-const LoginForm = ({
-  hideLoginDropdown,
-}: {
-  hideLoginDropdown: () => void;
-}) => {
+const LoginForm = () => {
   const { t } = useI18n();
   const [apiError, setApiError] = useState<string | null>(null);
   const { enableModal } = useModal();
@@ -45,7 +39,7 @@ const LoginForm = ({
     },
   });
   const { register, handleSubmit, formState, watch } = formMethods;
-  const { mutateUser } = useConfig();
+  const { signin } = useAuth();
   const sendDataToGTM = useGTM();
   const forgotPasswordRoute = useRoutePath(PagesName.ForgotPasswordPage);
   const onSubmit = async ({ email, password, remember_me }) => {
@@ -53,40 +47,10 @@ const LoginForm = ({
     sendDataToGTM({
       event: 'LoginSubmitted',
     });
-    const response = await postApi<RailsApiResponse<NET_USER | null>>(
-      '/railsapi/v1/user/login',
-      {
-        login: email.trim(),
-        password,
-        remember_me,
-      },
-    ).catch((res: RailsApiResponse<null>) => res);
-    if (response.Success && response.Data?.PlayerId) {
-      hideLoginDropdown();
-      sendDataToGTM({
-        'tglab.GUID': response.Data.PlayerId!,
-        event: 'SuccessfulLogin',
-      });
-      enableModal(ComponentName.ResponsibleGamblingModal);
-      return mutateUser(
-        {
-          id: response.Data.PlayerId,
-          balance: response.Data.Balance.toLocaleString('de-DE', {
-            style: 'currency',
-            currency: 'EUR',
-          }),
-          logged_in: true,
-          loading: false,
-          name: response.Data.Login,
-        },
-        true,
-      );
+    const response = await signin(email, password, remember_me);
+    if (!response.success) {
+      return setApiError(response.message || t('login_failed_to_login'));
     }
-    sendDataToGTM({
-      'tglab.Error': response.Message || t('login_failed_to_login'),
-      event: 'LoginFailed',
-    });
-    setApiError(response.Message || t('login_failed_to_login'));
     return;
   };
   return (
@@ -205,6 +169,7 @@ const LoginDropdown = ({
   dropdownClasses,
   toggleClasses,
   userLoading,
+  toggleBackdrop,
 }: Props) => {
   const { t } = useI18n();
   const location = useLocation();
@@ -214,14 +179,9 @@ const LoginDropdown = ({
   useEffect(() => {
     setShowDropdown(false);
   }, [location.pathname]);
-
   useEffect(() => {
-    backdrop.toggle(showDropdown, [ComponentName.Header]);
+    toggleBackdrop(showDropdown, [ComponentName.Header]);
   }, [showDropdown]);
-
-  const handleHideDropdown = React.useCallback(() => {
-    setShowDropdown(prev => !prev);
-  }, []);
 
   const toggleDropdown = isOpen => {
     if (isOpen) {
@@ -261,7 +221,7 @@ const LoginDropdown = ({
         )}
       </Dropdown.Toggle>
       <Dropdown.Menu className="login-dropdown__menu">
-        <LoginForm hideLoginDropdown={handleHideDropdown} />
+        <LoginForm />
         {/* <JoinLotteryClub /> */}
         <RegistrationLink />
       </Dropdown.Menu>

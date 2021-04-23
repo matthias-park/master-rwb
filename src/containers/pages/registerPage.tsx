@@ -20,10 +20,10 @@ import dayjs from 'dayjs';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { RegistrationPostalCodeAutofill } from '../../types/api/user/Registration';
 import useGTM from '../../hooks/useGTM';
-import isEqual from 'lodash.isequal';
 import { useI18n } from '../../hooks/useI18n';
 import { PagesName, REDIRECT_PROTECTED_NOT_LOGGED_IN } from '../../constants';
 import NotFoundPage from './notFoundPage';
+import { useAuth } from '../../hooks/useAuth';
 
 interface SuccessRegistrationPathState {
   welcomeScreen?: boolean;
@@ -33,15 +33,13 @@ const RegisterPage = () => {
   const { t } = useI18n();
   const location = useLocation<SuccessRegistrationPathState>();
   const history = useHistory<SuccessRegistrationPathState>();
-  const { user, mutateUser, locale, locales, routes } = useConfig(
-    (prev, next) => {
-      const userEqual = isEqual(prev.user, next.user);
-      const localeEqual = prev.locale === next.locale;
-      const localesEqual = !!prev.locales === !!next.locales;
-      const routesEqual = prev.routes.length === next.routes.length;
-      return userEqual && localeEqual && localesEqual && routesEqual;
-    },
-  );
+  const { locale, locales, routes } = useConfig((prev, next) => {
+    const localeEqual = prev.locale === next.locale;
+    const localesEqual = !!prev.locales === !!next.locales;
+    const routesEqual = prev.routes.length === next.routes.length;
+    return localeEqual && localesEqual && routesEqual;
+  });
+  const { user, updateUser } = useAuth();
   const { headerNav } = useUIConfig();
   const { addToast } = useToasts();
   const sendDataToGTM = useGTM();
@@ -135,19 +133,9 @@ const RegisterPage = () => {
         return res;
       });
       if (res?.Success && res.Data) {
-        mutateUser(
-          {
-            loading: false,
-            logged_in: true,
-            balance: '',
-            id: res.Data.PlayerId,
-            name: res.Data.Login,
-          },
-          true,
-        );
-
+        updateUser();
         sendDataToGTM({
-          'tglab.GUID': res.Data.PlayerId,
+          'tglab.user.GUID': res.Data.PlayerId,
           event: 'ConfirmedRegistration',
         });
         if (successRegisterRoute) {

@@ -12,6 +12,7 @@ import useGTM from '../../hooks/useGTM';
 import { PagesName } from '../../constants';
 import { ConfigLoaded } from '../../types/Config';
 import NotFoundPage from '../pages/notFoundPage';
+import { useAuth } from '../../hooks/useAuth';
 
 let prevPathname: string | null = null;
 
@@ -20,14 +21,14 @@ const PageLayout = ({ children }) => {
   const { t } = useI18n();
   const { pathname } = useLocation();
   const { headerNav } = useUIConfig();
-  const { user, helpBlock, sidebars, routes, locale, configLoaded } = useConfig(
+  const { helpBlock, sidebars, routes, locale, configLoaded } = useConfig(
     (prev, next) => {
-      const userEqual = prev.user.loading === next.user.loading;
       const configLoaded = prev.configLoaded === next.configLoaded;
       const localeEqual = prev.locale === next.locale;
-      return userEqual && configLoaded && localeEqual;
+      return configLoaded && localeEqual;
     },
   );
+  const { user } = useAuth();
   const history = useHistory();
   const sidebar = useMemo(
     () =>

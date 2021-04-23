@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { useConfig } from '../../hooks/useConfig';
 import { useI18n } from '../../hooks/useI18n';
-import isEqual from 'lodash.isequal';
 import Link from '../../components/Link';
 import { PagesName } from '../../constants';
 import { sortAscending } from '../../utils';
+import { useAuth } from '../../hooks/useAuth';
 
 interface SitemapListItem {
   path: string;
@@ -51,12 +51,10 @@ const TreeItem = ({ route }: { route: SitemapListItem }) => {
 
 const SitemapPage = () => {
   const { t } = useI18n();
-  const { routes, user } = useConfig((prev, next) => {
-    const routesEqual = !!prev.routes === !!next.routes;
-    const userEqual = isEqual(prev.user, next.user);
-    return routesEqual && userEqual;
-  });
-
+  const { routes } = useConfig(
+    (prev, next) => prev.routes.length === next.routes.length,
+  );
+  const { user } = useAuth();
   const sitemapList = useMemo(() => {
     const list: SitemapListItem[] = [];
     for (const route of routes.sort((a, b) =>

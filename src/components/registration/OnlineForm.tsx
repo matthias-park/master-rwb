@@ -304,6 +304,7 @@ const OnlineForm = (props: Props) => {
                             id={field.id}
                             key={field.id}
                             title={jsxT(`register_input_${field.id}_label`)}
+                            defaultValue={false}
                             rules={{
                               required:
                                 field.required &&

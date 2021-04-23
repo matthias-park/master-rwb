@@ -6,17 +6,16 @@ import { useParams } from 'react-router-dom';
 import { DepositRequest, DepositResponse } from '../../types/api/user/Deposit';
 import { useToasts } from 'react-toast-notifications';
 import { useI18n } from '../../hooks/useI18n';
-import { useConfig } from '../../hooks/useConfig';
 import { ComponentName, PagesName } from '../../constants';
-import isEqual from 'lodash.isequal';
 import CustomAlert from '../../components/CustomAlert';
 import useUserBankAccountModal from '../../hooks/useUserBankAccountModal';
 import { usePrevious, useRoutePath } from '../../hooks';
 import { useModal } from '../../hooks/useModal';
+import { useAuth } from '../../hooks/useAuth';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
-  const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
+  const { user } = useAuth();
   const bankAccount = useUserBankAccountModal();
   const { enableModal, allActiveModals } = useModal();
   const { t } = useI18n();

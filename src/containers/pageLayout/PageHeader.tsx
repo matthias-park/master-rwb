@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useConfig } from '../../hooks/useConfig';
-import { getApi, postApi } from '../../utils/apiUtils';
+import { postApi } from '../../utils/apiUtils';
 import { setPageLoadingSpinner } from '../../utils/uiUtils';
 import LoginDropdown from '../LoginDropdown';
 import UserInfoBlock from '../../components/header/UserInfoBlock';
@@ -12,12 +12,14 @@ import useDesktopWidth from '../../hooks/useDesktopWidth';
 import { sortAscending } from '../../utils/index';
 import { HeaderNavClassicLink } from '../../components/header/HeaderNavLinks';
 import BrandLogo from '../../components/header/BrandLogo';
-import { useToasts } from 'react-toast-notifications';
 import LocaleSelector from '../../components/header/LocaleSelector';
 import { useI18n } from '../../hooks/useI18n';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useGTM from '../../hooks/useGTM';
 import Link from '../../components/Link';
+import { useAuth } from '../../hooks/useAuth';
+import { usePrevious } from '../../hooks';
+import { useModal } from '../../hooks/useModal';
 
 const SubNavLinks = () => {
   const { locales, locale, setLocale } = useConfig();
@@ -96,34 +98,30 @@ interface UserBlockProps {
   mobile: boolean;
 }
 const UserBlock = ({ mobile }: UserBlockProps) => {
-  const { addToast } = useToasts();
-  const { user, mutateUser } = useConfig();
-
-  const handleLogout = async () => {
-    await getApi('/railsapi/v1/user/logout').catch(err => {
-      addToast('Failed to logout', { appearance: 'error', autoDismiss: true });
-      console.log(err);
-    });
-    return mutateUser({
-      loading: false,
-      logged_in: false,
-      logout: true,
-    });
-  };
-
+  const { user, signout } = useAuth();
+  const { backdrop } = useUIConfig();
+  const { enableModal } = useModal();
+  const prevUser = usePrevious(user.logged_in);
+  useEffect(() => {
+    if (user.logged_in && !prevUser) {
+      backdrop.hide();
+      enableModal(ComponentName.ResponsibleGamblingModal);
+    }
+  }, [user]);
   if (user.id) {
     return (
       <UserInfoBlock
         dropdownClasses={clsx('d-flex ml-auto', !mobile && 'mr-1')}
         isMobile={mobile}
         user={user}
-        handleLogout={handleLogout}
+        handleLogout={signout}
       />
     );
   }
   return (
     <LoginDropdown
       dropdownClasses={mobile ? 'ml-auto mr-0' : 'ml-auto mt-0 mt-lg-2'}
+      toggleBackdrop={backdrop.toggle}
       userLoading={user.loading}
     />
   );

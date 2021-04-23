@@ -10,6 +10,7 @@ import useGTM from '../../hooks/useGTM';
 import Link from '../Link';
 import { useLocation } from 'react-router';
 import useDesktopWidth from '../../hooks/useDesktopWidth';
+import { useAuth } from '../../hooks/useAuth';
 
 interface HeaderNavLinkProps {
   data: HeaderRoute;
@@ -27,11 +28,8 @@ export const HeaderNavClassicLink = ({
   toggleActive,
 }: HeaderNavLinkProps) => {
   const { t } = useI18n();
-  const { locale, user } = useConfig((prev, next) => {
-    const localeEqual = prev.locale === next.locale;
-    const userEqual = prev.user.logged_in === next.user.logged_in;
-    return localeEqual && userEqual;
-  });
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const { user } = useAuth();
   const { pathname, hash } = useLocation();
   const fullPath = /^\/sports#bethistory\/[\d]{4}(-[\d]{2}){2}$/i.test(
     `${pathname}${hash}`,

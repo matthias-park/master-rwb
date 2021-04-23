@@ -7,13 +7,12 @@ import CustomAlert from '../../components/CustomAlert';
 import Form from 'react-bootstrap/Form';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Redirect } from 'react-router-dom';
-import { useConfig } from '../../hooks/useConfig';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useGTM from '../../hooks/useGTM';
-import isEqual from 'lodash.isequal';
 import LoadingButton from '../../components/LoadingButton';
 import { VALIDATIONS } from '../../constants';
 import TextInput from '../../components/customFormInputs/TextInput';
+import { useAuth } from '../../hooks/useAuth';
 
 const ForgotPasswordPage = () => {
   const formMethods = useForm({
@@ -26,7 +25,7 @@ const ForgotPasswordPage = () => {
   } | null>(null);
   const { t } = useI18n();
   const { addToast } = useToasts();
-  const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
+  const { user } = useAuth();
   const sendDataToGTM = useGTM();
 
   useEffect(() => {

@@ -6,67 +6,16 @@ import React, {
   useEffect,
   useMemo,
 } from 'react';
-import { getApi, postApi } from '../utils/apiUtils';
+import { postApi } from '../utils/apiUtils';
 import Config, { ConfigLoaded } from '../types/Config';
-import UserStatus, { VALIDATOR_STATUS } from '../types/UserStatus';
 import { setLocalePathname, getWindowUrlLocale } from '../utils/i18n';
-import { TestEnv } from '../constants';
 import { useToasts } from 'react-toast-notifications';
-import { usePrevious } from './index';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { PageConfig } from '../types/api/PageConfig';
 import useApi from './useApi';
 import useMemoCompare from './useMemoCompare';
 import { sortDescending } from '../utils/index';
 import useLocalStorage from './useLocalStorage';
-
-const useUser = () => {
-  const { addToast } = useToasts();
-  const {
-    data: userData,
-    error: userError,
-    mutate: mutateUser,
-  } = useApi<UserStatus | null>(
-    !TestEnv ? '/railsapi/v1/user/status' : null,
-    url => getApi<RailsApiResponse<UserStatus>>(url).then(res => res.Data),
-    {
-      revalidateOnFocus: true,
-      refreshInterval: 300000, // 5 min
-      onErrorRetry: (err: RailsApiResponse<null>) => {
-        if (err.Code !== 401) {
-          addToast(`Failed to fetch user data`, {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        } else {
-          return;
-        }
-      },
-    },
-  );
-
-  const prevUser = usePrevious(userData);
-  useEffect(() => {
-    if (!userData?.logout && !userData?.logged_in && prevUser?.logged_in) {
-      addToast(`User session ended`, {
-        appearance: 'warning',
-        autoDismiss: true,
-      });
-    }
-  }, [userData, prevUser]);
-
-  let user: UserStatus = { logged_in: false, loading: false };
-  if (!userData && !userError) {
-    user.loading = true;
-  } else if (userData && !userError) {
-    user = userData;
-    user.logged_in = !!user.id;
-    user.loading = false;
-  }
-  if (user.id === 963) user.validator_status = VALIDATOR_STATUS.MINOR_ERROR;
-
-  return { user, mutateUser };
-};
 
 const useConstants = () => {
   const { addToast } = useToasts();
@@ -124,7 +73,6 @@ export type ConfigProviderProps = {
 export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   const { constants, updateConstants, constantsError } = useConstants();
   const locales = constants?.available_locales.map(locale => locale.iso) || [];
-  const { user, mutateUser } = useUser();
   const { addToast } = useToasts();
   const [cachedLocale, setCachedLocale] = useLocalStorage<string | null>(
     'locale',
@@ -190,8 +138,6 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   };
   const value: Config = useMemo(
     () => ({
-      user,
-      mutateUser,
       locale,
       setLocale,
       locales: constants?.available_locales || [],
@@ -207,7 +153,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
       helpBlock: constants?.help_block,
       configLoaded,
     }),
-    [user, locale, !!constants],
+    [locale, !!constants],
   );
   return <configContext.Provider value={value} {...props} />;
 };

@@ -5,17 +5,16 @@ import Form from 'react-bootstrap/Form';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useI18n } from '../../hooks/useI18n';
 import FieldFromJson from '../../components/FieldFromJson';
-import { useConfig } from '../../hooks/useConfig';
 import { postApi } from '../../utils/apiUtils';
 import SeoPages from '../../types/api/content/SeoPages';
 import HelpBlock from '../../components/HelpBlock';
 import CustomAlert from '../../components/CustomAlert';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
-import isEqual from 'lodash.isequal';
 import { REGEX_EXPRESSION, VALIDATIONS } from '../../constants';
 import { isValid as isDateValid } from 'date-fns';
 import dayjs from 'dayjs';
+import { useAuth } from '../../hooks/useAuth';
 
 const fieldValidations = {
   first_name: (value: string) =>
@@ -32,7 +31,7 @@ const fieldValidations = {
 
 const ContactUsPage = () => {
   const { t } = useI18n();
-  const { user } = useConfig((prev, next) => isEqual(prev.user, next.user));
+  const { user } = useAuth();
   const formMethods = useForm({
     mode: 'onBlur',
   });

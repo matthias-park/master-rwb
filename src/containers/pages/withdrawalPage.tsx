@@ -19,11 +19,11 @@ import WithdrawalConfirmModal from '../../components/modals/WithdrawalConfirmMod
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { ComponentName } from '../../constants';
 import useApi from '../../hooks/useApi';
-import isEqual from 'lodash.isequal';
 import LoadingButton from '../../components/LoadingButton';
 import { useModal } from '../../hooks/useModal';
 import { usePrevious } from '../../hooks';
 import useUserBankAccountModal from '../../hooks/useUserBankAccountModal';
+import { useAuth } from '../../hooks/useAuth';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -107,11 +107,8 @@ const WithdrawalRequests = ({
 
 const WithdrawalPage = () => {
   const { t, set } = useI18n();
-  const { user, locale, mutateUser } = useConfig((prev, next) => {
-    const userEqual = isEqual(prev.user, next.user);
-    const localeEqual = prev.locale === next.locale;
-    return userEqual && localeEqual;
-  });
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const { user, updateUser } = useAuth();
   const { addToast } = useToasts();
   const { enableModal, allActiveModals } = useModal();
   const bankAccount = useUserBankAccountModal();
@@ -234,7 +231,7 @@ const WithdrawalPage = () => {
       setWithdrawalLoading(false);
       setWithdrawalConfirmData(null);
       mutate();
-      mutateUser();
+      updateUser();
       return setSubmitResponse({
         success: response.Success,
         msg: response.Message,

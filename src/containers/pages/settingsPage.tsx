@@ -7,11 +7,10 @@ import { postApi } from '../../utils/apiUtils';
 import DynamicSettingsAccordion from '../../components/account-settings/DynamicSettingsAccordion';
 import { useI18n } from '../../hooks/useI18n';
 import { useToasts } from 'react-toast-notifications';
-import { useConfig } from '../../hooks/useConfig';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
-import isEqual from 'lodash.isequal';
 import CustomAlert from '../../components/CustomAlert';
+import { useAuth } from '../../hooks/useAuth';
 
 const LoadableMarketingSettingsAccordion = loadable(
   () => import('../../components/account-settings/MarketingSettingsAccordion'),
@@ -27,9 +26,7 @@ export const COMPONENTS_BY_SETTINGS = {
 
 const SettingsPage = () => {
   const { t } = useI18n();
-  const { user, mutateUser } = useConfig((prev, next) =>
-    isEqual(prev.user, next.user),
-  );
+  const { user, updateUser } = useAuth();
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
     msg: string;
@@ -52,7 +49,7 @@ const SettingsPage = () => {
     url: string,
     body: { [key: string]: string | Blob },
     formBody: boolean = false,
-    updateUser: boolean = false,
+    shouldUpdateUser: boolean = false,
   ): Promise<void> => {
     setApiResponse(null);
     body.authenticity_token = user.token!;
@@ -72,8 +69,8 @@ const SettingsPage = () => {
       msg: res.Message || t('api_response_failed'),
     });
     setTimeout(() => mutate(), 1000);
-    if (updateUser) {
-      mutateUser();
+    if (shouldUpdateUser) {
+      updateUser();
     }
     return;
   };
