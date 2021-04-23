@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { getApi, postApi } from '../utils/apiUtils';
 import Config, { ConfigLoaded } from '../types/Config';
-import UserStatus from '../types/UserStatus';
+import UserStatus, { VALIDATOR_STATUS } from '../types/UserStatus';
 import { setLocalePathname, getWindowUrlLocale } from '../utils/i18n';
 import { TestEnv } from '../constants';
 import { useToasts } from 'react-toast-notifications';
@@ -63,6 +63,8 @@ const useUser = () => {
     user.logged_in = !!user.id;
     user.loading = false;
   }
+  if (user.id === 963) user.validator_status = VALIDATOR_STATUS.MINOR_ERROR;
+
   return { user, mutateUser };
 };
 
