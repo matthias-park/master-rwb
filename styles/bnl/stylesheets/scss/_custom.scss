@@ -651,6 +651,10 @@ a:hover {
     @include media-breakpoint-down(lg) {
       width: calc(100% + 40px) !important;
       transform: translateX(-20px);
+      height: calc(100vh - 65px) !important;
+      .KambiBC-view-wrapper {
+        height: calc(100% - 65px) !important;
+      }
     }
 }
 

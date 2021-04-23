@@ -244,7 +244,7 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
                       onClick={() => onGtmLinkClick(child.name)}
                       className={
                         child.button
-                          ? 'btn btn-outline-light btn-sm mt-3'
+                          ? 'btn btn-outline-light btn-sm my-3'
                           : 'section-item__link'
                       }
                     >
