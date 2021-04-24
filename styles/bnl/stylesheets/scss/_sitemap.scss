@@ -1,0 +1,33 @@
+.sitemap-accordion {
+  &__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-left: 26px;
+    &:not(:last-of-type) {
+      margin: 14px 0;
+    }
+    &-title {
+      a:hover,
+      a:focus,
+      a:active {
+        text-decoration: underline;
+      }
+    }
+    &-toggle {
+      position: absolute;
+      left: -12px;
+      top: -12px;
+      font-size: 40px;
+      color: $brand-light;
+      cursor: pointer;
+      &.active {
+        color: $primary-hover;
+      }
+    }
+    &-body {
+      flex-basis: 100%;
+    }
+  }
+}
