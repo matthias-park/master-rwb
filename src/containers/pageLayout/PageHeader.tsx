@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useConfig } from '../../hooks/useConfig';
 import { postApi } from '../../utils/apiUtils';
-import { setPageLoadingSpinner } from '../../utils/uiUtils';
 import LoginDropdown from '../LoginDropdown';
 import UserInfoBlock from '../../components/header/UserInfoBlock';
 import { Navbar } from 'react-bootstrap';

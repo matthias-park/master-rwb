@@ -1,32 +1,30 @@
-import useLocalStorage from '../hooks/useLocalStorage';
 import React from 'react';
 import { ComponentName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
-import useStorage from '../hooks/useStorage';
-import { Storage } from '../types/Storage';
 import { useModal } from '../hooks/useModal';
 import Button from 'react-bootstrap/Button';
 import useGTM from '../hooks/useGTM';
+import { isEqual } from 'lodash';
+import { useConfig } from '../hooks/useConfig';
+import { Cookies } from '../types/Config';
 
 const CookieConsent = () => {
   const { enableModal } = useModal();
   const { jsxT, t } = useI18n();
-  const storage = useStorage();
   const sendDataToGTM = useGTM();
-  const [cookiesAccepted, setCookiesAccepted] = useLocalStorage(
-    'cookieConsent',
-    false,
+  const { cookies } = useConfig((prev, next) =>
+    isEqual(prev.cookies.cookies, next.cookies.cookies),
   );
 
-  if (cookiesAccepted) {
+  if (cookies.cookies.accepted) {
     return null;
   }
   const handleAccept = () => {
-    storage.saveCookies(
-      Object.keys(storage.cookies).reduce((obj, id) => {
+    cookies.setCookies(
+      Object.keys(cookies.cookies).reduce((obj, id) => {
         obj[id] = true;
         return obj;
-      }, {}) as Storage,
+      }, {}) as Cookies,
     );
     sendDataToGTM({
       event: 'cookiePreferencesChange',
@@ -35,7 +33,6 @@ const CookieConsent = () => {
       'tglab.cookies.marketing': true,
       'tglab.cookies.personalization': true,
     });
-    setCookiesAccepted(true);
   };
   return (
     <nav className="cookies-nav">

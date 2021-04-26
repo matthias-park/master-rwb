@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { useUIConfig } from '../hooks/useUIConfig';
 import { ComponentName, FormFieldValidation, PagesName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
 import { useLocation } from 'react-router-dom';
@@ -11,7 +10,6 @@ import { useRoutePath } from '../hooks/index';
 import useGTM from '../hooks/useGTM';
 import LoadingButton from '../components/LoadingButton';
 import Link from '../components/Link';
-import { useModal } from '../hooks/useModal';
 import TextInput from '../components/customFormInputs/TextInput';
 import { useAuth } from '../hooks/useAuth';
 
@@ -25,7 +23,6 @@ interface Props {
 const LoginForm = () => {
   const { t } = useI18n();
   const [apiError, setApiError] = useState<string | null>(null);
-  const { enableModal } = useModal();
   const formMethods = useForm<{
     email: string;
     password: string;
@@ -174,7 +171,6 @@ const LoginDropdown = ({
   const { t } = useI18n();
   const location = useLocation();
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
-  const { backdrop } = useUIConfig();
   const sendDataToGTM = useGTM();
   useEffect(() => {
     setShowDropdown(false);

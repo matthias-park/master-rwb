@@ -12,6 +12,17 @@ export enum ConfigLoaded {
   Loaded = 1,
   Error = 2,
 }
+export interface Cookies {
+  accepted: boolean;
+  functional: boolean;
+  marketing: boolean;
+  analytics: boolean;
+  personalization: boolean;
+}
+export interface CookiesConfig {
+  cookies: Cookies;
+  setCookies: (cookies: Cookies) => void;
+}
 
 type Config = {
   locale: string;
@@ -23,6 +34,7 @@ type Config = {
   sidebars?: Array<Sidebar[]>;
   helpBlock?: PagesName[];
   configLoaded: ConfigLoaded;
+  cookies: CookiesConfig;
 };
 
 export default Config;
