@@ -37,8 +37,9 @@ const CookiePolicyModal = () => {
           return obj;
         }, {}) as Cookies,
       );
+    } else {
+      cookies.setCookies({ ...cookieSettings, accepted: true });
     }
-    cookies.setCookies({ ...cookieSettings, accepted: true });
     sendDataToGTM({
       event: 'cookiePreferencesChange',
       'tglab.cookies.analytics': cookieSettings.analytics,
