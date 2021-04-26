@@ -151,3 +151,10 @@ export const showKambiSportsbook = () => {
     window.KambiWapi.set(window.KambiWapi.BETSLIP_SHOW);
   }
 };
+
+export const checkHrOverflow = (containerSelector, itemSelector) => {
+  return (
+    document.querySelectorAll(itemSelector)[0]?.offsetWidth >=
+    document.querySelectorAll(containerSelector)[0]?.offsetWidth
+  );
+};

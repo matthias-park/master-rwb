@@ -13,6 +13,7 @@ import QuestionsContainer from '../../components/account-settings/QuestionsConta
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
 import useLocalStorage from '../../hooks/useLocalStorage';
+import { checkHrOverflow } from '../../utils/uiUtils';
 
 const questionItems = [
   {
@@ -50,6 +51,7 @@ const TransactionsTable = ({
 }) => {
   const { t } = useI18n();
   const [currentPage, setCurrentPage] = useState(1);
+  const [paginationOverflow, setPaginationOverflow] = useState(false);
 
   useEffect(() => {
     const periodInDateFilter = dateTo.diff(dateFrom, 'day');
@@ -70,6 +72,10 @@ const TransactionsTable = ({
   useEffect(() => {
     setCurrentPage(1);
   }, [periodSelected]);
+
+  useEffect(() => {
+    setPaginationOverflow(checkHrOverflow('.table-container', '.pagination'));
+  }, [data]);
 
   return (
     <div className="d-flex flex-column">
@@ -116,18 +122,56 @@ const TransactionsTable = ({
             </tbody>
           </Table>
           {data.pages > 1 && (
-            <Pagination className="ml-auto mr-3 mt-3 mb-n2">
-              {[...Array(data.pages)].map((_, i) => {
-                return (
-                  <Pagination.Item
-                    key={i}
-                    onClick={() => setCurrentPage(i + 1)}
-                    active={i + 1 === currentPage}
-                  >
-                    {i + 1}
-                  </Pagination.Item>
-                );
-              })}
+            <Pagination className="mt-3 mb-n2 mx-auto mr-md-3 ml-md-auto">
+              {!paginationOverflow ? (
+                [...Array(data.pages)].map((_, i) => {
+                  return (
+                    <Pagination.Item
+                      key={i}
+                      onClick={() => setCurrentPage(i + 1)}
+                      active={i + 1 === currentPage}
+                    >
+                      {i + 1}
+                    </Pagination.Item>
+                  );
+                })
+              ) : (
+                <>
+                  {currentPage > 2 && (
+                    <>
+                      <Pagination.Item onClick={() => setCurrentPage(1)}>
+                        1
+                      </Pagination.Item>
+                      {currentPage !== 3 && <Pagination.Ellipsis />}
+                    </>
+                  )}
+                  {[...Array(data.pages)].map(
+                    (_, i) =>
+                      i >= currentPage - 2 &&
+                      i < currentPage + 1 && (
+                        <Pagination.Item
+                          key={i}
+                          onClick={() => setCurrentPage(i + 1)}
+                          active={i + 1 === currentPage}
+                        >
+                          {i + 1}
+                        </Pagination.Item>
+                      ),
+                  )}
+                  {currentPage < data.pages - 1 && (
+                    <>
+                      {currentPage !== data.pages - 2 && (
+                        <Pagination.Ellipsis />
+                      )}
+                      <Pagination.Item
+                        onClick={() => setCurrentPage(data.pages)}
+                      >
+                        {data.pages}
+                      </Pagination.Item>
+                    </>
+                  )}
+                </>
+              )}
             </Pagination>
           )}
           <div className="table-container__info">
