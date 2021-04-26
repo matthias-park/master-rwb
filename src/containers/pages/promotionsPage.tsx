@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { useI18n } from '../../hooks/useI18n';
 import useDesktopWidth from '../../hooks/useDesktopWidth';
 import Button from 'react-bootstrap/Button';
@@ -96,6 +96,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
     '/railsapi/v1/content/promotions',
   );
+  const numberOfPromotions = currentSlug >= 4 ? 4 : 5;
   const isDataLoading = !data && !error;
 
   return (
@@ -106,7 +107,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
         </div>
       )}
       <div className="promo-cards">
-        {data?.Data.map(
+        {data?.Data?.slice(0, numberOfPromotions).map(
           item =>
             item.slug != currentSlug && (
               <div key={item.id} className="promo-card">
@@ -117,8 +118,11 @@ const PromotionsListBlock = ({ currentSlug }) => {
                   <p className="promo-card__body-text">
                     {item.short_description}
                   </p>
-                  <PromoLinkEl item={item}>
-                    <Button variant="primary">
+                  <PromoLinkEl item={item} className="mt-auto">
+                    <Button
+                      variant="primary"
+                      className="text-line-overflow d-inline-block"
+                    >
                       {item.button_text || 'Details'}
                     </Button>
                   </PromoLinkEl>
@@ -135,6 +139,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
   const { data, error } = useApi<RailsApiResponse<PostItem>>(
     `/railsapi/v1/content/promotion/${slug}`,
   );
+  const history = useHistory();
   const desktopWidth = useDesktopWidth(568);
   const isDataLoading = !data && !error;
   const bannerImg = desktopWidth
@@ -147,6 +152,15 @@ const PromotionPage = ({ slug }: { slug: string }) => {
   useEffect(() => {
     makeCollapsible('terms', 'terms-body', 'terms-toggle');
   }, [data]);
+
+  const jsxRedirect = event => {
+    event.preventDefault();
+    if (event.target.tagName === 'A') {
+      history.push(event.target.getAttribute('href'));
+    } else if (event.target.closest('a').tagName === 'A') {
+      history.push(event.target.closest('a').getAttribute('href'));
+    }
+  };
 
   if (!isDataLoading && (error || !data?.Success)) {
     return <NotFoundPage />;
@@ -185,7 +199,11 @@ const PromotionPage = ({ slug }: { slug: string }) => {
             <p className="promotion-inner__body-short">
               {data?.Data.short_description}
             </p>
-            <div dangerouslySetInnerHTML={{ __html: data?.Data.body || '' }} />
+            <div
+              id="promo-inner-html"
+              dangerouslySetInnerHTML={{ __html: data?.Data.body || '' }}
+              onClick={event => jsxRedirect(event)}
+            />
             <PromotionsListBlock currentSlug={data?.Data.slug} />
           </div>
         </div>

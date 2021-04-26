@@ -73,6 +73,7 @@
       right: 8%;
     }
     &-subtitle {
+      @include text-overflow(2);
       font-size: 27px;
       color: $orange;
       margin-bottom: 4px;
@@ -84,18 +85,22 @@
       }
     }
     &-title {
+      @include text-overflow(3);
       color: $white;
       font-size: 42px;
       line-height: 1;
       margin-bottom: 10px;
       @media only screen and (max-width: 1179.8px) {
         font-size: 3.8vw;
+        @include text-overflow(2);
       }
       @include media-breakpoint-down(xs) {
+        @include text-overflow(3);
         font-size: 6.4vw;
       }
     }
     &-button {
+      @include text-overflow-1(100%);
       @media only screen and (max-width: 1179.8px) {
         font-size: 1.7vw;
       }
@@ -118,7 +123,7 @@
     }
     #{ $self }__body {
       @include media-breakpoint-up(sm) {
-        right: 14%;
+        right: 6%;
       }
       &-subtitle {
         font-size: 14px;
@@ -155,6 +160,8 @@
     width: 100%;
   }
   .promo-card {
+    display: flex;
+    flex-direction: column;
     flex-basis: calc(25% - 8px);
     margin: 4px;
     background-color: $white;
@@ -170,6 +177,9 @@
       margin: 8px 0;
     }
     &__body {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
       padding: 12px 16px;
       &-title {
         font-size: 16px;
@@ -321,6 +331,7 @@
     width: 55%;
   }
   &__subtitle {
+    @include text-overflow(2);
     font-size: 60px;
     color: $orange;
     margin-bottom: 4px;
@@ -332,6 +343,7 @@
     }
   }
   &__title {
+    @include text-overflow(3);
     font-size: 100px;
     color: $white;
     line-height: 1;
@@ -344,6 +356,7 @@
     }
   }
   &__button {
+    @include text-overflow-1(100%);
     font-size: 39px;
     @include media-breakpoint-down(xxxlg) {
       font-size: 2.2vw;
