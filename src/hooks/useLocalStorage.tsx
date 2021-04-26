@@ -3,6 +3,7 @@ import Lockr from 'lockr';
 
 export interface Options {
   setInitValue?: boolean;
+  valueAs?: (value: any) => any;
 }
 
 const useLocalStorage = <T extends unknown>(
@@ -22,7 +23,10 @@ const useLocalStorage = <T extends unknown>(
     setStoredValue(value);
     Lockr.set(key, value as any);
   };
-  return [storedValue, setValue];
+  const returnedValue = options?.valueAs
+    ? options.valueAs(storedValue)
+    : storedValue;
+  return [returnedValue, setValue];
 };
 
 export default useLocalStorage;

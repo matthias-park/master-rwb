@@ -12,6 +12,7 @@ import Pagination from 'react-bootstrap/Pagination';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 const questionItems = [
   {
@@ -177,14 +178,19 @@ const TransactionsPeriodFilter = ({
 const TransactionsDateFilter = ({
   dateTo,
   dateFrom,
+  url,
   setDateTo,
   setDateFrom,
   setUrl,
   setPeriodSelected,
 }) => {
   const { t } = useI18n();
+  const [dateChanged, setDateChanged] = useState(false);
   const validDate = dateTo.diff(dateFrom) >= 0;
 
+  useEffect(() => {
+    setDateChanged(false);
+  }, [url]);
   const updateDate = () => {
     setUrl(
       formatUrl('/railsapi/v1/user/transactions', {
@@ -200,17 +206,24 @@ const TransactionsDateFilter = ({
       <div className="date-filter__picker-wrp mb-sm-3">
         <DatePicker
           selected={dateFrom.toDate()}
-          onChange={date => setDateFrom(dayjs(date as Date))}
+          onChange={date => {
+            setDateChanged(true);
+            setDateFrom(dayjs(date as Date));
+          }}
           dateFormat="yyyy-MM-dd"
-          maxDate={dayjs().toDate()}
+          maxDate={dateTo.toDate()}
         />
         <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
       </div>
       <span className="text-gray-400 mx-auto mx-sm-1 mb-sm-3">-</span>
       <div className="date-filter__picker-wrp mb-sm-3">
         <DatePicker
+          minDate={dateFrom.toDate()}
           selected={dateTo.toDate()}
-          onChange={date => setDateTo(dayjs(date as Date))}
+          onChange={date => {
+            setDateChanged(true);
+            setDateTo(dayjs(date as Date));
+          }}
           dateFormat="yyyy-MM-dd"
           maxDate={dayjs().toDate()}
         />
@@ -219,8 +232,11 @@ const TransactionsDateFilter = ({
       <Button
         className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3 btn--small-radius"
         variant="primary"
-        disabled={!validDate}
-        onClick={() => updateDate()}
+        disabled={!validDate || !dateChanged}
+        onClick={() => {
+          setDateChanged(false);
+          updateDate();
+        }}
       >
         {t('search')}
       </Button>
@@ -233,9 +249,15 @@ const TransactionsPage = () => {
   const [url, setUrl] = useState<string | null>(null);
   const { data } = useApi<RailsApiResponse<Transactions>>(url);
   const [periodSelected, setPeriodSelected] = useState(30);
-  const [dateTo, setDateTo] = useState(dayjs());
-  const [dateFrom, setDateFrom] = useState(
+  const [dateTo, setDateTo] = useLocalStorage('transactions-date-to', dayjs(), {
+    valueAs: value => dayjs(value),
+  });
+  const [dateFrom, setDateFrom] = useLocalStorage(
+    'transactions-date-from',
     dayjs().subtract(periodSelected, 'day'),
+    {
+      valueAs: value => dayjs(value),
+    },
   );
   const [currentDate, setCurrentDate] = useState({
     from: dateFrom,
@@ -263,6 +285,7 @@ const TransactionsPage = () => {
         <TransactionsDateFilter
           dateTo={dateTo}
           dateFrom={dateFrom}
+          url={url}
           setDateFrom={setDateFrom}
           setDateTo={setDateTo}
           setUrl={setUrl}
