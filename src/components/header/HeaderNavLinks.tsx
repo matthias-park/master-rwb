@@ -1,6 +1,6 @@
 import React, { useRef, useMemo } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { sortAscending } from '../../utils/index';
+import { sortAscending, sortDescending } from '../../utils/index';
 import clsx from 'clsx';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
@@ -8,7 +8,7 @@ import { useUIConfig } from '../../hooks/useUIConfig';
 import { HeaderRoute } from '../../types/api/PageConfig';
 import useGTM from '../../hooks/useGTM';
 import Link from '../Link';
-import { useLocation } from 'react-router';
+import { matchPath, useLocation } from 'react-router';
 import useDesktopWidth from '../../hooks/useDesktopWidth';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -28,14 +28,23 @@ export const HeaderNavClassicLink = ({
   toggleActive,
 }: HeaderNavLinkProps) => {
   const { t } = useI18n();
-  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const { locale, routes } = useConfig((prev, next) => {
+    const localeEqual = prev.locale === next.locale;
+    const routesEqual = prev.routes.length === next.routes.length;
+    return localeEqual && routesEqual;
+  });
   const { user } = useAuth();
   const { pathname, hash } = useLocation();
-  const fullPath = /^\/sports#bethistory\/[\d]{4}(-[\d]{2}){2}$/i.test(
-    `${pathname}${hash}`,
-  )
-    ? '/sports#bethistory'
-    : `${pathname}${hash}`;
+  const fullPath = routes
+    .sort((a, b) => sortDescending(a.path.length, b.path.length))
+    .find(route => {
+      const match = (path: string) =>
+        matchPath(path, {
+          path: route.path,
+          exact: route.exact ?? true,
+        });
+      return match(`${pathname}${hash}`) || match(pathname);
+    })?.path;
   const { backdrop } = useUIConfig();
   const desktopWidth = useDesktopWidth(1199);
   const dropdownRef = useRef(null);
@@ -126,7 +135,11 @@ export const HeaderNavClassicLink = ({
                     target: '_blank',
                   }
                 : {})}
-              className={clsx(link.path === fullPath && 'active')}
+              className={clsx(
+                (link.path === fullPath ||
+                  link.path === `${pathname}${hash}`) &&
+                  'active',
+              )}
               href={link.path.replace('{__locale__}', locale)}
             >
               {t(link.text)}

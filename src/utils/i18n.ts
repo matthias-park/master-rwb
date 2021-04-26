@@ -48,7 +48,6 @@ export const setLocalePathname = (newlocale: string) => {
     paths.splice(1, 0, newlocale);
   }
   const newPath = paths.join('/') + window.location.hash;
-  console.log(newPath);
   window.history.pushState({}, '', newPath);
 };
 

@@ -118,7 +118,6 @@ export const makeCollapsible = (
 
 export const removePageLoadingSpinner = () => {
   const spinnerEl = document.getElementById('page-loading-spinner');
-  console.log(spinnerEl);
   spinnerEl?.remove();
 };
 

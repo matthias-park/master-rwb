@@ -840,6 +840,7 @@ export interface WidgetAPI {
   request: (key: string, ...args: any[]) => unknown;
   set: (key: string, ...args: any[]) => unknown;
   navigateClient: (path: string, widget: string) => void;
+  subscribe: (response: any) => void;
   ua: Ua;
   VERSION: string;
   BETSLIP_OUTCOMES_ARGS: BetslipOutcomesArgs;

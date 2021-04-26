@@ -7,6 +7,7 @@ import Modals from './Modals';
 import { UIConfigProvider } from '../hooks/useUIConfig';
 import { ModalProvider } from '../hooks/useModal';
 import { useI18n } from '../hooks/useI18n';
+import { KambiProvider } from './KambiSportsbook';
 
 const App = () => {
   const { locale: translationLocale } = useI18n();
@@ -16,11 +17,13 @@ const App = () => {
     <BrowserRouter key={locale} basename={locale ? `/${locale}` : undefined}>
       <ModalProvider>
         <UIConfigProvider>
-          <ApiHead />
-          <Modals />
-          <PageLayout>
-            <Routes />
-          </PageLayout>
+          <KambiProvider>
+            <ApiHead />
+            <Modals />
+            <PageLayout>
+              <Routes />
+            </PageLayout>
+          </KambiProvider>
         </UIConfigProvider>
       </ModalProvider>
     </BrowserRouter>
