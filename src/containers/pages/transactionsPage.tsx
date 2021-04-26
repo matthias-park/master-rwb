@@ -249,6 +249,7 @@ const TransactionsDateFilter = ({
     <>
       <div className="date-filter__picker-wrp mb-sm-3">
         <DatePicker
+          popperPlacement="bottom-start"
           selected={dateFrom.toDate()}
           onChange={date => {
             setDateChanged(true);
@@ -262,6 +263,7 @@ const TransactionsDateFilter = ({
       <span className="text-gray-400 mx-auto mx-sm-1 mb-sm-3">-</span>
       <div className="date-filter__picker-wrp mb-sm-3">
         <DatePicker
+          popperPlacement="bottom-start"
           minDate={dateFrom.toDate()}
           selected={dateTo.toDate()}
           onChange={date => {
