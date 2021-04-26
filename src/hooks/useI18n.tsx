@@ -44,11 +44,12 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
     const loadedEqual = prev.configLoaded === next.configLoaded;
     return localeEqual && loadedEqual;
   });
-  const translationsUrl = `/railsapi/v1/translations`;
-  const { data, mutate } = useApi<RailsApiResponse<Translations>>(
+  const translationsUrl =
     !TestEnv && configLoaded === ConfigLoaded.Loaded && locale
-      ? translationsUrl
-      : null,
+      ? `/railsapi/v1/translations?locale=${locale}`
+      : null;
+  const { data, mutate } = useApi<RailsApiResponse<Translations>>(
+    translationsUrl,
     {
       revalidateOnMount: true,
       onErrorRetry: () => {

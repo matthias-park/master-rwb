@@ -40,13 +40,12 @@ const COMPONENT_PAGES = {
 
 const Routes = () => {
   const { jsxT } = useI18n();
-  const { routes, locale } = useConfig((prev, next) => {
-    const routesEqual = prev.routes.length === next.routes.length;
-    const localeExist = !!prev.locale === !!next.locale;
-    return routesEqual && localeExist;
-  });
+  const { routes } = useConfig(
+    (prev, next) => prev.routes.length === next.routes.length,
+  );
   const { pathname } = useLocation();
-
+  const { locale: translationLocale } = useI18n();
+  const locale = translationLocale();
   return (
     <ErrorBoundary
       key={pathname}
@@ -56,7 +55,7 @@ const Routes = () => {
         </main>
       }
     >
-      <Switch key={pathname}>
+      <Switch key={`${pathname}-${locale}`}>
         {routes
           .sort((a, b) => sortDescending(a.path.length, b.path.length))
           .map(route => {

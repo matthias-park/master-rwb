@@ -112,6 +112,7 @@ export const makeCollapsible = (
 
 export const removePageLoadingSpinner = () => {
   const spinnerEl = document.getElementById('page-loading-spinner');
+  console.log(spinnerEl);
   spinnerEl?.remove();
 };
 
@@ -119,6 +120,7 @@ export const setPageLoadingSpinner = () => {
   if (!document.getElementsByClassName('page-loading-spinner')[0]) {
     const body = <HTMLElement>document.querySelector('body');
     const spinnerEl = <HTMLElement>document.createElement('DIV');
+    spinnerEl.id = 'page-loading-spinner';
     spinnerEl.classList.add('page-loading-spinner');
     const spinnerImg = <HTMLImageElement>document.createElement('IMG');
     spinnerImg.classList.add('spinner-img');

@@ -16,6 +16,7 @@ import useApi from './useApi';
 import useMemoCompare from './useMemoCompare';
 import { sortDescending } from '../utils/index';
 import useLocalStorage from './useLocalStorage';
+import { setPageLoadingSpinner } from '../utils/uiUtils';
 
 const useConstants = () => {
   const { addToast } = useToasts();
@@ -130,7 +131,11 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     }
   }, [!!constants, !!constantsError]);
 
-  const setLocale = async (lang: string) => {
+  const setLocale = (lang: string, setPageLoading = false) => {
+    if (setPageLoading) {
+      setPageLoadingSpinner();
+      setConfigLoaded(ConfigLoaded.Loading);
+    }
     changeLocale(lang);
     setLocalePathname(lang);
     setCachedLocale(lang);

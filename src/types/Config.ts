@@ -16,7 +16,7 @@ export enum ConfigLoaded {
 type Config = {
   locale: string;
   locales: AvailableLocale[];
-  setLocale: (lang: string) => void;
+  setLocale: (lang: string, setPageLoading?: boolean) => void;
   routes: NavigationRoute[];
   header?: HeaderRoute[];
   footer?: FooterData;

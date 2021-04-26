@@ -31,7 +31,7 @@ export const UIConfigProvider = props => {
     const localeEqual = prev.locale === next.locale;
     return headerEqual && configLoadedEqual && localeEqual;
   });
-  const { table } = useI18n();
+  const { table, locale: translationsLocale } = useI18n();
   const location = useLocation();
   const [activeHeaderNav, setActiveHeaderNav] = useState<string | null>(null);
   const [initPageSpinner, setInitPageSpinner] = useState<boolean>(true);
@@ -52,7 +52,8 @@ export const UIConfigProvider = props => {
   useEffect(() => {
     if (
       [ConfigLoaded.Loaded, ConfigLoaded.Error].includes(configLoaded) &&
-      (!locale || Object.keys(table()).length)
+      (!locale ||
+        (locale === translationsLocale() && Object.keys(table()).length))
     ) {
       removePageLoadingSpinner();
       setInitPageSpinner(false);
