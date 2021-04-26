@@ -186,35 +186,37 @@ const setCustomerSettings = ({
   };
 };
 
-const insertKambiBootstrap = async (): Promise<WidgetAPI | null> => {
-  return new Promise(resolve => {
-    if (!window.KambiWidget) {
-      const scriptElement = document.createElement('script');
-      scriptElement.setAttribute('type', 'text/javascript');
-      scriptElement.setAttribute(
-        'src',
-        `https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js?cb=${Date.now()}`,
-      );
-      scriptElement.async = true;
-      scriptElement.onload = resolve;
-      document.head.appendChild(scriptElement);
-    } else {
-      resolve(null);
-    }
-  }).then(async () => {
-    document.body.classList.add('body-background');
+const insertKambiBootstrap = async (
+  ready: (wapi?: WidgetAPI) => void,
+): Promise<void> => {
+  if (!window.KambiWidget) {
     const scriptElement = document.createElement('script');
     scriptElement.setAttribute('type', 'text/javascript');
-    scriptElement.async = true;
     scriptElement.setAttribute(
       'src',
-      `https://ctn-static.kambi.com/client/bnlbe/kambi-bootstrap.js?cb=${Date.now()}`,
+      `https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js?cb=${Date.now()}`,
     );
+    scriptElement.async = true;
+    scriptElement.onload = () => {
+      if (window.KambiWidget) {
+        window.KambiWidget?.ready.then(wapi => {
+          ready(wapi);
+        });
+      } else {
+        ready();
+      }
+    };
     document.head.appendChild(scriptElement);
-    return window.KambiWidget?.ready.then(wapi => {
-      return wapi;
-    });
-  });
+  }
+  document.body.classList.add('body-background');
+  const scriptElement = document.createElement('script');
+  scriptElement.setAttribute('type', 'text/javascript');
+  scriptElement.async = true;
+  scriptElement.setAttribute(
+    'src',
+    `https://ctn-static.kambi.com/client/bnlbe/kambi-bootstrap.js?cb=${Date.now()}`,
+  );
+  document.head.appendChild(scriptElement);
 };
 
 const getSBParams = async (locale: string, playerId?: string) => {
@@ -256,7 +258,7 @@ const KambiSportsbook = () => {
         kambiContainer.classList.add('kambiHidden');
         containerRef.current?.after(kambiContainer);
         updateWindowKambiConfig(kambiConfig);
-        insertKambiBootstrap().then(wapi => {
+        insertKambiBootstrap(wapi => {
           if (wapi) context.setApi(wapi);
           context.setSportsbookLoaded(true);
         });

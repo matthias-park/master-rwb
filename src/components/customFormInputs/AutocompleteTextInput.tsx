@@ -12,7 +12,7 @@ import { UncontrolledTextInput } from './TextInput';
 interface Props {
   id: string;
   autoComplete: (value: string) => Promise<any>;
-  labelkey: (value: any) => string;
+  labelkey: (value: any, inputValue?: string) => string;
   control?: Control<FieldValues>;
   defaultValue?: unknown;
   rules: any;
@@ -59,7 +59,7 @@ const AutocompleteTextInput = ({
   }, []);
 
   const filteredOptions = options.filter(option => {
-    const formatedLabel = labelkey(option);
+    const formatedLabel = labelkey(option, field.value);
     return formatedLabel.includes(field.value) && formatedLabel !== field.value;
   });
   const open =
@@ -71,14 +71,14 @@ const AutocompleteTextInput = ({
     <AsyncTypeahead
       {...field}
       isLoading={isLoading}
-      labelKey={labelkey}
+      labelKey={value => labelkey(value, field.value)}
       id={`${id}-select`}
       promptText={title}
       useCache={false}
       open={open}
       onChange={values => {
         if (values.length) {
-          field.onChange(labelkey(values[0]));
+          field.onChange(labelkey(values[0], field.value));
           setOptions(values);
         } else {
           field.onChange('');
@@ -98,7 +98,9 @@ const AutocompleteTextInput = ({
         field.onBlur();
         onBlur?.();
         if (
-          !options?.some(option => labelkey(option) === field.value) &&
+          !options?.some(
+            option => labelkey(option, field.value) === field.value,
+          ) &&
           !fieldState.error
         ) {
           setError(id, { type: 'manual', message: invalidTextError });
