@@ -1,10 +1,12 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useConfig } from '../../hooks/useConfig';
 import { useI18n } from '../../hooks/useI18n';
 import Link from '../../components/Link';
 import { PagesName } from '../../constants';
 import { sortAscending } from '../../utils';
 import { useAuth } from '../../hooks/useAuth';
+import Accordion from 'react-bootstrap/Accordion';
+import clsx from 'clsx';
 
 interface SitemapListItem {
   path: string;
@@ -30,22 +32,61 @@ const insertSitemapChildren = (listItem: SitemapListItem, route) => {
   });
 };
 
-const TreeItem = ({ route }: { route: SitemapListItem }) => {
+const TreeItem = ({
+  route,
+  active,
+  setActive,
+}: {
+  route: SitemapListItem;
+  active: string | null;
+  setActive: (active: string | null) => void;
+}) => {
   const { t } = useI18n();
   if (!t(`sitemap_${route.name}`)) return null;
   return (
-    <li>
-      {route.emptyRoute ? (
-        <div>{t(`sitemap_${route.name}`)}</div>
-      ) : (
-        <Link to={route.path}>{t(`sitemap_${route.name}`)}</Link>
+    <div className="sitemap-accordion__item">
+      {route.children && (
+        <Accordion.Toggle
+          className={clsx(
+            'sitemap-accordion__item-toggle icon-add',
+            active === `key_${route.name}` && 'active',
+          )}
+          as="i"
+          eventKey={`key_${route.name}`}
+          onClick={() =>
+            setActive(
+              active === `key_${route.name}` ? null : `key_${route.name}`,
+            )
+          }
+        ></Accordion.Toggle>
       )}
-      {route.children?.map(subRoute => (
-        <ul key={subRoute.path}>
-          <TreeItem route={subRoute} />
-        </ul>
-      ))}
-    </li>
+      {route.emptyRoute ? (
+        <div className="sitemap-accordion__item-title">
+          {t(`sitemap_${route.name}`)}
+        </div>
+      ) : (
+        <div className="sitemap-accordion__item-title">
+          <Link to={route.path}>{t(`sitemap_${route.name}`)}</Link>
+        </div>
+      )}
+      {route.children && (
+        <Accordion.Collapse
+          className="sitemap-accordion__item-body"
+          eventKey={`key_${route.name}`}
+        >
+          <>
+            {route.children?.map(subRoute => (
+              <TreeItem
+                route={subRoute}
+                key={subRoute.path}
+                active={active}
+                setActive={setActive}
+              />
+            ))}
+          </>
+        </Accordion.Collapse>
+      )}
+    </div>
   );
 };
 
@@ -55,6 +96,7 @@ const SitemapPage = () => {
     (prev, next) => prev.routes.length === next.routes.length,
   );
   const { user } = useAuth();
+  const [activeItem, setActiveItem] = useState<string | null>(null);
   const sitemapList = useMemo(() => {
     const list: SitemapListItem[] = [];
     for (const route of routes.sort((a, b) =>
@@ -92,13 +134,22 @@ const SitemapPage = () => {
   }, [routes, user]);
 
   return (
-    <main className="container-fluid px-0 pr-sm-4 pl-sm-5 mb-4 pt-5">
-      <h1 className="mb-4">{t('sitemap_page_title')}</h1>
-      <ul>
-        {sitemapList.map(route => (
-          <TreeItem key={route.path} route={route} />
-        ))}
-      </ul>
+    <main className="page-container">
+      <div className="page-inner">
+        <div className="pl-3 pl-lg-5 py-2 py-lg-3">
+          <h1 className="mb-4">{t('sitemap_page_title')}</h1>
+          <Accordion className="sitemap-accordion">
+            {sitemapList.map(route => (
+              <TreeItem
+                key={route.path}
+                route={route}
+                active={activeItem}
+                setActive={setActiveItem}
+              />
+            ))}
+          </Accordion>
+        </div>
+      </div>
     </main>
   );
 };

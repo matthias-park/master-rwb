@@ -38,7 +38,7 @@ const CookieConsent = () => {
     <nav className="cookies-nav">
       <i className="icon-cookies cookies-nav__icon"></i>
       <div className="cookies-nav__body">
-        <h3 className="cookies-nav__body-title">cookies title</h3>
+        <h3 className="cookies-nav__body-title">{t('cookies_nav_title')}</h3>
         <p className="cookies-nav__body-text">
           {jsxT('cookie_consent_desc')} {jsxT('cookie_consent_open_policy')}
         </p>
@@ -49,7 +49,7 @@ const CookieConsent = () => {
           variant="primary"
           onClick={() => enableModal(ComponentName.CookiesModal)}
         >
-          show modal
+          {t('cookies_modal_button')}
         </Button>
         <Button
           size="sm"

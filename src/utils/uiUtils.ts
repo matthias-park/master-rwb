@@ -5,6 +5,7 @@ import {
 } from '../types/UIConfig';
 import { ComponentName } from '../constants';
 import { HeaderRoute } from '../types/api/PageConfig';
+import { isDesktop } from 'react-device-detect';
 
 export const changeBackdropVisibility = (visibility: boolean) => {
   const SHOW_CLASS = 'show';
@@ -18,11 +19,16 @@ export const changeBackdropVisibility = (visibility: boolean) => {
 
 export const changeBodyScroll = (enabledScroll: boolean) => {
   const DISABLED_SCROLL_CLASS = 'modal-open';
+  const DISABLED_SCROLL_CLASS_DESKTOP = 'modal-open-desktop';
   const classList = document.body.classList;
   if (enabledScroll) {
-    return classList.remove(DISABLED_SCROLL_CLASS);
+    return isDesktop
+      ? classList.remove(DISABLED_SCROLL_CLASS, DISABLED_SCROLL_CLASS_DESKTOP)
+      : classList.remove(DISABLED_SCROLL_CLASS);
   }
-  return classList.add(DISABLED_SCROLL_CLASS);
+  return isDesktop
+    ? classList.add(DISABLED_SCROLL_CLASS, DISABLED_SCROLL_CLASS_DESKTOP)
+    : classList.add(DISABLED_SCROLL_CLASS);
 };
 
 export const createBackdropProviderValues = (

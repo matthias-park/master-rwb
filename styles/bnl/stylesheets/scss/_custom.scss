@@ -17,7 +17,7 @@ body {
     @include media-breakpoint-down(lg) {
         padding: 0 20px;
     }
-    &.modal-open {
+    &.modal-open-desktop {
       max-width: calc(100vw - 17px);
       margin: 0;
       padding-right: 80px !important;
@@ -311,7 +311,7 @@ a:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1030;
+  z-index: 1100;
   background-color: $brand-light;
   color: $gray-custom-200;
   border-top-left-radius: 8px;
@@ -331,7 +331,6 @@ a:hover {
     }
   }
   &__body {
-    flex-grow: 2;
     &-text {
       font-size: 14px;
       line-height: 1.4;
@@ -347,19 +346,21 @@ a:hover {
   }
   &__buttons {
     margin-left: 30px;
-    display: flex;
-    flex-direction: column;
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 185px);
+    justify-content: end;
+    align-content: center;
+    grid-gap: 10px;
     @include media-breakpoint-down(xs) {
       margin-left: 35px;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
     }
     .btn.btn-sm {
       padding-top: 6px;
       padding-bottom: 6px;
       max-height: 34px;
       white-space: nowrap;
-    }
-    button:first-of-type {
-      margin-bottom: 10px;
     }
   }
 }
