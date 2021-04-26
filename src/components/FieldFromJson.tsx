@@ -6,6 +6,7 @@ import DateInput from './customFormInputs/DateInput';
 import SelectInput from './customFormInputs/SelectInput';
 import FileInput from './customFormInputs/FileInput';
 import TextInput from './customFormInputs/TextInput';
+import dayjs from 'dayjs';
 
 interface Props {
   field: Field;
@@ -39,11 +40,15 @@ const FieldFromJson = ({ field, size, rules }: Props) => {
           rules={rules}
           defaultValue={
             field.default && typeof field.default === 'string'
-              ? new Date(field.default)
+              ? dayjs(field.default, 'YYYY-MM-DD').toDate()
               : null
           }
-          minDate={field.dateFrom ? new Date(field.dateFrom, 1) : null}
-          maxDate={field.dateTo ? new Date(field.dateTo, 1) : null}
+          minDate={
+            field.dateFrom ? dayjs(field.dateFrom, 'YYYY-MM-DD').toDate() : null
+          }
+          maxDate={
+            field.dateTo ? dayjs(field.dateTo, 'YYYY-MM-DD').toDate() : null
+          }
           size={size}
           title={field.title}
         />
