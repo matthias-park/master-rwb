@@ -165,7 +165,7 @@ const setCustomerSettings = ({
   window.customerSettings = {
     getBalance: function (successFunc, failureFunc) {
       updateBalance();
-      getApi<string>(getApiBalance)
+      getApi<string>(getApiBalance, { responseText: true })
         .then(res => {
           successFunc(parseFloat(res));
         })
@@ -218,7 +218,7 @@ const getSBParams = async (locale: string, playerId?: string) => {
     ticket: data?.Data || '',
     currency: 'EUR',
     market: 'BE',
-    getApiBalance: `${window.__config__.apiUrl}/railsapi/v1/user/balance`,
+    getApiBalance: '/railsapi/v1/user/balance',
   };
 };
 

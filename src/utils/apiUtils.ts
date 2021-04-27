@@ -8,7 +8,7 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 
 export const formatUrl = (
   url: string,
-  params: { [key: string]: string | undefined } = {},
+  params: { [key: string]: string | number | undefined } = {},
 ): string => {
   const paramsArr = Object.keys(params)
     .filter(key => params[key])
@@ -16,7 +16,11 @@ export const formatUrl = (
   return `${url}${paramsArr.length ? '?' : ''}${paramsArr.join('&')}`;
 };
 
-export const getApi = <T>(url: string): Promise<T> => {
+interface GetApiOptions {
+  responseText?: boolean;
+}
+
+export const getApi = <T>(url: string, options?: GetApiOptions): Promise<T> => {
   const config: RequestInit = {
     mode: 'cors',
     credentials: 'include',
@@ -28,6 +32,9 @@ export const getApi = <T>(url: string): Promise<T> => {
         ...RailsApiResponseFallback,
         Code: res.status,
       });
+    }
+    if (options?.responseText) {
+      return res.text();
     }
     return res.json();
   });

@@ -50,7 +50,7 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [dateTo, dateFrom]);
+  }, [dateTo.format('YYYY-MM-DD'), dateFrom.format('YYYY-MM-DD')]);
 
   useEffect(() => {
     setPaginationOverflow(checkHrOverflow('.table-container', '.pagination'));
@@ -198,14 +198,7 @@ const TransactionsPeriodFilter = ({ dateFrom, dateTo, updateUrl }) => {
   );
 };
 
-const TransactionsDateFilter = ({
-  dateTo,
-  dateFrom,
-  url,
-  setDateTo,
-  setDateFrom,
-  updateUrl,
-}) => {
+const TransactionsDateFilter = ({ dateTo, dateFrom, updateUrl }) => {
   const { t } = useI18n();
   const [newDateFrom, setNewDateFrom] = useState<Dayjs>(dateFrom);
   const [newDateTo, setNewDateTo] = useState<Dayjs>(dateTo);
@@ -276,22 +269,17 @@ const TransactionsPage = () => {
   );
 
   const updateUrl = (from?: Dayjs, to?: Dayjs, page?: string) => {
-    if (from) setDateFrom(from);
-    if (to) setDateTo(to);
-    console.log(
-      formatUrl('/railsapi/v1/user/transactions', {
-        from: (from || dateFrom).format('DD/MM/YYYY'),
-        to: (to || dateTo).format('DD/MM/YYYY'),
-        page,
-      }),
-    );
-    setUrl(
-      formatUrl('/railsapi/v1/user/transactions', {
-        from: (from || dateFrom).format('DD/MM/YYYY'),
-        to: (to || dateTo).format('DD/MM/YYYY'),
-        page,
-      }),
-    );
+    if (from && dateFrom !== from) setDateFrom(from);
+    if (to && dateTo !== to) setDateTo(to);
+
+    const newUrl = formatUrl('/railsapi/v1/user/transactions', {
+      from: (from || dateFrom).format('DD/MM/YYYY'),
+      to: (to || dateTo).format('DD/MM/YYYY'),
+      page: page || 1,
+    });
+    if (url !== newUrl) {
+      setUrl(newUrl);
+    }
   };
 
   useEffect(() => {
@@ -305,9 +293,6 @@ const TransactionsPage = () => {
         <TransactionsDateFilter
           dateTo={dateTo}
           dateFrom={dateFrom}
-          url={url}
-          setDateFrom={setDateFrom}
-          setDateTo={setDateTo}
           updateUrl={updateUrl}
         />
         <TransactionsPeriodFilter
