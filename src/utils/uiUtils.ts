@@ -6,7 +6,6 @@ import {
 import { ComponentName } from '../constants';
 import { HeaderRoute } from '../types/api/PageConfig';
 import { isDesktop } from 'react-device-detect';
-import { animateScroll as scroll } from 'react-scroll';
 
 export const changeBackdropVisibility = (visibility: boolean) => {
   const SHOW_CLASS = 'show';
@@ -150,6 +149,22 @@ export const showKambiSportsbook = () => {
     window.KambiWapi.set(window.KambiWapi.CLIENT_SHOW);
     window.KambiWapi.set(window.KambiWapi.BETSLIP_SHOW);
   }
+};
+
+export const scrollToKambiViewport = () => {
+  const observer = new MutationObserver((mutations, observer) => {
+    const kambiContainer = document.getElementsByClassName(
+      'KambiBC-view-wrapper',
+    )[0];
+    if (kambiContainer) {
+      kambiContainer.addEventListener('scroll', () => {
+        window.scrollTo(0, 0);
+      });
+      observer.disconnect();
+      return;
+    }
+  });
+  observer.observe(document, { childList: true, subtree: true });
 };
 
 export const checkHrOverflow = (containerSelector, itemSelector) => {

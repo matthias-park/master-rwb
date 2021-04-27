@@ -15,7 +15,11 @@ import { WidgetAPI } from '../types/KambiConfig';
 import Spinner from 'react-bootstrap/Spinner';
 import { KambiSbLocales, PagesName } from '../constants';
 import { matchPath, useLocation } from 'react-router-dom';
-import { hideKambiSportsbook, showKambiSportsbook } from '../utils/uiUtils';
+import {
+  hideKambiSportsbook,
+  showKambiSportsbook,
+  scrollToKambiViewport,
+} from '../utils/uiUtils';
 import { useAuth } from '../hooks/useAuth';
 
 interface KambiContext {
@@ -252,6 +256,10 @@ const KambiSportsbook = () => {
       containerRef.current?.after(kambiContainer as Node);
     }
   }, []);
+
+  useEffect(() => {
+    !desktopWidth && context.sportsbookLoaded && scrollToKambiViewport();
+  }, [context.sportsbookLoaded]);
 
   return (
     <>
