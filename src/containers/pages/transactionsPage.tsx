@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import DatePicker from 'react-datepicker';
 import { formatUrl } from '../../utils/apiUtils';
 import { useI18n } from '../../hooks/useI18n';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import clsx from 'clsx';
 import 'react-datepicker/dist/react-datepicker.css';
 import Button from 'react-bootstrap/Button';
@@ -39,39 +39,18 @@ interface Transactions {
   }[];
 }
 
-const TransactionsTable = ({
-  dateTo,
-  dateFrom,
-  setDateTo,
-  setDateFrom,
-  data,
-  setUrl,
-  periodSelected,
-  currentDate,
-}) => {
+const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
   const { t } = useI18n();
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationOverflow, setPaginationOverflow] = useState(false);
 
   useEffect(() => {
-    const periodInDateFilter = dateTo.diff(dateFrom, 'day');
-    const to = periodSelected === periodInDateFilter ? dateTo : currentDate.to;
-    const from =
-      periodSelected === periodInDateFilter ? dateFrom : currentDate.from;
-    setUrl(
-      formatUrl('/railsapi/v1/user/transactions.json', {
-        to: to.format('DD/MM/YYYY'),
-        from: from.format('DD/MM/YYYY'),
-        page: currentPage.toString(),
-      }),
-    );
-    setDateTo(to);
-    setDateFrom(from);
+    updateUrl(dateFrom, dateTo, currentPage.toString());
   }, [currentPage]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [periodSelected]);
+  }, [dateTo, dateFrom]);
 
   useEffect(() => {
     setPaginationOverflow(checkHrOverflow('.table-container', '.pagination'));
@@ -83,7 +62,7 @@ const TransactionsTable = ({
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="brand" className="mx-auto" />
         </div>
-      ) : data.transactions.length ? (
+      ) : data.transactions?.length ? (
         <div className="table-container d-flex flex-column mb-4">
           <Table hover>
             <thead>
@@ -185,29 +164,29 @@ const TransactionsTable = ({
   );
 };
 
-const TransactionsPeriodFilter = ({
-  periodSelected,
-  setPeriodSelected,
-  setDateFrom,
-  setDateTo,
-}) => {
+const periods = [7, 14, 30];
+const TransactionsPeriodFilter = ({ dateFrom, dateTo, updateUrl }) => {
   const { t } = useI18n();
+  const dateToToday = useMemo(() => dayjs().isSame(dateTo, 'day'), [dateTo]);
+  const dateFromPeriod = useMemo(
+    () =>
+      periods.find(period =>
+        dayjs().subtract(period, 'day').isSame(dateFrom, 'day'),
+      ),
+    [dateFrom],
+  );
 
-  const updatePeriod = period => {
-    setPeriodSelected(period);
-    setDateFrom(dayjs().subtract(period, 'day'));
-    setDateTo(dayjs());
-  };
-
+  const updatePeriod = period =>
+    updateUrl(dayjs().subtract(period, 'day'), dayjs());
   return (
     <div className="account-tabs mb-sm-3">
-      {[7, 14, 30].map(period => {
+      {periods.map(period => {
         return (
           <button
             key={period}
             className={clsx(
               'account-tabs__tab',
-              periodSelected === period && 'active',
+              dateFromPeriod === period && !!dateToToday && 'active',
             )}
             onClick={() => updatePeriod(period)}
           >
@@ -225,35 +204,26 @@ const TransactionsDateFilter = ({
   url,
   setDateTo,
   setDateFrom,
-  setUrl,
-  setPeriodSelected,
+  updateUrl,
 }) => {
   const { t } = useI18n();
-  const [dateChanged, setDateChanged] = useState(false);
-  const validDate = dateTo.diff(dateFrom) >= 0;
+  const [newDateFrom, setNewDateFrom] = useState<Dayjs>(dateFrom);
+  const [newDateTo, setNewDateTo] = useState<Dayjs>(dateTo);
+  const validDate = newDateTo.diff(newDateFrom) >= 0;
 
   useEffect(() => {
-    setDateChanged(false);
-  }, [url]);
-  const updateDate = () => {
-    setUrl(
-      formatUrl('/railsapi/v1/user/transactions', {
-        to: dateTo.format('DD/MM/YYYY'),
-        from: dateFrom.format('DD/MM/YYYY'),
-      }),
-    );
-    setPeriodSelected(dateTo.diff(dateFrom, 'day'));
-  };
+    setNewDateFrom(dateFrom);
+    setNewDateTo(dateTo);
+  }, [dateFrom, dateTo]);
 
   return (
     <>
       <div className="date-filter__picker-wrp mb-sm-3">
         <DatePicker
           popperPlacement="bottom-start"
-          selected={dateFrom.toDate()}
+          selected={newDateFrom.toDate()}
           onChange={date => {
-            setDateChanged(true);
-            setDateFrom(dayjs(date as Date));
+            setNewDateFrom(dayjs(date as Date));
           }}
           dateFormat="yyyy-MM-dd"
           maxDate={dateTo.toDate()}
@@ -264,11 +234,10 @@ const TransactionsDateFilter = ({
       <div className="date-filter__picker-wrp mb-sm-3">
         <DatePicker
           popperPlacement="bottom-start"
-          minDate={dateFrom.toDate()}
-          selected={dateTo.toDate()}
+          minDate={newDateFrom.toDate()}
+          selected={newDateTo.toDate()}
           onChange={date => {
-            setDateChanged(true);
-            setDateTo(dayjs(date as Date));
+            setNewDateTo(dayjs(date as Date));
           }}
           dateFormat="yyyy-MM-dd"
           maxDate={dayjs().toDate()}
@@ -278,10 +247,11 @@ const TransactionsDateFilter = ({
       <Button
         className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3 btn--small-radius"
         variant="primary"
-        disabled={!validDate || !dateChanged}
+        disabled={
+          !validDate || (dateFrom === newDateFrom && dateTo === newDateTo)
+        }
         onClick={() => {
-          setDateChanged(false);
-          updateDate();
+          updateUrl(newDateFrom, newDateTo);
         }}
       >
         {t('search')}
@@ -294,34 +264,38 @@ const TransactionsPage = () => {
   const { t } = useI18n();
   const [url, setUrl] = useState<string | null>(null);
   const { data } = useApi<RailsApiResponse<Transactions>>(url);
-  const [periodSelected, setPeriodSelected] = useState(30);
   const [dateTo, setDateTo] = useLocalStorage('transactions-date-to', dayjs(), {
     valueAs: value => dayjs(value),
   });
   const [dateFrom, setDateFrom] = useLocalStorage(
     'transactions-date-from',
-    dayjs().subtract(periodSelected, 'day'),
+    dayjs().subtract(30, 'day'),
     {
       valueAs: value => dayjs(value),
     },
   );
-  const [currentDate, setCurrentDate] = useState({
-    from: dateFrom,
-    to: dateTo,
-  });
 
-  useEffect(() => {
-    setUrl(
+  const updateUrl = (from?: Dayjs, to?: Dayjs, page?: string) => {
+    if (from) setDateFrom(from);
+    if (to) setDateTo(to);
+    console.log(
       formatUrl('/railsapi/v1/user/transactions', {
-        to: dateTo.format('DD/MM/YYYY'),
-        from: dateFrom.format('DD/MM/YYYY'),
+        from: (from || dateFrom).format('DD/MM/YYYY'),
+        to: (to || dateTo).format('DD/MM/YYYY'),
+        page,
       }),
     );
-  }, [periodSelected]);
+    setUrl(
+      formatUrl('/railsapi/v1/user/transactions', {
+        from: (from || dateFrom).format('DD/MM/YYYY'),
+        to: (to || dateTo).format('DD/MM/YYYY'),
+        page,
+      }),
+    );
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setCurrentDate({ from: dateFrom, to: dateTo });
   }, [url]);
 
   return (
@@ -334,25 +308,19 @@ const TransactionsPage = () => {
           url={url}
           setDateFrom={setDateFrom}
           setDateTo={setDateTo}
-          setUrl={setUrl}
-          setPeriodSelected={setPeriodSelected}
+          updateUrl={updateUrl}
         />
         <TransactionsPeriodFilter
-          periodSelected={periodSelected}
-          setPeriodSelected={setPeriodSelected}
-          setDateFrom={setDateFrom}
-          setDateTo={setDateTo}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
+          updateUrl={updateUrl}
         />
       </div>
       <TransactionsTable
         dateTo={dateTo}
         dateFrom={dateFrom}
-        setDateTo={setDateTo}
-        setDateFrom={setDateFrom}
+        updateUrl={updateUrl}
         data={data}
-        setUrl={setUrl}
-        periodSelected={periodSelected}
-        currentDate={currentDate}
       />
       <QuestionsContainer items={questionItems} />
     </main>

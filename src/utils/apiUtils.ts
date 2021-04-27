@@ -8,7 +8,7 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 
 export const formatUrl = (
   url: string,
-  params: { [key: string]: string } = {},
+  params: { [key: string]: string | undefined } = {},
 ): string => {
   const paramsArr = Object.keys(params)
     .filter(key => params[key])

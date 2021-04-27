@@ -47,8 +47,6 @@ const kambiLogin = (api: WidgetAPI, locale: string, userId: string) => {
 };
 const kambiLogout = (api: WidgetAPI) => api.request(api.LOGOUT);
 
-let kambiLoginRetries = 0;
-let kambiRetryTimeout = 0;
 export const KambiProvider = ({ children }) => {
   const { routes, locale } = useConfig((prev, next) => {
     const routesEqual = prev.routes.length === next.routes.length;
@@ -97,19 +95,7 @@ export const KambiProvider = ({ children }) => {
         switch (response.type) {
           case api.USER_SESSION_CHANGE: {
             setKambiUserLoggedIn(!!response.data?.isLoggedIn);
-            if (!response.isLoggedIn && user.logged_in) {
-              const retryLogin = () =>
-                kambiLogin(api, locale, user.id!.toString());
-              if (kambiLoginRetries > 2) {
-                kambiRetryTimeout = setTimeout(() => retryLogin(), 60000);
-              } else {
-                retryLogin();
-              }
-            } else {
-              if (kambiRetryTimeout) clearTimeout(kambiRetryTimeout);
-              kambiLoginRetries = 0;
-              setSportsbookLoaded(true);
-            }
+            setSportsbookLoaded(true);
             break;
           }
         }
