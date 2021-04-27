@@ -83,6 +83,14 @@ export const KambiProvider = ({ children }) => {
   }, [user.logged_in, kambiUserLoggedIn]);
 
   useEffect(() => {
+    if (!api) {
+      window.KambiWidget?.ready.then(wapi => {
+        setApi(wapi);
+      });
+    }
+  }, [sportsbookLoaded]);
+
+  useEffect(() => {
     if (api) {
       api.request(api.USER_SESSION_CHANGE);
       api.subscribe(response => {
@@ -186,38 +194,31 @@ const setCustomerSettings = ({
   };
 };
 
-const insertKambiBootstrap = async (
-  ready: (wapi?: WidgetAPI) => void,
-): Promise<void> => {
-  const kambiApiReady = () => {
-    window.KambiWidget?.ready.then(wapi => {
-      ready(wapi);
-    });
-  };
-  document.body.classList.add('body-background');
-  const scriptElement = document.createElement('script');
-  scriptElement.setAttribute('type', 'text/javascript');
-  scriptElement.async = true;
-  scriptElement.setAttribute(
-    'src',
-    `https://ctn-static.kambi.com/client/bnlbe/kambi-bootstrap.js?cb=${Date.now()}`,
-  );
-  document.head.appendChild(scriptElement);
-  if (!window.KambiWidget) {
+const insertKambiBootstrap = async (): Promise<void> => {
+  return new Promise(resolve => {
+    document.body.classList.add('body-background');
     const scriptElement = document.createElement('script');
     scriptElement.setAttribute('type', 'text/javascript');
+    scriptElement.async = true;
     scriptElement.setAttribute(
       'src',
-      `https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js?cb=${Date.now()}`,
+      `https://ctn-static.kambi.com/client/bnlbe/kambi-bootstrap.js?cb=${Date.now()}`,
     );
-    scriptElement.async = true;
-    scriptElement.onload = () => {
-      kambiApiReady();
-    };
     document.head.appendChild(scriptElement);
-  } else {
-    kambiApiReady();
-  }
+    if (!window.KambiWidget) {
+      const scriptElement = document.createElement('script');
+      scriptElement.setAttribute('type', 'text/javascript');
+      scriptElement.setAttribute(
+        'src',
+        `https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js?cb=${Date.now()}`,
+      );
+      scriptElement.async = true;
+      scriptElement.onload = () => resolve();
+      document.head.appendChild(scriptElement);
+    } else {
+      resolve();
+    }
+  });
 };
 
 const getSBParams = async (locale: string, playerId?: string) => {
@@ -259,8 +260,7 @@ const KambiSportsbook = () => {
         kambiContainer.classList.add('kambiHidden');
         containerRef.current?.after(kambiContainer);
         updateWindowKambiConfig(kambiConfig);
-        insertKambiBootstrap(wapi => {
-          if (wapi) context.setApi(wapi);
+        insertKambiBootstrap().then(() => {
           context.setSportsbookLoaded(true);
         });
       });
