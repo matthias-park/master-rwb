@@ -6,7 +6,6 @@ import {
 import { ComponentName } from '../constants';
 import { HeaderRoute } from '../types/api/PageConfig';
 import { isDesktop } from 'react-device-detect';
-import { animateScroll as scroll } from 'react-scroll';
 
 export const changeBackdropVisibility = (visibility: boolean) => {
   const SHOW_CLASS = 'show';
@@ -159,7 +158,7 @@ export const scrollToKambiViewport = () => {
     )[0];
     if (kambiContainer) {
       kambiContainer.addEventListener('scroll', () => {
-        scroll.scrollTo(0, { duration: 200 });
+        window.scrollTo(0, 0);
       });
       observer.disconnect();
       return;
