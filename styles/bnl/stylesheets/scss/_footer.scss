@@ -96,10 +96,18 @@ footer:not(.KambiBC-footer) {
     }
     .footer-sub {
         position: relative;
-        width: calc(100vw - 16px);
-        max-width: 1920px;
+        width: calc(100% + 190px);
         left: 50%;
         transform: translateX(-50%);
+        &.with-bottom-nav {
+          padding-bottom: 100px;
+        }
+        @include media-breakpoint-down(xl) {
+          width: calc(100% + 120px);
+        }
+        @include media-breakpoint-down(lg) {
+          width: calc(100% + 70px);
+        }
     }
 }
 
