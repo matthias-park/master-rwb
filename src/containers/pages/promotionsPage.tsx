@@ -96,7 +96,11 @@ const PromotionsListBlock = ({ currentSlug }) => {
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
     '/railsapi/v1/content/promotions',
   );
-  const numberOfPromotions = currentSlug >= 4 ? 4 : 5;
+  const numberOfPromotions = data?.Data.slice(0, 4).find(
+    promo => promo.slug === currentSlug,
+  )
+    ? 5
+    : 4;
   const isDataLoading = !data && !error;
 
   return (
