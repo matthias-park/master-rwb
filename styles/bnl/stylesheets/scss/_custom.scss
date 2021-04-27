@@ -44,6 +44,10 @@ a:hover {
   cursor: pointer;
 }
 
+.text-line-overflow {
+  @include text-overflow-1(100%);
+}
+
 .text-14 {
     font-size: 14px !important;
 }
