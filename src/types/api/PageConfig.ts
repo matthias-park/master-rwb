@@ -85,4 +85,5 @@ export interface NavigationRoute {
   protected?: boolean;
   hiddenSitemap?: boolean;
   exact?: boolean;
+  redirectTo?: string;
 }

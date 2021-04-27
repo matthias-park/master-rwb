@@ -19,16 +19,23 @@ const ApiHead = () => {
   });
   const { t, table } = useI18n();
   const { pathname, hash } = useLocation();
-  const pathInfo = routes
-    .sort((a, b) => sortDescending(a.path.length, b.path.length))
-    .find(route => {
-      const match = (path: string) =>
-        matchPath(path, {
-          path: route.path,
-          exact: route.exact ?? true,
-        });
-      return match(`${pathname}${hash}`) || match(`${pathname}`);
-    });
+  const pathInfo = useMemo(() => {
+    let pathRoute = routes
+      .sort((a, b) => sortDescending(a.path.length, b.path.length))
+      .find(route => {
+        const match = (path: string) =>
+          matchPath(path, {
+            path: route.path,
+            exact: route.exact ?? true,
+          });
+        return match(`${pathname}${hash}`) || match(`${pathname}`);
+      });
+    if (pathRoute?.redirectTo) {
+      pathRoute = routes.find(route => route.path === pathRoute!.redirectTo);
+    }
+    return pathRoute;
+  }, [routes, pathname, hash]);
+
   const params = useMemo(
     () => ({
       slug: pathname,

@@ -1,8 +1,5 @@
 import { AddToast } from 'react-toast-notifications';
-import KambiConfig, {
-  CustomerSettings,
-  WidgetAPI,
-} from '../src/types/KambiConfig';
+import KambiConfig, { CustomerSettings } from '../src/types/KambiConfig';
 
 export declare global {
   interface Window {
@@ -19,6 +16,5 @@ export declare global {
     _kc?: KambiConfig;
     _kbc?: { dispose: any };
     KambiWidget?: { ready: Promise<any> };
-    KambiWapi?: WidgetAPI;
   }
 }

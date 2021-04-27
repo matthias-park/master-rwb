@@ -200,7 +200,7 @@ const insertKambiBootstrap = async (): Promise<void> => {
         `https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js?cb=${Date.now()}`,
       );
       scriptElement.async = true;
-      scriptElement.onload = () => resolve();
+      scriptElement.addEventListener('load', () => resolve());
       document.head.appendChild(scriptElement);
     } else {
       resolve();

@@ -1,7 +1,7 @@
 import React from 'react';
 import loadable from '@loadable/component';
 import ProtectedRoute from './ProtectedRoute';
-import { Route, Switch, useLocation } from 'react-router-dom';
+import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import { useConfig } from '../../hooks/useConfig';
 import { PagesName } from '../../constants';
 import Spinner from 'react-bootstrap/Spinner';
@@ -59,11 +59,24 @@ const Routes = () => {
         {routes
           .sort((a, b) => sortDescending(a.path.length, b.path.length))
           .map(route => {
+            if (locale && route.id === PagesName.LocaleSelectPage) {
+              return null;
+            }
+            if (route.redirectTo) {
+              return (
+                <Redirect
+                  to={route.redirectTo}
+                  exact={route.exact ?? true}
+                  key={`${route.id}-${route.path}`}
+                  path={route.path}
+                />
+              );
+            }
             const Page =
               COMPONENT_PAGES[route.id] ||
               COMPONENT_PAGES[PagesName.TemplatePage];
 
-            if (!Page || (locale && route.id === PagesName.LocaleSelectPage)) {
+            if (!Page) {
               return null;
             }
             const RouteEl = route.protected ? ProtectedRoute : Route;
