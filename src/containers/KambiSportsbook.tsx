@@ -189,25 +189,11 @@ const setCustomerSettings = ({
 const insertKambiBootstrap = async (
   ready: (wapi?: WidgetAPI) => void,
 ): Promise<void> => {
-  if (!window.KambiWidget) {
-    const scriptElement = document.createElement('script');
-    scriptElement.setAttribute('type', 'text/javascript');
-    scriptElement.setAttribute(
-      'src',
-      `https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js?cb=${Date.now()}`,
-    );
-    scriptElement.async = true;
-    scriptElement.onload = () => {
-      if (window.KambiWidget) {
-        window.KambiWidget?.ready.then(wapi => {
-          ready(wapi);
-        });
-      } else {
-        ready();
-      }
-    };
-    document.head.appendChild(scriptElement);
-  }
+  const kambiApiReady = () => {
+    window.KambiWidget?.ready.then(wapi => {
+      ready(wapi);
+    });
+  };
   document.body.classList.add('body-background');
   const scriptElement = document.createElement('script');
   scriptElement.setAttribute('type', 'text/javascript');
@@ -217,6 +203,21 @@ const insertKambiBootstrap = async (
     `https://ctn-static.kambi.com/client/bnlbe/kambi-bootstrap.js?cb=${Date.now()}`,
   );
   document.head.appendChild(scriptElement);
+  if (!window.KambiWidget) {
+    const scriptElement = document.createElement('script');
+    scriptElement.setAttribute('type', 'text/javascript');
+    scriptElement.setAttribute(
+      'src',
+      `https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js?cb=${Date.now()}`,
+    );
+    scriptElement.async = true;
+    scriptElement.onload = () => {
+      kambiApiReady();
+    };
+    document.head.appendChild(scriptElement);
+  } else {
+    kambiApiReady();
+  }
 };
 
 const getSBParams = async (locale: string, playerId?: string) => {
