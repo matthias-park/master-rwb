@@ -205,17 +205,17 @@
 .promotion-inner {
   &__banner {
     position: relative;
+    width: 90%;
+    margin: auto;
+    @include media-breakpoint-down(lg) {
+      width: 100%;
+    }
     &-img {
-      margin-left: -80px;
-      width: calc(100% + 160px);
-      max-width: 100vw;
-      @include media-breakpoint-down(xl) {
-        margin-left: -45px;
-        width: calc(100% + 90px);
-      }
+      max-width: 100%;
       @include media-breakpoint-down(lg) {
         margin-left: -20px;
         width: calc(100% + 40px);
+        max-width: 100vw;
       }
     }
   }
@@ -320,7 +320,7 @@
 }
 
 .promo-bg-text {
-  width: 440px;
+  width: 415px;
   font-family: 'Anton', sans-serif;
   text-align: center;
   text-transform: uppercase;
@@ -332,11 +332,11 @@
   }
   &__subtitle {
     @include text-overflow(2);
-    font-size: 60px;
+    font-size: 50px;
     color: $orange;
     margin-bottom: 4px;
     @include media-breakpoint-down(xxxlg) {
-      font-size: 3vw;
+      font-size: 2.6vw;
     }
     @include media-breakpoint-down(xs) {
       font-size: 6vw;
@@ -344,12 +344,12 @@
   }
   &__title {
     @include text-overflow(3);
-    font-size: 100px;
+    font-size: 85px;
     color: $white;
     line-height: 1;
     margin-bottom: 16px;
     @include media-breakpoint-down(xxxlg) {
-      font-size: 5vw;
+      font-size: 4.5vw;
     }
     @include media-breakpoint-down(xs) {
       font-size: 11vw;
@@ -357,9 +357,9 @@
   }
   &__button {
     @include text-overflow-1(100%);
-    font-size: 39px;
+    font-size: 35px;
     @include media-breakpoint-down(xxxlg) {
-      font-size: 2.2vw;
+      font-size: 1.8vw;
     }
     @include media-breakpoint-down(xs) {
       font-size: 6.5vw;
