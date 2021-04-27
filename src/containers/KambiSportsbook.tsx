@@ -97,10 +97,7 @@ export const KambiProvider = ({ children }) => {
         switch (response.type) {
           case api.USER_SESSION_CHANGE: {
             setKambiUserLoggedIn(!!response.data?.isLoggedIn);
-            if (
-              ['LOGIN_FAILED'].includes(response.logoutReason) &&
-              user.logged_in
-            ) {
+            if (!response.isLoggedIn && user.logged_in) {
               const retryLogin = () =>
                 kambiLogin(api, locale, user.id!.toString());
               if (kambiLoginRetries > 2) {
