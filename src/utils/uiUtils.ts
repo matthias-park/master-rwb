@@ -152,6 +152,22 @@ export const showKambiSportsbook = () => {
   }
 };
 
+export const scrollToKambiViewport = () => {
+  const observer = new MutationObserver((mutations, observer) => {
+    const kambiContainer = document.getElementsByClassName(
+      'KambiBC-view-wrapper',
+    )[0];
+    if (kambiContainer) {
+      kambiContainer.addEventListener('scroll', () => {
+        scroll.scrollTo(0, { duration: 200 });
+      });
+      observer.disconnect();
+      return;
+    }
+  });
+  observer.observe(document, { childList: true, subtree: true });
+};
+
 export const checkHrOverflow = (containerSelector, itemSelector) => {
   return (
     document.querySelectorAll(itemSelector)[0]?.offsetWidth >=
