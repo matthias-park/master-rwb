@@ -11,8 +11,8 @@ import { useI18n } from '../../hooks/useI18n';
 import useGTM from '../../hooks/useGTM';
 import { PagesName } from '../../constants';
 import { ConfigLoaded } from '../../types/Config';
+import NotFoundPage from '../pages/notFoundPage';
 import { useAuth } from '../../hooks/useAuth';
-import RedirectNotFound from '../../components/RedirectNotFound';
 
 let prevPathname: string | null = null;
 
@@ -106,7 +106,7 @@ const PageLayout = ({ children }) => {
       ) : (
         <>
           {configLoaded === ConfigLoaded.Loaded && children}
-          {configLoaded === ConfigLoaded.Error && <RedirectNotFound />}
+          {configLoaded === ConfigLoaded.Error && <NotFoundPage />}
           <ErrorBoundary>
             <PageFooter />
           </ErrorBoundary>
