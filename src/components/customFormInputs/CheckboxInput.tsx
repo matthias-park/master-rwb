@@ -34,10 +34,11 @@ const CheckboxInput = ({
       disabled={disabled}
       className={className}
       onChange={e => {
-        field.onChange(!!(e.target as HTMLInputElement).value);
+        field.onChange(e.target.checked);
       }}
       custom
       type="checkbox"
+      checked={field.value}
       id={id}
       label={title}
       isInvalid={!!fieldState.error}
