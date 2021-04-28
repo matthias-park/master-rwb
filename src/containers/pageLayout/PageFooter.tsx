@@ -6,6 +6,8 @@ import SessionTimer from '../../components/SessionTimer';
 import { useI18n } from '../../hooks/useI18n';
 import { sortAscending } from '../../utils/index';
 import { useConfig } from '../../hooks/useConfig';
+import { useIsRouteActive } from '../../hooks/index';
+import { isMobile } from 'react-device-detect';
 import useGTM from '../../hooks/useGTM';
 import {
   SubFooter,
@@ -15,6 +17,7 @@ import {
 } from '../../types/api/PageConfig';
 import Link from '../../components/Link';
 import { useModal } from '../../hooks/useModal';
+import clsx from 'clsx';
 
 const FooterHeader = () => {
   const { t } = useI18n();
@@ -57,8 +60,15 @@ const FooterHeader = () => {
 const FooterBottom = ({ data }: { data?: SubFooter }) => {
   const { t } = useI18n();
   const { enableModal } = useModal();
+  const isSports = useIsRouteActive('sports');
+  const isLive = useIsRouteActive('sportsLive');
   return (
-    <div className="row no-gutters footer-sub">
+    <div
+      className={clsx(
+        'row no-gutters footer-sub',
+        isMobile && (isSports || isLive) && 'with-bottom-nav',
+      )}
+    >
       <ul className="footer-sub__nav mr-auto">
         {data?.links
           .sort((a, b) => sortAscending(a.order, b.order))
