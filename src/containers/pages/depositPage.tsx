@@ -12,6 +12,7 @@ import useUserBankAccountModal from '../../hooks/useUserBankAccountModal';
 import { usePrevious, useRoutePath } from '../../hooks';
 import { useModal } from '../../hooks/useModal';
 import { useAuth } from '../../hooks/useAuth';
+import { VALIDATOR_STATUS } from '../../types/UserStatus';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
@@ -28,7 +29,12 @@ const DepositPage = () => {
   );
 
   useEffect(() => {
-    if (user.logged_in && !bankAccount.loading && !bankAccount.hasBankAccount) {
+    if (
+      user.logged_in &&
+      user.validator_status !== VALIDATOR_STATUS.MAJOR_ERROR &&
+      !bankAccount.loading &&
+      !bankAccount.hasBankAccount
+    ) {
       enableModal(ComponentName.AddBankAccountModal);
     }
   }, [bankAccount.loading]);
@@ -113,7 +119,10 @@ const DepositPage = () => {
         onSubmit={handleRequestDeposit}
         quickAmounts={[10, 20, 50, 100]}
         currency={user.currency}
-        disabled={!bankAccount.hasBankAccount}
+        disabled={
+          !bankAccount.hasBankAccount ||
+          user.validator_status === VALIDATOR_STATUS.MAJOR_ERROR
+        }
       />
       <div className="info-container mb-4">
         <p className="info-container__info text-14 mb-0">

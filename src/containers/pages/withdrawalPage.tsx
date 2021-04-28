@@ -24,6 +24,7 @@ import { useModal } from '../../hooks/useModal';
 import { usePrevious } from '../../hooks';
 import useUserBankAccountModal from '../../hooks/useUserBankAccountModal';
 import { useAuth } from '../../hooks/useAuth';
+import { VALIDATOR_STATUS } from '../../types/UserStatus';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -129,7 +130,12 @@ const WithdrawalPage = () => {
   );
   const isDataLoading = !data && !error;
   useEffect(() => {
-    if (user.logged_in && !bankAccount.loading && !bankAccount.hasBankAccount) {
+    if (
+      user.logged_in &&
+      user.validator_status !== VALIDATOR_STATUS.MAJOR_ERROR &&
+      !bankAccount.loading &&
+      !bankAccount.hasBankAccount
+    ) {
       enableModal(ComponentName.AddBankAccountModal);
     }
   }, [bankAccount.loading]);
