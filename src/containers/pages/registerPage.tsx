@@ -22,8 +22,8 @@ import { RegistrationPostalCodeAutofill } from '../../types/api/user/Registratio
 import useGTM from '../../hooks/useGTM';
 import { useI18n } from '../../hooks/useI18n';
 import { PagesName, REDIRECT_PROTECTED_NOT_LOGGED_IN } from '../../constants';
-import NotFoundPage from './notFoundPage';
 import { useAuth } from '../../hooks/useAuth';
+import RedirectNotFound from '../../components/RedirectNotFound';
 
 interface SuccessRegistrationPathState {
   welcomeScreen?: boolean;
@@ -162,7 +162,7 @@ const RegisterPage = () => {
     location.pathname === successRegisterRoute?.path &&
     !location?.state?.welcomeScreen
   ) {
-    return <NotFoundPage />;
+    return <RedirectNotFound />;
   }
 
   return (

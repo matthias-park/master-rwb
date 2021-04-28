@@ -6,7 +6,6 @@ import CustomAlert from '../../components/CustomAlert';
 import Form from 'react-bootstrap/Form';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Redirect, useParams } from 'react-router-dom';
-import NotFoundPage from './notFoundPage';
 import ForgotPasswordResponse from '../../types/api/user/ForgotPassword';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useGTM from '../../hooks/useGTM';
@@ -14,6 +13,7 @@ import LoadingButton from '../../components/LoadingButton';
 import { VALIDATIONS } from '../../constants';
 import TextInput from '../../components/customFormInputs/TextInput';
 import { useAuth } from '../../hooks/useAuth';
+import RedirectNotFound from '../../components/RedirectNotFound';
 
 const ForgotPasswordPage = () => {
   const { code } = useParams<{ code?: string }>();
@@ -61,7 +61,7 @@ const ForgotPasswordPage = () => {
     });
   };
   if (!code) {
-    return <NotFoundPage />;
+    return <RedirectNotFound />;
   }
   return (
     <main className="page-container">

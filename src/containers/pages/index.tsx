@@ -62,7 +62,7 @@ const Routes = () => {
             if (locale && route.id === PagesName.LocaleSelectPage) {
               return null;
             }
-            if (route.redirectTo) {
+            if (!!locale && route.redirectTo) {
               return (
                 <Redirect
                   to={route.redirectTo}

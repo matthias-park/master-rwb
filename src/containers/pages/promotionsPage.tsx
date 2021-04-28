@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { useI18n } from '../../hooks/useI18n';
 import useDesktopWidth from '../../hooks/useDesktopWidth';
@@ -9,8 +9,8 @@ import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
 import Link from '../../components/Link';
 import { makeCollapsible } from '../../utils/uiUtils';
-import NotFoundPage from './notFoundPage';
 import clsx from 'clsx';
+import RedirectNotFound from '../../components/RedirectNotFound';
 
 const PromoLinkEl = ({
   item,
@@ -146,12 +146,6 @@ const PromotionPage = ({ slug }: { slug: string }) => {
   const history = useHistory();
   const desktopWidth = useDesktopWidth(568);
   const isDataLoading = !data && !error;
-  const bannerImg = desktopWidth
-    ? data?.Data.bg_image.url
-    : data?.Data.bg_image_mobile.url;
-  const fallbackBannerImg = desktopWidth
-    ? '/assets/images/promo/promo-inner-lg.png'
-    : '/assets/images/promo/promo-inner-sm.png';
 
   useEffect(() => {
     makeCollapsible('terms', 'terms-body', 'terms-toggle');
@@ -167,8 +161,15 @@ const PromotionPage = ({ slug }: { slug: string }) => {
   };
 
   if (!isDataLoading && (error || !data?.Success)) {
-    return <NotFoundPage />;
+    return <RedirectNotFound />;
   }
+
+  const bannerImg = desktopWidth
+    ? data?.Data.bg_image.url
+    : data?.Data.bg_image_mobile.url;
+  const fallbackBannerImg = desktopWidth
+    ? '/assets/images/promo/promo-inner-lg.png'
+    : '/assets/images/promo/promo-inner-sm.png';
 
   return (
     <main className="pt-xl-5">

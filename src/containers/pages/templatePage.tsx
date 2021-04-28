@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import Dropdown from 'react-bootstrap/Dropdown';
-import JsonPageTemplate from '../../types/api/JsonPageTemplate';
-import JsonPage from '../../types/api/JsonPage';
 import { makeCollapsible } from '../../utils/uiUtils';
 import { useConfig } from '../../hooks/useConfig';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { useI18n } from '../../hooks/useI18n';
 import { useParams, useLocation } from 'react-router-dom';
-import NotFoundPage from './notFoundPage';
 import Sidebar from '../../components/Sidebar';
 import HelpBlock from '../../components/HelpBlock';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
 import clsx from 'clsx';
 import { Element, Link as ScrollLink } from 'react-scroll';
+import RedirectNotFound from '../../components/RedirectNotFound';
 
 const TemplatePage = () => {
   const { slug } = useParams<{ slug?: string }>();
@@ -51,7 +49,7 @@ const TemplatePage = () => {
   }, [data]);
 
   if (!isDataLoading && (error || !data?.Success)) {
-    return <NotFoundPage />;
+    return <RedirectNotFound />;
   }
 
   return (

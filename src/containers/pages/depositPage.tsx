@@ -78,11 +78,15 @@ const DepositPage = () => {
     ).catch(res => {
       return res;
     });
-    console.log(response);
     if (response?.Success && response.RedirectUrl) {
       return !!(window.location.href = response.RedirectUrl);
     }
-    if (!response || response.PaymentResultMessage || response.Message) {
+    if (
+      !response ||
+      !response.Success ||
+      response.PaymentResultMessage ||
+      response.Message
+    ) {
       setApiError(
         response?.PaymentResultMessage ||
           response?.Message ||
