@@ -403,10 +403,16 @@ export const VALIDATIONS = {
     (!!value.trim().length &&
       REGEX_EXPRESSION.LETTERS_WITH_SEPERATORS.test(value.trim())) ||
     value === '*',
-  email: value =>
-    REGEX_EXPRESSION.EMAIL.test(value.trim()) &&
-    value.split('@')?.[0]?.length < 65 &&
-    value.split('@')?.[1]?.length < 255,
+  email: (value: string) => {
+    const trimmedValue = value.trim();
+    let valid =
+      REGEX_EXPRESSION.EMAIL.test(trimmedValue) &&
+      trimmedValue.split('@')?.[0]?.length < 65 &&
+      trimmedValue.split('@')?.[1]?.length < 255;
+    const lastDot = trimmedValue.lastIndexOf('.');
+    if (trimmedValue.length - lastDot < 3) valid = false;
+    return valid;
+  },
   phone: value => {
     const phone = value
       .trim()

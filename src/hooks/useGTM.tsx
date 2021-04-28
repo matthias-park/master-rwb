@@ -28,7 +28,7 @@ type GTMHookProviderProps = { state?: any; children: ReactNode };
  */
 export const initialState: ISnippetsParams = {
   dataLayer: undefined,
-  dataLayerName: 'tglabDataLayer',
+  dataLayerName: 'tglab',
   environment: undefined,
   id: '',
 };

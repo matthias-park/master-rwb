@@ -105,7 +105,7 @@ export const KambiProvider = ({ children }) => {
         }
         console.log(response);
       });
-    } else if (visibleSportsbook) {
+    } else if (!apiLoadedIntervalRef.current && visibleSportsbook) {
       apiLoadedIntervalRef.current = setInterval(() => {
         window.KambiWidget?.ready.then(wapi => {
           setApi(wapi);

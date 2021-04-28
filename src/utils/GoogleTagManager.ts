@@ -121,4 +121,4 @@ export const initGTM = ({
  * @param data - The data to push
  */
 export const sendToGTM = ({ dataLayerName, data }: ISendToGTM): void =>
-  window[dataLayerName].push(data);
+  window[dataLayerName]?.push(data);
