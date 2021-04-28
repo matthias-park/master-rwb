@@ -48,6 +48,7 @@ const ContactUsPage = () => {
   useEffect(() => {
     reset();
     mutate();
+    setSubmitResponse(null);
   }, [user.logged_in]);
   useEffect(() => {
     if (data?.form) {
@@ -63,6 +64,12 @@ const ContactUsPage = () => {
       }
     }
   }, [data]);
+
+  useEffect(() => {
+    if (!formMethods.formState.isDirty && submitResponse) {
+      setSubmitResponse(null);
+    }
+  }, [formMethods.formState.isDirty]);
 
   const onSubmit = async ({ file, phone_number, date_of_birth, ...fields }) => {
     if (file?.length) {
@@ -90,6 +97,9 @@ const ContactUsPage = () => {
         Message: null,
       };
     });
+    if (response.Success) {
+      reset();
+    }
     return setSubmitResponse({
       success: response.Success,
       msg: response.Message,

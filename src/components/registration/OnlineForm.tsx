@@ -258,7 +258,7 @@ const OnlineForm = (props: Props) => {
   const formMethods = useForm({
     mode: 'onBlur',
   });
-  const { handleSubmit, watch, trigger, formState } = formMethods;
+  const { handleSubmit, watch, trigger, formState, reset } = formMethods;
 
   const setValidation = (id: string, status: FormFieldValidation) =>
     setValidationForms({ ...validationForms, [id]: status });
@@ -283,6 +283,7 @@ const OnlineForm = (props: Props) => {
       scroll.scrollToTop();
       return setApiError(response.Message);
     }
+    reset();
     return setApiError(null);
   };
 
