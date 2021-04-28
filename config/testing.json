@@ -2,7 +2,7 @@
   "franchises": [
     {
       "name": "bnl",
-      "domain": "bnl-rjtest.tglab.dev",
+      "domain": ["bnl-rjtest.tglab.dev", "uat-fe.scooore.be"],
       "theme": "bnl",
       "api": "https://bnl-test-rails.tglab.dev",
       "gtmId": "GTM-PGRW8BQ",

@@ -61,13 +61,19 @@ export const HOLD_RENDERED_PAGE_INTERVAL = 3600000; // 1 hour
 export const DOMAINS_TO_NAME = config
   .get<FranchiseConfig[]>('franchises')
   .reduce((obj, fr) => {
-    obj[fr.domain] = fr.name;
+    const domains = Array.isArray(fr.domain) ? fr.domain : [fr.domain];
+    domains.forEach(domain => {
+      obj[domain] = fr.name;
+    });
     return obj;
   }, {});
 export const DOMAINS_TO_FRANCHISE: {
   [key: string]: FranchiseConfig;
 } = config.get<FranchiseConfig[]>('franchises').reduce((obj, fr) => {
-  obj[fr.domain] = fr;
+  const domains = Array.isArray(fr.domain) ? fr.domain : [fr.domain];
+  domains.forEach(domain => {
+    obj[domain] = fr;
+  });
   return obj;
 }, {});
 export const BASIC_AUTH =

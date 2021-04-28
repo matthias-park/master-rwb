@@ -1,6 +1,6 @@
 export interface FranchiseConfig {
   name: string;
-  domain: string;
+  domain: string | string[];
   theme: string;
   api: string;
 }
