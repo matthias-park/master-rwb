@@ -69,16 +69,22 @@ const DepositPage = () => {
     const response: DepositResponse | null = await postApi<DepositResponse>(
       '/railsapi/v1/deposits/perform',
       depositParams,
-    ).catch(() => {
-      return null;
+    ).catch(res => {
+      return res;
     });
+    console.log(response);
     if (response?.Success && response.RedirectUrl) {
-      return (window.location.href = response.RedirectUrl);
+      return !!(window.location.href = response.RedirectUrl);
     }
-    if (!response || response.PaymentResultMessage) {
-      setApiError(response?.PaymentResultMessage || t('api_response_failed'));
+    if (!response || response.PaymentResultMessage || response.Message) {
+      setApiError(
+        response?.PaymentResultMessage ||
+          response?.Message ||
+          t('api_response_failed'),
+      );
     }
     setDepositLoading(false);
+    return false;
   }, []);
 
   return (
