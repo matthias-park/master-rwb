@@ -66,8 +66,8 @@ export const KambiProvider = ({ children }) => {
           path: route.path,
           exact: route.exact ?? true,
         }),
-      )?.id === PagesName.SportsPage && sportsbookLoaded,
-    [pathname, routes, sportsbookLoaded],
+      )?.id === PagesName.SportsPage,
+    [pathname, routes],
   );
 
   useEffect(() => {
@@ -111,7 +111,7 @@ export const KambiProvider = ({ children }) => {
           setApi(wapi);
           setSportsbookLoaded(true);
         });
-      }, 500);
+      }, 1000);
     }
   }, [!!api]);
 
@@ -121,16 +121,24 @@ export const KambiProvider = ({ children }) => {
     }
   }, [hash, !!api]);
   useEffect(() => {
-    if (visibleSportsbook) {
+    if (visibleSportsbook && sportsbookLoaded) {
       showKambiSportsbook();
     } else {
       hideKambiSportsbook();
     }
     if (api) {
-      api.set(visibleSportsbook ? api.CLIENT_SHOW : api.CLIENT_HIDE);
-      api.set(visibleSportsbook ? api.BETSLIP_SHOW : api.BETSLIP_HIDE);
+      api.set(
+        visibleSportsbook && sportsbookLoaded
+          ? api.CLIENT_SHOW
+          : api.CLIENT_HIDE,
+      );
+      api.set(
+        visibleSportsbook && sportsbookLoaded
+          ? api.BETSLIP_SHOW
+          : api.BETSLIP_HIDE,
+      );
     }
-  }, [visibleSportsbook]);
+  }, [visibleSportsbook, sportsbookLoaded]);
 
   const value: KambiContext = {
     sportsbookLoaded,
