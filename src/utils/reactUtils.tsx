@@ -3,8 +3,25 @@ import Link from '../components/Link';
 
 const regexToReact = [
   {
-    regex: /{linkTo=(.*)}(.*){linkTo}/gm,
-    component: matches => <Link to={matches[1]}>{matches[2]}</Link>,
+    regex: /{linkTo=([^\s]+)([ newTab]+)?}(.*){linkTo}/gm,
+    component: matches => {
+      const url = matches[1];
+      const newTab = !!matches[2];
+      const name = matches[3];
+      if (newTab) {
+        const locale = window.location.pathname.split('/')[1];
+        return (
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href={`${window.location.origin}/${locale}/${url}`}
+          >
+            {name}
+          </a>
+        );
+      }
+      return <Link to={url}>{name}</Link>;
+    },
   },
 ];
 
