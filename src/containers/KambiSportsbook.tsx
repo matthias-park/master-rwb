@@ -57,6 +57,7 @@ export const KambiProvider = ({ children }) => {
     const localeEqual = prev.locale === next.locale;
     return routesEqual && localeEqual;
   });
+  const apiLoadedIntervalRef = useRef<number>(0);
   const { user } = useAuth();
   const [sportsbookLoaded, setSportsbookLoaded] = useState(false);
   const [api, setApi] = useState<WidgetAPI | null>(null);
@@ -94,6 +95,9 @@ export const KambiProvider = ({ children }) => {
 
   useEffect(() => {
     if (api) {
+      if (apiLoadedIntervalRef.current)
+        clearInterval(apiLoadedIntervalRef.current);
+
       api.request(api.USER_SESSION_CHANGE);
       api.subscribe(response => {
         switch (response.type) {
@@ -105,6 +109,13 @@ export const KambiProvider = ({ children }) => {
         }
         console.log(response);
       });
+    } else if (visibleSportsbook) {
+      apiLoadedIntervalRef.current = setInterval(() => {
+        window.KambiWidget?.ready.then(wapi => {
+          setApi(wapi);
+          setSportsbookLoaded(true);
+        });
+      }, 500);
     }
   }, [!!api]);
 
