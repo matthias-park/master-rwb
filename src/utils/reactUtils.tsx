@@ -5,7 +5,7 @@ const regexToReact = [
   {
     regex: /{linkTo=([^\s]+)([ newTab]+)?}(.*){linkTo}/gm,
     component: matches => {
-      const url = matches[1];
+      const url = matches[1] as string;
       const newTab = !!matches[2];
       const name = matches[3];
       if (newTab) {
@@ -14,7 +14,9 @@ const regexToReact = [
           <a
             target="_blank"
             rel="noreferrer"
-            href={`${window.location.origin}/${locale}/${url}`}
+            href={`${window.location.origin}/${locale}${
+              url.startsWith('/') ? '' : '/'
+            }${url}`}
           >
             {name}
           </a>
