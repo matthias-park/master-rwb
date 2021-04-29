@@ -6,12 +6,11 @@ import PageLayout from './pageLayout';
 import Modals from './Modals';
 import { UIConfigProvider } from '../hooks/useUIConfig';
 import { ModalProvider } from '../hooks/useModal';
-import { useI18n } from '../hooks/useI18n';
 import { KambiProvider } from './KambiSportsbook';
+import { useConfig } from '../hooks/useConfig';
 
 const App = () => {
-  const { locale: translationLocale } = useI18n();
-  const locale = translationLocale();
+  const { locale } = useConfig((prev, next) => !!prev.locale === !!next.locale);
 
   return (
     <BrowserRouter key={locale} basename={locale ? `/${locale}` : undefined}>
