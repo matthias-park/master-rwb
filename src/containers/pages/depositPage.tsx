@@ -13,6 +13,7 @@ import { usePrevious, useRoutePath } from '../../hooks';
 import { useModal } from '../../hooks/useModal';
 import { useAuth } from '../../hooks/useAuth';
 import { VALIDATOR_STATUS } from '../../types/UserStatus';
+import { structuredBankCommunications } from '../../utils/index';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
@@ -156,6 +157,12 @@ const DepositPage = () => {
               {t('deposit_bank_title')}:{' '}
               <span className="font-weight-bold">
                 {t('deposit_bank_title_data')}
+              </span>
+            </li>
+            <li className="mb-1">
+              {t('deposit_bank_communications')}:{' '}
+              <span className="font-weight-bold">
+                {structuredBankCommunications(user?.barcode)}
               </span>
             </li>
           </ul>

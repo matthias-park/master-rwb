@@ -33,3 +33,9 @@ export const removeFalsyFromObject = (obj: any) =>
   Object.keys(obj).forEach(
     k => !obj[k] && obj[k] !== undefined && delete obj[k],
   );
+
+export const structuredBankCommunications = barcode => {
+  const rExp = /\d+/;
+  const moduloOf97 = barcode.match(rExp)[0] % 97;
+  return '00' + barcode + moduloOf97;
+};
