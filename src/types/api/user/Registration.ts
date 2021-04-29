@@ -3,11 +3,11 @@ export interface PostRegistration {
   login: string;
   password: string;
   gender: string;
-  street: string;
+  address: string;
   postal_code: string;
   city: string;
   date_of_birth: string;
-  language_id: number;
+  language_id?: number;
 }
 export interface ValidateRegisterInput {
   Exists: boolean;

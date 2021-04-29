@@ -57,7 +57,7 @@ const blocks = (
         validate: value => VALIDATIONS.name(value) || t('field_only_letters'),
       },
       {
-        id: 'street',
+        id: 'address',
         type: 'text',
         required: true,
       },

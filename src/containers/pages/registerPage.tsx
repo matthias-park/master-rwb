@@ -110,7 +110,7 @@ const RegisterPage = () => {
       sendDataToGTM({
         event: 'RegistrationSubmitted',
       });
-      form.language_id = locales.find(lang => lang.iso === locale)?.id || 0;
+      form.language_id = locales.find(lang => lang.iso === locale)?.id;
       const finalForm = Object.keys(form).reduce((obj, key) => {
         if (!key.includes('repeat')) {
           obj[key] = form[key];
