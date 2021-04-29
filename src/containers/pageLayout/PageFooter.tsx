@@ -212,7 +212,7 @@ const SocialSection = ({
 };
 
 const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
   const desktopWidth = useDesktopWidth(768);
   const sendDataToGTM = useGTM();
   const FooterLink = useMemo(
@@ -242,7 +242,7 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
               className="section-item"
             >
               <FooterLink.Title as="h3" className="section-item__title">
-                {t(linkContainer.name)}
+                {jsxT(linkContainer.name)}
               </FooterLink.Title>
               <FooterLink.Children>
                 {linkContainer.children
