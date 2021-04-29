@@ -66,7 +66,7 @@ const ContactUsPage = () => {
   }, [data]);
 
   useEffect(() => {
-    if (!formMethods.formState.isDirty && submitResponse) {
+    if (formMethods.formState.isDirty && submitResponse) {
       setSubmitResponse(null);
     }
   }, [formMethods.formState.isDirty]);
