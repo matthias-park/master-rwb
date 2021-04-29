@@ -54,22 +54,25 @@ export const createBackdropProviderValues = (
   };
 };
 
+let activeHeaderNavCopy;
 export const createHeaderNavProviderValues = (
   activeHeaderNav: string | null,
   setActiveHeaderNav: (newState: string | null) => void,
   currentRoute?: string,
   headerLinks?: HeaderRoute[],
 ): HeaderActiveNav => {
-  const toggle = (name?: string | null) => {
+  const toggle = (name?: string | null, active?: boolean) => {
     const navName = name && (name.includes('hover:') ? name : `hover:${name}`);
-    let activeRouteName =
-      navName && navName !== activeHeaderNav ? navName : null;
+    let activeRouteName = navName ? navName : null;
+    if (!active && navName === activeHeaderNavCopy) activeRouteName = null;
+    if (navName && navName !== activeHeaderNavCopy && !active) return;
     if (!activeRouteName && currentRoute && headerLinks) {
       activeRouteName =
         headerLinks.find(
           link => !!link.prefix && currentRoute.startsWith(link.prefix),
         )?.name || null;
     }
+    activeHeaderNavCopy = activeRouteName;
     setActiveHeaderNav(activeRouteName);
   };
 

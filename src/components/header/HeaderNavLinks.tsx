@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { sortAscending, sortDescending } from '../../utils/index';
 import clsx from 'clsx';
@@ -11,13 +11,14 @@ import Link from '../Link';
 import { matchPath, useLocation } from 'react-router';
 import useDesktopWidth from '../../hooks/useDesktopWidth';
 import { useAuth } from '../../hooks/useAuth';
+import useHover from '../../hooks/useHover';
 
 interface HeaderNavLinkProps {
   data: HeaderRoute;
   mobile: boolean;
   active: string | null;
   setNavExpanded: (value: boolean) => void;
-  toggleActive: (name?: string | null) => void;
+  toggleActive: (name?: string | null, active?: boolean) => void;
 }
 
 export const HeaderNavClassicLink = ({
@@ -49,10 +50,29 @@ export const HeaderNavClassicLink = ({
   const desktopWidth = useDesktopWidth(1199);
   const dropdownRef = useRef(null);
   const sendDataToGTM = useGTM();
+  const hover = useHover(dropdownRef);
+  const [delayHoverHandler, setDelayHoverHandler] = useState<number | null>(
+    null,
+  );
   const dropdownLinks = useMemo(
     () => data.links?.sort((a, b) => sortAscending(a.order, b.order)),
     [data.links],
   );
+  const currentLinkActive = active?.includes(
+    `${mobile ? 'hover:' : ''}${data.name}`,
+  );
+
+  useEffect(() => {
+    if (delayHoverHandler) {
+      clearTimeout(delayHoverHandler);
+      setDelayHoverHandler(null);
+    }
+    if (desktopWidth) {
+      setDelayHoverHandler(
+        setTimeout(() => toggleActive(data.name, hover), hover ? 600 : 800),
+      );
+    }
+  }, [hover]);
 
   const onGtmLinkClick = (name: string, subHeader: boolean = false) => {
     sendDataToGTM({
@@ -68,9 +88,7 @@ export const HeaderNavClassicLink = ({
       ref={dropdownRef}
       as="li"
       className="header__nav-item"
-      show={active?.includes(`${mobile ? 'hover:' : ''}${data.name}`)}
-      onMouseEnter={() => desktopWidth && toggleActive(data.name)}
-      onMouseLeave={() => desktopWidth && toggleActive(null)}
+      show={currentLinkActive}
     >
       {!mobile ? (
         <Dropdown.Toggle
