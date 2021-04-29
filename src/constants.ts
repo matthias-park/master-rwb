@@ -416,7 +416,7 @@ export const VALIDATIONS = {
   phone: value => {
     const phone = value
       .trim()
-      .replaceAll(REGEX_EXPRESSION.PHONE_NUMBER_NORMALIZE, '');
+      .replace(REGEX_EXPRESSION.PHONE_NUMBER_NORMALIZE, '');
     return REGEX_EXPRESSION.PHONE_NUMBER.test(phone);
   },
   bank_account: value => REGEX_EXPRESSION.BANK_IBAN.test(value.trim()),
