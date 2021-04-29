@@ -116,6 +116,9 @@ footer:not(.KambiBC-footer) {
     color: $white-light;
     &__title {
         margin-bottom: 12px;
+        a {
+          color: $white-light;
+        }
         &:after {
             content: none;
         }
