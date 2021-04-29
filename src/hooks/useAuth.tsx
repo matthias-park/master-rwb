@@ -59,11 +59,10 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
   );
 
   const prevUser = usePrevious(data);
-
   let user: UserStatus = { logged_in: false, loading: false };
   if (!data && !error) {
     user.loading = true;
-  } else if (data && !error) {
+  } else if (data) {
     user = data;
     user.logged_in = !!user.id;
     user.loading = false;
