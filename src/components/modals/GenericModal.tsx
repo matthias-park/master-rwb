@@ -1,5 +1,6 @@
 import React from 'react';
 import { useI18n } from '../../hooks/useI18n';
+import { useConfig } from '../../hooks/useConfig';
 import Modal from 'react-bootstrap/Modal';
 import clsx from 'clsx';
 
@@ -22,6 +23,7 @@ const GenericModal = ({
   className,
 }: Props) => {
   const { t } = useI18n();
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   return (
     <Modal
       show={show}
@@ -51,26 +53,12 @@ const GenericModal = ({
             </p>
           </div>
           <div className="custom-modal__footer-bnl ml-2 ml-sm-4">
-            <div className="d-flex">
-              <img
-                alt="brand-logo"
-                width="20"
-                height="20"
-                className="mr-1"
-                src="/assets/images/logo/bnl-logo.svg"
-              />
-              <img
-                alt="18-label"
-                width="20"
-                height="20"
-                className="mr-2"
-                src="/assets/images/restrictions/18-label-green.png"
-              />
-              <small>{t('bnl_modal_footer_text_1')}</small>
-            </div>
-            <small className="d-block text-center mt-1">
-              {t('bnl_modal_footer_text_1')}
-            </small>
+            <img
+              alt="bnl-restrictions"
+              height="45"
+              className="mr-2"
+              src={`/assets/images/restrictions/bnl-${locale}.svg`}
+            />
           </div>
         </div>
       </Modal.Body>

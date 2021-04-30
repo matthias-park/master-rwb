@@ -21,6 +21,7 @@ import clsx from 'clsx';
 
 const FooterHeader = () => {
   const { t } = useI18n();
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   return (
     <div className="row flex-column flex-sm-row footer-pre align-items-sm-center py-3">
       <div className="session-block mb-2 mb-sm-0">
@@ -49,7 +50,7 @@ const FooterHeader = () => {
         <img
           className="restrictions-block__img mr-3"
           alt=""
-          src="/assets/images/restrictions/bnl.jpg"
+          src={`/assets/images/restrictions/bnl-${locale}.svg`}
           width="200"
         />
       </div>
@@ -59,6 +60,7 @@ const FooterHeader = () => {
 
 const FooterBottom = ({ data }: { data?: SubFooter }) => {
   const { t } = useI18n();
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { enableModal } = useModal();
   const isSports = useIsRouteActive('sports');
   const isLive = useIsRouteActive('sportsLive');
@@ -91,8 +93,8 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
         <li className="footer-sub__nav-img">
           <a target="_blank" href={t('play_legally_href')}>
             <img
-              alt="kansspel"
-              className="mb-2 mb-lg-0"
+              alt="play legally"
+              className="mb-2 mb-lg-0 white-corners"
               height="50"
               src="/assets/images/footer/play-legally.jpg"
             />
@@ -101,37 +103,37 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
         <li className="footer-sub__nav-img">
           <a target="_blank" href={t('bgc_href')}>
             <img
-              alt="kansspel"
+              alt="bgc"
               className="ml-2 ml-lg-3 mb-2 mb-lg-0"
               height="35"
-              src="/assets/images/footer/bgc.png"
+              src={`/assets/images/footer/bgc-${locale}.png`}
             />
           </a>
         </li>
         <li className="footer-sub__nav-img">
           <a target="_blank" href={t('responsible_gaming_href')}>
             <img
-              alt="kansspel"
-              className="ml-2 ml-lg-3 mb-2 mb-lg-0"
-              height="45"
-              src="/assets/images/footer/kansspel.jpg"
+              alt="responsible gaming"
+              className="ml-2 ml-lg-3 mb-2 mb-lg-0 white-corners"
+              height="40"
+              src={`/assets/images/footer/kansspel-${locale}.jpg`}
             />
           </a>
         </li>
         <li className="footer-sub__nav-img">
           <a target="_blank" href={t('bnl_href')}>
             <img
-              alt="loterij"
+              alt="bnl"
               className="ml-1 ml-lg-2 mb-2 mb-lg-0"
               height="45"
-              src="/assets/images/footer/loterij.jpg"
+              src={`/assets/images/footer/loterij-${locale}.png`}
             />
           </a>
         </li>
         <li className="footer-sub__nav-img">
           <a target="_blank" href={t('el_href')}>
             <img
-              alt="european"
+              alt="european lotteries"
               className="ml-1 ml-lg-2 mb-2 mb-lg-0"
               height="45"
               src="/assets/images/footer/european.jpg"
@@ -196,6 +198,7 @@ const SocialSection = ({
                   key={key}
                   href={value}
                   className="section-social__icons-link"
+                  target="_blank"
                 >
                   <i className={`icon-${iconName[key] || key}`}></i>
                 </a>
@@ -211,8 +214,9 @@ const SocialSection = ({
               .map(([key, value]) => (
                 <a
                   key={key}
-                  href={value}
+                  href={t(value)}
                   className="section-social__icons-link"
+                  target="_blank"
                 >
                   <img
                     alt={`partner-${key}`}

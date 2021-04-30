@@ -347,10 +347,6 @@ footer:not(.KambiBC-footer) {
             }
             @include media-breakpoint-down(md) {
                 padding-top: 18px;
-                &:nth-last-of-type(-n+2) {
-                    display: flex;
-                    justify-content: flex-end;
-                }
             }
         }
         &-link:not(:last-of-type) {
@@ -367,6 +363,9 @@ footer:not(.KambiBC-footer) {
           align-items: center;
           img {
             border-radius: 4px;
+            &.white-corners {
+              border: 3px solid $white;
+            }
           }
         }
         li {

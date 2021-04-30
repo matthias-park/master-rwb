@@ -570,8 +570,11 @@ a:hover {
       width: calc(100% + 40px);
     }
     &-bnl {
-      min-width: 200px;
-      max-width: 200px;
+      @media only screen and (max-width: 360px) {
+        img {
+          height: 36px;
+        }
+      }
     }
     small {
       font-size: 9px;
