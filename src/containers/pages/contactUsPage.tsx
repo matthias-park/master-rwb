@@ -40,14 +40,13 @@ const ContactUsPage = () => {
     success: boolean;
     msg: string | null;
   } | null>(null);
-  const { data, error, mutate, isValidating } = useApi<JSONFormPage>(
-    `/railsapi/v1/contact_us/form`,
+  const { data, error, isValidating } = useApi<JSONFormPage>(
+    user.loading ? null : [`/railsapi/v1/contact_us/form`, user.logged_in],
   );
   const isDataLoading = (!data && !error) || isValidating;
 
   useEffect(() => {
     reset();
-    mutate();
     setSubmitResponse(null);
   }, [user.logged_in]);
   useEffect(() => {
