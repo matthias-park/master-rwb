@@ -34,8 +34,9 @@ export const removeFalsyFromObject = (obj: any) =>
     k => !obj[k] && obj[k] !== undefined && delete obj[k],
   );
 
-export const structuredBankCommunications = barcode => {
+export const structuredBankCommunications = (barcode?: string) => {
+  if (!barcode) return '';
   const rExp = /\d+/;
-  const moduloOf97 = barcode.match(rExp)[0] % 97;
+  const moduloOf97 = Number(barcode.match(rExp)![0]) % 97;
   return '00' + barcode + moduloOf97;
 };

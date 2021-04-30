@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { useI18n } from '../../hooks/useI18n';
 import { ComponentName } from '../../constants';
@@ -8,18 +8,27 @@ import LoadingButton from '../LoadingButton';
 import GenericModal from '../../components/modals/GenericModal';
 import { useModal } from '../../hooks/useModal';
 import TextInput from '../customFormInputs/TextInput';
+import { useAuth } from '../../hooks/useAuth';
 
 interface Props {
   onSubmit: SubmitHandler<Record<string, any>>;
 }
 
 const AddBankAccountModal = ({ onSubmit }: Props) => {
+  const { user } = useAuth();
   const { t } = useI18n();
   const [apiError, setApiErr] = useState('');
   const { disableModal } = useModal();
   const formMethods = useForm({
     mode: 'onBlur',
   });
+
+  useEffect(() => {
+    if (!user.logged_in) {
+      disableModal(ComponentName.AddBankAccountModal);
+    }
+  }, [user.logged_in]);
+
   const handleSubmit = async ({ account_number }) => {
     const result = await onSubmit({ account_number: `BE${account_number}` });
     if (typeof result === 'string') {
