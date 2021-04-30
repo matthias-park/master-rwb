@@ -19,7 +19,12 @@ import Link from '../../components/Link';
 import { useAuth } from '../../hooks/useAuth';
 import { usePrevious } from '../../hooks';
 
-const SubNavLinks = () => {
+const SubNavLinks = ({
+  setNavExpanded,
+}: {
+  setNavExpanded: (active: boolean) => void;
+}) => {
+  const { backdrop } = useUIConfig();
   const { locales, locale, setLocale } = useConfig();
   const { t } = useI18n();
   const sendDataToGTM = useGTM();
@@ -29,6 +34,8 @@ const SubNavLinks = () => {
     }).then(() => setLocale(lang, true));
   };
   const navLinkClick = (linkName: string) => {
+    setNavExpanded(false);
+    backdrop.hide();
     sendDataToGTM({
       event: 'TopNavigationClick',
       'tglab.ItemClicked': t(linkName),
@@ -170,7 +177,7 @@ const PageHeader = () => {
               <span className="icon-menu-close"></span>
             </Navbar.Toggle>
           )}
-          <SubNavLinks />
+          <SubNavLinks setNavExpanded={setNavExpanded} />
           <div className="row w-100 mt-0 mt-lg-2 align-items-end order-1 order-xl-2">
             <ul ref={navbarRef} className="header__nav header__nav--main">
               {header

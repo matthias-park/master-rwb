@@ -50,7 +50,7 @@ export const HeaderNavClassicLink = ({
   const desktopWidth = useDesktopWidth(1199);
   const dropdownRef = useRef(null);
   const sendDataToGTM = useGTM();
-  const hover = useHover(dropdownRef);
+  const hover = useHover(dropdownRef, desktopWidth);
   const [delayHoverHandler, setDelayHoverHandler] = useState<number | null>(
     null,
   );

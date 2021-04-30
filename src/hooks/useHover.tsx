@@ -1,20 +1,29 @@
-import { useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 
-const useHover = (ref?: React.MutableRefObject<HTMLElement | null>) => {
-  const [value, setValue] = useState(false);
-  const handleMouseOver = () => setValue(true);
-  const handleMouseOut = () => setValue(false);
-  useEffect(() => {
-    const node = ref?.current;
-    if (node) {
-      node.addEventListener('mouseover', handleMouseOver);
-      node.addEventListener('mouseout', handleMouseOut);
-      return () => {
-        node.removeEventListener('mouseover', handleMouseOver);
-        node.removeEventListener('mouseout', handleMouseOut);
-      };
+const useHover = (ref: RefObject<Element>, enabled: boolean = true) => {
+  if (process.env.NODE_ENV === 'development') {
+    if (typeof ref !== 'object' || typeof ref.current === 'undefined') {
+      console.error('useHoverDirty expects a single ref argument.');
     }
-  }, [ref?.current]);
+  }
+  const [value, setValue] = useState(false);
+  useEffect(() => {
+    const onMouseOver = () => setValue(true);
+    const onMouseOut = () => setValue(false);
+    const node = ref?.current;
+
+    if (enabled && node) {
+      node.addEventListener('mouseover', onMouseOver);
+      node.addEventListener('mouseout', onMouseOut);
+    }
+    return () => {
+      if (enabled && node) {
+        node.removeEventListener('mouseover', onMouseOver);
+        node.removeEventListener('mouseout', onMouseOut);
+      }
+    };
+  }, [enabled, ref?.current]);
+
   return value;
 };
 
