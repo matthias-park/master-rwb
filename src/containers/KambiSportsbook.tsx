@@ -67,7 +67,7 @@ export const KambiProvider = ({ children }) => {
           exact: route.exact ?? true,
         }),
       )?.id === PagesName.SportsPage,
-    [pathname, routes],
+    [pathname, routes, locationKey],
   );
 
   useEffect(() => {
@@ -138,7 +138,7 @@ export const KambiProvider = ({ children }) => {
           : api.BETSLIP_HIDE,
       );
     }
-  }, [visibleSportsbook, sportsbookLoaded]);
+  }, [api, visibleSportsbook, sportsbookLoaded]);
 
   const value: KambiContext = {
     sportsbookLoaded,

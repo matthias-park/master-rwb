@@ -105,7 +105,7 @@ export const HeaderNavClassicLink = ({
           }
           className="header__nav-item-link cursor-pointer"
           onClick={() => {
-            toggleActive(data.name);
+            toggleActive(data.name, !currentLinkActive);
           }}
         >
           {t(data.name)}
@@ -116,7 +116,7 @@ export const HeaderNavClassicLink = ({
           as="div"
           className="d-flex align-items-center w-100 cursor-pointer"
           onClick={() => {
-            toggleActive(data.name);
+            toggleActive(data.name, !currentLinkActive);
           }}
         >
           <span className="header__nav-item-link cursor-pointer">
