@@ -88,36 +88,55 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
           ))}
       </ul>
       <ul className="footer-sub__nav flex-row justify-content-center h-auto pb-3 pb-lg-0">
-        <li>
-          <img
-            alt="kansspel"
-            height="45"
-            src="/assets/images/footer/kansspel.jpg"
-          />
+        <li className="footer-sub__nav-img">
+          <a target="_blank" href={t('play_legally_href')}>
+            <img
+              alt="kansspel"
+              className="mb-2 mb-lg-0"
+              height="50"
+              src="/assets/images/footer/play-legally.jpg"
+            />
+          </a>
         </li>
-        <li>
-          <img
-            alt="loterij"
-            className="ml-2 ml-lg-3"
-            height="45"
-            src="/assets/images/footer/loterij.jpg"
-          />
+        <li className="footer-sub__nav-img">
+          <a target="_blank" href={t('bgc_href')}>
+            <img
+              alt="kansspel"
+              className="ml-2 ml-lg-3 mb-2 mb-lg-0"
+              height="35"
+              src="/assets/images/footer/bgc.png"
+            />
+          </a>
         </li>
-        <li>
-          <img
-            alt="european"
-            className="ml-2 ml-lg-3"
-            height="45"
-            src="/assets/images/footer/european.jpg"
-          />
+        <li className="footer-sub__nav-img">
+          <a target="_blank" href={t('responsible_gaming_href')}>
+            <img
+              alt="kansspel"
+              className="ml-2 ml-lg-3 mb-2 mb-lg-0"
+              height="45"
+              src="/assets/images/footer/kansspel.jpg"
+            />
+          </a>
         </li>
-        <li>
-          <img
-            alt="becommerce"
-            className="ml-2 ml-lg-3"
-            height="45"
-            src="/assets/images/footer/becommerce.jpg"
-          />
+        <li className="footer-sub__nav-img">
+          <a target="_blank" href={t('bnl_href')}>
+            <img
+              alt="loterij"
+              className="ml-1 ml-lg-2 mb-2 mb-lg-0"
+              height="45"
+              src="/assets/images/footer/loterij.jpg"
+            />
+          </a>
+        </li>
+        <li className="footer-sub__nav-img">
+          <a target="_blank" href={t('el_href')}>
+            <img
+              alt="european"
+              className="ml-1 ml-lg-2 mb-2 mb-lg-0"
+              height="45"
+              src="/assets/images/footer/european.jpg"
+            />
+          </a>
         </li>
       </ul>
     </div>
