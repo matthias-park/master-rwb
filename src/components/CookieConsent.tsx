@@ -46,7 +46,7 @@ const CookieConsent = () => {
       <div className="cookies-nav__buttons">
         <Button
           size="sm"
-          variant="primary"
+          variant="outline-light"
           onClick={() => enableModal(ComponentName.CookiesModal)}
         >
           {t('cookies_modal_button')}
@@ -54,7 +54,7 @@ const CookieConsent = () => {
         <Button
           size="sm"
           id="gdpr-snackbar-accept"
-          variant="outline-light"
+          variant="primary"
           onClick={handleAccept}
         >
           {t('cookie_consent_accept')}

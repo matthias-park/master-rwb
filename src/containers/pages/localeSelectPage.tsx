@@ -10,19 +10,19 @@ const LANGUAGE = {
     message: 'Welcom',
     full_name: 'Nederlands',
     link_text: 'Gebruiksvoorwaarden',
-    link: 'terms_of_use',
+    link: 'legal/terms-and-conditions',
   },
   fr: {
     message: 'Bienvenue',
     full_name: 'Français',
-    link_text: 'Nutzungsbedingungen',
-    link: 'terms_of_use',
+    link_text: "Conditions d'utilisation",
+    link: 'legal/terms-and-conditions',
   },
   de: {
     message: 'Willkommen',
     full_name: 'Deutsch',
-    link_text: "Conditions d'utilisation",
-    link: 'terms_of_use',
+    link_text: 'Nutzungsbedingungen',
+    link: 'legal/terms-and-conditions',
   },
 };
 
@@ -93,7 +93,7 @@ const LocaleSelectPage = () => {
           </small>
         </div>
         <p className="lang-info__text lang-info__text--big">
-          ©2020 Nationale Loterij, Loterie Nationale, Nationallotterie
+          {`©${new Date().getFullYear()} Nationale Loterij, Loterie Nationale, Nationallotterie`}
         </p>
       </div>
       <div className="lang-conditions">
