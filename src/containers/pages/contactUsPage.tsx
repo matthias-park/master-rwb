@@ -42,7 +42,7 @@ const ContactUsPage = () => {
   const defaultValues = useMemo(
     () =>
       data?.form.reduce((obj: any, field: any) => {
-        obj[field.id] = '';
+        if (field.type !== 'submit') obj[field.id] = '';
         if (field.default) {
           obj[field.id] =
             typeof field.default === 'object'
