@@ -22,6 +22,7 @@ import clsx from 'clsx';
 const FooterHeader = () => {
   const { t } = useI18n();
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+
   return (
     <div className="row flex-column flex-sm-row footer-pre align-items-sm-center py-3">
       <div className="session-block mb-2 mb-sm-0">
@@ -47,12 +48,14 @@ const FooterHeader = () => {
         <span className="restrictions-block__text text-14 mr-3 d-none d-sm-block d-md-none d-lg-block">
           {t('minimum_age_disclaimer')}
         </span>
-        <img
-          className="restrictions-block__img mr-3"
-          alt=""
-          src={`/assets/images/restrictions/bnl-${locale}.svg`}
-          width="200"
-        />
+        <Link to="/responsible-gaming">
+          <img
+            className="restrictions-block__img mr-3"
+            alt=""
+            src={`/assets/images/restrictions/bnl-${locale}.svg`}
+            width="200"
+          />
+        </Link>
       </div>
     </div>
   );
@@ -64,6 +67,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
   const { enableModal } = useModal();
   const isSports = useIsRouteActive('sports');
   const isLive = useIsRouteActive('sportsLive');
+
   return (
     <div
       className={clsx(
@@ -101,22 +105,22 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
           </a>
         </li>
         <li className="footer-sub__nav-img">
-          <a target="_blank" href={t('bgc_href')}>
-            <img
-              alt="bgc"
-              className="ml-2 ml-lg-3 mb-2 mb-lg-0"
-              height="35"
-              src={`/assets/images/footer/bgc-${locale}.png`}
-            />
-          </a>
-        </li>
-        <li className="footer-sub__nav-img">
           <a target="_blank" href={t('responsible_gaming_href')}>
             <img
               alt="responsible gaming"
               className="ml-2 ml-lg-3 mb-2 mb-lg-0 white-corners"
               height="40"
-              src={`/assets/images/footer/kansspel-${locale}.jpg`}
+              src={`/assets/images/footer/res-gaming-${locale}.png`}
+            />
+          </a>
+        </li>
+        <li className="footer-sub__nav-img">
+          <a target="_blank" href={t('bgc_href')}>
+            <img
+              alt="bgc"
+              className="ml-2 ml-lg-3 mb-2 mb-lg-0"
+              height="40"
+              src={`/assets/images/footer/bgc-${locale}.jpg`}
             />
           </a>
         </li>
@@ -238,6 +242,7 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
   const { t, jsxT } = useI18n();
   const desktopWidth = useDesktopWidth(768);
   const sendDataToGTM = useGTM();
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const FooterLink = useMemo(
     () => ({
       Container: desktopWidth ? 'div' : Dropdown,
@@ -252,6 +257,7 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
       event: 'BottomNavigationClick',
     });
   };
+
   if (!links) return null;
   return links
     .sort((a, b) => sortAscending(a.order, b.order))
@@ -270,20 +276,37 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
               <FooterLink.Children>
                 {linkContainer.children
                   .sort((a, b) => sortAscending(a.order, b.order))
-                  .map(child => (
-                    <Link
-                      key={child.name}
-                      to={child.link || '#'}
-                      onClick={() => onGtmLinkClick(child.name)}
-                      className={
-                        child.button
-                          ? 'btn btn-outline-light btn-sm my-3'
-                          : 'section-item__link'
-                      }
-                    >
-                      {t(child.name)}
-                    </Link>
-                  ))}
+                  .map(child =>
+                    child.external ? (
+                      <a
+                        href={
+                          child.link &&
+                          child.link.replace('{__locale__}', locale)
+                        }
+                        target="_blank"
+                        className={
+                          child.button
+                            ? 'btn btn-outline-light btn-sm my-3'
+                            : 'section-item__link'
+                        }
+                      >
+                        {t(child.name)}
+                      </a>
+                    ) : (
+                      <Link
+                        key={child.name}
+                        to={child.link || '#'}
+                        onClick={() => onGtmLinkClick(child.name)}
+                        className={
+                          child.button
+                            ? 'btn btn-outline-light btn-sm my-3'
+                            : 'section-item__link'
+                        }
+                      >
+                        {t(child.name)}
+                      </Link>
+                    ),
+                  )}
               </FooterLink.Children>
             </FooterLink.Container>
           ))}

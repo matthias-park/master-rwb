@@ -43,6 +43,7 @@ export interface ChildElement {
   order: number;
   button?: boolean;
   modal?: ComponentName;
+  external?: boolean;
 }
 
 export interface Partners {
