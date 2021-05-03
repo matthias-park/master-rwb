@@ -10,13 +10,20 @@ import { useI18n } from '../../hooks/useI18n';
 import { sortDescending } from '../../utils';
 
 const AsyncPage = (pageName: string) =>
-  loadable(() => import(`./${pageName}`), {
-    fallback: (
-      <div className="w-100 d-flex justify-content-center pt-5">
-        <Spinner animation="border" variant="white" className="mx-auto" />
-      </div>
-    ),
-  });
+  loadable(
+    () =>
+      import(`./${pageName}`).catch(() => {
+        window.location.reload();
+        return 'div';
+      }),
+    {
+      fallback: (
+        <div className="w-100 d-flex justify-content-center pt-5">
+          <Spinner animation="border" variant="black" className="mx-auto" />
+        </div>
+      ),
+    },
+  );
 
 const COMPONENT_PAGES = {
   [PagesName.DepositPage]: AsyncPage('depositPage'),

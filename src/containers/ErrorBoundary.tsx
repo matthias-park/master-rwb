@@ -9,11 +9,6 @@ interface Props {
 const ErrorBoundary = ({ children, fallback }: Props) => (
   <Sentry.ErrorBoundary
     fallback={fallback || <h1>An error has occurred</h1>}
-    onError={error => {
-      if (error.name === 'ChunkLoadError') {
-        window.location.reload();
-      }
-    }}
     children={children}
   />
 );
