@@ -138,7 +138,9 @@ const DepositPage = () => {
         subText={`${t('min_deposit')}: ${t('bancontact_min_deposit')} ${
           user.currency
         } - ${t('max_deposit')}: ${
-          user.max_deposit ? user.max_deposit : t('bancontact_max_deposit')
+          user.max_deposit !== null
+            ? user.max_deposit
+            : t('bancontact_max_deposit')
         } ${user.currency}`}
         header={
           <div className="input-container__header d-flex align-items-center">
