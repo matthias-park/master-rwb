@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import clsx from 'clsx';
+import { useI18n } from '../../hooks/useI18n';
 import Form from 'react-bootstrap/Form';
 import { enterKeyPress } from '../../utils/uiUtils';
 import LoadingButton from '../LoadingButton';
@@ -8,7 +9,8 @@ import NumberFormat from 'react-number-format';
 interface Props {
   title: string;
   defaultValue?: number | string;
-  buttonText: string;
+  buttonText: string | JSX.Element;
+  buttonClassName?: string;
   loading?: boolean;
   min?: number | string;
   max?: number | string;
@@ -16,12 +18,15 @@ interface Props {
   quickAmounts?: number[];
   disabled?: boolean;
   currency?: string;
+  header?: JSX.Element;
+  subText?: string;
 }
 
 const InputContainer = ({
   title,
   defaultValue = '',
   buttonText,
+  buttonClassName,
   loading,
   onSubmit,
   quickAmounts = [],
@@ -29,8 +34,11 @@ const InputContainer = ({
   max,
   disabled,
   currency = '',
+  subText,
+  header,
 }: Props) => {
   const [inputValue, setInputValue] = useState<string>(defaultValue.toString());
+  const { t } = useI18n();
   const handleSubmit = async () => {
     const response = await onSubmit(Number(inputValue));
     if (!response) return;
@@ -62,23 +70,26 @@ const InputContainer = ({
   };
   return (
     <div className="input-container mb-4">
+      {header && header}
       <p data-testid="title" className="input-container__title text-14 mb-2">
         {title}
       </p>
       <Form.Group className="w-100">
-        {quickAmounts.map(value => (
-          <Button
-            key={value}
-            variant="outline-brand"
-            size="sm"
-            className="mr-1 mb-3 weight-500"
-            onClick={() => setInputValue(value.toString())}
-            disabled={disabled}
-          >
-            {value}
-            {currency}
-          </Button>
-        ))}
+        <div className="quick-amounts">
+          {quickAmounts.map(value => (
+            <button
+              key={value}
+              className={clsx(
+                'quick-amounts__btn',
+                inputValue === value.toString() && 'active',
+              )}
+              onClick={() => setInputValue(value.toString())}
+              disabled={disabled}
+            >
+              {`${currency} ${value}`}
+            </button>
+          ))}
+        </div>
         <NumberFormat
           customInput={Form.Control}
           thousandSeparator
@@ -94,9 +105,11 @@ const InputContainer = ({
           className="input-container__input"
         />
       </Form.Group>
+      {subText && <small className="mb-2">{subText}</small>}
       <LoadingButton
         variant="primary"
         disabled={!inputValue.length || inputValue === '0' || disabled}
+        className={clsx(buttonClassName ? buttonClassName : '')}
         onClick={handleSubmit}
         data-testid="button"
         loading={!!loading}

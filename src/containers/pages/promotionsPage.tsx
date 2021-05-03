@@ -155,7 +155,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
     event.preventDefault();
     if (event.target.tagName === 'A') {
       history.push(event.target.getAttribute('href'));
-    } else if (event.target.closest('a').tagName === 'A') {
+    } else if (event.target.closest('a')?.tagName === 'A') {
       history.push(event.target.closest('a').getAttribute('href'));
     }
   };

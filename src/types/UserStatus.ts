@@ -32,6 +32,7 @@ export interface UserStatus {
   last_name?: string;
   validator_status?: VALIDATOR_STATUS;
   barcode?: string;
+  max_deposit?: number | null;
 }
 
 export interface UserBankAccount {

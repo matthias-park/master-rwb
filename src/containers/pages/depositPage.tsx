@@ -20,7 +20,7 @@ const DepositPage = () => {
   const { user } = useAuth();
   const bankAccount = useUserBankAccountModal();
   const { enableModal, allActiveModals } = useModal();
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
   const { bankResponse } = useParams<{ bankResponse?: string }>();
   const [depositLoading, setDepositLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -100,7 +100,12 @@ const DepositPage = () => {
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
-      <h1 className="mb-4">{t('deposit_page_title')}</h1>
+      <h1>{t('deposit_page_title')}</h1>
+      <p className="mb-4">{t('deposit_page_sub_text')}</p>
+      <div className="play-responsible-block mb-3">
+        <i className="icon-thumbs"></i>
+        {jsxT('play_responsible_block_link')}
+      </div>
       {/* <AmountContainer
         title={t('total_playable_amount')}
         amount={user.balance!}
@@ -119,53 +124,78 @@ const DepositPage = () => {
       <InputContainer
         title={t('select_amount')}
         defaultValue="0"
-        buttonText={t('deposit_btn')}
+        buttonText={
+          <>
+            <i className="icon-lock1 text-brand mr-1"></i>
+            {t('deposit_btn')}
+          </>
+        }
+        buttonClassName="mx-auto my-2"
         loading={depositLoading}
         onSubmit={handleRequestDeposit}
         quickAmounts={[10, 20, 50, 100]}
         currency={user.currency}
+        subText={`${t('min_deposit')}: ${t('bancontact_min_deposit')} ${
+          user.currency
+        } - ${t('max_deposit')}: ${
+          user.max_deposit ? user.max_deposit : t('bancontact_max_deposit')
+        } ${user.currency}`}
+        header={
+          <div className="input-container__header d-flex align-items-center">
+            <img height="45" src={`/assets/images/banks/bancontact.png`} />
+            <h2 className="ml-3 mb-0">{t('deposit_input_container_title')}</h2>
+          </div>
+        }
         disabled={
           !bankAccount.hasBankAccount ||
           user.validator_status === VALIDATOR_STATUS.MAJOR_ERROR
         }
       />
-      <div className="info-container mb-4">
-        <p className="info-container__info text-14 mb-0">
-          {t('deposit_to_bank_info')}
-        </p>
-        <div className="info-container__text">
+      <div className="details-container mb-4">
+        <div className="details-container__header">
+          <h2 className="mb-0">{t('deposit_to_bank_title')}</h2>
+        </div>
+        <div className="details-container__body">
+          <p className="mb-3">{t('deposit_to_bank_info')}</p>
           <ul className="list-unstyled mb-0">
-            <li className="mb-1">
-              {t('deposit_iban')}:{' '}
-              <span className="font-weight-bold">
-                {t('deposit_bank_iban_data')}
-              </span>
+            <li className="mb-2 d-flex flex-column flex-sm-row">
+              <span className="font-weight-bold">{t('deposit_iban')}: </span>
+              <span className="ml-sm-auto">{t('deposit_bank_iban_data')}</span>
             </li>
-            <li className="mb-1">
-              {t('deposit_bank_account')}:{' '}
+            <li className="mb-2 d-flex flex-column flex-sm-row">
               <span className="font-weight-bold">
-                {t('deposit_bank_account')}
+                {t('deposit_bank_account')}:{' '}
               </span>
+              <span className="ml-sm-auto">{t('deposit_bank_account')}</span>
             </li>
-            <li className="mb-1">
-              {t('deposit_bank_code')}:{' '}
+            <li className="mb-2 d-flex flex-column flex-sm-row">
               <span className="font-weight-bold">
-                {t('deposit_bank_code_data')}
+                {t('deposit_bank_code')}:{' '}
               </span>
+              <span className="ml-sm-auto">{t('deposit_bank_code_data')}</span>
             </li>
-            <li className="mb-1">
-              {t('deposit_bank_title')}:{' '}
+            <li className="mb-2 d-flex flex-column flex-sm-row">
               <span className="font-weight-bold">
-                {t('deposit_bank_title_data')}
+                {t('deposit_bank_title')}:{' '}
               </span>
+              <span className="ml-sm-auto">{t('deposit_bank_title_data')}</span>
             </li>
-            <li className="mb-1">
-              {t('deposit_bank_communications')}:{' '}
+            <li className="mb-2 d-flex flex-column flex-sm-row">
               <span className="font-weight-bold">
+                {t('deposit_bank_communications')}:{' '}
+              </span>
+              <span className="ml-sm-auto">
                 {structuredBankCommunications(user?.barcode)}
               </span>
             </li>
           </ul>
+          <div className="details-mention-block mt-4">
+            <i className="icon-arrow-label">
+              <span className="path1"></span>
+              <span className="path2"></span>
+            </i>
+            {t('deposit_to_bank_mention')}
+          </div>
         </div>
       </div>
       <QuestionsContainer items={questionItems} />
