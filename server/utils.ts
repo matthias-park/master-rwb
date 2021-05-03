@@ -43,6 +43,13 @@ export const getRailsConstants = (req: Request) =>
           const navigation_routes = data.Data.navigation_routes.filter(
             route => route.id !== 14 && route.path !== '*',
           );
+          for (const page of data.Data.content_pages) {
+            navigation_routes.push({
+              id: 15,
+              path: `/${page}`,
+              name: page,
+            });
+          }
           return {
             ...data.Data,
             navigation_routes,

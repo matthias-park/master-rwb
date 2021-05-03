@@ -16,6 +16,7 @@ import useMemoCompare from './useMemoCompare';
 import { sortDescending } from '../utils/index';
 import useLocalStorage from './useLocalStorage';
 import { setPageLoadingSpinner } from '../utils/uiUtils';
+import { PagesName } from '../constants';
 
 const useConstants = () => {
   const { addToast } = useToasts();
@@ -32,8 +33,8 @@ const useConstants = () => {
       ],
     },
   );
-  useEffect(() => {
-    /*navigator.serviceWorker.addEventListener('message', async ({ data }) => {
+  // useEffect(() => {
+  /*navigator.serviceWorker.addEventListener('message', async ({ data }) => {
       if (
         data.meta === 'workbox-broadcast-update' &&
         data.payload.updatedURL.includes(constantsUrl)
@@ -46,7 +47,17 @@ const useConstants = () => {
         console.log('constants updated');
       }
     });*/
-  }, []);
+  // }, []);
+  const constants = data?.Data;
+  if (constants && constants.navigation_routes && constants.content_pages) {
+    for (const page of constants.content_pages) {
+      constants.navigation_routes.push({
+        id: PagesName.TemplatePage,
+        path: `/${page}`,
+        name: page,
+      });
+    }
+  }
   return {
     constants: data?.Data,
     updateConstants: mutate,

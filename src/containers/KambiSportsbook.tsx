@@ -251,26 +251,29 @@ const KambiSportsbook = () => {
   const desktopWidth = useDesktopWidth(1199);
 
   useEffect(() => {
-    if (!context.api && !document.getElementById(kambiId)) {
-      getSBParams(locale, user.id?.toString()).then(kambiConfig => {
-        setCustomerSettings({
-          getApiBalance: kambiConfig?.getApiBalance,
-          updateBalance: () => updateUser(),
+    if (!user.loading) {
+      if (!context.api && !document.getElementById(kambiId)) {
+        getSBParams(locale, user.id?.toString()).then(kambiConfig => {
+          setCustomerSettings({
+            getApiBalance: kambiConfig?.getApiBalance,
+            updateBalance: () => updateUser(),
+          });
+          const kambiContainer = document.createElement('div');
+          kambiContainer.id = 'KambiBC';
+          kambiContainer.classList.add('kambiHidden');
+          containerRef.current?.after(kambiContainer);
+          console.log(kambiConfig);
+          updateWindowKambiConfig(kambiConfig);
+          insertKambiBootstrap().then(() => {
+            context.setSportsbookLoaded(true);
+          });
         });
-        const kambiContainer = document.createElement('div');
-        kambiContainer.id = 'KambiBC';
-        kambiContainer.classList.add('kambiHidden');
-        containerRef.current?.after(kambiContainer);
-        updateWindowKambiConfig(kambiConfig);
-        insertKambiBootstrap().then(() => {
-          context.setSportsbookLoaded(true);
-        });
-      });
-    } else {
-      const kambiContainer = document.getElementById(kambiId);
-      containerRef.current?.after(kambiContainer as Node);
+      } else {
+        const kambiContainer = document.getElementById(kambiId);
+        containerRef.current?.after(kambiContainer as Node);
+      }
     }
-  }, []);
+  }, [user]);
 
   return (
     <>

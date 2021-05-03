@@ -8,6 +8,7 @@ export interface PageConfig {
   sidebars: Array<Sidebar[]>;
   help_block: PagesName[];
   locale: string | null;
+  content_pages: string[];
 }
 
 export interface Sidebar {
