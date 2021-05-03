@@ -50,11 +50,11 @@ const useConstants = () => {
   // }, []);
   const constants = data?.Data;
   if (constants && constants.navigation_routes && constants.content_pages) {
-    for (const page of constants.content_pages) {
+    for (const [key, value] of Object.entries(constants.content_pages)) {
       constants.navigation_routes.push({
         id: PagesName.TemplatePage,
-        path: `/${page}`,
-        name: page,
+        path: `${key.startsWith('/') ? '' : '/'}${key}`,
+        name: value,
       });
     }
   }
