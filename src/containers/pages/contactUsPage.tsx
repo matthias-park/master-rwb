@@ -45,14 +45,10 @@ const ContactUsPage = () => {
   );
   const isDataLoading = (!data && !error) || isValidating;
 
-  useEffect(() => {
-    reset();
-    setSubmitResponse(null);
-  }, [user.logged_in]);
-  useEffect(() => {
+  const setDefaultValues = () => {
     if (data?.form) {
       for (const field of data.form) {
-        if (field.disabled && field.default) {
+        if (field.default) {
           setValue(
             field.id,
             typeof field.default === 'object'
@@ -62,7 +58,13 @@ const ContactUsPage = () => {
         }
       }
     }
-  }, [data]);
+  };
+
+  useEffect(() => {
+    reset();
+    setSubmitResponse(null);
+  }, [user.logged_in]);
+  useEffect(setDefaultValues, [data]);
 
   useEffect(() => {
     if (formMethods.formState.isDirty && submitResponse) {
@@ -98,6 +100,7 @@ const ContactUsPage = () => {
     });
     if (response.Success) {
       reset();
+      setDefaultValues();
     }
     return setSubmitResponse({
       success: response.Success,
