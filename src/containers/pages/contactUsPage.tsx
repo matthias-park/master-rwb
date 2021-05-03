@@ -48,6 +48,8 @@ const ContactUsPage = () => {
             typeof field.default === 'object'
               ? field.default.title
               : field.default;
+        } else if (field.type === 'select') {
+          obj[field.id] = '-1';
         }
         return obj;
       }),
