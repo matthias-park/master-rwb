@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { JSONFormPage } from '../../types/api/JsonFormPage';
 import Spinner from 'react-bootstrap/Spinner';
 import Form from 'react-bootstrap/Form';
@@ -32,10 +32,6 @@ const fieldValidations = {
 const ContactUsPage = () => {
   const { t } = useI18n();
   const { user } = useAuth();
-  const formMethods = useForm({
-    mode: 'onBlur',
-  });
-  const { handleSubmit, setValue, reset } = formMethods;
   const [submitResponse, setSubmitResponse] = useState<{
     success: boolean;
     msg: string | null;
@@ -43,28 +39,34 @@ const ContactUsPage = () => {
   const { data, error, isValidating } = useApi<JSONFormPage>(
     user.loading ? null : [`/railsapi/v1/contact_us/form`, user.logged_in],
   );
-  const isDataLoading = (!data && !error) || isValidating;
-
-  const setDefaultValues = () => {
-    if (data?.form) {
-      for (const field of data.form) {
+  const defaultValues = useMemo(
+    () =>
+      data?.form.reduce((obj: any, field: any) => {
+        obj[field.id] = '';
         if (field.default) {
-          setValue(
-            field.id,
+          obj[field.id] =
             typeof field.default === 'object'
               ? field.default.title
-              : field.default,
-          );
+              : field.default;
         }
-      }
-    }
-  };
+        return obj;
+      }),
+    [data],
+  );
+  const formMethods = useForm({
+    mode: 'onBlur',
+    defaultValues,
+  });
+  const { handleSubmit, reset } = formMethods;
+  const isDataLoading = (!data && !error) || isValidating;
 
   useEffect(() => {
     reset();
     setSubmitResponse(null);
   }, [user.logged_in]);
-  useEffect(setDefaultValues, [data]);
+  useEffect(() => {
+    reset(defaultValues);
+  }, [data]);
 
   useEffect(() => {
     if (formMethods.formState.isDirty && submitResponse) {
@@ -99,8 +101,7 @@ const ContactUsPage = () => {
       };
     });
     if (response.Success) {
-      reset();
-      setDefaultValues();
+      reset(defaultValues);
     }
     return setSubmitResponse({
       success: response.Success,
