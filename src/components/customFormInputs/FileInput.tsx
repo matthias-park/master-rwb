@@ -13,8 +13,7 @@ interface Props {
 
 const FileInput = ({ id, rules, disabled, className, title }: Props) => {
   const [filename, setFilename] = useState('');
-  const { register, formState } = useFormContext();
-
+  const { register, formState, watch } = useFormContext();
   return (
     <Form.Group>
       <Form.File
@@ -23,7 +22,7 @@ const FileInput = ({ id, rules, disabled, className, title }: Props) => {
         isInvalid={!!formState[id]?.error}
         custom
         className={className}
-        label={filename || title}
+        label={(!!watch(id) && filename) || title}
         onChange={e => {
           const file = e.target.files?.[0];
           if (file) {
