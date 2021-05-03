@@ -52,7 +52,7 @@ const ContactUsPage = () => {
           obj[field.id] = '-1';
         }
         return obj;
-      }),
+      }, {}),
     [data],
   );
   const formMethods = useForm({
