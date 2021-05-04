@@ -3,7 +3,6 @@ import HelpBlock from '../../components/HelpBlock';
 import OnlineForm from '../../components/registration/OnlineForm';
 import RegWelcome from '../../components/registration/RegWelcome';
 import { useConfig } from '../../hooks/useConfig';
-import { useUIConfig } from '../../hooks/useUIConfig';
 import { Redirect, useHistory, useLocation } from 'react-router-dom';
 import { postApi } from '../../utils/apiUtils';
 import { useToasts } from 'react-toast-notifications';
@@ -40,7 +39,6 @@ const RegisterPage = () => {
     return localeEqual && localesEqual && routesEqual;
   });
   const { user, updateUser } = useAuth();
-  const { headerNav } = useUIConfig();
   const { addToast } = useToasts();
   const sendDataToGTM = useGTM();
   const fieldChange = (FieldName: string) => {
@@ -167,7 +165,7 @@ const RegisterPage = () => {
 
   return (
     <main className="registration">
-      <div className={clsx('reg-block', headerNav.active && 'mt-5')}>
+      <div className="reg-block">
         <HelpBlock
           title="Hulp nodig?"
           blocks={['faq', 'phone', 'email']}
