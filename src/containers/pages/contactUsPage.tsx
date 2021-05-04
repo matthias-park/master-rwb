@@ -81,7 +81,7 @@ const ContactUsPage = () => {
       fields.file = file[0];
     }
     if (phone_number) {
-      fields.phone_number = phone_number.replaceAll(
+      fields.phone_number = phone_number.replace(
         REGEX_EXPRESSION.PHONE_NUMBER_NORMALIZE,
         '',
       );

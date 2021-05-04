@@ -39,6 +39,10 @@ interface Props {
 interface UncontrolledProps extends FormControlProps {
   title?: string;
   validation?: FormFieldValidation;
+  onValueChange?: (values: any) => void;
+  format?: string | ((value: string) => string);
+  allowEmptyFormatting?: boolean;
+  mask?: string;
   tooltip?: string;
   toggleVisibility?: boolean;
   errorMsg?: string;
@@ -146,7 +150,6 @@ const TextInput = ({
       },
     },
   });
-
   const preventCopyPaste = useCallback(
     e => {
       if (disableCopyPaste) {
@@ -160,25 +163,10 @@ const TextInput = ({
     !!fieldState.error || validation === FormFieldValidation.Invalid;
   const isValid = !fieldState.error && validation === FormFieldValidation.Valid;
   const inputAs = useMemo(() => {
-    if (maskedInput)
-      return props => (
-        <LoadableNumberFormat
-          {...props}
-          onValueChange={
-            maskedInput
-              ? values => {
-                  field.onChange?.(values.value);
-                }
-              : undefined
-          }
-          format={maskedInput.format}
-          allowEmptyFormatting={maskedInput.allowEmptyFormatting}
-          mask={maskedInput.mask}
-        />
-      );
+    if (maskedInput) return LoadableNumberFormat;
     if (textArea) return 'textarea';
     return 'input';
-  }, [textArea, maskedInput]);
+  }, [maskedInput, textArea]);
 
   return (
     <UncontrolledTextInput
@@ -201,6 +189,16 @@ const TextInput = ({
       tooltip={tooltip}
       toggleVisibility={toggleVisibility}
       type={type}
+      onValueChange={
+        maskedInput
+          ? values => {
+              field.onChange?.(values.value);
+            }
+          : undefined
+      }
+      format={maskedInput?.format}
+      allowEmptyFormatting={maskedInput?.allowEmptyFormatting}
+      mask={maskedInput?.mask}
     />
   );
 };
