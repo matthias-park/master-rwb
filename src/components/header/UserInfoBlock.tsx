@@ -69,7 +69,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
           <div className="user-menu__wrp">
             <Dropdown.Item as="div">
               <Link
-                to="/deposit"
+                to="/wallet/deposit"
                 className="btn btn-outline-brand btn-lg text-14 px-3 mb-2"
               >
                 <i className="icon-card"></i>
