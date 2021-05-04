@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { makeCollapsible } from '../../utils/uiUtils';
-import { useConfig } from '../../hooks/useConfig';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { useI18n } from '../../hooks/useI18n';
 import { useParams, useLocation } from 'react-router-dom';
@@ -20,21 +19,17 @@ const TemplatePage = () => {
   const [active, setActive] = useState('');
   const [dropdownShow, setDropdownShow] = useState(false);
   const page = slug || pathname.substring(1);
-  const { sidebars } = useConfig();
   const { headerNav } = useUIConfig();
   const { t } = useI18n();
-  const htmlPages = sidebars?.slice(1)[0].map(el => el.link.substring(1));
   const { data, error } = useApi<RailsApiResponse<any>>(
-    htmlPages?.includes(page)
-      ? `/railsapi/v1/content/promotion/${page}`
-      : `/railsapi/v1/content/page/${page}`,
+    `/railsapi/v1/content/page/${page}`,
   );
   const isDataLoading = !data && !error;
   const [links, setLinks] = useState<{ link: string; name: string }[]>([]);
 
   useEffect(() => {
     makeCollapsible('card', 'collapse', 'card-header');
-    if (!!data?.Data?.structure?.content && !htmlPages?.includes(page)) {
+    if (!!data?.Data?.structure?.content) {
       const menuLinks = data.Data?.structure?.content.slice(1).map(el => ({
         link: el.section?.menu_item?.value,
         name: el.section?.menu_item?.value,
@@ -62,7 +57,7 @@ const TemplatePage = () => {
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
       )}
-      {!!data && links && !htmlPages?.includes(page) && (
+      {!!data && links && (
         <div
           className={clsx(
             'page-container justify-content-between',
@@ -146,11 +141,6 @@ const TemplatePage = () => {
             </div>
           </div>
         </div>
-      )}
-      {!!data && htmlPages?.includes(page) && (
-        <main className="container-fluid mb-4 pt-5 pb-4">
-          <div dangerouslySetInnerHTML={{ __html: data?.Data?.body }}></div>
-        </main>
       )}
     </>
   );
