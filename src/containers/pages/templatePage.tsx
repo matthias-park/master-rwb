@@ -19,13 +19,11 @@ const TemplatePage = () => {
   const { pathname } = useLocation();
   const [active, setActive] = useState('');
   const [dropdownShow, setDropdownShow] = useState(false);
-  const page = slug || pathname.substring(1).replace(/\//g, '_');
+  const page = slug || pathname.substring(1);
   const { sidebars } = useConfig();
   const { headerNav } = useUIConfig();
   const { t } = useI18n();
-  const htmlPages = sidebars
-    ?.slice(1)[0]
-    .map(el => el.link.replace(/\//g, '_').substring(1));
+  const htmlPages = sidebars?.slice(1)[0].map(el => el.link.substring(1));
   const { data, error } = useApi<RailsApiResponse<any>>(
     htmlPages?.includes(page)
       ? `/railsapi/v1/content/promotion/${page}`
