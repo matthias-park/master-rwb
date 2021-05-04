@@ -47,7 +47,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
         onToggle={isOpen => showUserMenu(isOpen)}
       >
         <div className="header__user-menu-info">
-          <Link to="/deposit" className="header__user-menu-info-balance">
+          <Link to="/wallet/deposit" className="header__user-menu-info-balance">
             <span>
               {user.balance} {user.currency}
             </span>
@@ -79,15 +79,15 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
             <ul className="user-menu__list">
               {[
                 {
-                  link: '/withdrawal',
+                  link: '/wallet/withdrawal',
                   name: 'withdrawal_link',
                 },
                 {
-                  link: '/settings',
+                  link: '/wallet/settings',
                   name: 'settings_link',
                 },
                 {
-                  link: '/transactions',
+                  link: '/wallet/transactions',
                   name: 'transactions_link',
                 },
               ].map(link => (
