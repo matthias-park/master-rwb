@@ -79,7 +79,8 @@ export interface HeaderRoute {
 
 export interface HeaderRouteLink {
   text: string;
-  path: string;
+  path?: string;
+  translationPath?: string;
   order: number;
   onlyLoggedIn?: boolean;
 }

@@ -129,11 +129,12 @@ export const HeaderNavClassicLink = ({
       <Dropdown.Menu>
         {dropdownLinks?.map(link => {
           if (link.onlyLoggedIn && !user.logged_in) return null;
+          const path = link.path || t(link.translationPath!);
           return (
             <Dropdown.Item
-              key={link.path}
+              key={path}
               as={
-                link.path.includes('https')
+                path.includes('https')
                   ? 'a'
                   : (props: any): any => (
                       <Link
@@ -147,7 +148,7 @@ export const HeaderNavClassicLink = ({
                       />
                     )
               }
-              {...(link.path.includes('https')
+              {...(path.includes('https')
                 ? {
                     rel: 'noopener',
                     target: '_blank',
@@ -158,7 +159,7 @@ export const HeaderNavClassicLink = ({
                   link.path === `${pathname}${hash}`) &&
                   'active',
               )}
-              href={link.path.replace('{__locale__}', locale)}
+              href={path}
             >
               {t(link.text)}
             </Dropdown.Item>
