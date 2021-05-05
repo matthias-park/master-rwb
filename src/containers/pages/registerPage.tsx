@@ -212,7 +212,7 @@ const RegisterPage = () => {
             />
           )}
 
-          {(!location?.state?.resCode ?? true) && (
+          {location?.state?.resCode === undefined && (
             <OnlineForm
               fieldChange={fieldChange}
               checkEmailAvailable={checkEmailAvailable}
