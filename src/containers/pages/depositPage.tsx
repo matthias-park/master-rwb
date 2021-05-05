@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import InputContainer from '../../components/account-settings/InputContainer';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
+import HelpBlock from '../../components/HelpBlock';
 import { postApi } from '../../utils/apiUtils';
 import { useParams } from 'react-router-dom';
 import { DepositRequest, DepositResponse } from '../../types/api/user/Deposit';
@@ -201,6 +202,11 @@ const DepositPage = () => {
         </div>
       </div>
       <QuestionsContainer items={questionItems} />
+      <HelpBlock
+        title={'user_help_title'}
+        blocks={['phone']}
+        className={'d-block d-xl-none'}
+      />
     </main>
   );
 };

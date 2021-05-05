@@ -3,6 +3,7 @@ import loadable from '@loadable/component';
 import Accordion from 'react-bootstrap/Accordion';
 import Spinner from 'react-bootstrap/Spinner';
 import ProfileSettings from '../../types/api/user/ProfileSettings';
+import HelpBlock from '../../components/HelpBlock';
 import { postApi } from '../../utils/apiUtils';
 import DynamicSettingsAccordion from '../../components/account-settings/DynamicSettingsAccordion';
 import { useI18n } from '../../hooks/useI18n';
@@ -110,6 +111,11 @@ const SettingsPage = () => {
           })}
         </Accordion>
       )}
+      <HelpBlock
+        title={'user_help_title'}
+        blocks={['phone']}
+        className={'d-block d-xl-none mt-4'}
+      />
     </main>
   );
 };

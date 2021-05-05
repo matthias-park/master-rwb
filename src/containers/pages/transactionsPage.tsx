@@ -10,6 +10,7 @@ import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
 import Pagination from 'react-bootstrap/Pagination';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
+import HelpBlock from '../../components/HelpBlock';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
 import useLocalStorage from '../../hooks/useLocalStorage';
@@ -308,6 +309,11 @@ const TransactionsPage = () => {
         data={data}
       />
       <QuestionsContainer items={questionItems} />
+      <HelpBlock
+        title={'user_help_title'}
+        blocks={['phone']}
+        className={'d-block d-xl-none'}
+      />
     </main>
   );
 };

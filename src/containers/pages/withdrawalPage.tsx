@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import AmountContainer from '../../components/account-settings/AmountContainer';
 import InputContainer from '../../components/account-settings/InputContainer';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
+import HelpBlock from '../../components/HelpBlock';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
 import Spinner from 'react-bootstrap/Spinner';
@@ -318,6 +319,11 @@ const WithdrawalPage = () => {
             />
           )}
           <QuestionsContainer items={questionItems} />
+          <HelpBlock
+            title={'user_help_title'}
+            blocks={['phone']}
+            className={'d-block d-xl-none'}
+          />
         </>
       )}
       {withdrawalConfirmData && (
