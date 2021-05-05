@@ -81,7 +81,7 @@ const CookiePolicyModal = () => {
                         onChange={e => toggleCookie(e, id)}
                       ></CustomToggleCheck>
                     )}
-                    <div className="ml-3 text-left">
+                    <div className="ml-3 text-left text-wrap">
                       <h4 className="mb-0 text-14 weight-500 text-gray-800">
                         {t(`cookies_check_${id}_title`)}
                       </h4>
