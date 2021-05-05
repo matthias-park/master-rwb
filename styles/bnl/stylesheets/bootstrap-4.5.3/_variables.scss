@@ -234,7 +234,7 @@ $grid-row-columns:            6 !default;
 $line-height-lg:              1.5 !default;
 $line-height-sm:              1.5 !default;
 
-$border-width:                1px !default;
+$border-width:                1px;
 $border-color:                $gray-300 !default;
 
 $border-radius:               .25rem !default;
@@ -328,7 +328,7 @@ $blockquote-small-font-size:  $small-font-size !default;
 $blockquote-font-size:        $font-size-base * 1.25 !default;
 
 $hr-border-color:             rgba($black, .1) !default;
-$hr-border-width:             $border-width !default;
+$hr-border-width:             $border-width;
 
 $mark-padding:                .2em !default;
 
