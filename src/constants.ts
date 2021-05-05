@@ -399,11 +399,11 @@ export const REGEX_EXPRESSION = {
 };
 
 export const VALIDATIONS = {
-  name: value =>
+  name: (value: string = '') =>
     (!!value.trim().length &&
       REGEX_EXPRESSION.LETTERS_WITH_SEPERATORS.test(value.trim())) ||
     value === '*',
-  email: (value: string) => {
+  email: (value: string = '') => {
     const trimmedValue = value.trim();
     let valid =
       REGEX_EXPRESSION.EMAIL.test(trimmedValue) &&
@@ -413,14 +413,15 @@ export const VALIDATIONS = {
     if (trimmedValue.length - lastDot < 3) valid = false;
     return valid;
   },
-  phone: value => {
+  phone: (value: string = '') => {
     const phone = value
       .trim()
       .replace(REGEX_EXPRESSION.PHONE_NUMBER_NORMALIZE, '');
     return REGEX_EXPRESSION.PHONE_NUMBER.test(phone);
   },
-  bank_account: value => REGEX_EXPRESSION.BANK_IBAN.test(value.trim()),
-  passwordMixOfThree: value => {
+  bank_account: (value: string = '') =>
+    REGEX_EXPRESSION.BANK_IBAN.test(value.trim()),
+  passwordMixOfThree: (value: string = '') => {
     if (value.includes(' ')) return false;
     const valueValid = value.length > 7;
     const hasLowerCase = /[a-z]/.test(value);

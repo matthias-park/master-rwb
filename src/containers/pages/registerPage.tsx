@@ -30,6 +30,7 @@ const RegistrationReturnCode = {
   '1': 'registerVerification',
   '2': 'registerMajorError',
   '3': 'registerExclusion',
+  '-1': 'registerTechnicalError',
 };
 
 interface RegistrationPathState {
@@ -132,12 +133,7 @@ const RegisterPage = () => {
         '/railsapi/v1/registration/new',
         finalForm,
       ).catch((res: RailsApiResponse<null>) => {
-        if (res.Fallback) {
-          addToast(`Failed to register`, {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        }
+        res.Code = -1;
         return res;
       });
       const responseRoute = registrationResponseRoutes.find(

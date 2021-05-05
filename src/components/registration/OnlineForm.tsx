@@ -113,6 +113,7 @@ const blocks = (
         type: 'text',
         required: false,
         validate: value =>
+          !value ||
           !value.length ||
           VALIDATIONS.phone(value) ||
           t('phone_number_invalid'),
