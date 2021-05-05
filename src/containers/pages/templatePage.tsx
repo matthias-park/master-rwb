@@ -5,7 +5,7 @@ import { makeCollapsible } from '../../utils/uiUtils';
 import { useUIConfig } from '../../hooks/useUIConfig';
 import { useI18n } from '../../hooks/useI18n';
 import { useParams, useLocation } from 'react-router-dom';
-import Sidebar from '../../components/Sidebar';
+import ScrollSidebar from '../../components/ScrollSidebar';
 import HelpBlock from '../../components/HelpBlock';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import useApi from '../../hooks/useApi';
@@ -64,12 +64,7 @@ const TemplatePage = () => {
             headerNav.active && 'pt-xl-4',
           )}
         >
-          <Sidebar
-            links={links}
-            scroll={true}
-            setActive={setActive}
-            active={active}
-          />
+          <ScrollSidebar links={links} setActive={setActive} active={active} />
           <div className="w-100 ml-0 ml-md-5 ml-xl-0 d-flex flex-column flex-xl-row mx-auto">
             <main className="container px-0 px-4 pl-xxl-150 mb-4 pt-4 pt-sm-5">
               {!!data.Data.structure.content && (

@@ -26,6 +26,8 @@
     position: relative;
     list-style-type: none;
     padding: 14px 14px 14px 20px;
+    color: rgba($black-custom, 0.7);
+    cursor: pointer;
     &.active {
       border-left: 5px solid $primary;
       padding-left: 15px;
@@ -50,6 +52,43 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+    &-icon {
+      position: relative;
+      font-size: 28px;
+      line-height: 18px !important;
+      color: rgba($black-custom, 0.3);
+      transition: transform 0.6s;
+    }
+    &.show {
+      i {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  &__sub {
+    padding-left: 0;
+    background-color: $gray-custom;
+    &-item {
+      position: relative;
+      list-style-type: none;
+      padding: 14px 14px 14px 20px;
+      opacity: 0.7;
+      &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 95%;
+        border-bottom: 1px solid #D8D8E1;
+      }
+      &-link {
+        display: block;
+      }
+      &.active {
+        border-left: 5px solid $primary;
+        padding-left: 15px;
+      }
     }
   }
 }

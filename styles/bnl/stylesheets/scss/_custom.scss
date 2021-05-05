@@ -18,11 +18,15 @@ body {
         padding: 0 20px;
     }
     &.modal-open-desktop {
-      max-width: calc(100vw - 17px);
-      margin: 0;
+      transform: translateX(-8px);
       padding-right: 80px !important;
-      .header:before {
-        margin-right: -97px;
+      @media only screen and (max-width: 1920px) {
+        margin: 0;
+        width: calc(100vw - 17px);
+        transform: none;
+        .header:before {
+          margin-right: -97px;
+        }
       }
       @include media-breakpoint-down(xl) {
         padding-right: 45px !important;

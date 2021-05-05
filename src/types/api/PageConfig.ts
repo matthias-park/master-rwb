@@ -14,6 +14,10 @@ export interface PageConfig {
 export interface Sidebar {
   name: string;
   link: string;
+  children?: {
+    name: string;
+    link: string;
+  }[];
 }
 export interface AvailableLocale {
   id: number;
