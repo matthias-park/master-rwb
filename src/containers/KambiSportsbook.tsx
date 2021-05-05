@@ -34,7 +34,7 @@ const kambiContext = createContext<KambiContext>({
   kambiUserLoggedIn: false,
 });
 
-const kambiLogin = (api: WidgetAPI, locale: string, userId: string) => {
+const kambiLogin = (api: WidgetAPI, locale: string, userId?: string) => {
   getSBParams(locale, userId).then(kambiConfig => {
     api.request(api.LOGIN, {
       punterId: kambiConfig.playerId,
@@ -69,7 +69,6 @@ export const KambiProvider = ({ children }) => {
       )?.id === PagesName.SportsPage,
     [pathname, routes, locationKey],
   );
-
   useEffect(() => {
     if (!!api && user.logged_in !== kambiUserLoggedIn) {
       setSportsbookLoaded(false);
@@ -116,7 +115,7 @@ export const KambiProvider = ({ children }) => {
   }, [!!api]);
 
   useEffect(() => {
-    if (api && locationKey && hash.length) {
+    if (api && locationKey && (hash.length || visibleSportsbook)) {
       api.navigateClient(hash, 'sportsbook');
     }
   }, [hash, !!api]);

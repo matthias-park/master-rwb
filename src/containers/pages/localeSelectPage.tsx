@@ -28,8 +28,7 @@ const LANGUAGE = {
 
 const LocaleSelectPage = () => {
   const [buttonLoading, setButtonLoading] = useState<string | null>(null);
-  const { t } = useI18n();
-  const { locales, setLocale } = useConfig(
+  const { locales } = useConfig(
     (prev, next) => prev.locales.length === next.locales.length,
   );
 
@@ -37,14 +36,11 @@ const LocaleSelectPage = () => {
     setButtonLoading(lang);
     return postApi('/railsapi/v1/locale', {
       locale: lang,
-    })
-      .then(() => setPageLoadingSpinner())
-      .then(() => setLocale(lang))
-      .then(() =>
-        link
-          ? (window.location.pathname = `/${lang}/${link}`)
-          : (window.location.pathname = `/${lang}/`),
-      );
+    }).then(() =>
+      link
+        ? (window.location.pathname = `/${lang}/${link}`)
+        : (window.location.pathname = `/${lang}/`),
+    );
   };
 
   return (
