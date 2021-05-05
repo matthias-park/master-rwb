@@ -57,6 +57,7 @@ const DateInput = ({
             isInvalid={!!fieldState.error}
             value={field.value ? dayjs(field.value).format('YYYY-MM-DD') : ''}
             placeholder=" "
+            readOnly={true}
           />
           <label
             data-testid={`${id}-title`}
