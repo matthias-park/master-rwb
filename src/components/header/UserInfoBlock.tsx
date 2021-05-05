@@ -7,18 +7,49 @@ import Spinner from 'react-bootstrap/Spinner';
 import Link from '../Link';
 import { cache as SWRCache } from 'swr';
 import { useModal } from '../../hooks/useModal';
+import { useConfig } from '../../hooks/useConfig';
+import Accordion from 'react-bootstrap/Accordion';
 
-const UserMenuLink = ({ link, name, setShowDropdown }) => (
-  <li className="user-menu__list-item">
-    <Link
-      to={link}
-      onClick={() => setShowDropdown(false)}
-      className="user-menu__list-item-link"
-    >
-      {name}
-    </Link>
-  </li>
-);
+const UserMenuLink = ({ link, name, setShowDropdown, children }) => {
+  return (
+    <>
+      {children ? (
+        <>
+          <Accordion.Toggle
+            className="user-menu__list-item user-menu__list-item-link--toggler"
+            as="li"
+            eventKey={name}
+          >
+            <span className="user-menu__list-item-link">{name}</span>
+            <Accordion.Collapse eventKey={name}>
+              <>
+                {children.map(childLink => (
+                  <Link
+                    to={childLink.link}
+                    className="user-menu__list-sub-item"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    {childLink.name}
+                  </Link>
+                ))}
+              </>
+            </Accordion.Collapse>
+          </Accordion.Toggle>
+        </>
+      ) : (
+        <li className="user-menu__list-item">
+          <Link
+            to={link}
+            onClick={() => setShowDropdown(false)}
+            className="user-menu__list-item-link"
+          >
+            {name}
+          </Link>
+        </li>
+      )}
+    </>
+  );
+};
 
 const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const { t } = useI18n();
@@ -26,6 +57,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const { backdrop } = useUIConfig();
   const { allActiveModals } = useModal();
+  const { sidebars } = useConfig();
 
   const showUserMenu = isOpen => {
     if (!!allActiveModals.length) return;
@@ -67,59 +99,20 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
         </Dropdown.Toggle>
         <Dropdown.Menu className="dropdown-menu user-menu">
           <div className="user-menu__wrp">
-            <Dropdown.Item as="div">
-              <Link
-                to="/wallet/deposit"
-                className="btn btn-outline-brand btn-lg text-14 px-3 mb-2"
-              >
-                <i className="icon-card"></i>
-                {t('deposit_link')}
-              </Link>
-            </Dropdown.Item>
             <ul className="user-menu__list">
-              {[
-                {
-                  link: '/wallet/withdrawal',
-                  name: 'withdrawal_link',
-                },
-                {
-                  link: '/wallet/settings',
-                  name: 'settings_link',
-                },
-                {
-                  link: '/wallet/transactions',
-                  name: 'transactions_link',
-                },
-              ].map(link => (
-                <UserMenuLink
-                  key={link.link}
-                  link={link.link}
-                  name={t(link.name)}
-                  setShowDropdown={showUserMenu}
-                />
-              ))}
+              <Accordion>
+                {sidebars &&
+                  sidebars[0].map(link => (
+                    <UserMenuLink
+                      key={link.link}
+                      link={link.link}
+                      name={t(link.name)}
+                      children={link.children ? link.children : null}
+                      setShowDropdown={showUserMenu}
+                    />
+                  ))}
+              </Accordion>
             </ul>
-            {/* <div className="club-card">
-              <img
-                className="club-card__bg-img"
-                src="/assets/images/lottery-club/bg.png"
-                alt=""
-              />
-              <img
-                className="club-card__img"
-                src="/assets/images/lottery-club/logo.png"
-                alt=""
-              />
-              <span className="club-card__text club-barcode mt-n3">
-                <p className="club-barcode__text">My lottery Club Card</p>
-                <img
-                  className="club-barcode__img"
-                  src="/assets/images/lottery-club/barcode.png"
-                  alt=""
-                />
-                <p className="club-barcode__number">1700340334308</p>
-              </span>
-            </div> */}
             <div
               className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
               onClick={onLogoutClick}
