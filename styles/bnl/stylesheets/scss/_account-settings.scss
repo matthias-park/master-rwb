@@ -89,6 +89,7 @@
 }
 
 .info-container {
+  position: relative;
   background-color: $account-light;
   color: $black;
   border-radius: 8px;
@@ -103,6 +104,11 @@
     border-radius: 8px;
     border: 1px solid #CCCCCC;
     font-size: 14px;
+  }
+  &__edit {
+    position: absolute;
+    top: 10px;
+    right: 10px;
   }
 }
 
@@ -463,5 +469,23 @@
   }
   a {
     text-decoration: underline;
+  }
+}
+
+.play-limits {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  @include media-breakpoint-down(xs) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  &__limit {
+    &-title {
+      font-size: 12px;
+      color: $gray-400;
+    }
+    &-total {
+      color: $gray-800;
+      font-weight: 500;
+    }
   }
 }
