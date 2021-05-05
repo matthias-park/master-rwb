@@ -12,6 +12,7 @@ import useApi from '../../hooks/useApi';
 import clsx from 'clsx';
 import { Element, Link as ScrollLink } from 'react-scroll';
 import RedirectNotFound from '../../components/RedirectNotFound';
+import ContentPage from '../../types/api/content/ContentPage';
 
 const TemplatePage = () => {
   const { slug } = useParams<{ slug?: string }>();
@@ -21,7 +22,7 @@ const TemplatePage = () => {
   const page = slug || pathname.substring(1);
   const { headerNav } = useUIConfig();
   const { t } = useI18n();
-  const { data, error } = useApi<RailsApiResponse<any>>(
+  const { data, error } = useApi<RailsApiResponse<ContentPage>>(
     `/railsapi/v1/content/page/${page}`,
   );
   const isDataLoading = !data && !error;
@@ -30,13 +31,20 @@ const TemplatePage = () => {
   useEffect(() => {
     makeCollapsible('card', 'collapse', 'card-header');
     if (!!data?.Data?.structure?.content) {
-      const menuLinks = data.Data?.structure?.content.slice(1).map(el => ({
-        link: el.section?.menu_item?.value,
-        name: el.section?.menu_item?.value,
-      }));
-      setLinks(menuLinks);
+      const menuLinks = data.Data.structure.content
+        .slice(1)
+        ?.map(el =>
+          el.section?.menu_item?.value
+            ? {
+                link: el.section?.menu_item?.value,
+                name: el.section?.menu_item?.value,
+              }
+            : null,
+        )
+        .filter(Boolean) as typeof links | undefined;
+      setLinks(menuLinks || []);
       const firstMenuItem =
-        data.Data?.structure?.content[1]?.section?.menu_item?.value;
+        data.Data?.structure?.content[1]?.section?.menu_item?.value || '';
       setActive(firstMenuItem);
     }
   }, [data]);
@@ -57,7 +65,7 @@ const TemplatePage = () => {
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
       )}
-      {!!data && links && (
+      {!!data && (
         <div
           className={clsx(
             'page-container justify-content-between',
@@ -79,13 +87,16 @@ const TemplatePage = () => {
                           <h2 className="template-page-block__title">
                             {el.section?.section_title?.value}
                           </h2>
-                          <div
-                            className="template-page-block__text mb-3"
-                            dangerouslySetInnerHTML={{
-                              __html: el.section?.section_content?.value,
-                            }}
-                          ></div>
+                          {!!el.section?.section_content?.value && (
+                            <div
+                              className="template-page-block__text mb-3"
+                              dangerouslySetInnerHTML={{
+                                __html: el.section?.section_content?.value,
+                              }}
+                            />
+                          )}
                           <img
+                            alt=""
                             className="template-page-block__img"
                             src={el.section?.section_image_url?.value}
                           />
