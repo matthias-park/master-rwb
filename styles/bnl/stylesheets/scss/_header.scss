@@ -446,7 +446,7 @@
             display: flex;
             align-items: center;
             &-name {
-              width: 65px;
+              min-width: 65px;
               font-size: 13px;
               @include media-breakpoint-down(lg) {
                 display: none;
