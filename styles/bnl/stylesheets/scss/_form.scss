@@ -138,15 +138,19 @@
       height: 38px;
       padding-left: 12px;
       font-size: 15px;
+      background-color: $gray-custom-100;
       &.is-invalid {
         border-color: $danger;
+      }
+      &:focus {
+        background-color: $white;
       }
     }
   }
   + .react-datepicker {
     &__tab-loop {
       .react-datepicker-popper {
-        z-index: 2;
+        z-index: 3;
       }
       .react-datepicker__triangle {
         left: 15% !important;
