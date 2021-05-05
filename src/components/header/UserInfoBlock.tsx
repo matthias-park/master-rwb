@@ -11,6 +11,7 @@ import { useConfig } from '../../hooks/useConfig';
 import Accordion from 'react-bootstrap/Accordion';
 
 const UserMenuLink = ({ link, name, setShowDropdown, children }) => {
+  const { t } = useI18n();
   return (
     <>
       {children ? (
@@ -29,7 +30,7 @@ const UserMenuLink = ({ link, name, setShowDropdown, children }) => {
                     className="user-menu__list-sub-item"
                     onClick={() => setShowDropdown(false)}
                   >
-                    {childLink.name}
+                    {t(childLink.name)}
                   </Link>
                 ))}
               </>
