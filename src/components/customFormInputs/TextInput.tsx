@@ -161,7 +161,10 @@ const TextInput = ({
   );
   const hasErrors =
     !!fieldState.error || validation === FormFieldValidation.Invalid;
-  const isValid = !fieldState.error && validation === FormFieldValidation.Valid;
+  const isValid =
+    !fieldState.error &&
+    (validation === FormFieldValidation.Valid ||
+      (!fieldState.isValidating && fieldState.isTouched));
   const inputAs = useMemo(() => {
     if (maskedInput) return LoadableNumberFormat;
     if (textArea) return 'textarea';
@@ -174,6 +177,7 @@ const TextInput = ({
       id={id}
       isInvalid={hasErrors}
       isValid={isValid}
+      validation={validation}
       errorMsg={fieldState.error?.message}
       onBlur={() => {
         onBlur?.();

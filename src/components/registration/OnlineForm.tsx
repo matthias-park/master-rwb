@@ -6,7 +6,7 @@ import {
   ValidateRegisterInput,
   ValidateRegisterPersonalCode,
 } from '../../types/api/user/Registration';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { FormFieldValidation, VALIDATIONS } from '../../constants';
 import { OnlineFormBlock } from '../../types/RegistrationBlock';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
@@ -17,7 +17,6 @@ import {
 import AutocompleteTextInput from '../customFormInputs/AutocompleteTextInput';
 import { PostCodeInfo } from '../../types/api/user/Registration';
 import LoadingButton from '../LoadingButton';
-import RegError from './RegError';
 import { cache } from 'swr';
 import TextInput from '../customFormInputs/TextInput';
 import CheckboxInput from '../customFormInputs/CheckboxInput';
@@ -251,14 +250,10 @@ const blocks = (
 
 const OnlineForm = (props: Props) => {
   const { t, jsxT } = useI18n();
-  const [apiError, setApiError] = useState<string | null>(null);
   const [validationForms, setValidationForms] = useState<{
     [key: string]: FormFieldValidation;
   }>({});
-  const formMethods = useForm({
-    mode: 'onBlur',
-  });
-  const { handleSubmit, watch, trigger, formState, reset } = formMethods;
+  const { handleSubmit, watch, trigger, formState, reset } = useFormContext();
 
   const setValidation = (id: string, status: FormFieldValidation) =>
     setValidationForms({ ...validationForms, [id]: status });
@@ -268,7 +263,7 @@ const OnlineForm = (props: Props) => {
   const triggerRepeat = (id: string) => {
     return watch(id, '') !== '' && trigger(id);
   };
-  const onSubmit = async ({ terms_and_conditions, postal_code, ...data }) => {
+  const onSubmit = async ({ postal_code, ...data }) => {
     const post_code = postal_code.split(' ')[0];
     const postal_info = await props.checkPostalCode(post_code);
     const city =
@@ -281,130 +276,119 @@ const OnlineForm = (props: Props) => {
     });
     if (!response.Success) {
       scroll.scrollToTop();
-      return setApiError(response.Message);
     }
-    reset();
-    return setApiError(null);
+    return reset();
   };
 
   return (
     <div className="reg-form">
-      {apiError ? (
-        <RegError errMsg={apiError} onClose={setApiError} />
-      ) : (
-        <>
-          <h1 className="reg-form__title">{jsxT('register_title')}</h1>
-          <p className="reg-form__sub-title">{jsxT('register_desc')}</p>
-          <FormProvider {...formMethods}>
-            <Form onSubmit={handleSubmit(onSubmit)}>
-              {blocks(props, t, setValidation, validateRepeat).map(block => (
-                <div key={block.title} className="reg-form__block">
-                  <p className="weight-500 mt-4 mb-3">
-                    {!!block.title && jsxT(`register_${block.title}`)}
-                  </p>
-                  {block.fields.map(field => {
-                    switch (field.type) {
-                      case 'checkbox': {
-                        return (
-                          <CheckboxInput
-                            id={field.id}
-                            key={field.id}
-                            title={jsxT(`register_input_${field.id}_label`)}
-                            defaultValue={false}
-                            rules={{
-                              required:
-                                field.required &&
-                                `${t(`register_input_${field.id}`)} ${t(
-                                  'register_input_required',
-                                )}`,
-                            }}
-                            className="mb-4"
-                          />
-                        );
+      <h1 className="reg-form__title">{jsxT('register_title')}</h1>
+      <p className="reg-form__sub-title">{jsxT('register_desc')}</p>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        {blocks(props, t, setValidation, validateRepeat).map(block => (
+          <div key={block.title} className="reg-form__block">
+            <p className="weight-500 mt-4 mb-3">
+              {!!block.title && jsxT(`register_${block.title}`)}
+            </p>
+            {block.fields.map(field => {
+              switch (field.type) {
+                case 'checkbox': {
+                  return (
+                    <CheckboxInput
+                      id={field.id}
+                      key={field.id}
+                      title={jsxT(`register_input_${field.id}_label`)}
+                      defaultValue={false}
+                      rules={{
+                        required:
+                          field.required &&
+                          `${t(`register_input_${field.id}`)} ${t(
+                            'register_input_required',
+                          )}`,
+                      }}
+                      className="mb-4"
+                    />
+                  );
+                }
+                case 'number':
+                case 'password':
+                case 'text':
+                case 'email': {
+                  if (
+                    typeof field.autoComplete === 'function' &&
+                    field.labelKey
+                  ) {
+                    return (
+                      <AutocompleteTextInput
+                        id={field.id}
+                        key={field.id}
+                        autoComplete={field.autoComplete}
+                        invalidTextError={t(
+                          `register_input_${field.id}_invalid`,
+                        )}
+                        labelkey={field.labelKey}
+                        title={t(`register_input_${field.id}`)}
+                        rules={{
+                          required:
+                            field.required &&
+                            `${t(`register_input_${field.id}`)} ${t(
+                              'register_input_required',
+                            )}`,
+                          validate: field.validate,
+                        }}
+                        onBlur={() => props.fieldChange(field.id)}
+                      />
+                    );
+                  }
+                  return (
+                    <TextInput
+                      key={field.id}
+                      id={field.id}
+                      rules={{
+                        required:
+                          field.required &&
+                          `${t(`register_input_${field.id}`)} ${t(
+                            'register_input_required',
+                          )}`,
+                        validate: field.validate,
+                      }}
+                      disableCopyPaste={field.disableCopyPaste}
+                      toggleVisibility={field.type === 'password'}
+                      type={field.type}
+                      title={t(`register_input_${field.id}`)}
+                      tooltip={
+                        field.id === 'personal_code'
+                          ? t(`tooltip_${field.id}`)
+                          : undefined
                       }
-                      case 'number':
-                      case 'password':
-                      case 'text':
-                      case 'email': {
-                        if (
-                          typeof field.autoComplete === 'function' &&
-                          field.labelKey
-                        ) {
-                          return (
-                            <AutocompleteTextInput
-                              id={field.id}
-                              key={field.id}
-                              autoComplete={field.autoComplete}
-                              invalidTextError={t(
-                                `register_input_${field.id}_invalid`,
-                              )}
-                              labelkey={field.labelKey}
-                              title={t(`register_input_${field.id}`)}
-                              rules={{
-                                required:
-                                  field.required &&
-                                  `${t(`register_input_${field.id}`)} ${t(
-                                    'register_input_required',
-                                  )}`,
-                                validate: field.validate,
-                              }}
-                              onBlur={() => props.fieldChange(field.id)}
-                            />
-                          );
-                        }
-                        return (
-                          <TextInput
-                            key={field.id}
-                            id={field.id}
-                            rules={{
-                              required:
-                                field.required &&
-                                `${t(`register_input_${field.id}`)} ${t(
-                                  'register_input_required',
-                                )}`,
-                              validate: field.validate,
-                            }}
-                            disableCopyPaste={field.disableCopyPaste}
-                            toggleVisibility={field.type === 'password'}
-                            type={field.type}
-                            title={t(`register_input_${field.id}`)}
-                            tooltip={
-                              field.id === 'personal_code'
-                                ? t(`tooltip_${field.id}`)
-                                : undefined
-                            }
-                            validation={
-                              validationForms[
-                                field.id.replace('repeat_', '')
-                              ] === FormFieldValidation.Invalid
-                                ? FormFieldValidation.Invalid
-                                : validationForms[field.id]
-                            }
-                            onBlur={() => {
-                              props.fieldChange(field.id);
-                              field.triggerId && triggerRepeat(field.triggerId);
-                            }}
-                            maskedInput={field.inputFormatting}
-                          />
-                        );
+                      validation={
+                        validationForms[field.id.replace('repeat_', '')] ===
+                        FormFieldValidation.Invalid
+                          ? FormFieldValidation.Invalid
+                          : validationForms[field.id]
                       }
-                      default:
-                        return null;
-                    }
-                  })}
-                </div>
-              ))}
-              <LoadingButton
-                loading={formState.isSubmitting}
-                type="submit"
-                className="btn btn-primary d-block mx-auto mb-4"
-              >
-                {jsxT('register_submit_btn')}
-              </LoadingButton>
-            </Form>
-          </FormProvider>
-        </>
-      )}
+                      onBlur={() => {
+                        props.fieldChange(field.id);
+                        field.triggerId && triggerRepeat(field.triggerId);
+                      }}
+                      maskedInput={field.inputFormatting}
+                    />
+                  );
+                }
+                default:
+                  return null;
+              }
+            })}
+          </div>
+        ))}
+        <LoadingButton
+          loading={formState.isSubmitting}
+          type="submit"
+          className="btn btn-primary d-block mx-auto mb-4"
+        >
+          {jsxT('register_submit_btn')}
+        </LoadingButton>
+      </Form>
     </div>
   );
 };

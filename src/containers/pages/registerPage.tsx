@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import HelpBlock from '../../components/HelpBlock';
 import OnlineForm from '../../components/registration/OnlineForm';
 import RegWelcome from '../../components/registration/RegWelcome';
@@ -24,15 +24,27 @@ import { useI18n } from '../../hooks/useI18n';
 import { PagesName, REDIRECT_PROTECTED_NOT_LOGGED_IN } from '../../constants';
 import { useAuth } from '../../hooks/useAuth';
 import RedirectNotFound from '../../components/RedirectNotFound';
+import { FormProvider, useForm } from 'react-hook-form';
+import RegError from '../../components/registration/RegError';
 
-interface SuccessRegistrationPathState {
+const RegistrationReturnCode = {
+  '0': 'registerWelcome',
+  '1': 'registerVerification',
+  '2': 'registerMajorError',
+  '3': 'registerExclusion',
+};
+
+interface RegistrationPathState {
   welcomeScreen?: boolean;
+  resCode?: number;
+  message?: string;
+  formFields?: any;
 }
 
 const RegisterPage = () => {
   const { t } = useI18n();
-  const location = useLocation<SuccessRegistrationPathState>();
-  const history = useHistory<SuccessRegistrationPathState>();
+  const location = useLocation<RegistrationPathState>();
+  const history = useHistory<RegistrationPathState>();
   const { locale, locales, routes } = useConfig((prev, next) => {
     const localeEqual = prev.locale === next.locale;
     const localesEqual = !!prev.locales === !!next.locales;
@@ -43,6 +55,11 @@ const RegisterPage = () => {
   const { headerNav } = useUIConfig();
   const { addToast } = useToasts();
   const sendDataToGTM = useGTM();
+  const formMethods = useForm({
+    mode: 'onBlur',
+    defaultValues: location?.state?.formFields,
+  });
+
   const fieldChange = (FieldName: string) => {
     if (FieldName.startsWith('repeat_')) return;
     sendDataToGTM({
@@ -51,15 +68,11 @@ const RegisterPage = () => {
     });
   };
 
-  const successRegisterRoute = useMemo(
-    () =>
-      routes.find(
-        route =>
-          route.id === PagesName.RegisterPage &&
-          route.name === 'registerWelcome',
-      ),
+  const registrationResponseRoutes = useMemo(
+    () => routes.filter(route => route.id === PagesName.RegisterPage),
     [routes],
   );
+
   const checkEmailAvailable = useCallback(
     async (email: string): Promise<ValidateRegisterInput | null> => {
       const res = await postApi<ValidateRegisterInput>(
@@ -68,11 +81,6 @@ const RegisterPage = () => {
           email,
         },
       ).catch(err => {
-        addToast(`Failed to check e-mail`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-        console.log(err);
         return null;
       });
       return res;
@@ -112,7 +120,10 @@ const RegisterPage = () => {
       });
       form.language_id = locales.find(lang => lang.iso === locale)?.id;
       const finalForm = Object.keys(form).reduce((obj, key) => {
-        if (!key.includes('repeat')) {
+        if (
+          !key.includes('repeat') &&
+          !['terms_and_conditions'].includes(key)
+        ) {
           obj[key] = form[key];
         }
         if (key === 'date_of_birth') {
@@ -132,19 +143,32 @@ const RegisterPage = () => {
         }
         return res;
       });
+      const responseRoute = registrationResponseRoutes.find(
+        route => route.name === RegistrationReturnCode[res.Code],
+      );
       if (res?.Success && res.Data) {
         updateUser();
         sendDataToGTM({
           'tglab.user.GUID': res.Data.PlayerId,
           event: 'ConfirmedRegistration',
         });
-        if (successRegisterRoute) {
-          history.push(successRegisterRoute.path, { welcomeScreen: true });
-        }
       } else {
         sendDataToGTM({
           'tglab.Error': res.Message || t('register_page_submit_error'),
           event: 'FailedAccountDetails',
+        });
+      }
+      if (responseRoute) {
+        history.push(responseRoute.path, {
+          welcomeScreen: !res.Code,
+          resCode: res.Code,
+          message: res.Message || t('register_page_submit_error'),
+          formFields: {
+            ...form,
+            password: '',
+            repeat_password: '',
+            postal_code: `${form.postal_code} - ${form.city}`,
+          },
         });
       }
       return res;
@@ -159,8 +183,10 @@ const RegisterPage = () => {
     return <Redirect to={redirectRoute?.path || '/'} />;
   }
   if (
-    location.pathname === successRegisterRoute?.path &&
-    !location?.state?.welcomeScreen
+    registrationResponseRoutes.some(
+      route => route.name !== 'register' && route.path === location.pathname,
+    ) &&
+    location?.state?.resCode === undefined
   ) {
     return <RedirectNotFound />;
   }
@@ -168,22 +194,37 @@ const RegisterPage = () => {
   return (
     <main className="registration">
       <div className={clsx('reg-block', headerNav.active && 'mt-5')}>
-        <HelpBlock
-          title="Hulp nodig?"
-          blocks={['faq', 'phone', 'email']}
-          className="default"
-        />
-        {location?.state?.welcomeScreen ? (
-          <RegWelcome />
-        ) : (
-          <OnlineForm
-            fieldChange={fieldChange}
-            checkEmailAvailable={checkEmailAvailable}
-            checkPersonalCode={checkPersonalCode}
-            checkPostalCode={checkPostalCode}
-            handleRegisterSubmit={handleRegisterSubmit}
+        <FormProvider {...formMethods}>
+          <HelpBlock
+            title="Hulp nodig?"
+            blocks={['faq', 'phone', 'email']}
+            className="default"
           />
-        )}
+          {location?.state?.welcomeScreen && <RegWelcome />}
+          {!!location?.state?.resCode && !!location.state.message && (
+            <RegError
+              errMsg={location.state.message}
+              onClose={() => {
+                history.push(
+                  registrationResponseRoutes.find(
+                    route => route.name === 'register',
+                  )!.path,
+                  { formFields: location?.state?.formFields },
+                );
+              }}
+            />
+          )}
+
+          {(!location?.state?.resCode ?? true) && (
+            <OnlineForm
+              fieldChange={fieldChange}
+              checkEmailAvailable={checkEmailAvailable}
+              checkPersonalCode={checkPersonalCode}
+              checkPostalCode={checkPostalCode}
+              handleRegisterSubmit={handleRegisterSubmit}
+            />
+          )}
+        </FormProvider>
       </div>
     </main>
   );

@@ -147,10 +147,11 @@ const LoginForm = () => {
 
 const RegistrationLink = () => {
   const { t } = useI18n();
+  const registerRoute = useRoutePath(PagesName.RegisterPage, true);
   return (
     <div className="d-flex flex-column align-items-center">
       {/* <p className="weight-500 mt-3">{t('login_dont_have_acc')}</p> */}
-      <Link to="/register" className="btn btn-outline-brand my-2">
+      <Link to={registerRoute} className="btn btn-outline-brand my-2">
         {t('login_registration_link')}
       </Link>
       {/* <a href="#" className="d-block text-14 mt-2 mb-2">
@@ -172,6 +173,7 @@ const LoginDropdown = ({
   const location = useLocation();
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const sendDataToGTM = useGTM();
+  const registerRoute = useRoutePath(PagesName.RegisterPage, true);
   useEffect(() => {
     setShowDropdown(false);
   }, [location.pathname]);
@@ -196,7 +198,7 @@ const LoginDropdown = ({
     >
       <Link
         className="btn btn-light btn-header mr-2 mr-xl-3 ml-auto"
-        to="/register"
+        to={registerRoute}
       >
         {t('register_btn')}
       </Link>
