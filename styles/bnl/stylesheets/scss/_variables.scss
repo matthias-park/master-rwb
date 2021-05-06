@@ -589,7 +589,7 @@ $custom-control-indicator-focus-box-shadow:     $input-focus-box-shadow !default
 $custom-control-indicator-focus-border-color:   $input-focus-border-color !default;
 
 $custom-control-indicator-active-color:         $success-alt;
-$custom-control-indicator-active-bg:            lighten($component-active-bg, 35%) !default;
+$custom-control-indicator-active-bg:            $white;
 $custom-control-indicator-active-box-shadow:    null !default;
 $custom-control-indicator-active-border-color:  $gray-100;
 
