@@ -213,30 +213,34 @@ const TransactionsDateFilter = ({ dateTo, dateFrom, updateUrl }) => {
   return (
     <>
       <div className="date-filter__picker-wrp mb-sm-3">
-        <DatePicker
-          popperPlacement="bottom-start"
-          selected={newDateFrom.toDate()}
-          onChange={date => {
-            setNewDateFrom(dayjs(date as Date));
-          }}
-          dateFormat="yyyy-MM-dd"
-          maxDate={dateTo.toDate()}
-        />
-        <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
+        <label className="d-inline">
+          <DatePicker
+            popperPlacement="bottom-start"
+            selected={newDateFrom.toDate()}
+            onChange={date => {
+              setNewDateFrom(dayjs(date as Date));
+            }}
+            dateFormat="yyyy-MM-dd"
+            maxDate={dateTo.toDate()}
+          />
+          <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
+        </label>
       </div>
       <span className="text-gray-400 mx-auto mx-sm-1 mb-sm-3">-</span>
       <div className="date-filter__picker-wrp mb-sm-3">
-        <DatePicker
-          popperPlacement="bottom-start"
-          minDate={newDateFrom.toDate()}
-          selected={newDateTo.toDate()}
-          onChange={date => {
-            setNewDateTo(dayjs(date as Date));
-          }}
-          dateFormat="yyyy-MM-dd"
-          maxDate={dayjs().toDate()}
-        />
-        <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
+        <label className="d-inline">
+          <DatePicker
+            popperPlacement="bottom-start"
+            minDate={newDateFrom.toDate()}
+            selected={newDateTo.toDate()}
+            onChange={date => {
+              setNewDateTo(dayjs(date as Date));
+            }}
+            dateFormat="yyyy-MM-dd"
+            maxDate={dayjs().toDate()}
+          />
+          <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
+        </label>
       </div>
       <Button
         className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3 btn--small-radius"
