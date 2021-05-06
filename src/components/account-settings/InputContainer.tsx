@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useI18n } from '../../hooks/useI18n';
 import Form from 'react-bootstrap/Form';
 import { enterKeyPress } from '../../utils/uiUtils';
 import LoadingButton from '../LoadingButton';
@@ -38,7 +37,6 @@ const InputContainer = ({
   header,
 }: Props) => {
   const [inputValue, setInputValue] = useState<string>(defaultValue.toString());
-  const { t } = useI18n();
   const handleSubmit = async () => {
     const response = await onSubmit(Number(inputValue));
     if (!response) return;

@@ -106,7 +106,7 @@ export const HeaderNavClassicLink = ({
           }
           className="header__nav-item-link cursor-pointer"
           onClick={() => {
-            toggleActive(data.name, !currentLinkActive);
+            toggleActive(`hover:${data.name}`, !currentLinkActive);
           }}
         >
           {t(data.name)}

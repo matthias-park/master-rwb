@@ -62,7 +62,7 @@ export const UIConfigProvider = props => {
 
   useEffect(() => {
     headerNav.toggle();
-  }, [location, header]);
+  }, [location, header, headerNav]);
 
   const value: UIConfig = {
     backdrop: createBackdropProviderValues(backdrop, setBackdrop),
