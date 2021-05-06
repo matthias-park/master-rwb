@@ -261,7 +261,6 @@ const KambiSportsbook = () => {
           kambiContainer.id = 'KambiBC';
           kambiContainer.classList.add('kambiHidden');
           containerRef.current?.after(kambiContainer);
-          console.log(kambiConfig);
           updateWindowKambiConfig(kambiConfig);
           insertKambiBootstrap().then(() => {
             context.setSportsbookLoaded(true);

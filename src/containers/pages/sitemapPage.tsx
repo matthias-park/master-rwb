@@ -127,7 +127,6 @@ const SitemapPage = () => {
         });
       }
     }
-    console.log(list);
     return list;
   }, [routes, user]);
 

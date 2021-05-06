@@ -61,7 +61,7 @@ export const formatNavigationRoutes = (constants: PageConfig) => {
     }
   }
 
-  return constants.navigation_routes.sort((a, b) =>
+  return navigationRoutes.sort((a, b) =>
     sortDescending(a.path.length, b.path.length),
   );
 };
