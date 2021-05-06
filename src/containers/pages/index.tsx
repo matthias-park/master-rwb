@@ -43,6 +43,12 @@ const COMPONENT_PAGES = {
   [PagesName.ContactUsPage]: AsyncPage('contactUsPage'),
   [PagesName.SitemapPage]: AsyncPage('sitemapPage'),
   [PagesName.LocaleSelectPage]: AsyncPage('localeSelectPage'),
+  [PagesName.PersonalInfoPage]: AsyncPage('personalInfoPage'),
+  [PagesName.CommunicationPreferencesPage]: AsyncPage(
+    'communicationPreferencesPage',
+  ),
+  [PagesName.ChangePasswordPage]: AsyncPage('changePasswordPage'),
+  [PagesName.CloseAccountPage]: AsyncPage('closeAccountPage'),
 };
 
 const Routes = () => {
