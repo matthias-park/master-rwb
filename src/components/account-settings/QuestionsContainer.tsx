@@ -10,6 +10,7 @@ interface Props {
     title: string;
     body: string;
   }[];
+  className?: string;
 }
 
 const QuestionItem = ({ item, index }) => {
@@ -32,11 +33,11 @@ const QuestionItem = ({ item, index }) => {
   );
 };
 
-const QuestionsContainer = ({ items }: Props) => {
+const QuestionsContainer = ({ items, className }: Props) => {
   const { t } = useI18n();
   const faqRoute = useRoutePath(PagesName.FaqPage);
   return (
-    <>
+    <div className={className ? className : ''}>
       <h3 className="mb-3">{t('user_questions')}</h3>
       <Accordion className="questions-acr">
         {items.map((item, index) => {
@@ -46,7 +47,7 @@ const QuestionsContainer = ({ items }: Props) => {
       <u className="d-block text-center my-3 text-14 font-weight-bold">
         <Link to={faqRoute}>{t('user_all_faq')}</Link>
       </u>
-    </>
+    </div>
   );
 };
 

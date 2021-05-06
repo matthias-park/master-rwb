@@ -40,6 +40,10 @@ export enum PagesName {
   BettingRulesPage = 18,
   Null = 19,
   LocaleSelectPage = 20,
+  PersonalInfoPage = 21,
+  CommunicationPreferencesPage = 22,
+  ChangePasswordPage = 23,
+  CloseAccountPage = 24,
 }
 
 export enum FormFieldValidation {

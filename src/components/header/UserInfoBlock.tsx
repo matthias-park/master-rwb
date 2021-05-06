@@ -8,8 +8,8 @@ import Link from '../Link';
 import { cache as SWRCache } from 'swr';
 import { useModal } from '../../hooks/useModal';
 import { useConfig } from '../../hooks/useConfig';
+import { useRoutePath } from '../../hooks/index';
 import Accordion from 'react-bootstrap/Accordion';
-import { useRoutePath } from '../../hooks';
 
 const UserMenuLink = ({ link, name, setShowDropdown, children }) => {
   const { t } = useI18n();
@@ -60,7 +60,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const { backdrop } = useUIConfig();
   const { allActiveModals } = useModal();
   const { sidebars } = useConfig();
-  const depositPath = useRoutePath(PagesName.DepositPage, true);
+  const depositRoute = useRoutePath(PagesName.DepositPage, true);
 
   const showUserMenu = isOpen => {
     if (!!allActiveModals.length) return;
@@ -82,7 +82,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
         onToggle={isOpen => showUserMenu(isOpen)}
       >
         <div className="header__user-menu-info">
-          <Link to={depositPath} className="header__user-menu-info-balance">
+          <Link to={depositRoute} className="header__user-menu-info-balance">
             <span>
               {user.balance} {user.currency}
             </span>
@@ -103,6 +103,15 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
         <Dropdown.Menu className="dropdown-menu user-menu">
           <div className="user-menu__wrp">
             <ul className="user-menu__list">
+              <Dropdown.Item as="div" className="mt-3">
+                <Link
+                  to={depositRoute}
+                  className="btn btn-outline-brand btn-lg text-14 px-3"
+                >
+                  <i className="icon-card"></i>
+                  {t('deposit_link')}
+                </Link>
+              </Dropdown.Item>
               <Accordion>
                 {sidebars &&
                   sidebars[0].map(link => (
