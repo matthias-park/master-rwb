@@ -11,6 +11,8 @@ import Link from '../../components/Link';
 import { makeCollapsible } from '../../utils/uiUtils';
 import clsx from 'clsx';
 import RedirectNotFound from '../../components/RedirectNotFound';
+import { useRoutePath } from '../../hooks';
+import { PagesName } from '../../constants';
 
 const PromoLinkEl = ({
   item,
@@ -21,10 +23,8 @@ const PromoLinkEl = ({
   className?: string;
   children: JSX.Element | JSX.Element[];
 }) => {
-  const { pathname } = useLocation();
-  const linkTo = `${
-    pathname.split('/')[2] ? `/${pathname.split('/')[1]}` : pathname
-  }/${item.slug}`;
+  const promotionsPath = useRoutePath(PagesName.PromotionsPage);
+  const linkTo = promotionsPath.replace(':slug', item.slug);
 
   return (
     <>
