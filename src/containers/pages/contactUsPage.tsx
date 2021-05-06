@@ -125,7 +125,7 @@ const ContactUsPage = () => {
           </h2>
         )}
         {!!data && !isValidating && (
-          <div className="d-flex flex-column flex-md-row">
+          <div className="d-flex flex-column flex-xl-row">
             <div className="flex-grow-1 mr-0 mr-md-5">
               <h2 className="mb-4">{data.title}</h2>
               <small className="d-block mb-2">
@@ -186,7 +186,7 @@ const ContactUsPage = () => {
             </div>
             <HelpBlock
               blocks={['faq', 'phone', 'email']}
-              className="d-block w-md-100 mt-5 mt-md-0"
+              className="d-block w-md-100 mt-5 mt-xl-0"
             />
           </div>
         )}
