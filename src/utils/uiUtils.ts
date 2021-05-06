@@ -54,26 +54,31 @@ export const createBackdropProviderValues = (
   };
 };
 
-let activeHeaderNavCopy;
+let activeHeaderNavCopy: string | null = null;
 export const createHeaderNavProviderValues = (
   activeHeaderNav: string | null,
   setActiveHeaderNav: (newState: string | null) => void,
   currentRoute?: string,
   headerLinks?: HeaderRoute[],
 ): HeaderActiveNav => {
+  const hoverPrefix = 'hover:';
   const toggle = (name?: string | null, active?: boolean) => {
-    const navName = name && (name.includes('hover:') ? name : `hover:${name}`);
-    let activeRouteName = navName ? navName : null;
-    if (!active && navName === activeHeaderNavCopy) activeRouteName = null;
-    if (navName && navName !== activeHeaderNavCopy && !active) return;
-    if (!activeRouteName && currentRoute && headerLinks) {
-      activeRouteName =
+    let navName = name && active ? name : null;
+    if (!navName && currentRoute && headerLinks) {
+      navName =
         headerLinks.find(
           link => !!link.prefix && currentRoute.startsWith(link.prefix),
         )?.name || null;
     }
-    activeHeaderNavCopy = activeRouteName;
-    setActiveHeaderNav(activeRouteName);
+    if (!navName && !name && activeHeaderNavCopy?.includes(hoverPrefix)) return;
+    if (
+      activeHeaderNavCopy?.includes(hoverPrefix) &&
+      activeHeaderNavCopy !== name &&
+      !active
+    )
+      return;
+    activeHeaderNavCopy = navName;
+    setActiveHeaderNav(navName);
   };
 
   return {
@@ -126,11 +131,11 @@ export const removePageLoadingSpinner = () => {
 
 export const setPageLoadingSpinner = () => {
   if (!document.getElementsByClassName('page-loading-spinner')[0]) {
-    const body = <HTMLElement>document.querySelector('body');
-    const spinnerEl = <HTMLElement>document.createElement('DIV');
+    const body = document.querySelector<HTMLElement>('body');
+    const spinnerEl = document.createElement('DIV') as HTMLElement;
     spinnerEl.id = 'page-loading-spinner';
     spinnerEl.classList.add('page-loading-spinner');
-    const spinnerImg = <HTMLImageElement>document.createElement('IMG');
+    const spinnerImg = document.createElement('IMG') as HTMLImageElement;
     spinnerImg.classList.add('spinner-img');
     spinnerImg.src = '/assets/scoore-loader.svg';
     spinnerEl.appendChild(spinnerImg);
@@ -138,21 +143,11 @@ export const setPageLoadingSpinner = () => {
   }
 };
 
-export const hideKambiSportsbook = () => {
+export const hideKambiSportsbook = () =>
   document.getElementById('root')?.classList.add('sb-hidden');
-  if (window.KambiWapi) {
-    window.KambiWapi.set(window.KambiWapi.CLIENT_HIDE);
-    window.KambiWapi.set(window.KambiWapi.BETSLIP_HIDE);
-  }
-};
 
-export const showKambiSportsbook = () => {
+export const showKambiSportsbook = () =>
   document.getElementById('root')?.classList.remove('sb-hidden');
-  if (window.KambiWapi) {
-    window.KambiWapi.set(window.KambiWapi.CLIENT_SHOW);
-    window.KambiWapi.set(window.KambiWapi.BETSLIP_SHOW);
-  }
-};
 
 export const checkHrOverflow = (containerSelector, itemSelector) => {
   return (

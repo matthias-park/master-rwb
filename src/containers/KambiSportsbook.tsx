@@ -116,7 +116,7 @@ export const KambiProvider = ({ children }) => {
 
   useEffect(() => {
     if (api && locationKey && (hash.length || visibleSportsbook)) {
-      api.navigateClient(hash, 'sportsbook');
+      api.navigateClient(hash || 'home', 'sportsbook');
     }
   }, [hash, !!api, visibleSportsbook]);
   useEffect(() => {

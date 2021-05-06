@@ -29,11 +29,9 @@ export const HeaderNavClassicLink = ({
   toggleActive,
 }: HeaderNavLinkProps) => {
   const { t } = useI18n();
-  const { locale, routes } = useConfig((prev, next) => {
-    const localeEqual = prev.locale === next.locale;
-    const routesEqual = prev.routes.length === next.routes.length;
-    return localeEqual && routesEqual;
-  });
+  const { routes } = useConfig(
+    (prev, next) => prev.routes.length === next.routes.length,
+  );
   const { user } = useAuth();
   const { pathname, hash } = useLocation();
   const fullPath = routes
@@ -69,7 +67,10 @@ export const HeaderNavClassicLink = ({
     }
     if (desktopWidth) {
       setDelayHoverHandler(
-        setTimeout(() => toggleActive(data.name, hover), hover ? 600 : 800),
+        setTimeout(
+          () => toggleActive(`hover:${data.name}`, hover),
+          hover ? 600 : 800,
+        ),
       );
     }
   }, [hover]);

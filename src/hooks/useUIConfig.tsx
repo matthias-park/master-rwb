@@ -61,9 +61,7 @@ export const UIConfigProvider = props => {
   }, [configLoaded, table]);
 
   useEffect(() => {
-    if (!activeHeaderNav?.includes('hover:')) {
-      headerNav.toggle();
-    }
+    headerNav.toggle();
   }, [location, header]);
 
   const value: UIConfig = {

@@ -163,6 +163,7 @@ const TextInput = ({
     !!fieldState.error || validation === FormFieldValidation.Invalid;
   const isValid =
     !fieldState.error &&
+    validation !== FormFieldValidation.Invalid &&
     (validation === FormFieldValidation.Valid ||
       (!fieldState.isValidating && fieldState.isTouched));
   const inputAs = useMemo(() => {
