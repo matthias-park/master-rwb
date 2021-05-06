@@ -8,6 +8,7 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { useI18n } from '../hooks/useI18n';
 import useApi from '../hooks/useApi';
 import { sortDescending } from '../utils';
+import { usePrevious } from '../hooks';
 
 const ApiHead = () => {
   const { locales, locale, routes, configLoaded } = useConfig((prev, next) => {
@@ -35,6 +36,7 @@ const ApiHead = () => {
     }
     return pathRoute;
   }, [routes, pathname, hash]);
+  const prevPathInfo = usePrevious(pathInfo);
 
   const params = useMemo(
     () => ({
@@ -52,8 +54,8 @@ const ApiHead = () => {
   const seoData = data?.Success ? data?.Data : null;
   const translationsLoaded = !!Object.keys(table()).length;
   const fallbackTitle =
-    t(`sitemap_${pathInfo?.name}`) +
-    (t(`sitemap_${pathInfo?.name}`).length ? ' - ' : '') +
+    t(`sitemap_${pathInfo?.name || prevPathInfo?.name}`) +
+    (t(`sitemap_${pathInfo?.name || prevPathInfo?.name}`).length ? ' - ' : '') +
     t('seo_site_name');
   const title = translationsLoaded ? seoData?.title || fallbackTitle : '';
   return (
