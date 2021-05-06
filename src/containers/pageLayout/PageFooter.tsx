@@ -276,9 +276,10 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
               <FooterLink.Children>
                 {linkContainer.children
                   .sort((a, b) => sortAscending(a.order, b.order))
-                  .map(child =>
+                  .map((child, index) =>
                     child.external ? (
                       <a
+                        key={`${child.name}-${index}`}
                         href={
                           child.link &&
                           child.link.replace('{__locale__}', locale)

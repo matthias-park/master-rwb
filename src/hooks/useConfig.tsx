@@ -4,6 +4,7 @@ import React, {
   ReactNode,
   useState,
   useEffect,
+  useMemo,
 } from 'react';
 import { postApi } from '../utils/apiUtils';
 import Config, { ConfigLoaded, Cookies } from '../types/Config';
@@ -13,7 +14,7 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { PageConfig } from '../types/api/PageConfig';
 import useApi from './useApi';
 import useMemoCompare from './useMemoCompare';
-import { sortDescending } from '../utils/index';
+import { formatNavigationRoutes, sortDescending } from '../utils/index';
 import useLocalStorage from './useLocalStorage';
 import { setPageLoadingSpinner } from '../utils/uiUtils';
 import { PagesName } from '../constants';
@@ -48,18 +49,16 @@ const useConstants = () => {
       }
     });*/
   // }, []);
-  const constants = data?.Data;
-  if (constants && constants.navigation_routes && constants.content_pages) {
-    for (const [key, value] of Object.entries(constants.content_pages)) {
-      constants.navigation_routes.push({
-        id: PagesName.TemplatePage,
-        path: `${key.startsWith('/') ? '' : '/'}${key}`,
-        name: value,
-      });
+  const constants = useMemo(() => {
+    const constants = data?.Data;
+    if (constants?.navigation_routes) {
+      constants.navigation_routes = formatNavigationRoutes(constants);
     }
-  }
+    return constants;
+  }, [data?.Data]);
+
   return {
-    constants: data?.Data,
+    constants,
     updateConstants: mutate,
     constantsError: error,
   };

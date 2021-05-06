@@ -1,3 +1,6 @@
+import { PagesName } from '../constants';
+import { PageConfig } from '../types/api/PageConfig';
+
 export const sortAscending = (a: number, b: number) => a - b;
 export const sortDescending = (a: number, b: number) => b - a;
 
@@ -39,4 +42,26 @@ export const structuredBankCommunications = (barcode): string => {
   const rExp = /\d+/;
   const moduloOf97 = barcode.match(rExp)[0] % 97;
   return '00' + barcode + moduloOf97.toString().padStart(2, '0');
+};
+
+export const formatNavigationRoutes = (constants: PageConfig) => {
+  const navigationRoutes = constants.navigation_routes
+    ? [...constants.navigation_routes]
+    : [];
+  if (constants.content_pages) {
+    for (const [key, value] of Object.entries(constants.content_pages)) {
+      const contentPagePath = `${key.startsWith('/') ? '' : '/'}${key}`;
+      if (navigationRoutes.some(route => route.path !== contentPagePath)) {
+        navigationRoutes.push({
+          id: PagesName.TemplatePage,
+          path: contentPagePath,
+          name: value,
+        });
+      }
+    }
+  }
+
+  return constants.navigation_routes.sort((a, b) =>
+    sortDescending(a.path.length, b.path.length),
+  );
 };

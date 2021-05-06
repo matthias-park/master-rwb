@@ -1,6 +1,6 @@
 import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import { sortAscending, sortDescending } from '../../utils/index';
+import { sortAscending } from '../../utils/index';
 import clsx from 'clsx';
 import { useI18n } from '../../hooks/useI18n';
 import { useConfig } from '../../hooks/useConfig';
@@ -34,45 +34,37 @@ export const HeaderNavClassicLink = ({
   );
   const { user } = useAuth();
   const { pathname, hash } = useLocation();
-  const fullPath = routes
-    .sort((a, b) => sortDescending(a.path.length, b.path.length))
-    .find(route => {
-      const match = (path: string) =>
-        matchPath(path, {
-          path: route.path,
-          exact: route.exact ?? true,
-        });
-      return match(`${pathname}${hash}`) || match(pathname);
-    })?.path;
+  const fullPath = routes.find(route => {
+    const match = (path: string) =>
+      matchPath(path, {
+        path: route.path,
+        exact: route.exact ?? true,
+      });
+    return match(`${pathname}${hash}`) || match(pathname);
+  })?.path;
   const { backdrop } = useUIConfig();
   const desktopWidth = useDesktopWidth(1199);
   const dropdownRef = useRef(null);
   const sendDataToGTM = useGTM();
   const hover = useHover(dropdownRef, desktopWidth);
-  const [delayHoverHandler, setDelayHoverHandler] = useState<number | null>(
-    null,
-  );
   const dropdownLinks = useMemo(
     () => data.links?.sort((a, b) => sortAscending(a.order, b.order)),
     [data.links],
   );
-  const currentLinkActive = active?.includes(
-    `${mobile ? 'hover:' : ''}${data.name}`,
-  );
+  const currentLinkActive = active?.includes(data.name);
 
   useEffect(() => {
-    if (delayHoverHandler) {
-      clearTimeout(delayHoverHandler);
-      setDelayHoverHandler(null);
-    }
+    let timer: number | undefined;
     if (desktopWidth) {
-      setDelayHoverHandler(
-        setTimeout(
-          () => toggleActive(`hover:${data.name}`, hover),
-          hover ? 600 : 800,
-        ),
+      timer = setTimeout(
+        () => toggleActive(`hover:${data.name}`, hover),
+        hover ? 600 : 800,
       );
     }
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [hover]);
 
   const onGtmLinkClick = (name: string, subHeader: boolean = false) => {
@@ -117,7 +109,7 @@ export const HeaderNavClassicLink = ({
           as="div"
           className="d-flex align-items-center w-100 cursor-pointer"
           onClick={() => {
-            toggleActive(data.name, !currentLinkActive);
+            toggleActive(`hover:${data.name}`, !currentLinkActive);
           }}
         >
           <span className="header__nav-item-link cursor-pointer">

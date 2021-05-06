@@ -3,7 +3,6 @@ import { useConfig } from '../../hooks/useConfig';
 import { useI18n } from '../../hooks/useI18n';
 import Link from '../../components/Link';
 import { PagesName } from '../../constants';
-import { sortAscending } from '../../utils';
 import { useAuth } from '../../hooks/useAuth';
 import Accordion from 'react-bootstrap/Accordion';
 import clsx from 'clsx';
@@ -99,9 +98,7 @@ const SitemapPage = () => {
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const sitemapList = useMemo(() => {
     const list: SitemapListItem[] = [];
-    for (const route of routes.sort((a, b) =>
-      sortAscending(a.path.length, b.path.length),
-    )) {
+    for (const route of [...routes].reverse()) {
       if (
         route.hiddenSitemap ||
         route.path === '/' ||
@@ -130,6 +127,7 @@ const SitemapPage = () => {
         });
       }
     }
+    console.log(list);
     return list;
   }, [routes, user]);
 

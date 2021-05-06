@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../../hooks/useUIConfig';
-import { ComponentName } from '../../constants';
+import { ComponentName, PagesName } from '../../constants';
 import { useI18n } from '../../hooks/useI18n';
 import Spinner from 'react-bootstrap/Spinner';
 import Link from '../Link';
@@ -9,6 +9,7 @@ import { cache as SWRCache } from 'swr';
 import { useModal } from '../../hooks/useModal';
 import { useConfig } from '../../hooks/useConfig';
 import Accordion from 'react-bootstrap/Accordion';
+import { useRoutePath } from '../../hooks';
 
 const UserMenuLink = ({ link, name, setShowDropdown, children }) => {
   const { t } = useI18n();
@@ -59,6 +60,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const { backdrop } = useUIConfig();
   const { allActiveModals } = useModal();
   const { sidebars } = useConfig();
+  const depositPath = useRoutePath(PagesName.DepositPage, true);
 
   const showUserMenu = isOpen => {
     if (!!allActiveModals.length) return;
@@ -80,7 +82,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
         onToggle={isOpen => showUserMenu(isOpen)}
       >
         <div className="header__user-menu-info">
-          <Link to="/wallet/deposit" className="header__user-menu-info-balance">
+          <Link to={depositPath} className="header__user-menu-info-balance">
             <span>
               {user.balance} {user.currency}
             </span>
@@ -105,7 +107,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 {sidebars &&
                   sidebars[0].map(link => (
                     <UserMenuLink
-                      key={link.link}
+                      key={`${link.link}-${link.name}`}
                       link={link.link}
                       name={t(link.name)}
                       children={link.children ? link.children : null}

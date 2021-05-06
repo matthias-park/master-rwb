@@ -7,7 +7,6 @@ import { postApi } from '../utils/apiUtils';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { useI18n } from '../hooks/useI18n';
 import useApi from '../hooks/useApi';
-import { sortDescending } from '../utils';
 import { usePrevious } from '../hooks';
 
 const ApiHead = () => {
@@ -21,16 +20,14 @@ const ApiHead = () => {
   const { t, table } = useI18n();
   const { pathname, hash } = useLocation();
   const pathInfo = useMemo(() => {
-    let pathRoute = routes
-      .sort((a, b) => sortDescending(a.path.length, b.path.length))
-      .find(route => {
-        const match = (path: string) =>
-          matchPath(path, {
-            path: route.path,
-            exact: route.exact ?? true,
-          });
-        return match(`${pathname}${hash}`) || match(`${pathname}`);
-      });
+    let pathRoute = routes.find(route => {
+      const match = (path: string) =>
+        matchPath(path, {
+          path: route.path,
+          exact: route.exact ?? true,
+        });
+      return match(`${pathname}${hash}`) || match(`${pathname}`);
+    });
     if (pathRoute?.redirectTo) {
       pathRoute = routes.find(route => route.path === pathRoute!.redirectTo);
     }

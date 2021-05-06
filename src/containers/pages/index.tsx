@@ -7,7 +7,6 @@ import { PagesName } from '../../constants';
 import Spinner from 'react-bootstrap/Spinner';
 import ErrorBoundary from '../ErrorBoundary';
 import { useI18n } from '../../hooks/useI18n';
-import { sortDescending } from '../../utils';
 
 const AsyncPage = (pageName: string) =>
   loadable(
@@ -61,40 +60,38 @@ const Routes = () => {
       }
     >
       <Switch key={pathname}>
-        {routes
-          .sort((a, b) => sortDescending(a.path.length, b.path.length))
-          .map(route => {
-            if (locale && route.id === PagesName.LocaleSelectPage) {
-              return null;
-            }
-            if (!!locale && route.redirectTo) {
-              return (
-                <Redirect
-                  to={route.redirectTo}
-                  exact={route.exact ?? true}
-                  key={`${route.id}-${route.path}`}
-                  path={route.path}
-                />
-              );
-            }
-            const Page =
-              COMPONENT_PAGES[route.id] ||
-              COMPONENT_PAGES[PagesName.TemplatePage];
-
-            if (!Page) {
-              return null;
-            }
-            const RouteEl = route.protected ? ProtectedRoute : Route;
+        {routes.map(route => {
+          if (locale && route.id === PagesName.LocaleSelectPage) {
+            return null;
+          }
+          if (!!locale && route.redirectTo) {
             return (
-              <RouteEl
-                key={`${route.id}-${route.path}`}
+              <Redirect
+                to={route.redirectTo}
                 exact={route.exact ?? true}
+                key={`${route.id}-${route.path}`}
                 path={route.path}
-                component={Page}
-                sensitive
               />
             );
-          })}
+          }
+          const Page =
+            COMPONENT_PAGES[route.id] ||
+            COMPONENT_PAGES[PagesName.TemplatePage];
+
+          if (!Page) {
+            return null;
+          }
+          const RouteEl = route.protected ? ProtectedRoute : Route;
+          return (
+            <RouteEl
+              key={`${route.id}-${route.path}`}
+              exact={route.exact ?? true}
+              path={route.path}
+              component={Page}
+              sensitive
+            />
+          );
+        })}
       </Switch>
     </ErrorBoundary>
   );

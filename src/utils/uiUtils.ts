@@ -70,6 +70,16 @@ export const createHeaderNavProviderValues = (
           link => !!link.prefix && currentRoute.startsWith(link.prefix),
         )?.name || null;
     }
+    console.log(
+      activeHeaderNavCopy,
+      navName,
+      name,
+      active,
+      !navName && !name && activeHeaderNavCopy?.includes(hoverPrefix),
+      activeHeaderNavCopy?.includes(hoverPrefix) &&
+        activeHeaderNavCopy !== name &&
+        !active,
+    );
     if (!navName && !name && activeHeaderNavCopy?.includes(hoverPrefix)) return;
     if (
       activeHeaderNavCopy?.includes(hoverPrefix) &&
