@@ -45,6 +45,7 @@ export interface Child {
 export interface ChildElement {
   name: string;
   link?: string;
+  translationPath?: string;
   order: number;
   button?: boolean;
   modal?: ComponentName;

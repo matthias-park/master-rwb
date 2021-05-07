@@ -242,7 +242,6 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
   const { t, jsxT } = useI18n();
   const desktopWidth = useDesktopWidth(768);
   const sendDataToGTM = useGTM();
-  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const FooterLink = useMemo(
     () => ({
       Container: desktopWidth ? 'div' : Dropdown,
@@ -280,11 +279,9 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
                     child.external ? (
                       <a
                         key={`${child.name}-${index}`}
-                        href={
-                          child.link &&
-                          child.link.replace('{__locale__}', locale)
-                        }
+                        href={child.link || t(child.translationPath!)}
                         target="_blank"
+                        rel="noreferrer"
                         className={
                           child.button
                             ? 'btn btn-outline-light btn-sm my-3'
