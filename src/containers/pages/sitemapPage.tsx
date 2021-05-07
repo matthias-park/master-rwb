@@ -60,12 +60,10 @@ const TreeItem = ({
         ></Accordion.Toggle>
       )}
       {route.emptyRoute ? (
-        <div className="sitemap-accordion__item-title">
-          {t(`sitemap_${route.name}`)}
-        </div>
+        <div className="sitemap-accordion__item-title">{route.name}</div>
       ) : (
         <div className="sitemap-accordion__item-title">
-          <Link to={route.path}>{t(`sitemap_${route.name}`)}</Link>
+          <Link to={route.path}>{route.name}</Link>
         </div>
       )}
       {route.children && (
@@ -122,7 +120,10 @@ const SitemapPage = () => {
       } else {
         list.push({
           path: route.path,
-          name: route.name,
+          name:
+            route.id === PagesName.TemplatePage
+              ? route.name
+              : t(`sitemap_${route.name}`),
           emptyRoute: route.id === PagesName.Null,
         });
       }
