@@ -222,6 +222,7 @@
       right: 0;
       color: $gray-500;
       font-size: 34px;
+      pointer-events: none;
     }
   }
   @include media-breakpoint-down(sm) {
@@ -245,8 +246,10 @@
       border-radius: 4px;
       background-color: $gray-custom-100;
       font-size: 12px;
+      padding-top: 3px;
       padding-left: 8px;
       padding-right: 30px;
+      cursor: pointer;
     }
   }
 }
