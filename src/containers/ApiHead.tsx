@@ -8,6 +8,7 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { useI18n } from '../hooks/useI18n';
 import useApi from '../hooks/useApi';
 import { usePrevious } from '../hooks';
+import { PagesName } from '../constants';
 
 const ApiHead = () => {
   const { locales, locale, routes, configLoaded } = useConfig((prev, next) => {
@@ -50,9 +51,14 @@ const ApiHead = () => {
   );
   const seoData = data?.Success ? data?.Data : null;
   const translationsLoaded = !!Object.keys(table()).length;
+  const pathName = pathInfo?.name || prevPathInfo?.name || '';
+  const pathNameTranslation =
+    (pathInfo?.id || prevPathInfo?.id) === PagesName.TemplatePage
+      ? pathName
+      : t(`sitemap_${pathName}`);
   const fallbackTitle =
-    t(`sitemap_${pathInfo?.name || prevPathInfo?.name}`) +
-    (t(`sitemap_${pathInfo?.name || prevPathInfo?.name}`).length ? ' - ' : '') +
+    pathNameTranslation +
+    (pathNameTranslation.length ? ' - ' : '') +
     t('seo_site_name');
   const title = translationsLoaded ? seoData?.title || fallbackTitle : '';
   return (
