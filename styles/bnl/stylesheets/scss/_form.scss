@@ -176,6 +176,14 @@
                     border-color: transparent;
                 }
             }
+            &:active {
+              + label {
+                &:before {
+                    background-color: $success;
+                    border-color: $success;
+                }
+              }
+            }
         }
         &.is-invalid {
           + label {
