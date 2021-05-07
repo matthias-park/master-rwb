@@ -17,15 +17,21 @@ import useMemoCompare from './useMemoCompare';
 import { formatNavigationRoutes, sortDescending } from '../utils/index';
 import useLocalStorage from './useLocalStorage';
 import { setPageLoadingSpinner } from '../utils/uiUtils';
-import { PagesName } from '../constants';
 
 const useConstants = () => {
   const { addToast } = useToasts();
+  const [cache, setCache] = useLocalStorage<
+    RailsApiResponse<PageConfig> | undefined
+  >('api-constants-cache', undefined);
   const constantsUrl = '/railsapi/v1/content/constants';
   const { data, mutate, error } = useApi<RailsApiResponse<PageConfig>>(
     constantsUrl,
     {
+      initialData: cache,
       revalidateOnMount: true,
+      onSuccess: data => {
+        setCache(data);
+      },
       onErrorRetry: (err: RailsApiResponse<null>) => [
         addToast('Failed to get page config', {
           appearance: 'error',
@@ -61,6 +67,7 @@ const useConstants = () => {
     constants,
     updateConstants: mutate,
     constantsError: error,
+    clearConstantsCache: () => setCache(undefined),
   };
 };
 
@@ -89,7 +96,12 @@ const initCookies: Cookies = {
 };
 
 export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
-  const { constants, updateConstants, constantsError } = useConstants();
+  const {
+    constants,
+    updateConstants,
+    constantsError,
+    clearConstantsCache,
+  } = useConstants();
   const locales = constants?.available_locales.map(locale => locale.iso) || [];
   const { addToast } = useToasts();
   const [cachedLocale, setCachedLocale] = useLocalStorage<string | null>(
@@ -159,6 +171,9 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     if (setPageLoading) {
       setPageLoadingSpinner();
       setConfigLoaded(ConfigLoaded.Loading);
+    }
+    if (lang !== constants?.locale) {
+      clearConstantsCache();
     }
     changeLocale(lang);
     setLocalePathname(lang);

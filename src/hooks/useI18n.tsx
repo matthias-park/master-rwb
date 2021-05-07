@@ -12,6 +12,7 @@ import { useToasts } from 'react-toast-notifications';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import useApi from './useApi';
 import { ConfigLoaded } from '../types/Config';
+import useLocalStorage from './useLocalStorage';
 
 export const I18nContext = createContext<I18n | null>(null);
 
@@ -44,6 +45,9 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
     const loadedEqual = prev.configLoaded === next.configLoaded;
     return localeEqual && loadedEqual;
   });
+  const [cache, setCache] = useLocalStorage<
+    RailsApiResponse<Translations> | undefined
+  >(`translations-cache-${locale}`, undefined);
   const translationsUrl =
     !TestEnv && configLoaded === ConfigLoaded.Loaded && locale
       ? `/railsapi/v1/translations?locale=${locale}`
@@ -51,7 +55,11 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   const { data, mutate } = useApi<RailsApiResponse<Translations>>(
     translationsUrl,
     {
+      initialData: cache,
       revalidateOnMount: true,
+      onSuccess: data => {
+        setCache(data);
+      },
       onErrorRetry: () => {
         addToast(`Failed to fetch translations`, {
           appearance: 'error',
