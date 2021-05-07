@@ -5,7 +5,6 @@ import RegWelcome from '../../components/registration/RegWelcome';
 import { useConfig } from '../../hooks/useConfig';
 import { Redirect, useHistory, useLocation } from 'react-router-dom';
 import { postApi } from '../../utils/apiUtils';
-import { useToasts } from 'react-toast-notifications';
 import {
   PostRegistration,
   ValidateRegisterPersonalCode,
@@ -30,7 +29,7 @@ const RegistrationReturnCode = {
   '1': 'registerVerification',
   '2': 'registerMajorError',
   '3': 'registerExclusion',
-  '-1': 'registerTechnicalError',
+  '4': 'registerTechnicalError',
 };
 
 interface RegistrationPathState {
@@ -51,7 +50,6 @@ const RegisterPage = () => {
     return localeEqual && localesEqual && routesEqual;
   });
   const { user, updateUser } = useAuth();
-  const { addToast } = useToasts();
   const sendDataToGTM = useGTM();
   const formMethods = useForm({
     mode: 'onBlur',
@@ -133,9 +131,12 @@ const RegisterPage = () => {
         '/railsapi/v1/registration/new',
         finalForm,
       ).catch((res: RailsApiResponse<null>) => {
-        res.Code = -1;
+        res.Code = 4;
         return res;
       });
+      if (!RegistrationReturnCode[res.Code]) {
+        res.Code = 4;
+      }
       const responseRoute = registrationResponseRoutes.find(
         route => route.name === RegistrationReturnCode[res.Code],
       );

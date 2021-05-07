@@ -30,7 +30,7 @@ const useConstants = () => {
       initialData: cache,
       revalidateOnMount: true,
       onSuccess: data => {
-        setCache(data);
+        if (data.Success && data.Data.locale) setCache(data);
       },
       onErrorRetry: (err: RailsApiResponse<null>) => [
         addToast('Failed to get page config', {
