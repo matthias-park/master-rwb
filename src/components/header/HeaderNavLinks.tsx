@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState, useEffect } from 'react';
+import React, { useRef, useMemo, useEffect } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { sortAscending } from '../../utils/index';
 import clsx from 'clsx';
@@ -51,7 +51,9 @@ export const HeaderNavClassicLink = ({
     () => data.links?.sort((a, b) => sortAscending(a.order, b.order)),
     [data.links],
   );
-  const currentLinkActive = active?.includes(data.name);
+  const currentLinkActive = active?.includes(
+    `${!desktopWidth ? 'hover:' : ''}${data.name}`,
+  );
 
   useEffect(() => {
     let timer: number | undefined;
