@@ -72,7 +72,7 @@ const PromotionsList = () => {
   const isDataLoading = !data && !error;
 
   return (
-    <main className="mb-5 pt-0 pt-xl-5">
+    <main className="mb-5 pt-0 pt-xl-5 min-vh-70">
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />
@@ -106,7 +106,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
   return (
     <>
       {isDataLoading && (
-        <div className="d-flex justify-content-center pt-4 pb-3">
+        <div className="d-flex justify-content-center pt-4 pb-3 min-vh-70">
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
       )}
@@ -172,7 +172,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
     : '/assets/images/promo/promo-inner-sm.png';
 
   return (
-    <main className="pt-xl-5">
+    <main className="pt-xl-5 min-vh-70">
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />

@@ -20,7 +20,7 @@ const LayoutWithSidebar = ({
     <div
       className={
         rightSidebar
-          ? `account-settings pb-4 ${spacingClasses}`
+          ? `account-settings pb-4 min-vh-70 ${spacingClasses}`
           : `page-container ${spacingClasses}`
       }
     >
