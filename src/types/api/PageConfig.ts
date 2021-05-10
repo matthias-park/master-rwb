@@ -71,6 +71,7 @@ export interface SubFooter {
 }
 
 export interface HeaderRoute {
+  subLinks?: boolean;
   name: string;
   prefix?: string;
   order: number;

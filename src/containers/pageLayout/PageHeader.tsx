@@ -18,10 +18,13 @@ import useGTM from '../../hooks/useGTM';
 import Link from '../../components/Link';
 import { useAuth } from '../../hooks/useAuth';
 import { usePrevious } from '../../hooks';
+import { HeaderRouteLink } from '../../types/api/PageConfig';
 
 const SubNavLinks = ({
+  links,
   setNavExpanded,
 }: {
+  links: HeaderRouteLink[];
   setNavExpanded: (active: boolean) => void;
 }) => {
   const { backdrop } = useUIConfig();
@@ -46,49 +49,34 @@ const SubNavLinks = ({
   return (
     <div className="row w-100 align-items-start order-2 order-xl-1">
       <ul className="header__nav header__nav--secondary mr-auto mr-lg-0 ml-lg-auto">
-        {[
-          {
-            name: 'sub_header_help',
-            link: '/help',
-          },
-          {
-            name: 'sub_header_where_to_play',
-            link: '/',
-          },
-          {
-            name: 'sub_header_play_responsibly',
-            link: '/',
-          },
-        ].map(link => (
-          <li key={link.name} className="header__nav-item">
-            <Link
-              key={`${link.name}-${link.link}`}
-              onClick={() => navLinkClick(link.name)}
-              className="header__nav-item-link"
-              to={link.link}
-            >
-              {t(link.name)}
-            </Link>
-          </li>
-        ))}
-        {/* <li className="header__nav-item">
-          <Link className="header__nav-item-link" to="/help">
-            {t('sub_header_help')}
-          </Link>
-        </li>
-        <li className="header__nav-item">
-          <Link className="header__nav-item-link" to="/">
-            {t('sub_header_where_to_play')}
-          </Link>
-        </li>
-        <li className="header__nav-item">
-          <Link className="header__nav-item-link" to="/">
-            {t('sub_header_play_responsibly')}
-          </Link>
-        </li> */}
-        {/* <li className="header-search">
-          <i className="icon-search-nav"></i>
-        </li> */}
+        {
+          //[
+          // {
+          //   name: 'sub_header_help',
+          //   link: '/help',
+          // },
+          // {
+          //   name: 'sub_header_where_to_play',
+          //   link: '/',
+          // },
+          // {
+          //   name: 'sub_header_play_responsibly',
+          //   link: '/',
+          // },
+          // ]
+          links.map(link => (
+            <li key={link.text} className="header__nav-item">
+              <Link
+                key={link.text}
+                onClick={() => navLinkClick(link.text)}
+                className="header__nav-item-link"
+                to={link.path || '/'}
+              >
+                {t(link.text)}
+              </Link>
+            </li>
+          ))
+        }
         <LocaleSelector
           available={locales}
           current={locale}
@@ -141,6 +129,7 @@ const PageHeader = () => {
       headerNav.active?.startsWith('click:') &&
       headerNav.toggle(headerNav.active),
   );
+  const subLinks = header?.find(link => link.subLinks);
 
   return (
     <Navbar
@@ -179,12 +168,18 @@ const PageHeader = () => {
               <span className="icon-menu-close"></span>
             </Navbar.Toggle>
           )}
-          <SubNavLinks setNavExpanded={setNavExpanded} />
+          {!!subLinks && (
+            <SubNavLinks
+              links={subLinks.links}
+              setNavExpanded={setNavExpanded}
+            />
+          )}
           <div className="row w-100 mt-0 mt-lg-2 align-items-end order-1 order-xl-2">
             <ul ref={navbarRef} className="header__nav header__nav--main">
               {header
                 ?.sort((a, b) => sortAscending(a.order!, b.order!))
                 .map(link => {
+                  if (link.subLinks) return null;
                   return (
                     <HeaderNavClassicLink
                       key={`${link.name}-${link.prefix}-${link.order}`}
