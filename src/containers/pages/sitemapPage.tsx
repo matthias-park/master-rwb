@@ -42,6 +42,8 @@ const TreeItem = ({
 }) => {
   const { t } = useI18n();
   if (!t(`sitemap_${route.name}`)) return null;
+  if (route.emptyRoute && !route.children) return null;
+
   return (
     <div className="sitemap-accordion__item">
       {route.children && (
@@ -100,16 +102,14 @@ const SitemapPage = () => {
       if (
         route.hiddenSitemap ||
         route.path === '/' ||
-        (route.protected && !user.logged_in)
-      )
-        continue;
-      if (
-        user.logged_in &&
-        [
-          PagesName.ForgotLoginPage,
-          PagesName.ForgotPasswordPage,
-          PagesName.RegisterPage,
-        ].includes(route.id)
+        (route.protected && !user.logged_in) ||
+        route.id === PagesName.NotFoundPage ||
+        (user.logged_in &&
+          [
+            PagesName.ForgotLoginPage,
+            PagesName.ForgotPasswordPage,
+            PagesName.RegisterPage,
+          ].includes(route.id))
       )
         continue;
       const mapItem = list.find(

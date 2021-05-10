@@ -99,7 +99,7 @@ const SettingsPage = () => {
           {data.forms.map((form, index) => {
             const Component =
               COMPONENTS_BY_SETTINGS[form.id] || DynamicSettingsAccordion;
-            if (!Component) return null;
+            if (!Component || !form.fields) return null;
             return (
               <Component
                 key={form.id}
