@@ -15,8 +15,7 @@ const ProtectedRoute = ({ children, redirectTo, ...props }: Props) => {
   if (user.loading) {
     return (
       <div
-        style={{ minHeight: '300px' }}
-        className="w-100 d-flex align-items-center justify-content-center pt-4 pb-3"
+        className="w-100 d-flex align-items-center justify-content-center pt-4 pb-3 min-vh-70"
       >
         <Spinner animation="border" variant="black" className="mx-auto" />
       </div>

@@ -58,11 +58,11 @@ const TemplatePage = () => {
       {isDataLoading && (
         <div
           className={clsx(
-            'd-flex justify-content-center my-5 pb-5 mx-auto',
+            'd-flex justify-content-center py-5 mx-auto min-vh-70',
             headerNav.active && 'pt-xl-4',
           )}
         >
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" variant="black" className="mx-auto mt-5" />
         </div>
       )}
       {!!data?.Success && (
