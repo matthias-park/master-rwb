@@ -7,11 +7,13 @@ import { DepositStatus } from '../types/api/user/Deposit';
 import { postApi } from '../utils/apiUtils';
 import useApi from './useApi';
 import { useAuth } from './useAuth';
+import { useI18n } from './useI18n';
 import useLocalStorage from './useLocalStorage';
 
 const postUrl = '/railsapi/v1/deposits/status';
 
 const useDepositResponseStatus = () => {
+  const { t } = useI18n();
   const { updateUser } = useAuth();
   const { bankResponse } = useParams<{ bankResponse?: string }>();
   const { pathname, state } = useLocation<{
@@ -72,7 +74,12 @@ const useDepositResponseStatus = () => {
     } else if (data?.Code !== undefined) {
       status = data.Code;
     }
-    if (responseLoading && status !== depositStatus) {
+    if (depositStatus === DepositStatus.Timeout) status = depositStatus;
+
+    if (
+      responseLoading &&
+      (status !== depositStatus || status === DepositStatus.Timeout)
+    ) {
       setDepositStatus(status);
       if (DepositStatus.Confirmed === status) updateUser();
       if (
@@ -90,13 +97,13 @@ const useDepositResponseStatus = () => {
         });
       }
     }
-  }, [data, updateUser]);
+  }, [data, updateUser, depositStatus]);
 
   return {
     setDepositId: (id: string | number) => setId(id),
     error,
     depositStatus,
-    message: state?.message,
+    message: state?.message || t(`deposit_status_${depositStatus}`),
   };
 };
 
