@@ -168,7 +168,7 @@
     position: relative;
     $self: &;
     &-toggle {
-      height: 50px;
+      min-height: 50px;
       width: 100%;
       border: none;
       background: transparent;

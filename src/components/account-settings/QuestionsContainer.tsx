@@ -17,7 +17,7 @@ const QuestionItem = ({ item, index }) => {
   return (
     <div className="questions-acr__item">
       <Accordion.Toggle
-        className="questions-acr__item-toggle px-3"
+        className="questions-acr__item-toggle pl-3 pr-5 py-3"
         eventKey={`${index}`}
       >
         {item.title}
