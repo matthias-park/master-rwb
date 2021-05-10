@@ -189,6 +189,7 @@ module.exports = function (webpackEnv) {
             apiUrl: franchise.api,
             gtmId: franchise.gtmId,
             sentryDsn: franchise.sentryDsn,
+            kambi: franchise.kambi,
           }),
         },
         isEnvProduction

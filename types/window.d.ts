@@ -8,6 +8,10 @@ export declare global {
       apiUrl: string;
       gtmId?: string;
       sentryDsn?: string;
+      kambi?: {
+        bootstrap: string;
+        api: string;
+      };
     };
     toast?: AddToast;
     _wbUpdate?: boolean;

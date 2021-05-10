@@ -6,7 +6,11 @@
       "theme": "bnl",
       "api": "https://bnl-dev.tglab.dev",
       "gtmId": "GTM-PGRW8BQ",
-      "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17"
+      "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17",
+      "kambi": {
+        "bootstrap": "https://ctn-static.kambi.com/client/bnlbe/kambi-bootstrap.js",
+        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js"
+      }
     }
   ],
   "port": 3800,

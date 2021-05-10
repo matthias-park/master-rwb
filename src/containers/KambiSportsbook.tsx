@@ -197,13 +197,14 @@ const setCustomerSettings = ({
 
 const insertKambiBootstrap = async (): Promise<void> => {
   return new Promise(resolve => {
+    if (!window.__config__.kambi) return resolve();
     document.body.classList.add('body-background');
     const scriptElement = document.createElement('script');
     scriptElement.setAttribute('type', 'text/javascript');
     scriptElement.async = true;
     scriptElement.setAttribute(
       'src',
-      `https://ctn-static.kambi.com/client/bnlbe/kambi-bootstrap.js?cb=${Date.now()}`,
+      `${window.__config__.kambi?.bootstrap}?cb=${Date.now()}`,
     );
     document.head.appendChild(scriptElement);
     if (!window.KambiWidget) {
@@ -211,7 +212,7 @@ const insertKambiBootstrap = async (): Promise<void> => {
       scriptElement.setAttribute('type', 'text/javascript');
       scriptElement.setAttribute(
         'src',
-        `https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js?cb=${Date.now()}`,
+        `${window.__config__.kambi?.api}?cb=${Date.now()}`,
       );
       scriptElement.async = true;
       scriptElement.addEventListener('load', () => resolve());
