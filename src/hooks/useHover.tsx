@@ -22,7 +22,7 @@ const useHover = (ref: RefObject<Element>, enabled: boolean = true) => {
         node.removeEventListener('mouseout', onMouseOut);
       }
     };
-  }, [enabled, ref?.current]);
+  }, [enabled]);
 
   return value;
 };

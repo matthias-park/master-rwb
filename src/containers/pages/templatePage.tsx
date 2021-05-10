@@ -65,7 +65,7 @@ const TemplatePage = () => {
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
       )}
-      {!!data && (
+      {!!data?.Success && (
         <div
           className={clsx(
             'page-container justify-content-between',

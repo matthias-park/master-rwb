@@ -3,8 +3,11 @@ import InputContainer from '../../components/account-settings/InputContainer';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
 import HelpBlock from '../../components/HelpBlock';
 import { postApi } from '../../utils/apiUtils';
-import { useParams } from 'react-router-dom';
-import { DepositRequest, DepositResponse } from '../../types/api/user/Deposit';
+import {
+  DepositRequest,
+  DepositResponse,
+  DepositStatus,
+} from '../../types/api/user/Deposit';
 import { useToasts } from 'react-toast-notifications';
 import { useI18n } from '../../hooks/useI18n';
 import { ComponentName, PagesName } from '../../constants';
@@ -15,6 +18,8 @@ import { useModal } from '../../hooks/useModal';
 import { useAuth } from '../../hooks/useAuth';
 import { VALIDATOR_STATUS } from '../../types/UserStatus';
 import { structuredBankCommunications } from '../../utils/index';
+import Spinner from 'react-bootstrap/Spinner';
+import useDepositResponseStatus from '../../hooks/useDepositResponseStatus';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
@@ -22,10 +27,10 @@ const DepositPage = () => {
   const bankAccount = useUserBankAccountModal();
   const { enableModal, allActiveModals } = useModal();
   const { t, jsxT } = useI18n();
-  const { bankResponse } = useParams<{ bankResponse?: string }>();
   const [depositLoading, setDepositLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const depositBaseUrl = useRoutePath(PagesName.DepositPage, true);
+  const depositStatus = useDepositResponseStatus();
   const addBankAccountModalActivePrevious = usePrevious(
     allActiveModals.includes(ComponentName.AddBankAccountModal),
   );
@@ -70,9 +75,7 @@ const DepositPage = () => {
     const depositParams: DepositRequest = {
       BankId: 160,
       Amount: depositValue,
-      ReturnSuccessUrl: `${window.location.origin}${depositBaseUrl}/success`,
-      ReturnCancelUrl: `${window.location.origin}${depositBaseUrl}/cancel`,
-      ReturnErrorUrl: `${window.location.origin}${depositBaseUrl}/error`,
+      ReturnSuccessUrl: `${window.location.origin}${depositBaseUrl}/loading`,
     };
     const response: DepositResponse | null = await postApi<DepositResponse>(
       '/railsapi/v1/deposits/perform',
@@ -80,7 +83,12 @@ const DepositPage = () => {
     ).catch(res => {
       return res;
     });
-    if (response?.Success && response.RedirectUrl) {
+    if (
+      response?.Success &&
+      response.RedirectUrl &&
+      response.DepositRequestId
+    ) {
+      depositStatus.setDepositId(response.DepositRequestId);
       return !!(window.location.href = response.RedirectUrl);
     }
     if (
@@ -115,10 +123,20 @@ const DepositPage = () => {
       <CustomAlert show={!!apiError} variant="danger">
         {apiError}
       </CustomAlert>
-      {!!bankResponse && (
+      {depositStatus.depositStatus !== DepositStatus.None && (
         <div className="amount-container mb-4">
           <h2 className="amount-container__amount">
-            {t(`deposit_page_${bankResponse.toLocaleLowerCase()}`)}
+            {depositStatus.depositStatus === DepositStatus.Pending && (
+              <Spinner
+                as="span"
+                animation="border"
+                role="status"
+                aria-hidden="true"
+                className="mr-1 mt-1"
+              />
+            )}
+            {depositStatus.message ||
+              t(`deposit_status_${depositStatus.depositStatus}`)}
           </h2>
         </div>
       )}
@@ -145,13 +163,18 @@ const DepositPage = () => {
         } ${user.currency}`}
         header={
           <div className="input-container__header d-flex align-items-center">
-            <img height="45" src={`/assets/images/banks/bancontact.png`} />
+            <img
+              alt="bancontact"
+              height="45"
+              src={`/assets/images/banks/bancontact.png`}
+            />
             <h2 className="ml-3 mb-0">{t('deposit_input_container_title')}</h2>
           </div>
         }
         disabled={
           !bankAccount.hasBankAccount ||
-          user.validator_status === VALIDATOR_STATUS.MAJOR_ERROR
+          user.validator_status === VALIDATOR_STATUS.MAJOR_ERROR ||
+          depositStatus.depositStatus === DepositStatus.Pending
         }
       />
       <div className="details-container mb-4">
