@@ -278,7 +278,7 @@ const KambiSportsbook = () => {
     <>
       <div ref={containerRef} className={clsx(desktopWidth && 'mt-5')} />
       {!context.sportsbookLoaded && (
-        <div style={{ minHeight: 100 }} className="position-relative mt-5">
+        <div className="position-relative mt-5 min-vh-70">
           <div className="position-absolute w-100 d-flex justify-content-center pt-4 pb-3">
             <Spinner animation="border" variant="black" className="mx-auto" />
           </div>
