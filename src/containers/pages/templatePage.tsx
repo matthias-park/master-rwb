@@ -62,7 +62,11 @@ const TemplatePage = () => {
             headerNav.active && 'pt-xl-4',
           )}
         >
-          <Spinner animation="border" variant="black" className="mx-auto mt-5" />
+          <Spinner
+            animation="border"
+            variant="black"
+            className="mx-auto mt-5"
+          />
         </div>
       )}
       {!!data?.Success && (

@@ -14,9 +14,7 @@ const ProtectedRoute = ({ children, redirectTo, ...props }: Props) => {
   const redirectToPath = useRoutePath(REDIRECT_PROTECTED_NOT_LOGGED_IN);
   if (user.loading) {
     return (
-      <div
-        className="w-100 d-flex align-items-center justify-content-center pt-4 pb-3 min-vh-70"
-      >
+      <div className="w-100 d-flex align-items-center justify-content-center pt-4 pb-3 min-vh-70">
         <Spinner animation="border" variant="black" className="mx-auto" />
       </div>
     );

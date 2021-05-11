@@ -122,7 +122,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   }, []);
   useEffect(() => {
     if (constants) {
-      const appLocale = locale || constants.locale;
+      const appLocale = constants.locale;
       const detectedLocale = getWindowUrlLocale();
       const detectedLocaleAvailable =
         detectedLocale?.toLocaleLowerCase() === 'en' ||
@@ -165,7 +165,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     } else if (constantsError) {
       setConfigLoaded(ConfigLoaded.Error);
     }
-  }, [!!constants, !!constantsError]);
+  }, [constants?.locale, !!constantsError]);
 
   const setLocale = (lang: string, setPageLoading = false) => {
     if (setPageLoading) {
