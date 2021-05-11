@@ -1,8 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useI18n } from '../../hooks/useI18n';
 import CustomToggleCheck from '../../components/CustomToggleCheck';
+import Spinner from 'react-bootstrap/Spinner';
+import { useToasts } from 'react-toast-notifications';
+import useApi from '../../hooks/useApi';
+import SettingsForm from '../../components/account-settings/SettingsForm';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
 import HelpBlock from '../../components/HelpBlock';
+import CustomAlert from '../../components/CustomAlert';
 
 interface CommunicationPrefProps {
   id: string;
@@ -43,6 +48,19 @@ const CommunicationPrefCard = ({
 
 const CommunicationPreferencesPage = () => {
   const { t, jsxT } = useI18n();
+  const { addToast } = useToasts();
+  const { data, error, mutate } = useApi<any>(
+    '/railsapi/v1/user/profile/communication_preferences',
+    {
+      onErrorRetry: (error, key) => {
+        addToast(`Failed to fetch user settings`, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+        console.log(error);
+      },
+    },
+  );
   const questionItems = useMemo(
     () => [
       { title: t('deposit_question_1'), body: 'deposit_answer_1' },
@@ -55,10 +73,6 @@ const CommunicationPreferencesPage = () => {
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       <h1>{t('communication_preferences_page_title')}</h1>
       <p className="mb-4">{t('communication_preferences_page_sub_text')}</p>
-      <div className="play-responsible-block mb-3">
-        <i className="icon-thumbs"></i>
-        {jsxT('play_responsible_block_link')}
-      </div>
       <ul className="list-unstyled communication-prefs">
         <CommunicationPrefCard
           id={'1'}

@@ -19,6 +19,12 @@ interface SettingProps {
   id: string;
   fields: SettingsField[];
   action: string;
+  setResponse?: (
+    resp: {
+      success: boolean;
+      msg: string;
+    } | null,
+  ) => void;
 }
 
 const FormsWithUpdateUser = [
@@ -27,13 +33,9 @@ const FormsWithUpdateUser = [
   'permanent_disable',
 ];
 
-const SettingsForm = ({ id, fields, action }: SettingProps) => {
+const SettingsForm = ({ id, fields, action, setResponse }: SettingProps) => {
   const { t } = useI18n();
   const { user, updateUser } = useAuth();
-  const [apiResponse, setApiResponse] = useState<{
-    success: boolean;
-    msg: string;
-  } | null>(null);
   const { addToast } = useToasts();
   const formMethods = useForm<any, any>({
     mode: 'onBlur',
@@ -50,7 +52,7 @@ const SettingsForm = ({ id, fields, action }: SettingProps) => {
       },
     },
   );
-  const { handleSubmit, watch, formState } = formMethods;
+  const { handleSubmit, watch, formState, reset } = formMethods;
   const watchAllFields = watch();
   const visibilityOverrideFields = useMemo(
     () =>
@@ -88,7 +90,7 @@ const SettingsForm = ({ id, fields, action }: SettingProps) => {
     formBody: boolean = false,
     shouldUpdateUser: boolean = false,
   ): Promise<void> => {
-    setApiResponse(null);
+    setResponse && setResponse(null);
     body.authenticity_token = user.token!;
     const res = await postApi<RailsApiResponse<null>>(url, body, {
       formData: formBody,
@@ -101,10 +103,12 @@ const SettingsForm = ({ id, fields, action }: SettingProps) => {
       }
       return res;
     });
-    setApiResponse({
-      success: res.Success,
-      msg: res.Message || t('api_response_failed'),
-    });
+    setResponse &&
+      setResponse({
+        success: res.Success,
+        msg: res.Message || t('api_response_failed'),
+      });
+    res.Success && reset();
     setTimeout(() => mutate(), 1000);
     if (shouldUpdateUser) {
       updateUser();
@@ -128,8 +132,8 @@ const SettingsForm = ({ id, fields, action }: SettingProps) => {
               if (!(field.visible ?? true) && !(visibilityOverride ?? false)) {
                 return null;
               }
-              switch (field.id) {
-                case 'submit_button': {
+              switch (field.type) {
+                case 'submit': {
                   return (
                     <LoadingButton
                       key={field.id}
@@ -169,10 +173,7 @@ const SettingsForm = ({ id, fields, action }: SettingProps) => {
                   );
                 }
                 default: {
-                  const isPassword = [
-                    'new_password',
-                    'new_password_confirmation',
-                  ].includes(field.id);
+                  const isPassword = ['password'].includes(field.type);
                   return (
                     <TextInput
                       id={field.id}
