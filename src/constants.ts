@@ -440,3 +440,9 @@ export const VALIDATIONS = {
     );
   },
 };
+
+export const PAGES_WITH_CAPTCHA_ICON = [
+  PagesName.RegisterPage,
+  PagesName.ContactUsPage,
+  PagesName.ForgotPasswordPage,
+];

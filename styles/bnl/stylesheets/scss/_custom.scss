@@ -41,6 +41,9 @@ body {
           }
       }
     }
+    &:not(.show-captcha) .grecaptcha-badge {
+      visibility: hidden; 
+    }
 }
 
 a:hover {

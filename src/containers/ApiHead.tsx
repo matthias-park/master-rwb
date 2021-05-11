@@ -8,7 +8,8 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { useI18n } from '../hooks/useI18n';
 import useApi from '../hooks/useApi';
 import { usePrevious } from '../hooks';
-import { PagesName } from '../constants';
+import { PagesName, PAGES_WITH_CAPTCHA_ICON } from '../constants';
+import clsx from 'clsx';
 
 const ApiHead = () => {
   const { locales, locale, routes, configLoaded } = useConfig((prev, next) => {
@@ -61,6 +62,12 @@ const ApiHead = () => {
     (pathNameTranslation.length ? ' - ' : '') +
     t('seo_site_name');
   const title = translationsLoaded ? seoData?.title || fallbackTitle : '';
+  const bodyClassName = clsx(
+    PAGES_WITH_CAPTCHA_ICON.includes(
+      pathInfo?.id || prevPathInfo?.id || PagesName.Null,
+    ) && 'show-captcha',
+  );
+
   return (
     <>
       <Helmet
@@ -95,6 +102,7 @@ const ApiHead = () => {
             />
           );
         })}
+        <body className={bodyClassName} />
       </Helmet>
       {!!seoData?.hidden_h1 && (
         <h1 style={{ display: 'none' }}>{seoData.hidden_h1}</h1>
