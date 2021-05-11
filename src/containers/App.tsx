@@ -8,6 +8,7 @@ import { UIConfigProvider } from '../hooks/useUIConfig';
 import { ModalProvider } from '../hooks/useModal';
 import { KambiProvider } from './KambiSportsbook';
 import { useConfig } from '../hooks/useConfig';
+import { CaptchaProvider } from '../hooks/useGoogleRecaptcha';
 
 const App = () => {
   const { locale } = useConfig((prev, next) => !!prev.locale === !!next.locale);
@@ -16,13 +17,15 @@ const App = () => {
     <BrowserRouter key={locale} basename={locale ? `/${locale}` : undefined}>
       <ModalProvider>
         <UIConfigProvider>
-          <KambiProvider>
-            <ApiHead />
-            <Modals />
-            <PageLayout>
-              <Routes />
-            </PageLayout>
-          </KambiProvider>
+          <CaptchaProvider>
+            <KambiProvider>
+              <ApiHead />
+              <Modals />
+              <PageLayout>
+                <Routes />
+              </PageLayout>
+            </KambiProvider>
+          </CaptchaProvider>
         </UIConfigProvider>
       </ModalProvider>
     </BrowserRouter>

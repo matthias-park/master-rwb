@@ -15,6 +15,7 @@ import { REGEX_EXPRESSION, VALIDATIONS } from '../../constants';
 import { isValid as isDateValid } from 'date-fns';
 import dayjs from 'dayjs';
 import { useAuth } from '../../hooks/useAuth';
+import { useCaptcha } from '../../hooks/useGoogleRecaptcha';
 
 const fieldValidations = {
   first_name: (value: string) =>
@@ -32,6 +33,7 @@ const fieldValidations = {
 const ContactUsPage = () => {
   const { t } = useI18n();
   const { user } = useAuth();
+  const getToken = useCaptcha();
   const [submitResponse, setSubmitResponse] = useState<{
     success: boolean;
     msg: string | null;
@@ -77,6 +79,7 @@ const ContactUsPage = () => {
   }, [formMethods.formState.isDirty]);
 
   const onSubmit = async ({ file, phone_number, date_of_birth, ...fields }) => {
+    const captchaToken = await getToken?.('contact_us').catch(() => '');
     if (file?.length) {
       fields.file = file[0];
     }
@@ -89,6 +92,7 @@ const ContactUsPage = () => {
     if (date_of_birth) {
       fields.date_of_birth = dayjs(date_of_birth).format('YYYY-MM-DD');
     }
+    if (captchaToken) fields.captcha_token = captchaToken;
     const response = await postApi<RailsApiResponse<SeoPages>>(
       data!.action,
       fields,

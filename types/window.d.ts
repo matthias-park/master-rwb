@@ -12,6 +12,7 @@ export declare global {
         bootstrap: string;
         api: string;
       };
+      googleRecaptchaKey?: string;
     };
     toast?: AddToast;
     _wbUpdate?: boolean;

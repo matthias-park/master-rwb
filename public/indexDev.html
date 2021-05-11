@@ -16,8 +16,8 @@
       link.href = '/static/css/theme-' + franchise.theme + '.css';
       head.appendChild(link);
       window.__config__ = {
-        apiUrl: '/rails',
-        kambi: franchise.kambi
+        ...franchise,
+        apiUrl: '/rails'
       }
     </script>
     <title></title>

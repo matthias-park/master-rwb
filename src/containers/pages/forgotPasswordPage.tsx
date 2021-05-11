@@ -13,11 +13,13 @@ import LoadingButton from '../../components/LoadingButton';
 import { VALIDATIONS } from '../../constants';
 import TextInput from '../../components/customFormInputs/TextInput';
 import { useAuth } from '../../hooks/useAuth';
+import { useCaptcha } from '../../hooks/useGoogleRecaptcha';
 
 const ForgotPasswordPage = () => {
   const formMethods = useForm({
     mode: 'onBlur',
   });
+  const getToken = useCaptcha();
   const { handleSubmit, formState } = formMethods;
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
@@ -42,11 +44,12 @@ const ForgotPasswordPage = () => {
     sendDataToGTM({
       event: 'LoginPasswordFormSubmit',
     });
+    const captchaToken = await getToken?.('forgot_password').catch(() => '');
+    let form: { [key: string]: string } = { email };
+    if (captchaToken) form.captcha_token = captchaToken;
     const result = await postApi<RailsApiResponse<ForgotPasswordResponse>>(
       '/railsapi/v1/user/login/forgot_password',
-      {
-        email,
-      },
+      form,
     ).catch((res: RailsApiResponse<null>) => {
       if (res.Fallback) {
         addToast('failed to recover password', {

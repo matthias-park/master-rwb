@@ -8,6 +8,7 @@ export interface PostRegistration {
   city: string;
   date_of_birth: string;
   language_id?: number;
+  captcha_token?: string;
 }
 export interface ValidateRegisterInput {
   Exists: boolean;

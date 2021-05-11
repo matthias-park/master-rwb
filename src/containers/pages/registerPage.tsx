@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { forwardRef, useCallback, useMemo } from 'react';
 import HelpBlock from '../../components/HelpBlock';
 import OnlineForm from '../../components/registration/OnlineForm';
 import RegWelcome from '../../components/registration/RegWelcome';
@@ -23,6 +23,7 @@ import { useAuth } from '../../hooks/useAuth';
 import RedirectNotFound from '../../components/RedirectNotFound';
 import { FormProvider, useForm } from 'react-hook-form';
 import RegError from '../../components/registration/RegError';
+import { useCaptcha } from '../../hooks/useGoogleRecaptcha';
 
 const RegistrationReturnCode = {
   '0': 'registerWelcome',
@@ -50,6 +51,7 @@ const RegisterPage = () => {
     return localeEqual && localesEqual && routesEqual;
   });
   const { user, updateUser } = useAuth();
+  const getToken = useCaptcha();
   const sendDataToGTM = useGTM();
   const formMethods = useForm({
     mode: 'onBlur',
@@ -115,6 +117,8 @@ const RegisterPage = () => {
         event: 'RegistrationSubmitted',
       });
       form.language_id = locales.find(lang => lang.iso === locale)?.id;
+      const captchaToken = await getToken?.('registration').catch(() => '');
+      if (captchaToken) form.captcha_token = captchaToken;
       const finalForm = Object.keys(form).reduce((obj, key) => {
         if (
           !key.includes('repeat') &&
