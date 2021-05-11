@@ -686,6 +686,9 @@ a:hover {
       width: calc(100% + 40px) !important;
       right: 20px !important;
     }
+    &-container {
+      overflow-y: hidden !important;
+    }
 }
 
 .sb-hidden {
