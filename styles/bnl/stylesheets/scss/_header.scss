@@ -51,12 +51,14 @@
             top: 0;
             right: -345px;
             width: 100%;
-            min-height: 100vh;
-            max-height: 100vh;
+            height: 100%;
             max-width: 345px;
             background-color: $white;
             transition: right 0.3s;
             z-index: 1100;
+            > * {
+              flex-shrink: 0; 
+            }
             &.show {
                 display: flex;
                 right: 0;
