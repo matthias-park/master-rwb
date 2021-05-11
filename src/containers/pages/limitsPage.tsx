@@ -1,88 +1,125 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useI18n } from '../../hooks/useI18n';
 import Accordion from 'react-bootstrap/Accordion';
 import Spinner from 'react-bootstrap/Spinner';
+import CustomAlert from '../../components/CustomAlert';
 import { useToasts } from 'react-toast-notifications';
 import useApi from '../../hooks/useApi';
 import SettingsForm from '../../components/account-settings/SettingsForm';
 import { SettingsField } from '../../types/api/user/ProfileSettings';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
 import HelpBlock from '../../components/HelpBlock';
+import { useAuth } from '../../hooks/useAuth';
+import dayjs from 'dayjs';
 
 interface LimitProps {
-  id: string;
-  title: string;
-  subText: string;
-  currentLimit: string;
-  usedLimit: string;
-  leftLimit: string;
-  pendingLimit?: string;
-  requestDate?: string;
-  fields: SettingsField[];
-  action: string;
+  limitData: {
+    id: string;
+    title: string;
+    note: string;
+    limit_amount: number;
+    amount_left: number;
+    future_limit_amount: number;
+    future_limit_valid_from: string;
+    fields: SettingsField[];
+    action: string;
+  };
+  mutate: () => void;
 }
 
-const LimitsCard = ({
-  id,
-  title,
-  subText,
-  currentLimit,
-  usedLimit,
-  leftLimit,
-  pendingLimit,
-  requestDate,
-  fields,
-  action,
-}: LimitProps) => {
+const LimitsCard = ({ limitData, mutate }: LimitProps) => {
+  const { t, jsxT } = useI18n();
+  const { user } = useAuth();
+  const [apiResponse, setApiResponse] = useState<{
+    success: boolean;
+    msg: string;
+  } | null>(null);
+
+  useEffect(() => {
+    apiResponse?.success && mutate();
+  }, [apiResponse]);
+
   return (
     <Accordion className="info-container mb-3">
       <div className="info-container__info pt-3">
         <p className="mb-2">
-          <b>{title}</b>
+          <b>{limitData.title}</b>
         </p>
-        <p className="text-14 text-gray-700 pt-1">{subText}</p>
+        <p className="text-14 text-gray-700 pt-1">{limitData.note}</p>
         <Accordion.Toggle
           as="button"
-          eventKey={id}
+          eventKey={limitData.id}
           className="info-container__edit btn btn-light btn-sm px-3"
         >
-          Annuleer
+          {t('limits_edit')}
         </Accordion.Toggle>
       </div>
       <div className="info-container__text">
-        <ul className="list-unstyled mb-0 play-limits">
-          <li className="play-limits__limit">
-            <p className="play-limits__limit-title">currentLimit</p>
-            <p className="play-limits__limit-total text-primary">
-              € {currentLimit}
-            </p>
-          </li>
-          <li className="play-limits__limit">
-            <p className="play-limits__limit-title">usedLimit</p>
-            <p className="play-limits__limit-total">€ {usedLimit}</p>
-          </li>
-          <li className="play-limits__limit">
-            <p className="play-limits__limit-title">leftLimit</p>
-            <p className="play-limits__limit-total">€ {leftLimit}</p>
-          </li>
-        </ul>
-        {pendingLimit && requestDate && (
+        {limitData.limit_amount ? (
+          <ul className="list-unstyled mb-0 play-limits">
+            <li className="play-limits__limit">
+              <p className="play-limits__limit-title">{t('current_limit')}</p>
+              <p className="play-limits__limit-total text-primary">
+                {user.currency} {limitData.limit_amount}
+              </p>
+            </li>
+            <li className="play-limits__limit">
+              <p className="play-limits__limit-title">{t('used_limit')}</p>
+              <p className="play-limits__limit-total">
+                {user.currency} {limitData.limit_amount - limitData.amount_left}
+              </p>
+            </li>
+            <li className="play-limits__limit">
+              <p className="play-limits__limit-title">{t('left_limit')}</p>
+              <p className="play-limits__limit-total">
+                {user.currency} {limitData.amount_left}
+              </p>
+            </li>
+          </ul>
+        ) : (
+          <p className="text-gray-400 mb-0">{t('limit_unset')}</p>
+        )}
+        {limitData.future_limit_amount && limitData.future_limit_valid_from && (
           <>
             <hr className="mt-2 mb-3"></hr>
             <p className="text-14 text-gray-800 mb-2">
-              <b>Je limietwijziging wordt verwerkt</b>
+              <b>{t('future_limit_title')}</b>
             </p>
             <p className="text-14 text-gray-400 mb-2">
-              Je gevraagde limiet:{' '}
-              <b className="text-gray-800">€ {pendingLimit}</b>
+              {t('future_limit_amount')}:&nbsp;
+              <b className="text-gray-800">
+                {user.currency} {limitData.future_limit_amount}
+              </b>
             </p>
-            <p className="text-14 text-gray-400">
-              Gaat in op: <b className="text-gray-800">{requestDate}</b>
+            <p className="text-14 text-gray-400 mb-0">
+              {t('future_limit_valid_from')}:&nbsp;
+              <b className="text-gray-800">
+                {dayjs(new Date(limitData.future_limit_valid_from)).format(
+                  'YYYY-MM-DD',
+                )}
+              </b>
             </p>
           </>
         )}
-        <Accordion.Collapse eventKey={id}>
-          <SettingsForm id={id} fields={fields} action={action} />
+        <Accordion.Collapse eventKey={limitData.id}>
+          <>
+            <hr className="pt-1 mb-0"></hr>
+            <CustomAlert
+              show={!!apiResponse}
+              variant={apiResponse?.success ? 'success' : 'danger'}
+              className="mb-0 mt-2"
+            >
+              <div
+                dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }}
+              />
+            </CustomAlert>
+            <SettingsForm
+              id={limitData.id}
+              fields={limitData.fields}
+              action={limitData.action}
+              setResponse={setApiResponse}
+            />
+          </>
         </Accordion.Collapse>
       </div>
     </Accordion>
@@ -137,16 +174,8 @@ const LimitsPage = () => {
           {Object.keys(data).map(limit => (
             <LimitsCard
               key={data[limit].id}
-              id={data[limit].id}
-              title={data[limit].title}
-              subText={data[limit].note}
-              currentLimit="300"
-              usedLimit="50"
-              leftLimit="250"
-              pendingLimit={'500'}
-              requestDate={'11 augustus 2020 – 12.16 u'}
-              fields={data[limit].fields}
-              action={data[limit].action}
+              limitData={data[limit]}
+              mutate={mutate}
             />
           ))}
         </>

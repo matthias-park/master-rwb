@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useI18n } from '../../hooks/useI18n';
 import Spinner from 'react-bootstrap/Spinner';
 import { useToasts } from 'react-toast-notifications';
@@ -6,6 +6,7 @@ import useApi from '../../hooks/useApi';
 import SettingsForm from '../../components/account-settings/SettingsForm';
 import QuestionsContainer from '../../components/account-settings/QuestionsContainer';
 import HelpBlock from '../../components/HelpBlock';
+import CustomAlert from '../../components/CustomAlert';
 
 const ChangePasswordPage = () => {
   const { t, jsxT } = useI18n();
@@ -22,6 +23,10 @@ const ChangePasswordPage = () => {
       },
     },
   );
+  const [apiResponse, setApiResponse] = useState<{
+    success: boolean;
+    msg: string;
+  } | null>(null);
   const isDataLoading = !data && !error;
   const questionItems = useMemo(
     () => [
@@ -35,10 +40,6 @@ const ChangePasswordPage = () => {
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       <h1>{t('change_password_page_title')}</h1>
       <p className="mb-4">{t('change_password_sub_text')}</p>
-      <div className="play-responsible-block mb-3">
-        <i className="icon-thumbs"></i>
-        {jsxT('play_responsible_block_link')}
-      </div>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />
@@ -46,11 +47,18 @@ const ChangePasswordPage = () => {
       )}
       {!!data && (
         <div className="change-pw">
+          <CustomAlert
+            show={!!apiResponse}
+            variant={apiResponse?.success ? 'success' : 'danger'}
+          >
+            <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />
+          </CustomAlert>
           <p className="change-pw__title">{data.title}</p>
           <SettingsForm
             id={data.id}
             fields={data.fields}
             action={data.action}
+            setResponse={setApiResponse}
           />
         </div>
       )}
