@@ -30,7 +30,9 @@ const useConstants = () => {
       initialData: cache,
       revalidateOnMount: true,
       onSuccess: data => {
-        if (data.Success && data.Data.locale) setCache(data);
+        if (data.Success && data.Data.locale) {
+          setCache({ ...data, Data: { ...data.Data, cached: true } });
+        }
       },
       onErrorRetry: (err: RailsApiResponse<null>) => [
         addToast('Failed to get page config', {
@@ -108,7 +110,6 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     'locale',
     null,
   );
-  const [locale, changeLocale] = useState(constants?.locale || '');
   const [configLoaded, setConfigLoaded] = useState(ConfigLoaded.Loading);
   const [cookies, setCookies] = useLocalStorage<Cookies>(
     'cookieSettings',
@@ -122,42 +123,33 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
   }, []);
   useEffect(() => {
     if (constants) {
-      const appLocale = constants.locale;
+      const setApiLocale = async (lang: string) => {
+        if (!window.PRERENDER_CACHE) {
+          await postApi('/railsapi/v1/locale', {
+            locale: lang,
+          }).then(() => {
+            updateConstants();
+          });
+        }
+      };
       const detectedLocale = getWindowUrlLocale();
       const detectedLocaleAvailable =
         detectedLocale?.toLocaleLowerCase() === 'en' ||
         (detectedLocale &&
           locales.includes(detectedLocale.toLocaleLowerCase()));
-      if (!appLocale && cachedLocale) {
-        (async () => {
-          if (!window.PRERENDER_CACHE) {
-            await postApi('/railsapi/v1/locale', {
-              locale: cachedLocale,
-            }).then(() => {
-              updateConstants();
-            });
-          }
-          setLocale(cachedLocale);
-        })();
-      } else if (
-        appLocale &&
-        detectedLocaleAvailable &&
-        appLocale !== detectedLocale &&
-        !!cachedLocale
-      ) {
-        (async () => {
-          if (!window.PRERENDER_CACHE && detectedLocaleAvailable) {
-            await postApi('/railsapi/v1/locale', {
-              locale: detectedLocale!,
-            }).then(() => {
-              updateConstants();
-            });
-          }
-          setLocale(detectedLocaleAvailable ? detectedLocale! : appLocale!);
-        })();
-      } else {
-        if (appLocale && (locale !== appLocale || !detectedLocale)) {
-          setLocale(appLocale);
+      let newLocale: string | null = null;
+      if (!constants.locale && cachedLocale) {
+        newLocale = cachedLocale;
+      }
+      if (detectedLocaleAvailable && constants.locale !== detectedLocale) {
+        newLocale = detectedLocale;
+      }
+      if (newLocale && !constants.cached) {
+        setLocale(newLocale);
+        setApiLocale(newLocale);
+      } else if (!newLocale && configLoaded !== ConfigLoaded.Loaded) {
+        if (!detectedLocale && constants.locale) {
+          setLocale(constants.locale);
         } else {
           setConfigLoaded(ConfigLoaded.Loaded);
         }
@@ -165,7 +157,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     } else if (constantsError) {
       setConfigLoaded(ConfigLoaded.Error);
     }
-  }, [constants?.locale, !!constantsError]);
+  }, [constants?.locale, constants?.cached, !!constantsError]);
 
   const setLocale = (lang: string, setPageLoading = false) => {
     if (setPageLoading) {
@@ -175,13 +167,13 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     if (lang !== constants?.locale) {
       clearConstantsCache();
     }
-    changeLocale(lang);
+    // changeLocale(lang);
     setLocalePathname(lang);
     setCachedLocale(lang);
     setConfigLoaded(ConfigLoaded.Loaded);
   };
   const value: Config = {
-    locale,
+    locale: cachedLocale || '',
     setLocale,
     locales: constants?.available_locales || [],
     routes:

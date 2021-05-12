@@ -20,9 +20,9 @@ const addBankAccountSubmit = async data => {
 };
 
 const Modals = () => {
-  const { table } = useI18n();
+  const { hasTranslations } = useI18n();
   const { activeModal } = useModal();
-  if (!Object.keys(table()).length) {
+  if (!hasTranslations) {
     return null;
   }
   return (

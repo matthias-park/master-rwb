@@ -10,6 +10,7 @@ import useApi from '../hooks/useApi';
 import { usePrevious } from '../hooks';
 import { PagesName, PAGES_WITH_CAPTCHA_ICON } from '../constants';
 import clsx from 'clsx';
+import { ConfigLoaded } from '../types/Config';
 
 const ApiHead = () => {
   const { locales, locale, routes, configLoaded } = useConfig((prev, next) => {
@@ -19,7 +20,7 @@ const ApiHead = () => {
     const configLoadedEqual = prev.configLoaded === next.configLoaded;
     return localeEqual && localesEqual && routesEqual && configLoadedEqual;
   });
-  const { t, table } = useI18n();
+  const { t, hasTranslations } = useI18n();
   const { pathname, hash } = useLocation();
   const pathInfo = useMemo(() => {
     let pathRoute = routes.find(route => {
@@ -44,24 +45,32 @@ const ApiHead = () => {
     [pathname, locale],
   );
   const { data } = useApi<RailsApiResponse<SeoPages>>(
-    configLoaded ? ['/railsapi/v1/content/seo_pages', params] : null,
+    configLoaded === ConfigLoaded.Loaded
+      ? ['/railsapi/v1/content/seo_pages', params]
+      : null,
     postApi,
     {
       errorRetryCount: 0,
     },
   );
+
+  if (configLoaded !== ConfigLoaded.Loaded) {
+    return null;
+  }
+
   const seoData = data?.Success ? data?.Data : null;
-  const translationsLoaded = !!Object.keys(table()).length;
   const pathName = pathInfo?.name || prevPathInfo?.name || '';
   const pathNameTranslation =
     (pathInfo?.id || prevPathInfo?.id) === PagesName.TemplatePage
       ? pathName
-      : t(`sitemap_${pathName}`);
+      : pathName
+      ? t(`sitemap_${pathName}`)
+      : '';
   const fallbackTitle =
     pathNameTranslation +
     (pathNameTranslation.length ? ' - ' : '') +
     t('seo_site_name');
-  const title = translationsLoaded ? seoData?.title || fallbackTitle : '';
+  const title = hasTranslations ? seoData?.title || fallbackTitle : '';
   const bodyClassName = clsx(
     PAGES_WITH_CAPTCHA_ICON.includes(
       pathInfo?.id || prevPathInfo?.id || PagesName.Null,

@@ -9,6 +9,7 @@ export interface PageConfig {
   help_block: PagesName[];
   locale: string | null;
   content_pages: { [key: string]: string };
+  cached?: boolean;
 }
 
 export interface Sidebar {

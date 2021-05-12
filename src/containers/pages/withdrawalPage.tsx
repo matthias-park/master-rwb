@@ -108,8 +108,7 @@ const WithdrawalRequests = ({
 };
 
 const WithdrawalPage = () => {
-  const { t, set } = useI18n();
-  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const { t, addSymbols } = useI18n();
   const { user, updateUser } = useAuth();
   const { addToast } = useToasts();
   const { enableModal, allActiveModals } = useModal();
@@ -151,8 +150,7 @@ const WithdrawalPage = () => {
   }, [allActiveModals]);
   useEffect(() => {
     if (data?.Data.translations) {
-      set(
-        locale,
+      addSymbols(
         Object.keys(data.Data.translations).reduce((obj, key) => {
           obj[`withdrawal_page_${key}`] = data.Data.translations![key];
           return obj;

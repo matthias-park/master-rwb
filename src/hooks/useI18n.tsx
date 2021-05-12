@@ -5,7 +5,7 @@ import React, {
   useEffect,
   ReactNode,
 } from 'react';
-import i18n, { I18n } from '../utils/i18n';
+import i18n, { I18n, Symbols } from '../utils/i18n';
 import { TestEnv } from '../constants';
 import { useConfig } from './useConfig';
 import { useToasts } from 'react-toast-notifications';
@@ -28,10 +28,8 @@ export type I18nProviderProps = {
   children?: ReactNode;
 };
 
-const createLocale = (locale = 'en', data: unknown) => {
-  const current = i18n();
-  current.set(locale, data);
-  current.locale(locale);
+const createLocale = (locale = 'en', data: any) => {
+  const current = i18n(locale, data);
   return current;
 };
 interface Translations {
@@ -86,7 +84,7 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   }, []);
 
   const [translations, setTranslations] = useState(() =>
-    createLocale(locale, data?.Data),
+    i18n(locale, data?.Data),
   );
 
   useEffect(() => {
@@ -96,8 +94,14 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   }, [locale]);
 
   useEffect(() => {
-    setTranslations(createLocale(locale, data?.Data));
-  }, [data?.Data]);
+    setTranslations(i18n(locale, data?.Data));
+  }, [locale, data?.Data]);
 
-  return <I18nContext.Provider value={translations} {...props} />;
+  const addSymbols = (data: Symbols) => {
+    setTranslations(i18n(locale, { ...translations.symbols, ...data }));
+  };
+
+  return (
+    <I18nContext.Provider value={{ ...translations, addSymbols }} {...props} />
+  );
 };

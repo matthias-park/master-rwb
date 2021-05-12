@@ -4,17 +4,9 @@ import 'react-app-polyfill/stable';
 
 import * as ReactDOM from 'react-dom';
 import App from './containers/App';
-import { HelmetProvider } from 'react-helmet-async';
-import { ConfigProvider } from './hooks/useConfig';
-import { I18nProvider } from './hooks/useI18n';
-import { SWRConfig } from 'swr';
-import { SwrFetcherConfig } from './utils/apiUtils';
-import { ToastProvider } from 'react-toast-notifications';
-import { GtmProvider } from './hooks/useGTM';
 import * as Sentry from '@sentry/react';
 import { Workbox } from 'workbox-window';
 import Lockr from 'lockr';
-import { AuthProvider } from './hooks/useAuth';
 
 if (process.env.TARGET_ENV !== 'development' && window.__config__.sentryDsn) {
   Sentry.init({
@@ -25,23 +17,9 @@ if (process.env.TARGET_ENV !== 'development' && window.__config__.sentryDsn) {
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(
-  <SWRConfig value={SwrFetcherConfig}>
-    <ToastProvider>
-      <ConfigProvider>
-        <I18nProvider>
-          <GtmProvider>
-            <AuthProvider>
-              <HelmetProvider>
-                <React.StrictMode>
-                  <App />
-                </React.StrictMode>
-              </HelmetProvider>
-            </AuthProvider>
-          </GtmProvider>
-        </I18nProvider>
-      </ConfigProvider>
-    </ToastProvider>
-  </SWRConfig>,
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
   MOUNT_NODE,
 );
 

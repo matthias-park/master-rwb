@@ -1,33 +1,22 @@
 import { replaceStringTagsReact } from './reactUtils';
 import { ALL_LOCALES } from '../constants';
 
-type Symbols = { [key: string]: { [key: string]: string } };
+export type Symbols = { [key: string]: string };
 
-const i18n = () => {
-  let locale = '';
-  const symbols: Symbols = {};
-
+const i18n = (lang: string, data: Symbols = {}) => {
   return {
-    set(lang: string, data: unknown = {}) {
-      symbols[lang] = Object.assign(symbols[lang || locale] || {}, data);
-    },
-
-    locale(lang?: string) {
-      return (locale = lang || locale);
-    },
-
-    table(lang?: string) {
-      return symbols[lang || locale];
-    },
-
-    t(key: string, lang?: string) {
-      const val = symbols?.[lang || locale]?.[key] || `missing symbol: ${key}`;
+    locale: lang,
+    hasTranslations: !!Object.keys(data).length,
+    symbols: data,
+    t(key: string) {
+      const val = data[key] || `missing symbol: ${key}`;
       return val;
     },
-    jsxT(key: string, lang?: string) {
-      const val = symbols?.[lang || locale]?.[key] || `missing symbol: ${key}`;
+    jsxT(key: string) {
+      const val = data[key] || `missing symbol: ${key}`;
       return replaceStringTagsReact(val);
     },
+    addSymbols(data: Symbols) {},
   };
 };
 
