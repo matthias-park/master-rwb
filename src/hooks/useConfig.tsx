@@ -144,6 +144,9 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
       if (detectedLocaleAvailable && constants.locale !== detectedLocale) {
         newLocale = detectedLocale;
       }
+      if (!cachedLocale && !newLocale && constants.locale) {
+        newLocale = constants.locale;
+      }
       if (newLocale && !constants.cached) {
         setLocale(newLocale);
         setApiLocale(newLocale);
