@@ -26,6 +26,7 @@ interface SettingProps {
       msg: string;
     } | null,
   ) => void;
+  mutateData?: () => void;
 }
 
 const FormsWithUpdateUser = [
@@ -40,6 +41,7 @@ const SettingsForm = ({
   action,
   setResponse,
   fixedData,
+  mutateData,
 }: SettingProps) => {
   const { t } = useI18n();
   const { user, updateUser } = useAuth();
@@ -47,18 +49,6 @@ const SettingsForm = ({
   const formMethods = useForm<any, any>({
     mode: 'onBlur',
   });
-  const { data, error, mutate } = useApi<ProfileSettings>(
-    '/railsapi/v1/user/profile',
-    {
-      onErrorRetry: (error, key) => {
-        addToast(`Failed to fetch user settings`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-        console.log(error);
-      },
-    },
-  );
   const { handleSubmit, watch, formState, reset } = formMethods;
   const watchAllFields = watch(
     fields
@@ -126,7 +116,7 @@ const SettingsForm = ({
         msg: res.Message || t('api_response_failed'),
       });
     res.Success && reset();
-    setTimeout(() => mutate(), 1000);
+    mutateData && setTimeout(() => mutateData(), 1000);
     if (shouldUpdateUser) {
       updateUser();
     }
@@ -191,27 +181,33 @@ const SettingsForm = ({
                 }
                 default: {
                   const isPassword = ['password'].includes(field.type);
+                  const isNewPassword = [
+                    'new_password',
+                    'new_password_confirmation',
+                  ].includes(field.id);
                   return (
                     <TextInput
                       id={field.id}
-                      rules={{
-                        required: `${field.title} ${t(
-                          'settings_field_required',
-                        )}`,
-                        validate: value => {
-                          if (isPassword)
-                            return (
-                              VALIDATIONS.passwordMixOfThree(value) ||
-                              t('register_password_weak')
-                            );
-                          if (field.id === 'phone_number')
-                            return (
-                              VALIDATIONS.phone(value) ||
-                              t('phone_number_invalid')
-                            );
-                          return true;
-                        },
-                      }}
+                      rules={
+                        !field.disabled && {
+                          required: `${field.title} ${t(
+                            'settings_field_required',
+                          )}`,
+                          validate: value => {
+                            if (isNewPassword)
+                              return (
+                                VALIDATIONS.passwordMixOfThree(value) ||
+                                t('register_password_weak')
+                              );
+                            if (field.id === 'phone_number')
+                              return (
+                                VALIDATIONS.phone(value) ||
+                                t('phone_number_invalid')
+                              );
+                            return true;
+                          },
+                        }
+                      }
                       defaultValue={field.default}
                       disabled={field.disabled}
                       title={field.title}

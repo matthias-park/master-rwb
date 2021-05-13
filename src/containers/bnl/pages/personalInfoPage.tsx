@@ -32,10 +32,6 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
     msg: string;
   } | null>(null);
 
-  useEffect(() => {
-    apiResponse?.success && mutate();
-  }, [apiResponse]);
-
   return (
     <Accordion className="info-container mb-3">
       <div className="info-container__info pt-3">
@@ -90,6 +86,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
                 fields={fields}
                 action={action}
                 setResponse={setApiResponse}
+                mutateData={mutate}
               />
             </>
           </Accordion.Collapse>
