@@ -73,7 +73,7 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
         autoDismiss: true,
       });
     }
-    if ((!prevUser || prevUser.logged_in) && !user.logged_in) {
+    if ((!prevUser || prevUser.logged_in) && !user.logged_in && !user.loading) {
       clearUserLocalStorage();
     }
     sendDataToGTM({
