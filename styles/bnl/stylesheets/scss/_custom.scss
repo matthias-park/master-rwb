@@ -366,11 +366,14 @@ a:hover {
     justify-content: flex-end;
     align-items: center;
     align-content: center;
+    flex-direction: column;
     @include media-breakpoint-up(sm) {
       margin-left: auto;
       padding-left: 30px;
+      flex-direction: row;
     }
     .btn.btn-sm {
+      display: inline-block;
       min-width: 100%;
       padding-top: 6px;
       padding-bottom: 6px;
