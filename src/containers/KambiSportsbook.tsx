@@ -261,7 +261,10 @@ const KambiSportsbook = () => {
           const kambiContainer = document.createElement('div');
           kambiContainer.id = 'KambiBC';
           kambiContainer.classList.add('kambiHidden');
-          containerRef.current?.after(kambiContainer);
+          containerRef.current?.parentNode?.insertBefore(
+            kambiContainer,
+            containerRef.current.nextSibling,
+          );
           updateWindowKambiConfig(kambiConfig);
           insertKambiBootstrap().then(() => {
             context.setSportsbookLoaded(true);
@@ -269,7 +272,10 @@ const KambiSportsbook = () => {
         });
       } else {
         const kambiContainer = document.getElementById(kambiId);
-        containerRef.current?.after(kambiContainer as Node);
+        containerRef.current?.parentNode?.insertBefore(
+          kambiContainer as Node,
+          containerRef.current.nextSibling,
+        );
       }
     }
   }, [user, containerRef.current]);
