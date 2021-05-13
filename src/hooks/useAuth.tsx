@@ -9,6 +9,7 @@ import { usePrevious } from '.';
 import useGTM from './useGTM';
 import { useConfig } from './useConfig';
 import { isMobile } from 'react-device-detect';
+import { clearUserLocalStorage } from '../utils/';
 
 export interface UserAuth {
   user: UserStatus;
@@ -41,20 +42,17 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { data, error, mutate } = useApi<UserStatus | null>(
     !TestEnv ? '/railsapi/v1/user/status' : null,
-    url => getApi<RailsApiResponse<UserStatus>>(url).then(res => res.Data),
+    url =>
+      getApi<RailsApiResponse<UserStatus>>(url).then(res => {
+        if (!res.Success) throw new Error('not logged in');
+        return res.Data;
+      }),
     {
       revalidateOnFocus: true,
       refreshInterval: 300000, // 5 min
-      // onErrorRetry: (err: RailsApiResponse<null>) => {
-      //   if (err.Code !== 401) {
-      //     addToast(`Failed to fetch user data`, {
-      //       appearance: 'error',
-      //       autoDismiss: true,
-      //     });
-      //   } else {
-      //     return;
-      //   }
-      // },
+      onErrorRetry: () => {
+        return;
+      },
     },
   );
 
@@ -74,6 +72,9 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
         appearance: 'warning',
         autoDismiss: true,
       });
+    }
+    if ((!prevUser || prevUser.logged_in) && !user.logged_in) {
+      clearUserLocalStorage();
     }
     sendDataToGTM({
       'tglab.user.LoginStatus': user.logged_in ? 'LoggedIn' : 'LoggedIout',

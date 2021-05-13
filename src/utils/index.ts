@@ -65,3 +65,10 @@ export const formatNavigationRoutes = (constants: PageConfig) => {
     sortDescending(a.path.length, b.path.length),
   );
 };
+
+export const clearUserLocalStorage = () => {
+  const keys = ['transactions-date-to', 'transactions-date-from'];
+  for (const key of keys) {
+    localStorage.removeItem(key);
+  }
+};
