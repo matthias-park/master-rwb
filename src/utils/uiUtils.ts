@@ -126,7 +126,12 @@ export const makeCollapsible = (
 
 export const removePageLoadingSpinner = () => {
   const spinnerEl = document.getElementById('page-loading-spinner');
-  spinnerEl?.remove();
+  if (!spinnerEl) return;
+  if (typeof spinnerEl.remove == 'function') {
+    spinnerEl.remove();
+  } else {
+    spinnerEl.outerHTML = '';
+  }
 };
 
 export const setPageLoadingSpinner = () => {

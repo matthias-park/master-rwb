@@ -135,11 +135,15 @@
   },
   "browserslist": {
     "production": [
+      "IE 11",
+      "ios >= 7",
       ">0.2%",
       "not dead",
       "not op_mini all"
     ],
     "stage": [
+      "IE 11",
+      "ios >= 7",
       ">0.2%",
       "not dead",
       "not op_mini all"

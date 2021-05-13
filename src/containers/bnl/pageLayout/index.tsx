@@ -61,7 +61,7 @@ const PageLayout = ({ children }) => {
         event: 'VirtualPageView',
       });
     }
-    if (prevPathname)
+    if (prevPathname && window.scrollY)
       sessionStorage.setItem(
         `route-${prevPathname}`,
         window.scrollY.toString(),

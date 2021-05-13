@@ -8,17 +8,21 @@
     <script>
       var franchises = JSON.parse('<%= htmlWebpackPlugin.options.franchises %>');
       var domain = window.location.hostname;
-      var franchise = franchises.find(fr => fr.domain === domain);
+      var franchise = franchises.filter(function (x) {
+         return x.domain === domain
+    })[0];
       var head = document.head;
       var link = document.createElement("link");
       link.type = "text/css";
       link.rel = "stylesheet";
       link.href = '/static/css/theme-' + franchise.theme + '.css';
       head.appendChild(link);
-      window.__config__ = {
-        ...franchise,
-        apiUrl: '/rails'
-      }
+      window.__config__ = [franchise, {apiUrl: '/rails'}].reduce(function (r, o) {
+        Object.keys(o).forEach(function (k) {
+            r[k] = o[k];
+        });
+        return r;
+    }, {});
     </script>
     <title></title>
   </head>
