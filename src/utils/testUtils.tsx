@@ -6,7 +6,6 @@ import { ToastProvider } from 'react-toast-notifications';
 import { ConfigProvider } from '../hooks/useConfig';
 import { I18nProvider } from '../hooks/useI18n';
 import { HelmetProvider } from 'react-helmet-async';
-import { UIConfigProvider } from '../hooks/useUIConfig';
 
 const AllTheProviders = ({ children }) => {
   return (

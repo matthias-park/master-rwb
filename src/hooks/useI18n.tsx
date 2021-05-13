@@ -28,10 +28,6 @@ export type I18nProviderProps = {
   children?: ReactNode;
 };
 
-const createLocale = (locale = 'en', data: any) => {
-  const current = i18n(locale, data);
-  return current;
-};
 interface Translations {
   [key: string]: string;
 }

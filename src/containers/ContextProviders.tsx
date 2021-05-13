@@ -55,7 +55,7 @@ const ContextProviders = ({ children }: Props) => {
     ModalProvider,
     UIConfigProvider,
     CaptchaProvider,
-    KambiProvider,
+    !!window.__config__.kambi && KambiProvider,
   ];
 
   return (

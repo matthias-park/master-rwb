@@ -1,18 +1,25 @@
+import loadable from '@loadable/component';
 import React from 'react';
-import Routes from './pages';
 import ApiHead from './ApiHead';
-import PageLayout from './pageLayout';
-import Modals from './Modals';
 import ContextProviders from './ContextProviders';
 
+const AsyncFranchise = (name: string) =>
+  loadable(() =>
+    import(`./${name}`).catch(() => {
+      window.location.reload();
+      return 'div';
+    }),
+  );
+
 const App = () => {
+  const franchiseName = window.__config__.name;
+  const FranchiseIndex = franchiseName
+    ? AsyncFranchise(window.__config__.name)
+    : 'div';
   return (
     <ContextProviders>
       <ApiHead />
-      <Modals />
-      <PageLayout>
-        <Routes />
-      </PageLayout>
+      <FranchiseIndex />
     </ContextProviders>
   );
 };

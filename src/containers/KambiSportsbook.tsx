@@ -251,7 +251,7 @@ const KambiSportsbook = () => {
   const desktopWidth = useDesktopWidth(1199);
 
   useEffect(() => {
-    if (!user.loading) {
+    if (!user.loading && containerRef.current) {
       if (!context.api && !document.getElementById(kambiId)) {
         getSBParams(locale, user.id?.toString()).then(kambiConfig => {
           setCustomerSettings({
@@ -272,7 +272,7 @@ const KambiSportsbook = () => {
         containerRef.current?.after(kambiContainer as Node);
       }
     }
-  }, [user]);
+  }, [user, containerRef.current]);
 
   return (
     <>

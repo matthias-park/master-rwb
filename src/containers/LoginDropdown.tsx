@@ -4,7 +4,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { ComponentName, FormFieldValidation, PagesName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
 import { useLocation } from 'react-router-dom';
-import CustomAlert from '../components/CustomAlert';
+import CustomAlert from './bnl/components/CustomAlert';
 import { Spinner, OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
 import { useRoutePath } from '../hooks/index';
 import useGTM from '../hooks/useGTM';
