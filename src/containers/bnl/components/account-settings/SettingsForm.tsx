@@ -30,6 +30,7 @@ interface SettingProps {
 }
 
 const FormsWithUpdateUser = [
+  'deposit_limit',
   'disable_player',
   'disable_player_time_out',
   'permanent_disable',
