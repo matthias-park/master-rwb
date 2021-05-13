@@ -19,6 +19,7 @@ interface SettingProps {
   id: string;
   fields: SettingsField[];
   action: string;
+  fixedData?: { id: string; value: number | string | undefined }[];
   setResponse?: (
     resp: {
       success: boolean;
@@ -33,7 +34,13 @@ const FormsWithUpdateUser = [
   'permanent_disable',
 ];
 
-const SettingsForm = ({ id, fields, action, setResponse }: SettingProps) => {
+const SettingsForm = ({
+  id,
+  fields,
+  action,
+  setResponse,
+  fixedData,
+}: SettingProps) => {
   const { t } = useI18n();
   const { user, updateUser } = useAuth();
   const { addToast } = useToasts();
@@ -53,7 +60,11 @@ const SettingsForm = ({ id, fields, action, setResponse }: SettingProps) => {
     },
   );
   const { handleSubmit, watch, formState, reset } = formMethods;
-  const watchAllFields = watch();
+  const watchAllFields = watch(
+    fields
+      .filter(item => !item.disabled && item.type !== 'submit')
+      .map(field => field.id),
+  );
   const visibilityOverrideFields = useMemo(
     () =>
       fields
@@ -79,6 +90,7 @@ const SettingsForm = ({ id, fields, action, setResponse }: SettingProps) => {
         }, {}),
     [fields],
   );
+
   const updateSettingsSubmit = useCallback(
     data => onSubmit(action, data, false, FormsWithUpdateUser.includes(id)),
     [],
@@ -92,6 +104,11 @@ const SettingsForm = ({ id, fields, action, setResponse }: SettingProps) => {
   ): Promise<void> => {
     setResponse && setResponse(null);
     body.authenticity_token = user.token!;
+    fixedData?.forEach(item => {
+      if (item.id && item.value) {
+        body[item.id] = item.value?.toString();
+      }
+    });
     const res = await postApi<RailsApiResponse<null>>(url, body, {
       formData: formBody,
     }).catch((res: RailsApiResponse<null>) => {
