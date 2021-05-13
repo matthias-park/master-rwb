@@ -148,8 +148,10 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
         newLocale = constants.locale;
       }
       if (newLocale && !constants.cached) {
-        setLocale(newLocale);
-        setApiLocale(newLocale);
+        (async () => {
+          await setApiLocale(newLocale);
+          setLocale(newLocale);
+        })();
       } else if (!newLocale && configLoaded !== ConfigLoaded.Loaded) {
         if (!detectedLocale && constants.locale) {
           setLocale(constants.locale);

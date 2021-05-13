@@ -107,7 +107,7 @@ const WithdrawalRequests = ({
 };
 
 const WithdrawalPage = () => {
-  const { t, addSymbols } = useI18n();
+  const { t } = useI18n();
   const { user, updateUser } = useAuth();
   const { addToast } = useToasts();
   const { enableModal, allActiveModals } = useModal();
@@ -147,16 +147,7 @@ const WithdrawalPage = () => {
       mutate();
     }
   }, [allActiveModals]);
-  useEffect(() => {
-    if (data?.Data.translations) {
-      addSymbols(
-        Object.keys(data.Data.translations).reduce((obj, key) => {
-          obj[`withdrawal_page_${key}`] = data.Data.translations![key];
-          return obj;
-        }, {}),
-      );
-    }
-  }, [data]);
+
   const cancelRequest = useCallback(
     async (id: number): Promise<void> => {
       const response = await postApi<RailsApiResponse<null>>(
@@ -294,16 +285,13 @@ const WithdrawalPage = () => {
           />
           {!!data.Data.default_account && (
             <div className="info-container mb-4">
-              {/* <p className="info-container__info pb-0 mb-n1">
-              <strong>Your bank account number</strong>
-            </p> */}
               <p
                 className="info-container__info text-14 mb-0"
                 dangerouslySetInnerHTML={{ __html: data.Data.info }}
               />
               <div className="info-container__text">
                 <ul className="list-unstyled mb-0">
-                  <li className="mb-1">Your current bank account number:</li>
+                  <li className="mb-1">{t('withdrawal_bank_account')}</li>
                   <li className="mb-1">{data.Data.default_account.account}</li>
                 </ul>
               </div>
