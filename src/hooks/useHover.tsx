@@ -7,6 +7,11 @@ const useHover = (ref: RefObject<Element>, enabled: boolean = true) => {
     }
   }
   const [value, setValue] = useState(false);
+
+  if (value && ref.current && ref.current.matches(':hover') === false) {
+    setValue(false);
+  }
+
   useEffect(() => {
     const onMouseOver = () => setValue(true);
     const onMouseOut = () => setValue(false);
