@@ -356,26 +356,34 @@ a:hover {
     }
     @include media-breakpoint-down(xs) {
       margin-left: 35px;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
   }
   &__buttons {
-    margin-left: 30px;
-    flex-grow: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 185px);
-    justify-content: end;
+    margin-left: 35px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
     align-content: center;
-    grid-gap: 10px;
-    @include media-breakpoint-down(xs) {
-      margin-left: 35px;
-      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+    flex-direction: column;
+    @include media-breakpoint-up(sm) {
+      margin-left: auto;
+      padding-left: 30px;
+      flex-direction: row;
     }
     .btn.btn-sm {
+      display: inline-block;
+      min-width: 100%;
       padding-top: 6px;
       padding-bottom: 6px;
+      margin: 5px 0;
       max-height: 34px;
       white-space: nowrap;
+      @include media-breakpoint-up(sm) {
+        min-width: 185px;
+        margin-right: 10px;
+      }
     }
   }
 }

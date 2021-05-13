@@ -33,8 +33,10 @@
         }
         &-form {
             border-bottom: 1px solid $gray-100;
-            .form-control {
-              font-size: 16px;
+            @supports (-webkit-touch-callout: none) {
+              .form-control {
+                font-size: 16px;
+              }
             }
         }
         &-link {

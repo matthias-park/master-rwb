@@ -34,6 +34,11 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
     success: boolean;
     msg: string;
   } | null>(null);
+  const fixedData = limitData.fields
+    .filter(limit => limit.disabled && limit.value)
+    .map(item => {
+      return { id: item.id, value: item.value };
+    });
 
   useEffect(() => {
     apiResponse?.success && mutate();
@@ -118,6 +123,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
               fields={limitData.fields}
               action={limitData.action}
               setResponse={setApiResponse}
+              fixedData={fixedData}
             />
           </>
         </Accordion.Collapse>
@@ -171,12 +177,8 @@ const LimitsPage = () => {
       )}
       {!!data && (
         <>
-          {Object.keys(data).map(limit => (
-            <LimitsCard
-              key={data[limit].id}
-              limitData={data[limit]}
-              mutate={mutate}
-            />
+          {data.limits.map(limit => (
+            <LimitsCard key={limit.id} limitData={limit} mutate={mutate} />
           ))}
         </>
       )}

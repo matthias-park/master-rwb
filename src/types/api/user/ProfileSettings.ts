@@ -32,6 +32,7 @@ export interface SettingsField {
   values?: SettingsFieldValue[];
   visible?: boolean;
   disabled?: boolean;
+  value?: string | number;
 }
 
 export enum SettingsFieldStyle {

@@ -106,14 +106,14 @@ const CookiePolicyModal = () => {
         </Accordion>
         <div className="d-flex flex-column align-items-center mt-3">
           <Button
-            className="mt-2 col-8"
+            className="mt-2 col-8 flex-fill d-inline-block"
             variant="primary"
             onClick={() => handleBtnClick('save')}
           >
             {t('cookies_btn_save')}
           </Button>
           <Button
-            className="mt-2 col-8"
+            className="mt-2 col-8 flex-fill d-inline-block"
             variant="primary"
             onClick={e => handleBtnClick('all')}
           >

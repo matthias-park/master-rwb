@@ -126,6 +126,10 @@
     }
 }
 
+.form-control:disabled {
+  background-color: $gray-100;
+}
+
 .invalid-feedback {
   font-size: 12px;
 }
