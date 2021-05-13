@@ -8,7 +8,12 @@ const useHover = (ref: RefObject<Element>, enabled: boolean = true) => {
   }
   const [value, setValue] = useState(false);
 
-  if (value && ref.current && ref.current.matches(':hover') === false) {
+  if (
+    value &&
+    ref.current &&
+    typeof ref.current.matches === 'function' &&
+    ref.current.matches(':hover') === false
+  ) {
     setValue(false);
   }
 
