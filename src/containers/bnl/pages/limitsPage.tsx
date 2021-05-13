@@ -40,10 +40,6 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
       return { id: item.id, value: item.value };
     });
 
-  useEffect(() => {
-    apiResponse?.success && mutate();
-  }, [apiResponse]);
-
   return (
     <Accordion className="info-container mb-3">
       <div className="info-container__info pt-3">
@@ -124,6 +120,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
               action={limitData.action}
               setResponse={setApiResponse}
               fixedData={fixedData}
+              mutateData={mutate}
             />
           </>
         </Accordion.Collapse>
