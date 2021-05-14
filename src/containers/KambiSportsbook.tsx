@@ -191,6 +191,7 @@ const setCustomerSettings = ({
           failureFunc(e);
         });
     },
+    hideHeader: true,
     enableOddsFormatSelector: true,
   };
 };
