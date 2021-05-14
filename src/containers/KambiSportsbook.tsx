@@ -196,8 +196,11 @@ const setCustomerSettings = ({
   };
 };
 
+let kambiLock = false;
 const insertKambiBootstrap = async (): Promise<void> => {
   return new Promise(resolve => {
+    if (kambiLock) return resolve();
+    kambiLock = true;
     if (!window.__config__.kambi) return resolve();
     document.body.classList.add('body-background');
     const scriptElement = document.createElement('script');

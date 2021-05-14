@@ -200,16 +200,21 @@ const SocialSection = ({
           {!!webSocial &&
             Object.entries(webSocial)
               .filter(Boolean)
-              .map(([key, value]) => (
-                <a
-                  key={key}
-                  href={value}
-                  className="section-social__icons-link"
-                  target="_blank"
-                >
-                  <i className={`icon-${iconName[key] || key}`}></i>
-                </a>
-              ))}
+              .map(([key, value]) => {
+                const externalLink = value.includes('http');
+                const Component = externalLink ? 'a' : Link;
+                return (
+                  <Component
+                    key={key}
+                    to={!externalLink ? value : undefined}
+                    href={externalLink ? value : undefined}
+                    className="section-social__icons-link"
+                    target={externalLink ? '_blank' : undefined}
+                  >
+                    <i className={`icon-${iconName[key] || key}`}></i>
+                  </Component>
+                );
+              })}
         </p>
         <h2 className="section-social__head-title mt-4">
           {t('official_partners_title')}
