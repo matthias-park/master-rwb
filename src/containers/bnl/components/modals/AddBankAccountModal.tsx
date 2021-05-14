@@ -43,6 +43,7 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
       isCentered
       show
       hideCallback={() => disableModal(ComponentName.AddBankAccountModal)}
+      className="pb-5"
     >
       <h2 className="mb-2 text-gray-800">{t('add_bank_modal_title')}</h2>
       <CustomAlert show={!!apiError} variant="danger" className="mt-2">
