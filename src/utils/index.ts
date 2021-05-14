@@ -50,17 +50,21 @@ export const formatNavigationRoutes = (constants: PageConfig) => {
     : [];
   if (constants.content_pages) {
     for (const [key, value] of Object.entries(constants.content_pages)) {
-      const contentPagePath = `${key.startsWith('/') ? '' : '/'}${key}`;
+      const name = Array.isArray(value) ? value[0] : value;
+      const slug = Array.isArray(value) ? value[1] : key;
+      const contentPagePath = `${slug.startsWith('/') ? '' : '/'}${slug}`;
       if (navigationRoutes.some(route => route.path !== contentPagePath)) {
         navigationRoutes.push({
-          id: PagesName.TemplatePage,
+          id:
+            Array.isArray(value) && PagesName[key]
+              ? Number(key)
+              : PagesName.TemplatePage,
           path: contentPagePath,
-          name: value,
+          name,
         });
       }
     }
   }
-
   return navigationRoutes.sort((a, b) =>
     sortDescending(a.path.length, b.path.length),
   );

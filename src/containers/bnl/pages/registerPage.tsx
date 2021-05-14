@@ -5,17 +5,10 @@ import RegWelcome from '../components/registration/RegWelcome';
 import { useConfig } from '../../../hooks/useConfig';
 import { Redirect, useHistory, useLocation } from 'react-router-dom';
 import { postApi } from '../../../utils/apiUtils';
-import {
-  PostRegistration,
-  ValidateRegisterPersonalCode,
-} from '../../../types/api/user/Registration';
-import {
-  ValidateRegisterInput,
-  RegistrationResponse,
-} from '../../../types/api/user/Registration';
+import { PostRegistration } from '../../../types/api/user/Registration';
+import { RegistrationResponse } from '../../../types/api/user/Registration';
 import dayjs from 'dayjs';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
-import { RegistrationPostalCodeAutofill } from '../../../types/api/user/Registration';
 import useGTM from '../../../hooks/useGTM';
 import { useI18n } from '../../../hooks/useI18n';
 import {

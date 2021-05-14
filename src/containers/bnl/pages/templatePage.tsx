@@ -75,7 +75,10 @@ const TemplatePage = () => {
         <div
           className={clsx(
             'page-container justify-content-between',
-            header?.slice(1).some(item => item?.prefix?.includes(pathname.split('/')[1])) && 'pt-xl-4',
+            header
+              ?.slice(1)
+              .some(item => item?.prefix?.includes(pathname.split('/')[1])) &&
+              'pt-xl-4',
           )}
         >
           <ScrollSidebar links={links} setActive={setActive} active={active} />

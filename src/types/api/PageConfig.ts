@@ -8,7 +8,7 @@ export interface PageConfig {
   sidebars: Array<Sidebar[]>;
   help_block: PagesName[];
   locale: string | null;
-  content_pages: { [key: string]: string };
+  content_pages: { [key: string]: string[] };
   cached?: boolean;
 }
 
