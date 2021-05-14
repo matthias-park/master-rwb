@@ -107,7 +107,7 @@ const WithdrawalRequests = ({
 };
 
 const WithdrawalPage = () => {
-  const { t } = useI18n();
+  const { t, addSymbols } = useI18n();
   const { user, updateUser } = useAuth();
   const { addToast } = useToasts();
   const { enableModal, allActiveModals } = useModal();
@@ -147,7 +147,16 @@ const WithdrawalPage = () => {
       mutate();
     }
   }, [allActiveModals]);
-
+  useEffect(() => {
+    if (data?.Data.translations) {
+      addSymbols(
+        Object.keys(data.Data.translations).reduce((obj, key) => {
+          obj[`withdrawal_page_${key}`] = data.Data.translations![key];
+          return obj;
+        }, {}),
+      );
+    }
+  }, [data]);
   const cancelRequest = useCallback(
     async (id: number): Promise<void> => {
       const response = await postApi<RailsApiResponse<null>>(
