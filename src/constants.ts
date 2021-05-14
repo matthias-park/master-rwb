@@ -44,6 +44,7 @@ export enum PagesName {
   CommunicationPreferencesPage = 22,
   ChangePasswordPage = 23,
   CloseAccountPage = 24,
+  ResponsibleGamingPage = 25,
 }
 
 export enum FormFieldValidation {
@@ -447,4 +448,8 @@ export const PAGES_WITH_CAPTCHA_ICON = [
   PagesName.ForgotPasswordPage,
 ];
 
-export const CONTENT_PAGES = [PagesName.TemplatePage, PagesName.FaqPage];
+export const CONTENT_PAGES = [
+  PagesName.TemplatePage,
+  PagesName.FaqPage,
+  PagesName.ResponsibleGamingPage,
+];

@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
-import { iconName } from '../../../constants';
+import { iconName, PagesName } from '../../../constants';
 import Dropdown from 'react-bootstrap/Dropdown';
 import useDesktopWidth from '../../../hooks/useDesktopWidth';
 import SessionTimer from '../../../components/SessionTimer';
 import { useI18n } from '../../../hooks/useI18n';
 import { sortAscending } from '../../../utils/index';
 import { useConfig } from '../../../hooks/useConfig';
-import { useIsRouteActive } from '../../../hooks/index';
+import { useIsRouteActive, useRoutePath } from '../../../hooks/index';
 import { isMobile } from 'react-device-detect';
 import useGTM from '../../../hooks/useGTM';
 import {
@@ -22,7 +22,10 @@ import clsx from 'clsx';
 const FooterHeader = () => {
   const { t } = useI18n();
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
-
+  const responsibleGamingPath = useRoutePath(
+    PagesName.ResponsibleGamingPage,
+    true,
+  );
   return (
     <div className="row flex-column flex-sm-row footer-pre align-items-sm-center py-3">
       <div className="session-block mb-2 mb-sm-0">
@@ -48,7 +51,7 @@ const FooterHeader = () => {
         <span className="restrictions-block__text text-14 mr-3 d-none d-sm-block d-md-none d-lg-block">
           {t('minimum_age_disclaimer')}
         </span>
-        <Link to="/responsible-gaming">
+        <Link to={responsibleGamingPath}>
           <img
             className="restrictions-block__img mr-3"
             alt=""
