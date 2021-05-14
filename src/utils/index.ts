@@ -76,3 +76,11 @@ export const clearUserLocalStorage = () => {
     localStorage.removeItem(key);
   }
 };
+
+export const trimWhitespacesFromObjectValues = (obj: {
+  [key: string]: unknown;
+}) =>
+  Object.entries(obj).reduce((obj, [key, value]) => {
+    obj[key] = typeof value === 'string' ? value.trim() : value;
+    return obj;
+  }, {});

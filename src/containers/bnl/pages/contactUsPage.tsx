@@ -178,6 +178,7 @@ const ContactUsPage = () => {
                                 : 'contact_page_field_required',
                             )}`,
                           validate: value => {
+                            if (!value) return true;
                             const valid = fieldValidations[field.id]?.(value);
                             return typeof valid === 'string' ? t(valid) : valid;
                           },

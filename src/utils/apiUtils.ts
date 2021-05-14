@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-unfetch';
 import { ConfigInterface } from 'swr';
+import { trimWhitespacesFromObjectValues } from '.';
 import { RailsApiResponseFallback } from '../constants';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { RegistrationPostalCodeAutofill } from '../types/api/user/Registration';
@@ -59,12 +60,13 @@ export const postApi = <T>(
   if (body) {
     if (options.formData) {
       const formData = new FormData();
-      for (const key in body) {
-        formData.append(key, body[key] as string | Blob);
+      const formBody = trimWhitespacesFromObjectValues(body);
+      for (const key in formBody) {
+        formData.append(key, formBody[key] as string | Blob);
       }
       config.body = formData;
     } else {
-      config.body = JSON.stringify(body);
+      config.body = JSON.stringify(trimWhitespacesFromObjectValues(body));
       (config.headers as Headers).append('Content-Type', 'application/json');
     }
   }

@@ -162,6 +162,7 @@ const TextInput = ({
   const hasErrors =
     !!fieldState.error || validation === FormFieldValidation.Invalid;
   const isValid =
+    !!field.value &&
     !fieldState.error &&
     validation !== FormFieldValidation.Invalid &&
     (validation === FormFieldValidation.Valid ||
