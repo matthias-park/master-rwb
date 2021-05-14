@@ -28,6 +28,7 @@ const WithdrawalConfirmModal = ({
       hideCallback={onCancel}
       isStatic={true}
       isCentered={true}
+      className="pb-5"
     >
       <div>
         <h2>{t('withdrawal_page_withdrawal_confirm')}</h2>
