@@ -40,6 +40,12 @@ body {
             margin-right: -37px;
           }
       }
+      @include media-breakpoint-down(sm) {
+        padding-right: 3px !important;
+        .header:before {
+          margin-right: 0;
+        }
+      }
     }
     &:not(.show-captcha) .grecaptcha-badge {
       visibility: hidden; 

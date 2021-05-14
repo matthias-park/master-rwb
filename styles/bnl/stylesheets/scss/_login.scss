@@ -7,6 +7,9 @@
     @include media-breakpoint-down(lg) {
       top: 0;
     }
+    @media only screen and (max-width: 330px) {
+      max-width: 186px;
+    }
     &__toggle {
       &:after {
           content: none;
