@@ -2,22 +2,12 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useI18n } from '../../../../hooks/useI18n';
 import { animateScroll as scroll } from 'react-scroll';
-import {
-  ValidateRegisterInput,
-  ValidateRegisterPersonalCode,
-} from '../../../../types/api/user/Registration';
 import { useFormContext } from 'react-hook-form';
 import { FormFieldValidation, VALIDATIONS } from '../../../../constants';
 import { OnlineFormBlock } from '../../../../types/RegistrationBlock';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
-import {
-  RegistrationResponse,
-  RegistrationPostalCodeAutofill,
-} from '../../../../types/api/user/Registration';
-import AutocompleteTextInput from '../../../../components/customFormInputs/AutocompleteTextInput';
-import { PostCodeInfo } from '../../../../types/api/user/Registration';
+import { RegistrationResponse } from '../../../../types/api/user/Registration';
 import LoadingButton from '../../../../components/LoadingButton';
-import { cache } from 'swr';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import CheckboxInput from '../../../../components/customFormInputs/CheckboxInput';
 import { API_VALIDATIONS } from '../../../../utils/apiUtils';
@@ -30,7 +20,6 @@ interface Props {
 }
 
 const blocks = (
-  props: Props,
   t: any,
   setValidation: any,
   validateRepeat: any,
@@ -209,7 +198,7 @@ const OnlineForm = (props: Props) => {
   const { handleSubmit, watch, trigger, formState, reset } = useFormContext();
 
   const setValidation = (id: string, status: FormFieldValidation) =>
-    setValidationForms({ ...validationForms, [id]: status });
+    setValidationForms(prev => ({ ...prev, [id]: status }));
   const validateRepeat = (id: string, value: string) => {
     return value === watch(id) || t(`register_need_match_${id}`);
   };
@@ -232,13 +221,14 @@ const OnlineForm = (props: Props) => {
     }
     return reset();
   };
+  const fields = blocks(t, setValidation, validateRepeat);
 
   return (
     <div className="reg-form">
       <h1 className="reg-form__title">{jsxT('register_title')}</h1>
       <p className="reg-form__sub-title">{jsxT('register_desc')}</p>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        {blocks(props, t, setValidation, validateRepeat).map(block => (
+        {fields.map(block => (
           <div key={block.title} className="reg-form__block">
             <p className="weight-500 mt-4 mb-3">
               {!!block.title && jsxT(`register_${block.title}`)}
