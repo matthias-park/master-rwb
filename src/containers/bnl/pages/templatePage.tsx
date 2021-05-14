@@ -13,6 +13,7 @@ import clsx from 'clsx';
 import { Element, Link as ScrollLink } from 'react-scroll';
 import RedirectNotFound from '../../../components/RedirectNotFound';
 import ContentPage from '../../../types/api/content/ContentPage';
+import { useConfig } from '../../../hooks/useConfig';
 
 const TemplatePage = () => {
   const { slug } = useParams<{ slug?: string }>();
@@ -27,6 +28,7 @@ const TemplatePage = () => {
   );
   const isDataLoading = !data && !error;
   const [links, setLinks] = useState<{ link: string; name: string }[]>([]);
+  const { header } = useConfig();
 
   useEffect(() => {
     makeCollapsible('card', 'collapse', 'card-header');
@@ -73,7 +75,7 @@ const TemplatePage = () => {
         <div
           className={clsx(
             'page-container justify-content-between',
-            headerNav.active && 'pt-xl-4',
+            header?.slice(1).some(item => item?.prefix?.includes(pathname.split('/')[1])) && 'pt-xl-4',
           )}
         >
           <ScrollSidebar links={links} setActive={setActive} active={active} />
