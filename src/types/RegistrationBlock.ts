@@ -9,7 +9,8 @@ export interface OnlineFormBlockField {
     | 'date'
     | 'checkbox'
     | 'number'
-    | 'email';
+    | 'email'
+    | 'postal_code';
   required?: boolean;
   validate?: (value: string) => boolean | string | Promise<boolean | string>;
   triggerId?: string;

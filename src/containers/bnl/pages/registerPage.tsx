@@ -74,44 +74,6 @@ const RegisterPage = () => {
     [routes],
   );
 
-  const checkEmailAvailable = useCallback(
-    async (email: string): Promise<ValidateRegisterInput | null> => {
-      const res = await postApi<ValidateRegisterInput>(
-        '/railsapi/v1/registration/check/email',
-        {
-          email,
-        },
-      ).catch(err => {
-        return null;
-      });
-      return res;
-    },
-    [],
-  );
-  const checkPersonalCode = useCallback(async (personal_code: string): Promise<
-    RailsApiResponse<ValidateRegisterPersonalCode | null>
-  > => {
-    const res = await postApi<RailsApiResponse<ValidateRegisterPersonalCode>>(
-      '/railsapi/v1/registration/check/personal_code',
-      {
-        personal_code,
-      },
-    ).catch((err: RailsApiResponse<null>) => err);
-    return res;
-  }, []);
-  const checkPostalCode = useCallback(async (post_code: string): Promise<
-    RailsApiResponse<any>
-  > => {
-    const res = await postApi<RailsApiResponse<RegistrationPostalCodeAutofill>>(
-      '/railsapi/v1/registration/check/post_code',
-      {
-        post_code,
-      },
-    ).catch((err: RailsApiResponse<null>) => {
-      return err;
-    });
-    return res;
-  }, []);
   const handleRegisterSubmit = useCallback(
     async (
       form: PostRegistration,
@@ -219,9 +181,6 @@ const RegisterPage = () => {
           {location?.state?.resCode === undefined && (
             <OnlineForm
               fieldChange={fieldChange}
-              checkEmailAvailable={checkEmailAvailable}
-              checkPersonalCode={checkPersonalCode}
-              checkPostalCode={checkPostalCode}
               handleRegisterSubmit={handleRegisterSubmit}
             />
           )}

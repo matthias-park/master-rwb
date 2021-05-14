@@ -2,6 +2,7 @@ import fetch from 'isomorphic-unfetch';
 import { ConfigInterface } from 'swr';
 import { RailsApiResponseFallback } from '../constants';
 import RailsApiResponse from '../types/api/RailsApiResponse';
+import { RegistrationPostalCodeAutofill } from '../types/api/user/Registration';
 
 // For rails api testing in dev
 // const API_URL = window.API_URL;
@@ -100,3 +101,36 @@ export const formatSuccesfullRailsApiResponse = <T>(
   Message: '',
   Success: true,
 });
+
+export const API_VALIDATIONS = {
+  email: async (email: string): Promise<RailsApiResponse<{}>> => {
+    const res = await postApi<RailsApiResponse<{}>>(
+      '/railsapi/v1/registration/check/email',
+      {
+        email,
+      },
+    ).catch(err => err);
+    return res;
+  },
+  personalCode: async (
+    personal_code: string,
+  ): Promise<RailsApiResponse<{}>> => {
+    const res = await postApi<RailsApiResponse<{}>>(
+      '/railsapi/v1/registration/check/personal_code',
+      {
+        personal_code,
+      },
+    ).catch((err: RailsApiResponse<{}>) => err);
+    return res;
+  },
+  postalCode: async (
+    post_code: string,
+  ): Promise<RailsApiResponse<RegistrationPostalCodeAutofill | null>> => {
+    const res = await postApi<
+      RailsApiResponse<RegistrationPostalCodeAutofill | null>
+    >('/railsapi/v1/registration/check/post_code', {
+      post_code,
+    }).catch((err: RailsApiResponse<null>) => err);
+    return res;
+  },
+};

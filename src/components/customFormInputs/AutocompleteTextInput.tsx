@@ -59,8 +59,12 @@ const AutocompleteTextInput = ({
   }, []);
 
   const filteredOptions = options.filter(option => {
-    const formatedLabel = labelkey(option, field.value);
-    return formatedLabel.includes(field.value) && formatedLabel !== field.value;
+    const value = field.value as string;
+    const formatedLabel = labelkey(option, value).toLocaleLowerCase();
+    return (
+      formatedLabel.includes(value.toLocaleLowerCase()) &&
+      formatedLabel !== value.toLocaleLowerCase()
+    );
   });
   const open =
     !isLoading &&
