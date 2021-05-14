@@ -446,3 +446,5 @@ export const PAGES_WITH_CAPTCHA_ICON = [
   PagesName.ContactUsPage,
   PagesName.ForgotPasswordPage,
 ];
+
+export const CONTENT_PAGES = [PagesName.TemplatePage, PagesName.FaqPage];

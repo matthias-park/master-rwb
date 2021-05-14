@@ -8,7 +8,11 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { useI18n } from '../hooks/useI18n';
 import useApi from '../hooks/useApi';
 import { usePrevious } from '../hooks';
-import { PagesName, PAGES_WITH_CAPTCHA_ICON } from '../constants';
+import {
+  CONTENT_PAGES,
+  PagesName,
+  PAGES_WITH_CAPTCHA_ICON,
+} from '../constants';
 import clsx from 'clsx';
 import { ConfigLoaded } from '../types/Config';
 
@@ -60,12 +64,13 @@ const ApiHead = () => {
 
   const seoData = data?.Success ? data?.Data : null;
   const pathName = pathInfo?.name || prevPathInfo?.name || '';
-  const pathNameTranslation =
-    (pathInfo?.id || prevPathInfo?.id) === PagesName.TemplatePage
-      ? pathName
-      : pathName
-      ? t(`sitemap_${pathName}`)
-      : '';
+  const pathNameTranslation = CONTENT_PAGES.includes(
+    pathInfo?.id || prevPathInfo?.id || 0,
+  )
+    ? pathName
+    : pathName
+    ? t(`sitemap_${pathName}`)
+    : '';
   const fallbackTitle =
     pathNameTranslation +
     (pathNameTranslation.length ? ' - ' : '') +
