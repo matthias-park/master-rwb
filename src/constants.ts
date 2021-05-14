@@ -419,6 +419,7 @@ export const VALIDATIONS = {
     return valid;
   },
   phone: (value: string = '') => {
+    if (!value) return false;
     const phone = value
       .trim()
       .replace(REGEX_EXPRESSION.PHONE_NUMBER_NORMALIZE, '');

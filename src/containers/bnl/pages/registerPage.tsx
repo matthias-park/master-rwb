@@ -82,7 +82,8 @@ const RegisterPage = () => {
           !key.includes('repeat') &&
           !['terms_and_conditions'].includes(key)
         ) {
-          obj[key] = form[key];
+          const value = form[key];
+          obj[key] = typeof value === 'string' ? value.trim() : value;
         }
         if (key === 'date_of_birth') {
           obj[key] = dayjs(obj[key]).format('YYYY-MM-DD');
