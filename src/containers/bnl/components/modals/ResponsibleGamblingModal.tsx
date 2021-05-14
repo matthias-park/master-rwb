@@ -50,7 +50,7 @@ const ResponsibleGamblingModal = () => {
         {jsxT('play_responsible_block_link')}
       </div>
       <h2 className="mb-3 mt-4">{t('responsible_gambling_title')}</h2>
-      <p>{t('responsible_gambling_body')} {jsxT('responsible_gambling_body_link')}</p>
+      <p>{jsxT('responsible_gambling_body')}</p>
       <Button onClick={hideModal} variant="primary" className="mx-auto mt-4">
         {t('responsible_gambling_close')}
       </Button>
