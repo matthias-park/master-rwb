@@ -31,12 +31,6 @@ const CloseAccountCard = ({ closeAccountData }: CloseAccountProps) => {
   return (
     <Accordion className="info-container info-container--gray mb-3">
       <div className="info-container__info pt-3">
-        <CustomAlert
-          show={!!apiResponse}
-          variant={apiResponse?.success ? 'success' : 'danger'}
-        >
-          <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />
-        </CustomAlert>
         <p className="mb-2">
           <b>{title}</b>
         </p>
@@ -53,7 +47,16 @@ const CloseAccountCard = ({ closeAccountData }: CloseAccountProps) => {
         <p className="text-gray-600 mb-0">{t('close_account_unset')}</p>
         <Accordion.Collapse eventKey={id}>
           <>
-            <hr className="mt-2 mb-0"></hr>
+            <hr className="pt-1 mb-0"></hr>
+            <CustomAlert
+              show={!!apiResponse}
+              variant={apiResponse?.success ? 'success' : 'danger'}
+              className="mb-0 mt-2"
+            >
+              <div
+                dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }}
+              />
+            </CustomAlert>
             <SettingsForm
               id={id}
               fields={fields}
