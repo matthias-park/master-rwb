@@ -83,11 +83,9 @@ export const UncontrolledTextInput = React.forwardRef(
           type={showPassword ? 'text' : props.type}
           placeholder=" "
         />
-        {!props.title && (
-          <label htmlFor={props.id} className="text-14">
-            {props.title}
-          </label>
-        )}
+        <label htmlFor={props.id} className="text-14">
+          {props.title}
+        </label>
         <div data-testid="icons" className="form-group__icons">
           {props.validation === FormFieldValidation.Validating && (
             <Spinner

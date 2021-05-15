@@ -14,6 +14,7 @@ import { useI18n } from '../../../hooks/useI18n';
 import {
   PagesName,
   REDIRECT_PROTECTED_NOT_LOGGED_IN,
+  REGEX_EXPRESSION,
 } from '../../../constants';
 import { useAuth } from '../../../hooks/useAuth';
 import RedirectNotFound from '../../../components/RedirectNotFound';
@@ -83,6 +84,12 @@ const RegisterPage = () => {
           !['terms_and_conditions'].includes(key)
         ) {
           obj[key] = form[key];
+        }
+        if ('phone_number' === key) {
+          obj[key] = obj[key].replace(
+            REGEX_EXPRESSION.PHONE_NUMBER_NORMALIZE,
+            '',
+          );
         }
         if (key === 'date_of_birth') {
           obj[key] = dayjs(obj[key]).format('YYYY-MM-DD');

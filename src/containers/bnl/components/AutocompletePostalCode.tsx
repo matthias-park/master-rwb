@@ -28,7 +28,7 @@ const AutocompletePostalCode = ({
   const validate = useCallback(
     async value => {
       const postCode = value.split(' ')[0]?.trim();
-      const cacheId = `registration_post_code_${postCode}`;
+      const cacheId = `post_code_${postCode}`;
       let response = cache.has(cacheId) && cache.get(cacheId);
       if (!response) {
         response = await API_VALIDATIONS.postalCode(postCode);
@@ -48,7 +48,7 @@ const AutocompletePostalCode = ({
         )
       )
         return true;
-      return t('register_input_postal_code_invalid');
+      return t(`${translationPrefix}postal_code_invalid`);
     },
     [t],
   );

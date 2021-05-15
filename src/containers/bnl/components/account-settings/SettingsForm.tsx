@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import Form from 'react-bootstrap/Form';
 import LoadingButton from '../../../../components/LoadingButton';
 import { useI18n } from '../../../../hooks/useI18n';
-import { VALIDATIONS } from '../../../../constants';
+import { REGEX_EXPRESSION, VALIDATIONS } from '../../../../constants';
 import SelectInput from '../../../../components/customFormInputs/SelectInput';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import { useAuth } from '../../../../hooks/useAuth';
@@ -14,12 +14,13 @@ import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import { useToasts } from 'react-toast-notifications';
 import useApi from '../../../../hooks/useApi';
 import ProfileSettings from '../../../../types/api/user/ProfileSettings';
+import AutocompletePostalCode from '../AutocompletePostalCode';
 
 interface SettingProps {
   id: string;
   fields: SettingsField[];
   action: string;
-  fixedData?: { id: string; value: number | string | undefined }[];
+  fixedData?: { id: string; value?: number | string | undefined }[];
   setResponse?: (
     resp: {
       success: boolean;
@@ -98,6 +99,15 @@ const SettingsForm = ({
     fixedData?.forEach(item => {
       if (item.id && item.value) {
         body[item.id] = item.value?.toString();
+      }
+      if ('phone_number' === item.id && body[item.id]) {
+        body[item.id] = (body[item.id] as string).replace(
+          REGEX_EXPRESSION.PHONE_NUMBER_NORMALIZE,
+          '',
+        );
+      }
+      if ('postal_code' === item.id && body[item.id]) {
+        body[item.id] = (body[item.id] as string).split(' ')[0];
       }
     });
     const res = await postApi<RailsApiResponse<null>>(url, body, {
@@ -181,6 +191,16 @@ const SettingsForm = ({
                   );
                 }
                 default: {
+                  if (field.id === 'postal_code') {
+                    return (
+                      <AutocompletePostalCode
+                        id={field.id}
+                        key={field.id}
+                        translationPrefix="settings_field_"
+                        required
+                      />
+                    );
+                  }
                   const isPassword = ['password'].includes(field.type);
                   const isNewPassword = [
                     'new_password',
