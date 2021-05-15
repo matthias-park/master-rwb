@@ -8,6 +8,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import loadable from '@loadable/component';
 import { FormControlProps } from 'react-bootstrap/FormControl';
+import { enterKeyPress } from '../../utils/uiUtils';
 
 const LoadableNumberFormat = loadable(() => import('react-number-format'), {
   fallback: <input />,
@@ -27,13 +28,18 @@ interface Props {
   type?: string;
   textArea?: boolean;
   className?: string;
+  clearDefaultValueOnFocus?: boolean;
   onBlur?: () => void;
   size?: 'sm' | 'lg';
   maskedInput?: {
     format?: string | ((value: string) => string);
     allowEmptyFormatting?: boolean;
     mask?: string;
+    thousandSeparator?: boolean;
+    prefix?: string;
+    allowNegative?: boolean;
   };
+  onEnterPress?: () => void;
 }
 
 interface UncontrolledProps extends FormControlProps {
@@ -45,10 +51,15 @@ interface UncontrolledProps extends FormControlProps {
   mask?: string;
   tooltip?: string;
   toggleVisibility?: boolean;
+  prefix?: string;
+  thousandSeparator?: boolean;
+  allowNegative?: boolean;
   errorMsg?: string;
   onBlur?: () => void;
   onCopy?: (e) => void;
   onPaste?: (e) => void;
+  onKeyUp?: (e) => void;
+  onFocus?: () => void;
 }
 
 export const UncontrolledTextInput = React.forwardRef(
@@ -72,9 +83,11 @@ export const UncontrolledTextInput = React.forwardRef(
           type={showPassword ? 'text' : props.type}
           placeholder=" "
         />
-        <label htmlFor={props.id} className="text-14">
-          {props.title}
-        </label>
+        {!props.title && (
+          <label htmlFor={props.id} className="text-14">
+            {props.title}
+          </label>
+        )}
         <div data-testid="icons" className="form-group__icons">
           {props.validation === FormFieldValidation.Validating && (
             <Spinner
@@ -137,6 +150,8 @@ const TextInput = ({
   onBlur,
   maskedInput,
   size,
+  onEnterPress,
+  clearDefaultValueOnFocus,
 }: Props) => {
   const { field, fieldState } = useController({
     name: id,
@@ -159,6 +174,15 @@ const TextInput = ({
     },
     [disableCopyPaste],
   );
+  const onFocusHandle = () => {
+    if (
+      clearDefaultValueOnFocus &&
+      defaultValue &&
+      field.value === defaultValue
+    ) {
+      field.onChange('');
+    }
+  };
   const hasErrors =
     !!fieldState.error || validation === FormFieldValidation.Invalid;
   const isValid =
@@ -185,6 +209,8 @@ const TextInput = ({
         onBlur?.();
         field.onBlur();
       }}
+      onFocus={onFocusHandle}
+      onKeyUp={onEnterPress ? e => enterKeyPress(e, onEnterPress) : undefined}
       onChange={maskedInput ? undefined : field.onChange}
       as={inputAs}
       size={size}
@@ -204,6 +230,9 @@ const TextInput = ({
       }
       format={maskedInput?.format}
       allowEmptyFormatting={maskedInput?.allowEmptyFormatting}
+      prefix={maskedInput?.prefix}
+      thousandSeparator={maskedInput?.thousandSeparator}
+      allowNegative={maskedInput?.allowNegative}
       mask={maskedInput?.mask}
     />
   );

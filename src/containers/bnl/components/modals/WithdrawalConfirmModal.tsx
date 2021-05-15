@@ -32,11 +32,13 @@ const WithdrawalConfirmModal = ({
     >
       <div>
         <h2>{t('withdrawal_page_withdrawal_confirm')}</h2>
-        {Object.keys(data.confirm_info).map(key => (
-          <div key={key}>
-            {t(`withdrawal_page_${key}`)}: {data.confirm_info[key]}
-          </div>
-        ))}
+        {Object.keys(data.confirm_info).map(key =>
+          t(`withdrawal_page_${key}`, true) ? (
+            <div key={key}>
+              {t(`withdrawal_page_${key}`)}: {data.confirm_info[key]}
+            </div>
+          ) : null,
+        )}
         <div className="d-flex flex-column flex-sm-row mt-3">
           <LoadingButton
             onClick={() => {

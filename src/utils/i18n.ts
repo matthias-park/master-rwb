@@ -8,8 +8,8 @@ const i18n = (lang: string, data: Symbols = {}) => {
     locale: lang,
     hasTranslations: !!Object.keys(data).length,
     symbols: data,
-    t(key: string) {
-      const val = data[key] || `missing symbol: ${key}`;
+    t(key: string, noFallback: boolean = false) {
+      const val = data[key] || (noFallback ? '' : `missing symbol: ${key}`);
       return val;
     },
     jsxT(key: string) {
