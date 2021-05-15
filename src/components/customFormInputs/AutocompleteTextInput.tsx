@@ -62,8 +62,8 @@ const AutocompleteTextInput = ({
     const value = field.value as string;
     const formatedLabel = labelkey(option, value).toLocaleLowerCase();
     return (
-      formatedLabel.includes(value.toLocaleLowerCase()) &&
-      formatedLabel !== value.toLocaleLowerCase()
+      formatedLabel.includes(value?.toLocaleLowerCase()) &&
+      formatedLabel !== value?.toLocaleLowerCase()
     );
   });
   const open =

@@ -17,15 +17,73 @@ interface LimitProps {
     id: string;
     title: string;
     note: string;
-    limit_amount: number;
-    amount_left: number;
-    future_limit_amount: number;
-    future_limit_valid_from: string;
+    limit_amount?: number;
+    amount_left?: number;
+    future_limit_amount?: number;
+    future_limit_valid_from?: string;
     fields: SettingsField[];
     action: string;
   };
   mutate: () => void;
 }
+
+const timeoutCards = ['disable_player_time_out', 'self_exclusion'];
+
+const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
+  const { t } = useI18n();
+  const [apiResponse, setApiResponse] = useState<{
+    success: boolean;
+    msg: string;
+  } | null>(null);
+  const fixedData = limitData.fields
+    .filter(limit => limit.disabled && limit.value)
+    .map(item => {
+      return { id: item.id, value: item.value };
+    });
+
+  return (
+    <Accordion className="info-container info-container--gray mb-3">
+      <div className="info-container__info pt-3">
+        <p className="mb-2">
+          <b>{limitData.title}</b>
+        </p>
+        <p className="text-14 text-gray-700 pt-1">{limitData.note}</p>
+        <Accordion.Toggle
+          as="button"
+          eventKey={limitData.id}
+          className="info-container__edit btn btn-light btn-sm px-3"
+        >
+          {t('timeout_edit')}
+        </Accordion.Toggle>
+      </div>
+      <div className="info-container__text">
+        <p className="text-gray-400 mb-0">{t('timeout_unset')}</p>
+        <Accordion.Collapse eventKey={limitData.id}>
+          <>
+            <hr className="pt-1 mb-0"></hr>
+            <CustomAlert
+              show={!!apiResponse}
+              variant={apiResponse?.success ? 'success' : 'danger'}
+              className="mb-0 mt-2"
+            >
+              <div
+                dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }}
+              />
+            </CustomAlert>
+            <SettingsForm
+              id={limitData.id}
+              fields={limitData.fields}
+              action={limitData.action}
+              setResponse={setApiResponse}
+              fixedData={fixedData}
+              mutateData={mutate}
+            />
+          </>
+        </Accordion.Collapse>
+      </div>
+    </Accordion>
+  );
+};
 
 const LimitsCard = ({ limitData, mutate }: LimitProps) => {
   const { t } = useI18n();
@@ -56,7 +114,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
         </Accordion.Toggle>
       </div>
       <div className="info-container__text">
-        {limitData.limit_amount ? (
+        {limitData.limit_amount && limitData.amount_left ? (
           <ul className="list-unstyled mb-0 play-limits">
             <li className="play-limits__limit">
               <p className="play-limits__limit-title">{t('current_limit')}</p>
@@ -73,7 +131,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
             <li className="play-limits__limit">
               <p className="play-limits__limit-title">{t('left_limit')}</p>
               <p className="play-limits__limit-total">
-                {user.currency} {limitData.amount_left}
+                {user.currency} {limitData?.amount_left}
               </p>
             </li>
           </ul>
@@ -174,9 +232,13 @@ const LimitsPage = () => {
       )}
       {!!data && (
         <>
-          {data.limits.map(limit => (
-            <LimitsCard key={limit.id} limitData={limit} mutate={mutate} />
-          ))}
+          {data.limits.map(limit =>
+            timeoutCards.includes(limit.id) ? (
+              <TimeoutCard key={limit.id} limitData={limit} mutate={mutate} />
+            ) : (
+              <LimitsCard key={limit.id} limitData={limit} mutate={mutate} />
+            ),
+          )}
         </>
       )}
       <QuestionsContainer items={questionItems} className="mt-5" />

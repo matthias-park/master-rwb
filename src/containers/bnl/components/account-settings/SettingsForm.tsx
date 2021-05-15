@@ -59,6 +59,9 @@ const SettingsForm = ({
       )
       .map(field => field.id),
   );
+  const resetValues = fields
+    .filter(field => !field.default && field.type != 'submit')
+    .map(field => field.id);
   const visibilityOverrideFields = useMemo(
     () =>
       fields
@@ -137,7 +140,10 @@ const SettingsForm = ({
         success: res.Success,
         msg: res.Message || t('api_response_failed'),
       });
-    res.Success && reset();
+    if (res.Success) {
+      reset(null, { keepValues: true });
+      resetValues.forEach(id => formMethods.setValue(id, ''));
+    }
     mutateData && setTimeout(() => mutateData(), 1000);
     if (shouldUpdateUser) {
       updateUser();
@@ -226,7 +232,12 @@ const SettingsForm = ({
                     'new_password',
                     'new_password_confirmation',
                   ].includes(field.id);
-                  return (
+                  return field.id === 'postal_code' ? (
+                    <AutocompletePostalCode
+                      id={field.id}
+                      defaultValue={field.default}
+                    />
+                  ) : (
                     <TextInput
                       id={field.id}
                       rules={
