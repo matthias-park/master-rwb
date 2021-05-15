@@ -204,10 +204,18 @@ const SettingsForm = ({
                 default: {
                   if (field.id === 'city') return null;
                   if (field.id === 'postal_code') {
+                    const cityField = fields.find(item => item.id === 'city');
+                    let defaultValue = field.default
+                      ? field.default.toString()
+                      : '';
+                    if (cityField?.default) {
+                      defaultValue += ` - ${cityField.default}`;
+                    }
                     return (
                       <AutocompletePostalCode
                         id={field.id}
                         key={field.id}
+                        defaultValue={defaultValue}
                         translationPrefix="settings_field_"
                         required
                       />

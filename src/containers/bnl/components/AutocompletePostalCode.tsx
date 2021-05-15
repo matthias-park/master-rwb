@@ -15,6 +15,7 @@ interface Props {
   translationPrefix?: string;
   onBlur?: () => void;
   required?: boolean;
+  defaultValue?: string;
 }
 
 const AutocompletePostalCode = ({
@@ -22,6 +23,7 @@ const AutocompletePostalCode = ({
   onBlur,
   translationPrefix = '',
   required,
+  defaultValue,
 }: Props) => {
   const { t } = useI18n();
 
@@ -79,6 +81,7 @@ const AutocompletePostalCode = ({
       invalidTextError={t(`${translationPrefix}${id}_invalid`)}
       labelkey={labelKey}
       title={t(`${translationPrefix}${id}`)}
+      defaultValue={defaultValue}
       rules={{
         required:
           required &&
