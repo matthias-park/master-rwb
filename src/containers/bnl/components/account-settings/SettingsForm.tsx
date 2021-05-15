@@ -9,7 +9,7 @@ import { REGEX_EXPRESSION, VALIDATIONS } from '../../../../constants';
 import SelectInput from '../../../../components/customFormInputs/SelectInput';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import { useAuth } from '../../../../hooks/useAuth';
-import { postApi } from '../../../../utils/apiUtils';
+import { API_VALIDATIONS, postApi } from '../../../../utils/apiUtils';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import { useToasts } from 'react-toast-notifications';
 import useApi from '../../../../hooks/useApi';
@@ -54,7 +54,9 @@ const SettingsForm = ({
   const { handleSubmit, watch, formState, reset } = formMethods;
   const watchAllFields = watch(
     fields
-      .filter(item => !item.disabled && item.type !== 'submit')
+      .filter(
+        item => !item.disabled && item.type !== 'submit' && item.id !== 'city',
+      )
       .map(field => field.id),
   );
   const visibilityOverrideFields = useMemo(
@@ -96,20 +98,29 @@ const SettingsForm = ({
   ): Promise<void> => {
     setResponse && setResponse(null);
     body.authenticity_token = user.token!;
-    fixedData?.forEach(item => {
-      if (item.id && item.value) {
-        body[item.id] = item.value?.toString();
+    if (fixedData) {
+      for (const item of fixedData) {
+        if (item.id && item.value) {
+          body[item.id] = item.value?.toString();
+        }
+        if ('phone_number' === item.id && body[item.id]) {
+          body[item.id] = (body[item.id] as string).replace(
+            REGEX_EXPRESSION.PHONE_NUMBER_NORMALIZE,
+            '',
+          );
+        }
+        if ('postal_code' === item.id && body[item.id]) {
+          body[item.id] = (body[item.id] as string).split(' ')[0];
+          const post_code = (body[item.id] as string).split(' ')[0];
+          const postal_info = await API_VALIDATIONS.postalCode(post_code);
+          const city =
+            Object.values(postal_info.Data?.result || {})[0]?.locality_name ||
+            '';
+          body['postal_code'] = post_code;
+          body['city'] = city;
+        }
       }
-      if ('phone_number' === item.id && body[item.id]) {
-        body[item.id] = (body[item.id] as string).replace(
-          REGEX_EXPRESSION.PHONE_NUMBER_NORMALIZE,
-          '',
-        );
-      }
-      if ('postal_code' === item.id && body[item.id]) {
-        body[item.id] = (body[item.id] as string).split(' ')[0];
-      }
-    });
+    }
     const res = await postApi<RailsApiResponse<null>>(url, body, {
       formData: formBody,
     }).catch((res: RailsApiResponse<null>) => {
@@ -191,6 +202,7 @@ const SettingsForm = ({
                   );
                 }
                 default: {
+                  if (field.id === 'city') return null;
                   if (field.id === 'postal_code') {
                     return (
                       <AutocompletePostalCode
