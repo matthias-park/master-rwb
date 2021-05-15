@@ -6,15 +6,21 @@ import { PagesName } from '../../../constants';
 import { useAuth } from '../../../hooks/useAuth';
 import Accordion from 'react-bootstrap/Accordion';
 import clsx from 'clsx';
+import useApi from '../../../hooks/useApi';
+import RailsApiResponse from '../../../types/api/RailsApiResponse';
+import { PostItem } from '../../../types/api/Posts';
+import { NavigationRoute } from '../../../types/api/PageConfig';
+import { sortAscending } from '../../../utils';
 
 interface SitemapListItem {
   path: string;
   children?: SitemapListItem[];
   name: string;
   emptyRoute?: boolean;
+  order?: number;
 }
 
-const insertSitemapChildren = (listItem: SitemapListItem, route) => {
+const insertSitemapChildren = (listItem: SitemapListItem, route, t) => {
   if (!listItem.children) {
     listItem.children = [];
   } else {
@@ -22,12 +28,17 @@ const insertSitemapChildren = (listItem: SitemapListItem, route) => {
       route.path.startsWith(item.path),
     );
     if (mapItem) {
-      return insertSitemapChildren(mapItem, route);
+      return insertSitemapChildren(mapItem, route, t);
     }
   }
+  const pageName =
+    route.id === PagesName.TemplatePage
+      ? route.name
+      : t(`${route.externalLinkTranslation ? '' : 'sitemap_'}${route.name}`);
   listItem.children.push({
     path: route.path,
-    name: route.name,
+    name: pageName,
+    order: route.order,
   });
 };
 
@@ -40,8 +51,6 @@ const TreeItem = ({
   active: string | null;
   setActive: (active: string | null) => void;
 }) => {
-  const { t } = useI18n();
-  if (!t(`sitemap_${route.name}`)) return null;
   if (route.emptyRoute && !route.children) return null;
 
   return (
@@ -94,6 +103,9 @@ const SitemapPage = () => {
   const { routes } = useConfig(
     (prev, next) => prev.routes.length === next.routes.length,
   );
+  const { data: promotions } = useApi<RailsApiResponse<PostItem[]>>(
+    '/railsapi/v1/content/promotions',
+  );
   const { user } = useAuth();
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const sitemapList = useMemo(() => {
@@ -116,20 +128,50 @@ const SitemapPage = () => {
         item => route.path.startsWith(item.path) && route.name !== item.name,
       );
       if (mapItem) {
-        insertSitemapChildren(mapItem, route);
+        insertSitemapChildren(mapItem, route, t);
       } else {
+        const pageName =
+          route.id === PagesName.TemplatePage
+            ? route.name
+            : t(
+                `${route.externalLinkTranslation ? '' : 'sitemap_'}${
+                  route.name
+                }`,
+              );
         list.push({
           path: route.path,
-          name:
-            route.id === PagesName.TemplatePage
-              ? route.name
-              : t(`sitemap_${route.name}`),
+          name: pageName,
           emptyRoute: route.id === PagesName.Null,
+          order: route.order,
         });
       }
     }
+    if (promotions?.Data) {
+      const promotionsPath = routes.find(
+        route => route.id === PagesName.PromotionsPage && !route.hiddenSitemap,
+      );
+      const promotionsSitemapItem = list.find(
+        item =>
+          promotionsPath?.path.startsWith(item.path) &&
+          promotionsPath?.name !== item.name,
+      );
+      if (promotionsSitemapItem) {
+        for (const promotion of promotions.Data) {
+          insertSitemapChildren(
+            promotionsSitemapItem,
+            {
+              id: PagesName.PromotionsPage,
+              name: promotion.title,
+              path: `${promotionsPath!.path}/${promotion.slug}`,
+              order: promotion.priority,
+            } as NavigationRoute,
+            t,
+          );
+        }
+      }
+    }
     return list;
-  }, [routes, user]);
+  }, [routes, user, promotions]);
 
   return (
     <main className="page-container">
@@ -137,14 +179,16 @@ const SitemapPage = () => {
         <div className="pl-3 pl-lg-5 py-2 py-lg-3">
           <h1 className="mb-4">{t('sitemap_page_title')}</h1>
           <Accordion className="sitemap-accordion">
-            {sitemapList.map(route => (
-              <TreeItem
-                key={route.path}
-                route={route}
-                active={activeItem}
-                setActive={setActiveItem}
-              />
-            ))}
+            {sitemapList
+              .sort((a, b) => sortAscending(a.order || 999, b.order || 999))
+              .map(route => (
+                <TreeItem
+                  key={route.path}
+                  route={route}
+                  active={activeItem}
+                  setActive={setActiveItem}
+                />
+              ))}
           </Accordion>
         </div>
       </div>

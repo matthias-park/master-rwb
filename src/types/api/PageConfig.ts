@@ -96,4 +96,6 @@ export interface NavigationRoute {
   hiddenSitemap?: boolean;
   exact?: boolean;
   redirectTo?: string;
+  order?: number;
+  externalLinkTranslation?: string;
 }
