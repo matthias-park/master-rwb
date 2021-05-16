@@ -20,6 +20,7 @@ interface Props {
   currency?: string;
   header?: JSX.Element;
   subText?: string;
+  inputTitle?: string;
 }
 
 const InputContainer = ({
@@ -36,6 +37,7 @@ const InputContainer = ({
   currency = '',
   subText,
   header,
+  inputTitle,
 }: Props) => {
   const { t } = useI18n();
   const formMethods = useForm<{
@@ -77,6 +79,7 @@ const InputContainer = ({
           <TextInput
             id="amount"
             className="input-container__input"
+            title={inputTitle}
             maskedInput={{
               allowEmptyFormatting: true,
               prefix: `${currency} `,

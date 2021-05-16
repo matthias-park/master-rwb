@@ -283,6 +283,7 @@ const WithdrawalPage = () => {
           )}
           <InputContainer
             title={t('withdrawal_amount')}
+            inputTitle={t('withdrawal_input_amount')}
             defaultValue="0"
             buttonText={t('withdrawal_btn')}
             min={data.Data.default_account?.min_withdraw_amount}

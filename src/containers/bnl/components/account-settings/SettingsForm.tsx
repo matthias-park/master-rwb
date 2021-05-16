@@ -265,6 +265,7 @@ const SettingsForm = ({
                       title={field.title}
                       toggleVisibility={isPassword}
                       type={field.type}
+                      autoComplete="off"
                     />
                   );
                 }

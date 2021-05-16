@@ -40,6 +40,7 @@ interface Props {
     allowNegative?: boolean;
   };
   onEnterPress?: () => void;
+  autoComplete?: string;
 }
 
 interface UncontrolledProps extends FormControlProps {
@@ -60,6 +61,7 @@ interface UncontrolledProps extends FormControlProps {
   onPaste?: (e) => void;
   onKeyUp?: (e) => void;
   onFocus?: () => void;
+  autoComplete?: string;
 }
 
 export const UncontrolledTextInput = React.forwardRef(
@@ -82,6 +84,7 @@ export const UncontrolledTextInput = React.forwardRef(
           ref={ref}
           type={showPassword ? 'text' : props.type}
           placeholder=" "
+          autoComplete={props.autoComplete}
         />
         <label htmlFor={props.id} className="text-14">
           {props.title}
@@ -150,6 +153,7 @@ const TextInput = ({
   size,
   onEnterPress,
   clearDefaultValueOnFocus,
+  autoComplete,
 }: Props) => {
   const { field, fieldState } = useController({
     name: id,
@@ -232,6 +236,7 @@ const TextInput = ({
       thousandSeparator={maskedInput?.thousandSeparator}
       allowNegative={maskedInput?.allowNegative}
       mask={maskedInput?.mask}
+      autoComplete={autoComplete}
     />
   );
 };
