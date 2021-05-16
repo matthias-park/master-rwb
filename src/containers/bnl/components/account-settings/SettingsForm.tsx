@@ -265,7 +265,10 @@ const SettingsForm = ({
                       title={field.title}
                       toggleVisibility={isPassword}
                       type={field.type}
-                      autoComplete="off"
+                      autoComplete={
+                        isPassword || isNewPassword ? 'new-password' : ''
+                      }
+                      disableCopyPaste={isPassword || isNewPassword}
                     />
                   );
                 }
