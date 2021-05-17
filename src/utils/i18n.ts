@@ -12,9 +12,9 @@ const i18n = (lang: string, data: Symbols = {}) => {
       const val = data[key] || (noFallback ? '' : `missing symbol: ${key}`);
       return val;
     },
-    jsxT(key: string) {
+    jsxT(key: string, props: any = {}) {
       const val = data[key] || `missing symbol: ${key}`;
-      return replaceStringTagsReact(val);
+      return replaceStringTagsReact(val, props);
     },
     addSymbols(data: Symbols) {},
   };

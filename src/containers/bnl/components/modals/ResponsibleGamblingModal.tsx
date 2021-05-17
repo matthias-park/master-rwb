@@ -53,7 +53,9 @@ const ResponsibleGamblingModal = () => {
     >
       <div className="play-responsible-block mb-3 py-3 py-sm-1 pl-2 pr-4 pr-sm-2">
         <i className="icon-thumbs"></i>
-        {jsxT('play_responsible_block_link')}
+        {jsxT('play_responsible_block_link', {
+          onClick: hideModal,
+        })}
       </div>
       <h2 className="mb-3 mt-4">{t('responsible_gambling_title')}</h2>
       <p>{jsxT('responsible_gambling_body')}</p>
@@ -62,7 +64,7 @@ const ResponsibleGamblingModal = () => {
       </Button>
       <div className="custom-modal__footer">
         <div className="custom-modal__footer-bnl mx-auto">
-          <Link to={responsibleGamingPath}>
+          <Link onClick={hideModal} to={responsibleGamingPath}>
             <img
               alt="bnl-restrictions"
               height="45"
