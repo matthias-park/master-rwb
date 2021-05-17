@@ -290,8 +290,12 @@ const OnlineForm = (props: Props) => {
                           : undefined
                       }
                       validation={
-                        validationForms[field.id.replace('repeat_', '')] ===
-                        FormFieldValidation.Invalid
+                        (validationForms[field.id.replace('repeat_', '')] ===
+                          FormFieldValidation.Invalid ||
+                          validationForms[`repeat_${field.id}`] ===
+                            FormFieldValidation.Invalid) &&
+                        validationForms[field.id] !==
+                          FormFieldValidation.Validating
                           ? FormFieldValidation.Invalid
                           : validationForms[field.id]
                       }

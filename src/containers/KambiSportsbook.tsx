@@ -152,6 +152,7 @@ export const KambiProvider = ({ children }) => {
 interface SetCustomerSettingsProps {
   getApiBalance: string;
   updateBalance: () => void;
+  setKambiLoaded: () => void;
 }
 
 interface KambiSportsbookProps {
@@ -179,6 +180,7 @@ const updateWindowKambiConfig = (params: KambiSportsbookProps) => {
 const setCustomerSettings = ({
   getApiBalance,
   updateBalance,
+  setKambiLoaded,
 }: SetCustomerSettingsProps) => {
   window.customerSettings = {
     getBalance: function (successFunc, failureFunc) {
@@ -190,6 +192,14 @@ const setCustomerSettings = ({
         .catch(e => {
           failureFunc(e);
         });
+    },
+    notification: function (event) {
+      if (
+        event.name === 'dataLayerPushed' &&
+        event.data?.event === 'kambi loaded'
+      ) {
+        setKambiLoaded();
+      }
     },
     hideHeader: true,
     enableOddsFormatSelector: true,
@@ -261,6 +271,7 @@ const KambiSportsbook = () => {
           setCustomerSettings({
             getApiBalance: kambiConfig?.getApiBalance,
             updateBalance: () => updateUser(),
+            setKambiLoaded: () => context.setSportsbookLoaded(true),
           });
           const kambiContainer = document.createElement('div');
           kambiContainer.id = 'KambiBC';
@@ -270,9 +281,7 @@ const KambiSportsbook = () => {
             containerRef.current.nextSibling,
           );
           updateWindowKambiConfig(kambiConfig);
-          insertKambiBootstrap().then(() => {
-            context.setSportsbookLoaded(true);
-          });
+          insertKambiBootstrap();
         });
       } else {
         const kambiContainer = document.getElementById(kambiId);

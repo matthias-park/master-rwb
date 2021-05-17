@@ -62,50 +62,53 @@ const DepositPage = () => {
     [t],
   );
 
-  const handleRequestDeposit = useCallback(async (depositValue: number) => {
-    setApiError(null);
-    if (!bankAccount.loading && !bankAccount.hasBankAccount) {
-      addToast(`No bank account`, {
-        appearance: 'error',
-        autoDismiss: true,
+  const handleRequestDeposit = useCallback(
+    async (depositValue: number) => {
+      setApiError(null);
+      if (!bankAccount.loading && !bankAccount.hasBankAccount) {
+        addToast(`No bank account`, {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+        return;
+      }
+      setDepositLoading(true);
+      const depositParams: DepositRequest = {
+        BankId: 160,
+        Amount: depositValue,
+        ReturnSuccessUrl: `${window.location.origin}${depositBaseUrl}/loading`,
+      };
+      const response: DepositResponse | null = await postApi<DepositResponse>(
+        '/railsapi/v1/deposits/perform',
+        depositParams,
+      ).catch(res => {
+        return res;
       });
-      return;
-    }
-    setDepositLoading(true);
-    const depositParams: DepositRequest = {
-      BankId: 160,
-      Amount: depositValue,
-      ReturnSuccessUrl: `${window.location.origin}${depositBaseUrl}/loading`,
-    };
-    const response: DepositResponse | null = await postApi<DepositResponse>(
-      '/railsapi/v1/deposits/perform',
-      depositParams,
-    ).catch(res => {
-      return res;
-    });
-    if (
-      response?.Success &&
-      response.RedirectUrl &&
-      response.DepositRequestId
-    ) {
-      depositStatus.setDepositId(response.DepositRequestId);
-      return !!(window.location.href = response.RedirectUrl);
-    }
-    if (
-      !response ||
-      !response.Success ||
-      response.PaymentResultMessage ||
-      response.Message
-    ) {
-      setApiError(
-        response?.PaymentResultMessage ||
-          response?.Message ||
-          t('api_response_failed'),
-      );
-    }
-    setDepositLoading(false);
-    return false;
-  }, []);
+      if (
+        response?.Success &&
+        response.RedirectUrl &&
+        response.DepositRequestId
+      ) {
+        depositStatus.setDepositId(response.DepositRequestId);
+        return !!(window.location.href = response.RedirectUrl);
+      }
+      if (
+        !response ||
+        !response.Success ||
+        response.PaymentResultMessage ||
+        response.Message
+      ) {
+        setApiError(
+          response?.PaymentResultMessage ||
+            response?.Message ||
+            t('api_response_failed'),
+        );
+      }
+      setDepositLoading(false);
+      return false;
+    },
+    [bankAccount],
+  );
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">

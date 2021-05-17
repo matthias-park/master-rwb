@@ -41,7 +41,7 @@ const InputContainer = ({
   const formMethods = useForm<{
     amount: string;
   }>({
-    mode: 'onChange',
+    mode: 'onBlur',
     defaultValues: {
       amount: defaultValue.toString(),
     },
