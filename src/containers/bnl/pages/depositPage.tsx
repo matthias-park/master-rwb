@@ -109,7 +109,9 @@ const DepositPage = () => {
     },
     [bankAccount],
   );
-
+  const minDeposit = t('bancontact_min_deposit');
+  const maxDeposit =
+    user.max_deposit !== null ? user.max_deposit : t('bancontact_max_deposit');
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       <h1>{t('deposit_page_title')}</h1>
@@ -154,17 +156,15 @@ const DepositPage = () => {
           </>
         }
         buttonClassName="mx-auto my-2"
+        min={minDeposit}
+        max={maxDeposit}
         loading={depositLoading}
         onSubmit={handleRequestDeposit}
         quickAmounts={[10, 20, 50, 100]}
         currency={user.currency}
-        subText={`${t('min_deposit')}: ${t('bancontact_min_deposit')} ${
-          user.currency
-        } - ${t('max_deposit')}: ${
-          user.max_deposit !== null
-            ? user.max_deposit
-            : t('bancontact_max_deposit')
-        } ${user.currency}`}
+        subText={`${t('min_deposit')}: ${minDeposit} ${user.currency} - ${t(
+          'max_deposit',
+        )}: ${maxDeposit} ${user.currency}`}
         header={
           <div className="input-container__header d-flex align-items-center">
             <img

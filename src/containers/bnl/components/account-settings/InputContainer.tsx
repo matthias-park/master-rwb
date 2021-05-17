@@ -53,6 +53,18 @@ const InputContainer = ({
   const handleSubmit = () => {
     formMethods.handleSubmit(({ amount }) => onSubmit(Number(amount)))();
   };
+  const validateAmount = (value: string) => {
+    if (!value) return true;
+    let inputAmount = Number(value);
+    const minNumber = Number(min);
+    const maxNumber = Number(max);
+    if (minNumber && inputAmount < minNumber) {
+      return `${t('amount_below_minimum')} ${currency}${minNumber}`;
+    } else if (maxNumber && inputAmount > maxNumber) {
+      return `${t('amount_above_maximum')} ${currency}${maxNumber}`;
+    }
+    return true;
+  };
   return (
     <div className="input-container mb-4">
       {header && header}
@@ -87,18 +99,7 @@ const InputContainer = ({
               allowNegative: false,
             }}
             rules={{
-              validate: (value: string) => {
-                if (!value) return true;
-                let inputAmount = Number(value);
-                const minNumber = Number(min);
-                const maxNumber = Number(max);
-                if (minNumber && inputAmount < minNumber) {
-                  return `${t('amount_below_minimum')} ${currency}${minNumber}`;
-                } else if (maxNumber && inputAmount > maxNumber) {
-                  return `${t('amount_above_maximum')} ${currency}${maxNumber}`;
-                }
-                return true;
-              },
+              validate: validateAmount,
             }}
             onBlur={() => {
               const amount = watch('amount', '');
@@ -118,7 +119,9 @@ const InputContainer = ({
         <LoadingButton
           variant="primary"
           disabled={
-            !formState.isDirty || !formState.isValid || !watch('amount', '')
+            !formState.isDirty ||
+            !watch('amount', '') ||
+            validateAmount(watch('amount', '')) !== true
           }
           className={clsx(buttonClassName ? buttonClassName : '')}
           onClick={handleSubmit}
