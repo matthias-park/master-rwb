@@ -203,6 +203,8 @@ const setCustomerSettings = ({
     },
     hideHeader: true,
     enableOddsFormatSelector: true,
+    // @ts-ignore
+    enableMyBetsHarmonization: false,
   };
 };
 
