@@ -1,7 +1,10 @@
 import { replaceStringTagsReact } from './reactUtils';
 import { ALL_LOCALES } from '../constants';
+import * as Sentry from '@sentry/react';
 
 export type Symbols = { [key: string]: string };
+
+const missingSymbolsSent: string[] = [];
 
 const i18n = (lang: string, data: Symbols = {}) => {
   return {
@@ -9,10 +12,18 @@ const i18n = (lang: string, data: Symbols = {}) => {
     hasTranslations: !!Object.keys(data).length,
     symbols: data,
     t(key: string, noFallback: boolean = false) {
+      if (!data[key] && !missingSymbolsSent.includes(key)) {
+        missingSymbolsSent.push(key);
+        Sentry.captureMessage(`missing symbol:${key}`);
+      }
       const val = data[key] || (noFallback ? '' : `missing symbol: ${key}`);
       return val;
     },
     jsxT(key: string, props: any = {}) {
+      if (!data[key] && !missingSymbolsSent.includes(key)) {
+        missingSymbolsSent.push(key);
+        Sentry.captureMessage(`missing symbol:${key}`);
+      }
       const val = data[key] || `missing symbol: ${key}`;
       return replaceStringTagsReact(val, props);
     },

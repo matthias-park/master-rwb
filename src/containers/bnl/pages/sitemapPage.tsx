@@ -20,7 +20,14 @@ interface SitemapListItem {
   order?: number;
 }
 
+const pagesWithTranslatedName = [
+  PagesName.TemplatePage,
+  PagesName.FaqPage,
+  PagesName.ResponsibleGamingPage,
+];
+
 const insertSitemapChildren = (listItem: SitemapListItem, route, t) => {
+  if (route.path === listItem.path) return;
   if (!listItem.children) {
     listItem.children = [];
   } else {
@@ -31,10 +38,9 @@ const insertSitemapChildren = (listItem: SitemapListItem, route, t) => {
       return insertSitemapChildren(mapItem, route, t);
     }
   }
-  const pageName =
-    route.id === PagesName.TemplatePage
-      ? route.name
-      : t(`${route.externalLinkTranslation ? '' : 'sitemap_'}${route.name}`);
+  const pageName = pagesWithTranslatedName.includes(route.id)
+    ? route.name
+    : t(`${route.externalLinkTranslation ? '' : 'sitemap_'}${route.name}`);
   listItem.children.push({
     path: route.path,
     name: pageName,
@@ -130,14 +136,11 @@ const SitemapPage = () => {
       if (mapItem) {
         insertSitemapChildren(mapItem, route, t);
       } else {
-        const pageName =
-          route.id === PagesName.TemplatePage
-            ? route.name
-            : t(
-                `${route.externalLinkTranslation ? '' : 'sitemap_'}${
-                  route.name
-                }`,
-              );
+        const pageName = pagesWithTranslatedName.includes(route.id)
+          ? route.name
+          : t(
+              `${route.externalLinkTranslation ? '' : 'sitemap_'}${route.name}`,
+            );
         list.push({
           path: route.path,
           name: pageName,
@@ -160,7 +163,7 @@ const SitemapPage = () => {
           insertSitemapChildren(
             promotionsSitemapItem,
             {
-              id: PagesName.PromotionsPage,
+              id: PagesName.TemplatePage,
               name: promotion.title,
               path: `${promotionsPath!.path}/${promotion.slug}`,
               order: promotion.priority,

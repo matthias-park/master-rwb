@@ -229,6 +229,7 @@ const SocialSection = ({
                   href={t(value)}
                   className="section-social__icons-link"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <img
                     alt={`partner-${key}`}

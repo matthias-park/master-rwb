@@ -33,9 +33,11 @@ const ValidationFailedModal = () => {
 
   const hideModal = () => disableModal(ComponentName.ValidationFailedModal);
 
+  if (activeModal !== ComponentName.ValidationFailedModal) return null;
+
   return (
     <GenericModal
-      show={activeModal === ComponentName.ValidationFailedModal}
+      show
       hideCallback={hideModal}
       isCentered={true}
       isStatic={true}
