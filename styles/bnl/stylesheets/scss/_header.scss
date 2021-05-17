@@ -104,6 +104,10 @@
                 &-link {
                     font-weight: 600;
                     font-size: 20px;
+                    @include media-breakpoint-down(xl) {
+                      font-size: 18px;
+                      font-weight: 500;
+                    }
                     @include media-breakpoint-down(lg) {
                       span {
                         transform: translateX(25px);
@@ -117,7 +121,11 @@
                       vertical-align: text-bottom;
                       color: rgba($white, 0.85);
                       @include media-breakpoint-down(xl) {
-                        transform: translateX(25px);
+                        line-height: 19px;
+                        font-size: 25px;
+                      }
+                      @include media-breakpoint-down(lg) {
+                        transform: translateX(26px) translateY(-1px);
                         color: rgba($brand-text, 0.85);
                       }
                     }
@@ -433,7 +441,7 @@
                     content: '';
                     position: absolute;
                     top: 50%;
-                    left: 50%;
+                    left: 51%;
                     transform: translateX(-50%) translateY(-50%);
                     width: 22px;
                     height: 22px;
@@ -506,15 +514,12 @@
     }
     &__wrp {
       padding: 10px 20px 0 20px;
-      max-height: calc(100vh - 140px);
+      max-height: calc(100vh - 180px);
       overflow-y: auto;
       -ms-overflow-style: none;
       scrollbar-width: none;
       &::-webkit-scrollbar {
         display: none;
-      }
-      @include media-breakpoint-down(lg) {
-        max-height: calc(100vh - 86px);
       }
     }
     &__list {

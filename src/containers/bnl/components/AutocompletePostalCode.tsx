@@ -15,7 +15,7 @@ interface Props {
   translationPrefix?: string;
   onBlur?: () => void;
   required?: boolean;
-  defaultValue?: string;
+  defaultValue?: unknown;
 }
 
 const AutocompletePostalCode = ({

@@ -143,12 +143,12 @@
   }
   .icon-payment-of-wins .path1:before {
     content: "\e91a";
-    color: rgb(0, 175, 67);
+    color: $brand-text;
   }
   .icon-payment-of-wins .path2:before {
     content: "\e91b";
     margin-left: -1em;
-    color: rgb(0, 0, 0);
+    color: $brand-light;
   }
   .icon-food .path1:before {
     content: "\e91c";

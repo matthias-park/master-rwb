@@ -145,6 +145,7 @@ const DepositPage = () => {
       )}
       <InputContainer
         title={t('select_amount')}
+        inputTitle={t('deposit_input_amount')}
         defaultValue="0"
         buttonText={
           <>
@@ -182,11 +183,23 @@ const DepositPage = () => {
       />
       <div className="details-container mb-4">
         <div className="details-container__header">
-          <h2 className="mb-0">{t('deposit_to_bank_title')}</h2>
+          <i className="icon-payment-of-wins mr-2">
+            <span className="path1"></span>
+            <span className="path2"></span>
+          </i>
+          <h2 className="mb-0">{jsxT('deposit_to_bank_title')}</h2>
         </div>
         <div className="details-container__body">
           <p className="mb-3">{t('deposit_to_bank_info')}</p>
           <ul className="list-unstyled mb-0">
+            <li className="mb-2 d-flex flex-column flex-sm-row">
+              <span className="font-weight-bold">
+                {t('deposit_max_amount')}:{' '}
+              </span>
+              <span className="ml-sm-auto">
+                {user?.max_deposit} {user.currency}
+              </span>
+            </li>
             <li className="mb-2 d-flex flex-column flex-sm-row">
               <span className="font-weight-bold">{t('deposit_iban')}: </span>
               <span className="ml-sm-auto">{t('deposit_bank_iban_data')}</span>
