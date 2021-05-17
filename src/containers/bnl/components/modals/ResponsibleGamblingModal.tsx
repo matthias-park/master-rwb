@@ -5,10 +5,12 @@ import { useI18n } from '../../../../hooks/useI18n';
 import { useConfig } from '../../../../hooks/useConfig';
 import Lockr from 'lockr';
 import { stringToMiliseconds } from '../../../../utils/index';
-import { ComponentName } from '../../../../constants';
+import { ComponentName, PagesName } from '../../../../constants';
 import { useModal } from '../../../../hooks/useModal';
 import { useAuth } from '../../../../hooks/useAuth';
 import { usePrevious } from '../../../../hooks';
+import Link from '../../../../components/Link';
+import { useRoutePath } from '../../../../hooks/index';
 
 const ResponsibleGamblingModal = () => {
   const { user } = useAuth();
@@ -36,6 +38,10 @@ const ResponsibleGamblingModal = () => {
 
   const hideModal = () => disableModal(ComponentName.ResponsibleGamblingModal);
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const responsibleGamingPath = useRoutePath(
+    PagesName.ResponsibleGamingPage,
+    true,
+  );
 
   return (
     <GenericModal
@@ -56,12 +62,14 @@ const ResponsibleGamblingModal = () => {
       </Button>
       <div className="custom-modal__footer">
         <div className="custom-modal__footer-bnl mx-auto">
-          <img
-            alt="bnl-restrictions"
-            height="45"
-            className="mr-2"
-            src={`/assets/images/restrictions/bnl-${locale}.svg`}
-          />
+          <Link to={responsibleGamingPath}>
+            <img
+              alt="bnl-restrictions"
+              height="45"
+              className="mr-2"
+              src={`/assets/images/restrictions/bnl-${locale}.svg`}
+            />
+          </Link>
         </div>
       </div>
     </GenericModal>
