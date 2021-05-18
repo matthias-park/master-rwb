@@ -115,10 +115,10 @@ export const KambiProvider = ({ children }) => {
   }, [!!api]);
 
   useEffect(() => {
-    if (api && locationKey && (hash.length || visibleSportsbook)) {
+    if (api && locationKey) {
       api.navigateClient(hash || 'home', 'sportsbook');
     }
-  }, [hash, !!api, visibleSportsbook]);
+  }, [hash, !!api]);
   useEffect(() => {
     if (visibleSportsbook && sportsbookLoaded) {
       showKambiSportsbook();
