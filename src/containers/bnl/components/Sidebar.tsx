@@ -78,17 +78,19 @@ const Sidebar = ({ links }: Props) => {
                 </Accordion.Collapse>
               </>
             ) : (
-              <li
-                key={link.link}
-                className={clsx(
-                  `sidebar-list__item`,
-                  link.link === pathname ? 'active' : 'inactive',
-                )}
-              >
-                <Link to={link.link} className="sidebar-list__item-link">
-                  {t(link.name)}
-                </Link>
-              </li>
+              <Link to={link.link}>
+                <li
+                  key={link.link}
+                  className={clsx(
+                    `sidebar-list__item`,
+                    link.link === pathname ? 'active' : 'inactive',
+                  )}
+                >
+                  <span className="sidebar-list__item-link">
+                    {t(link.name)}
+                  </span>
+                </li>
+              </Link>
             ),
           )}
         </Accordion>

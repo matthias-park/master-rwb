@@ -141,6 +141,7 @@ const SitemapPage = () => {
             PagesName.ForgotLoginPage,
             PagesName.ForgotPasswordPage,
             PagesName.RegisterPage,
+            PagesName.LoginPage,
           ].includes(route.id))
       )
         continue;
