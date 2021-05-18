@@ -84,7 +84,7 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
                     </td>
                     <td>
                       <strong className="heading-sm">{t('action')}</strong>
-                      {transaction.title}
+                      {t(transaction.title)}
                     </td>
                     <td>
                       <strong className="heading-sm">{t('account')}</strong>
@@ -155,7 +155,7 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
             </Pagination>
           )}
           <div className="table-container__info">
-            {data && data.time_limitation_notice}
+            {data && t(data.time_limitation_notice)}
           </div>
         </div>
       ) : (

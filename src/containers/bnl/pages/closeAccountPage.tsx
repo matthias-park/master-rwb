@@ -32,9 +32,9 @@ const CloseAccountCard = ({ closeAccountData }: CloseAccountProps) => {
     <Accordion className="info-container info-container--gray mb-3">
       <div className="info-container__info pt-3">
         <p className="mb-2">
-          <b>{title}</b>
+          <b>{t(title)}</b>
         </p>
-        <p className="text-14 text-gray-700 pt-1">{note}</p>
+        <p className="text-14 text-gray-700 pt-1">{t(note)}</p>
         <Accordion.Toggle
           as="button"
           eventKey={id}

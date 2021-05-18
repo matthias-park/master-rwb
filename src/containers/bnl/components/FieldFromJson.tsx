@@ -7,6 +7,7 @@ import SelectInput from '../../../components/customFormInputs/SelectInput';
 import FileInput from '../../../components/customFormInputs/FileInput';
 import TextInput from '../../../components/customFormInputs/TextInput';
 import dayjs from 'dayjs';
+import { useI18n } from '../../../hooks/useI18n';
 
 interface Props {
   field: Field;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const FieldFromJson = ({ field, size, rules }: Props) => {
+  const { t } = useI18n();
   const { formState } = useFormContext();
   switch (field.type) {
     case 'submit': {
@@ -27,7 +29,7 @@ const FieldFromJson = ({ field, size, rules }: Props) => {
           type="submit"
           loading={!!formState.isSubmitting}
         >
-          {field.title}
+          {t(field.title)}
         </LoadingButton>
       );
     }
@@ -50,7 +52,7 @@ const FieldFromJson = ({ field, size, rules }: Props) => {
             field.dateTo ? dayjs(field.dateTo, 'YYYY-MM-DD').toDate() : null
           }
           size={size}
-          title={field.title}
+          title={t(field.title)}
         />
       );
     }
@@ -70,7 +72,7 @@ const FieldFromJson = ({ field, size, rules }: Props) => {
             field.values || (field.default ? [field.default as Value] : [])
           )?.map(option => ({ value: option.title, text: option.title }))}
           size={size}
-          title={field.title}
+          title={t(field.title)}
         />
       );
     }
@@ -82,7 +84,7 @@ const FieldFromJson = ({ field, size, rules }: Props) => {
           rules={rules}
           disabled={field.disabled}
           className="mt-auto"
-          title={field.title}
+          title={t(field.title)}
         />
       );
     }
@@ -93,7 +95,7 @@ const FieldFromJson = ({ field, size, rules }: Props) => {
           rules={rules}
           defaultValue={field.default}
           disabled={field.disabled}
-          title={field.title}
+          title={t(field.title)}
           textArea={field.id === 'text'}
         />
       );

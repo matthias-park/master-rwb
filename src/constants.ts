@@ -45,6 +45,7 @@ export enum PagesName {
   ChangePasswordPage = 23,
   CloseAccountPage = 24,
   ResponsibleGamingPage = 25,
+  LoginPage = 26,
 }
 
 export enum FormFieldValidation {

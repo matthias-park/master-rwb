@@ -28,6 +28,7 @@ interface SettingProps {
     } | null,
   ) => void;
   mutateData?: () => void;
+  translatableDefaultValues?: boolean;
 }
 
 const FormsWithUpdateUser = [
@@ -44,6 +45,7 @@ const SettingsForm = ({
   setResponse,
   fixedData,
   mutateData,
+  translatableDefaultValues,
 }: SettingProps) => {
   const { t } = useI18n();
   const { user, updateUser } = useAuth();
@@ -181,7 +183,7 @@ const SettingsForm = ({
                       variant="primary"
                       type="submit"
                     >
-                      {field.title}
+                      {t(field.title)}
                     </LoadingButton>
                   );
                 }
@@ -200,10 +202,10 @@ const SettingsForm = ({
                       values={
                         field.values?.map(option => ({
                           value: option.id,
-                          text: option.title,
+                          text: t(option.title),
                         })) || []
                       }
-                      title={field.title}
+                      title={t(field.title)}
                     />
                   );
                 }
@@ -242,7 +244,7 @@ const SettingsForm = ({
                       id={field.id}
                       rules={
                         !field.disabled && {
-                          required: `${field.title} ${t(
+                          required: `${t(field.title)} ${t(
                             'settings_field_required',
                           )}`,
                           validate: value => {
@@ -260,9 +262,13 @@ const SettingsForm = ({
                           },
                         }
                       }
-                      defaultValue={field.default}
+                      defaultValue={
+                        field.default && translatableDefaultValues
+                          ? t(field.default.toString())
+                          : field.default
+                      }
                       disabled={field.disabled}
-                      title={field.title}
+                      title={t(field.title)}
                       toggleVisibility={isPassword}
                       type={field.type}
                       autoComplete={
