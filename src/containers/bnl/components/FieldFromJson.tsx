@@ -27,6 +27,7 @@ const FieldFromJson = ({ field, size, rules }: Props) => {
           className="mt-2"
           variant="primary"
           type="submit"
+          disabled={field.disabled}
           loading={!!formState.isSubmitting}
         >
           {t(field.title)}

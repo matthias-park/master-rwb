@@ -176,9 +176,12 @@ const SettingsForm = ({
                       key={field.id}
                       data-testid={field.id}
                       loading={!!formState.isSubmitting}
-                      disabled={Object.values(watchAllFields).some(
-                        value => !value || value === 'default',
-                      )}
+                      disabled={
+                        field.disabled ||
+                        Object.values(watchAllFields).some(
+                          value => !value || value === 'default',
+                        )
+                      }
                       className="mt-2"
                       variant="primary"
                       type="submit"
