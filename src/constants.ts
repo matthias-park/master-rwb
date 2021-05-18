@@ -59,7 +59,7 @@ export const iconName: { [key: string]: string } = {
   instagram: 'nsta',
 };
 
-export const REDIRECT_PROTECTED_NOT_LOGGED_IN = PagesName.HomePage;
+export const REDIRECT_PROTECTED_NOT_LOGGED_IN = PagesName.LoginPage;
 
 export const RailsApiResponseFallback: RailsApiResponse<null> = {
   Code: -1,
