@@ -47,7 +47,7 @@ const insertSitemapChildren = (listItem: SitemapListItem, route, t) => {
     path: route.path,
     name: pageName,
     order: route.order,
-    emptyRoute: route.id === PagesName.Null,
+    emptyRoute: route.id === PagesName.Null && !route.externalLinkTranslation,
     externalLink:
       route.externalLinkTranslation && t(route.externalLinkTranslation),
   });
