@@ -4,7 +4,7 @@ server '192.168.109.27', user: 'tonybet', roles: %w(next-web-stage stage-release
 set :deploy_to, '/home/tonybet/next-web'
 
 set :nvm_type, :user
-set :nvm_node, 'v15.4.0'
+set :nvm_node, 'v16.1.0'
 set :nvm_map_bins, %w{node npm pm2}
 set :build_env, 'stage'
 
