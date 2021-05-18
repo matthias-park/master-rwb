@@ -18,13 +18,12 @@ export const useRoutePath = (
   visiblePage = false,
 ): string => {
   const { routes } = useConfig((prev, next) => !!prev.routes === !!next.routes);
-  return useMemo(
-    () =>
-      routes.find(
-        route => route.id === routeId && (!visiblePage || !route.hiddenSitemap),
-      )?.path || '/',
-    [routes],
-  );
+  return useMemo(() => {
+    const route = routes.find(
+      route => route.id === routeId && (!visiblePage || !route.hiddenSitemap),
+    );
+    return route?.redirectTo || route?.path || '/';
+  }, [routes]);
 };
 
 export const useIsRouteActive = (pathName: string) => {

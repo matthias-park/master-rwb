@@ -1,5 +1,7 @@
 import React from 'react';
 import Link from '../../../../components/Link';
+import { PagesName } from '../../../../constants';
+import { useRoutePath } from '../../../../hooks';
 
 interface BrandLogoProps {
   mobile: boolean;
@@ -7,10 +9,11 @@ interface BrandLogoProps {
 
 const BrandLogo = ({ mobile }: BrandLogoProps) => {
   const logoSuffix = mobile ? '-small' : '';
+  const homePageRoute = useRoutePath(PagesName.HomePage, true);
   return (
     <Link
       className={mobile ? 'header__mobile-logo' : 'header__desktop-logo'}
-      to="/"
+      to={homePageRoute}
     >
       <img
         alt="logo"
