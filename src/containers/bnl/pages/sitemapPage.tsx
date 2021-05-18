@@ -89,14 +89,16 @@ const TreeItem = ({
           eventKey={`key_${route.name}`}
         >
           <>
-            {route.children?.map(subRoute => (
-              <TreeItem
-                route={subRoute}
-                key={subRoute.path}
-                active={active}
-                setActive={setActive}
-              />
-            ))}
+            <Accordion className="sitemap-accordion">
+              {route.children?.map(subRoute => (
+                <TreeItem
+                  route={subRoute}
+                  key={subRoute.path}
+                  active={active}
+                  setActive={setActive}
+                />
+              ))}
+            </Accordion>
           </>
         </Accordion.Collapse>
       )}
