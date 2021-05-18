@@ -58,7 +58,6 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
               .map(value => (value.symbol ? t(value.value) : value.value))
               .join(': ');
 
-          console.log(text, info);
           return (
             <ul className="list-unstyled mb-0">
               {!index ? (
