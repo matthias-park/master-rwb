@@ -16,7 +16,7 @@ interface PersonalInfoProps {
     id: string;
     title: string;
     note?: string;
-    data: string[];
+    data: ({ value: string; symbol: boolean } | string)[];
     editable: boolean;
     fields: SettingsField[];
     action: string;
@@ -50,24 +50,32 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
         )}
       </div>
       <div className="info-container__text">
-        {data.map((info, index) => (
-          <ul className="list-unstyled mb-0">
-            {!index ? (
-              <li className={clsx(index + 1 !== data.length && 'mb-1')}>
-                <b>{info}</b>
-              </li>
-            ) : (
-              <li
-                className={clsx(
-                  'text-gray-400',
-                  index + 1 !== data.length && 'mb-1',
-                )}
-              >
-                {info}
-              </li>
-            )}
-          </ul>
-        ))}
+        {data.map((info, index) => {
+          const text =
+            typeof info === 'string'
+              ? info
+              : info.symbol
+              ? t(info.value)
+              : info.value;
+          return (
+            <ul className="list-unstyled mb-0">
+              {!index ? (
+                <li className={clsx(index + 1 !== data.length && 'mb-1')}>
+                  <b>{text}</b>
+                </li>
+              ) : (
+                <li
+                  className={clsx(
+                    'text-gray-400',
+                    index + 1 !== data.length && 'mb-1',
+                  )}
+                >
+                  {text}
+                </li>
+              )}
+            </ul>
+          );
+        })}
         {!!fields && editable && (
           <Accordion.Collapse eventKey={id}>
             <>
