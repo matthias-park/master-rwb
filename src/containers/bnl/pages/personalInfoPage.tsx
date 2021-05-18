@@ -51,12 +51,14 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
       </div>
       <div className="info-container__text">
         {data.map((info, index) => {
-          const text =
-            typeof info === 'string'
-              ? info
-              : info.symbol
-              ? t(info.value)
-              : info.value;
+          let text = '';
+          if (typeof info === 'string') text = info;
+          else if (Array.isArray(info))
+            text = info
+              .map(value => (value.symbol ? t(value.value) : value.value))
+              .join(': ');
+
+          console.log(text, info);
           return (
             <ul className="list-unstyled mb-0">
               {!index ? (
