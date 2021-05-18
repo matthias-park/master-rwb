@@ -89,16 +89,16 @@ const TreeItem = ({
           eventKey={`key_${route.name}`}
         >
           <>
-            <Accordion className="sitemap-accordion">
-              {route.children?.map(subRoute => (
+            {route.children?.map(subRoute => (
+              <Accordion className="sitemap-accordion">
                 <TreeItem
                   route={subRoute}
                   key={subRoute.path}
                   active={active}
                   setActive={setActive}
                 />
-              ))}
-            </Accordion>
+              </Accordion>
+            ))}
           </>
         </Accordion.Collapse>
       )}
@@ -183,18 +183,18 @@ const SitemapPage = () => {
       <div className="page-inner">
         <div className="pl-3 pl-lg-5 py-2 py-lg-3">
           <h1 className="mb-4">{t('sitemap_page_title')}</h1>
-          <Accordion className="sitemap-accordion">
-            {sitemapList
-              .sort((a, b) => sortAscending(a.order || 999, b.order || 999))
-              .map(route => (
+          {sitemapList
+            .sort((a, b) => sortAscending(a.order || 999, b.order || 999))
+            .map(route => (
+              <Accordion className="sitemap-accordion">
                 <TreeItem
                   key={route.path}
                   route={route}
                   active={activeItem}
                   setActive={setActiveItem}
                 />
-              ))}
-          </Accordion>
+              </Accordion>
+            ))}
         </div>
       </div>
     </main>
