@@ -805,7 +805,7 @@ export interface CustomerSettings {
    *
    */
   handle404?: (url: string) => void;
-
+  enableMyBetsHarmonization?: boolean;
   /**
    * Version available: TBC
    * Used to enable the operator to take control over fullscreen video playback.
