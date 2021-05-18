@@ -17,7 +17,7 @@ interface PersonalInfoProps {
     title: string;
     note?: string;
     data: ({ value: string; symbol: boolean } | string)[];
-    editable: boolean;
+    disabled: boolean;
     fields: SettingsField[];
     action: string;
   };
@@ -25,7 +25,7 @@ interface PersonalInfoProps {
 }
 
 const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
-  const { id, title, note, data, editable, fields, action } = personalInfoData;
+  const { id, title, note, data, disabled, fields, action } = personalInfoData;
   const { t } = useI18n();
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
@@ -39,7 +39,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
           <b>{t(title)}</b>
         </p>
         {note && <p className="text-14 text-gray-700 pt-1">{t(note)}</p>}
-        {!!fields && editable && (
+        {!!fields && !disabled && (
           <Accordion.Toggle
             as="button"
             eventKey={id}
@@ -77,7 +77,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
             </ul>
           );
         })}
-        {!!fields && editable && (
+        {!!fields && !disabled && (
           <Accordion.Collapse eventKey={id}>
             <>
               <hr className="mt-2 mb-0"></hr>
