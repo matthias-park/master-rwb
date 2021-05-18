@@ -45,9 +45,9 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
     <Accordion className="info-container info-container--gray mb-3">
       <div className="info-container__info pt-3">
         <p className="mb-2">
-          <b>{limitData.title}</b>
+          <b>{t(limitData.title)}</b>
         </p>
-        <p className="text-14 text-gray-700 pt-1">{limitData.note}</p>
+        <p className="text-14 text-gray-700 pt-1">{t(limitData.note)}</p>
         <Accordion.Toggle
           as="button"
           eventKey={limitData.id}
@@ -77,6 +77,7 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
               setResponse={setApiResponse}
               fixedData={fixedData}
               mutateData={mutate}
+              translatableDefaultValues={true}
             />
           </>
         </Accordion.Collapse>
@@ -102,9 +103,9 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
     <Accordion className="info-container mb-3">
       <div className="info-container__info pt-3">
         <p className="mb-2">
-          <b>{limitData.title}</b>
+          <b>{t(limitData.title)}</b>
         </p>
-        <p className="text-14 text-gray-700 pt-1">{limitData.note}</p>
+        <p className="text-14 text-gray-700 pt-1">{t(limitData.note)}</p>
         <Accordion.Toggle
           as="button"
           eventKey={limitData.id}
@@ -179,6 +180,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
               setResponse={setApiResponse}
               fixedData={fixedData}
               mutateData={mutate}
+              translatableDefaultValues={true}
             />
           </>
         </Accordion.Collapse>

@@ -36,9 +36,9 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
     <Accordion className="info-container mb-3">
       <div className="info-container__info pt-3">
         <p className="mb-2">
-          <b>{title}</b>
+          <b>{t(title)}</b>
         </p>
-        {note && <p className="text-14 text-gray-700 pt-1">{note}</p>}
+        {note && <p className="text-14 text-gray-700 pt-1">{t(note)}</p>}
         {!!fields && editable && (
           <Accordion.Toggle
             as="button"

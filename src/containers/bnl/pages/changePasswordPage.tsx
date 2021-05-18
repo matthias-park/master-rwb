@@ -53,7 +53,7 @@ const ChangePasswordPage = () => {
           >
             <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />
           </CustomAlert>
-          <p className="change-pw__title">{data.title}</p>
+          <p className="change-pw__title">{t(data.title)}</p>
           <SettingsForm
             id={data.id}
             fields={data.fields}

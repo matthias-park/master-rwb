@@ -59,7 +59,6 @@ const CommunicationPrefCard = ({
   ): Promise<void> => {
     setApiResponse(null);
     body.authenticity_token = user.token!;
-    url = url.replace('https://bnl-dev.tglab.dev', '');
     const res = await postApi<RailsApiResponse<null>>(url, body, {
       formData: formBody,
     }).catch((res: RailsApiResponse<null>) => {
@@ -98,14 +97,14 @@ const CommunicationPrefCard = ({
         >
           <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />
         </CustomAlert>
-        <h6 className="communication-prefs__pref-title">{title}</h6>
-        <p className="communication-prefs__pref-text">{subText}</p>
+        <h6 className="communication-prefs__pref-title">{t(title)}</h6>
+        <p className="communication-prefs__pref-text">{t(subText)}</p>
         {fields.map(field => (
           <div className="communication-prefs__pref-item">
-            <span>{field.title}</span>
+            <span>{t(field.title)}</span>
             <span className="ml-auto d-flex align-items-center">
               <CustomToggleCheck
-                id={field.id}
+                id={t(field.id)}
                 checked={checkboxValues[field.id] == 1 ? true : false}
                 onChange={() =>
                   setCheckboxValues({
