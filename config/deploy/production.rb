@@ -7,7 +7,7 @@ server '192.168.51.20', user: 'deploy', roles: %w(next-web prod-release)
 set :deploy_to, '/home/deploy/next-web'
 
 set :nvm_type, :user
-set :nvm_node, 'v12.18.0'
+set :nvm_node, 'v12.18.2'
 set :nvm_map_bins, %w{node npm pm2}
 set :build_env, 'production'
 
