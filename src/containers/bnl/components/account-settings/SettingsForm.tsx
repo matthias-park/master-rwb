@@ -193,7 +193,7 @@ const SettingsForm = ({
                       key={field.id}
                       id={field.id}
                       rules={{
-                        required: `${field.title} ${t(
+                        required: `${t(field.title)} ${t(
                           'settings_field_required',
                         )}`,
                       }}
