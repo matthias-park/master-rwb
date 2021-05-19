@@ -1,6 +1,9 @@
 .form-group {
     position: relative;
     $self: &;
+    .form-control-wrp {
+      position: relative;
+    }
     .form-control:not(select) {
         padding-top: 17px;
         + label {
@@ -125,7 +128,7 @@
     }
     &.has-error.with-message {
       #{ $self }__icons {
-        top: calc(50% - 8px);
+        top: 50%;
       }
     }
 }
