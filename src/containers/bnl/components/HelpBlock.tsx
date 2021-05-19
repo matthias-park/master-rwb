@@ -13,7 +13,7 @@ const HelpBlock = ({
   const { t } = useI18n();
   return (
     <div className={`help-block ${className}`}>
-      {title && <p className="help-block__title">{title}</p>}
+      {title && <p className="help-block__title">{t(title)}</p>}
       <div className="help-block__body">
         {blocks.includes('faq') && (
           <div className="help-block__body-item">

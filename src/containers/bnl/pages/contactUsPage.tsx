@@ -172,7 +172,7 @@ const ContactUsPage = () => {
                         rules={{
                           required:
                             field.required &&
-                            `${field.title} ${t(
+                            `${t(field.title)} ${t(
                               field.type === 'select'
                                 ? 'contact_us_select_required'
                                 : 'contact_page_field_required',

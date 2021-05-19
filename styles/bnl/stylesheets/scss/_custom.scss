@@ -638,8 +638,15 @@ a:hover {
   border-radius: 8px;
   padding: 16px;
   &__title {
+    display: flex;
+    align-items: center;
     font-weight: 600;
     font-size: 14px;
+    color: $gray-800;
+    i {
+      font-size: 25px;
+      transform: translateX(-4px);
+    }
   }
   &__text {
     color: $gray-700;

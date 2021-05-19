@@ -79,51 +79,53 @@ export const UncontrolledTextInput = React.forwardRef(
           !!props.errorMsg && 'with-message',
         )}
       >
-        <Form.Control
-          {...props}
-          ref={ref}
-          type={showPassword ? 'text' : props.type}
-          placeholder=" "
-          autoComplete={props.autoComplete}
-        />
-        <label htmlFor={props.id} className="text-14">
-          {props.title}
-        </label>
-        <div data-testid="icons" className="form-group__icons">
-          {props.validation === FormFieldValidation.Validating && (
-            <Spinner
-              as="span"
-              data-testid="spinner"
-              animation="border"
-              role="status"
-              size="sm"
-            />
-          )}
-          {!!props.tooltip && (
-            <OverlayTrigger
-              placement={'bottom'}
-              overlay={
-                <Tooltip id={`tooltip-${props.id}`} className="tooltip--big">
-                  <div
-                    dangerouslySetInnerHTML={{ __html: props.tooltip }}
-                  ></div>
-                </Tooltip>
-              }
-            >
-              <i className="icon-tooltip"></i>
-            </OverlayTrigger>
-          )}
-          {props.toggleVisibility && (
-            <i
-              className={clsx(
-                'icon-eye-off show-password',
-                showPassword && 'show',
-              )}
-              onClick={togglePasswordVisibility}
-            />
-          )}
-          <i className="icon-check" />
-          <i className="icon-exclamation" />
+        <div className="form-control-wrp">
+          <Form.Control
+            {...props}
+            ref={ref}
+            type={showPassword ? 'text' : props.type}
+            placeholder=" "
+            autoComplete={props.autoComplete}
+          />
+          <label htmlFor={props.id} className="text-14">
+            {props.title}
+          </label>
+          <div data-testid="icons" className="form-group__icons">
+            {props.validation === FormFieldValidation.Validating && (
+              <Spinner
+                as="span"
+                data-testid="spinner"
+                animation="border"
+                role="status"
+                size="sm"
+              />
+            )}
+            {!!props.tooltip && (
+              <OverlayTrigger
+                placement={'bottom'}
+                overlay={
+                  <Tooltip id={`tooltip-${props.id}`} className="tooltip--big">
+                    <div
+                      dangerouslySetInnerHTML={{ __html: props.tooltip }}
+                    ></div>
+                  </Tooltip>
+                }
+              >
+                <i className="icon-tooltip"></i>
+              </OverlayTrigger>
+            )}
+            {props.toggleVisibility && (
+              <i
+                className={clsx(
+                  'icon-eye-off show-password',
+                  showPassword && 'show',
+                )}
+                onClick={togglePasswordVisibility}
+              />
+            )}
+            <i className="icon-check" />
+            <i className="icon-exclamation" />
+          </div>
         </div>
         {!!props.errorMsg && (
           <small data-testid="error" className="form-group__error-msg">

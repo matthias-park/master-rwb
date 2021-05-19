@@ -44,27 +44,29 @@ const SelectInput = ({
         fieldState.error?.message && 'with-message',
       )}
     >
-      <Form.Control
-        {...field}
-        as="select"
-        disabled={disabled}
-        isInvalid={!!fieldState.error}
-        size={size}
-        type="text"
-        placeholder=" "
-      >
-        {!defaultValue && title && (
-          <option key="-1" value="-1">
-            {title}
-          </option>
-        )}
-        {values.map(option => (
-          <option value={option.value}>{option.text}</option>
-        ))}
-      </Form.Control>
-      <div className="form-group__icons">
-        <i className="icon-check"></i>
-        <i className="icon-exclamation"></i>
+      <div className="form-control-wrp">
+        <Form.Control
+          {...field}
+          as="select"
+          disabled={disabled}
+          isInvalid={!!fieldState.error}
+          size={size}
+          type="text"
+          placeholder=" "
+        >
+          {!defaultValue && title && (
+            <option key="-1" value="-1">
+              {title}
+            </option>
+          )}
+          {values.map(option => (
+            <option value={option.value}>{option.text}</option>
+          ))}
+        </Form.Control>
+        <div className="form-group__icons">
+          <i className="icon-check"></i>
+          <i className="icon-exclamation"></i>
+        </div>
       </div>
       <small className="form-group__error-msg">
         {fieldState.error?.message}
