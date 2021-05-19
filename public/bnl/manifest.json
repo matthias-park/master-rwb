@@ -1,7 +1,7 @@
 {
   "name": "SCOOORE",
   "start_url": "/",
-  "display": "standalone",
+  "display": "browser",
   "icons": [
     {
       "src": "/assets/images/icons/128px.png",
