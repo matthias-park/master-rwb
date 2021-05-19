@@ -11,10 +11,14 @@ const useUserBankAccountModal = () => {
       revalidateOnReconnect: false,
     },
   );
-
+  const loading = !data && !error;
+  const hasBankAccount = data?.Data.bank_account ?? false;
+  const requestError =
+    (!loading && data?.Data.bank_account === undefined) || !!error;
   return {
-    loading: !data && !error,
-    hasBankAccount: !!data?.Data.bank_account,
+    loading,
+    hasBankAccount,
+    error: requestError,
     refresh: mutate,
   };
 };

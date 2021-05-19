@@ -133,7 +133,8 @@ const WithdrawalPage = () => {
       user.logged_in &&
       user.validator_status !== VALIDATOR_STATUS.MAJOR_ERROR &&
       !bankAccount.loading &&
-      !bankAccount.hasBankAccount
+      !bankAccount.hasBankAccount &&
+      !bankAccount.error
     ) {
       enableModal(ComponentName.AddBankAccountModal);
     }

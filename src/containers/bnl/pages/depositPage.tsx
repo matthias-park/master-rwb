@@ -40,7 +40,8 @@ const DepositPage = () => {
       user.logged_in &&
       user.validator_status !== VALIDATOR_STATUS.MAJOR_ERROR &&
       !bankAccount.loading &&
-      !bankAccount.hasBankAccount
+      !bankAccount.hasBankAccount &&
+      !bankAccount.error
     ) {
       enableModal(ComponentName.AddBankAccountModal);
     }
@@ -125,8 +126,8 @@ const DepositPage = () => {
         amount={user.balance!}
         tooltip={t('playable_amount_tooltip')}
       /> */}
-      <CustomAlert show={!!apiError} variant="danger">
-        {apiError}
+      <CustomAlert show={!!apiError || !!bankAccount.error} variant="danger">
+        {apiError ? apiError : t('user_bank_acc_check_failed')}
       </CustomAlert>
       {depositStatus.depositStatus !== DepositStatus.None && (
         <div className="amount-container mb-4">
