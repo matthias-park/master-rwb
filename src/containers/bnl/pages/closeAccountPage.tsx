@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { useI18n } from '../../../hooks/useI18n';
 import Accordion from 'react-bootstrap/Accordion';
 import Spinner from 'react-bootstrap/Spinner';
-import { useToasts } from 'react-toast-notifications';
 import useApi from '../../../hooks/useApi';
 import SettingsForm from '../components/account-settings/SettingsForm';
 import { SettingsField } from '../../../types/api/user/ProfileSettings';
@@ -21,7 +20,7 @@ interface CloseAccountProps {
 }
 
 const CloseAccountCard = ({ closeAccountData }: CloseAccountProps) => {
-  const { t, jsxT } = useI18n();
+  const { t } = useI18n();
   const { id, title, note, fields, action } = closeAccountData;
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
@@ -71,21 +70,9 @@ const CloseAccountCard = ({ closeAccountData }: CloseAccountProps) => {
 };
 
 const CloseAccountPage = () => {
-  const { t, jsxT } = useI18n();
-  const { addToast } = useToasts();
-  const { data, error, mutate } = useApi<any>(
+  const { t } = useI18n();
+  const { data, error } = useApi<any>(
     '/railsapi/v1/user/profile/close_account',
-    {
-      onErrorRetry: (error, key) => {
-        if (error?.Code !== 401) {
-          addToast(`Failed to fetch user settings`, {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        }
-        console.log(error);
-      },
-    },
   );
   const isDataLoading = !data && !error;
   const questionItems = useMemo(

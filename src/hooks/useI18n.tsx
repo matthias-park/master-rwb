@@ -63,21 +63,21 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
     },
   );
 
-  useEffect(() => {
-    navigator.serviceWorker?.addEventListener('message', async ({ data }) => {
-      if (
-        data.meta === 'workbox-broadcast-update' &&
-        data.payload.updatedURL.includes(translationsUrl)
-      ) {
-        const { cacheName, updatedUrl } = data.payload;
-        const cache = await caches.open(cacheName);
-        const updatedResponse = await cache.match(updatedUrl);
-        const updatedJson = updatedResponse && (await updatedResponse.json());
-        mutate(updatedJson, false);
-        console.log('translations updated');
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   navigator.serviceWorker?.addEventListener('message', async ({ data }) => {
+  //     if (
+  //       data.meta === 'workbox-broadcast-update' &&
+  //       data.payload.updatedURL.includes(translationsUrl)
+  //     ) {
+  //       const { cacheName, updatedUrl } = data.payload;
+  //       const cache = await caches.open(cacheName);
+  //       const updatedResponse = await cache.match(updatedUrl);
+  //       const updatedJson = updatedResponse && (await updatedResponse.json());
+  //       mutate(updatedJson, false);
+  //       console.log('translations updated');
+  //     }
+  //   });
+  // }, []);
 
   const [translations, setTranslations] = useState(() =>
     i18n(locale, data?.Data),

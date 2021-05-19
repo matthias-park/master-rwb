@@ -1,9 +1,8 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useI18n } from '../../../hooks/useI18n';
 import Accordion from 'react-bootstrap/Accordion';
 import Spinner from 'react-bootstrap/Spinner';
 import CustomAlert from '../components/CustomAlert';
-import { useToasts } from 'react-toast-notifications';
 import useApi from '../../../hooks/useApi';
 import SettingsForm from '../components/account-settings/SettingsForm';
 import { SettingsField } from '../../../types/api/user/ProfileSettings';
@@ -191,20 +190,8 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
 
 const LimitsPage = () => {
   const { t, jsxT } = useI18n();
-  const { addToast } = useToasts();
   const { data, error, mutate } = useApi<any>(
     '/railsapi/v1/user/profile/play_limits',
-    {
-      onErrorRetry: (error, key) => {
-        if (error?.Code !== 401) {
-          addToast(`Failed to fetch user settings`, {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        }
-        console.log(error);
-      },
-    },
   );
   const isDataLoading = !data && !error;
 

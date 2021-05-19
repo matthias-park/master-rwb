@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useI18n } from '../../../hooks/useI18n';
 import { postApi } from '../../../utils/apiUtils';
-import { useToasts } from 'react-toast-notifications';
 import ForgotPasswordResponse from '../../../types/api/user/ForgotPassword';
 import CustomAlert from '../components/CustomAlert';
 import Form from 'react-bootstrap/Form';
@@ -26,7 +25,6 @@ const ForgotPasswordPage = () => {
     msg: string;
   } | null>(null);
   const { t } = useI18n();
-  const { addToast } = useToasts();
   const { user } = useAuth();
   const sendDataToGTM = useGTM();
 
@@ -50,15 +48,7 @@ const ForgotPasswordPage = () => {
     const result = await postApi<RailsApiResponse<ForgotPasswordResponse>>(
       '/railsapi/v1/user/login/forgot_password',
       form,
-    ).catch((res: RailsApiResponse<null>) => {
-      if (res.Fallback) {
-        addToast('failed to recover password', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      }
-      return res;
-    });
+    ).catch((res: RailsApiResponse<null>) => res);
 
     return setApiResponse({
       success: result.Success,

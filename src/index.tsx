@@ -5,8 +5,8 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './containers/App';
 import * as Sentry from '@sentry/react';
-import { Workbox } from 'workbox-window';
-import Lockr from 'lockr';
+// import { Workbox } from 'workbox-window';
+// import Lockr from 'lockr';
 
 if (process.env.TARGET_ENV !== 'development' && window.__config__.sentryDsn) {
   Sentry.init({
@@ -23,38 +23,38 @@ ReactDOM.render(
   MOUNT_NODE,
 );
 
-if (
-  Lockr.get('service-worker') &&
-  process.env.TARGET_ENV !== 'development' &&
-  'serviceWorker' in navigator
-) {
-  const wb = new Workbox(`/service-worker.js?name=${window.__config__.name}`);
+// if (
+//   Lockr.get('service-worker') &&
+//   process.env.TARGET_ENV !== 'development' &&
+//   'serviceWorker' in navigator
+// ) {
+//   const wb = new Workbox(`/service-worker.js?name=${window.__config__.name}`);
 
-  wb.addEventListener('installed', event => {
-    if (event.isUpdate) {
-      window._wbUpdate = true;
-      window.toast?.('Website update available', {
-        appearance: 'success',
-        autoDismiss: false,
-        onDismiss: () => window.location.reload(),
-      });
-    }
-  });
+//   wb.addEventListener('installed', event => {
+//     if (event.isUpdate) {
+//       window._wbUpdate = true;
+//       window.toast?.('Website update available', {
+//         appearance: 'success',
+//         autoDismiss: false,
+//         onDismiss: () => window.location.reload(),
+//       });
+//     }
+//   });
 
-  setInterval(() => {
-    wb.update();
-  }, 3600000); // 1hour
+//   setInterval(() => {
+//     wb.update();
+//   }, 3600000); // 1hour
 
-  wb.register();
-} else {
-  window.navigator.serviceWorker
-    ?.getRegistrations()
-    ?.then(function (registrations) {
-      if (registrations.length) {
-        for (let registration of registrations) {
-          registration.unregister();
-        }
-        window.location.reload();
-      }
-    });
-}
+//   wb.register();
+// } else {
+//   window.navigator.serviceWorker
+//     ?.getRegistrations()
+//     ?.then(function (registrations) {
+//       if (registrations.length) {
+//         for (let registration of registrations) {
+//           registration.unregister();
+//         }
+//         window.location.reload();
+//       }
+//     });
+// }

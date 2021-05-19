@@ -98,7 +98,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
       </ul>
       <ul className="footer-sub__nav flex-row justify-content-center h-auto pb-3 pb-lg-0">
         <li className="footer-sub__nav-img">
-          <a target="_blank" href={t('play_legally_href')}>
+          <a target="_blank" rel="noreferrer" href={t('play_legally_href')}>
             <img
               alt="play legally"
               className="mb-2 mb-lg-0 white-corners"
@@ -108,7 +108,11 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
           </a>
         </li>
         <li className="footer-sub__nav-img">
-          <a target="_blank" href={t('responsible_gaming_href')}>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href={t('responsible_gaming_href')}
+          >
             <img
               alt="responsible gaming"
               className="ml-2 ml-lg-3 mb-2 mb-lg-0 white-corners"
@@ -118,7 +122,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
           </a>
         </li>
         <li className="footer-sub__nav-img">
-          <a target="_blank" href={t('bgc_href')}>
+          <a target="_blank" rel="noreferrer" href={t('bgc_href')}>
             <img
               alt="bgc"
               className="ml-2 ml-lg-3 mb-2 mb-lg-0"
@@ -128,7 +132,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
           </a>
         </li>
         <li className="footer-sub__nav-img">
-          <a target="_blank" href={t('bnl_href')}>
+          <a target="_blank" rel="noreferrer" href={t('bnl_href')}>
             <img
               alt="bnl"
               className="ml-1 ml-lg-2 mb-2 mb-lg-0"
@@ -138,7 +142,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
           </a>
         </li>
         <li className="footer-sub__nav-img">
-          <a target="_blank" href={t('el_href')}>
+          <a target="_blank" rel="noreferrer" href={t('el_href')}>
             <img
               alt="european lotteries"
               className="ml-1 ml-lg-2 mb-2 mb-lg-0"

@@ -1,7 +1,6 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { SettingsField } from '../../../../types/api/user/ProfileSettings';
 import { FormProvider, useForm } from 'react-hook-form';
-import clsx from 'clsx';
 import Form from 'react-bootstrap/Form';
 import LoadingButton from '../../../../components/LoadingButton';
 import { useI18n } from '../../../../hooks/useI18n';
@@ -12,8 +11,6 @@ import { useAuth } from '../../../../hooks/useAuth';
 import { API_VALIDATIONS, postApi } from '../../../../utils/apiUtils';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import { useToasts } from 'react-toast-notifications';
-import useApi from '../../../../hooks/useApi';
-import ProfileSettings from '../../../../types/api/user/ProfileSettings';
 import AutocompletePostalCode from '../AutocompletePostalCode';
 
 interface SettingProps {
@@ -62,7 +59,7 @@ const SettingsForm = ({
       .map(field => field.id),
   );
   const resetValues = fields
-    .filter(field => !field.default && field.type != 'submit')
+    .filter(field => !field.default && field.type !== 'submit')
     .map(field => field.id);
   const visibilityOverrideFields = useMemo(
     () =>

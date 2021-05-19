@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useI18n } from '../../../hooks/useI18n';
 import Spinner from 'react-bootstrap/Spinner';
-import { useToasts } from 'react-toast-notifications';
 import useApi from '../../../hooks/useApi';
 import SettingsForm from '../components/account-settings/SettingsForm';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
@@ -10,20 +9,8 @@ import CustomAlert from '../components/CustomAlert';
 
 const ChangePasswordPage = () => {
   const { t } = useI18n();
-  const { addToast } = useToasts();
   const { data, error } = useApi<any>(
     '/railsapi/v1/user/profile/change_password',
-    {
-      onErrorRetry: (error, key) => {
-        if (error?.Code !== 401) {
-          addToast(`Failed to fetch user settings`, {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        }
-        console.log(error);
-      },
-    },
   );
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
@@ -46,6 +33,11 @@ const ChangePasswordPage = () => {
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
+      )}
+      {!!error && (
+        <h2 className="mt-3 mb-5 text-center">
+          {t('settings_page_failed_to_load')}
+        </h2>
       )}
       {!!data && (
         <div className="change-pw">

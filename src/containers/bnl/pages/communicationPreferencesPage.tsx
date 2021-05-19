@@ -4,7 +4,6 @@ import CustomToggleCheck from '../components/CustomToggleCheck';
 import Spinner from 'react-bootstrap/Spinner';
 import { useToasts } from 'react-toast-notifications';
 import useApi from '../../../hooks/useApi';
-import SettingsForm from '../components/account-settings/SettingsForm';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
 import HelpBlock from '../components/HelpBlock';
 import CustomAlert from '../components/CustomAlert';
@@ -105,11 +104,11 @@ const CommunicationPrefCard = ({
             <span className="ml-auto d-flex align-items-center">
               <CustomToggleCheck
                 id={t(field.id)}
-                checked={checkboxValues[field.id] == 1 ? true : false}
+                checked={checkboxValues[field.id] === 1 ? true : false}
                 onChange={() =>
                   setCheckboxValues({
                     ...checkboxValues,
-                    [field.id]: checkboxValues[field.id] == 1 ? '0' : '1',
+                    [field.id]: checkboxValues[field.id] === 1 ? '0' : '1',
                   })
                 }
               />
@@ -130,21 +129,9 @@ const CommunicationPrefCard = ({
 };
 
 const CommunicationPreferencesPage = () => {
-  const { t, jsxT } = useI18n();
-  const { addToast } = useToasts();
-  const { data, error, mutate } = useApi<any>(
+  const { t } = useI18n();
+  const { data, error } = useApi<any>(
     '/railsapi/v1/user/profile/communication_preferences',
-    {
-      onErrorRetry: (error, key) => {
-        if (error?.Code !== 401) {
-          addToast(`Failed to fetch user settings`, {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        }
-        console.log(error);
-      },
-    },
   );
   const isDataLoading = !data && !error;
   const questionItems = useMemo(
@@ -163,6 +150,11 @@ const CommunicationPreferencesPage = () => {
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
+      )}
+      {!!error && (
+        <h2 className="mt-3 mb-5 text-center">
+          {t('settings_page_failed_to_load')}
+        </h2>
       )}
       {!!data && (
         <ul className="list-unstyled communication-prefs">

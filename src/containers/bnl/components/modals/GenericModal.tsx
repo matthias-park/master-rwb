@@ -1,5 +1,4 @@
 import React from 'react';
-import { useI18n } from '../../../../hooks/useI18n';
 import Modal from 'react-bootstrap/Modal';
 import clsx from 'clsx';
 
@@ -21,7 +20,6 @@ const GenericModal = ({
   withoutClose,
   className,
 }: Props) => {
-  const { t } = useI18n();
   return (
     <Modal
       show={show}

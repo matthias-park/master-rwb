@@ -35,17 +35,6 @@ const SettingsPage = () => {
   const { addToast } = useToasts();
   const { data, error, mutate } = useApi<ProfileSettings>(
     '/railsapi/v1/user/profile',
-    {
-      onErrorRetry: (error, key) => {
-        if (error?.Code !== 401) {
-          addToast(`Failed to fetch user settings`, {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        }
-        console.log(error);
-      },
-    },
   );
   const isDataLoading = !data && !error;
   const handleOnSubmit = async (
