@@ -163,7 +163,7 @@ const RegisterPage = () => {
       <div className="reg-block">
         <FormProvider {...formMethods}>
           <HelpBlock
-            title="Hulp nodig?"
+            title={'user_help_title'}
             blocks={['faq', 'phone', 'email']}
             className="default"
           />

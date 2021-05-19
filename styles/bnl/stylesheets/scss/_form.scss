@@ -28,7 +28,8 @@
         }
         &:focus,
         &:active,
-        &:not(:placeholder-shown) {
+        &:not(:placeholder-shown),
+        &:-webkit-autofill {
             + label {
                 font-size: 9px !important;
                 top: 4px;
