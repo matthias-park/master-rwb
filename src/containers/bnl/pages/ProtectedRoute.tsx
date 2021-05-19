@@ -26,7 +26,10 @@ const ProtectedRoute = ({ children, redirectTo, ...props }: Props) => {
     <Redirect
       to={{
         pathname: redirectTo || redirectToPath,
-        state: { from: !user.logout && props.location?.pathname },
+        state: {
+          from: !user.logout && props.location?.pathname,
+          protectedRoute: true,
+        },
       }}
     />
   );
