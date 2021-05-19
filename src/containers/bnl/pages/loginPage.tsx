@@ -5,13 +5,14 @@ import { useConfig } from '../../../hooks/useConfig';
 import { useRoutePath } from '../../../hooks/index';
 import { PagesName } from '../../../constants';
 import Link from '../../../components/Link';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { useAuth } from '../../../hooks/useAuth';
 import Spinner from 'react-bootstrap/Spinner';
 
 const LoginPage = () => {
   const { t } = useI18n();
   const { user } = useAuth();
+  const location = useLocation<{ from?: string } | null>();
   const history = useHistory();
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const responsibleGamingPath = useRoutePath(
@@ -20,9 +21,9 @@ const LoginPage = () => {
   );
 
   useEffect(() => {
-    if (user.logged_in) history.push('/');
+    const fromPathname = location.state?.from;
+    if (user.logged_in) history.push(fromPathname || '/');
   }, [user.logged_in]);
-
   return (
     <main className="page-container">
       <div className="page-inner page-inner--small">
