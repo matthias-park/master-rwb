@@ -85,7 +85,7 @@ const CommunicationPrefCard = ({
       }, {}),
     };
     return handleOnSubmit(action, body);
-  }, []);
+  }, [checkboxValues]);
 
   return (
     <li className="communication-prefs__pref">
