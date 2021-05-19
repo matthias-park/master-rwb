@@ -91,7 +91,9 @@ const CommunicationPrefCard = ({
       <form onSubmit={handleSubmit(updateSettingsSubmit)}>
         <CustomAlert
           show={!!apiResponse}
-          variant={apiResponse?.success ? 'success' : 'danger'}
+          variant={
+            (apiResponse && (apiResponse.success ? 'success' : 'danger')) || ''
+          }
           className="mb-3"
         >
           <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />

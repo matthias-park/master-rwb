@@ -82,7 +82,11 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
               <hr className="mt-2 mb-0"></hr>
               <CustomAlert
                 show={!!apiResponse}
-                variant={apiResponse?.success ? 'success' : 'danger'}
+                variant={
+                  (apiResponse &&
+                    (apiResponse.success ? 'success' : 'danger')) ||
+                  ''
+                }
                 className="mb-0 mt-2"
               >
                 <div

@@ -62,7 +62,10 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
             <hr className="pt-1 mb-0"></hr>
             <CustomAlert
               show={!!apiResponse}
-              variant={apiResponse?.success ? 'success' : 'danger'}
+              variant={
+                (apiResponse && (apiResponse.success ? 'success' : 'danger')) ||
+                ''
+              }
               className="mb-0 mt-2"
             >
               <div
@@ -165,7 +168,10 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
             <hr className="pt-1 mb-0"></hr>
             <CustomAlert
               show={!!apiResponse}
-              variant={apiResponse?.success ? 'success' : 'danger'}
+              variant={
+                (apiResponse && (apiResponse.success ? 'success' : 'danger')) ||
+                ''
+              }
               className="mb-0 mt-2"
             >
               <div

@@ -66,7 +66,9 @@ const ForgotPasswordPage = () => {
         <h2 className="mb-4">{t('forgot_password_page_title')}</h2>
         <CustomAlert
           show={!!apiResponse}
-          variant={apiResponse?.success ? 'success' : 'danger'}
+          variant={
+            (apiResponse && (apiResponse.success ? 'success' : 'danger')) || ''
+          }
         >
           {apiResponse?.msg}
         </CustomAlert>
