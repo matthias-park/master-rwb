@@ -153,11 +153,21 @@ const SettingsForm = ({
     return;
   };
 
+  const showHiddenUsernameField = fields.some(field => field.id === 'password');
+
   return (
     <FormProvider {...formMethods}>
       <Form onSubmit={handleSubmit(updateSettingsSubmit)}>
         <div className="row pt-3">
           <div data-testid="form-container" className="col-12">
+            {showHiddenUsernameField && (
+              <input
+                id="username"
+                name="username"
+                style={{ display: 'none' }}
+                type="text"
+              />
+            )}
             {fields.map(field => {
               const visibilityOverrideField =
                 visibilityOverrideFields[field.id];
@@ -275,7 +285,9 @@ const SettingsForm = ({
                       toggleVisibility={isPassword}
                       type={field.type}
                       autoComplete={
-                        isPassword || isNewPassword ? 'new-password' : ''
+                        isPassword
+                          ? `${isNewPassword ? 'new' : 'current'}-password`
+                          : 'nope'
                       }
                       disableCopyPaste={isPassword || isNewPassword}
                     />

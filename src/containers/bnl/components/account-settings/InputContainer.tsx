@@ -59,9 +59,9 @@ const InputContainer = ({
     const minNumber = Number(min);
     const maxNumber = Number(max);
     if (minNumber && inputAmount < minNumber) {
-      return `${t('amount_below_minimum')} ${currency}${minNumber}`;
+      return t('amount_below_minimum');
     } else if (maxNumber && inputAmount > maxNumber) {
-      return `${t('amount_above_maximum')} ${currency}${maxNumber}`;
+      return t('amount_above_maximum');
     }
     return true;
   };

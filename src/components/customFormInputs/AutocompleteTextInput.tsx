@@ -119,6 +119,7 @@ const AutocompleteTextInput = ({
             id={id}
             errorMsg={fieldState.error?.message}
             isInvalid={!!fieldState.error && !isLoading}
+            autoComplete="nope"
             ref={ref => {
               referenceElementRef(ref);
               inputRef(ref);

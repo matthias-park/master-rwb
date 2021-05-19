@@ -71,7 +71,7 @@ const LoginForm = () => {
           id="password"
           type="password"
           title={t('login_password')}
-          // autoComplete="current-password"
+          autoComplete="current-password"
           toggleVisibility
         />
         <div className="d-flex align-items-center flex-wrap">

@@ -29,18 +29,21 @@ const blocks = (
     fields: [
       {
         id: 'firstname',
+        autoComplete: 'given-name',
         type: 'text',
         required: true,
         validate: value => VALIDATIONS.name(value) || t('field_only_letters'),
       },
       {
         id: 'lastname',
+        autoComplete: 'family-name',
         type: 'text',
         required: true,
         validate: value => VALIDATIONS.name(value) || t('field_only_letters'),
       },
       {
         id: 'address',
+        autoComplete: 'street-address',
         type: 'text',
         required: true,
       },
@@ -51,6 +54,7 @@ const blocks = (
       },
       {
         id: 'phone_number',
+        autoComplete: 'tel',
         type: 'text',
         required: false,
         validate: value =>
@@ -97,6 +101,7 @@ const blocks = (
       {
         id: 'email',
         type: 'email',
+        autoComplete: 'email',
         required: true,
         disableCopyPaste: true,
         triggerId: 'repeat_email',
@@ -121,6 +126,7 @@ const blocks = (
       {
         id: 'repeat_email',
         type: 'email',
+        autoComplete: 'email',
         required: true,
         disableCopyPaste: true,
         validate: value => {
@@ -161,6 +167,7 @@ const blocks = (
         id: 'repeat_password',
         required: true,
         type: 'password',
+        autoComplete: 'new-password',
         disableCopyPaste: true,
         validate: value => {
           const valid = validateRepeat('password', value);
@@ -289,6 +296,7 @@ const OnlineForm = (props: Props) => {
                           ? t(`tooltip_${field.id}`)
                           : undefined
                       }
+                      autoComplete={field.autoComplete}
                       validation={
                         (validationForms[field.id.replace('repeat_', '')] ===
                           FormFieldValidation.Invalid ||

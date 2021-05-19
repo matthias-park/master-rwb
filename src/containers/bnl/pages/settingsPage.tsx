@@ -37,10 +37,12 @@ const SettingsPage = () => {
     '/railsapi/v1/user/profile',
     {
       onErrorRetry: (error, key) => {
-        addToast(`Failed to fetch user settings`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
+        if (error?.Code !== 401) {
+          addToast(`Failed to fetch user settings`, {
+            appearance: 'error',
+            autoDismiss: true,
+          });
+        }
         console.log(error);
       },
     },

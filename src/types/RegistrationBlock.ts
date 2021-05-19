@@ -14,8 +14,7 @@ export interface OnlineFormBlockField {
   required?: boolean;
   validate?: (value: string) => boolean | string | Promise<boolean | string>;
   triggerId?: string;
-  autoComplete?: ((value: string) => Promise<any>) | string;
-  labelKey?: (value: any) => string;
+  autoComplete?: string | undefined;
   inputFormatting?: {
     format?: string | ((value: string) => string);
     allowEmptyFormatting?: boolean;

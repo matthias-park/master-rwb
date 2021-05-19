@@ -22,7 +22,7 @@ export interface UserAuth {
   updateUser: () => void;
 }
 
-const AuthContext = createContext<UserAuth | null>(null);
+export const AuthContext = createContext<UserAuth | null>(null);
 
 export function useAuth(): UserAuth {
   const instance = useContext<UserAuth | null>(AuthContext);
@@ -60,14 +60,13 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
   let user: UserStatus = { logged_in: false, loading: false };
   if (!data && !error) {
     user.loading = true;
-  } else if (data) {
+  } else if (data && !error) {
     user = data;
     user.logged_in = !!user.id;
     user.loading = false;
   }
-
   useEffect(() => {
-    if (!data?.logout && !data?.logged_in && prevUser?.logged_in) {
+    if (!user?.logout && !user?.logged_in && prevUser?.logged_in) {
       addToast(`User session ended`, {
         appearance: 'warning',
         autoDismiss: true,
