@@ -140,7 +140,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
         )}
       </div>
       <div className="info-container__text">
-        {limitData.limit_amount && limitData.amount_left ? (
+        {limitData.limit_amount ? (
           <ul className="list-unstyled mb-0 play-limits">
             <li className="play-limits__limit">
               <p className="play-limits__limit-title">{t('current_limit')}</p>
@@ -151,7 +151,9 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
             <li className="play-limits__limit">
               <p className="play-limits__limit-title">{t('used_limit')}</p>
               <p className="play-limits__limit-total">
-                {user.currency} {limitData.limit_amount - limitData.amount_left}
+                {user.currency}{' '}
+                {limitData.amount_left &&
+                  limitData.limit_amount - limitData.amount_left}
               </p>
             </li>
             <li className="play-limits__limit">
