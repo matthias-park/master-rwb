@@ -22,6 +22,7 @@ interface LimitProps {
     future_limit_valid_from?: string;
     fields: SettingsField[];
     action: string;
+    disabled?: boolean;
   };
   mutate: () => void;
 }
@@ -30,6 +31,7 @@ const timeoutCards = ['disable_player_time_out', 'self_exclusion'];
 
 const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
   const { t } = useI18n();
+  const { user } = useAuth();
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
     msg: string;
@@ -39,6 +41,10 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
     .map(item => {
       return { id: item.id, value: item.value };
     });
+  const disabledUntilDate =
+    user.player_timeout && dayjs(new Date(user.player_timeout['DisableUntil']));
+  const isSelfExcluded =
+    disabledUntilDate && disabledUntilDate?.year() - dayjs().year() > 5;
 
   return (
     <Accordion className="info-container info-container--gray mb-3">
@@ -47,39 +53,57 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
           <b>{t(limitData.title)}</b>
         </p>
         <p className="text-14 text-gray-700 pt-1">{t(limitData.note)}</p>
-        <Accordion.Toggle
-          as="button"
-          eventKey={limitData.id}
-          className="info-container__edit btn btn-light btn-sm px-3"
-        >
-          {t('timeout_edit')}
-        </Accordion.Toggle>
+        {!limitData.disabled && (
+          <Accordion.Toggle
+            as="button"
+            eventKey={limitData.id}
+            className="info-container__edit btn btn-light btn-sm px-3"
+          >
+            {t('timeout_edit')}
+          </Accordion.Toggle>
+        )}
       </div>
       <div className="info-container__text">
-        <p className="text-gray-400 mb-0">{t('timeout_unset')}</p>
-        <Accordion.Collapse eventKey={limitData.id}>
-          <>
-            <hr className="pt-1 mb-0"></hr>
-            <CustomAlert
-              show={!!apiResponse}
-              variant={apiResponse?.success ? 'success' : 'danger'}
-              className="mb-0 mt-2"
-            >
-              <div
-                dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }}
+        <p className="text-gray-400 mb-0">
+          {limitData.id === 'self_exclusion'
+            ? disabledUntilDate && isSelfExcluded
+              ? t('player_disabled_indefinite')
+              : t('timeout_unset')
+            : disabledUntilDate && !isSelfExcluded
+            ? `${t('player_disabled_until')}: ${disabledUntilDate.format(
+                'YYYY-MM-DD',
+              )}`
+            : t('timeout_unset')}
+        </p>
+        {!limitData.disabled && (
+          <Accordion.Collapse eventKey={limitData.id}>
+            <>
+              <hr className="pt-1 mb-0"></hr>
+              <CustomAlert
+                show={!!apiResponse}
+                variant={
+                  (apiResponse &&
+                    (apiResponse.success ? 'success' : 'danger')) ||
+                  ''
+                }
+                className="mb-0 mt-2"
+              >
+                <div
+                  dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }}
+                />
+              </CustomAlert>
+              <SettingsForm
+                id={limitData.id}
+                fields={limitData.fields}
+                action={limitData.action}
+                setResponse={setApiResponse}
+                fixedData={fixedData}
+                mutateData={mutate}
+                translatableDefaultValues={true}
               />
-            </CustomAlert>
-            <SettingsForm
-              id={limitData.id}
-              fields={limitData.fields}
-              action={limitData.action}
-              setResponse={setApiResponse}
-              fixedData={fixedData}
-              mutateData={mutate}
-              translatableDefaultValues={true}
-            />
-          </>
-        </Accordion.Collapse>
+            </>
+          </Accordion.Collapse>
+        )}
       </div>
     </Accordion>
   );
@@ -105,13 +129,15 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
           <b>{t(limitData.title)}</b>
         </p>
         <p className="text-14 text-gray-700 pt-1">{t(limitData.note)}</p>
-        <Accordion.Toggle
-          as="button"
-          eventKey={limitData.id}
-          className="info-container__edit btn btn-light btn-sm px-3"
-        >
-          {t('limits_edit')}
-        </Accordion.Toggle>
+        {!limitData.disabled && (
+          <Accordion.Toggle
+            as="button"
+            eventKey={limitData.id}
+            className="info-container__edit btn btn-light btn-sm px-3"
+          >
+            {t('limits_edit')}
+          </Accordion.Toggle>
+        )}
       </div>
       <div className="info-container__text">
         {limitData.limit_amount && limitData.amount_left ? (
@@ -160,29 +186,35 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
             </p>
           </>
         )}
-        <Accordion.Collapse eventKey={limitData.id}>
-          <>
-            <hr className="pt-1 mb-0"></hr>
-            <CustomAlert
-              show={!!apiResponse}
-              variant={apiResponse?.success ? 'success' : 'danger'}
-              className="mb-0 mt-2"
-            >
-              <div
-                dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }}
+        {!limitData.disabled && (
+          <Accordion.Collapse eventKey={limitData.id}>
+            <>
+              <hr className="pt-1 mb-0"></hr>
+              <CustomAlert
+                show={!!apiResponse}
+                variant={
+                  (apiResponse &&
+                    (apiResponse.success ? 'success' : 'danger')) ||
+                  ''
+                }
+                className="mb-0 mt-2"
+              >
+                <div
+                  dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }}
+                />
+              </CustomAlert>
+              <SettingsForm
+                id={limitData.id}
+                fields={limitData.fields}
+                action={limitData.action}
+                setResponse={setApiResponse}
+                fixedData={fixedData}
+                mutateData={mutate}
+                translatableDefaultValues={true}
               />
-            </CustomAlert>
-            <SettingsForm
-              id={limitData.id}
-              fields={limitData.fields}
-              action={limitData.action}
-              setResponse={setApiResponse}
-              fixedData={fixedData}
-              mutateData={mutate}
-              translatableDefaultValues={true}
-            />
-          </>
-        </Accordion.Collapse>
+            </>
+          </Accordion.Collapse>
+        )}
       </div>
     </Accordion>
   );

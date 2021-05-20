@@ -43,7 +43,10 @@ const ChangePasswordPage = () => {
         <div className="change-pw">
           <CustomAlert
             show={!!apiResponse}
-            variant={apiResponse?.success ? 'success' : 'danger'}
+            variant={
+              (apiResponse && (apiResponse.success ? 'success' : 'danger')) ||
+              ''
+            }
           >
             <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />
           </CustomAlert>
