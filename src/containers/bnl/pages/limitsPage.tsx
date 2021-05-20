@@ -30,7 +30,7 @@ interface LimitProps {
 const timeoutCards = ['disable_player_time_out', 'self_exclusion'];
 
 const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
   const { user } = useAuth();
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
@@ -59,7 +59,7 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
             eventKey={limitData.id}
             className="info-container__edit btn btn-light btn-sm px-3"
           >
-            {t('timeout_edit')}
+            {jsxT('timeout_edit')}
           </Accordion.Toggle>
         )}
       </div>
@@ -67,13 +67,13 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
         <p className="text-gray-400 mb-0">
           {limitData.id === 'self_exclusion'
             ? disabledUntilDate && isSelfExcluded
-              ? t('player_disabled_indefinite')
-              : t('timeout_unset')
+              ? jsxT('player_disabled_indefinite')
+              : jsxT('timeout_unset')
             : disabledUntilDate && !isSelfExcluded
             ? `${t('player_disabled_until')}: ${disabledUntilDate.format(
                 'YYYY-MM-DD',
               )}`
-            : t('timeout_unset')}
+            : jsxT('timeout_unset')}
         </p>
         {!limitData.disabled && (
           <Accordion.Collapse eventKey={limitData.id}>

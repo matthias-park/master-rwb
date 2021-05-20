@@ -127,7 +127,7 @@ const DepositPage = () => {
         tooltip={t('playable_amount_tooltip')}
       /> */}
       <CustomAlert show={!!apiError || !!bankAccount.error} variant="danger">
-        {apiError ? apiError : t('user_bank_acc_check_failed')}
+        {apiError ? apiError : jsxT('user_bank_acc_check_failed')}
       </CustomAlert>
       {depositStatus.depositStatus !== DepositStatus.None && (
         <div className="amount-container mb-4">
@@ -142,7 +142,7 @@ const DepositPage = () => {
               />
             )}
             {depositStatus.message ||
-              t(`deposit_status_${depositStatus.depositStatus}`)}
+              jsxT(`deposit_status_${depositStatus.depositStatus}`)}
           </h2>
         </div>
       )}

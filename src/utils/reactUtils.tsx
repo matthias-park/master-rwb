@@ -30,6 +30,17 @@ const regexToReact = [
       );
     },
   },
+  {
+    regex: /<br>/gm,
+    component: () => <br />,
+  },
+  {
+    regex: /<(small|b|strong|em|i|kbd|mark|q|s|samp|sub|var)>(.*?)<\/(small|b|strong|em|i|kbd|mark|q|s|samp|sub|var)>/gm,
+    component: matches => {
+      const [, Tag, text] = matches;
+      return <Tag>{text}</Tag>;
+    },
+  },
 ];
 
 export const replaceStringTagsReact = (text: string, props: any = {}) => {
@@ -46,6 +57,6 @@ export const replaceStringTagsReact = (text: string, props: any = {}) => {
       text = text.substring(index + match.length, text.length + 1);
     }
   }
-
+  if (text.length) output.push(text);
   return output;
 };

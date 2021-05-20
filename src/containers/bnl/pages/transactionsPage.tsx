@@ -41,7 +41,7 @@ interface Transactions {
 }
 
 const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationOverflow, setPaginationOverflow] = useState(false);
 
@@ -155,7 +155,7 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
             </Pagination>
           )}
           <div className="table-container__info">
-            {data && t(data.time_limitation_notice)}
+            {data && jsxT(data.time_limitation_notice)}
           </div>
         </div>
       ) : (

@@ -51,7 +51,10 @@ const InputContainer = ({
 
   const { formState, watch, setValue } = formMethods;
   const handleSubmit = () => {
-    formMethods.handleSubmit(({ amount }) => onSubmit(Number(amount)))();
+    formMethods.handleSubmit(async ({ amount }) => {
+      await onSubmit(Number(amount));
+      formMethods.reset();
+    })();
   };
   const validateAmount = (value: string) => {
     if (!value) return true;
