@@ -20,6 +20,7 @@ interface SitemapListItem {
   name: string;
   emptyRoute?: boolean;
   order?: number;
+  redirectTo?: string;
 }
 
 const pagesWithTranslatedName = [
@@ -48,6 +49,7 @@ const insertSitemapChildren = (listItem: SitemapListItem, route, t) => {
     name: pageName,
     order: route.order,
     emptyRoute: route.id === PagesName.Null && !route.externalLinkTranslation,
+    redirectTo: route.redirectTo,
     externalLink:
       route.externalLinkTranslation && t(route.externalLinkTranslation),
   });
@@ -90,7 +92,7 @@ const TreeItem = ({
               {route.name}
             </a>
           ) : (
-            <Link to={route.path}>{route.name}</Link>
+            <Link to={route.redirectTo || route.path}>{route.name}</Link>
           )}
         </div>
       )}
@@ -161,6 +163,7 @@ const SitemapPage = () => {
           name: pageName,
           emptyRoute: route.id === PagesName.Null,
           order: route.order,
+          redirectTo: route.redirectTo,
           externalLink:
             route.externalLinkTranslation && t(route.externalLinkTranslation),
         });
