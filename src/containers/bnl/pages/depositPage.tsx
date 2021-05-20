@@ -207,12 +207,6 @@ const DepositPage = () => {
             </li>
             <li className="mb-2 d-flex flex-column flex-sm-row">
               <span className="font-weight-bold">
-                {t('deposit_bank_account')}:{' '}
-              </span>
-              <span className="ml-sm-auto">{t('deposit_bank_account')}</span>
-            </li>
-            <li className="mb-2 d-flex flex-column flex-sm-row">
-              <span className="font-weight-bold">
                 {t('deposit_bank_code')}:{' '}
               </span>
               <span className="ml-sm-auto">{t('deposit_bank_code_data')}</span>
