@@ -31,6 +31,7 @@ export interface UserStatus {
   first_name?: string;
   last_name?: string;
   validator_status?: VALIDATOR_STATUS;
+  player_timeout?: { DisableReason: number; DisableUntil: Date };
   barcode?: string;
   max_deposit?: number | null;
 }

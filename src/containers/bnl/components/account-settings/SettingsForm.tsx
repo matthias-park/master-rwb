@@ -33,6 +33,7 @@ const FormsWithUpdateUser = [
   'disable_player',
   'disable_player_time_out',
   'permanent_disable',
+  'self_exclusion',
 ];
 
 const SettingsForm = ({
