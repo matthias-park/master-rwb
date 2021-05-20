@@ -39,9 +39,9 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
     const loadedEqual = prev.configLoaded === next.configLoaded;
     return localeEqual && loadedEqual;
   });
-  const [cache, setCache] = useLocalStorage<
-    RailsApiResponse<Translations> | undefined
-  >(`translations-cache-${locale}`, undefined);
+  const [cache, setCache] = useLocalStorage<{
+    [key: string]: RailsApiResponse<Translations> | undefined;
+  }>(`translations-cache`, {});
   const translationsUrl =
     !TestEnv && configLoaded === ConfigLoaded.Loaded && locale
       ? `/railsapi/v1/translations?locale=${locale}`
@@ -49,10 +49,10 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   const { data, mutate } = useApi<RailsApiResponse<Translations>>(
     translationsUrl,
     {
-      initialData: cache,
+      initialData: cache?.[locale],
       revalidateOnMount: true,
       onSuccess: data => {
-        setCache(data);
+        setCache({ ...(cache || {}), [locale]: data });
       },
       onErrorRetry: () => {
         addToast(`Failed to fetch translations`, {
@@ -80,7 +80,7 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   // }, []);
 
   const [translations, setTranslations] = useState(() =>
-    i18n(locale, data?.Data),
+    data?.Data ? i18n(data.Data._locale_, data.Data) : i18n(locale, {}),
   );
 
   useEffect(() => {
@@ -90,7 +90,9 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   }, [locale]);
 
   useEffect(() => {
-    setTranslations(i18n(locale, data?.Data));
+    if (data?.Data._locale_) {
+      setTranslations(i18n(data.Data._locale_, data?.Data));
+    }
   }, [locale, data?.Data]);
 
   const addSymbols = (data: Symbols) => {

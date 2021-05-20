@@ -91,6 +91,7 @@ const WithdrawalRequests = ({
                       variant="outline-danger"
                       size="sm"
                       onClick={() => handleCancel(request.id)}
+                      disabled={request.cancel_requested}
                       loading={cancelLoading === request.id}
                     >
                       {t('withdrawal_requests_cancel_btn')}

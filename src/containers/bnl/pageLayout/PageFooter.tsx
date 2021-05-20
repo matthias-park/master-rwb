@@ -163,7 +163,7 @@ const SocialSection = ({
   social?: Social;
   partners?: Partners;
 }) => {
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
   const { ...webSocial } = social || {};
 
   return (
@@ -245,7 +245,7 @@ const SocialSection = ({
         </p>
       </div>
       <div className="footer-info-text d-none d-xxl-flex align-items-end ml-3 mb-2">
-        <p>{t('footer_info_text')}</p>
+        <p>{jsxT('footer_info_text')}</p>
       </div>
     </section>
   );

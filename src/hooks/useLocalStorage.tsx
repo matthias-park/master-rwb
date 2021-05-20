@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Lockr from 'lockr';
 
 export interface Options {
@@ -11,13 +11,18 @@ const useLocalStorage = <T extends unknown>(
   initialValue: T,
   options?: Options,
 ): [value: T, setValue: (value: T) => void] => {
-  const [storedValue, setStoredValue] = useState<T>(() => {
+  const getValue = () => {
     const value = Lockr.get<T>(key);
     if (!value && initialValue && options?.setInitValue) {
       Lockr.set(key, initialValue as any);
     }
     return value || initialValue;
-  });
+  };
+  const [storedValue, setStoredValue] = useState<T>(getValue);
+
+  useEffect(() => {
+    setStoredValue(getValue());
+  }, [key]);
 
   const setValue = (value: T) => {
     setStoredValue(value);
