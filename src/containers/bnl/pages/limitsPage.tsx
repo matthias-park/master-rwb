@@ -140,7 +140,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
         )}
       </div>
       <div className="info-container__text">
-        {limitData.limit_amount ? (
+        {limitData.limit_amount != null ? (
           <ul className="list-unstyled mb-0 play-limits">
             <li className="play-limits__limit">
               <p className="play-limits__limit-title">{t('current_limit')}</p>
