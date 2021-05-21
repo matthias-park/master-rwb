@@ -235,11 +235,11 @@ a:hover {
           align-items: center;
           color: $gray-800;
           padding-bottom: 5px;
-          &:not(:first-of-type) {
+          &:not(:first-child) {
               padding-top: 15px;
               padding-bottom: 10px;
           }
-          &:not(:last-of-type) {
+          &:not(:last-child) {
               border-bottom: 1px solid $gray-200;
           }
           &-icon {
