@@ -27,6 +27,7 @@ const pagesWithTranslatedName = [
   PagesName.TemplatePage,
   PagesName.FaqPage,
   PagesName.ResponsibleGamingPage,
+  PagesName.TermsAndConditionsPage,
 ];
 
 const insertSitemapChildren = (listItem: SitemapListItem, route, t) => {
