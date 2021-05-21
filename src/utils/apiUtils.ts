@@ -29,7 +29,7 @@ export const getApi = <T>(url: string, options?: GetApiOptions): Promise<T> => {
     headers: new Headers(),
   };
   return fetch(`${window.__config__.apiUrl}${url}`, config).then(res => {
-    if (!res.ok) {
+    if (!res.ok && res.status !== 400) {
       return Promise.reject<RailsApiResponse<null>>({
         ...RailsApiResponseFallback,
         Code: res.status,
