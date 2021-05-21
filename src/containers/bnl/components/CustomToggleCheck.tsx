@@ -10,7 +10,7 @@ const CustomToggleCheck = ({ id, checked, onChange }) => {
       className={clsx('toggle-check', checked && 'toggle-check--checked')}
       onClick={onChange}
     >
-      <input type="checkbox" id={id} checked={checked}></input>
+      <input type="checkbox" id={id} checked={checked} readOnly></input>
       <span className="toggle-check__slider"></span>
       <span className="toggle-check__checked">
         {t('custom_checkbox_checked')}
