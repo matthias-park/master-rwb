@@ -212,16 +212,10 @@ const OnlineForm = (props: Props) => {
   const triggerRepeat = (id: string) => {
     return watch(id, '') !== '' && trigger(id);
   };
-  const onSubmit = async ({ postal_code, ...data }) => {
-    const post_code = postal_code.split(' ')[0];
-    const postal_info = await API_VALIDATIONS.postalCode(post_code);
-    const city =
-      Object.values(postal_info.Data?.result || {})[0]?.locality_name || '';
+  const onSubmit = async data => {
     const response = await props.handleRegisterSubmit({
       ...data,
       login: data.email,
-      city,
-      postal_code: post_code,
     });
     if (!response.Success) {
       scroll.scrollToTop();

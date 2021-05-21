@@ -101,7 +101,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
                 action={action}
                 setResponse={setApiResponse}
                 mutateData={mutate}
-                fixedData={[{ id: 'phone_number' }, { id: 'postal_code' }]}
+                fixedData={[{ id: 'phone_number' }]}
               />
             </>
           </Accordion.Collapse>

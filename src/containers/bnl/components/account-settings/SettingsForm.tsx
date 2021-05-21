@@ -8,11 +8,11 @@ import { REGEX_EXPRESSION, VALIDATIONS } from '../../../../constants';
 import SelectInput from '../../../../components/customFormInputs/SelectInput';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import { useAuth } from '../../../../hooks/useAuth';
-import { API_VALIDATIONS, postApi } from '../../../../utils/apiUtils';
+import { postApi } from '../../../../utils/apiUtils';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import { useToasts } from 'react-toast-notifications';
 import AutocompletePostalCode from '../AutocompletePostalCode';
-
+import { DevTool } from '@hookform/devtools';
 interface SettingProps {
   id: string;
   fields: SettingsField[];
@@ -112,16 +112,6 @@ const SettingsForm = ({
             '',
           );
         }
-        if ('postal_code' === item.id && body[item.id]) {
-          body[item.id] = (body[item.id] as string).split(' ')[0];
-          const post_code = (body[item.id] as string).split(' ')[0];
-          const postal_info = await API_VALIDATIONS.postalCode(post_code);
-          const city =
-            Object.values(postal_info.Data?.result || {})[0]?.locality_name ||
-            '';
-          body['postal_code'] = post_code;
-          body['city'] = city;
-        }
       }
     }
     const res = await postApi<RailsApiResponse<null>>(url, body, {
@@ -156,6 +146,7 @@ const SettingsForm = ({
   return (
     <FormProvider {...formMethods}>
       <Form onSubmit={handleSubmit(updateSettingsSubmit)}>
+        <DevTool {...formMethods} />
         <div className="row pt-3">
           <div data-testid="form-container" className="col-12">
             {showHiddenUsernameField && (
