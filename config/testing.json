@@ -4,7 +4,7 @@
       "name": "bnl",
       "domain": ["bnl-rjtest.tglab.dev", "uat-fe.scooore.be"],
       "theme": "bnl",
-      "api": "https://bnl-test-rails.tglab.dev",
+      "api": "https://uat-api.scooore.be",
       "gtmId": "GTM-PGRW8BQ",
       "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17",
       "kambi": {
