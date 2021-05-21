@@ -77,10 +77,10 @@ export const clearUserLocalStorage = () => {
   }
 };
 
-export const trimWhitespacesFromObjectValues = (obj: {
-  [key: string]: unknown;
-}) =>
+export const cleanPostBody = (obj: { [key: string]: unknown }) =>
   Object.entries(obj).reduce((obj, [key, value]) => {
-    obj[key] = typeof value === 'string' ? value.trim() : value;
+    if (!key.includes('temp_field_')) {
+      obj[key] = typeof value === 'string' ? value.trim() : value;
+    }
     return obj;
   }, {});

@@ -58,21 +58,11 @@ export const extensionsToIgnore = [
 export const BROWSER_KEEP_ALIVE = 300000; // 5min
 export const HOLD_RENDERED_PAGE_INTERVAL = 3600000; // 1 hour
 
-export const DOMAINS_TO_NAME = config
-  .get<FranchiseConfig[]>('franchises')
-  .reduce((obj, fr) => {
-    const domains = Array.isArray(fr.domain) ? fr.domain : [fr.domain];
-    domains.forEach(domain => {
-      obj[domain] = fr.name;
-    });
-    return obj;
-  }, {});
 export const DOMAINS_TO_FRANCHISE: {
   [key: string]: FranchiseConfig;
 } = config.get<FranchiseConfig[]>('franchises').reduce((obj, fr) => {
-  const domains = Array.isArray(fr.domain) ? fr.domain : [fr.domain];
-  domains.forEach(domain => {
-    obj[domain] = fr;
+  fr.domains.forEach(domain => {
+    obj[domain.hostname] = fr;
   });
   return obj;
 }, {});

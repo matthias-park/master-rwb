@@ -175,41 +175,44 @@ module.exports = function (webpackEnv) {
   };
 
   const generateHtmlPlugin = franchise =>
-    new HtmlWebpackPlugin(
-      Object.assign(
-        {},
-        {
-          inject: true,
-          template: paths.appBuildHtml,
-          chunks: ['main'],
-          filename: `${franchise.name}.html`,
-          franchiseTheme: `static/css/theme-${franchise.theme}.${buildHash}.css`,
-          config: JSON.stringify({
-            name: franchise.name,
-            apiUrl: franchise.api,
-            gtmId: franchise.gtmId,
-            sentryDsn: franchise.sentryDsn,
-            kambi: franchise.kambi,
-            googleRecaptchaKey: franchise.googleRecaptchaKey,
-          }),
-        },
-        isEnvProduction
-          ? {
-              minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeRedundantAttributes: true,
-                useShortDoctype: true,
-                removeEmptyAttributes: true,
-                removeStyleLinkTypeAttributes: true,
-                keepClosingSlash: true,
-                minifyJS: true,
-                minifyCSS: true,
-                minifyURLs: true,
-              },
-            }
-          : undefined,
-      ),
+    franchise.domains.map(
+      domain =>
+        new HtmlWebpackPlugin(
+          Object.assign(
+            {},
+            {
+              inject: true,
+              template: paths.appBuildHtml,
+              chunks: ['main'],
+              filename: `${domain.hostname}.html`,
+              franchiseTheme: `static/css/theme-${franchise.theme}.${buildHash}.css`,
+              config: JSON.stringify({
+                name: franchise.name,
+                apiUrl: domain.api,
+                gtmId: franchise.gtmId,
+                sentryDsn: franchise.sentryDsn,
+                kambi: franchise.kambi,
+                googleRecaptchaKey: franchise.googleRecaptchaKey,
+              }),
+            },
+            isEnvProduction
+              ? {
+                  minify: {
+                    removeComments: true,
+                    collapseWhitespace: true,
+                    removeRedundantAttributes: true,
+                    useShortDoctype: true,
+                    removeEmptyAttributes: true,
+                    removeStyleLinkTypeAttributes: true,
+                    keepClosingSlash: true,
+                    minifyJS: true,
+                    minifyCSS: true,
+                    minifyURLs: true,
+                  },
+                }
+              : undefined,
+          ),
+        ),
     );
 
   return {
@@ -553,7 +556,9 @@ module.exports = function (webpackEnv) {
     },
     plugins: [
       // Generates an `index.html` file with the <script> injected.
-      ...(isEnvProduction ? configFranchises.map(generateHtmlPlugin) : []),
+      ...(isEnvProduction
+        ? configFranchises.map(generateHtmlPlugin).flat()
+        : []),
       isEnvDevelopment &&
         new HtmlWebpackPlugin({
           inject: true,

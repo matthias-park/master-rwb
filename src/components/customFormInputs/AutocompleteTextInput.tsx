@@ -105,7 +105,8 @@ const AutocompleteTextInput = ({
           !options?.some(
             option => labelkey(option, field.value) === field.value,
           ) &&
-          !fieldState.error
+          !fieldState.error &&
+          field.value !== defaultValue
         ) {
           setError(id, { type: 'manual', message: invalidTextError });
         }

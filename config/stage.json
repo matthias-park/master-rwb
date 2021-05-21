@@ -2,9 +2,13 @@
   "franchises": [
     {
       "name": "bnl",
-      "domain": "bnl-rj.tglab.dev",
+      "domains": [
+        {
+          "hostname": "bnl-rj.tglab.dev",
+          "api": "https://bnl-dev.tglab.dev"
+        }
+      ],
       "theme": "bnl",
-      "api": "https://bnl-dev.tglab.dev",
       "gtmId": "GTM-PGRW8BQ",
       "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17",
       "kambi": {

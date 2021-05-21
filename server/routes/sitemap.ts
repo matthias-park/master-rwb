@@ -20,9 +20,8 @@ const getSitemap = async (req: Request, res: Response) => {
     )
     .filter(Boolean);
   if (!links) return res.sendStatus(404);
-  const hostname = `http${req.secure ? 's' : ''}://${req.franchise.domain}`;
   const stream = new SitemapStream({
-    hostname: hostname,
+    hostname: req.hostname,
     lastmodDateOnly: true,
   });
   Readable.from(links).pipe(stream);

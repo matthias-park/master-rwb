@@ -2,9 +2,17 @@
   "franchises": [
     {
       "name": "bnl",
-      "domain": ["preprod.scooore.be", "scooore.be"],
+      "domains": [
+        {
+          "hostname": "preprod.scooore.be",
+          "api": "http://api.scooore.be"
+        },
+        {
+          "hostname": "scooore.be",
+          "api": "http://api.scooore.be"
+        }
+      ],
       "theme": "bnl",
-      "api": "https://bnl-dev.tglab.dev",
       "gtmId": "GTM-PGRW8BQ",
       "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17",
       "kambi": {

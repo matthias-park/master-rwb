@@ -2,15 +2,24 @@
   "franchises": [
     {
       "name": "bnl",
-      "domain": ["bnl-rjtest.tglab.dev", "uat-fe.scooore.be"],
+      "domains": [
+        {
+          "hostname": "bnl-rjtest.tglab.dev",
+          "api": "https://bnl-test-rails.tglab.dev"
+        },
+        {
+          "hostname": "uat-fe.scooore.be",
+          "api": "https://uat-api.scooore.be"
+        }
+      ],
       "theme": "bnl",
-      "api": "https://uat-api.scooore.be",
       "gtmId": "GTM-PGRW8BQ",
       "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17",
       "kambi": {
         "bootstrap": "https://cts-static.kambi.com/client/bnlbe/kambi-bootstrap.js",
         "api": "https://cts-static.kambi.com/client/widget-api/kambi-widget-api.js"
-      }
+      },
+      "googleRecaptchaKey": "6Lezp2oaAAAAADpwV6q_a2k7yVPD52Qb89Z2zFcR"
     }
   ],
   "port": 3805,

@@ -1,8 +1,10 @@
 export interface FranchiseConfig {
   name: string;
-  domain: string | string[];
+  domains: {
+    hostname: string;
+    api: string;
+  }[];
   theme: string;
-  api: string;
 }
 declare global {
   namespace Express {

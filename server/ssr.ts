@@ -7,7 +7,6 @@ import {
   PRERENDER_HEADER,
   BROWSER_KEEP_ALIVE,
   HOLD_RENDERED_PAGE_INTERVAL,
-  DOMAINS_TO_NAME,
   MAX_PRERENDER_PAGES,
 } from './constants';
 import logger from './logger';
@@ -67,15 +66,14 @@ export const render = async (req: Request) => {
       return req.abort();
     }
     const reqUrl = new URL(req.url());
-    const frName = DOMAINS_TO_NAME[reqUrl.hostname];
-    if (frName) {
+    if (reqUrl.hostname) {
       const jsFile = reqUrl.pathname.endsWith('.js');
       const contentType = `${
         jsFile ? 'application/javascript' : 'text/html'
       }; charset=UTF-8`;
       const filePath = path.join(
         BUILD_FOLDER,
-        jsFile ? reqUrl.pathname : `/${frName}.html`,
+        jsFile ? reqUrl.pathname : `/${reqUrl.hostname}.html`,
       );
       if (fs.existsSync(filePath)) {
         return req.respond({

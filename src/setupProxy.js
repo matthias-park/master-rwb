@@ -4,11 +4,15 @@ const franchises = config.get('franchises');
 const port = config.get('port') || 3800;
 
 const domainToApi = franchises.reduce((obj, fr) => {
-  obj[`${fr.domain}:${port}`] = fr.api;
+  fr.domains.forEach(domain => {
+    obj[`${domain.hostname}:${port}`] = domain.api;
+  });
   return obj;
 }, {});
 const domainToName = franchises.reduce((obj, fr) => {
-  obj[fr.domain] = fr.name;
+  fr.domains.forEach(domain => {
+    obj[domain.hostname] = fr.name;
+  });
   return obj;
 }, {});
 

@@ -39,7 +39,7 @@ interface ContentPages {
 export const getRailsConstants = (req: Request) =>
   // 2 hour cache
   getCache(`${req.franchise.name}-rails-constants`, 7200000, () =>
-    fetch(`${req.franchise.api}/railsapi/v1/content/constants`).then(
+    fetch(`${req.franchise.domains[0].api}/railsapi/v1/content/constants`).then(
       async res => {
         if (res.ok) {
           const data = await res.json();

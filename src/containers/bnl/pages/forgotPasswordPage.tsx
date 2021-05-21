@@ -77,9 +77,7 @@ const ForgotPasswordPage = () => {
           <Form onSubmit={handleSubmit(onSubmit)}>
             <TextInput
               rules={{
-                required: `${t('forgot_password_email_field')} ${t(
-                  'login_field_required',
-                )}`,
+                required: t('forgot_password_field_required'),
                 validate: async value =>
                   VALIDATIONS.email(value) || t('register_email_bad_format'),
               }}

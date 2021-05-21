@@ -2,9 +2,13 @@
   "franchises": [
     {
       "name": "bnl",
-      "domain": "bnl.local",
+      "domains": [
+        {
+          "hostname": "bnl.local",
+          "api": "https://bnl-dev.tglab.dev"
+        }
+      ],
       "theme": "bnl",
-      "api": "https://bnl-dev.tglab.dev",
       "kambi": {
         "bootstrap": "https://ctn-static.kambi.com/client/bnlbe/kambi-bootstrap.js",
         "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js"

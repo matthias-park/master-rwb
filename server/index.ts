@@ -40,7 +40,7 @@ app.get('*', async (req, res) => {
       return res.send(html);
     }
   }
-  const filePath = path.join(BUILD_FOLDER, `/${req.franchise.name}.html`);
+  const filePath = path.join(BUILD_FOLDER, `/${req.hostname}.html`);
   if (fs.existsSync(filePath)) {
     return res.sendFile(filePath);
   }

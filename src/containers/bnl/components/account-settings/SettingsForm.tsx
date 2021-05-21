@@ -12,7 +12,6 @@ import { postApi } from '../../../../utils/apiUtils';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import { useToasts } from 'react-toast-notifications';
 import AutocompletePostalCode from '../AutocompletePostalCode';
-import { DevTool } from '@hookform/devtools';
 interface SettingProps {
   id: string;
   fields: SettingsField[];
@@ -146,7 +145,6 @@ const SettingsForm = ({
   return (
     <FormProvider {...formMethods}>
       <Form onSubmit={handleSubmit(updateSettingsSubmit)}>
-        <DevTool {...formMethods} />
         <div className="row pt-3">
           <div data-testid="form-container" className="col-12">
             {showHiddenUsernameField && (
@@ -224,7 +222,7 @@ const SettingsForm = ({
                     return (
                       <AutocompletePostalCode
                         id={field.id}
-                        key={field.id}
+                        key={defaultValue || field.id}
                         defaultValue={defaultValue}
                         translationPrefix="settings_field_"
                         required

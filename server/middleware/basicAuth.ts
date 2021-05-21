@@ -4,11 +4,13 @@ import auth from 'basic-auth';
 
 const basicAuth = (req: Request, res: Response, next: NextFunction) => {
   if (
-    req
-      .header('referer')
-      ?.includes(
-        `${req.franchise.domain}/service-worker.js?name=${req.franchise.name}`,
-      )
+    req.franchise.domains.some(domain =>
+      req
+        .header('referer')
+        ?.includes(
+          `${domain.hostname}/service-worker.js?name=${req.franchise.name}`,
+        ),
+    )
   )
     return next();
   if (
