@@ -110,7 +110,7 @@ const CommunicationPrefCard = ({
                 onChange={() =>
                   setCheckboxValues({
                     ...checkboxValues,
-                    [field.id]: checkboxValues[field.id] === 1 ? '0' : '1',
+                    [field.id]: checkboxValues[field.id] === 1 ? 0 : 1,
                   })
                 }
               />

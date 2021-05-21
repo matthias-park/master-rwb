@@ -125,7 +125,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
           <a target="_blank" rel="noreferrer" href={t('bgc_href')}>
             <img
               alt="bgc"
-              className="ml-2 ml-lg-3 mb-2 mb-lg-0"
+              className="ml-2 ml-lg-3 mb-2 mb-lg-0 white-corners"
               height="40"
               src={`/assets/images/footer/bgc-${locale}.jpg`}
             />

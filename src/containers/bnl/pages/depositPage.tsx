@@ -19,6 +19,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { VALIDATOR_STATUS } from '../../../types/UserStatus';
 import { structuredBankCommunications } from '../../../utils/index';
 import Spinner from 'react-bootstrap/Spinner';
+import Button from 'react-bootstrap/Button';
 import useDepositResponseStatus from '../../../hooks/useDepositResponseStatus';
 
 const DepositPage = () => {
@@ -110,6 +111,7 @@ const DepositPage = () => {
     },
     [bankAccount],
   );
+
   const minDeposit = t('bancontact_min_deposit');
   const maxDeposit =
     user.max_deposit !== null ? user.max_deposit : t('bancontact_max_deposit');
@@ -129,23 +131,35 @@ const DepositPage = () => {
       <CustomAlert show={!!apiError || !!bankAccount.error} variant="danger">
         {apiError ? apiError : jsxT('user_bank_acc_check_failed')}
       </CustomAlert>
-      {depositStatus.depositStatus !== DepositStatus.None && (
-        <div className="amount-container mb-4">
-          <h2 className="amount-container__amount">
-            {depositStatus.depositStatus === DepositStatus.Pending && (
-              <Spinner
-                as="span"
-                animation="border"
-                role="status"
-                aria-hidden="true"
-                className="mr-1 mt-1"
-              />
-            )}
+      {depositStatus.depositStatus !== DepositStatus.None &&
+        (depositStatus.depositStatus === DepositStatus.Pending ? (
+          <Spinner
+            as="span"
+            animation="border"
+            role="status"
+            aria-hidden="true"
+            className="d-block mx-auto my-4"
+          />
+        ) : (
+          <CustomAlert
+            show={true}
+            variant={
+              depositStatus.depositStatus === DepositStatus.Confirmed
+                ? 'success'
+                : 'danger'
+            }
+          >
             {depositStatus.message ||
               jsxT(`deposit_status_${depositStatus.depositStatus}`)}
-          </h2>
-        </div>
-      )}
+            <div>
+              <u>
+                {depositStatus.depositStatus === DepositStatus.Confirmed
+                  ? jsxT('cta_bet_now')
+                  : jsxT('cta_deposit')}
+              </u>
+            </div>
+          </CustomAlert>
+        ))}
       <InputContainer
         title={t('select_amount')}
         inputTitle={t('deposit_input_amount')}
