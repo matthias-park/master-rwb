@@ -6,10 +6,14 @@ import { VALIDATOR_STATUS } from '../../../../types/UserStatus';
 import { useModal } from '../../../../hooks/useModal';
 import { ComponentName } from '../../../../constants';
 import { useAuth } from '../../../../hooks/useAuth';
+import { useRoutePath } from '../../../../hooks';
+import { PagesName } from '../../../../constants';
+import Link from '../../../../components/Link';
 
 const ValidationFailedModal = () => {
   const { user } = useAuth();
   const { t } = useI18n();
+  const personalInfoRoute = useRoutePath(PagesName.PersonalInfoPage);
   const {
     activeModal,
     allActiveModals,
@@ -45,9 +49,13 @@ const ValidationFailedModal = () => {
     >
       <h2 className="mb-3 mt-4">{t('validation_failed_title')}</h2>
       <p>{t(`validation_failed_body_${user.validator_status}`)}</p>
-      <Button onClick={hideModal} variant="primary" className="mx-auto mt-4">
-        {t('validation_failed_close')}
-      </Button>
+      <Link
+        to={personalInfoRoute}
+        onClick={hideModal}
+        className="btn btn-primary mx-auto mt-4 px-4"
+      >
+        {t('validation_failed_profile_link')}
+      </Link>
     </GenericModal>
   );
 };
