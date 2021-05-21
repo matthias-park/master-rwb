@@ -245,12 +245,15 @@ const SettingsForm = ({
                     'new_password',
                     'new_password_confirmation',
                   ].includes(field.id);
-                  return field.id === 'postal_code' ? (
-                    <AutocompletePostalCode
-                      id={field.id}
-                      defaultValue={field.default}
-                    />
-                  ) : (
+                  let masketInput;
+                  if (field.id.includes('amount')) {
+                    masketInput = {
+                      prefix: `${user.currency} `,
+                      thousandSeparator: true,
+                      allowNegative: false,
+                    };
+                  }
+                  return (
                     <TextInput
                       id={field.id}
                       rules={
@@ -278,6 +281,7 @@ const SettingsForm = ({
                           ? t(field.default.toString())
                           : field.default
                       }
+                      maskedInput={masketInput}
                       disabled={field.disabled}
                       title={t(field.title)}
                       toggleVisibility={isPassword}
