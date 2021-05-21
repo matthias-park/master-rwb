@@ -16,6 +16,7 @@ export enum ComponentName {
   Null,
   ResponsibleGamblingModal,
   ValidationFailedModal,
+  TermsAndConditionsModal,
   CookiesModal = 'cookiesModal',
 }
 
@@ -46,6 +47,7 @@ export enum PagesName {
   CloseAccountPage = 24,
   ResponsibleGamingPage = 25,
   LoginPage = 26,
+  TermsAndConditionsPage = 27,
 }
 
 export enum FormFieldValidation {

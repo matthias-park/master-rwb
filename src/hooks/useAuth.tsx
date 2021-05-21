@@ -1,4 +1,10 @@
-import React, { useContext, createContext, useEffect, ReactNode } from 'react';
+import React, {
+  useContext,
+  createContext,
+  useEffect,
+  ReactNode,
+  useRef,
+} from 'react';
 import { TestEnv } from '../constants';
 import { useToasts } from 'react-toast-notifications';
 import RailsApiResponse from '../types/api/RailsApiResponse';
@@ -40,6 +46,7 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
   const { addToast } = useToasts();
   const sendDataToGTM = useGTM();
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const loginClick = useRef(false);
   const { data, error, mutate } = useApi<UserStatus | null>(
     !TestEnv ? '/railsapi/v1/user/status' : null,
     url =>
@@ -65,6 +72,7 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
     user.logged_in = !!user.id;
     user.loading = false;
   }
+  user.login_click = loginClick.current;
   useEffect(() => {
     if (!user?.logout && !user?.logged_in && prevUser?.logged_in) {
       addToast(`User session ended`, {
@@ -101,6 +109,7 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
         'tglab.user.GUID': res.Data!.PlayerId!,
         event: 'SuccessfulLogin',
       });
+      loginClick.current = true;
       mutate(
         {
           id: res.Data!.PlayerId,
@@ -109,7 +118,6 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
             currency: 'EUR',
           }),
           logged_in: true,
-          login_click: true,
           loading: false,
           name: res.Data!.Login,
         },

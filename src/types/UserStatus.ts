@@ -34,6 +34,7 @@ export interface UserStatus {
   player_timeout?: { DisableReason: number; DisableUntil: Date };
   barcode?: string;
   max_deposit?: number | null;
+  tnc_required?: boolean;
 }
 
 export interface UserBankAccount {

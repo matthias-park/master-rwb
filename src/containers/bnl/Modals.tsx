@@ -2,6 +2,7 @@ import React from 'react';
 import ResponsibleGamblingModal from './components/modals/ResponsibleGamblingModal';
 import CookiePolicyModal from './components/modals/CookiePolicyModal';
 import AddBankAccountModal from './components/modals/AddBankAccountModal';
+import TermsAndConditionsModal from './components/modals/TermsAndConditionsModal';
 import { postApi } from '../../utils/apiUtils';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { removeFalsyFromObject } from '../../utils/index';
@@ -27,6 +28,7 @@ const Modals = () => {
   }
   return (
     <>
+      <TermsAndConditionsModal />
       <ResponsibleGamblingModal />
       <ValidationFailedModal />
       {activeModal === ComponentName.CookiesModal && <CookiePolicyModal />}

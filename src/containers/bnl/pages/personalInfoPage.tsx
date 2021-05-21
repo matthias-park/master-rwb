@@ -56,6 +56,8 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
             text = info
               .map(value => (value.symbol ? t(value.value) : value.value))
               .join(': ');
+          if (id === 'bank_account')
+            text = text.match(/.{1,4}/g)?.join(' ') || text;
 
           return (
             <ul className="list-unstyled mb-0">

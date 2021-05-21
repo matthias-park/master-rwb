@@ -15,7 +15,9 @@ import { useRoutePath } from '../../../../hooks/index';
 const ResponsibleGamblingModal = () => {
   const { user } = useAuth();
   const { jsxT, t } = useI18n();
-  const prevUser = usePrevious(user.logged_in);
+  const prevUser = usePrevious(
+    user.tnc_required !== undefined ? user.logged_in : false,
+  );
   const intervalRef = useRef(0);
   const { activeModal, enableModal, disableModal } = useModal();
   const modalActive = activeModal === ComponentName.ResponsibleGamblingModal;
@@ -26,7 +28,12 @@ const ResponsibleGamblingModal = () => {
     const interval = stringToMiliseconds(
       Lockr.get('responsibleGamlingInterval', '0:20:0'),
     );
-    if (!modalActive && user.logged_in && interval) {
+    if (
+      !modalActive &&
+      user.logged_in &&
+      !(user.tnc_required ?? true) &&
+      interval
+    ) {
       if (user.logged_in && !prevUser && user.login_click) {
         setModal();
       } else {
