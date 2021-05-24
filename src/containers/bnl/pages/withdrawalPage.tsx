@@ -25,7 +25,7 @@ import { usePrevious } from '../../../hooks';
 import useUserBankAccountModal from '../../../hooks/useUserBankAccountModal';
 import { useAuth } from '../../../hooks/useAuth';
 import { VALIDATOR_STATUS } from '../../../types/UserStatus';
-
+import { replaceStringTagsReact } from '../../../utils/reactUtils';
 interface WithdrawalRequestsProps {
   requests: Request[];
   onCancelRequest: (id: number) => Promise<void>;
@@ -297,10 +297,9 @@ const WithdrawalPage = () => {
           />
           {!!data.Data.default_account && (
             <div className="info-container mb-4">
-              <p
-                className="info-container__info text-14 mb-0"
-                dangerouslySetInnerHTML={{ __html: data.Data.info }}
-              />
+              <p className="info-container__info text-14 mb-0">
+                {replaceStringTagsReact(data.Data.info || '')}
+              </p>
               <div className="info-container__text">
                 <ul className="list-unstyled mb-0">
                   <li className="mb-1">{t('withdrawal_bank_account')}</li>
