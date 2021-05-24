@@ -147,14 +147,14 @@ const PageHeader = () => {
     >
       {!desktopWidth && (
         <>
-          <BrandLogo mobile={true} />
-          <UserBlock mobile={true} />
           <Navbar.Toggle
-            className="header__nav-toggler px-1 ml-2"
+            className="header__nav-toggler pl-0 pr-1 mr-2 ml-n1"
             type="button"
           >
             <span className="icon-menu"></span>
           </Navbar.Toggle>
+          <BrandLogo mobile={true} />
+          <UserBlock mobile={true} />
         </>
       )}
       <div className="container-fluid px-0">
