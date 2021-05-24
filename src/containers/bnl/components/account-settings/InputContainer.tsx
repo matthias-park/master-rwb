@@ -84,7 +84,12 @@ const InputContainer = ({
                   'quick-amounts__btn',
                   watch('amount') === value.toString() && 'active',
                 )}
-                onClick={() => setValue('amount', value.toString())}
+                onClick={() =>
+                  setValue('amount', value.toString(), {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  })
+                }
                 disabled={disabled}
               >
                 {`${currency} ${value}`}

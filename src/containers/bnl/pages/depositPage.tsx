@@ -19,8 +19,8 @@ import { useAuth } from '../../../hooks/useAuth';
 import { VALIDATOR_STATUS } from '../../../types/UserStatus';
 import { structuredBankCommunications } from '../../../utils/index';
 import Spinner from 'react-bootstrap/Spinner';
-import Button from 'react-bootstrap/Button';
 import useDepositResponseStatus from '../../../hooks/useDepositResponseStatus';
+import RailsApiResponse from '../../../types/api/RailsApiResponse';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
@@ -80,31 +80,23 @@ const DepositPage = () => {
         Amount: depositValue,
         ReturnSuccessUrl: `${window.location.origin}${depositBaseUrl}/loading`,
       };
-      const response: DepositResponse | null = await postApi<DepositResponse>(
-        '/railsapi/v1/deposits/perform',
-        depositParams,
-      ).catch(res => {
-        return res;
-      });
+      const response: RailsApiResponse<DepositResponse | null> = await postApi<
+        RailsApiResponse<DepositResponse>
+      >('/railsapi/v1/deposits/perform', depositParams).catch(
+        (res: RailsApiResponse<null>) => {
+          return res;
+        },
+      );
       if (
         response?.Success &&
-        response.RedirectUrl &&
-        response.DepositRequestId
+        response.Data?.RedirectUrl &&
+        response.Data?.DepositRequestId
       ) {
-        depositStatus.setDepositId(response.DepositRequestId);
-        return !!(window.location.href = response.RedirectUrl);
+        depositStatus.setDepositId(response.Data.DepositRequestId);
+        return !!(window.location.href = response.Data.RedirectUrl);
       }
-      if (
-        !response ||
-        !response.Success ||
-        response.PaymentResultMessage ||
-        response.Message
-      ) {
-        setApiError(
-          response?.PaymentResultMessage ||
-            response?.Message ||
-            t('api_response_failed'),
-        );
+      if (!response || !response.Success || response.Message) {
+        setApiError(response?.Message || t('api_response_failed'));
       }
       setDepositLoading(false);
       return false;
