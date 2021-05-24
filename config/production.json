@@ -5,11 +5,11 @@
       "domains": [
         {
           "hostname": "preprod.scooore.be",
-          "api": "http://api.scooore.be"
+          "api": "https://rapi.scooore.be"
         },
         {
           "hostname": "scooore.be",
-          "api": "http://api.scooore.be"
+          "api": "https://rapi.scooore.be"
         }
       ],
       "theme": "bnl",
