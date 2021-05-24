@@ -34,19 +34,21 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
   return (
     <Accordion className="info-container mb-3">
       <div className="info-container__info pt-3">
-        <p className="mb-2">
-          <b>{t(title)}</b>
-        </p>
-        {note && <p className="text-14 text-gray-700 pt-1">{t(note)}</p>}
-        {!!fields && !disabled && (
-          <Accordion.Toggle
-            as="button"
-            eventKey={id}
-            className="info-container__edit btn btn-light btn-sm px-3"
-          >
-            {t('profile_edit')}
-          </Accordion.Toggle>
-        )}
+        <div className="d-flex">
+          <p className="mb-2">
+            <b>{t(title)}</b>
+          </p>
+          {note && <p className="text-14 text-gray-700 pt-1">{t(note)}</p>}
+          {!!fields && !disabled && (
+            <Accordion.Toggle
+              as="button"
+              eventKey={id}
+              className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
+            >
+              {t('profile_edit')}
+            </Accordion.Toggle>
+          )}
+        </div>
       </div>
       <div className="info-container__text">
         {data.map((info, index) => {

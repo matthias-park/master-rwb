@@ -49,19 +49,21 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
   return (
     <Accordion className="info-container info-container--gray mb-3">
       <div className="info-container__info pt-3">
-        <p className="mb-2">
-          <b>{t(limitData.title)}</b>
-        </p>
+        <div className="d-flex">
+          <p className="mb-2 pr-3">
+            <b>{t(limitData.title)}</b>
+          </p>
+          {!limitData.disabled && (
+            <Accordion.Toggle
+              as="button"
+              eventKey={limitData.id}
+              className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
+            >
+              {jsxT('timeout_edit')}
+            </Accordion.Toggle>
+          )}
+        </div>
         <p className="text-14 text-gray-700 pt-1">{t(limitData.note)}</p>
-        {!limitData.disabled && (
-          <Accordion.Toggle
-            as="button"
-            eventKey={limitData.id}
-            className="info-container__edit btn btn-light btn-sm px-3"
-          >
-            {jsxT('timeout_edit')}
-          </Accordion.Toggle>
-        )}
       </div>
       <div className="info-container__text">
         <p className="text-gray-400 mb-0">
@@ -125,19 +127,21 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
   return (
     <Accordion className="info-container mb-3">
       <div className="info-container__info pt-3">
-        <p className="mb-2">
-          <b>{t(limitData.title)}</b>
-        </p>
+        <div className="d-flex">
+          <p className="mb-2 pr-3">
+            <b>{t(limitData.title)}</b>
+          </p>
+          {!limitData.disabled && (
+            <Accordion.Toggle
+              as="button"
+              eventKey={limitData.id}
+              className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
+            >
+              {t('limits_edit')}
+            </Accordion.Toggle>
+          )}
+        </div>
         <p className="text-14 text-gray-700 pt-1">{t(limitData.note)}</p>
-        {!limitData.disabled && (
-          <Accordion.Toggle
-            as="button"
-            eventKey={limitData.id}
-            className="info-container__edit btn btn-light btn-sm px-3"
-          >
-            {t('limits_edit')}
-          </Accordion.Toggle>
-        )}
       </div>
       <div className="info-container__text">
         {limitData.limit_amount != null ? (
