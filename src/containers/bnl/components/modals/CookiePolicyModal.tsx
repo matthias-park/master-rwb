@@ -12,7 +12,7 @@ import { isEqual } from 'lodash';
 import { Cookies } from '../../../../types/Config';
 
 const CookiePolicyModal = () => {
-  const { t } = useI18n();
+  const { jsxT } = useI18n();
   const { cookies } = useConfig((prev, next) =>
     isEqual(prev.cookies.cookies, next.cookies.cookies),
   );
@@ -29,6 +29,7 @@ const CookiePolicyModal = () => {
   const isChecked = (id: string): boolean => {
     return cookieSettings[id];
   };
+  const hideModal = () => disableModal(ComponentName.CookiesModal);
   const handleBtnClick = (id: string) => {
     if (id === 'all') {
       cookies.setCookies(
@@ -51,18 +52,15 @@ const CookiePolicyModal = () => {
   };
 
   return (
-    <Modal
-      centered
-      show
-      onHide={() => disableModal(ComponentName.CookiesModal)}
-    >
+    <Modal centered show onHide={hideModal}>
       <Modal.Body className="custom-modal">
-        <i
-          className="icon-close custom-modal__close"
-          onClick={() => disableModal(ComponentName.CookiesModal)}
-        ></i>
-        <h2 className="mb-2 text-gray-800">{t('cookie_modal_title')}</h2>
-        <p className="text-gray-700">{t('cookie_modal_text')}</p>
+        <i className="icon-close custom-modal__close" onClick={hideModal}></i>
+        <h2 className="mb-2 text-gray-800">
+          {jsxT('cookie_modal_title', { onClick: hideModal })}
+        </h2>
+        <p className="text-gray-700">
+          {jsxT('cookie_modal_text', { onClick: hideModal })}
+        </p>
         <Accordion defaultActiveKey="0" className="cookies-accordion mt-3">
           {cookiesId.map((id, index) =>
             id === 'accepted' ? null : (
@@ -83,10 +81,14 @@ const CookiePolicyModal = () => {
                     )}
                     <div className="ml-3 text-left text-wrap">
                       <h4 className="mb-0 text-14 weight-500 text-gray-800">
-                        {t(`cookies_check_${id}_title`)}
+                        {jsxT(`cookies_check_${id}_title`, {
+                          onClick: hideModal,
+                        })}
                       </h4>
                       <small className="text-gray-700">
-                        {t(`cookies_check_${id}_short_desc`)}
+                        {jsxT(`cookies_check_${id}_short_desc`, {
+                          onClick: hideModal,
+                        })}
                       </small>
                     </div>
                   </div>
@@ -96,7 +98,7 @@ const CookiePolicyModal = () => {
                   className="cookies-accordion__body"
                 >
                   <p className="text-14 text-gray-700 mb-0">
-                    {t(`cookies_check_${id}_desc`)}
+                    {jsxT(`cookies_check_${id}_desc`, { onClick: hideModal })}
                   </p>
                 </Accordion.Collapse>
                 <i className="icon-down1 cookies-accordion__icon"></i>
@@ -110,14 +112,14 @@ const CookiePolicyModal = () => {
             variant="primary"
             onClick={() => handleBtnClick('save')}
           >
-            {t('cookies_btn_save')}
+            {jsxT('cookies_btn_save')}
           </Button>
           <Button
             className="mt-2 col-8 flex-fill d-inline-block"
             variant="primary"
             onClick={e => handleBtnClick('all')}
           >
-            {t('cookies_btn_all')}
+            {jsxT('cookies_btn_all')}
           </Button>
         </div>
       </Modal.Body>

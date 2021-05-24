@@ -122,8 +122,8 @@ const PersonalInfoPage = () => {
 
   const questionItems = useMemo(
     () => [
-      { title: t('deposit_question_1'), body: 'deposit_answer_1' },
-      { title: t('deposit_question_2'), body: 'deposit_answer_2' },
+      { title: t('profile_question_1'), body: t('profile_answer_1') },
+      { title: t('profile_question_2'), body: t('profile_answer_2') },
     ],
     [t],
   );

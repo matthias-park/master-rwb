@@ -235,8 +235,8 @@ const LimitsPage = () => {
 
   const questionItems = useMemo(
     () => [
-      { title: t('deposit_question_1'), body: 'deposit_answer_1' },
-      { title: t('deposit_question_2'), body: 'deposit_answer_2' },
+      { title: t('limits_question_1'), body: t('limits_answer_1') },
+      { title: t('limits_question_2'), body: t('limits_answer_2') },
     ],
     [t],
   );
