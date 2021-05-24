@@ -510,7 +510,9 @@
     z-index: 1100;
     box-shadow: 0 -2px 20px 0 rgba(0, 0, 0, 0.3);
     @include media-breakpoint-down(lg) {
-      left: 0;
+      left: unset;
+      transform: none;
+      right: -5%;
     }
     &__wrp {
       padding: 10px 20px 0 20px;
