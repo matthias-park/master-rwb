@@ -90,7 +90,9 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
           </Link>
         </div>
         <Dropdown.Toggle as="a" bsPrefix="header__user-menu-toggle">
-          <strong className="header__user-menu-toggle-name">{user.name}</strong>
+          <strong className="header__user-menu-toggle-name">
+            {t('hello')} {user.first_name}
+          </strong>
           <i className="header__user-menu-icon icon-account ml-2"></i>
           <div className="header__user-menu-toggle-button user-menu-dropdown">
             <i

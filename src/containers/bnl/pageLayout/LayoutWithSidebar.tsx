@@ -30,8 +30,8 @@ const LayoutWithSidebar = ({
         <div className="right-sidebar">
           <HelpBlock
             title={'user_help_title'}
-            blocks={['phone']}
-            className={'default'}
+            blocks={['faq', 'phone', 'email']}
+            className="default"
           />
         </div>
       )}
