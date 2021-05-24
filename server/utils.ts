@@ -43,6 +43,7 @@ export const getRailsConstants = (req: Request) =>
       async res => {
         if (res.ok) {
           const data = await res.json();
+          if (!data?.Data?.navigation_routes) return null;
           const navigation_routes = data.Data.navigation_routes.filter(
             route => route.id !== 14 && route.path !== '*',
           );

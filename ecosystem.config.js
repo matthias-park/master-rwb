@@ -26,15 +26,15 @@ module.exports = {
       name: 'next-web',
       script: 'build/server/index.js',
       cwd: '/home/deploy/next-web/current',
-      // instances: 4,
+      instances: 4,
       pid_file: '/home/deploy/next-web/current/pids/web.pid',
-      // exec_mode: 'cluster',
+      exec_mode: 'cluster',
       out_file: '/dev/null',
       error_file: '/dev/null',
-      // env_production: {
-      //   NODE_ENV: 'production',
-      //   NODE_APP_INSTANCE: 4,
-      // },
+      env_production: {
+        NODE_ENV: 'production',
+        NODE_APP_INSTANCE: 4,
+      },
     },
   ],
 };
