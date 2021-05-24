@@ -68,7 +68,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
   const { t } = useI18n();
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { enableModal } = useModal();
-  const isSports = useIsRouteActive('sports');
+  const isSports = useIsRouteActive('sportsPrematch');
   const isLive = useIsRouteActive('sportsLive');
 
   return (
@@ -167,87 +167,65 @@ const SocialSection = ({
   const { ...webSocial } = social || {};
 
   return (
-    <section className="footer-social-block d-flex ml-auto pt-4 mt-0 mt-md-4 mt-lg-0 pt-lg-0">
-      <div className="section-social">
-        <h2 className="section-social__head-title">
-          {t('footer_social_title')}
-        </h2>
-        {/* {(androidApp || iosApp) && (
-          <>
-            <p className="section-social__title font-weight-500">
-              {t('footer_download_the_app')}
-            </p>
-            <div className="section-social__app-img-cont">
-              {!!iosApp && (
-                <img
-                  src="/assets/images/app/ios.png"
-                  alt="iOS app"
-                  className="section-social__app-img-cont-img mr-2 mr-sm-3"
-                  width="120"
-                  height="40"
-                />
-              )}
-              {!!androidApp && (
-                <img
-                  src="/assets/images/app/android.png"
-                  alt="Android app"
-                  className="section-social__app-img-cont-img"
-                  width="120"
-                  height="40"
-                />
-              )}
-            </div>
-          </>
-        )} */}
-        <p className="section-social__title">{t('find_us_in_social')}</p>
-        <p className="section-social__icons">
-          {!!webSocial &&
-            Object.entries(webSocial)
-              .filter(Boolean)
-              .map(([key, value]) => {
-                const externalLink = value.includes('http');
-                const Component = externalLink ? 'a' : Link;
-                return (
-                  <Component
+    <>
+      <section className="footer-social-block ml-auto pt-4 mt-0 mt-md-4 mt-lg-0 pt-lg-0">
+        <div className="section-social">
+          <h2 className="section-social__head-title">
+            {t('footer_social_title')}
+          </h2>
+          <p className="section-social__title">{t('find_us_in_social')}</p>
+          <p className="section-social__icons">
+            {!!webSocial &&
+              Object.entries(webSocial)
+                .filter(Boolean)
+                .map(([key, value]) => {
+                  const externalLink = value.includes('http');
+                  const Component = externalLink ? 'a' : Link;
+                  return (
+                    <Component
+                      key={key}
+                      to={!externalLink ? value : undefined}
+                      href={externalLink ? value : undefined}
+                      className="section-social__icons-link"
+                      target={externalLink ? '_blank' : undefined}
+                    >
+                      <i className={`icon-${iconName[key] || key}`}></i>
+                    </Component>
+                  );
+                })}
+          </p>
+          <h2 className="section-social__head-title mt-4">
+            {t('official_partners_title')}
+          </h2>
+          <p className="section-social__icons d-flex align-items-center">
+            {!!partners &&
+              Object.entries(partners)
+                .filter(Boolean)
+                .map(([key, value]) => (
+                  <a
                     key={key}
-                    to={!externalLink ? value : undefined}
-                    href={externalLink ? value : undefined}
+                    href={t(value)}
                     className="section-social__icons-link"
-                    target={externalLink ? '_blank' : undefined}
+                    target="_blank"
+                    rel="noreferrer"
                   >
-                    <i className={`icon-${iconName[key] || key}`}></i>
-                  </Component>
-                );
-              })}
-        </p>
-        <h2 className="section-social__head-title mt-4">
-          {t('official_partners_title')}
-        </h2>
-        <p className="section-social__icons d-flex align-items-center">
-          {!!partners &&
-            Object.entries(partners)
-              .filter(Boolean)
-              .map(([key, value]) => (
-                <a
-                  key={key}
-                  href={t(value)}
-                  className="section-social__icons-link"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <img
-                    alt={`partner-${key}`}
-                    height="42"
-                    src={`/assets/images/footer/${key}.jpg`}
-                  />
-                </a>
-              ))}
-        </p>
-      </div>
-      <div className="footer-info-text d-none d-xxl-flex align-items-end ml-3 mb-2">
+                    <img
+                      alt={`partner-${key}`}
+                      height="42"
+                      src={`/assets/images/footer/${key}.jpg`}
+                    />
+                  </a>
+                ))}
+          </p>
+        </div>
+        <div className="footer-info-text d-none d-xxl-flex align-items-end ml-3 mb-2">
+          <p>{jsxT('footer_info_text')}</p>
+        </div>
+      </section>
+      <div className="footer-info-text d-flex d-xxl-none mt-3 mb-2 mb-lg-0">
         <p>{jsxT('footer_info_text')}</p>
       </div>
-    </section>
+    </>
   );
 };
 
@@ -327,6 +305,7 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
 
 const PageFooter = () => {
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
+  const { t, jsxT } = useI18n();
   return (
     <footer>
       <div className="container-fluid">

@@ -317,8 +317,8 @@ const WithdrawalPage = () => {
           <QuestionsContainer items={questionItems} />
           <HelpBlock
             title={'user_help_title'}
-            blocks={['phone']}
-            className={'d-block d-xl-none'}
+            blocks={['faq', 'phone', 'email']}
+            className="d-block d-xl-none"
           />
         </>
       )}

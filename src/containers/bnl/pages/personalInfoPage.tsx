@@ -149,8 +149,8 @@ const PersonalInfoPage = () => {
       <QuestionsContainer items={questionItems} className="mt-5" />
       <HelpBlock
         title={'user_help_title'}
-        blocks={['phone']}
-        className={'d-block d-xl-none'}
+        blocks={['faq', 'phone', 'email']}
+        className="d-block d-xl-none"
       />
     </main>
   );

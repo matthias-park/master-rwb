@@ -30,17 +30,19 @@ const CloseAccountCard = ({ closeAccountData }: CloseAccountProps) => {
   return (
     <Accordion className="info-container info-container--gray mb-3">
       <div className="info-container__info pt-3">
-        <p className="mb-2">
-          <b>{t(title)}</b>
-        </p>
+        <div className="d-flex">
+          <p className="mb-2">
+            <b>{t(title)}</b>
+          </p>
+          <Accordion.Toggle
+            as="button"
+            eventKey={id}
+            className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
+          >
+            {t('close_account_edit')}
+          </Accordion.Toggle>
+        </div>
         <p className="text-14 text-gray-700 pt-1">{t(note)}</p>
-        <Accordion.Toggle
-          as="button"
-          eventKey={id}
-          className="info-container__edit btn btn-light btn-sm px-3"
-        >
-          {t('close_account_edit')}
-        </Accordion.Toggle>
       </div>
       <div className="info-container__text py-3">
         <p className="text-gray-600 mb-0">{t('close_account_unset')}</p>
@@ -116,8 +118,8 @@ const CloseAccountPage = () => {
       <QuestionsContainer items={questionItems} className="mt-5" />
       <HelpBlock
         title={'user_help_title'}
-        blocks={['phone']}
-        className={'d-block d-xl-none'}
+        blocks={['faq', 'phone', 'email']}
+        className="d-block d-xl-none"
       />
     </main>
   );

@@ -120,7 +120,7 @@ const ContactUsPage = () => {
   };
 
   return (
-    <main className="page-container pt-4">
+    <main className="page-container">
       <div className="page-inner">
         {isDataLoading && (
           <div className="d-flex justify-content-center pt-4 pb-3">
@@ -136,17 +136,9 @@ const ContactUsPage = () => {
           <div className="d-flex flex-column flex-xl-row">
             <div className="flex-grow-1 mr-0 mr-md-5">
               <h2 className="mb-4">{t(data.title)}</h2>
-              <small className="d-block mb-2">
+              <small className="d-block mb-3">
                 {t('questions_or_suggestions')}
               </small>
-              <small>
-                {t('call_us')} <b>{t('help_call_us_number')}</b>
-              </small>
-              <ul className="my-3">
-                <li>{t('time_workday')}</li>
-                <li>{t('time_weekend')}</li>
-              </ul>
-              <small className="d-block mb-4">{t('use_form_below')}</small>
               {!!submitResponse && (
                 <CustomAlert
                   show={!!submitResponse}
@@ -161,7 +153,7 @@ const ContactUsPage = () => {
                 </CustomAlert>
               )}
               <FormProvider {...formMethods}>
-                <Form onSubmit={handleSubmit(onSubmit)}>
+                <Form onSubmit={handleSubmit(onSubmit)} className="pb-4">
                   <small className="d-block mb-3">
                     {t('contact_form_text')}
                   </small>

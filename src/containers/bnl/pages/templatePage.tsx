@@ -150,8 +150,8 @@ const TemplatePage = () => {
             <div className="right-sidebar px-4 px-xl-0">
               <HelpBlock
                 title={'user_help_title'}
-                blocks={['phone']}
-                className={'default mx-auto mx-md-0'}
+                blocks={['faq', 'phone', 'email']}
+                className="d-block d-xl-none"
               />
             </div>
           </div>
