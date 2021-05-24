@@ -12,6 +12,7 @@ import TextInput from '../../../../components/customFormInputs/TextInput';
 import CheckboxInput from '../../../../components/customFormInputs/CheckboxInput';
 import { API_VALIDATIONS } from '../../../../utils/apiUtils';
 import AutocompletePostalCode from '../AutocompletePostalCode';
+import clsx from 'clsx';
 interface Props {
   handleRegisterSubmit: (
     form: any,
@@ -67,6 +68,7 @@ const blocks = (
   },
   {
     title: 'over_18',
+    description: 'over_18_desc',
     fields: [
       {
         id: 'personal_code',
@@ -146,6 +148,7 @@ const blocks = (
   },
   {
     title: 'password_section',
+    description: 'password_desc',
     fields: [
       {
         id: 'password',
@@ -207,7 +210,11 @@ const OnlineForm = (props: Props) => {
   const setValidation = (id: string, status: FormFieldValidation) =>
     setValidationForms(prev => ({ ...prev, [id]: status }));
   const validateRepeat = (id: string, value: string) => {
-    return value === watch(id) || t(`register_need_match_${id}`);
+    const isEqual =
+      id === 'email'
+        ? value.toLocaleLowerCase() === watch(id, '').toLocaleLowerCase()
+        : value === watch(id, '');
+    return isEqual || t(`register_need_match_${id}`);
   };
   const triggerRepeat = (id: string) => {
     return watch(id, '') !== '' && trigger(id);
@@ -231,9 +238,14 @@ const OnlineForm = (props: Props) => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         {fields.map(block => (
           <div key={block.title} className="reg-form__block">
-            <p className="weight-500 mt-4 mb-3">
+            <p
+              className={clsx('weight-500 mt-4', !block.description && 'mb-3')}
+            >
               {!!block.title && jsxT(`register_${block.title}`)}
             </p>
+            {!!block.description && (
+              <p className="mb-3">{jsxT(`register_${block.description}`)}</p>
+            )}
             {block.fields.map(field => {
               switch (field.type) {
                 case 'checkbox': {

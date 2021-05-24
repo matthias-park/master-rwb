@@ -25,5 +25,6 @@ export interface OnlineFormBlockField {
 
 export interface OnlineFormBlock {
   title?: string;
+  description?: string;
   fields: OnlineFormBlockField[];
 }
