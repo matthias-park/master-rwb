@@ -31,7 +31,7 @@ const fieldValidations = {
 };
 
 const ContactUsPage = () => {
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
   const { user } = useAuth();
   const getToken = useCaptcha();
   const [submitResponse, setSubmitResponse] = useState<{
@@ -129,31 +129,31 @@ const ContactUsPage = () => {
         )}
         {!!error && (
           <h2 className="mt-3 mb-5 text-center">
-            {t('contact_page_failed_to_load')}
+            {jsxT('contact_page_failed_to_load')}
           </h2>
         )}
         {!!data && !isValidating && (
           <div className="d-flex flex-column flex-xl-row">
             <div className="flex-grow-1 mr-0 mr-md-5">
-              <h2 className="mb-4">{t(data.title)}</h2>
+              <h2 className="mb-4">{jsxT(data.title)}</h2>
               <small className="d-block mb-2">
-                {t('questions_or_suggestions')}
+                {jsxT('questions_or_suggestions')}
               </small>
               <small>
-                {t('call_us')} <b>{t('help_call_us_number')}</b>
+                {jsxT('call_us')} <b>{jsxT('help_call_us_number')}</b>
               </small>
               <ul className="my-3">
-                <li>{t('time_workday')}</li>
-                <li>{t('time_weekend')}</li>
+                <li>{jsxT('time_workday')}</li>
+                <li>{jsxT('time_weekend')}</li>
               </ul>
-              <small className="d-block mb-4">{t('use_form_below')}</small>
+              <small className="d-block mb-4">{jsxT('use_form_below')}</small>
               {!!submitResponse && (
                 <CustomAlert
                   show={!!submitResponse}
                   variant={submitResponse.success ? 'success' : 'danger'}
                 >
                   {submitResponse.msg ||
-                    t(
+                    jsxT(
                       `contact_page_${
                         submitResponse.success ? 'success' : 'failed'
                       }`,
@@ -163,7 +163,7 @@ const ContactUsPage = () => {
               <FormProvider {...formMethods}>
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <small className="d-block mb-3">
-                    {t('contact_form_text')}
+                    {jsxT('contact_form_text')}
                   </small>
                   {data.form.map(field => {
                     if (field.disabled) {

@@ -86,7 +86,7 @@ const LoginForm = () => {
             placement={'bottom'}
             overlay={
               <Tooltip id="tooltip_remember" className="tooltip-custom">
-                Tooltip for remember me
+                {t('remember_me_tooltip')}
               </Tooltip>
             }
           >
