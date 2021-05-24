@@ -187,7 +187,7 @@ const ContactUsPage = () => {
             </div>
             <HelpBlock
               blocks={['faq', 'phone', 'email']}
-              className="d-block w-md-100 mt-5 mt-xl-0"
+              className="d-block w-md-100 mt-2 mt-xl-0"
             />
           </div>
         )}
