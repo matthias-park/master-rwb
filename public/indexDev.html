@@ -7,9 +7,9 @@
     <link rel="manifest" href="%PUBLIC_URL%/assets/manifest.json" />
     <script>
       var franchises = JSON.parse('<%= htmlWebpackPlugin.options.franchises %>');
-      var domain = window.location.hostname;
+      var windowDomain = window.location.hostname;
       var franchise = franchises.filter(function (x) {
-         return x.domain === domain
+         return x.domains.some(domain => domain.hostname === windowDomain);
     })[0];
       var head = document.head;
       var link = document.createElement("link");

@@ -25,7 +25,7 @@ module.exports = function (app) {
     '/rails/**',
     // proxyDelayRequest,
     createProxyMiddleware({
-      target: franchises[0].api,
+      target: franchises[0].domains[0].api,
       pathRewrite: function (path, req) {
         return path.replace('/rails', '');
       },
