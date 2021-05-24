@@ -16,7 +16,7 @@ interface Props {
   translationPrefix?: string;
   onBlur?: () => void;
   required?: boolean;
-  defaultValue?: unknown;
+  defaultValue?: string;
 }
 
 const fakeFieldId = 'temp_field_postal_code_city';
@@ -29,8 +29,6 @@ const AutocompletePostalCode = ({
 }: Props) => {
   const { register, watch, setValue } = useFormContext();
   const { t } = useI18n();
-
-  const cityValue = watch('city');
 
   const validate = async value => {
     if (value === defaultValue) return true;
@@ -76,13 +74,21 @@ const AutocompletePostalCode = ({
     },
     [t],
   );
+  useEffect(() => {
+    const postalCodeValue: string[] = (defaultValue || '').split(' ');
+    if (postalCodeValue.length > 1) {
+      const cityValue = postalCodeValue[postalCodeValue.length - 1];
+      setValue('city', cityValue);
+      setValue('postal_code', postalCodeValue[0]);
+    }
+  }, [defaultValue]);
 
   const blurHandler = () => {
     const postalCodeValue: string[] = watch(fakeFieldId, '').split(' ');
     if (postalCodeValue.length > 1) {
       const cityValue = postalCodeValue[postalCodeValue.length - 1];
       setValue('city', cityValue);
-      setValue(id, postalCodeValue[0]);
+      setValue('postal_code', postalCodeValue[0]);
     }
     onBlur?.();
   };
