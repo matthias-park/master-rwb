@@ -92,7 +92,7 @@ footer:not(.KambiBC-footer) {
             margin: auto;
             @include make-col(5);
           }
-          @include media-breakpoint-down(sm) {
+          @include media-breakpoint-down(xs) {
             @include make-col(10);
           }
         }
