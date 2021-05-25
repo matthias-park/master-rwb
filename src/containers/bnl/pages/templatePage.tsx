@@ -151,7 +151,7 @@ const TemplatePage = () => {
               <HelpBlock
                 title={'user_help_title'}
                 blocks={['faq', 'phone', 'email']}
-                className="d-block d-xl-none"
+                className="default mx-auto mx-md-0"
               />
             </div>
           </div>
