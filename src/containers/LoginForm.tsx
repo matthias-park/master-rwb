@@ -100,7 +100,7 @@ const LoginForm = () => {
           </Link>
         </div>
         <LoadingButton
-          disabled={!formState.isDirty || !watch('email') || !watch('password')}
+          disabled={!watch('email') || !watch('password')}
           className="btn btn-primary d-block mx-auto mt-4 px-5"
           type="submit"
           loading={formState.isSubmitting}
