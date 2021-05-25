@@ -26,6 +26,7 @@ interface CommunicationPrefProps {
   values: {
     [key: string]: number;
   };
+  registerField: any;
 }
 
 const CommunicationPrefCard = ({
@@ -34,6 +35,7 @@ const CommunicationPrefCard = ({
   fields,
   setValues,
   values,
+  registerField,
 }: CommunicationPrefProps) => {
   const { t } = useI18n();
 
@@ -46,9 +48,10 @@ const CommunicationPrefCard = ({
           <span>{t(field.title)}</span>
           <span className="ml-auto d-flex align-items-center">
             <CustomToggleCheck
+              {...registerField(field.id)}
               id={t(field.id)}
               checked={values[field.id] === 1 ? true : false}
-              onChange={() =>
+              onClick={() =>
                 setValues({
                   ...values,
                   [field.id]: values[field.id] === 1 ? 0 : 1,
@@ -69,7 +72,7 @@ const CommunicationPreferencesPage = () => {
   const { data, error } = useApi<any>(
     '/railsapi/v1/user/profile/communication_preferences',
   );
-  const { handleSubmit, formState } = useForm();
+  const { handleSubmit, formState, register } = useForm();
   const [checkboxValues, setCheckboxValues] = useState({});
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
@@ -178,11 +181,13 @@ const CommunicationPreferencesPage = () => {
                   fields={block.fields}
                   values={checkboxValues}
                   setValues={setCheckboxValues}
+                  registerField={register}
                 />
               ))}
             </div>
             <LoadingButton
               loading={formState.isSubmitting}
+              disabled={!!!Object.keys(formState.dirtyFields).length}
               className="mt-3"
               variant="primary"
               type="submit"

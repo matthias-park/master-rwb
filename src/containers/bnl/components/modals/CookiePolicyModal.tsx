@@ -76,7 +76,7 @@ const CookiePolicyModal = () => {
                       <CustomToggleCheck
                         id="checkbox_all"
                         checked={isChecked(id)}
-                        onChange={e => toggleCookie(e, id)}
+                        onClick={e => toggleCookie(e, id)}
                       ></CustomToggleCheck>
                     )}
                     <div className="ml-3 text-left text-wrap">
