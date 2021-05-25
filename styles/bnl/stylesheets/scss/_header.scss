@@ -401,7 +401,7 @@
         height: 52px;
         background-color: $gray-custom-100;
         border-radius: 16px;
-        padding-left: 16px;
+        padding-left: 12px;
         padding-right: 32px;
         @include media-breakpoint-down(lg) {
             height: 36px;
@@ -418,9 +418,9 @@
                 height: 100%;
                 color: $black-custom;
                 font-weight: 500;
-                padding-right: 15px;
-                margin-right: 15px;
-                border-right: 2px solid $gray-200;
+                padding-right: 10px;
+                margin-right: 10px;
+                border-right: 1px solid $gray-200;
                 font-size: 16px;
                 @include media-breakpoint-down(lg) {
                   padding-right: 5px;
@@ -457,7 +457,6 @@
             display: flex;
             align-items: center;
             &-name {
-              min-width: 65px;
               font-size: 13px;
               @include media-breakpoint-down(lg) {
                 display: none;
