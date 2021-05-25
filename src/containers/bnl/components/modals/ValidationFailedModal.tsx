@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
 import GenericModal from './GenericModal';
 import { useI18n } from '../../../../hooks/useI18n';
 import { VALIDATOR_STATUS } from '../../../../types/UserStatus';

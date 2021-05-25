@@ -183,9 +183,9 @@ module.exports = function (webpackEnv) {
             {
               inject: true,
               template: paths.appBuildHtml,
-              chunks: ['main'],
+              chunks: getEntryFiles(),
               filename: `${domain.hostname}.html`,
-              franchiseTheme: `static/css/theme-${franchise.theme}.${buildHash}.css`,
+              franchiseTheme: `theme-${franchise.theme}`,
               config: JSON.stringify({
                 name: franchise.name,
                 apiUrl: domain.api,
@@ -617,9 +617,9 @@ module.exports = function (webpackEnv) {
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
-        filename: `static/css/[name]${
-          isEnvProduction ? '.' + buildHash : ''
-        }.css`,
+        filename: isEnvProduction
+          ? 'static/css/[name].[contenthash:8].css'
+          : 'static/css/[name].css',
       }),
       // Generate an asset manifest file with the following content:
       // - "files" key: Mapping of all asset filenames to their corresponding

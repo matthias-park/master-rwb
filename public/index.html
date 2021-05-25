@@ -9,11 +9,13 @@
     <link rel="apple-touch-icon" sizes="128x128" href="%PUBLIC_URL%/assets/images/icons/128px.png">
     <link rel="apple-touch-icon" sizes="192x192" href="%PUBLIC_URL%/assets/images/icons/192px.png">
     <link rel="apple-touch-icon" sizes="512x512" href="%PUBLIC_URL%/assets/images/icons/512px.png">
-    <link rel="stylesheet" href="%PUBLIC_URL%/<%= htmlWebpackPlugin.options.franchiseTheme %>">
     <title></title>
     <script>
       window.__config__ = JSON.parse('<%= htmlWebpackPlugin.options.config %>');
     </script>
+  <% if (htmlWebpackPlugin.files.css.find(href => href.includes(htmlWebpackPlugin.options.config.theme))) { %>
+    <link href="<%= htmlWebpackPlugin.files.css.find(href => href.includes(htmlWebpackPlugin.options.config.theme)) %>" rel="stylesheet">
+  <% } %>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
