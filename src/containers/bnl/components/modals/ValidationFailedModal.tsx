@@ -12,7 +12,7 @@ import Link from '../../../../components/Link';
 
 const ValidationFailedModal = () => {
   const { user } = useAuth();
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
   const personalInfoRoute = useRoutePath(PagesName.PersonalInfoPage);
   const {
     activeModal,
@@ -47,8 +47,8 @@ const ValidationFailedModal = () => {
       isStatic={true}
       className="text-center pb-5"
     >
-      <h2 className="mb-3 mt-4">{t('validation_failed_title')}</h2>
-      <p>{t(`validation_failed_body_${user.validator_status}`)}</p>
+      <h2 className="mb-3 mt-4">{jsxT('validation_failed_title')}</h2>
+      <p>{jsxT(`validation_failed_body_${user.validator_status}`)}</p>
       <Link
         to={personalInfoRoute}
         onClick={hideModal}
