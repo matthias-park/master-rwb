@@ -14,6 +14,27 @@ import { Element, Link as ScrollLink } from 'react-scroll';
 import RedirectNotFound from '../../../components/RedirectNotFound';
 import ContentPage from '../../../types/api/content/ContentPage';
 import { useConfig } from '../../../hooks/useConfig';
+import { Helmet } from 'react-helmet-async';
+import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser';
+import { Element as DomElement } from 'domhandler/lib/node';
+import Link from '../../../components/Link';
+
+const htmlParseOptions: HTMLReactParserOptions = {
+  replace: (domNode: DomElement) => {
+    if (
+      domNode.type === 'tag' &&
+      domNode.name === 'a' &&
+      domNode.attribs?.href &&
+      !domNode.attribs.href.startsWith('http')
+    ) {
+      return (
+        <Link to={domNode.attribs.href}>
+          {domToReact(domNode.children, htmlParseOptions)}
+        </Link>
+      );
+    }
+  },
+};
 
 const TemplatePage = () => {
   const { slug } = useParams<{ slug?: string }>();
@@ -55,6 +76,9 @@ const TemplatePage = () => {
     return <RedirectNotFound />;
   }
 
+  const pageTitle =
+    data?.Data?.structure?.content?.[0]?.standart?.page_title?.value;
+
   return (
     <>
       {isDataLoading && (
@@ -71,6 +95,7 @@ const TemplatePage = () => {
           />
         </div>
       )}
+      {!!pageTitle && <Helmet title={pageTitle} />}
       {!!data?.Success && (
         <div
           className={clsx(
@@ -86,9 +111,7 @@ const TemplatePage = () => {
             <main className="container px-0 px-4 pl-xxl-150 mb-4 pt-4 pt-sm-5">
               {!!data.Data.structure.content && (
                 <>
-                  <h1 className="mb-3 text-brand-text mt-xl-2">
-                    {data.Data.structure.content[0].standart?.page_title?.value}
-                  </h1>
+                  <h1 className="mb-3 text-brand-text mt-xl-2">{pageTitle}</h1>
                   {data.Data.structure.content.slice(1).map((el, index) => (
                     <div key={index}>
                       <Element name={el.section?.menu_item?.value}>
@@ -97,12 +120,12 @@ const TemplatePage = () => {
                             {el.section?.section_title?.value}
                           </h2>
                           {!!el.section?.section_content?.value && (
-                            <div
-                              className="template-page-block__text mb-3"
-                              dangerouslySetInnerHTML={{
-                                __html: el.section?.section_content?.value,
-                              }}
-                            />
+                            <div className="template-page-block__text mb-3">
+                              {parse(
+                                el.section.section_content.value,
+                                htmlParseOptions,
+                              )}
+                            </div>
                           )}
                           <img
                             alt=""
