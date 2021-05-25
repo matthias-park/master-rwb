@@ -16,17 +16,6 @@ import useApi from '../../../hooks/useApi';
 import useLocalStorage from '../../../hooks/useLocalStorage';
 import { checkHrOverflow } from '../../../utils/uiUtils';
 
-const questionItems = [
-  {
-    title: 'Additional Information',
-    body: 'Expanded description block',
-  },
-  {
-    title: 'Additional Information',
-    body: 'Expanded description block',
-  },
-];
-
 interface Transactions {
   pages: number;
   time_limitation_notice: string;
@@ -273,6 +262,20 @@ const TransactionsPage = () => {
     {
       valueAs: value => dayjs(value),
     },
+  );
+
+  const questionItems = useMemo(
+    () => [
+      {
+        title: t('transactions_question_1'),
+        body: t('transactions_answer_1'),
+      },
+      {
+        title: t('transactions_question_2'),
+        body: t('transactions_answer_2'),
+      },
+    ],
+    [t],
   );
 
   const updateUrl = (from?: Dayjs, to?: Dayjs, page?: string) => {

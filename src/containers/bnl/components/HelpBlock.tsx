@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from '../../../components/Link';
 import { PagesName } from '../../../constants';
 import { useRoutePath } from '../../../hooks';
 import { useI18n } from '../../../hooks/useI18n';
@@ -21,8 +22,8 @@ const HelpBlock = ({
       {title && <p className="help-block__title">{t(title)}</p>}
       <div className="help-block__body">
         {blocks.includes('faq') && (
-          <a
-            href={faqPagePath}
+          <Link
+            to={faqPagePath}
             target="_blank"
             rel="noreferrer"
             className="help-block__body-item"
@@ -33,7 +34,7 @@ const HelpBlock = ({
             <div className="help-block__body-item-text">
               <p className="weight-500">{t('help_check_faq')}</p>
             </div>
-          </a>
+          </Link>
         )}
         {blocks.includes('phone') && (
           <div className="help-block__body-item">
@@ -45,22 +46,20 @@ const HelpBlock = ({
               <p className="text-14 weight-500 mb-2">
                 {t('help_call_us_number_data')}
               </p>
-              <p className="text-14 gray">
-                {t('help_call_days')}
-                <span className="ml-2 weight-500">{t('help_call_hours')}</span>
-              </p>
-              <p className="text-14 gray">
-                {t('help_call_days_2')}
-                <span className=" ml-2 weight-500">
-                  {t('help_call_hours_2')}
-                </span>
-              </p>
+              {['', '_2', '_3'].map(id => (
+                <p className="text-14 gray">
+                  {t(`help_call_days${id}`)}
+                  <span className="ml-2 weight-500">
+                    {t(`help_call_hours${id}`)}
+                  </span>
+                </p>
+              ))}
             </div>
           </div>
         )}
         {blocks.includes('email') && (
-          <a
-            href={contactUsPagePath}
+          <Link
+            to={contactUsPagePath}
             target="_blank"
             rel="noreferrer"
             className="help-block__body-item"
@@ -72,7 +71,7 @@ const HelpBlock = ({
               <p className="weight-500">{t('help_mail_title')}</p>
               <p className="text-14 gray">{t('help_mail_description')}</p>
             </div>
-          </a>
+          </Link>
         )}
       </div>
     </div>

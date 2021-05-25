@@ -1,7 +1,7 @@
 import React from 'react';
 import CustomAlert from '../CustomAlert';
 import { useI18n } from '../../../../hooks/useI18n';
-
+import { replaceStringTagsReact } from '../../../../utils/reactUtils';
 const RegError = ({
   errMsg,
   onClose,
@@ -19,21 +19,23 @@ const RegError = ({
       >
         <i className="icon-left h4 mb-1 ml-n2"></i>
         <u>
-          <b>{t('registration_back')}</b>
+          <b>{jsxT('registration_back')}</b>
         </u>
       </p>
       <CustomAlert show={true} variant="danger" className="mb-3">
-        {t('register_page_submit_error')}
+        {jsxT('register_page_submit_error')}
       </CustomAlert>
       <p>{jsxT('reg_error_info')}</p>
       <p className="mt-4">
-        <b>{t('reg_error_reasons')}</b>
+        <b>{jsxT('reg_error_reasons')}</b>
       </p>
       <ul className="pt-2 pl-4">
-        <li className="mb-2">{errMsg}</li>
+        <li className="mb-2">{replaceStringTagsReact(errMsg)}</li>
       </ul>
       <div className="info-block mt-4">
-        <h4 className="info-block__title">{t('reg_error_info_block_title')}</h4>
+        <h4 className="info-block__title">
+          {jsxT('reg_error_info_block_title')}
+        </h4>
         <p className="info-block__text">{jsxT('reg_error_info_block_text')}</p>
       </div>
     </>

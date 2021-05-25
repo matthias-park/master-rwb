@@ -112,9 +112,15 @@ const InputContainer = ({
             onBlur={() => {
               const amount = watch('amount', '');
               if (!amount.length) {
-                setValue('amount', defaultValue.toString(), {
-                  shouldDirty: true,
-                });
+                formMethods.reset(
+                  {
+                    amount: '0',
+                  },
+                  {
+                    keepIsValid: true,
+                    keepDefaultValues: true,
+                  },
+                );
               }
             }}
             disabled={disabled}

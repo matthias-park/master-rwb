@@ -11,6 +11,7 @@ const NotFoundPage = () => {
   const { t } = useI18n();
   const faqRoute = useRoutePath(PagesName.FaqPage);
   const homeRoute = useRoutePath(PagesName.HomePage);
+  const contactUsRoute = useRoutePath(PagesName.ContactUsPage);
 
   return (
     <main className={clsx('page-container', headerNav.active && 'pt-xl-4')}>
@@ -30,7 +31,10 @@ const NotFoundPage = () => {
             <Link to={faqRoute} className="btn btn-outline-brand mx-1 col">
               {t('404_faq')}
             </Link>
-            <Link to="/help" className="btn btn-outline-brand mx-1 col">
+            <Link
+              to={contactUsRoute}
+              className="btn btn-outline-brand mx-1 col"
+            >
               {t('404_help')}
             </Link>
           </div>
