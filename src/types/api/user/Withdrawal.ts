@@ -26,6 +26,7 @@ export interface Request {
   account: string;
   amount: string;
   name: string;
+  is_used: boolean;
 }
 
 export interface RequestWithdrawalResponse {
