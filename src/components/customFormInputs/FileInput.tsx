@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Control, FieldValues, useFormContext } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
+import { useI18n } from '../../hooks/useI18n';
 
 interface Props {
   id: string;
@@ -12,6 +13,7 @@ interface Props {
 }
 
 const FileInput = ({ id, rules, disabled, className, title }: Props) => {
+  const { t } = useI18n();
   const [filename, setFilename] = useState('');
   const { register, formState, watch } = useFormContext();
   return (
@@ -23,6 +25,7 @@ const FileInput = ({ id, rules, disabled, className, title }: Props) => {
         custom
         className={className}
         label={(!!watch(id) && filename) || title}
+        data-browse={t('file_upload_browse')}
         onChange={e => {
           const file = e.target.files?.[0];
           if (file) {

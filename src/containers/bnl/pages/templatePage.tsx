@@ -15,26 +15,7 @@ import RedirectNotFound from '../../../components/RedirectNotFound';
 import ContentPage from '../../../types/api/content/ContentPage';
 import { useConfig } from '../../../hooks/useConfig';
 import { Helmet } from 'react-helmet-async';
-import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser';
-import { Element as DomElement } from 'domhandler/lib/node';
-import Link from '../../../components/Link';
-
-const htmlParseOptions: HTMLReactParserOptions = {
-  replace: (domNode: DomElement) => {
-    if (
-      domNode.type === 'tag' &&
-      domNode.name === 'a' &&
-      domNode.attribs?.href &&
-      !domNode.attribs.href.startsWith('http')
-    ) {
-      return (
-        <Link to={domNode.attribs.href}>
-          {domToReact(domNode.children, htmlParseOptions)}
-        </Link>
-      );
-    }
-  },
-};
+import { replaceStringTagsReact } from '../../../utils/reactUtils';
 
 const TemplatePage = () => {
   const { slug } = useParams<{ slug?: string }>();
@@ -125,9 +106,8 @@ const TemplatePage = () => {
                           </h2>
                           {!!el.section?.section_content?.value && (
                             <div className="template-page-block__text mb-3">
-                              {parse(
+                              {replaceStringTagsReact(
                                 el.section.section_content.value,
-                                htmlParseOptions,
                               )}
                             </div>
                           )}
