@@ -151,7 +151,8 @@ const RegisterPage = () => {
   }
   if (
     registrationResponseRoutes.some(
-      route => route.name !== 'register' && route.path === location.pathname,
+      route =>
+        route.name !== 'sitemap_register' && route.path === location.pathname,
     ) &&
     location?.state?.resCode === undefined
   ) {
