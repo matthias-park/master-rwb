@@ -62,7 +62,6 @@ const WithdrawalRequests = ({
           </thead>
           <tbody>
             {requests.map((request, index) => {
-              if (request.cancel_requested) return null;
               return (
                 <tr key={index}>
                   <td>
@@ -87,15 +86,17 @@ const WithdrawalRequests = ({
                     <strong className="heading-sm">
                       {t('withdrawal_requests_cancel')}
                     </strong>
-                    <LoadingButton
-                      variant="outline-danger"
-                      size="sm"
-                      onClick={() => handleCancel(request.id)}
-                      disabled={request.cancel_requested}
-                      loading={cancelLoading === request.id}
-                    >
-                      {t('withdrawal_requests_cancel_btn')}
-                    </LoadingButton>
+                    {!request.is_used && (
+                      <LoadingButton
+                        variant="outline-danger"
+                        size="sm"
+                        onClick={() => handleCancel(request.id)}
+                        disabled={request.cancel_requested}
+                        loading={cancelLoading === request.id}
+                      >
+                        {t('withdrawal_requests_cancel_btn')}
+                      </LoadingButton>
+                    )}
                   </td>
                 </tr>
               );
