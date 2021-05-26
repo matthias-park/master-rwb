@@ -69,7 +69,7 @@ const ApiHead = () => {
   )
     ? pathName
     : pathName
-    ? t(`sitemap_${pathName}`)
+    ? t(pathName)
     : '';
   const fallbackTitle =
     pathNameTranslation +

@@ -23,11 +23,11 @@ import RegError from '../components/registration/RegError';
 import { useCaptcha } from '../../../hooks/useGoogleRecaptcha';
 
 const RegistrationReturnCode = {
-  '0': 'registerWelcome',
-  '1': 'registerVerification',
-  '2': 'registerMajorError',
-  '3': 'registerExclusion',
-  '4': 'registerTechnicalError',
+  '0': 'sitemap_registerWelcome',
+  '1': 'sitemap_registerVerification',
+  '2': 'sitemap_registerMajorError',
+  '3': 'sitemap_registerExclusion',
+  '4': 'sitemap_registerExclusion',
 };
 
 interface RegistrationPathState {

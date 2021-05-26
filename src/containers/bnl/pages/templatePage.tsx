@@ -95,7 +95,11 @@ const TemplatePage = () => {
           />
         </div>
       )}
-      {!!pageTitle && <Helmet title={pageTitle} />}
+      {!!pageTitle && (
+        <Helmet
+          title={clsx(pageTitle && `${pageTitle} - `, t('seo_site_name'))}
+        />
+      )}
       {!!data?.Success && (
         <div
           className={clsx(

@@ -57,7 +57,7 @@ const PageLayout = ({ children }) => {
     ) {
       sendDataToGTM({
         'tglab.VirtualUrl': `/${locale}${pathname}`,
-        'tglab.VirtualTitle': route ? `${t(`sitemap_${route.name}`)}` : '',
+        'tglab.VirtualTitle': route ? `${t(route.name)}` : '',
         event: 'VirtualPageView',
       });
     }

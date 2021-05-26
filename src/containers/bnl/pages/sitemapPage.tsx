@@ -44,7 +44,7 @@ const insertSitemapChildren = (listItem: SitemapListItem, route, t) => {
   }
   const pageName = pagesWithTranslatedName.includes(route.id)
     ? route.name
-    : t(`${route.externalLinkTranslation ? '' : 'sitemap_'}${route.name}`);
+    : t(route.name);
   listItem.children.push({
     path: route.path,
     name: pageName,
@@ -156,9 +156,7 @@ const SitemapPage = () => {
       } else {
         const pageName = pagesWithTranslatedName.includes(route.id)
           ? route.name
-          : t(
-              `${route.externalLinkTranslation ? '' : 'sitemap_'}${route.name}`,
-            );
+          : t(route.name);
         list.push({
           path: route.path,
           name: pageName,
