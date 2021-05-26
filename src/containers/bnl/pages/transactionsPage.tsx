@@ -201,7 +201,7 @@ const TransactionsDateFilter = ({ dateTo, dateFrom, updateUrl }) => {
   useEffect(() => {
     setNewDateFrom(dateFrom);
     setNewDateTo(dateTo);
-  }, [dateFrom, dateTo]);
+  }, [dateFrom.format('DD/MM/YYYY'), dateTo.format('DD/MM/YYYY')]);
 
   return (
     <>
