@@ -53,7 +53,7 @@ export const formatNavigationRoutes = (constants: PageConfig) => {
       const name = Array.isArray(value) ? value[0] : value;
       const slug = Array.isArray(value) ? value[1] : key;
       const contentPagePath = `${slug.startsWith('/') ? '' : '/'}${slug}`;
-      if (navigationRoutes.some(route => route.path !== contentPagePath)) {
+      if (!navigationRoutes.some(route => route.path === contentPagePath)) {
         navigationRoutes.push({
           id:
             Array.isArray(value) && PagesName[key]
