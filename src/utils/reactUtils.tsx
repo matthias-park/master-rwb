@@ -9,7 +9,7 @@ export const replaceStringTagsReact = (text: string, props: any = {}) => {
         domNode.type === 'tag' &&
         domNode.name === 'a' &&
         domNode.attribs?.href &&
-        !domNode.attribs.href.startsWith('http')
+        domNode.attribs.href.startsWith('/')
       ) {
         const { href, ...attribs } = domNode.attribs;
         return (

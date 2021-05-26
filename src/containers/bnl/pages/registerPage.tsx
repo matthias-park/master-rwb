@@ -175,7 +175,7 @@ const RegisterPage = () => {
               onClose={() => {
                 history.push(
                   registrationResponseRoutes.find(
-                    route => route.name === 'register',
+                    route => route.name === 'sitemap_register',
                   )!.path,
                   { formFields: location?.state?.formFields },
                 );

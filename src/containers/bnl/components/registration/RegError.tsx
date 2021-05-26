@@ -19,7 +19,7 @@ const RegError = ({
       >
         <i className="icon-left h4 mb-1 ml-n2"></i>
         <u>
-          <b>{jsxT('registration_back')}</b>
+          <b>{t('registration_back')}</b>
         </u>
       </p>
       <CustomAlert show={true} variant="danger" className="mb-3">
