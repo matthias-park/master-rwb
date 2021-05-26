@@ -109,8 +109,8 @@ const DepositPage = () => {
     user.max_deposit !== null ? user.max_deposit : t('bancontact_max_deposit');
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
-      <h1>{t('deposit_page_title')}</h1>
-      <p className="mb-4">{t('deposit_page_sub_text')}</p>
+      <h1>{jsxT('deposit_page_title')}</h1>
+      <p className="mb-4">{jsxT('deposit_page_sub_text')}</p>
       <div className="play-responsible-block mb-3 px-2">
         <i className="icon-thumbs"></i>
         {jsxT('play_responsible_block_link')}

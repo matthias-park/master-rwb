@@ -243,8 +243,8 @@ const LimitsPage = () => {
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
-      <h1>{t('limits_page_title')}</h1>
-      <p className="mb-4">{t('limits_page_sub_text')}</p>
+      <h1>{jsxT('limits_page_title')}</h1>
+      <p className="mb-4">{jsxT('limits_page_sub_text')}</p>
       <div className="play-responsible-block mb-3 px-2">
         <i className="icon-thumbs"></i>
         {jsxT('play_responsible_block_link')}
@@ -256,7 +256,7 @@ const LimitsPage = () => {
       )}
       {!!error && (
         <h2 className="mt-3 mb-5 text-center">
-          {t('settings_page_failed_to_load')}
+          {jsxT('settings_page_failed_to_load')}
         </h2>
       )}
       {!!data && (

@@ -245,6 +245,7 @@ const SettingsForm = ({
                   return (
                     <TextInput
                       id={field.id}
+                      key={field.id}
                       rules={
                         !field.disabled && {
                           required: `${t(field.title)} ${t(

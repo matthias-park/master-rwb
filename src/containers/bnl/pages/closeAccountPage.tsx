@@ -75,7 +75,7 @@ const CloseAccountCard = ({ closeAccountData }: CloseAccountProps) => {
 };
 
 const CloseAccountPage = () => {
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
   const { data, error } = useApi<any>(
     '/railsapi/v1/user/profile/close_account',
   );
@@ -96,8 +96,8 @@ const CloseAccountPage = () => {
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
-      <h1>{t('close_account_page_title')}</h1>
-      <p className="mb-4">{t('close_account_sub_text')}</p>
+      <h1>{jsxT('close_account_page_title')}</h1>
+      <p className="mb-4">{jsxT('close_account_sub_text')}</p>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />
@@ -105,7 +105,7 @@ const CloseAccountPage = () => {
       )}
       {!!error && (
         <h2 className="mt-3 mb-5 text-center">
-          {t('settings_page_failed_to_load')}
+          {jsxT('settings_page_failed_to_load')}
         </h2>
       )}
       {!!data && (

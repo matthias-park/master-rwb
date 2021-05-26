@@ -68,7 +68,7 @@ const CommunicationPrefCard = ({
 const CommunicationPreferencesPage = () => {
   const { addToast } = useToasts();
   const { user } = useAuth();
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
   const { data, error } = useApi<any>(
     '/railsapi/v1/user/profile/communication_preferences',
   );
@@ -146,8 +146,10 @@ const CommunicationPreferencesPage = () => {
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       <form onSubmit={handleSubmit(updateSettingsSubmit)}>
-        <h1>{t('communication_preferences_page_title')}</h1>
-        <p className="mb-4">{t('communication_preferences_page_sub_text')}</p>
+        <h1>{jsxT('communication_preferences_page_title')}</h1>
+        <p className="mb-4">
+          {jsxT('communication_preferences_page_sub_text')}
+        </p>
         {isDataLoading && (
           <div className="d-flex justify-content-center pt-4 pb-3">
             <Spinner animation="border" variant="black" className="mx-auto" />
@@ -155,7 +157,7 @@ const CommunicationPreferencesPage = () => {
         )}
         {!!error && (
           <h2 className="mt-3 mb-5 text-center">
-            {t('settings_page_failed_to_load')}
+            {jsxT('settings_page_failed_to_load')}
           </h2>
         )}
         {!!data && (

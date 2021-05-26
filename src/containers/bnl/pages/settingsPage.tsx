@@ -26,7 +26,7 @@ export const COMPONENTS_BY_SETTINGS = {
 };
 
 const SettingsPage = () => {
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
   const { user, updateUser } = useAuth();
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
@@ -68,7 +68,7 @@ const SettingsPage = () => {
   };
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
-      <h1 className="mb-4">{t('settings_page_title')}</h1>
+      <h1 className="mb-4">{jsxT('settings_page_title')}</h1>
       <CustomAlert
         show={!!apiResponse}
         variant={apiResponse?.success ? 'success' : 'danger'}
@@ -82,7 +82,7 @@ const SettingsPage = () => {
       )}
       {!!error && (
         <h2 className="mt-3 mb-5 text-center">
-          {t('settings_page_failed_to_load')}
+          {jsxT('settings_page_failed_to_load')}
         </h2>
       )}
       {!!data?.forms && (

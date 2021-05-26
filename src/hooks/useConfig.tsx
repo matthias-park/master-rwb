@@ -104,7 +104,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     constantsError,
     clearConstantsCache,
   } = useConstants();
-  const locales = constants?.available_locales.map(locale => locale.iso) || [];
+  const locales = constants?.available_locales?.map(locale => locale.iso) || [];
   const { addToast } = useToasts();
   const [cachedLocale, setCachedLocale] = useLocalStorage<string | null>(
     'locale',

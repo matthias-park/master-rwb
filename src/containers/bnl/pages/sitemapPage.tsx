@@ -23,14 +23,12 @@ interface SitemapListItem {
   redirectTo?: string;
 }
 
-const pagesWithTranslatedName = [
-  PagesName.TemplatePage,
-  PagesName.FaqPage,
-  PagesName.ResponsibleGamingPage,
-  PagesName.TermsAndConditionsPage,
-];
-
-const insertSitemapChildren = (listItem: SitemapListItem, route, t) => {
+const insertSitemapChildren = (
+  listItem: SitemapListItem,
+  route,
+  t,
+  translateRouteName = true,
+) => {
   if (route.path === listItem.path) return;
   if (!listItem.children) {
     listItem.children = [];
@@ -42,12 +40,9 @@ const insertSitemapChildren = (listItem: SitemapListItem, route, t) => {
       return insertSitemapChildren(mapItem, route, t);
     }
   }
-  const pageName = pagesWithTranslatedName.includes(route.id)
-    ? route.name
-    : t(route.name);
   listItem.children.push({
     path: route.path,
-    name: pageName,
+    name: translateRouteName ? t(route.name) : route.name,
     order: route.order,
     emptyRoute: route.id === PagesName.Null && !route.externalLinkTranslation,
     redirectTo: route.redirectTo,
@@ -154,12 +149,9 @@ const SitemapPage = () => {
       if (mapItem) {
         insertSitemapChildren(mapItem, route, t);
       } else {
-        const pageName = pagesWithTranslatedName.includes(route.id)
-          ? route.name
-          : t(route.name);
         list.push({
           path: route.path,
-          name: pageName,
+          name: t(route.name),
           emptyRoute: route.id === PagesName.Null,
           order: route.order,
           redirectTo: route.redirectTo,
@@ -188,6 +180,7 @@ const SitemapPage = () => {
               order: promotion.priority,
             } as NavigationRoute,
             t,
+            false,
           );
         }
       }
