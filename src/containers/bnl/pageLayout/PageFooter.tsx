@@ -54,7 +54,7 @@ const FooterHeader = () => {
         <Link to={responsibleGamingPath}>
           <img
             className="restrictions-block__img mr-3"
-            alt=""
+            alt="responsible gaming"
             src={`/assets/images/restrictions/bnl-${locale}.svg`}
             width="200"
           />
@@ -188,6 +188,7 @@ const SocialSection = ({
                       href={externalLink ? value : undefined}
                       className="section-social__icons-link"
                       target={externalLink ? '_blank' : undefined}
+                      rel={externalLink ? 'noreferrer' : undefined}
                     >
                       <i className={`icon-${iconName[key] || key}`}></i>
                     </Component>
@@ -305,7 +306,6 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
 
 const PageFooter = () => {
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
-  const { t, jsxT } = useI18n();
   return (
     <footer>
       <div className="container-fluid">

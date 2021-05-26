@@ -62,7 +62,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
             text = text.match(/.{1,4}/g)?.join(' ') || text;
 
           return (
-            <ul className="list-unstyled mb-0">
+            <ul key={index} className="list-unstyled mb-0">
               {!index ? (
                 <li className={clsx(index + 1 !== data.length && 'mb-1')}>
                   <b>{text}</b>
@@ -143,8 +143,12 @@ const PersonalInfoPage = () => {
         </h2>
       )}
       {!!data &&
-        data.blocks.map(block => (
-          <PersonalInfoCard personalInfoData={block} mutate={mutate} />
+        data.blocks.map((block, index) => (
+          <PersonalInfoCard
+            key={index}
+            personalInfoData={block}
+            mutate={mutate}
+          />
         ))}
       <QuestionsContainer items={questionItems} className="mt-5" />
       <HelpBlock

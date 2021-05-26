@@ -17,6 +17,7 @@ const ScrollSidebar = ({ links, setActive, active }: Props) => {
       <ul className="sidebar-list">
         {links.map(link => (
           <ScrollLink
+            key={`${link.link}-${link.name}`}
             to={link.link}
             smooth={true}
             duration={500}

@@ -60,7 +60,9 @@ const SelectInput = ({
             </option>
           )}
           {values.map(option => (
-            <option value={option.value}>{option.text}</option>
+            <option key={option.value} value={option.value}>
+              {option.text}
+            </option>
           ))}
         </Form.Control>
         <div className="form-group__icons">

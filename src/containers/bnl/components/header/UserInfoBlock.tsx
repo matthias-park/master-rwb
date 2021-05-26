@@ -27,6 +27,7 @@ const UserMenuLink = ({ link, name, setShowDropdown, children }) => {
               <>
                 {children.map(childLink => (
                   <Link
+                    key={childLink.link}
                     to={childLink.link}
                     className="user-menu__list-sub-item"
                     onClick={() => setShowDropdown(false)}

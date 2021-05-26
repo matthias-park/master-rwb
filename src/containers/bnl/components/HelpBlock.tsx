@@ -25,7 +25,6 @@ const HelpBlock = ({
           <Link
             to={faqPagePath}
             target="_blank"
-            rel="noreferrer"
             className="help-block__body-item"
           >
             <span className="help-block__body-item-icon">
@@ -47,7 +46,7 @@ const HelpBlock = ({
                 {t('help_call_us_number_data')}
               </p>
               {['', '_2', '_3'].map(id => (
-                <p className="text-14 gray">
+                <p key={id} className="text-14 gray">
                   {t(`help_call_days${id}`)}
                   <span className="ml-2 weight-500">
                     {t(`help_call_hours${id}`)}

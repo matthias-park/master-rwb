@@ -8,19 +8,19 @@ const LANGUAGE = {
     message: 'Welcom',
     full_name: 'Nederlands',
     link_text: 'Gebruiksvoorwaarden',
-    link: 'legal/terms-and-conditions',
+    link: '/nl/legal/terms-and-conditions',
   },
   fr: {
     message: 'Bienvenue',
     full_name: 'Français',
     link_text: "Conditions d'utilisation",
-    link: 'legal/terms-and-conditions',
+    link: '/nl/legal/terms-and-conditions',
   },
   de: {
     message: 'Willkommen',
     full_name: 'Deutsch',
     link_text: 'Nutzungsbedingungen',
-    link: 'legal/terms-and-conditions',
+    link: '/nl/legal/terms-and-conditions',
   },
 };
 
@@ -60,7 +60,7 @@ const LocaleSelectPage = () => {
           src="/assets/images/logo/logo.svg"
         />
         {locales.map(locale => (
-          <div className="lang-card">
+          <div key={locale.iso} className="lang-card">
             <h2 className="lang-card__header">
               {LANGUAGE[locale.iso].message}
             </h2>
@@ -100,7 +100,8 @@ const LocaleSelectPage = () => {
       <div className="lang-conditions">
         {locales.map(locale => (
           <a
-            onClick={() => changeLocale(locale.iso, LANGUAGE[locale.iso].link)}
+            key={locale.iso}
+            href={LANGUAGE[locale.iso].link}
             className="lang-condition"
           >
             {LANGUAGE[locale.iso].link_text}

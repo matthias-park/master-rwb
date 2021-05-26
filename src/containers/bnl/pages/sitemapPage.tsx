@@ -104,7 +104,7 @@ const TreeItem = ({
         >
           <>
             {route.children?.map(subRoute => (
-              <Accordion className="sitemap-accordion">
+              <Accordion key={subRoute.path} className="sitemap-accordion">
                 <TreeItem
                   route={subRoute}
                   key={subRoute.path}
@@ -208,7 +208,7 @@ const SitemapPage = () => {
           {sitemapList
             .sort((a, b) => sortAscending(a.order || 999, b.order || 999))
             .map(route => (
-              <Accordion className="sitemap-accordion">
+              <Accordion key={route.path} className="sitemap-accordion">
                 <TreeItem
                   key={route.path}
                   route={route}

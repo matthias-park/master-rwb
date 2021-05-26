@@ -161,6 +161,7 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                         ].includes(field.id);
                         return (
                           <TextInput
+                            key={field.id}
                             id={field.id}
                             rules={{
                               required: `${field.title} ${t(
