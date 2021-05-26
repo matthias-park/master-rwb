@@ -27,6 +27,7 @@ const LoginForm = () => {
     },
   });
   const { register, handleSubmit, formState, watch } = formMethods;
+  const watchAllFields = watch();
   const { signin } = useAuth();
   const sendDataToGTM = useGTM();
   const forgotPasswordRoute = useRoutePath(PagesName.ForgotPasswordPage);
@@ -100,7 +101,11 @@ const LoginForm = () => {
           </Link>
         </div>
         <LoadingButton
-          disabled={!formState.isDirty || !watch('email') || !watch('password')}
+          disabled={
+            !formState.isDirty ||
+            !watchAllFields.email ||
+            !watchAllFields.password
+          }
           className="btn btn-primary d-block mx-auto mt-4 px-5"
           type="submit"
           loading={formState.isSubmitting}

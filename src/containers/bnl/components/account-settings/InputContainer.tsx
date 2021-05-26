@@ -5,7 +5,6 @@ import LoadingButton from '../../../../components/LoadingButton';
 import { useForm, FormProvider } from 'react-hook-form';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import { useI18n } from '../../../../hooks/useI18n';
-
 interface Props {
   title: string;
   defaultValue?: number | string;
@@ -49,12 +48,33 @@ const InputContainer = ({
     },
   });
 
-  const { formState, watch, setValue } = formMethods;
+  const { formState, watch, setValue, reset } = formMethods;
+
+  const resetAmount = () =>
+    reset(
+      {
+        amount: defaultValue.toString(),
+      },
+      {
+        keepErrors: false,
+        keepDefaultValues: true,
+        keepDirty: false,
+        keepIsSubmitted: false,
+        keepIsValid: false,
+        keepSubmitCount: false,
+        keepTouched: false,
+        keepValues: false,
+      },
+    );
+
+  React.useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+      resetAmount();
+    }
+  }, [formState, reset]);
+
   const handleSubmit = () => {
-    formMethods.handleSubmit(async ({ amount }) => {
-      await onSubmit(Number(amount));
-      formMethods.reset();
-    })();
+    formMethods.handleSubmit(async ({ amount }) => onSubmit(Number(amount)))();
   };
   const validateAmount = (value: string) => {
     if (!value) return true;
@@ -112,15 +132,7 @@ const InputContainer = ({
             onBlur={() => {
               const amount = watch('amount', '');
               if (!amount.length) {
-                formMethods.reset(
-                  {
-                    amount: '0',
-                  },
-                  {
-                    keepIsValid: true,
-                    keepDefaultValues: true,
-                  },
-                );
+                resetAmount();
               }
             }}
             disabled={disabled}
