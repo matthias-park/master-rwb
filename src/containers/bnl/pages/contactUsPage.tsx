@@ -65,10 +65,6 @@ const ContactUsPage = () => {
   const isDataLoading = (!data && !error) || isValidating;
 
   useEffect(() => {
-    //@ts-ignore
-    window.get_token = () => getToken?.('contact_us').catch(() => '');
-  }, [getToken]);
-  useEffect(() => {
     reset();
     setSubmitResponse(null);
   }, [user.logged_in]);

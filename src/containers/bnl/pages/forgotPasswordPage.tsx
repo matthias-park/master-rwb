@@ -29,11 +29,6 @@ const ForgotPasswordPage = () => {
   const sendDataToGTM = useGTM();
 
   useEffect(() => {
-    //@ts-ignore
-    window.get_token = () => getToken?.('forgot_password').catch(() => '');
-  }, [getToken]);
-
-  useEffect(() => {
     sendDataToGTM({
       event: 'ForgottenPassword',
     });

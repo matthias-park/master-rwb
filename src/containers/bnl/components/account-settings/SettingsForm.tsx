@@ -27,12 +27,12 @@ interface SettingProps {
   translatableDefaultValues?: boolean;
 }
 
-const FormsWithUpdateUser = [
-  'deposit_limit',
-  'disable_player',
-  'disable_player_time_out',
+const FormsWithUpdateUser = ['deposit_limit'];
+const formsWithLogoutUser = [
   'permanent_disable',
   'self_exclusion',
+  'disable_player_time_out',
+  'disable_player',
 ];
 
 const SettingsForm = ({
@@ -45,7 +45,7 @@ const SettingsForm = ({
   translatableDefaultValues,
 }: SettingProps) => {
   const { t } = useI18n();
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, signout } = useAuth();
   const { addToast } = useToasts();
   const formMethods = useForm<any, any>({
     mode: 'onBlur',
@@ -88,7 +88,14 @@ const SettingsForm = ({
   );
 
   const updateSettingsSubmit = useCallback(
-    data => onSubmit(action, data, false, FormsWithUpdateUser.includes(id)),
+    data =>
+      onSubmit(
+        action,
+        data,
+        false,
+        FormsWithUpdateUser.includes(id),
+        formsWithLogoutUser.includes(id),
+      ),
     [],
   );
 
@@ -97,6 +104,7 @@ const SettingsForm = ({
     body: { [key: string]: string | Blob },
     formBody: boolean = false,
     shouldUpdateUser: boolean = false,
+    shouldLogoutUser: boolean = false,
   ): Promise<void> => {
     setResponse && setResponse(null);
     body.authenticity_token = user.token!;
@@ -134,8 +142,12 @@ const SettingsForm = ({
       resetValues.forEach(id => formMethods.setValue(id, ''));
     }
     mutateData && setTimeout(() => mutateData(), 1000);
-    if (shouldUpdateUser) {
-      updateUser();
+    if (shouldUpdateUser || shouldLogoutUser) {
+      if (shouldLogoutUser && res.Success) {
+        signout();
+      } else {
+        updateUser();
+      }
     }
     return;
   };

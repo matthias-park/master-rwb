@@ -21,6 +21,7 @@ import RedirectNotFound from '../../../components/RedirectNotFound';
 import { FormProvider, useForm } from 'react-hook-form';
 import RegError from '../components/registration/RegError';
 import { useCaptcha } from '../../../hooks/useGoogleRecaptcha';
+import Lockr from 'lockr';
 
 const RegistrationReturnCode = {
   '0': 'sitemap_registerWelcome',
@@ -29,12 +30,26 @@ const RegistrationReturnCode = {
   '3': 'sitemap_registerExclusion',
   '4': 'sitemap_registerExclusion',
 };
+const localStorageSaveKey = 'register-saved';
 
 interface RegistrationPathState {
   welcomeScreen?: boolean;
   resCode?: number;
   message?: string;
-  formFields?: any;
+}
+interface RegistrationFields {
+  firstname: string;
+  lastname: string;
+  address: string;
+  postal_code: string;
+  phone_number: string;
+  personal_code: string;
+  email: string;
+  repeat_email: string;
+  password: string;
+  repeat_password: string;
+  newsletter: boolean;
+  terms_and_conditions: boolean;
 }
 
 const RegisterPage = () => {
@@ -50,15 +65,12 @@ const RegisterPage = () => {
   const { user, updateUser } = useAuth();
   const getToken = useCaptcha();
   const sendDataToGTM = useGTM();
-  const formMethods = useForm({
+  const formMethods = useForm<RegistrationFields>({
     mode: 'onBlur',
-    defaultValues: location?.state?.formFields,
+    defaultValues: Lockr.get(localStorageSaveKey, {}),
   });
+  const watchAllFields = formMethods.watch();
 
-  useEffect(() => {
-    //@ts-ignore
-    window.get_token = () => getToken?.('registration').catch(() => '');
-  }, [getToken]);
   const fieldChange = (FieldName: string) => {
     if (FieldName.startsWith('repeat_')) return;
     sendDataToGTM({
@@ -66,6 +78,10 @@ const RegisterPage = () => {
       'tglab.FieldName': FieldName,
     });
   };
+  if (formMethods.formState.isDirty) {
+    const { password, repeat_password, ...fields } = watchAllFields;
+    Lockr.set(localStorageSaveKey, fields);
+  }
 
   const registrationResponseRoutes = useMemo(
     () => routes.filter(route => route.id === PagesName.RegisterPage),
@@ -114,6 +130,7 @@ const RegisterPage = () => {
         route => route.name === RegistrationReturnCode[res.Code],
       );
       if (res?.Success && res.Data) {
+        Lockr.rm(localStorageSaveKey);
         updateUser();
         sendDataToGTM({
           'tglab.user.GUID': res.Data.PlayerId,
@@ -130,12 +147,6 @@ const RegisterPage = () => {
           welcomeScreen: !res.Code,
           resCode: res.Code,
           message: res.Message || t('register_page_submit_error'),
-          formFields: {
-            ...form,
-            password: '',
-            repeat_password: '',
-            postal_code: `${form.postal_code} - ${form.city}`,
-          },
         });
       }
       return res;
@@ -177,7 +188,6 @@ const RegisterPage = () => {
                   registrationResponseRoutes.find(
                     route => route.name === 'sitemap_register',
                   )!.path,
-                  { formFields: location?.state?.formFields },
                 );
               }}
             />

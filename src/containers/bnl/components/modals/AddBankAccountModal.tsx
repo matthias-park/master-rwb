@@ -31,8 +31,8 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
 
   const handleSubmit = async ({ account_number }) => {
     const result = await onSubmit({ account_number: `BE${account_number}` });
-    if (typeof result === 'string') {
-      return setApiErr(result);
+    if (typeof result === 'string' || !result) {
+      return setApiErr(result || t('failed_to_add_bank_account'));
     }
     if (result) {
       return disableModal(ComponentName.AddBankAccountModal);

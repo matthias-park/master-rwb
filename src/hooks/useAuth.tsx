@@ -16,6 +16,7 @@ import useGTM from './useGTM';
 import { useConfig } from './useConfig';
 import { isMobile } from 'react-device-detect';
 import { clearUserLocalStorage } from '../utils/';
+import { useI18n } from './useI18n';
 
 export interface UserAuth {
   user: UserStatus;
@@ -46,6 +47,7 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
   const { addToast } = useToasts();
   const sendDataToGTM = useGTM();
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const { t } = useI18n();
   const loginClick = useRef(false);
   const { data, error, mutate } = useApi<UserStatus | null>(
     !TestEnv ? '/railsapi/v1/user/status' : null,
@@ -75,7 +77,7 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
   user.login_click = loginClick.current;
   useEffect(() => {
     if (!user?.logout && !user?.logged_in && prevUser?.logged_in) {
-      addToast(`User session ended`, {
+      addToast(t('user_session_expired'), {
         appearance: 'warning',
         autoDismiss: true,
       });
