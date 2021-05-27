@@ -42,7 +42,7 @@ const TermsAndConditionsModal = () => {
       pathname !== termsAndConditionsPath
     ) {
       enableModal(ComponentName.TermsAndConditionsModal);
-    } else if (!user.logged_in) {
+    } else if (!user.logged_in || pathname === termsAndConditionsPath) {
       hideModal();
     }
   }, [modalActive, user, pathname, termsAndConditionsPath]);
