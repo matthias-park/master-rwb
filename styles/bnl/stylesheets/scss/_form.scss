@@ -42,6 +42,11 @@
           display: none;
         }
     }
+    .form-control {
+      @supports (-webkit-touch-callout: none) {
+        font-size: 16px;
+      }
+    }
     select.form-control {
       padding-left: 8px;
     }
@@ -53,6 +58,7 @@
         display: flex;
         align-items: center;
         font-size: 32px;
+        border-left: 12px solid transparent;
         .icon-eye-off {
             color: $brand-light;
             cursor: pointer;
