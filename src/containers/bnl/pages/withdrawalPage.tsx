@@ -260,6 +260,9 @@ const WithdrawalPage = () => {
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
       )}
+      {error && (
+        <h2 className="mt-3 mb-5 text-center">{t('withdrawal_failed_load')}</h2>
+      )}
       {data && (
         <>
           <h1 className="mb-4">{data.Data.title}</h1>

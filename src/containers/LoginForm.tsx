@@ -61,7 +61,7 @@ const LoginForm = () => {
           id="email"
           // type="email"
           title={t('login_email')}
-          // autoComplete="username"
+          autoComplete="email"
           validation={apiError ? FormFieldValidation.Invalid : undefined}
         />
         <TextInput
