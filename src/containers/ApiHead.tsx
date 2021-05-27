@@ -64,13 +64,10 @@ const ApiHead = () => {
 
   const seoData = data?.Success ? data?.Data : null;
   const pathName = pathInfo?.name || prevPathInfo?.name || '';
-  const pathNameTranslation = CONTENT_PAGES.includes(
-    pathInfo?.id || prevPathInfo?.id || 0,
-  )
-    ? pathName
-    : pathName
-    ? t(pathName)
-    : '';
+  const pathNameTranslation =
+    !CONTENT_PAGES.includes(pathInfo?.id || prevPathInfo?.id || 0) && pathname
+      ? t(pathName, true)
+      : '';
   const fallbackTitle =
     pathNameTranslation +
     (pathNameTranslation.length ? ' - ' : '') +
