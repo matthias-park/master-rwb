@@ -45,7 +45,7 @@ const TermsAndConditionsModal = () => {
     } else if (!user.logged_in) {
       hideModal();
     }
-  }, [modalActive, user]);
+  }, [modalActive, user, pathname, termsAndConditionsPath]);
 
   const acceptHandler = async () => {
     setLoadingBtn(LoadingBtnState.Accept);
@@ -53,8 +53,8 @@ const TermsAndConditionsModal = () => {
       '/railsapi/v1/user/accept_tnc',
     ).catch(err => err);
     if (result.Success) {
-      hideModal();
       updateUser();
+      hideModal();
     } else {
       setApiError(result.Message || t('terms_and_cond_modal_api_error'));
     }
