@@ -2,6 +2,7 @@
   "name": "Scooore",
   "start_url": "/",
   "display": "browser",
+  "theme_color": "#f6f6f6",
   "icons": [
     {
       "src": "/assets/images/icons/128px.png",

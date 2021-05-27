@@ -108,9 +108,6 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
       />
     );
   }
-  if (user.loading) {
-    return null;
-  }
   return (
     <LoginDropdown
       dropdownClasses={mobile ? 'ml-auto mr-0' : 'ml-auto mt-0 mt-lg-2'}
