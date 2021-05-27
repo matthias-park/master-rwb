@@ -53,6 +53,7 @@ const TermsAndConditionsModal = () => {
       '/railsapi/v1/user/accept_tnc',
     ).catch(err => err);
     if (result.Success) {
+      hideModal();
       updateUser();
     } else {
       setApiError(result.Message || t('terms_and_cond_modal_api_error'));
