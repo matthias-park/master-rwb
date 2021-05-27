@@ -163,6 +163,7 @@ const DepositPage = () => {
           </>
         }
         buttonClassName="mx-auto my-2"
+        validationErrorPrefix="deposit_"
         min={minDeposit}
         max={maxDeposit}
         loading={depositLoading}

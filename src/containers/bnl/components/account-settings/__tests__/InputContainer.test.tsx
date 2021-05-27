@@ -16,6 +16,7 @@ const buttonContent = 'buttonPlaceholder';
 test('displays title correctly', async () => {
   const { getByTestId } = render(
     <InputContainer
+      validationErrorPrefix=""
       title={titleContent}
       buttonText={buttonContent}
       onSubmit={() => Promise.resolve()}
@@ -27,6 +28,7 @@ test('displays title correctly', async () => {
 test('displays button correctly', async () => {
   const { getByTestId } = render(
     <InputContainer
+      validationErrorPrefix=""
       title={titleContent}
       buttonText={buttonContent}
       onSubmit={() => Promise.resolve()}
@@ -38,6 +40,7 @@ test('displays button correctly', async () => {
 test("doesn't display spinner correctly", async () => {
   const { queryByTestId } = render(
     <InputContainer
+      validationErrorPrefix=""
       title={titleContent}
       buttonText={buttonContent}
       onSubmit={() => Promise.resolve()}
@@ -49,6 +52,7 @@ test("doesn't display spinner correctly", async () => {
 test('displays spinner correctly', async () => {
   const { getByTestId } = render(
     <InputContainer
+      validationErrorPrefix=""
       title={titleContent}
       buttonText={buttonContent}
       onSubmit={() => Promise.resolve()}
@@ -61,6 +65,7 @@ test('submit value correctly', async () => {
   const newEnteredValue = '500';
   const { getByTestId } = render(
     <InputContainer
+      validationErrorPrefix=""
       title={titleContent}
       buttonText={buttonContent}
       onSubmit={value => {
@@ -82,6 +87,7 @@ test('submit value less than min', async () => {
   const newEnteredValue = '10';
   const { getByTestId } = render(
     <InputContainer
+      validationErrorPrefix=""
       title={titleContent}
       buttonText={buttonContent}
       min="200"
@@ -104,6 +110,7 @@ test('submit value more than max', async () => {
   const newEnteredValue = '500';
   const { getByTestId } = render(
     <InputContainer
+      validationErrorPrefix=""
       title={titleContent}
       buttonText={buttonContent}
       max="200"
@@ -124,6 +131,7 @@ test('submit value more than max', async () => {
 test('submit value on disabled prop', async () => {
   const { getByTestId } = render(
     <InputContainer
+      validationErrorPrefix=""
       title={titleContent}
       buttonText={buttonContent}
       disabled
@@ -139,6 +147,7 @@ test('submit value on disabled prop', async () => {
 test('default matches snapshot', () => {
   const dom = renderer.create(
     <InputContainer
+      validationErrorPrefix=""
       title={titleContent}
       buttonText={buttonContent}
       onSubmit={() => Promise.resolve()}
@@ -151,6 +160,7 @@ test('default matches snapshot', () => {
 test('with spinner matches snapshot', () => {
   const dom = renderer.create(
     <InputContainer
+      validationErrorPrefix=""
       title={titleContent}
       buttonText={buttonContent}
       onSubmit={() => Promise.resolve()}

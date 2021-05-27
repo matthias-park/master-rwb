@@ -20,11 +20,13 @@ interface Props {
   header?: JSX.Element;
   subText?: string;
   inputTitle?: string;
+  validationErrorPrefix: string;
 }
 
 const InputContainer = ({
   title,
   defaultValue = '',
+  validationErrorPrefix,
   buttonText,
   buttonClassName,
   loading,
@@ -82,9 +84,9 @@ const InputContainer = ({
     const minNumber = Number(min);
     const maxNumber = Number(max);
     if (minNumber && inputAmount < minNumber) {
-      return t('amount_below_minimum');
+      return t(`${validationErrorPrefix}amount_below_minimum`);
     } else if (maxNumber && inputAmount > maxNumber) {
-      return t('amount_above_maximum');
+      return t(`${validationErrorPrefix}amount_above_maximum`);
     }
     return true;
   };

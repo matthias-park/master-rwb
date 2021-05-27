@@ -13,7 +13,7 @@ const RegWelcome = () => {
   return (
     <div className="reg-welcome">
       <h1 className="reg-welcome__title">{`${t('reg_welcome_title')} ${
-        user.first_name
+        user.first_name || ''
       }`}</h1>
       <p className="reg-welcome__sub-title">{t('reg_welcome_sub_title')}</p>
       <div className="reg-welcome__container">
