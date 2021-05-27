@@ -58,7 +58,8 @@
         display: flex;
         align-items: center;
         font-size: 32px;
-        border-left: 12px solid transparent;
+        border: 12px solid transparent;
+        border-right: 0;
         .icon-eye-off {
             color: $brand-light;
             cursor: pointer;
