@@ -42,7 +42,11 @@ const TermsAndConditionsModal = () => {
       pathname !== termsAndConditionsPath
     ) {
       enableModal(ComponentName.TermsAndConditionsModal);
-    } else if (!user.logged_in || pathname === termsAndConditionsPath) {
+    } else if (
+      !user.logged_in ||
+      !user.tnc_required ||
+      pathname === termsAndConditionsPath
+    ) {
       hideModal();
     }
   }, [modalActive, user, pathname, termsAndConditionsPath]);
@@ -54,11 +58,10 @@ const TermsAndConditionsModal = () => {
     ).catch(err => err);
     if (result.Success) {
       updateUser();
-      hideModal();
     } else {
       setApiError(result.Message || t('terms_and_cond_modal_api_error'));
+      setLoadingBtn(LoadingBtnState.None);
     }
-    setLoadingBtn(LoadingBtnState.None);
   };
 
   const logout = async () => {
