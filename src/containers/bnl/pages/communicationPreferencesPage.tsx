@@ -82,12 +82,12 @@ const CommunicationPreferencesPage = () => {
   const questionItems = useMemo(
     () => [
       {
-        title: t('communications_question_1'),
-        body: t('communications_answer_1'),
+        title: t('communication_question_1'),
+        body: t('communication_answer_1'),
       },
       {
-        title: t('communications_question_2'),
-        body: t('communications_answer_2'),
+        title: t('communication_question_2'),
+        body: t('communication_answer_2'),
       },
     ],
     [t],
