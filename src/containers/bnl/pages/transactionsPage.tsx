@@ -203,6 +203,14 @@ const TransactionsDateFilter = ({ dateTo, dateFrom, updateUrl }) => {
     setNewDateTo(dateTo);
   }, [dateFrom.format('DD/MM/YYYY'), dateTo.format('DD/MM/YYYY')]);
 
+  const disabledSearchBtn = useMemo(() => {
+    const formatDate = date => date.format('DD/MM/YYYY');
+    return (
+      !validDate ||
+      (formatDate(dateFrom) === formatDate(newDateFrom) &&
+        formatDate(dateTo) === formatDate(newDateTo))
+    );
+  }, [validDate, dateFrom, newDateFrom, dateTo, newDateTo]);
   return (
     <>
       <div className="date-filter__picker-wrp mb-sm-3">
@@ -236,9 +244,7 @@ const TransactionsDateFilter = ({ dateTo, dateFrom, updateUrl }) => {
       <Button
         className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3 btn--small-radius"
         variant="primary"
-        disabled={
-          !validDate || (dateFrom === newDateFrom && dateTo === newDateTo)
-        }
+        disabled={disabledSearchBtn}
         onClick={() => {
           updateUrl(newDateFrom, newDateTo);
         }}
