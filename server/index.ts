@@ -28,7 +28,7 @@ app.get('/sitemap.xml', getSitemap);
 
 app.use(
   express.static(BUILD_FOLDER, {
-    maxAge: '7 days',
+    maxAge: '31536000',
   }),
 );
 app.use(middleware.routeExistCheck);

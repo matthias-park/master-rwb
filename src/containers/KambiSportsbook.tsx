@@ -216,7 +216,7 @@ const insertKambiBootstrap = async (): Promise<void> => {
     document.body.classList.add('body-background');
     const scriptElement = document.createElement('script');
     scriptElement.setAttribute('type', 'text/javascript');
-    scriptElement.async = true;
+    scriptElement.defer = true;
     scriptElement.setAttribute(
       'src',
       `${window.__config__.kambi?.bootstrap}?cb=${Date.now()}`,
@@ -229,7 +229,7 @@ const insertKambiBootstrap = async (): Promise<void> => {
         'src',
         `${window.__config__.kambi?.api}?cb=${Date.now()}`,
       );
-      scriptElement.async = true;
+      scriptElement.defer = true;
       scriptElement.addEventListener('load', () => resolve());
       document.head.appendChild(scriptElement);
     } else {

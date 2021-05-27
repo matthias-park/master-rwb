@@ -1,8 +1,8 @@
 {
   "name": "Scooore",
   "start_url": "/",
-  "display": "browser",
-  "theme_color": "#f6f6f6",
+  "display": "minimal-ui",
+  "theme_color": "#000541",
   "icons": [
     {
       "src": "/assets/images/icons/128px.png",
@@ -12,7 +12,8 @@
     {
       "src": "/assets/images/icons/192px.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "/assets/images/icons/512px.png",

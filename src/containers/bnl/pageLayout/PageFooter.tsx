@@ -103,6 +103,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
               alt="play legally"
               className="mb-2 mb-lg-0 white-corners"
               height="50"
+              width="44"
               src="/assets/images/footer/play-legally.jpg"
             />
           </a>
@@ -117,6 +118,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
               alt="responsible gaming"
               className="ml-2 ml-lg-3 mb-2 mb-lg-0 white-corners"
               height="40"
+              width="129"
               src={`/assets/images/footer/res-gaming-${locale}.png`}
             />
           </a>
@@ -127,6 +129,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
               alt="bgc"
               className="ml-2 ml-lg-3 mb-2 mb-lg-0 white-corners"
               height="40"
+              width="90"
               src={`/assets/images/footer/bgc-${locale}.jpg`}
             />
           </a>

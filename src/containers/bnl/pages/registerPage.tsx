@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import HelpBlock from '../components/HelpBlock';
 import OnlineForm from '../components/registration/OnlineForm';
 import RegWelcome from '../components/registration/RegWelcome';
