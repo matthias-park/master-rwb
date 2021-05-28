@@ -20,7 +20,9 @@
         "api": "https://c3-static.kambi.com/client/widget-api/kambi-widget-api.js"
       },
       "googleRecaptchaKey": "6Lezp2oaAAAAADpwV6q_a2k7yVPD52Qb89Z2zFcR",
-      "basicAuthEnabled": true
+      "basicAuthEnabled": true,
+      "themeColor": "#000541",
+      "iconSizes": ["128", "192", "512"]
     }
   ],
   "port": 3800,

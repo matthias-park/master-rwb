@@ -14,6 +14,16 @@
         "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js"
       },
       "googleRecaptchaKey": "6Lezp2oaAAAAADpwV6q_a2k7yVPD52Qb89Z2zFcR"
+    },
+    {
+      "name": "safeCasino",
+      "domains": [
+        {
+          "hostname": "safecasino.local",
+          "api": "https://bnl-dev.tglab.dev"
+        }
+      ],
+      "theme": "safeCasino"
     }
   ],
   "port": 3800

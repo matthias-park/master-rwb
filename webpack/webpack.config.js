@@ -24,6 +24,8 @@ const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpack
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const postcssNormalize = require('postcss-normalize');
+const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
+
 // const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 
 const appPackageJson = require(paths.appPackageJson);
@@ -166,11 +168,15 @@ module.exports = function (webpackEnv, buildFranchises) {
           Object.assign(
             {},
             {
-              inject: true,
+              inject: false,
               template: paths.appBuildHtml,
               chunks: getEntryFiles(),
               filename: `${domain.hostname}.html`,
               franchiseTheme: `theme-${franchise.theme}`,
+              iconSizes: franchise.iconSizes,
+              meta: {
+                'theme-color': franchise.themeColor,
+              },
               config: JSON.stringify({
                 name: franchise.name,
                 apiUrl: domain.api,
@@ -528,7 +534,7 @@ module.exports = function (webpackEnv, buildFranchises) {
               // its runtime that would otherwise be processed through "file" loader.
               // Also exclude `html` and `json` extensions so they get processed
               // by webpacks internal loaders.
-              exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+              exclude: [/\.(js|mjs|jsx|ts|tsx|snap)$/, /\.html$/, /\.json$/],
               options: {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
@@ -597,6 +603,7 @@ module.exports = function (webpackEnv, buildFranchises) {
       // to restart the development server for webpack to discover it. This plugin
       // makes the discovery automatic so you don't have to restart.
       // See https://github.com/facebook/create-react-app/issues/186
+      new FixStyleOnlyEntriesPlugin(),
       isEnvDevelopment &&
         new WatchMissingNodeModulesPlugin(paths.appNodeModules),
       new MiniCssExtractPlugin({

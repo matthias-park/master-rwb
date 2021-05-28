@@ -48,13 +48,13 @@ const ContextProviders = ({ children }: Props) => {
     ToastProvider,
     ConfigProvider,
     I18nProvider,
-    GtmProvider,
+    !!window.__config__.gtmId && GtmProvider,
     AuthProvider,
     HelmetProvider,
     BrowserRouterProvider,
     ModalProvider,
     UIConfigProvider,
-    CaptchaProvider,
+    !!window.__config__.googleRecaptchaKey && CaptchaProvider,
     !!window.__config__.kambi && KambiProvider,
   ];
 
