@@ -2,6 +2,7 @@ import config from 'config';
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
+import helmet from 'helmet';
 import { shouldPrerender } from './utils';
 import { getRenderedPage } from './ssr';
 import { BUILD_FOLDER } from './constants';
@@ -13,6 +14,16 @@ import getSitemap from './routes/sitemap';
 const app = express();
 
 app.set('trust proxy', true);
+app.use(
+  helmet.frameguard({
+    action: 'sameorigin',
+  }),
+);
+app.use((_, res, next) => {
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  next();
+});
+app.use(helmet.noSniff());
 app.use(middleware.useragent);
 app.use(middleware.franchiseIdentify);
 app.use(middleware.basicAuth);
