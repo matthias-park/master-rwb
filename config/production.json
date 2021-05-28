@@ -19,7 +19,8 @@
         "bootstrap": "https://c3-static.kambi.com/client/bnlbe/kambi-bootstrap.js",
         "api": "https://c3-static.kambi.com/client/widget-api/kambi-widget-api.js"
       },
-      "googleRecaptchaKey": "6Lezp2oaAAAAADpwV6q_a2k7yVPD52Qb89Z2zFcR"
+      "googleRecaptchaKey": "6Lezp2oaAAAAADpwV6q_a2k7yVPD52Qb89Z2zFcR",
+      "basicAuthEnabled": true
     }
   ],
   "port": 3800,

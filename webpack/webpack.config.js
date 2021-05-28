@@ -23,7 +23,6 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const config = require('config');
 const postcssNormalize = require('postcss-normalize');
 // const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 
@@ -67,25 +66,11 @@ const hasJsxRuntime = (() => {
   }
 })();
 
-const makeHash = length => {
-  var result = [];
-  var characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for (var i = 0; i < length; i++) {
-    result.push(
-      characters.charAt(Math.floor(Math.random() * charactersLength)),
-    );
-  }
-  return result.join('');
-};
-const buildHash = makeHash(7);
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
-module.exports = function (webpackEnv) {
+module.exports = function (webpackEnv, buildFranchises) {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = ['stage', 'production'].includes(webpackEnv);
-  const configFranchises = config.get('franchises');
   // Source maps are resource heavy and can cause out of memory issue for large source files.
   const shouldUseSourceMap = isEnvProduction;
 
@@ -557,14 +542,14 @@ module.exports = function (webpackEnv) {
     plugins: [
       // Generates an `index.html` file with the <script> injected.
       ...(isEnvProduction
-        ? configFranchises.map(generateHtmlPlugin).flat()
+        ? buildFranchises.map(generateHtmlPlugin).flat()
         : []),
       isEnvDevelopment &&
         new HtmlWebpackPlugin({
           inject: true,
           template: paths.appDevHtml,
           chunks: ['main'],
-          franchises: JSON.stringify(configFranchises),
+          franchises: JSON.stringify(buildFranchises),
         }),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.

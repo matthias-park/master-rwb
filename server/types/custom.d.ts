@@ -5,6 +5,7 @@ export interface FranchiseConfig {
     api: string;
   }[];
   theme: string;
+  basicAuthEnabled: boolean;
 }
 declare global {
   namespace Express {

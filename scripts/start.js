@@ -60,6 +60,8 @@ if (process.env.HOST) {
   console.log();
 }
 
+const allFranchises = config.get('franchises');
+
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
 const { checkBrowsers } = require('react-dev-utils/browsersHelper');
@@ -75,7 +77,7 @@ checkBrowsers(paths.appPath, isInteractive)
       return;
     }
 
-    const config = configFactory('development');
+    const webpackConfig = configFactory('development', allFranchises);
     const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
     const appName = require(paths.appPackageJson).name;
 
@@ -96,7 +98,7 @@ checkBrowsers(paths.appPath, isInteractive)
     // Create a webpack compiler that is configured with custom messages.
     const compiler = createCompiler({
       appName,
-      config,
+      config: webpackConfig,
       devSocket,
       urls,
       useTypeScript,

@@ -13,5 +13,6 @@ set :build_env, 'production'
 
 set :default_env, {
   NODE_ENV: :production,
+  NODE_FRANCHISE: 'bnl'
 }
 

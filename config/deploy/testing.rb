@@ -12,6 +12,7 @@ append :linked_dirs, 'node_modules'
 
 set :default_env, {
   NODE_ENV: :env,
+  NODE_FRANCHISE: 'all'
 }
 
 set :branch, ENV['branch'] || ask('Branch name to deploy?', :master)

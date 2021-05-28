@@ -23,6 +23,7 @@ const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 const printBuildError = require('react-dev-utils/printBuildError');
+const config = require('config');
 
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
@@ -42,9 +43,14 @@ if (!checkRequiredFiles([paths.appBuildHtml, paths.appIndexJs])) {
 
 const argv = process.argv.slice(2);
 const writeStatsJson = argv.indexOf('--stats') !== -1;
-
+const franchiseName = process.env.NODE_FRANCHISE || 'all';
+const allFranchises = config.get('franchises');
+const franchisesToCompile =
+  franchiseName !== 'all'
+    ? allFranchises.filter(fr => franchiseName.split(',').includes(fr.name))
+    : allFranchises;
 // Generate configuration
-const config = configFactory('production');
+const webpackConfig = configFactory('production', franchisesToCompile);
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
@@ -95,7 +101,7 @@ checkBrowsers(paths.appPath, isInteractive)
 
       const appPackage = require(paths.appPackageJson);
       const publicUrl = paths.publicUrlOrPath;
-      const publicPath = config.output.publicPath;
+      const publicPath = webpackConfig.output.publicPath;
       const buildFolder = path.relative(process.cwd(), paths.appBuild);
       printHostingInstructions(
         appPackage,
@@ -132,7 +138,7 @@ checkBrowsers(paths.appPath, isInteractive)
 function build(previousFileSizes) {
   console.log('Creating an optimized production build...');
 
-  const compiler = webpack(config);
+  const compiler = webpack(webpackConfig);
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
       let messages;
@@ -201,8 +207,18 @@ function build(previousFileSizes) {
 }
 
 function copyPublicFolder() {
+  const franchises = franchiseName
+    .split(',')
+    .map(fr => path.join(paths.appPublic, `/${fr}`));
   fs.copySync(paths.appPublic, paths.appBuild, {
     dereference: true,
-    filter: file => file !== paths.appBuildHtml,
+    filter: file => {
+      if ([paths.appBuildHtml, paths.appDevHtml].includes(file)) return false;
+      return (
+        file === paths.appPublic ||
+        franchiseName === 'all' ||
+        franchises.some(fr => file.startsWith(fr))
+      );
+    },
   });
 }

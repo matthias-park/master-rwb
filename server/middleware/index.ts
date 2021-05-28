@@ -6,8 +6,8 @@ import routeExistCheck from './routeExistCheck';
 
 const middleware = {
   useragent: useragent.express(),
-  basicAuth,
   franchiseIdentify,
+  basicAuth,
   assetsToFranchise,
   routeExistCheck,
 };
