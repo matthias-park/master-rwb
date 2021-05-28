@@ -21,6 +21,10 @@
       },
       "googleRecaptchaKey": "6Lezp2oaAAAAADpwV6q_a2k7yVPD52Qb89Z2zFcR",
       "basicAuthEnabled": true,
+      "excludeBasicAuthFiles": [
+        "/assets/styles/light-theme.css",
+        "/assets/styles/dark-theme.css"
+      ],
       "themeColor": "#000541",
       "iconSizes": ["128", "192", "512"]
     }

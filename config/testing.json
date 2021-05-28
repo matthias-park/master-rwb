@@ -19,6 +19,10 @@
         "bootstrap": "https://cts-static.kambi.com/client/bnlbe/kambi-bootstrap.js",
         "api": "https://cts-static.kambi.com/client/widget-api/kambi-widget-api.js"
       },
+      "excludeBasicAuthFiles": [
+        "/assets/styles/light-theme.css",
+        "/assets/styles/dark-theme.css"
+      ],
       "googleRecaptchaKey": "6Lezp2oaAAAAADpwV6q_a2k7yVPD52Qb89Z2zFcR",
       "basicAuthEnabled": true,
       "themeColor": "#000541",

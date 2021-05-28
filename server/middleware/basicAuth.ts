@@ -15,6 +15,7 @@ const basicAuth = (req: Request, res: Response, next: NextFunction) => {
     return next();
   if (
     !req.franchise.basicAuthEnabled ||
+    req.franchise.excludeBasicAuthFiles?.includes(req.url) ||
     req.header(PRERENDER_HEADER) ||
     !BASIC_AUTH ||
     !BASIC_AUTH.users ||
