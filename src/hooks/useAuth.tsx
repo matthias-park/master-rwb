@@ -4,6 +4,7 @@ import React, {
   useEffect,
   ReactNode,
   useRef,
+  useState,
 } from 'react';
 import { TestEnv } from '../constants';
 import { useToasts } from 'react-toast-notifications';
@@ -11,7 +12,6 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import useApi from './useApi';
 import UserStatus, { NET_USER } from '../types/UserStatus';
 import { getApi, postApi } from '../utils/apiUtils';
-import { usePrevious } from '.';
 import useGTM from './useGTM';
 import { useConfig } from './useConfig';
 import { isMobile } from 'react-device-detect';
@@ -43,30 +43,54 @@ export type I18nProviderProps = {
   children?: ReactNode;
 };
 
+class StatusResponseError {
+  notLoggedIn: boolean;
+
+  constructor(res: RailsApiResponse<UserStatus>) {
+    this.notLoggedIn = res.Code === 1;
+  }
+}
+
 export const AuthProvider = ({ ...props }: I18nProviderProps) => {
   const { addToast } = useToasts();
   const sendDataToGTM = useGTM();
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { t } = useI18n();
   const loginClick = useRef(false);
-  const { data, error, mutate } = useApi<UserStatus | null>(
+  const [prevUser, setPrevUser] = useState<UserStatus | null>(null);
+  const { data, error, mutate } = useApi<
+    UserStatus | null,
+    StatusResponseError
+  >(
     !TestEnv ? '/railsapi/v1/user/status' : null,
     url =>
       getApi<RailsApiResponse<UserStatus>>(url).then(res => {
-        if (!res.Success) throw new Error('not logged in');
+        if (!res.Success) throw new StatusResponseError(res);
         return res.Data;
       }),
     {
       revalidateOnFocus: true,
       refreshInterval: 300000, // 5 min
-      onErrorRetry: () => {
-        return;
+      onSuccess: data => {
+        setPrevUser(data);
+      },
+      onErrorRetry: (
+        error: StatusResponseError,
+        _,
+        _1,
+        revalidate,
+        { retryCount = 0 },
+      ) => {
+        if (error.notLoggedIn) return;
+        if (retryCount > 10) return;
+        setTimeout(() => revalidate({ retryCount }), 10000);
       },
     },
   );
-
-  const prevUser = usePrevious(data);
-  let user: UserStatus = { logged_in: false, loading: false };
+  let user: UserStatus =
+    !error?.notLoggedIn && prevUser?.logged_in
+      ? prevUser
+      : { logged_in: false, loading: false };
   if (!data && !error) {
     user.loading = true;
   } else if (data && !error) {
