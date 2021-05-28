@@ -166,8 +166,8 @@ const PromotionPage = ({ slug }: { slug: string }) => {
   }
 
   const bannerImg = desktopWidth
-    ? data?.Data.bg_image.url
-    : data?.Data.bg_image_mobile.url;
+    ? data?.Data?.bg_image?.url
+    : data?.Data?.bg_image_mobile?.url;
   const fallbackBannerImg = desktopWidth
     ? '/assets/images/promo/promo-inner-lg.png'
     : '/assets/images/promo/promo-inner-sm.png';
