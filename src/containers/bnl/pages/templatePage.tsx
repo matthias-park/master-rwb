@@ -79,6 +79,8 @@ const TemplatePage = () => {
       {!!pageTitle && (
         <Helmet
           title={clsx(pageTitle && `${pageTitle} - `, t('seo_site_name'))}
+          defer={false}
+          async
         />
       )}
       {!!data?.Success && (

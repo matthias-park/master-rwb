@@ -21,7 +21,6 @@ import RedirectNotFound from '../../../components/RedirectNotFound';
 import { FormProvider, useForm } from 'react-hook-form';
 import RegError from '../components/registration/RegError';
 import { useCaptcha } from '../../../hooks/useGoogleRecaptcha';
-import Lockr from 'lockr';
 
 const RegistrationReturnCode = {
   '0': 'sitemap_registerWelcome',
@@ -67,7 +66,9 @@ const RegisterPage = () => {
   const sendDataToGTM = useGTM();
   const formMethods = useForm<RegistrationFields>({
     mode: 'onBlur',
-    defaultValues: Lockr.get(localStorageSaveKey, {}),
+    defaultValues: JSON.parse(
+      sessionStorage.getItem(localStorageSaveKey) || '{}',
+    ),
   });
   const watchAllFields = formMethods.watch();
 
@@ -80,7 +81,7 @@ const RegisterPage = () => {
   };
   if (formMethods.formState.isDirty) {
     const { password, repeat_password, ...fields } = watchAllFields;
-    Lockr.set(localStorageSaveKey, fields);
+    sessionStorage.setItem(localStorageSaveKey, JSON.stringify(fields));
   }
 
   const registrationResponseRoutes = useMemo(
@@ -130,7 +131,7 @@ const RegisterPage = () => {
         route => route.name === RegistrationReturnCode[res.Code],
       );
       if (res?.Success && res.Data) {
-        Lockr.rm(localStorageSaveKey);
+        sessionStorage.removeItem(localStorageSaveKey);
         updateUser();
         sendDataToGTM({
           'tglab.user.GUID': res.Data.PlayerId,
