@@ -14,8 +14,6 @@
     <title></title>
     <script>
       window.__config__ = JSON.parse('<%= htmlWebpackPlugin.options.config %>');
-      window.test = JSON.parse('<%= htmlWebpackPlugin.files.css %>');
-      window.tedst = '<%= htmlWebpackPlugin.options.franchiseTheme %>';
     </script>
   <% if (htmlWebpackPlugin.files.css.find(href => href.includes(htmlWebpackPlugin.options.franchiseTheme))) { %>
     <link href="<%= htmlWebpackPlugin.files.css.find(href => href.includes(htmlWebpackPlugin.options.franchiseTheme)) %>" rel="stylesheet">

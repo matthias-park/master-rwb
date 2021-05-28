@@ -6,7 +6,7 @@ import ContextProviders from './ContextProviders';
 const AsyncFranchise = (name: string) =>
   loadable(() =>
     import(`./${name}`).catch(() => {
-      // window.location.reload();
+      window.location.reload();
       return 'div';
     }),
   );

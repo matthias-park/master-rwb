@@ -177,6 +177,7 @@ const WithdrawalPage = () => {
         return res;
       });
       mutate();
+      window.scrollTo(0, 0);
       return setSubmitResponse({
         success: response.Success,
         msg: response.Message,
