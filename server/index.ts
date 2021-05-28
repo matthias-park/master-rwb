@@ -15,6 +15,13 @@ const app = express();
 
 app.set('trust proxy', true);
 app.use(
+  helmet.hsts({
+    maxAge: 3156000,
+    includeSubDomains: true,
+    preload: true,
+  }),
+);
+app.use(
   helmet.frameguard({
     action: 'sameorigin',
   }),
