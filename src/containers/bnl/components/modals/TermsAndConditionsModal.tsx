@@ -66,6 +66,7 @@ const TermsAndConditionsModal = () => {
     ).catch(err => err);
     if (result.Success) {
       updateUser();
+      setTimeout(() => setLoadingBtn(LoadingBtnState.None), 2000);
     } else {
       setApiError(result.Message || t('terms_and_cond_modal_api_error'));
       setLoadingBtn(LoadingBtnState.None);
@@ -88,9 +89,7 @@ const TermsAndConditionsModal = () => {
       withoutClose
       className="pb-4"
     >
-      <h2 className="mb-3 mt-4 text-center">
-        {t('terms_and_cond_modal_title')}
-      </h2>
+      <h2 className="mb-4 text-center">{t('terms_and_cond_modal_title')}</h2>
       <CustomAlert show={!!apiError} variant="danger" className="mt-2">
         {apiError!}
       </CustomAlert>
@@ -105,12 +104,12 @@ const TermsAndConditionsModal = () => {
               required: t('tnc_checkbox_required'),
             }}
           />
-          <div className="d-flex justify-content-center">
+          <div className="d-flex justify-content-center flex-wrap mt-3">
             <LoadingButton
               disabled={!watchTncCheckbox}
               loading={loadingBtn === LoadingBtnState.Accept}
               variant="primary"
-              className="mt-4"
+              className="mt-2"
               type="submit"
             >
               {t('terms_and_cond_modal_accept')}
@@ -120,7 +119,7 @@ const TermsAndConditionsModal = () => {
               disabled={loadingBtn !== LoadingBtnState.None}
               loading={loadingBtn === LoadingBtnState.Logout}
               variant="primary"
-              className="ml-1 mt-4"
+              className="ml-1 mt-2"
             >
               {t('terms_and_cond_modal_logout')}
             </LoadingButton>

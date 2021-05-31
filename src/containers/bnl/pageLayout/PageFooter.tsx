@@ -103,7 +103,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
               alt="play legally"
               className="mb-2 mb-lg-0 white-corners"
               height="50"
-              width="44"
+              width="55"
               src="/assets/images/footer/play-legally.jpg"
             />
           </a>
