@@ -48,10 +48,12 @@ const kambiLogin = (api: WidgetAPI, locale: string, userId?: string) => {
 const kambiLogout = (api: WidgetAPI) => api.request(api.LOGOUT);
 
 export const KambiProvider = ({ children }) => {
-  const { routes, locale } = useConfig((prev, next) => {
+  const { routes, locale, cookies } = useConfig((prev, next) => {
     const routesEqual = prev.routes.length === next.routes.length;
     const localeEqual = prev.locale === next.locale;
-    return routesEqual && localeEqual;
+    const cookiesEqual =
+      prev.cookies.cookies.analytics === next.cookies.cookies.analytics;
+    return routesEqual && localeEqual && cookiesEqual;
   });
   const apiLoadedIntervalRef = useRef<number>(0);
   const { user } = useAuth();
@@ -69,6 +71,10 @@ export const KambiProvider = ({ children }) => {
       )?.id === PagesName.SportsPage,
     [pathname, routes, locationKey],
   );
+  useEffect(() => {
+    window['ga-disable-UA-45067452-1'] = !cookies.cookies.analytics;
+    window['ga-disable-UA-45067452-4'] = !cookies.cookies.analytics;
+  }, [cookies.cookies.analytics]);
   useEffect(() => {
     if (!!api && user.logged_in !== kambiUserLoggedIn) {
       setSportsbookLoaded(false);
