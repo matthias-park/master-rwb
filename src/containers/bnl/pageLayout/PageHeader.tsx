@@ -34,9 +34,7 @@ const SubNavLinks = ({
   const changeLocale = async (lang: string) => {
     return postApi('/railsapi/v1/locale', {
       locale: lang,
-    })
-      .then(() => setLocale(lang, true))
-      .then(() => window.location.reload());
+    }).then(() => setLocale(lang, true));
   };
   const navLinkClick = (linkName: string) => {
     setNavExpanded(false);

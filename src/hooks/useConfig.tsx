@@ -144,25 +144,21 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
       if (detectedLocaleAvailable && constants.locale !== detectedLocale) {
         newLocale = detectedLocale;
       }
-      if (!cachedLocale && !newLocale && constants.locale) {
-        newLocale = constants.locale;
-      }
-      if (newLocale && !constants.cached) {
+      if (newLocale) {
         (async () => {
           await setApiLocale(newLocale);
           setLocale(newLocale);
         })();
       } else if (!newLocale && configLoaded !== ConfigLoaded.Loaded) {
-        if (!detectedLocale && constants.locale) {
+        if (constants.locale) {
           setLocale(constants.locale);
-        } else {
-          setConfigLoaded(ConfigLoaded.Loaded);
         }
+        setConfigLoaded(ConfigLoaded.Loaded);
       }
     } else if (constantsError) {
       setConfigLoaded(ConfigLoaded.Error);
     }
-  }, [constants?.locale, constants?.cached, !!constantsError]);
+  }, [constants?.locale, !!constantsError]);
 
   const setLocale = (lang: string, setPageLoading = false) => {
     if (setPageLoading) {
@@ -172,10 +168,13 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     if (lang !== constants?.locale) {
       clearConstantsCache();
     }
-    setLocalePathname(lang);
     setCachedLocale(lang);
-    setConfigLoaded(ConfigLoaded.Loaded);
+    if (setPageLoading) {
+      setLocalePathname(lang);
+    }
+    // setConfigLoaded(ConfigLoaded.Loaded);
   };
+  console.log(configLoaded, cachedLocale);
   const value: Config = {
     locale: cachedLocale || '',
     setLocale,

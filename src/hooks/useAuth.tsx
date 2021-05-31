@@ -18,6 +18,7 @@ import { isMobile } from 'react-device-detect';
 import { clearUserLocalStorage } from '../utils/';
 import { useI18n } from './useI18n';
 import { setUser as sentrySetUser } from '@sentry/react';
+import { ConfigLoaded } from '../types/Config';
 
 export interface UserAuth {
   user: UserStatus;
@@ -55,7 +56,11 @@ class StatusResponseError {
 export const AuthProvider = ({ ...props }: I18nProviderProps) => {
   const { addToast } = useToasts();
   const sendDataToGTM = useGTM();
-  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const { configLoaded, locale } = useConfig((prev, next) => {
+    const localeEqual = prev.locale === next.locale;
+    const configEqual = prev.configLoaded === next.configLoaded;
+    return localeEqual && configEqual;
+  });
   const { t } = useI18n();
   const loginClick = useRef(false);
   const [prevUser, setPrevUser] = useState<UserStatus | null>(null);
@@ -111,9 +116,8 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
       clearUserLocalStorage();
     }
   }, [data, prevUser]);
-
   useEffect(() => {
-    if (!user.loading) {
+    if (!user.loading && configLoaded === ConfigLoaded.Loaded) {
       if (user.logged_in && user.id) {
         sentrySetUser({ id: user.id.toString() });
       }
@@ -125,7 +129,7 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
         event: 'userStatusChange',
       });
     }
-  }, [user.logged_in, user.loading, isMobile, locale]);
+  }, [user.logged_in, user.loading, configLoaded]);
 
   const signin = async (
     email: string,

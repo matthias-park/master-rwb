@@ -53,6 +53,7 @@ const PageLayout = ({ children }) => {
     if (
       prevPathname !== pathname &&
       locale &&
+      configLoaded === ConfigLoaded.Loaded &&
       route?.id !== PagesName.LocaleSelectPage
     ) {
       sendDataToGTM({

@@ -61,9 +61,7 @@ const AddBankAccountModal = ({ onSubmit }: Props) => {
               allowEmptyFormatting: true,
             }}
             rules={{
-              required: `${t('add_bank_modal_account_number')} ${t(
-                'add_bank_modal_input_required',
-              )}`,
+              required: t('add_bank_modal_input_required'),
               validate: (value: string) =>
                 value.length === 14 || t('bank_account_bad_format'),
             }}

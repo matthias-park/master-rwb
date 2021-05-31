@@ -6,7 +6,6 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { ConfigLoaded } from '../types/Config';
 import { ISnippetsParams, IDataGTM } from '../types/GoogleTagManager';
 import { sendToGTM, initGTM } from '../utils/GoogleTagManager';
 import { useConfig } from './useConfig';
@@ -41,14 +40,11 @@ const useGTMHookContext = createContext<ISnippetsParams | undefined>(
 );
 
 const useGTM = (): ((data: IDataGTM) => void) => {
-  const { configLoaded } = useConfig(
-    (prev, next) => prev.configLoaded === next.configLoaded,
-  );
   const gtmContextState = useContext(useGTMHookContext);
 
   const sendDataToGTM = useCallback(
     (data: IDataGTM): void => {
-      if (configLoaded === ConfigLoaded.Loaded && gtmContextState?.id) {
+      if (gtmContextState?.id) {
         sendToGTM({ data, dataLayerName: gtmContextState.dataLayerName! });
       }
     },
@@ -61,11 +57,9 @@ const useGTM = (): ((data: IDataGTM) => void) => {
 export default useGTM;
 
 export const GtmProvider = ({ ...props }: GTMHookProviderProps) => {
-  const { configLoaded, cookies } = useConfig((prev, next) => {
-    const configEqual = prev.configLoaded === next.configLoaded;
-    const cookiesEqual = prev.cookies.cookies === next.cookies.cookies;
-    return configEqual && cookiesEqual;
-  });
+  const { cookies } = useConfig(
+    (prev, next) => prev.cookies.cookies === next.cookies.cookies,
+  );
   const [dataLayerState, setDataLayerState] = useState<ISnippetsParams>(
     initialState,
   );
@@ -79,7 +73,7 @@ export const GtmProvider = ({ ...props }: GTMHookProviderProps) => {
           environment: dataLayerState.environment,
           id: dataLayerState.id,
         });
-        if (configLoaded === ConfigLoaded.Loaded && dataLayerState?.id) {
+        if (dataLayerState?.id) {
           sendToGTM({
             data: {
               event: 'cookiePreferencesChange',
@@ -97,17 +91,13 @@ export const GtmProvider = ({ ...props }: GTMHookProviderProps) => {
     }
   }, [dataLayerState, cookies.cookies.analytics]);
   useEffect(() => {
-    if (
-      configLoaded === ConfigLoaded.Loaded &&
-      window.__config__.gtmId &&
-      cookies.cookies.analytics
-    ) {
+    if (window.__config__.gtmId && cookies.cookies.analytics) {
       setDataLayerState(state => ({
         ...state,
         id: window.__config__.gtmId!,
       }));
     }
-  }, [configLoaded, cookies.cookies.analytics]);
+  }, [cookies.cookies.analytics]);
 
   return <useGTMHookContext.Provider value={dataLayerState} {...props} />;
 };

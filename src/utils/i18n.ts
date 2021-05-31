@@ -47,8 +47,8 @@ export const setLocalePathname = (newlocale: string) => {
   } else {
     paths.splice(1, 0, newlocale);
   }
-  const newPath = paths.join('/') + window.location.hash;
-  window.history.pushState({}, '', newPath);
+  const newPath = paths.join('/');
+  window.location.pathname = newPath;
 };
 
 export type I18n = ReturnType<typeof i18n>;
