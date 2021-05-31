@@ -67,6 +67,7 @@ const TermsAndConditionsModal = () => {
     if (result.Success) {
       updateUser();
       setTimeout(() => setLoadingBtn(LoadingBtnState.None), 2000);
+      enableModal(ComponentName.ResponsibleGamblingModal);
     } else {
       setApiError(result.Message || t('terms_and_cond_modal_api_error'));
       setLoadingBtn(LoadingBtnState.None);
