@@ -13,7 +13,7 @@
         }
       ],
       "theme": "bnl",
-      "gtmId": "GTM-PGRW8BQ",
+      "gtmId": "GTM-P7D2MHW",
       "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17",
       "kambi": {
         "bootstrap": "https://c3-static.kambi.com/client/bnlbe/kambi-bootstrap.js",

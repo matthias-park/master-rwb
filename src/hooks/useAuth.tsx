@@ -113,17 +113,19 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
   }, [data, prevUser]);
 
   useEffect(() => {
-    if (user.logged_in && user.id) {
-      sentrySetUser({ id: user.id.toString() });
+    if (!user.loading) {
+      if (user.logged_in && user.id) {
+        sentrySetUser({ id: user.id.toString() });
+      }
+      sendDataToGTM({
+        'tglab.user.GUID': user.id,
+        'tglab.user.LoginStatus': user.logged_in ? 'LoggedIn' : 'LoggedOut',
+        'tglab.user.Platform': isMobile ? 'Mobile' : 'Desktop',
+        'tglab.user.Language': locale,
+        event: 'userStatusChange',
+      });
     }
-    sendDataToGTM({
-      'tglab.user.GUID': user.id || 0,
-      'tglab.user.LoginStatus': user.logged_in ? 'LoggedIn' : 'LoggedOut',
-      'tglab.user.Platform': isMobile ? 'Mobile' : 'Desktop',
-      'tglab.user.Language': locale,
-      event: 'userStatusChange',
-    });
-  }, [user.logged_in, isMobile, locale]);
+  }, [user.logged_in, user.loading, isMobile, locale]);
 
   const signin = async (
     email: string,
