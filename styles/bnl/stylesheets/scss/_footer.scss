@@ -335,11 +335,13 @@ footer:not(.KambiBC-footer) {
         @include media-breakpoint-down(lg) {
           img {
             height: 36px;
+            width: auto;
           }
         }
         @include media-breakpoint-down(xs) {
           img {
             height: 30px;
+            width: auto;
           }
         }
         @include media-breakpoint-down(md) {
