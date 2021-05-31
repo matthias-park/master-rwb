@@ -12,11 +12,11 @@ export enum ComponentName {
   SetTheWageringAmountLimitPerPeriod,
   SetTheWageringAmountLimitPerSession,
   DisablingYourAccount,
-  AddBankAccountModal,
   Null,
-  ResponsibleGamblingModal,
-  ValidationFailedModal,
-  TermsAndConditionsModal,
+  AddBankAccountModal = 'addBankAccountModal',
+  ResponsibleGamblingModal = 'responsibleGamblingModal',
+  ValidationFailedModal = 'validationFailedModal',
+  TermsAndConditionsModal = 'termsAndConditionsModal',
   CookiesModal = 'cookiesModal',
 }
 

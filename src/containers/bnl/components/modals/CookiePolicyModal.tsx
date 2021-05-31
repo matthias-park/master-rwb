@@ -31,22 +31,22 @@ const CookiePolicyModal = () => {
   };
   const hideModal = () => disableModal(ComponentName.CookiesModal);
   const handleBtnClick = (id: string) => {
+    let newCookies: Cookies = cookieSettings;
     if (id === 'all') {
-      cookies.setCookies(
-        cookiesId.reduce((obj, id) => {
-          obj[id] = true;
-          return obj;
-        }, {}) as Cookies,
-      );
+      newCookies = cookiesId.reduce((obj, id) => {
+        obj[id] = true;
+        return obj;
+      }, {}) as Cookies;
     } else {
-      cookies.setCookies({ ...cookieSettings, accepted: true });
+      newCookies = { ...cookieSettings, accepted: true };
     }
+    cookies.setCookies(newCookies);
     sendDataToGTM({
       event: 'cookiePreferencesChange',
-      'tglab.cookies.analytics': cookieSettings.analytics,
-      'tglab.cookies.functional': cookieSettings.functional,
-      'tglab.cookies.marketing': cookieSettings.marketing,
-      'tglab.cookies.personalization': cookieSettings.personalization,
+      'tglab.cookies.analytics': newCookies.analytics,
+      'tglab.cookies.functional': newCookies.functional,
+      'tglab.cookies.marketing': newCookies.marketing,
+      'tglab.cookies.personalization': newCookies.personalization,
     });
     return disableModal(ComponentName.CookiesModal);
   };

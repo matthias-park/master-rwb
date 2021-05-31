@@ -17,6 +17,7 @@ import { useConfig } from './useConfig';
 import { isMobile } from 'react-device-detect';
 import { clearUserLocalStorage } from '../utils/';
 import { useI18n } from './useI18n';
+import { setUser as sentrySetUser } from '@sentry/react';
 
 export interface UserAuth {
   user: UserStatus;
@@ -109,13 +110,20 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
     if ((!prevUser || prevUser.logged_in) && !user.logged_in && !user.loading) {
       clearUserLocalStorage();
     }
+  }, [data, prevUser]);
+
+  useEffect(() => {
+    if (user.logged_in && user.id) {
+      sentrySetUser({ id: user.id.toString() });
+    }
     sendDataToGTM({
-      'tglab.user.LoginStatus': user.logged_in ? 'LoggedIn' : 'LoggedIout',
+      'tglab.user.GUID': user.id || 0,
+      'tglab.user.LoginStatus': user.logged_in ? 'LoggedIn' : 'LoggedOut',
       'tglab.user.Platform': isMobile ? 'Mobile' : 'Desktop',
       'tglab.user.Language': locale,
       event: 'userStatusChange',
     });
-  }, [data, prevUser]);
+  }, [user.logged_in, isMobile, locale]);
 
   const signin = async (
     email: string,

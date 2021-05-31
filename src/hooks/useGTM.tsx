@@ -62,7 +62,7 @@ const useGTM = (): ((data: IDataGTM) => void) => {
 export default useGTM;
 
 export const GtmProvider = ({ ...props }: GTMHookProviderProps) => {
-  const { configLoaded } = useConfig(
+  const { configLoaded, cookies } = useConfig(
     (prev, next) => prev.configLoaded === next.configLoaded,
   );
   const [dataLayerState, setDataLayerState] = useState<ISnippetsParams>(
@@ -77,6 +77,18 @@ export const GtmProvider = ({ ...props }: GTMHookProviderProps) => {
         environment: dataLayerState.environment,
         id: dataLayerState.id,
       });
+      if (configLoaded === ConfigLoaded.Loaded && dataLayerState?.id) {
+        sendToGTM({
+          data: {
+            event: 'cookiePreferencesChange',
+            'tglab.cookies.analytics': cookies.cookies.analytics,
+            'tglab.cookies.functional': cookies.cookies.functional,
+            'tglab.cookies.marketing': cookies.cookies.marketing,
+            'tglab.cookies.personalization': cookies.cookies.personalization,
+          },
+          dataLayerName: dataLayerState.dataLayerName!,
+        });
+      }
     }
   }, [dataLayerState]);
   useEffect(() => {

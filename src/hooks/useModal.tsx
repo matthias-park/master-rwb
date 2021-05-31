@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { ComponentName } from '../constants';
+import useGTM from './useGTM';
 
 type ModalContextState = ComponentName[];
 interface ModalContext {
@@ -22,6 +23,7 @@ export function useModal(): ModalContext {
 }
 
 export const ModalProvider = props => {
+  const sendDataToGTM = useGTM();
   const [modals, setModals] = useState<ModalContextState>([]);
 
   const enableModal = (name: ComponentName) => {
@@ -45,6 +47,16 @@ export const ModalProvider = props => {
     enableModal,
     disableModal,
   };
+
+  useEffect(() => {
+    if (typeof value.activeModal === 'string') {
+      sendDataToGTM({
+        'tglab.ActiveModal': value.activeModal,
+        event: 'ModalActiveChange',
+      });
+    }
+  }, [value.activeModal]);
+
   return (
     <modalContext.Provider value={value}>
       {props.children}

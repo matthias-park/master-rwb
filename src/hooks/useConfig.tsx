@@ -172,7 +172,6 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     if (lang !== constants?.locale) {
       clearConstantsCache();
     }
-    // changeLocale(lang);
     setLocalePathname(lang);
     setCachedLocale(lang);
     setConfigLoaded(ConfigLoaded.Loaded);
