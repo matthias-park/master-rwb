@@ -10,6 +10,7 @@ import ValidationFailedModal from './components/modals/ValidationFailedModal';
 import { useI18n } from '../../hooks/useI18n';
 import { useModal } from '../../hooks/useModal';
 import { ComponentName } from '../../constants';
+import { useAuth } from '../../hooks/useAuth';
 
 const addBankAccountSubmit = async data => {
   removeFalsyFromObject(data);
@@ -21,6 +22,7 @@ const addBankAccountSubmit = async data => {
 };
 
 const Modals = () => {
+  const { user } = useAuth();
   const { hasTranslations } = useI18n();
   const { activeModal } = useModal();
   if (!hasTranslations) {
@@ -29,11 +31,15 @@ const Modals = () => {
   return (
     <>
       <TermsAndConditionsModal />
-      <ResponsibleGamblingModal />
-      <ValidationFailedModal />
-      {activeModal === ComponentName.CookiesModal && <CookiePolicyModal />}
-      {activeModal === ComponentName.AddBankAccountModal && (
-        <AddBankAccountModal onSubmit={addBankAccountSubmit} />
+      {!user.tnc_required && (
+        <>
+          <ResponsibleGamblingModal />
+          <ValidationFailedModal />
+          {activeModal === ComponentName.CookiesModal && <CookiePolicyModal />}
+          {activeModal === ComponentName.AddBankAccountModal && (
+            <AddBankAccountModal onSubmit={addBankAccountSubmit} />
+          )}
+        </>
       )}
     </>
   );
