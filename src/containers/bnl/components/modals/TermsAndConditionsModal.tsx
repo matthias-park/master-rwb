@@ -56,6 +56,8 @@ const TermsAndConditionsModal = () => {
       pathname === termsAndConditionsPath
     ) {
       hideModal();
+      formMethods.reset();
+      setLoadingBtn(LoadingBtnState.None);
     }
   }, [modalActive, user, pathname, termsAndConditionsPath]);
 
@@ -66,7 +68,6 @@ const TermsAndConditionsModal = () => {
     ).catch(err => err);
     if (result.Success) {
       updateUser();
-      setTimeout(() => setLoadingBtn(LoadingBtnState.None), 2000);
       enableModal(ComponentName.ResponsibleGamblingModal);
     } else {
       setApiError(result.Message || t('terms_and_cond_modal_api_error'));

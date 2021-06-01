@@ -20,6 +20,12 @@ export enum ComponentName {
   CookiesModal = 'cookiesModal',
 }
 
+export const ModalPriority = {
+  [ComponentName.TermsAndConditionsModal]: 1,
+  [ComponentName.ValidationFailedModal]: 2,
+  [ComponentName.ResponsibleGamblingModal]: 5,
+};
+
 export enum PagesName {
   HomePage = 1,
   FaqPage = 2,

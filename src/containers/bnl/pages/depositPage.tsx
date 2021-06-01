@@ -21,6 +21,7 @@ import { structuredBankCommunications } from '../../../utils/index';
 import Spinner from 'react-bootstrap/Spinner';
 import useDepositResponseStatus from '../../../hooks/useDepositResponseStatus';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
+import useGTM from '../../../hooks/useGTM';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
@@ -35,6 +36,7 @@ const DepositPage = () => {
   const addBankAccountModalActivePrevious = usePrevious(
     allActiveModals.includes(ComponentName.AddBankAccountModal),
   );
+  const sendDataToGTM = useGTM();
 
   useEffect(() => {
     if (
@@ -55,6 +57,19 @@ const DepositPage = () => {
       bankAccount.refresh();
     }
   }, [allActiveModals]);
+  useEffect(() => {
+    if (
+      [DepositStatus.Confirmed, DepositStatus.Rejected].includes(
+        depositStatus.depositStatus,
+      )
+    ) {
+      sendDataToGTM({
+        event: 'depositStatusChange',
+        'tglab.deposit.success':
+          depositStatus.depositStatus === DepositStatus.Confirmed,
+      });
+    }
+  }, [depositStatus.depositStatus]);
 
   const questionItems = useMemo(
     () => [

@@ -1,10 +1,12 @@
 import useSWR from 'swr';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { UserBankAccount } from '../types/UserStatus';
+import { useAuth } from './useAuth';
 
 const useUserBankAccountModal = () => {
+  const { user } = useAuth();
   const { data, error, mutate } = useSWR<RailsApiResponse<UserBankAccount>>(
-    '/railsapi/v1/user/bank',
+    user.logged_in ? ['/railsapi/v1/user/bank', user.id] : null,
     {
       refreshInterval: 0,
       revalidateOnFocus: false,

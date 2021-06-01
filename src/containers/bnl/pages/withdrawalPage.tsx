@@ -26,6 +26,7 @@ import useUserBankAccountModal from '../../../hooks/useUserBankAccountModal';
 import { useAuth } from '../../../hooks/useAuth';
 import { VALIDATOR_STATUS } from '../../../types/UserStatus';
 import { replaceStringTagsReact } from '../../../utils/reactUtils';
+import useGTM from '../../../hooks/useGTM';
 interface WithdrawalRequestsProps {
   requests: Request[];
   onCancelRequest: (id: number) => Promise<void>;
@@ -126,6 +127,7 @@ const WithdrawalPage = () => {
   const addBankAccountModalActivePrevious = usePrevious(
     allActiveModals.includes(ComponentName.AddBankAccountModal),
   );
+  const sendDataToGTM = useGTM();
   const { data, error, mutate } = useApi<RailsApiResponse<Withdrawal>>(
     '/railsapi/v1/withdrawals',
   );
@@ -175,6 +177,11 @@ const WithdrawalPage = () => {
           });
         }
         return res;
+      });
+
+      sendDataToGTM({
+        event: 'withdrawalCancelRequested',
+        'tglab.withdrawal.id': id,
       });
       mutate();
       window.scrollTo(0, 0);
@@ -235,6 +242,10 @@ const WithdrawalPage = () => {
           });
         }
         return res;
+      });
+      sendDataToGTM({
+        event: 'withdrawalRequested',
+        'tglab.withdrawal.amount': data.amount,
       });
       setWithdrawalLoading(false);
       setWithdrawalConfirmData(null);

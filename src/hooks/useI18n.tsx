@@ -80,7 +80,7 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   // }, []);
 
   const [translations, setTranslations] = useState(() =>
-    data?.Data ? i18n(data.Data._locale_, data.Data) : i18n(locale, {}),
+    i18n(data?.Data._locale_ || locale, data?.Data || {}),
   );
 
   useEffect(() => {
@@ -90,10 +90,8 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   }, [locale]);
 
   useEffect(() => {
-    if (data?.Data._locale_) {
-      setTranslations(i18n(data.Data._locale_, data?.Data));
-    }
-  }, [locale, data?.Data]);
+    setTranslations(i18n(data?.Data?._locale_ || locale, data?.Data));
+  }, [data?.Data]);
 
   const addSymbols = (data: Symbols) => {
     setTranslations(i18n(locale, { ...translations.symbols, ...data }));

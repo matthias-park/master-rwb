@@ -40,15 +40,18 @@ const useGTMHookContext = createContext<ISnippetsParams | undefined>(
 );
 
 const useGTM = (): ((data: IDataGTM) => void) => {
+  const { cookies } = useConfig(
+    (prev, next) => prev.cookies.cookies === next.cookies.cookies,
+  );
   const gtmContextState = useContext(useGTMHookContext);
 
   const sendDataToGTM = useCallback(
     (data: IDataGTM): void => {
-      if (gtmContextState?.id) {
+      if (gtmContextState?.id && cookies.cookies.analytics) {
         sendToGTM({ data, dataLayerName: gtmContextState.dataLayerName! });
       }
     },
-    [gtmContextState],
+    [gtmContextState, cookies.cookies.analytics],
   );
 
   return sendDataToGTM;
@@ -66,38 +69,34 @@ export const GtmProvider = ({ ...props }: GTMHookProviderProps) => {
 
   useEffect(() => {
     if (dataLayerState.id) {
-      if (cookies.cookies.analytics) {
-        initGTM({
-          dataLayer: dataLayerState.dataLayer,
-          dataLayerName: dataLayerState.dataLayerName,
-          environment: dataLayerState.environment,
-          id: dataLayerState.id,
+      initGTM({
+        dataLayer: dataLayerState.dataLayer,
+        dataLayerName: dataLayerState.dataLayerName,
+        environment: dataLayerState.environment,
+        id: dataLayerState.id,
+      });
+      if (dataLayerState?.id) {
+        sendToGTM({
+          data: {
+            event: 'cookiePreferencesChange',
+            'tglab.cookies.analytics': cookies.cookies.analytics,
+            'tglab.cookies.functional': cookies.cookies.functional,
+            'tglab.cookies.marketing': cookies.cookies.marketing,
+            'tglab.cookies.personalization': cookies.cookies.personalization,
+          },
+          dataLayerName: dataLayerState.dataLayerName!,
         });
-        if (dataLayerState?.id) {
-          sendToGTM({
-            data: {
-              event: 'cookiePreferencesChange',
-              'tglab.cookies.analytics': cookies.cookies.analytics,
-              'tglab.cookies.functional': cookies.cookies.functional,
-              'tglab.cookies.marketing': cookies.cookies.marketing,
-              'tglab.cookies.personalization': cookies.cookies.personalization,
-            },
-            dataLayerName: dataLayerState.dataLayerName!,
-          });
-        }
-      } else if (!cookies.cookies.analytics) {
-        setDataLayerState(initialState);
       }
     }
-  }, [dataLayerState, cookies.cookies.analytics]);
+  }, [dataLayerState]);
   useEffect(() => {
-    if (window.__config__.gtmId && cookies.cookies.analytics) {
+    if (window.__config__.gtmId) {
       setDataLayerState(state => ({
         ...state,
         id: window.__config__.gtmId!,
       }));
     }
-  }, [cookies.cookies.analytics]);
+  }, []);
 
   return <useGTMHookContext.Provider value={dataLayerState} {...props} />;
 };

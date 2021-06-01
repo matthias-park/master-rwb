@@ -51,17 +51,21 @@ const PageLayout = ({ children }) => {
   }, [pathname, route, helpBlock]);
   useEffect(() => {
     if (
-      prevPathname !== pathname &&
       locale &&
       configLoaded === ConfigLoaded.Loaded &&
-      route?.id !== PagesName.LocaleSelectPage
+      route?.id !== PagesName.LocaleSelectPage &&
+      !user.loading
     ) {
-      sendDataToGTM({
-        'tglab.VirtualUrl': `/${locale}${pathname}`,
-        'tglab.VirtualTitle': route ? `${t(route.name)}` : '',
-        event: 'VirtualPageView',
-      });
+      process.nextTick(() =>
+        sendDataToGTM({
+          'tglab.VirtualUrl': `/${locale}${pathname}`,
+          'tglab.VirtualTitle': route ? `${t(route.name)}` : '',
+          event: 'VirtualPageView',
+        }),
+      );
     }
+  }, [pathname, user.loading, configLoaded]);
+  useEffect(() => {
     if (prevPathname && window.scrollY)
       sessionStorage.setItem(
         `route-${prevPathname}`,

@@ -174,7 +174,6 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     }
     // setConfigLoaded(ConfigLoaded.Loaded);
   };
-  console.log(configLoaded, cachedLocale);
   const value: Config = {
     locale: cachedLocale || '',
     setLocale,

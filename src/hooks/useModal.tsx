@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { ComponentName } from '../constants';
+import { ComponentName, ModalPriority } from '../constants';
+import { sortAscending } from '../utils';
 import useGTM from './useGTM';
 
 type ModalContextState = ComponentName[];
@@ -22,13 +23,20 @@ export function useModal(): ModalContext {
   return instance;
 }
 
+const sortModalsPriority = (modals: ModalContextState) =>
+  modals.sort((a, b) => {
+    const aPriority = ModalPriority[a] || 100;
+    const bPriority = ModalPriority[b] || 100;
+    return sortAscending(aPriority, bPriority);
+  });
+
 export const ModalProvider = props => {
   const sendDataToGTM = useGTM();
   const [modals, setModals] = useState<ModalContextState>([]);
 
   const enableModal = (name: ComponentName) => {
     if (name && !modals.includes(name)) {
-      setModals([...modals, name]);
+      setModals(sortModalsPriority([...modals, name]));
     }
   };
 
