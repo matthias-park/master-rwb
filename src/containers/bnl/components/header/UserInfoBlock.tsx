@@ -6,7 +6,6 @@ import { useI18n } from '../../../../hooks/useI18n';
 import Spinner from 'react-bootstrap/Spinner';
 import Link from '../../../../components/Link';
 import { cache as SWRCache } from 'swr';
-import { useModal } from '../../../../hooks/useModal';
 import { useConfig } from '../../../../hooks/useConfig';
 import { useRoutePath } from '../../../../hooks/index';
 import Accordion from 'react-bootstrap/Accordion';
@@ -59,12 +58,10 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const [loggingOut, setLoggingOut] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const { backdrop } = useUIConfig();
-  const { allActiveModals } = useModal();
   const { sidebars } = useConfig();
   const depositRoute = useRoutePath(PagesName.DepositPage, true);
 
   const showUserMenu = isOpen => {
-    if (!!allActiveModals.length) return;
     setShowDropdown(isOpen);
     backdrop.toggle(isOpen, [ComponentName.Header]);
   };
