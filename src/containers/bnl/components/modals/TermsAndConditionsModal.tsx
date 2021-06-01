@@ -43,18 +43,9 @@ const TermsAndConditionsModal = () => {
   );
 
   useEffect(() => {
-    if (
-      !modalActive &&
-      user.logged_in &&
-      user.tnc_required &&
-      pathname !== termsAndConditionsPath
-    ) {
+    if (!modalActive && user.logged_in && user.tnc_required) {
       enableModal(ComponentName.TermsAndConditionsModal);
-    } else if (
-      !user.logged_in ||
-      !user.tnc_required ||
-      pathname === termsAndConditionsPath
-    ) {
+    } else if (!user.logged_in || !user.tnc_required) {
       hideModal();
       formMethods.reset();
       setLoadingBtn(LoadingBtnState.None);
@@ -84,7 +75,7 @@ const TermsAndConditionsModal = () => {
 
   return (
     <GenericModal
-      show={modalActive}
+      show={modalActive && pathname !== termsAndConditionsPath}
       hideCallback={hideModal}
       isCentered
       isStatic

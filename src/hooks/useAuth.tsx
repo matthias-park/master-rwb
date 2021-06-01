@@ -104,6 +104,7 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
     user.logged_in = !!user.id;
     user.loading = false;
   }
+  user.tnc_required = true;
   user.login_click = loginClick.current;
   useEffect(() => {
     if (!user?.logout && !user?.logged_in && prevUser?.logged_in) {
