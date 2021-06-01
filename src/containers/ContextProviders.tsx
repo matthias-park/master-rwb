@@ -1,3 +1,4 @@
+import loadable, { DefaultComponent } from '@loadable/component';
 import React, { ComponentType } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
@@ -5,14 +6,11 @@ import { ToastProvider } from 'react-toast-notifications';
 import { SWRConfig } from 'swr';
 import { AuthProvider } from '../hooks/useAuth';
 import { ConfigProvider, useConfig } from '../hooks/useConfig';
-import { CaptchaProvider } from '../hooks/useGoogleRecaptcha';
-import { GtmProvider } from '../hooks/useGTM';
 import { I18nProvider } from '../hooks/useI18n';
 import { ModalProvider } from '../hooks/useModal';
 import { UIConfigProvider } from '../hooks/useUIConfig';
 import { ConfigLoaded } from '../types/Config';
 import { SwrFetcherConfig } from '../utils/apiUtils';
-import { KambiProvider } from './KambiSportsbook';
 
 interface Props {
   children: React.ReactNode;
@@ -39,8 +37,28 @@ const BrowserRouterProvider = ({ children }: Props) => {
 };
 
 type Provider =
-  // | React.ReactNode
-  ComponentType<any> | [ComponentType<any>, { [key: string]: any }] | false;
+  | ComponentType<any>
+  | [ComponentType<any>, { [key: string]: any }]
+  | false;
+
+const LoadableKambiProvider = loadable(
+  () =>
+    import('./KambiSportsbook')
+      .then(component => component.KambiProvider)
+      .catch(() => 'div') as Promise<DefaultComponent<unknown>>,
+);
+const LoadableGtmProvider = loadable(
+  () =>
+    import('../hooks/useGTM')
+      .then(component => component.GtmProvider)
+      .catch(() => 'div') as Promise<DefaultComponent<unknown>>,
+);
+const LoadableRecaptcha = loadable(
+  () =>
+    import('../hooks/useGoogleRecaptcha')
+      .then(component => component.CaptchaProvider)
+      .catch(() => 'div') as Promise<DefaultComponent<unknown>>,
+);
 
 const ContextProviders = ({ children }: Props) => {
   const providers: Provider[] = [
@@ -48,14 +66,14 @@ const ContextProviders = ({ children }: Props) => {
     ToastProvider,
     ConfigProvider,
     I18nProvider,
-    !!window.__config__.gtmId && GtmProvider,
+    !!window.__config__.gtmId && LoadableGtmProvider,
     AuthProvider,
     HelmetProvider,
     BrowserRouterProvider,
     ModalProvider,
     UIConfigProvider,
-    !!window.__config__.googleRecaptchaKey && CaptchaProvider,
-    !!window.__config__.kambi && KambiProvider,
+    !!window.__config__.googleRecaptchaKey && LoadableRecaptcha,
+    !!window.__config__.kambi && LoadableKambiProvider,
   ];
 
   return (

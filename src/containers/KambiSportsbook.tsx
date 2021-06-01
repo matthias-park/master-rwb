@@ -108,7 +108,6 @@ export const KambiProvider = ({ children }) => {
             break;
           }
         }
-        console.log(response);
       });
     } else if (!apiLoadedIntervalRef.current && visibleSportsbook) {
       apiLoadedIntervalRef.current = setInterval(() => {

@@ -9,7 +9,6 @@ import React, {
 import { postApi } from '../utils/apiUtils';
 import Config, { ConfigLoaded, Cookies } from '../types/Config';
 import { setLocalePathname, getWindowUrlLocale } from '../utils/i18n';
-import { useToasts } from 'react-toast-notifications';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { PageConfig } from '../types/api/PageConfig';
 import useApi from './useApi';
@@ -19,7 +18,6 @@ import useLocalStorage from './useLocalStorage';
 import { setPageLoadingSpinner } from '../utils/uiUtils';
 
 const useConstants = () => {
-  const { addToast } = useToasts();
   const [cache, setCache] = useLocalStorage<
     RailsApiResponse<PageConfig> | undefined
   >('api-constants-cache', undefined);
@@ -34,12 +32,10 @@ const useConstants = () => {
           setCache({ ...data, Data: { ...data.Data, cached: true } });
         }
       },
-      onErrorRetry: (err: RailsApiResponse<null>) => [
-        addToast('Failed to get page config', {
-          appearance: 'error',
-          autoDismiss: true,
-        }),
-      ],
+      onErrorRetry: (_, _1, _2, revalidate, { retryCount = 0 }) => {
+        if (retryCount > 10) return;
+        setTimeout(() => revalidate({ retryCount }), 1000);
+      },
     },
   );
   // useEffect(() => {
@@ -105,7 +101,6 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     clearConstantsCache,
   } = useConstants();
   const locales = constants?.available_locales?.map(locale => locale.iso) || [];
-  const { addToast } = useToasts();
   const [cachedLocale, setCachedLocale] = useLocalStorage<string | null>(
     'locale',
     null,
@@ -118,9 +113,6 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
       setInitValue: true,
     },
   );
-  useEffect(() => {
-    window.toast = addToast;
-  }, []);
   useEffect(() => {
     if (constants) {
       const setApiLocale = async (lang: string) => {

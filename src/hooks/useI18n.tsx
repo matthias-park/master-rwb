@@ -8,7 +8,6 @@ import React, {
 import i18n, { I18n, Symbols } from '../utils/i18n';
 import { TestEnv } from '../constants';
 import { useConfig } from './useConfig';
-import { useToasts } from 'react-toast-notifications';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import useApi from './useApi';
 import { ConfigLoaded } from '../types/Config';
@@ -33,7 +32,6 @@ interface Translations {
 }
 
 export const I18nProvider = ({ ...props }: I18nProviderProps) => {
-  const { addToast } = useToasts();
   const { locale, configLoaded } = useConfig((prev, next) => {
     const localeEqual = prev.locale === next.locale;
     const loadedEqual = prev.configLoaded === next.configLoaded;
@@ -54,11 +52,9 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
       onSuccess: data => {
         setCache({ ...(cache || {}), [locale]: data });
       },
-      onErrorRetry: () => {
-        addToast(`Failed to fetch translations`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
+      onErrorRetry: (_, _1, _2, revalidate, { retryCount = 0 }) => {
+        if (retryCount > 10) return;
+        setTimeout(() => revalidate({ retryCount }), 1000);
       },
     },
   );
