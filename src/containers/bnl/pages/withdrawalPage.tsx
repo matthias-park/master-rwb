@@ -320,7 +320,11 @@ const WithdrawalPage = () => {
               <div className="info-container__text">
                 <ul className="list-unstyled mb-0">
                   <li className="mb-1">{t('withdrawal_bank_account')}</li>
-                  <li className="mb-1">{data.Data.default_account.account}</li>
+                  <li className="mb-1">
+                    {data.Data.default_account.account
+                      ?.match(/.{1,4}/g)
+                      ?.join(' ')}
+                  </li>
                 </ul>
               </div>
             </div>
