@@ -41,7 +41,7 @@ const FileInput = ({ id, rules, disabled, className, title }: Props) => {
           }}
         />
         <Form.File.Label data-browse={t('file_upload_browse')}>
-          {filename || title}
+          {(!!field.value && filename) || title}
         </Form.File.Label>
       </Form.File>
     </Form.Group>
