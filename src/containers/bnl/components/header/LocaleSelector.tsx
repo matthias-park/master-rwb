@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { AvailableLocale } from '../../../../types/api/PageConfig';
-import Spinner from 'react-bootstrap/Spinner';
+import LoadingSpinner from '../../../../components/LoadingSpinner';
 
 interface Props {
   available: AvailableLocale[];
@@ -28,16 +28,7 @@ const LocaleSelector = ({ available, current, setLocale }: Props) => {
           id="navbarDropdownMenuLink"
           disabled={!!updatingLocale}
         >
-          {updatingLocale && (
-            <Spinner
-              data-testid="spinner"
-              as="span"
-              animation="border"
-              size="sm"
-              role="status"
-              className="mr-1"
-            />
-          )}
+          <LoadingSpinner show={!!updatingLocale} className="mr-1" />
           <strong data-testid="current" className="text-uppercase">
             {current}
           </strong>
@@ -73,16 +64,10 @@ const LocaleSelector = ({ available, current, setLocale }: Props) => {
               changeLocale(lang.iso);
             }}
           >
-            {updatingLocale === lang.iso && (
-              <Spinner
-                data-testid="spinner"
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                className="mr-1"
-              />
-            )}
+            <LoadingSpinner
+              show={updatingLocale === lang.iso}
+              className="mr-1"
+            />
             {lang.iso}
           </div>
         ))}

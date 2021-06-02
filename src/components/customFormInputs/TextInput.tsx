@@ -3,12 +3,12 @@ import { Control, FieldValues, useController } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import clsx from 'clsx';
 import { FormFieldValidation } from '../../constants';
-import Spinner from 'react-bootstrap/Spinner';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import loadable from '@loadable/component';
 import { FormControlProps } from 'react-bootstrap/FormControl';
 import { enterKeyPress } from '../../utils/uiUtils';
+import LoadingSpinner from '../LoadingSpinner';
 
 const LoadableNumberFormat = loadable(() => import('react-number-format'), {
   fallback: <input />,
@@ -91,15 +91,9 @@ export const UncontrolledTextInput = React.forwardRef(
             {props.title}
           </label>
           <div data-testid="icons" className="form-group__icons">
-            {props.validation === FormFieldValidation.Validating && (
-              <Spinner
-                as="span"
-                data-testid="spinner"
-                animation="border"
-                role="status"
-                size="sm"
-              />
-            )}
+            <LoadingSpinner
+              show={props.validation === FormFieldValidation.Validating}
+            />
             {!!props.tooltip && (
               <OverlayTrigger
                 placement={'bottom'}

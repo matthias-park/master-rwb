@@ -3,12 +3,12 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../../../../hooks/useUIConfig';
 import { ComponentName, PagesName } from '../../../../constants';
 import { useI18n } from '../../../../hooks/useI18n';
-import Spinner from 'react-bootstrap/Spinner';
 import Link from '../../../../components/Link';
 import { cache as SWRCache } from 'swr';
 import { useConfig } from '../../../../hooks/useConfig';
 import { useRoutePath } from '../../../../hooks/index';
 import Accordion from 'react-bootstrap/Accordion';
+import LoadingSpinner from '../../../../components/LoadingSpinner';
 
 const UserMenuLink = ({ link, name, setShowDropdown, children }) => {
   const { t } = useI18n();
@@ -129,15 +129,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
               className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
               onClick={onLogoutClick}
             >
-              {loggingOut && (
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  className="mr-1"
-                />
-              )}
+              <LoadingSpinner show={loggingOut} className="mr-1" />
               {t('logout')}
             </div>
           </div>

@@ -18,10 +18,10 @@ import { useModal } from '../../../hooks/useModal';
 import { useAuth } from '../../../hooks/useAuth';
 import { VALIDATOR_STATUS } from '../../../types/UserStatus';
 import { structuredBankCommunications } from '../../../utils/index';
-import Spinner from 'react-bootstrap/Spinner';
 import useDepositResponseStatus from '../../../hooks/useDepositResponseStatus';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 const DepositPage = () => {
   const { addToast } = useToasts();
@@ -41,10 +41,10 @@ const DepositPage = () => {
   useEffect(() => {
     if (
       user.logged_in &&
-      user.validator_status !== VALIDATOR_STATUS.MAJOR_ERROR &&
-      !bankAccount.loading &&
-      !bankAccount.hasBankAccount &&
-      !bankAccount.error
+      user.validator_status !== VALIDATOR_STATUS.MAJOR_ERROR //&&
+      // !bankAccount.loading &&
+      // !bankAccount.hasBankAccount &&
+      // !bankAccount.error
     ) {
       enableModal(ComponentName.AddBankAccountModal);
     }
@@ -130,43 +130,35 @@ const DepositPage = () => {
         <i className="icon-thumbs"></i>
         {jsxT('play_responsible_block_link')}
       </div>
-      {/* <AmountContainer
-        title={t('total_playable_amount')}
-        amount={user.balance!}
-        tooltip={t('playable_amount_tooltip')}
-      /> */}
       <CustomAlert show={!!apiError || !!bankAccount.error} variant="danger">
         {apiError ? apiError : jsxT('user_bank_acc_check_failed')}
       </CustomAlert>
-      {depositStatus.depositStatus !== DepositStatus.None &&
-        (depositStatus.depositStatus === DepositStatus.Pending ? (
-          <Spinner
-            as="span"
-            animation="border"
-            role="status"
-            aria-hidden="true"
-            className="d-block mx-auto my-4"
-          />
-        ) : (
-          <CustomAlert
-            show={true}
-            variant={
-              depositStatus.depositStatus === DepositStatus.Confirmed
-                ? 'success'
-                : 'danger'
-            }
-          >
-            {depositStatus.message ||
-              jsxT(`deposit_status_${depositStatus.depositStatus}`)}
-            <div>
-              <u>
-                {depositStatus.depositStatus === DepositStatus.Confirmed
-                  ? jsxT('cta_bet_now')
-                  : jsxT('cta_deposit')}
-              </u>
-            </div>
-          </CustomAlert>
-        ))}
+      <LoadingSpinner
+        show={depositStatus.depositStatus === DepositStatus.Pending}
+        className="mx-auto"
+      />
+      <CustomAlert
+        show={
+          ![DepositStatus.Pending, DepositStatus.None].includes(
+            depositStatus.depositStatus,
+          )
+        }
+        variant={
+          depositStatus.depositStatus === DepositStatus.Confirmed
+            ? 'success'
+            : 'danger'
+        }
+      >
+        {depositStatus.message ||
+          jsxT(`deposit_status_${depositStatus.depositStatus}`)}
+        <div>
+          <u>
+            {depositStatus.depositStatus === DepositStatus.Confirmed
+              ? jsxT('cta_bet_now')
+              : jsxT('cta_deposit')}
+          </u>
+        </div>
+      </CustomAlert>
       <InputContainer
         title={t('select_amount')}
         inputTitle={t('deposit_input_amount')}
