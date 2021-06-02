@@ -142,7 +142,7 @@ export const setPageLoadingSpinner = () => {
     spinnerEl.classList.add('page-loading-spinner');
     const spinnerImg = document.createElement('IMG') as HTMLImageElement;
     spinnerImg.classList.add('spinner-img');
-    spinnerImg.src = '/assets/scoore-loader.svg';
+    spinnerImg.src = '/assets/loading-spinner.svg';
     spinnerEl.appendChild(spinnerImg);
     body?.appendChild(spinnerEl);
   }
