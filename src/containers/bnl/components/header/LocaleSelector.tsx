@@ -28,7 +28,7 @@ const LocaleSelector = ({ available, current, setLocale }: Props) => {
           id="navbarDropdownMenuLink"
           disabled={!!updatingLocale}
         >
-          <LoadingSpinner show={!!updatingLocale} className="mr-1" />
+          <LoadingSpinner small show={!!updatingLocale} className="mr-1" />
           <strong data-testid="current" className="text-uppercase">
             {current}
           </strong>
