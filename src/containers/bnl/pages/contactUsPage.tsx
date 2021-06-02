@@ -80,8 +80,8 @@ const ContactUsPage = () => {
 
   const onSubmit = async ({ file, phone_number, date_of_birth, ...fields }) => {
     const captchaToken = await getToken?.('contact_us').catch(() => '');
-    if (file?.length) {
-      fields.file = file[0];
+    if (file) {
+      fields.file = file;
     }
     if (phone_number) {
       fields.phone_number = phone_number.replace(
