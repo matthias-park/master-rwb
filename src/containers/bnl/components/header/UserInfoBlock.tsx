@@ -129,7 +129,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
               className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
               onClick={onLogoutClick}
             >
-              <LoadingSpinner show={loggingOut} className="mr-1" />
+              <LoadingSpinner show={loggingOut} small className="mr-1" />
               {t('logout')}
             </div>
           </div>

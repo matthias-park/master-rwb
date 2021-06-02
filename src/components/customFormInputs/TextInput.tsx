@@ -92,6 +92,7 @@ export const UncontrolledTextInput = React.forwardRef(
           </label>
           <div data-testid="icons" className="form-group__icons">
             <LoadingSpinner
+              small
               show={props.validation === FormFieldValidation.Validating}
             />
             {!!props.tooltip && (

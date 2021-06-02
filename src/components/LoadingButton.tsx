@@ -9,7 +9,7 @@ type Props = {
 const LoadingButton = (props: Props) => {
   return (
     <Button {...props} disabled={props.disabled || props.loading}>
-      <LoadingSpinner show={props.loading} className="mr-1" />
+      <LoadingSpinner show={props.loading} small className="mr-1" />
       {props.children}
     </Button>
   );

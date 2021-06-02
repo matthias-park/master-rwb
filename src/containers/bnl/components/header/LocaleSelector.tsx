@@ -66,6 +66,7 @@ const LocaleSelector = ({ available, current, setLocale }: Props) => {
           >
             <LoadingSpinner
               show={updatingLocale === lang.iso}
+              small
               className="mr-1"
             />
             {lang.iso}

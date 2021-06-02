@@ -4,16 +4,17 @@ import Spinner from 'react-bootstrap/Spinner';
 interface Props {
   show?: boolean;
   className?: string;
+  small?: boolean;
 }
 
-const LoadingSpinner = ({ show, className }: Props) => {
+const LoadingSpinner = ({ show, className, small }: Props) => {
   return (
     <span>
       {show && (
         <Spinner
           as="span"
           animation="border"
-          size="sm"
+          size={small ? 'sm' : undefined}
           role="status"
           className={className}
         />

@@ -78,6 +78,7 @@ export const KambiProvider = ({ children }) => {
   useEffect(() => {
     if (!!api && user.logged_in !== kambiUserLoggedIn) {
       setSportsbookLoaded(false);
+      setTimeout(() => setSportsbookLoaded(true), 20000);
       if (user.logged_in) {
         kambiLogin(api, locale, user.id!.toString());
       } else {

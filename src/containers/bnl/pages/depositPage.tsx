@@ -135,7 +135,7 @@ const DepositPage = () => {
       </CustomAlert>
       <LoadingSpinner
         show={depositStatus.depositStatus === DepositStatus.Pending}
-        className="mx-auto"
+        className="d-block mx-auto my-4"
       />
       <CustomAlert
         show={
