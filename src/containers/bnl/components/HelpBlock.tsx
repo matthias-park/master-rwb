@@ -13,7 +13,7 @@ const HelpBlock = ({
   blocks: string[];
   className?: string;
 }) => {
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
   const faqPagePath = useRoutePath(PagesName.FaqPage);
   const contactUsPagePath = useRoutePath(PagesName.ContactUsPage);
 
@@ -31,7 +31,7 @@ const HelpBlock = ({
               <i className="icon-questions"></i>
             </span>
             <div className="help-block__body-item-text">
-              <p className="weight-500">{t('help_check_faq')}</p>
+              <p className="weight-500">{jsxT('help_check_faq')}</p>
             </div>
           </Link>
         )}
@@ -41,15 +41,15 @@ const HelpBlock = ({
               <i className="icon-phone"></i>
             </span>
             <div className="help-block__body-item-text">
-              <p className="weight-500">{t('help_call_us_number')}</p>
+              <p className="weight-500">{jsxT('help_call_us_number')}</p>
               <p className="text-14 weight-500 mb-2">
-                {t('help_call_us_number_data')}
+                {jsxT('help_call_us_number_data')}
               </p>
               {['', '_2', '_3'].map(id => (
                 <p key={id} className="text-14 gray">
-                  {t(`help_call_days${id}`)}
+                  {jsxT(`help_call_days${id}`)}
                   <span className="ml-2 weight-500">
-                    {t(`help_call_hours${id}`)}
+                    {jsxT(`help_call_hours${id}`)}
                   </span>
                 </p>
               ))}
@@ -67,8 +67,8 @@ const HelpBlock = ({
               <i className="icon-mail"></i>
             </span>
             <div className="help-block__body-item-text">
-              <p className="weight-500">{t('help_mail_title')}</p>
-              <p className="text-14 gray">{t('help_mail_description')}</p>
+              <p className="weight-500">{jsxT('help_mail_title')}</p>
+              <p className="text-14 gray">{jsxT('help_mail_description')}</p>
             </div>
           </Link>
         )}

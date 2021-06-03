@@ -92,6 +92,7 @@ const ForgotPasswordPage = () => {
                 watch('repeat_password') && trigger('repeat_password')
               }
               id="password"
+              autoComplete="new-password"
               type="password"
               title={t('reset_password_field')}
               toggleVisibility
@@ -108,6 +109,7 @@ const ForgotPasswordPage = () => {
                   t('reset_password_need_match_password'),
               }}
               id="repeat_password"
+              autoComplete="new-password"
               type="password"
               title={t('reset_password_repeat_field')}
               toggleVisibility
