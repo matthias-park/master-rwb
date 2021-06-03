@@ -5,7 +5,7 @@ import path from 'path';
 import helmet from 'helmet';
 import { shouldPrerender } from './utils';
 import { getRenderedPage } from './ssr';
-import { BUILD_FOLDER } from './constants';
+import { BUILD_FOLDER, DEVELOPMENT } from './constants';
 import logger from './logger';
 import middleware from './middleware';
 import getRobots from './routes/robots';
@@ -14,6 +14,13 @@ import getSitemap from './routes/sitemap';
 const app = express();
 
 app.set('trust proxy', true);
+
+app.use((req, res, next) => {
+  req.secure || DEVELOPMENT
+    ? next()
+    : res.redirect('https://' + req.headers.host + req.url);
+});
+
 app.use(
   helmet.hsts({
     maxAge: 3156000,
