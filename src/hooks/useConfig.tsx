@@ -139,11 +139,11 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
       if (newLocale) {
         (async () => {
           await setApiLocale(newLocale);
-          setLocale(newLocale);
+          setLocale(newLocale, true);
         })();
       } else if (!newLocale && configLoaded !== ConfigLoaded.Loaded) {
         if (constants.locale) {
-          setLocale(constants.locale);
+          setLocale(constants.locale, true);
         }
         setConfigLoaded(ConfigLoaded.Loaded);
       }
@@ -162,7 +162,6 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     }
     setCachedLocale(lang);
     setLocalePathname(lang, setPageLoading);
-    // setConfigLoaded(ConfigLoaded.Loaded);
   };
   const value: Config = {
     locale: cachedLocale || '',
