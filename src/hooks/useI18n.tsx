@@ -12,6 +12,7 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import useApi from './useApi';
 import { ConfigLoaded } from '../types/Config';
 import useLocalStorage from './useLocalStorage';
+import { getApi } from '../utils/apiUtils';
 
 export const I18nContext = createContext<I18n | null>(null);
 
@@ -42,19 +43,24 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   }>(`translations-cache`, {});
   const translationsUrl =
     !TestEnv && configLoaded === ConfigLoaded.Loaded && locale
-      ? `/railsapi/v1/translations?locale=${locale}`
+      ? ['/railsapi/v1/translations', locale, configLoaded]
       : null;
   const { data, mutate } = useApi<RailsApiResponse<Translations>>(
     translationsUrl,
+    url =>
+      getApi<RailsApiResponse<Translations>>(url).then(res => {
+        if (!res?.Data?._locale_) throw new Error('no locale');
+        return res;
+      }),
     {
       initialData: cache?.[locale],
       revalidateOnMount: true,
       onSuccess: data => {
-        setCache({ ...(cache || {}), [locale]: data });
+        setCache({ ...(cache || {}), [data.Data._locale_]: data });
       },
       onErrorRetry: (_, _1, _2, revalidate, { retryCount = 0 }) => {
         if (retryCount > 10) return;
-        setTimeout(() => revalidate({ retryCount }), 1000);
+        setTimeout(() => revalidate({ retryCount }), 2000);
       },
     },
   );
@@ -76,7 +82,7 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   // }, []);
 
   const [translations, setTranslations] = useState(() =>
-    i18n(data?.Data._locale_ || locale, data?.Data || {}),
+    i18n(data?.Data?._locale_ || '', data?.Data || {}),
   );
 
   useEffect(() => {
@@ -86,7 +92,8 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   }, [locale]);
 
   useEffect(() => {
-    setTranslations(i18n(data?.Data?._locale_ || locale, data?.Data));
+    if (data?.Data?._locale_)
+      setTranslations(i18n(data.Data._locale_, data.Data));
   }, [data?.Data]);
 
   const addSymbols = (data: Symbols) => {
