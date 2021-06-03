@@ -12,7 +12,6 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import useApi from './useApi';
 import { ConfigLoaded } from '../types/Config';
 import useLocalStorage from './useLocalStorage';
-import { getApi } from '../utils/apiUtils';
 
 export const I18nContext = createContext<I18n | null>(null);
 
@@ -47,16 +46,13 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
       : null;
   const { data, mutate } = useApi<RailsApiResponse<Translations>>(
     translationsUrl,
-    url =>
-      getApi<RailsApiResponse<Translations>>(url).then(res => {
-        if (!res?.Data?._locale_) throw new Error('no locale');
-        return res;
-      }),
     {
-      initialData: cache?.[locale],
+      initialData: locale && cache ? cache[locale] : undefined,
       revalidateOnMount: true,
       onSuccess: data => {
-        setCache({ ...(cache || {}), [data.Data._locale_]: data });
+        if (data?.Data?._locale_) {
+          setCache({ ...(cache || {}), [data.Data._locale_]: data });
+        }
       },
       onErrorRetry: (_, _1, _2, revalidate, { retryCount = 0 }) => {
         if (retryCount > 10) return;
@@ -94,6 +90,7 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   useEffect(() => {
     if (data?.Data?._locale_)
       setTranslations(i18n(data.Data._locale_, data.Data));
+    else mutate(undefined, true);
   }, [data?.Data]);
 
   const addSymbols = (data: Symbols) => {

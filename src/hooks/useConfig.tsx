@@ -143,7 +143,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
         })();
       } else if (!newLocale && configLoaded !== ConfigLoaded.Loaded) {
         if (constants.locale) {
-          setLocale(constants.locale, true);
+          setLocale(constants.locale);
         }
         setConfigLoaded(ConfigLoaded.Loaded);
       }
