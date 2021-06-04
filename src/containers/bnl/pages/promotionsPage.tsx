@@ -94,6 +94,7 @@ const PromotionsList = () => {
 };
 
 const PromotionsListBlock = ({ currentSlug }) => {
+  const { t } = useI18n();
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
     '/railsapi/v1/content/promotions',
   );
@@ -128,7 +129,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
                       variant="primary"
                       className="text-line-overflow d-inline-block"
                     >
-                      {item.button_text || 'Details'}
+                      {item.button_text || t('details')}
                     </Button>
                   </PromoLinkEl>
                 </div>

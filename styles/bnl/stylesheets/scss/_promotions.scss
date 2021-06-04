@@ -328,7 +328,7 @@
     width: 25%;
   }
   @include media-breakpoint-down(xs) {
-    width: 55%;
+    width: 60%;
   }
   &__subtitle {
     @include text-overflow(2);
@@ -343,13 +343,15 @@
     }
   }
   &__title {
-    @include text-overflow(3);
     font-size: 85px;
     color: $white;
     line-height: 1;
     margin-bottom: 16px;
     @include media-breakpoint-down(xxxlg) {
       font-size: 4.5vw;
+    }
+    @include media-breakpoint-up(sm) {
+      @include text-overflow(3);
     }
     @include media-breakpoint-down(xs) {
       font-size: 11vw;
