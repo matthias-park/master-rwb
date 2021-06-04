@@ -130,8 +130,10 @@ const PageHeader = () => {
   );
   useOnClickOutside(navbarContainerRef, () => {
     if (!desktopWidth && navExpanded) {
-      setNavExpanded(false);
-      backdrop.toggle(false);
+      setTimeout(() => {
+        backdrop.toggle(false);
+        setNavExpanded(false);
+      }, 200);
     }
   });
   const subLinks = header?.find(link => link.subLinks);
