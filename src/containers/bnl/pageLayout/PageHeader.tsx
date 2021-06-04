@@ -120,17 +120,25 @@ const PageHeader = () => {
   const { backdrop, headerNav } = useUIConfig();
   const desktopWidth = useDesktopWidth(1199);
   const [navExpanded, setNavExpanded] = useState(false);
-  const navbarRef = useRef(null);
+  const navbarLinksRef = useRef(null);
+  const navbarContainerRef = useRef(null);
   useOnClickOutside(
-    navbarRef,
+    navbarLinksRef,
     () =>
       headerNav.active?.startsWith('click:') &&
       headerNav.toggle(headerNav.active),
   );
+  useOnClickOutside(navbarContainerRef, () => {
+    if (!desktopWidth && navExpanded) {
+      setNavExpanded(false);
+      backdrop.toggle(false);
+    }
+  });
   const subLinks = header?.find(link => link.subLinks);
 
   return (
     <Navbar
+      ref={navbarContainerRef}
       variant="dark"
       expand="xl"
       className={clsx(
@@ -173,7 +181,7 @@ const PageHeader = () => {
             />
           )}
           <div className="row w-100 mt-0 mt-lg-2 align-items-end order-1 order-xl-2">
-            <ul ref={navbarRef} className="header__nav header__nav--main">
+            <ul ref={navbarLinksRef} className="header__nav header__nav--main">
               {header
                 ?.sort((a, b) => sortAscending(a.order!, b.order!))
                 .map(link => {
