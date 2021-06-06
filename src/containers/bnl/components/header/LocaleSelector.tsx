@@ -16,7 +16,6 @@ const LocaleSelector = ({ available, current, setLocale }: Props) => {
     if (!!updatingLocale) return;
     setUpdatingLocale(lang);
     await setLocale(lang);
-    setUpdatingLocale('');
   };
   return (
     <>
