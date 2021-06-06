@@ -12,6 +12,7 @@
           "api": "https://uat-api.scooore.be"
         }
       ],
+      "forceWWW": true,
       "theme": "bnl",
       "gtmId": "GTM-PGRW8BQ",
       "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17",

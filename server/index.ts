@@ -16,9 +16,15 @@ const app = express();
 app.set('trust proxy', true);
 
 app.use((req, res, next) => {
-  req.secure || DEVELOPMENT
-    ? next()
-    : res.redirect('https://' + req.headers.host + req.url);
+  const host = req.headers.host!;
+  const { url } = req;
+  const wwwPrefix = req.franchise.forceWWW ? 'www.' : '';
+  const wwwRedirect = req.franchise.forceWWW && !host.match(/^www\..*/i);
+  if ((!req.secure || wwwRedirect) && !DEVELOPMENT) {
+    res.redirect(301, `https://${wwwPrefix}${host}${url}`);
+  } else {
+    next();
+  }
 });
 
 app.use(
@@ -33,10 +39,6 @@ app.use(
     action: 'sameorigin',
   }),
 );
-app.use((_, res, next) => {
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  next();
-});
 app.use(helmet.noSniff());
 app.use(middleware.useragent);
 app.use(middleware.franchiseIdentify);
