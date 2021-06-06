@@ -12,6 +12,7 @@
           "api": "https://rapi.scooore.be"
         }
       ],
+      "forceWWW": true,
       "theme": "bnl",
       "gtmId": "GTM-P7D2MHW",
       "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17",

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormFieldValidation, PagesName } from '../constants';
+import { FormFieldValidation, PagesName, VALIDATIONS } from '../constants';
 import { useI18n } from '../hooks/useI18n';
 import CustomAlert from './bnl/components/CustomAlert';
 import { OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
@@ -57,9 +57,11 @@ const LoginForm = () => {
         <TextInput
           rules={{
             required: t('login_field_required'),
+            validate: (value: string) =>
+              VALIDATIONS.email(value) || t('login_form_bad_email_format'),
           }}
           id="email"
-          // type="email"
+          type="email"
           title={t('login_email')}
           autoComplete="email"
           validation={apiError ? FormFieldValidation.Invalid : undefined}
@@ -104,7 +106,8 @@ const LoginForm = () => {
           disabled={
             !formState.isDirty ||
             !watchAllFields.email ||
-            !watchAllFields.password
+            !watchAllFields.password ||
+            !!formState.errors.email?.message
           }
           className="btn btn-primary d-block mx-auto mt-4 px-5"
           type="submit"
