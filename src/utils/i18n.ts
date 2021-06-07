@@ -7,12 +7,14 @@ export type Symbols = { [key: string]: string };
 const missingSymbolsSent: string[] = [];
 
 const i18n = (lang: string, data: Symbols = {}) => {
+  const hasTranslations = !!Object.keys(data).length;
+
   return {
     locale: lang,
-    hasTranslations: !!Object.keys(data).length,
+    hasTranslations,
     symbols: data,
     t(key: string, noFallback: boolean = false) {
-      if (!data[key] && !missingSymbolsSent.includes(key)) {
+      if (hasTranslations && !data[key] && !missingSymbolsSent.includes(key)) {
         missingSymbolsSent.push(key);
         Sentry.captureMessage(`missing symbol:${key}`);
       }

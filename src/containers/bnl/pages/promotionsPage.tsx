@@ -129,7 +129,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
                       variant="primary"
                       className="text-line-overflow d-inline-block"
                     >
-                      {item.button_text || t('details')}
+                      {item.button_text || t('promotions_details')}
                     </Button>
                   </PromoLinkEl>
                 </div>
