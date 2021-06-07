@@ -13,7 +13,7 @@ interface Props {
 const LocaleSelector = ({ available, current, setLocale }: Props) => {
   const [updatingLocale, setUpdatingLocale] = useState('');
   const changeLocale = async (lang: string) => {
-    if (!!updatingLocale) return;
+    if (!!updatingLocale || lang === current) return;
     setUpdatingLocale(lang);
     await setLocale(lang);
     setUpdatingLocale('');
@@ -37,7 +37,11 @@ const LocaleSelector = ({ available, current, setLocale }: Props) => {
           {available.map(lang => (
             <Dropdown.Item
               data-testid={`desktop-locale-${lang.iso}`}
-              className={`lang-${lang.iso} header__nav-item-link text-uppercase cursor-pointer`}
+              className={clsx(
+                `lang-${lang.iso}`,
+                'header__nav-item-link text-uppercase',
+                lang.iso !== current && 'cursor-pointer',
+              )}
               key={lang.id}
               as="div"
               onClick={() => {
