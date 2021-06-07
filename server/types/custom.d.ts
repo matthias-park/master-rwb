@@ -3,8 +3,8 @@ export interface FranchiseConfig {
   domains: {
     hostname: string;
     api: string;
+    forceWWW?: boolean | undefined;
   }[];
-  forceWWW: boolean | undefined;
   theme: string;
   basicAuthEnabled: boolean;
   excludeBasicAuthFiles?: string[];

@@ -31,12 +31,14 @@ app.use(helmet.noSniff());
 app.use(middleware.useragent);
 app.use(middleware.franchiseIdentify);
 app.use((req, res, next) => {
-  const host = req.headers.host!;
   const { url } = req;
-  const wwwPrefix = req.franchise.forceWWW ? 'www.' : '';
-  const wwwRedirect = req.franchise.forceWWW && !host.match(/^www\..*/i);
+  const forceWWW = req.franchise.domains.find(
+    domain => domain.hostname === req.hostname.replace('www.', ''),
+  )?.forceWWW;
+  const wwwRedirect = forceWWW && !req.hostname.match(/^www\..*/i);
+  const wwwPrefix = forceWWW && wwwRedirect ? 'www.' : '';
   if ((!req.secure || wwwRedirect) && !DEVELOPMENT) {
-    res.redirect(301, `https://${wwwPrefix}${host}${url}`);
+    res.redirect(301, `https://${wwwPrefix}${req.hostname}${url}`);
   } else {
     next();
   }
@@ -66,7 +68,8 @@ app.get('*', async (req, res) => {
       return res.send(html);
     }
   }
-  const filePath = path.join(BUILD_FOLDER, `/${req.hostname}.html`);
+  const hostname = req.hostname.replace('www.', '');
+  const filePath = path.join(BUILD_FOLDER, `/${hostname}.html`);
   if (fs.existsSync(filePath)) {
     return res.sendFile(filePath);
   }
