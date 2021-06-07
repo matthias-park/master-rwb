@@ -23,10 +23,9 @@ const LoginForm = () => {
     defaultValues: {
       email: '',
       password: '',
-      remember_me: false,
     },
   });
-  const { register, handleSubmit, formState, watch } = formMethods;
+  const { handleSubmit, formState, watch } = formMethods;
   const watchAllFields = watch();
   const { signin } = useAuth();
   const sendDataToGTM = useGTM();
@@ -78,23 +77,6 @@ const LoginForm = () => {
           toggleVisibility
         />
         <div className="d-flex align-items-center flex-wrap">
-          <Form.Check
-            {...register('remember_me', { setValueAs: value => !!value })}
-            custom
-            id="remember_me"
-            name="remember_me"
-            label={t('login_remember_me')}
-          />
-          <OverlayTrigger
-            placement={'bottom'}
-            overlay={
-              <Tooltip id="tooltip_remember" className="tooltip-custom">
-                {t('remember_me_tooltip')}
-              </Tooltip>
-            }
-          >
-            <i className="icon-tooltip ml-2"></i>
-          </OverlayTrigger>
           <Link
             to={forgotPasswordRoute}
             className="text-14 ml-auto login-dropdown__menu-link"

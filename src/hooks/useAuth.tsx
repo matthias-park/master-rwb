@@ -87,9 +87,13 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
         revalidate,
         { retryCount = 0 },
       ) => {
-        if (error.notLoggedIn) return;
-        if (retryCount > 10) return;
-        setTimeout(() => revalidate({ retryCount }), 10000);
+        if (error.notLoggedIn) {
+          if (retryCount > 2) return;
+          setTimeout(() => revalidate({ retryCount }), 2000);
+        } else {
+          if (retryCount > 10) return;
+          setTimeout(() => revalidate({ retryCount }), 10000);
+        }
       },
     },
   );
