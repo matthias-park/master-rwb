@@ -23,7 +23,19 @@
       },
       "excludeBasicAuthFiles": [
         "/assets/styles/light-theme.css",
-        "/assets/styles/dark-theme.css"
+        "/assets/styles/dark-theme.css",
+        "/assets/images/promo/desktop/promoboost/ProfitBoost-Desktop_1@1x.png",
+        "/assets/images/promo/desktop/promoboost/ProfitBoost-Desktop_1@2x.png",
+        "/assets/images/promo/desktop/promoboost/ProfitBoost-Desktop_1@3x.png",
+        "/assets/images/promo/desktop/promoboost/ProfitBoost-Mobile_1@1x.png",
+        "/assets/images/promo/desktop/promoboost/ProfitBoost-Mobile_1@2x.png",
+        "/assets/images/promo/desktop/promoboost/ProfitBoost-Mobile_1@3x.png",
+        "/assets/images/promo/desktop/promowelcome/Welcome-Desktop_1@1x.png",
+        "/assets/images/promo/desktop/promowelcome/Welcome-Desktop_1@2x.png",
+        "/assets/images/promo/desktop/promowelcome/Welcome-Desktop_1@3x.png",
+        "/assets/images/promo/desktop/promowelcome/Welcome-Mobile_1@1x.png",
+        "/assets/images/promo/desktop/promowelcome/Welcome-Mobile_1@2x.png",
+        "/assets/images/promo/desktop/promowelcome/Welcome-Mobile_1@3x.png"
       ],
       "googleRecaptchaKey": "6Lezp2oaAAAAADpwV6q_a2k7yVPD52Qb89Z2zFcR",
       "basicAuthEnabled": true,
