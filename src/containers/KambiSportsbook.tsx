@@ -17,7 +17,6 @@ import { KambiSbLocales, PagesName } from '../constants';
 import { matchPath, useLocation } from 'react-router-dom';
 import { hideKambiSportsbook, showKambiSportsbook } from '../utils/uiUtils';
 import { useAuth } from '../hooks/useAuth';
-import Lockr from 'lockr';
 
 interface KambiContext {
   sportsbookLoaded: boolean;
@@ -92,7 +91,6 @@ export const KambiProvider = ({ children }) => {
     if (!api) {
       window.KambiWidget?.ready.then(wapi => {
         setApi(wapi);
-        Lockr.rm('kambi-error-reload');
       });
     }
   }, [sportsbookLoaded]);
