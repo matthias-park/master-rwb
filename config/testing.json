@@ -5,14 +5,15 @@
       "domains": [
         {
           "hostname": "bnl-rjtest.tglab.dev",
-          "api": "https://bnl-test-rails.tglab.dev"
+          "api": "https://bnl-test-rails.tglab.dev",
+          "forceWWW": false
         },
         {
           "hostname": "uat-fe.scooore.be",
-          "api": "https://uat-api.scooore.be"
+          "api": "https://uat-api.scooore.be",
+          "forceWWW": false
         }
       ],
-      "forceWWW": true,
       "theme": "bnl",
       "gtmId": "GTM-PGRW8BQ",
       "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17",
