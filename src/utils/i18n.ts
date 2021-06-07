@@ -22,7 +22,7 @@ const i18n = (lang: string, data: Symbols = {}) => {
       return val;
     },
     jsxT(key: string, props: any = {}) {
-      if (!data[key] && !missingSymbolsSent.includes(key)) {
+      if (hasTranslations && !data[key] && !missingSymbolsSent.includes(key)) {
         missingSymbolsSent.push(key);
         Sentry.captureMessage(`missing symbol:${key}`);
       }
