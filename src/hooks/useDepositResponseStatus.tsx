@@ -13,7 +13,7 @@ import useLocalStorage from './useLocalStorage';
 const postUrl = '/railsapi/v1/deposits/status';
 
 const useDepositResponseStatus = () => {
-  const { t } = useI18n();
+  const { jsxT } = useI18n();
   const { updateUser } = useAuth();
   const { bankResponse } = useParams<{ bankResponse?: string }>();
   const { pathname, state } = useLocation<{
@@ -67,7 +67,7 @@ const useDepositResponseStatus = () => {
 
   useEffect(() => {
     let status = DepositStatus.Pending;
-    if (!responseLoading) {
+    if (!responseLoading || !id) {
       status = DepositStatus.None;
     } else if (!id && !state?.status) {
       status = DepositStatus.NotFound;
@@ -96,14 +96,19 @@ const useDepositResponseStatus = () => {
           message: data?.Message,
         });
       }
+    } else if (responseLoading && !id && status === DepositStatus.None) {
+      history.replace(depositBaseUrl);
     }
   }, [data, updateUser, depositStatus]);
-
+  let message: string | JSX.Element | JSX.Element[] = '';
+  if (depositStatus !== DepositStatus.None) {
+    message = state?.message || jsxT(`deposit_status_${depositStatus}`);
+  }
   return {
     setDepositId: (id: string | number) => setId(id),
     error,
     depositStatus,
-    message: state?.message || t(`deposit_status_${depositStatus}`),
+    message,
   };
 };
 

@@ -149,8 +149,7 @@ const DepositPage = () => {
             : 'danger'
         }
       >
-        {depositStatus.message ||
-          jsxT(`deposit_status_${depositStatus.depositStatus}`)}
+        {depositStatus.message}
         <div>
           <u>
             {depositStatus.depositStatus === DepositStatus.Confirmed

@@ -14,7 +14,12 @@ const i18n = (lang: string, data: Symbols = {}) => {
     hasTranslations,
     symbols: data,
     t(key: string, noFallback: boolean = false) {
-      if (hasTranslations && !data[key] && !missingSymbolsSent.includes(key)) {
+      if (
+        hasTranslations &&
+        !noFallback &&
+        !data[key] &&
+        !missingSymbolsSent.includes(key)
+      ) {
         missingSymbolsSent.push(key);
         Sentry.captureMessage(`missing symbol:${key}`);
       }
