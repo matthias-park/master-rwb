@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useI18n } from '../../../hooks/useI18n';
 import useDesktopWidth from '../../../hooks/useDesktopWidth';
@@ -39,15 +39,27 @@ const PromoLinkEl = ({
   );
 };
 
-const PromoItem = ({ item, variant }: { item: PostItem; variant?: string }) => {
+const PromoItem = ({
+  item,
+  variant,
+  imageLoaded,
+}: {
+  item: PostItem;
+  variant?: string;
+  imageLoaded?: () => void;
+}) => {
   return (
     <PromoLinkEl
       item={item}
-      className={clsx('promotion-block', `promotion-block--${variant}`)}
+      className={clsx(
+        'promotion-block',
+        variant && `promotion-block--${variant}`,
+      )}
     >
       <img
         alt="promo"
         className="promotion-block__img"
+        onLoad={imageLoaded}
         src={item.image.url || '/assets/images/promo/promo-front.png'}
       ></img>
       <div className="promotion-block__body">
@@ -70,11 +82,24 @@ const PromotionsList = () => {
     '/railsapi/v1/content/promotions',
   );
   const { t } = useI18n();
+  const [imagesLoaded, setImagesLoaded] = useState({});
   const isDataLoading = !data && !error;
 
+  const setImageLoaded = (id: number) =>
+    setImagesLoaded(prev => ({ ...prev, [id]: true }));
+
+  useEffect(() => {
+    if (data?.Data) {
+      setImagesLoaded(
+        data?.Data.reduce((obj, cur) => ({ ...obj, [cur.id]: false }), {}),
+      );
+    }
+  }, [data?.Data]);
+
+  const allImagesLoaded = !Object.values(imagesLoaded).some(loaded => !loaded);
   return (
     <main className="mb-5 pt-0 pt-xl-5 min-vh-70">
-      {isDataLoading && (
+      {(isDataLoading || !allImagesLoaded) && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
@@ -84,9 +109,15 @@ const PromotionsList = () => {
           {t('promotions_failed_to_load')}
         </h2>
       )}
-      <div className="promotions-list mt-4">
+      <div
+        className={clsx('promotions-list mt-4', !allImagesLoaded && 'd-none')}
+      >
         {data?.Data.map(item => (
-          <PromoItem key={item.id} item={item} />
+          <PromoItem
+            key={item.id}
+            item={item}
+            imageLoaded={() => setImageLoaded(item.id)}
+          />
         ))}
       </div>
     </main>
@@ -147,6 +178,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
   );
   const history = useHistory();
   const desktopWidth = useDesktopWidth(568);
+  const [promoImageLoaded, setPromoImageLoaded] = useState(false);
   const isDataLoading = !data && !error;
 
   useEffect(() => {
@@ -175,17 +207,18 @@ const PromotionPage = ({ slug }: { slug: string }) => {
 
   return (
     <main className="pt-xl-5 min-vh-70">
-      {isDataLoading && (
+      {(isDataLoading || !promoImageLoaded) && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
       )}
       {!!data && (
-        <div className="promotion-inner">
+        <div className={clsx('promotion-inner', !promoImageLoaded && 'd-none')}>
           <div className="promotion-inner__banner">
             <img
               alt="banner"
               className="promotion-inner__banner-img"
+              onLoad={() => setPromoImageLoaded(true)}
               src={bannerImg || fallbackBannerImg}
             ></img>
             <div className="promo-bg-text">
