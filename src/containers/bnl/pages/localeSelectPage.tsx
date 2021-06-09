@@ -5,7 +5,7 @@ import LoadingButton from '../../../components/LoadingButton';
 
 const LANGUAGE = {
   nl: {
-    message: 'Welcom',
+    message: 'Welkom',
     full_name: 'Nederlands',
     link_text: 'Gebruiksvoorwaarden',
     link: '/nl/legal/terms-and-conditions',
