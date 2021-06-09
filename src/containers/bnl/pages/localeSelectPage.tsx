@@ -15,13 +15,13 @@ const LANGUAGE = {
     message: 'Bienvenue',
     full_name: 'Français',
     link_text: "Conditions d'utilisation",
-    link: '/nl/legal/terms-and-conditions',
+    link: '/fr/legal/terms-and-conditions',
   },
   de: {
     message: 'Willkommen',
     full_name: 'Deutsch',
     link_text: 'Nutzungsbedingungen',
-    link: '/nl/legal/terms-and-conditions',
+    link: '/de/legal/terms-and-conditions',
   },
 };
 
