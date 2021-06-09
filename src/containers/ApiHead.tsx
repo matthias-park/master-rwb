@@ -71,8 +71,8 @@ const ApiHead = () => {
   const fallbackTitle =
     pathNameTranslation +
     (pathNameTranslation.length ? ' - ' : '') +
-    t('seo_site_name');
-  const title = hasTranslations ? seoData?.title || fallbackTitle : '';
+    t('seo_site_name', true);
+  const title = seoData?.title || (hasTranslations ? fallbackTitle : '');
   const bodyClassName = clsx(
     PAGES_WITH_CAPTCHA_ICON.includes(
       pathInfo?.id || prevPathInfo?.id || PagesName.Null,
@@ -90,11 +90,11 @@ const ApiHead = () => {
         <meta property="og:title" content={seoData?.title || fallbackTitle} />
         <meta
           name="description"
-          content={seoData?.description || t('seo_description')}
+          content={seoData?.description || t('seo_description', true)}
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.href} />
-        <meta property="og:site_name" content={t('seo_site_name')} />
+        <meta property="og:site_name" content={t('seo_site_name', true)} />
         <meta property="og:image" content="/assets/images/logo/logo.png" />
         {!!seoData?.keywords && (
           <meta name="keywords" content={seoData.keywords} />

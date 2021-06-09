@@ -3,7 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { FormFieldValidation, PagesName, VALIDATIONS } from '../constants';
 import { useI18n } from '../hooks/useI18n';
 import CustomAlert from './bnl/components/CustomAlert';
-import { OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
 import { useRoutePath } from '../hooks/index';
 import useGTM from '../hooks/useGTM';
 import LoadingButton from '../components/LoadingButton';
