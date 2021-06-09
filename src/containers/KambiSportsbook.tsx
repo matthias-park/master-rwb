@@ -14,9 +14,10 @@ import { getApi } from '../utils/apiUtils';
 import { WidgetAPI } from '../types/KambiConfig';
 import Spinner from 'react-bootstrap/Spinner';
 import { KambiSbLocales, PagesName } from '../constants';
-import { matchPath, useLocation } from 'react-router-dom';
+import { matchPath, useHistory, useLocation } from 'react-router-dom';
 import { hideKambiSportsbook, showKambiSportsbook } from '../utils/uiUtils';
 import { useAuth } from '../hooks/useAuth';
+import { useRoutePath } from '../hooks';
 
 interface KambiContext {
   sportsbookLoaded: boolean;
@@ -159,6 +160,7 @@ interface SetCustomerSettingsProps {
   getApiBalance: string;
   updateBalance: () => void;
   setKambiLoaded: () => void;
+  urlChangeRequested: (page: PagesName) => void;
 }
 
 interface KambiSportsbookProps {
@@ -187,6 +189,7 @@ const setCustomerSettings = ({
   getApiBalance,
   updateBalance,
   setKambiLoaded,
+  urlChangeRequested,
 }: SetCustomerSettingsProps) => {
   window.customerSettings = {
     getBalance: function (successFunc, failureFunc) {
@@ -200,13 +203,14 @@ const setCustomerSettings = ({
         });
     },
     notification: function (event) {
-      if (
-        event.name === 'dataLayerPushed' &&
-        event.data?.event === 'kambi loaded'
-      ) {
+      if (event.name === 'pageRendered') {
         setKambiLoaded();
       }
+      if (event.name === 'loginRequested') {
+        urlChangeRequested(PagesName.LoginPage);
+      }
     },
+    loginUrl: 'notification',
     hideHeader: true,
     enableOddsFormatSelector: true,
     enableMyBetsHarmonization: false,
@@ -268,6 +272,8 @@ const KambiSportsbook = () => {
   const context = useContext(kambiContext);
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { user, updateUser } = useAuth();
+  const loginPagePath = useRoutePath(PagesName.LoginPage, true);
+  const history = useHistory();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const desktopWidth = useDesktopWidth(1199);
 
@@ -279,6 +285,11 @@ const KambiSportsbook = () => {
             getApiBalance: kambiConfig?.getApiBalance,
             updateBalance: () => updateUser(),
             setKambiLoaded: () => context.setSportsbookLoaded(true),
+            urlChangeRequested: (page: PagesName) => {
+              if (page === PagesName.LoginPage) {
+                history.push(loginPagePath);
+              }
+            },
           });
           const kambiContainer = document.createElement('div');
           kambiContainer.id = 'KambiBC';
