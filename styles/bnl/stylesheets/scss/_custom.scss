@@ -387,7 +387,6 @@ a:hover {
       max-height: 34px;
       white-space: nowrap;
       @include media-breakpoint-up(sm) {
-        min-width: 185px;
         margin-right: 10px;
       }
     }
