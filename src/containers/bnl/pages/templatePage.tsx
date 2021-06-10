@@ -120,37 +120,40 @@ const TemplatePage = () => {
                           />
                         </div>
                       </Element>
-                      {index === 0 && data.Data.structure.content.length > 1 && (
-                        <Dropdown
-                          className="custom-dropdown mb-3 d-block d-md-none"
-                          show={dropdownShow}
-                          onToggle={() => setDropdownShow(!dropdownShow)}
-                        >
-                          <Dropdown.Toggle
-                            variant="brand-light"
-                            id="dropdown-basic"
+                      {index === 0 &&
+                        data.Data.structure.content.length > 1 &&
+                        data.Data.structure.content[0].standart
+                          ?.dropdown_button_translations && (
+                          <Dropdown
+                            className="custom-dropdown mb-3 d-block d-md-none"
+                            show={dropdownShow}
+                            onToggle={() => setDropdownShow(!dropdownShow)}
                           >
-                            {data.Data.structure.content[0].standart
-                              ?.dropdown_button_translations?.value ||
-                              t('default_dropdown_title')}
-                            <i className="icon-down1"></i>
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu>
-                            {links.map(link => (
-                              <Dropdown.Item
-                                className="text-wrap"
-                                as={ScrollLink}
-                                key={link.link}
-                                to={link.link}
-                                smooth={true}
-                                onClick={() => setDropdownShow(false)}
-                              >
-                                {link.name}
-                              </Dropdown.Item>
-                            ))}
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      )}
+                            <Dropdown.Toggle
+                              variant="brand-light"
+                              id="dropdown-basic"
+                            >
+                              {data.Data.structure.content[0].standart
+                                ?.dropdown_button_translations?.value ||
+                                t('default_dropdown_title')}
+                              <i className="icon-down1"></i>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                              {links.map(link => (
+                                <Dropdown.Item
+                                  className="text-wrap"
+                                  as={ScrollLink}
+                                  key={link.link}
+                                  to={link.link}
+                                  smooth={true}
+                                  onClick={() => setDropdownShow(false)}
+                                >
+                                  {link.name}
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        )}
                     </div>
                   ))}
                 </>
