@@ -5,6 +5,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './containers/App';
 import * as Sentry from '@sentry/react';
+import { errorHandler } from './utils';
 // import { Workbox } from 'workbox-window';
 // import Lockr from 'lockr';
 
@@ -14,6 +15,7 @@ if (process.env.TARGET_ENV !== 'development' && window.__config__.sentryDsn) {
     environment: process.env.TARGET_ENV,
   });
 }
+window.addEventListener('error', errorHandler);
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(

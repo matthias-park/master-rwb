@@ -84,3 +84,14 @@ export const cleanPostBody = (obj: { [key: string]: unknown }) =>
     }
     return obj;
   }, {});
+
+export const errorHandler = (event: ErrorEvent) => {
+  if (event.error?.stack.includes('kambi-chunk')) {
+    const kambiErrorId = 'kambi-error-reload';
+    const kambiErrorRetryCount = Lockr.get(kambiErrorId, 0) + 1;
+    if (kambiErrorRetryCount < 3) {
+      Lockr.set(kambiErrorId, kambiErrorRetryCount);
+      window.location.reload();
+    }
+  }
+};
