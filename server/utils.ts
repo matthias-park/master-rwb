@@ -25,10 +25,12 @@ export const getCache = <T>(
     return Promise.resolve(CACHE[key].data);
   }
   return getData().then(data => {
-    CACHE[key] = {
-      cachedTime: new Date().getTime(),
-      data,
-    };
+    if (data) {
+      CACHE[key] = {
+        cachedTime: new Date().getTime(),
+        data,
+      };
+    }
     return data;
   });
 };

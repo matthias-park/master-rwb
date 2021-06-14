@@ -78,10 +78,15 @@ const TemplatePage = () => {
       )}
       {!!pageTitle && (
         <Helmet
-          title={clsx(pageTitle && `${pageTitle} - `, t('seo_site_name'))}
+          title={`${pageTitle} - ${t('seo_site_name')}`}
           defer={false}
           async
-        />
+        >
+          <meta
+            property="og:title"
+            content={`${pageTitle} - ${t('seo_site_name')}`}
+          />
+        </Helmet>
       )}
       {!!data?.Success && (
         <div

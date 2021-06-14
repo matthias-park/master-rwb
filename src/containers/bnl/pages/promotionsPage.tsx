@@ -60,6 +60,7 @@ const PromoItem = ({
         alt="promo"
         className="promotion-block__img"
         onLoad={imageLoaded}
+        onError={imageLoaded}
         src={item.image.url || '/assets/images/promo/promo-front.png'}
       ></img>
       <div className="promotion-block__body">
@@ -219,6 +220,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
               alt="banner"
               className="promotion-inner__banner-img"
               onLoad={() => setPromoImageLoaded(true)}
+              onError={() => setPromoImageLoaded(true)}
               src={bannerImg || fallbackBannerImg}
             ></img>
             <div className="promo-bg-text">

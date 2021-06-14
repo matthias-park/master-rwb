@@ -57,7 +57,7 @@ export const setLocalePathname = (newlocale: string, reloadPage = true) => {
   } else {
     paths.splice(1, 0, newlocale);
   }
-  if (reloadPage) {
+  if (reloadPage && !window.PRERENDER_CACHE) {
     const newPath = paths.join('/');
     window.location.pathname = newPath;
   } else {

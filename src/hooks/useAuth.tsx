@@ -68,7 +68,7 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
     UserStatus | null,
     StatusResponseError
   >(
-    !TestEnv ? '/railsapi/v1/user/status' : null,
+    !TestEnv && !window.PRERENDER_CACHE ? '/railsapi/v1/user/status' : null,
     url =>
       getApi<RailsApiResponse<UserStatus>>(url).then(res => {
         if (!res.Success) throw new StatusResponseError(res);
@@ -101,7 +101,7 @@ export const AuthProvider = ({ ...props }: I18nProviderProps) => {
     !error?.notLoggedIn && prevUser?.logged_in
       ? prevUser
       : { logged_in: false, loading: false };
-  if (!data && !error) {
+  if (!data && !error && !window.PRERENDER_CACHE) {
     user.loading = true;
   } else if (data && !error) {
     user = data;

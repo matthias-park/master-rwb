@@ -13,19 +13,22 @@ import logger from './logger';
 import { getCache } from './utils';
 
 export const getRenderedPage = async (req: Request): Promise<string | null> => {
-  const cacheKey = req.url;
-  const html = getCache(cacheKey, HOLD_RENDERED_PAGE_INTERVAL, async () =>
-    render(req).catch(err => {
-      logger.error(err);
-      return null;
-    }),
+  const cacheKey = req.url!;
+  const html = getCache(
+    cacheKey,
+    HOLD_RENDERED_PAGE_INTERVAL,
+    async () =>
+      await render(req).catch(err => {
+        logger.error(err);
+        return null;
+      }),
   );
   return html;
 };
 
+let openTabs = 0;
 let browser: Browser | null = null;
 let browserCloseTimeout: number = 0;
-let openTabs = 0;
 export const render = async (req: Request) => {
   if (!browser) {
     logger.info('Starting puppeteer');
@@ -49,7 +52,7 @@ export const render = async (req: Request) => {
   });
   await page.setRequestInterception(true);
   page.on('request', (req: HTTPRequest) => {
-    const allowlist = ['document', 'script', 'xhr', 'fetch'];
+    const allowlist = ['document', 'script', 'xhr', 'fetch', 'stylesheet'];
     if (!allowlist.includes(req.resourceType())) {
       return req.abort();
     }
@@ -57,10 +60,12 @@ export const render = async (req: Request) => {
       'www.google-analytics.com',
       '/gtag/js',
       'ga.js',
+      'gtm.js',
       'analytics.js',
       'kambi.com',
       'kambi-widget-api.js',
       'kambi-bootstrap.js',
+      'gstatic',
     ];
     if (blocklist.find(regex => req.url().match(regex))) {
       return req.abort();
@@ -68,12 +73,13 @@ export const render = async (req: Request) => {
     const reqUrl = new URL(req.url());
     if (reqUrl.hostname) {
       const jsFile = reqUrl.pathname.endsWith('.js');
+      const cssFile = reqUrl.pathname.endsWith('.css');
       const contentType = `${
-        jsFile ? 'application/javascript' : 'text/html'
+        jsFile ? 'application/javascript' : cssFile ? 'text/css' : 'text/html'
       }; charset=UTF-8`;
       const filePath = path.join(
         BUILD_FOLDER,
-        jsFile ? reqUrl.pathname : `/${reqUrl.hostname}.html`,
+        jsFile || cssFile ? reqUrl.pathname : `/${reqUrl.hostname}.html`,
       );
       if (fs.existsSync(filePath)) {
         return req.respond({
@@ -91,26 +97,40 @@ export const render = async (req: Request) => {
     }
     req.continue();
   });
-  // .on('console', message =>
-  //   console.log(
-  //     `${message.type().substr(0, 3).toUpperCase()} ${message.text()}`,
-  //   ),
-  // )
-  // .on('requestfailed', request =>
-  //   console.log(`${request.failure().errorText} ${request.url()}`),
-  // );
+
+  const lang = req.url.split('/')?.[1] || '';
+  const currentHostnameApi = req.franchise.domains
+    .find(domain => domain.hostname === req.hostname.replace('www.', ''))
+    ?.api?.replace('https://', '');
+
+  if (currentHostnameApi) {
+    await page.setCookie({
+      name: 'user_locale',
+      value: lang,
+      domain: currentHostnameApi,
+    });
+  }
 
   const fullUrl = buildReqUrl(req);
   await page.goto(fullUrl, {
-    waitUntil: 'networkidle0',
+    waitUntil: ['networkidle0', 'domcontentloaded'],
   });
-  //@ts-ignore
-  const cache = await page.evaluate(() => window.PRERENDER_CACHE);
+  await page
+    .waitForSelector('#page-loading-spinner', { hidden: true })
+    .catch(async () => {
+      openTabs--;
+      await page.close();
+    });
+  const cache = await page.evaluate(() => {
+    window.localStorage.clear();
+    //@ts-ignore
+    return window.PRERENDER_CACHE;
+  });
   let html = await page.content();
   html = html.replace(
     'window.PRERENDER_CACHE={}',
-    `window.PRERENDER_CACHE=JSON.parse("${JSON.stringify(cache).replaceAll(
-      '"',
+    `window.PRERENDER_CACHE=JSON.parse("${JSON.stringify(cache).replace(
+      /"/g,
       '\\"',
     )}")`,
   );
@@ -122,14 +142,14 @@ export const render = async (req: Request) => {
     if (browser) {
       logger.info('Stopping puppeteer');
       await browser.close();
+      browser = null;
     }
   }, BROWSER_KEEP_ALIVE);
   return html;
-  // return htmlCleanup(html);
 };
 
 const buildReqUrl = (req: Request) => {
-  var protocol = req.secure ? 'https' : 'http';
+  var protocol = 'https';
   const cfVisitorHeader = req.header('cf-visitor');
   if (cfVisitorHeader) {
     var match = cfVisitorHeader.match(/"scheme":"(http|https)"/);
@@ -146,8 +166,3 @@ const buildReqUrl = (req: Request) => {
     req.url
   );
 };
-
-const htmlCleanup = (html: string): string =>
-  (html = html
-    .replaceAll(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replaceAll(/<link[^>]+?as="script"[^>]*?>/gi, ''));

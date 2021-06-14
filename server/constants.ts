@@ -56,7 +56,7 @@ export const extensionsToIgnore = [
 ];
 
 export const BROWSER_KEEP_ALIVE = 300000; // 5min
-export const HOLD_RENDERED_PAGE_INTERVAL = 3600000; // 1 hour
+export const HOLD_RENDERED_PAGE_INTERVAL = 10 * 60 * 60 * 1000; // 10 hours
 
 export const DOMAINS_TO_FRANCHISE: {
   [key: string]: FranchiseConfig;
