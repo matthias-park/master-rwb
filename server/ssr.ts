@@ -77,9 +77,10 @@ export const render = async (req: Request) => {
       const contentType = `${
         jsFile ? 'application/javascript' : cssFile ? 'text/css' : 'text/html'
       }; charset=UTF-8`;
+      const hostname = reqUrl.hostname.replace('www.', '');
       const filePath = path.join(
         BUILD_FOLDER,
-        jsFile || cssFile ? reqUrl.pathname : `/${reqUrl.hostname}.html`,
+        jsFile || cssFile ? reqUrl.pathname : `/${hostname}.html`,
       );
       if (fs.existsSync(filePath)) {
         return req.respond({
