@@ -205,11 +205,16 @@ const setCustomerSettings = ({
         });
     },
     notification: function (event) {
-      if (event.name === 'pageRendered') {
-        setKambiLoaded();
-      }
-      if (event.name === 'loginRequested') {
-        urlChangeRequested(PagesName.LoginPage);
+      switch (event.name) {
+        case 'KambiMaintenance':
+        case 'pageRendered': {
+          setKambiLoaded();
+          break;
+        }
+        case 'loginRequested': {
+          urlChangeRequested(PagesName.LoginPage);
+          break;
+        }
       }
     },
     loginUrl: 'notification',
