@@ -161,6 +161,7 @@ interface SetCustomerSettingsProps {
   updateBalance: () => void;
   setKambiLoaded: () => void;
   urlChangeRequested: (page: PagesName) => void;
+  locale: string;
 }
 
 interface KambiSportsbookProps {
@@ -190,6 +191,7 @@ const setCustomerSettings = ({
   updateBalance,
   setKambiLoaded,
   urlChangeRequested,
+  locale,
 }: SetCustomerSettingsProps) => {
   window.customerSettings = {
     getBalance: function (successFunc, failureFunc) {
@@ -211,6 +213,11 @@ const setCustomerSettings = ({
       }
     },
     loginUrl: 'notification',
+    showEventStatistics: function (eventId) {
+      const url = `https://s5.sir.sportradar.com/scooorebe/be/match/m${eventId}?language=${locale}`;
+      const newStatisticsTab = window.open(url, '_blank');
+      newStatisticsTab?.focus();
+    },
     hideHeader: true,
     enableOddsFormatSelector: true,
     enableMyBetsHarmonization: false,
@@ -290,6 +297,7 @@ const KambiSportsbook = () => {
                 history.push(loginPagePath);
               }
             },
+            locale,
           });
           const kambiContainer = document.createElement('div');
           kambiContainer.id = 'KambiBC';
