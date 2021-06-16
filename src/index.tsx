@@ -13,6 +13,10 @@ if (process.env.TARGET_ENV !== 'development' && window.__config__.sentryDsn) {
   Sentry.init({
     dsn: window.__config__.sentryDsn,
     environment: process.env.TARGET_ENV,
+    beforeSend(event, hint) {
+      if (hint?.originalException === 'Timeout') return null;
+      return event;
+    },
   });
 }
 window.addEventListener('error', errorHandler);
