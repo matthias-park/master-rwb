@@ -214,7 +214,7 @@ const setCustomerSettings = ({
     },
     loginUrl: 'notification',
     showEventStatistics: function (eventId) {
-      const url = `https://s5.sir.sportradar.com/scooorebe/be/match/m${eventId}?language=${locale}`;
+      const url = `https://s5.sir.sportradar.com/scooorebe/${locale}/match/m${eventId}`;
       const newStatisticsTab = window.open(url, '_blank');
       newStatisticsTab?.focus();
     },
