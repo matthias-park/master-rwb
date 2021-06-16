@@ -87,7 +87,7 @@ const WithdrawalRequests = ({
                     <strong className="heading-sm">
                       {t('withdrawal_requests_cancel')}
                     </strong>
-                    {/* {!request.is_used && (
+                    {!request.is_used && (
                       <LoadingButton
                         variant="outline-danger"
                         size="sm"
@@ -97,7 +97,7 @@ const WithdrawalRequests = ({
                       >
                         {t('withdrawal_requests_cancel_btn')}
                       </LoadingButton>
-                    )} */}
+                    )}
                   </td>
                 </tr>
               );
