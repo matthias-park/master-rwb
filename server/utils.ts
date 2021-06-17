@@ -47,22 +47,29 @@ export const getRailsConstants = (req: Request) =>
           const data = await res.json();
           if (!data?.Data?.navigation_routes) return null;
           const navigation_routes = data.Data.navigation_routes.filter(
-            route => route.id !== 14 && route.path !== '*',
+            route =>
+              ![14, 19].includes(route.id) &&
+              route.path !== '*' &&
+              !route.externalLinkTranslation,
           );
           if (data.Data.content_pages) {
-            for (const value of Object.values(
+            for (const [key, value] of Object.entries(
               data.Data.content_pages as ContentPages,
             )) {
-              const name = Array.isArray(value) ? value[0] : '';
-              const slug = Array.isArray(value) ? value[1] : value;
+              const name = Array.isArray(value) ? value[0] : value;
+              const slug = Array.isArray(value) ? value[1] : key;
               const contentPagePath = `${
                 slug.startsWith('/') ? '' : '/'
               }${slug}`;
-              navigation_routes.push({
-                id: 15,
-                path: contentPagePath,
-                name,
-              });
+              if (
+                !navigation_routes.some(route => route.path === contentPagePath)
+              ) {
+                navigation_routes.push({
+                  id: 15,
+                  path: contentPagePath,
+                  name,
+                });
+              }
             }
           }
           return {
