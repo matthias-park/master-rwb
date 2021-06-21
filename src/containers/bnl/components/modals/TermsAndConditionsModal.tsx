@@ -30,7 +30,7 @@ const TermsAndConditionsModal = () => {
   const hideModal = () => disableModal(ComponentName.TermsAndConditionsModal);
   const [apiError, setApiError] = useState<string | null>(null);
   const formMethods = useForm({
-    mode: 'onBlur',
+    mode: 'onChange',
   });
   const { handleSubmit, watch } = formMethods;
   const watchTncCheckbox = watch('tnc_checkbox');

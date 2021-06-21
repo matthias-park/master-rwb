@@ -1,7 +1,6 @@
 import React from 'react';
 import { Control, FieldValues, useController } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
-
 interface Props {
   id: string;
   control?: Control<FieldValues>;
