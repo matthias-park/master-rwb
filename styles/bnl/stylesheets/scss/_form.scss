@@ -43,6 +43,7 @@
         }
     }
     .form-control {
+      background-image: none !important;
       @supports (-webkit-touch-callout: none) {
         font-size: 16px;
       }
