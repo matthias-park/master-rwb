@@ -54,6 +54,7 @@ export enum PagesName {
   ResponsibleGamingPage = 25,
   LoginPage = 26,
   TermsAndConditionsPage = 27,
+  SportsPlayRetailPage = 28,
 }
 
 export enum FormFieldValidation {

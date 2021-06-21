@@ -49,6 +49,7 @@ const COMPONENT_PAGES = {
   [PagesName.ChangePasswordPage]: AsyncPage('changePasswordPage'),
   [PagesName.CloseAccountPage]: AsyncPage('closeAccountPage'),
   [PagesName.LoginPage]: AsyncPage('loginPage'),
+  [PagesName.SportsPlayRetailPage]: AsyncPage('sportsRetail'),
 };
 
 const Routes = () => {

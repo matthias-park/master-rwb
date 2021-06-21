@@ -19,6 +19,8 @@ interface KambiConfig {
   racingMode?: 'true' | 'false';
   //String to be sent to the offering to be make the client only display live betting events selected for the specified competition. Optional.
   competitionId?: string;
+  channelId?: number; // BYOD uses the retail channel id
+  betslipBarcodeMode?: boolean;
 }
 
 export default KambiConfig;

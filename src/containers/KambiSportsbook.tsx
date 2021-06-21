@@ -23,7 +23,7 @@ interface KambiContext {
   sportsbookLoaded: boolean;
   setSportsbookLoaded: (loaded: boolean) => void;
   api: WidgetAPI | null;
-  setApi: (api: WidgetAPI) => void;
+  setApi: (api: WidgetAPI | null) => void;
   kambiUserLoggedIn: boolean;
 }
 
@@ -64,12 +64,14 @@ export const KambiProvider = ({ children }) => {
   const { hash, key: locationKey, pathname } = useLocation();
   const visibleSportsbook = useMemo(
     () =>
-      routes.find(route =>
-        matchPath(pathname, {
-          path: route.path,
-          exact: route.exact ?? true,
-        }),
-      )?.id === PagesName.SportsPage,
+      [PagesName.SportsPage, PagesName.SportsPlayRetailPage].includes(
+        routes.find(route =>
+          matchPath(pathname, {
+            path: route.path,
+            exact: route.exact ?? true,
+          }),
+        )?.id || PagesName.Null,
+      ),
     [pathname, routes, locationKey],
   );
   useEffect(() => {
@@ -171,6 +173,7 @@ interface KambiSportsbookProps {
   getApiBalance: string;
   currency: string;
   market: string;
+  retail?: boolean;
 }
 
 const updateWindowKambiConfig = (params: KambiSportsbookProps) => {
@@ -184,6 +187,9 @@ const updateWindowKambiConfig = (params: KambiSportsbookProps) => {
     streamingAllowedForPlayer: 'false',
     racingMode: 'false',
   };
+  if (params.retail) {
+    window._kc = { ...window._kc, channelId: 7, betslipBarcodeMode: true };
+  }
 };
 
 const setCustomerSettings = ({
@@ -260,14 +266,19 @@ const insertKambiBootstrap = async (): Promise<void> => {
   });
 };
 
-const getSBParams = async (locale: string, playerId?: string) => {
-  const data = playerId
-    ? await getApi<RailsApiResponse<string>>(
-        '/railsapi/v1/kambi/get_token',
-      ).catch((res: RailsApiResponse<null>) => {
-        return res;
-      })
-    : null;
+const getSBParams = async (
+  locale: string,
+  playerId?: string,
+  retail?: boolean,
+) => {
+  const data =
+    playerId && !retail
+      ? await getApi<RailsApiResponse<string>>(
+          '/railsapi/v1/kambi/get_token',
+        ).catch((res: RailsApiResponse<null>) => {
+          return res;
+        })
+      : null;
   return {
     locale: KambiSbLocales[locale.toLocaleLowerCase()] || 'en_GB',
     playerId,
@@ -275,12 +286,16 @@ const getSBParams = async (locale: string, playerId?: string) => {
     currency: 'EUR',
     market: 'BE',
     getApiBalance: '/railsapi/v1/user/balance',
+    retail,
   };
 };
 
+const disposeKambi = async () =>
+  window._kbc?.dispose({ clearLocalStorage: true });
+
 const kambiId = 'KambiBC';
 
-const KambiSportsbook = () => {
+const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
   const context = useContext(kambiContext);
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { user, updateUser } = useAuth();
@@ -290,38 +305,48 @@ const KambiSportsbook = () => {
   const desktopWidth = useDesktopWidth(1199);
 
   useEffect(() => {
-    if (!user.loading && containerRef.current && locale) {
-      if (!context.api && !document.getElementById(kambiId)) {
-        getSBParams(locale, user.id?.toString()).then(kambiConfig => {
-          setCustomerSettings({
-            getApiBalance: kambiConfig?.getApiBalance,
-            updateBalance: () => updateUser(),
-            setKambiLoaded: () => context.setSportsbookLoaded(true),
-            urlChangeRequested: (page: PagesName) => {
-              if (page === PagesName.LoginPage) {
-                history.push(loginPagePath);
-              }
-            },
-            locale,
-          });
-          const kambiContainer = document.createElement('div');
-          kambiContainer.id = 'KambiBC';
-          kambiContainer.classList.add('kambiHidden');
-          containerRef.current?.parentNode?.insertBefore(
-            kambiContainer,
-            containerRef.current.nextSibling,
-          );
-          updateWindowKambiConfig(kambiConfig);
-          insertKambiBootstrap();
-        });
-      } else {
-        const kambiContainer = document.getElementById(kambiId);
-        containerRef.current?.parentNode?.insertBefore(
-          kambiContainer as Node,
-          containerRef.current.nextSibling,
-        );
+    (async () => {
+      if (retail !== window._kc?.betslipBarcodeMode) {
+        await disposeKambi();
+        context.setApi(null);
+        context.setSportsbookLoaded(false);
+        kambiLock = false;
       }
-    }
+      if (!user.loading && containerRef.current && locale) {
+        if (!context.api && !document.getElementById(kambiId)) {
+          getSBParams(locale, user.id?.toString(), retail).then(kambiConfig => {
+            setCustomerSettings({
+              getApiBalance: kambiConfig?.getApiBalance,
+              updateBalance: () => updateUser(),
+              setKambiLoaded: () => context.setSportsbookLoaded(true),
+              urlChangeRequested: (page: PagesName) => {
+                if (page === PagesName.LoginPage) {
+                  history.push(loginPagePath);
+                }
+              },
+              locale,
+            });
+            const kambiContainer = document.createElement('div');
+            kambiContainer.id = 'KambiBC';
+            kambiContainer.classList.add('kambiHidden');
+            containerRef.current?.parentNode?.insertBefore(
+              kambiContainer,
+              containerRef.current.nextSibling,
+            );
+            updateWindowKambiConfig(kambiConfig);
+            insertKambiBootstrap();
+          });
+        } else {
+          const kambiContainer = document.getElementById(kambiId);
+          if (kambiContainer) {
+            containerRef.current?.parentNode?.insertBefore(
+              kambiContainer as Node,
+              containerRef.current.nextSibling,
+            );
+          }
+        }
+      }
+    })();
   }, [user, locale, containerRef.current]);
 
   return (
