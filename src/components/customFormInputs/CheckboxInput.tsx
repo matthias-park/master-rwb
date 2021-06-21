@@ -1,5 +1,10 @@
 import React from 'react';
-import { Control, FieldValues, useController } from 'react-hook-form';
+import {
+  Control,
+  FieldValues,
+  useController,
+  useFormContext,
+} from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 interface Props {
   id: string;
@@ -20,6 +25,7 @@ const CheckboxInput = ({
   title,
   className,
 }: Props) => {
+  const { trigger } = useFormContext();
   const { field, fieldState } = useController({
     name: id,
     control,
@@ -34,6 +40,7 @@ const CheckboxInput = ({
       className={className}
       onChange={e => {
         field.onChange(e.target.checked);
+        trigger(id);
       }}
       custom
       type="checkbox"
