@@ -45,8 +45,7 @@ const CookieConsent = () => {
       </div>
       <div className="cookies-nav__buttons">
         <Button
-          size="sm"
-          variant="outline-light"
+          className="btn-light-custom btn-sm"
           onClick={() => enableModal(ComponentName.CookiesModal)}
         >
           {t('cookies_modal_button')}
