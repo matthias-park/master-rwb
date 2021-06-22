@@ -500,7 +500,7 @@
 
 .user-menu {
     width: 330px;
-    left: 49%;
+    left: calc(100% - 148px);
     transform: translateX(-50%);
     top: calc(100% + 12px);
     padding: 0;

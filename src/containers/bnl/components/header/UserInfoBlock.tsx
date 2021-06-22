@@ -73,7 +73,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   };
 
   return (
-    <div className="d-flex justify-content-end flex-grow-1">
+    <div className="d-flex flex-grow-1">
       <Dropdown
         className={`header__user-menu user-menu-dropdown ${dropdownClasses}`}
         show={showDropdown}
