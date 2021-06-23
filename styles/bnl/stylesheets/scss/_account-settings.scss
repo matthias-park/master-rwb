@@ -447,18 +447,13 @@
     border: 1px solid $gray-100;
     &:hover,
     &.active {
-      border: 1px solid $brand-light;
-      border-top-width: 4px;
-      border-bottom-width: 4px;
+      border: 2px solid $brand-light;
       padding: 20px 0;
     }
     @include media-breakpoint-down(xs) {
       padding: 14px 0;
       &:hover,
       &.active {
-        border: 1px solid $brand-light;
-        border-top-width: 3px;
-        border-bottom-width: 3px;
         padding: 11px 0;
       }
     }
