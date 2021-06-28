@@ -19,6 +19,9 @@ const ValidationFailedModal = () => {
     enableModal,
     disableModal,
   } = useModal();
+
+  const hideModal = () => disableModal(ComponentName.ValidationFailedModal);
+
   useEffect(() => {
     if (
       [VALIDATOR_STATUS.MINOR_ERROR, VALIDATOR_STATUS.MAJOR_ERROR].includes(
@@ -30,24 +33,27 @@ const ValidationFailedModal = () => {
       !user.logged_in &&
       allActiveModals.includes(ComponentName.ValidationFailedModal)
     ) {
-      disableModal(ComponentName.ValidationFailedModal);
+      hideModal();
     }
   }, [user.validator_status]);
 
-  const hideModal = () => disableModal(ComponentName.ValidationFailedModal);
+  const showModal =
+    activeModal === ComponentName.ValidationFailedModal &&
+    !!user.validator_status;
 
-  if (activeModal !== ComponentName.ValidationFailedModal) return null;
-
+  const validationFailedBody =
+    showModal && jsxT(`validation_failed_body_${user.validator_status}`);
   return (
     <GenericModal
-      show
+      key={user.validator_status}
+      show={showModal}
       hideCallback={hideModal}
       isCentered={true}
       isStatic={true}
       className="text-center pb-5"
     >
       <h2 className="mb-3 mt-4">{jsxT('validation_failed_title')}</h2>
-      <p>{jsxT(`validation_failed_body_${user.validator_status}`)}</p>
+      <p>{validationFailedBody}</p>
       <Link
         to={personalInfoRoute}
         onClick={hideModal}
