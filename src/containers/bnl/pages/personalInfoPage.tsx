@@ -43,7 +43,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
             <Accordion.Toggle
               as="button"
               eventKey={id}
-              className="info-container__edit btn btn-light-custom btn-sm px-3 ml-auto"
+              className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
             >
               {t('profile_edit')}
             </Accordion.Toggle>
