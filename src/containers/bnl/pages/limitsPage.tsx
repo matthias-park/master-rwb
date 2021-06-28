@@ -10,6 +10,8 @@ import QuestionsContainer from '../components/account-settings/QuestionsContaine
 import HelpBlock from '../components/HelpBlock';
 import { useAuth } from '../../../hooks/useAuth';
 import dayjs from 'dayjs';
+import { isMobile } from 'react-device-detect';
+import clsx from 'clsx';
 
 interface LimitProps {
   limitData: {
@@ -57,7 +59,10 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
             <Accordion.Toggle
               as="button"
               eventKey={limitData.id}
-              className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
+              className={clsx(
+                isMobile && 'btn-light-mobile',
+                'info-container__edit btn btn-light-custom btn-sm px-3 ml-auto',
+              )}
             >
               {jsxT('timeout_edit')}
             </Accordion.Toggle>
@@ -135,7 +140,10 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
             <Accordion.Toggle
               as="button"
               eventKey={limitData.id}
-              className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
+              className={clsx(
+                isMobile && 'btn-light-mobile',
+                'info-container__edit btn btn-light-custom btn-sm px-3 ml-auto',
+              )}
             >
               {t('limits_edit')}
             </Accordion.Toggle>

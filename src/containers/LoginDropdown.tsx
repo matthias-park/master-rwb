@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { isMobile } from 'react-device-detect';
 import { ComponentName, PagesName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
 import { useLocation } from 'react-router-dom';
@@ -63,7 +64,8 @@ const LoginDropdown = ({
     >
       <Link
         className={clsx(
-          'btn btn-light btn-header mr-2 mr-xl-3 ml-auto',
+          'btn btn-light-custom btn-header mr-2 mr-xl-3 ml-auto',
+          isMobile && 'btn-light-mobile',
           userLoading && 'visibility-hidden',
         )}
         to={registerRoute}

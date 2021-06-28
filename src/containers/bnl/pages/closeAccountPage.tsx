@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useI18n } from '../../../hooks/useI18n';
+import { isMobile } from 'react-device-detect';
 import Accordion from 'react-bootstrap/Accordion';
 import Spinner from 'react-bootstrap/Spinner';
 import useApi from '../../../hooks/useApi';
@@ -8,6 +9,7 @@ import { SettingsField } from '../../../types/api/user/ProfileSettings';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
 import HelpBlock from '../components/HelpBlock';
 import CustomAlert from '../components/CustomAlert';
+import clsx from 'clsx';
 
 interface CloseAccountProps {
   closeAccountData: {
@@ -37,7 +39,10 @@ const CloseAccountCard = ({ closeAccountData }: CloseAccountProps) => {
           <Accordion.Toggle
             as="button"
             eventKey={id}
-            className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
+            className={clsx(
+              'info-container__edit btn btn-light-custom btn-sm px-3 ml-auto',
+              isMobile && 'btn-light-mobile',
+            )}
           >
             {t('close_account_edit')}
           </Accordion.Toggle>
