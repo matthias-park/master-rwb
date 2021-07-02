@@ -1,6 +1,8 @@
 import { PagesName } from '../constants';
 import { PageConfig } from '../types/api/PageConfig';
 import Lockr from 'lockr';
+import { PostItem } from '../types/api/Posts';
+import dayjs from 'dayjs';
 
 export const sortAscending = (a: number, b: number) => a - b;
 export const sortDescending = (a: number, b: number) => b - a;
@@ -96,3 +98,14 @@ export const errorHandler = (event: ErrorEvent) => {
     }
   }
 };
+
+export const filterPromotionsList = (promotions: PostItem[]): PostItem[] =>
+  promotions.filter(promotion => {
+    const isNotExpired =
+      !promotion.expiration_date ||
+      dayjs(promotion.expiration_date).isAfter(dayjs());
+    const isPublished =
+      promotion.publish_date && dayjs(promotion.publish_date).isBefore(dayjs());
+    const isVisible = promotion.visible;
+    return isNotExpired && isPublished && isVisible;
+  });

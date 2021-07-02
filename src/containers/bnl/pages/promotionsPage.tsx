@@ -13,6 +13,7 @@ import clsx from 'clsx';
 import RedirectNotFound from '../../../components/RedirectNotFound';
 import { useRoutePath } from '../../../hooks';
 import { PagesName } from '../../../constants';
+import { filterPromotionsList } from '../../../utils';
 
 const PromoLinkEl = ({
   item,
@@ -86,13 +87,14 @@ const PromotionsList = () => {
   const [imagesLoaded, setImagesLoaded] = useState({});
   const isDataLoading = !data && !error;
 
+  const promotions = filterPromotionsList(data?.Data || []);
   const setImageLoaded = (id: number) =>
     setImagesLoaded(prev => ({ ...prev, [id]: true }));
 
   useEffect(() => {
-    if (data?.Data) {
+    if (promotions.length) {
       setImagesLoaded(
-        data?.Data.reduce((obj, cur) => ({ ...obj, [cur.id]: false }), {}),
+        promotions.reduce((obj, cur) => ({ ...obj, [cur.id]: false }), {}),
       );
     }
   }, [data?.Data]);
@@ -113,7 +115,7 @@ const PromotionsList = () => {
       <div
         className={clsx('promotions-list mt-4', !allImagesLoaded && 'd-none')}
       >
-        {data?.Data.map(item => (
+        {promotions.map(item => (
           <PromoItem
             key={item.id}
             item={item}

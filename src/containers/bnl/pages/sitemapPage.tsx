@@ -10,7 +10,7 @@ import useApi from '../../../hooks/useApi';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import { PostItem } from '../../../types/api/Posts';
 import { NavigationRoute } from '../../../types/api/PageConfig';
-import { sortAscending } from '../../../utils';
+import { filterPromotionsList, sortAscending } from '../../../utils';
 import Spinner from 'react-bootstrap/Spinner';
 
 interface SitemapListItem {
@@ -34,7 +34,7 @@ const insertSitemapChildren = (
     listItem.children = [];
   } else {
     const mapItem = listItem.children.find(item =>
-      route.path.startsWith(item.path),
+      route.path.startsWith(`${item.path}/`),
     );
     if (mapItem) {
       return insertSitemapChildren(mapItem, route, t);
@@ -170,7 +170,8 @@ const SitemapPage = () => {
           promotionsPath?.name !== item.name,
       );
       if (promotionsSitemapItem) {
-        for (const promotion of promotions.Data) {
+        const filteredPromotions = filterPromotionsList(promotions?.Data || []);
+        for (const promotion of filteredPromotions) {
           insertSitemapChildren(
             promotionsSitemapItem,
             {
