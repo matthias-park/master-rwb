@@ -1,5 +1,6 @@
 import React from 'react';
 import Spinner from 'react-bootstrap/Spinner';
+import { isIOS } from 'react-device-detect';
 
 interface Props {
   show?: boolean;
@@ -16,7 +17,7 @@ const LoadingSpinner = ({ show, className, small }: Props) => {
           animation="border"
           size={small ? 'sm' : undefined}
           role="status"
-          className={className}
+          className={className + `${isIOS ? ' ios' : ''}`}
         />
       )}
     </span>
