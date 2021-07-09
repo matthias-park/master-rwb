@@ -15,6 +15,18 @@ if (process.env.TARGET_ENV !== 'development' && window.__config__.sentryDsn) {
     environment: process.env.TARGET_ENV,
     beforeSend(event, hint) {
       if (hint?.originalException === 'Timeout') return null;
+      const originalException = hint?.originalException?.toString();
+      if (originalException?.includes('kambi')) {
+        if (
+          originalException.includes('ChunkLoadError') ||
+          originalException.includes('geannuleerd') ||
+          originalException.includes('annulé') ||
+          originalException.includes('anulowane')
+        )
+          return null;
+        if (event.level === Sentry.Severity.Error)
+          event.level = Sentry.Severity.Warning;
+      }
       return event;
     },
   });
