@@ -75,7 +75,7 @@ const WithdrawalRequests = ({
                     <strong className="heading-sm">
                       {t('withdrawal_requests_account')}
                     </strong>
-                    {request.account}
+                    {request.account?.match(/.{1,4}/g)?.join(' ')}
                   </td>
                   <td className="text-sm-center">
                     <strong className="heading-sm">

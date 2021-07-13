@@ -77,7 +77,9 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
                     </td>
                     <td>
                       <strong className="heading-sm">{t('account')}</strong>
-                      {transaction.account_number || '-'}
+                      {transaction.account_number
+                        ?.match(/.{1,4}/g)
+                        ?.join(' ') || '-'}
                     </td>
                     <td>
                       <strong className="heading-sm">{t('amount')}</strong>

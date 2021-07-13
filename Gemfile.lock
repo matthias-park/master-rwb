@@ -30,4 +30,4 @@ DEPENDENCIES
   capistrano-nvm
 
 BUNDLED WITH
-   1.15.1
+   2.2.21

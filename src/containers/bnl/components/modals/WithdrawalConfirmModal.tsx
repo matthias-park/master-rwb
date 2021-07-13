@@ -35,7 +35,10 @@ const WithdrawalConfirmModal = ({
         {Object.keys(data.confirm_info).map(key =>
           t(`withdrawal_page_${key}`, true) ? (
             <div key={key}>
-              {t(`withdrawal_page_${key}`)}: {data.confirm_info[key]}
+              {t(`withdrawal_page_${key}`) + ': '}
+              {key === 'account'
+                ? data.confirm_info[key]?.match(/.{1,4}/g)?.join(' ')
+                : data.confirm_info[key]}
             </div>
           ) : null,
         )}
