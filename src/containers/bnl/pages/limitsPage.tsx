@@ -156,45 +156,49 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
               <p className="play-limits__limit-title">{t('used_limit')}</p>
               <p className="play-limits__limit-total">
                 {user.currency}{' '}
-                {!!limitData.limit_amount &&
-                  !!limitData.amount_left &&
-                  Number(
-                    (limitData.limit_amount - limitData.amount_left).toFixed(2),
-                  )}
+                {!!limitData.limit_amount && !!limitData.amount_left
+                  ? Number(
+                      (limitData.limit_amount - limitData.amount_left).toFixed(
+                        2,
+                      ),
+                    )
+                  : '0'}
               </p>
             </li>
             <li className="play-limits__limit">
               <p className="play-limits__limit-title">{t('left_limit')}</p>
               <p className="play-limits__limit-total">
-                {user.currency} {limitData?.amount_left}
+                {user.currency}{' '}
+                {limitData?.amount_left || limitData.limit_amount}
               </p>
             </li>
           </ul>
         ) : (
           <p className="text-gray-400 mb-0">{t('limit_unset')}</p>
         )}
-        {limitData.future_limit_amount && limitData.future_limit_valid_from && (
-          <>
-            <hr className="mt-2 mb-3"></hr>
-            <p className="text-14 text-gray-800 mb-2">
-              <b>{t('future_limit_title')}</b>
-            </p>
-            <p className="text-14 text-gray-400 mb-2">
-              {t('future_limit_amount')}:&nbsp;
-              <b className="text-gray-800">
-                {user.currency} {limitData.future_limit_amount}
-              </b>
-            </p>
-            <p className="text-14 text-gray-400 mb-0">
-              {t('future_limit_valid_from')}:&nbsp;
-              <b className="text-gray-800">
-                {dayjs(new Date(limitData.future_limit_valid_from)).format(
-                  'YYYY-MM-DD',
-                )}
-              </b>
-            </p>
-          </>
-        )}
+        {!!limitData.future_limit_amount &&
+          !!limitData.future_limit_valid_from && (
+            <>
+              <hr className="mt-2 mb-3"></hr>
+              <p className="text-14 text-gray-800 mb-2">
+                <b>{t('future_limit_title')}</b>
+              </p>
+              <p className="text-14 text-gray-400 mb-2">
+                {t('future_limit_amount')}:&nbsp;
+                <b className="text-gray-800">
+                  {user.currency} {limitData.future_limit_amount}
+                </b>
+              </p>
+              <p className="text-14 text-gray-400 mb-0">
+                {t('future_limit_valid_from')}:&nbsp;
+                <b className="text-gray-800">
+                  {dayjs(new Date(limitData.future_limit_valid_from)).format(
+                    'YYYY-MM-DD',
+                  )}
+                </b>
+              </p>
+            </>
+          )}
         {!limitData.disabled && (
           <Accordion.Collapse eventKey={limitData.id}>
             <>
