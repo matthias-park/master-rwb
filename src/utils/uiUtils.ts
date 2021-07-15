@@ -5,7 +5,7 @@ import {
 } from '../types/UIConfig';
 import { ComponentName } from '../constants';
 import { HeaderRoute } from '../types/api/PageConfig';
-import { isDesktop } from 'react-device-detect';
+import { isWindows } from 'react-device-detect';
 
 export const changeBackdropVisibility = (visibility: boolean) => {
   const SHOW_CLASS = 'show';
@@ -19,15 +19,15 @@ export const changeBackdropVisibility = (visibility: boolean) => {
 
 export const changeBodyScroll = (enabledScroll: boolean) => {
   const DISABLED_SCROLL_CLASS = 'modal-open';
-  const DISABLED_SCROLL_CLASS_DESKTOP = 'modal-open-desktop';
+  const DISABLED_SCROLL_CLASS_WINDOWS = 'modal-open-windows';
   const classList = document.body.classList;
   if (enabledScroll) {
-    return isDesktop
-      ? classList.remove(DISABLED_SCROLL_CLASS, DISABLED_SCROLL_CLASS_DESKTOP)
+    return isWindows
+      ? classList.remove(DISABLED_SCROLL_CLASS, DISABLED_SCROLL_CLASS_WINDOWS)
       : classList.remove(DISABLED_SCROLL_CLASS);
   }
-  return isDesktop
-    ? classList.add(DISABLED_SCROLL_CLASS, DISABLED_SCROLL_CLASS_DESKTOP)
+  return isWindows
+    ? classList.add(DISABLED_SCROLL_CLASS, DISABLED_SCROLL_CLASS_WINDOWS)
     : classList.add(DISABLED_SCROLL_CLASS);
 };
 

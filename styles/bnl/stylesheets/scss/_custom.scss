@@ -17,7 +17,7 @@ body {
     @include media-breakpoint-down(lg) {
         padding: 0 20px;
     }
-    &.modal-open-desktop {
+    &.modal-open-windows {
       transform: translateX(-8px);
       padding-right: 80px !important;
       @media only screen and (max-width: 1920px) {

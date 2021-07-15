@@ -8,12 +8,12 @@ import useGTM from '../hooks/useGTM';
 import Link from '../components/Link';
 import LoginForm from './LoginForm';
 import clsx from 'clsx';
+import { useUIConfig } from '../hooks/useUIConfig';
 
 interface Props {
   dropdownClasses?: string;
   toggleClasses?: string;
   userLoading?: boolean;
-  toggleBackdrop: (active: boolean, ignoredCompoents: ComponentName[]) => void;
 }
 
 const RegistrationLink = () => {
@@ -32,18 +32,19 @@ const LoginDropdown = ({
   dropdownClasses,
   toggleClasses,
   userLoading,
-  toggleBackdrop,
 }: Props) => {
   const { t } = useI18n();
   const location = useLocation();
+  const { backdrop } = useUIConfig();
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const sendDataToGTM = useGTM();
   const registerRoute = useRoutePath(PagesName.RegisterPage, true);
   useEffect(() => {
     setShowDropdown(false);
   }, [location.pathname]);
+
   useEffect(() => {
-    toggleBackdrop(showDropdown, [ComponentName.Header]);
+    backdrop.toggle(showDropdown, [ComponentName.Header]);
   }, [showDropdown]);
 
   const toggleDropdown = isOpen => {
@@ -52,6 +53,7 @@ const LoginDropdown = ({
         event: 'LoginIntention',
       });
     }
+    backdrop.toggle(isOpen, [ComponentName.Header]);
     setShowDropdown(isOpen);
   };
 
