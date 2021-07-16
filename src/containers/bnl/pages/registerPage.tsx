@@ -175,11 +175,6 @@ const RegisterPage = () => {
     <main className="registration">
       <div className="reg-block">
         <FormProvider {...formMethods}>
-          <HelpBlock
-            title={'user_help_title'}
-            blocks={['faq', 'phone', 'email']}
-            className="default"
-          />
           {location?.state?.welcomeScreen && <RegWelcome />}
           {!!location?.state?.resCode && !!location.state.message && (
             <RegError
@@ -201,6 +196,11 @@ const RegisterPage = () => {
             />
           )}
         </FormProvider>
+        <HelpBlock
+          title={'user_help_title'}
+          blocks={['faq', 'phone', 'email']}
+          className="d-block default"
+        />
       </div>
     </main>
   );
