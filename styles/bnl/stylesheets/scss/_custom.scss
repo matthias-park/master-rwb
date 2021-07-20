@@ -293,13 +293,27 @@ a:hover {
   width: calc(100% + 70px);
   margin-left: -35px;
   $self: &;
+  &__content {
+    padding-right: 50px;
+  }
   &__toggle {
     width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: inherit;
+    border: none;
+  }
+  &__card {
+    width: 100%;
     padding: 10px 35px;
+    padding-right: 0;
     border: none;
     background: transparent;
     border-top: 1px solid $gray-100;
     border-bottom: 1px solid $gray-100;
+    @media (max-width: 400px){
+      padding-left: 10px;
+    }
     .icon-check {
       position: relative;
       color: $white;
@@ -315,20 +329,18 @@ a:hover {
     p {
       padding: 15px 35px;
     }
-    &.show {
-      + #{ $self }__icon {
-        transform: rotate(180deg);
-      }
-    }
   }
   &__icon {
     position: absolute;
-    top: 12px;
-    right: 7px;
+    right: 0;
+    margin-right: 10px;
     font-size: 30px;
     color: $gray-200;
     transition: transform 0.2s;
     pointer-events: none;
+    &.open {
+        transform: rotate(180deg);
+    }
   }
 }
 

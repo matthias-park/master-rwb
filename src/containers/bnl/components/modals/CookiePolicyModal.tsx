@@ -18,12 +18,13 @@ const CookiePolicyModal = () => {
   );
   const cookiesId = Object.keys(cookies.cookies);
   const sendDataToGTM = useGTM();
+  const [open, setOpen] = useState<string>('');
+
   const [cookieSettings, setCookieSettings] = useState<Cookies>(
     cookies.cookies,
   );
   const { disableModal } = useModal();
   const toggleCookie = (e: React.SyntheticEvent<EventTarget>, id: string) => {
-    e.stopPropagation();
     setCookieSettings({ ...cookieSettings, [id]: !cookieSettings[id] });
   };
   const isChecked = (id: string): boolean => {
@@ -61,14 +62,11 @@ const CookiePolicyModal = () => {
         <p className="text-gray-700">
           {jsxT('cookie_modal_text', { onClick: hideModal })}
         </p>
-        <Accordion defaultActiveKey="0" className="cookies-accordion mt-3">
+        <Accordion className="cookies-accordion mt-3">
           {cookiesId.map((id, index) =>
             id === 'accepted' ? null : (
               <div key={id} className="position-relative">
-                <Accordion.Toggle
-                  eventKey={index.toString()}
-                  className="cookies-accordion__toggle"
-                >
+                <div className="cookies-accordion__card">
                   <div className="d-flex align-items-center">
                     {id === 'functional' ? (
                       <i className="icon-check mx-3"></i>
@@ -76,23 +74,44 @@ const CookiePolicyModal = () => {
                       <CustomToggleCheck
                         id="checkbox_all"
                         checked={isChecked(id)}
-                        onClick={e => toggleCookie(e, id)}
+                        onClick={e => {
+                          toggleCookie(e, id);
+                        }}
                       ></CustomToggleCheck>
                     )}
-                    <div className="ml-3 text-left text-wrap">
-                      <h4 className="mb-0 text-14 weight-500 text-gray-800">
-                        {jsxT(`cookies_check_${id}_title`, {
-                          onClick: hideModal,
-                        })}
-                      </h4>
-                      <small className="text-gray-700">
-                        {jsxT(`cookies_check_${id}_short_desc`, {
-                          onClick: hideModal,
-                        })}
-                      </small>
-                    </div>
+
+                    <Accordion.Toggle
+                      onClick={e =>
+                        setOpen(
+                          index.toString() !== open ? index.toString() : '',
+                        )
+                      }
+                      eventKey={index.toString()}
+                      className="cookies-accordion__toggle ml-3 text-left text-wrap"
+                    >
+                      <div className="cookies-accordion__content">
+                        <h4 className="mb-0 text-14 weight-500 text-gray-800">
+                          {jsxT(`cookies_check_${id}_title`, {
+                            onClick: hideModal,
+                          })}
+                        </h4>
+                        <small className="text-gray-700">
+                          {jsxT(`cookies_check_${id}_short_desc`, {
+                            onClick: hideModal,
+                          })}
+                        </small>
+                      </div>
+
+                      <i
+                        className={
+                          `${open === index.toString() ? 'open' : ''}` +
+                          ' icon-down1' +
+                          ' cookies-accordion__icon'
+                        }
+                      ></i>
+                    </Accordion.Toggle>
                   </div>
-                </Accordion.Toggle>
+                </div>
                 <Accordion.Collapse
                   eventKey={index.toString()}
                   className="cookies-accordion__body"
@@ -101,7 +120,6 @@ const CookiePolicyModal = () => {
                     {jsxT(`cookies_check_${id}_desc`, { onClick: hideModal })}
                   </p>
                 </Accordion.Collapse>
-                <i className="icon-down1 cookies-accordion__icon"></i>
               </div>
             ),
           )}
