@@ -222,6 +222,10 @@ a:hover {
 .help-block {
   width: 306px;
   $self: &;
+  @include media-breakpoint-down(lg){
+    width: 100%;
+    max-width: none;
+  }
   &__title {
       font-weight: 500;
       margin-bottom: 16px;
@@ -470,11 +474,6 @@ a:hover {
       .right-sidebar {
         width: 100%;
         margin: 0 auto 50px auto;
-      }
-      .help-block {
-        display: block;
-        width: 100%;
-        max-width: 450px;
       }
   }
   @include media-breakpoint-down(md) {

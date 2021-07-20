@@ -130,7 +130,7 @@ const ContactUsPage = () => {
         )}
         {!!data && !isValidating && (
           <div className="d-flex flex-column flex-xl-row">
-            <div className="flex-grow-1 mr-0 mr-md-5">
+            <div className="flex-grow-1 mr-0 mr-xl-5">
               <h2 className="mb-4">{jsxT(data.title)}</h2>
               <small className="d-block mb-3">
                 {jsxT('questions_or_suggestions')}
