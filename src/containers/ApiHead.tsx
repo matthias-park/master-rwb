@@ -113,7 +113,7 @@ const ApiHead = () => {
             />
           );
         })}
-        <body className={bodyClassName} />
+        <body className={bodyClassName} translate="no" />
       </Helmet>
       {!!seoData?.hidden_h1 && (
         <h1 style={{ display: 'none' }}>{seoData.hidden_h1}</h1>
