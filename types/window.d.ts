@@ -9,7 +9,8 @@ export declare global {
       gtmId?: string;
       sentryDsn?: string;
       kambi?: {
-        bootstrap: string;
+        online: string;
+        retail?: string;
         api: string;
       };
       googleRecaptchaKey?: string;

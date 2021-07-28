@@ -236,7 +236,7 @@ const setCustomerSettings = ({
 };
 
 let kambiLock = false;
-const insertKambiBootstrap = async (): Promise<void> => {
+const insertKambiBootstrap = async (retail?: boolean): Promise<void> => {
   return new Promise(resolve => {
     if (kambiLock) return resolve();
     kambiLock = true;
@@ -245,10 +245,10 @@ const insertKambiBootstrap = async (): Promise<void> => {
     const scriptElement = document.createElement('script');
     scriptElement.setAttribute('type', 'text/javascript');
     scriptElement.defer = true;
-    scriptElement.setAttribute(
-      'src',
-      `${window.__config__.kambi?.bootstrap}?cb=${Date.now()}`,
-    );
+    const bootstrapUrl = retail
+      ? window.__config__.kambi.retail
+      : window.__config__.kambi.online;
+    scriptElement.setAttribute('src', `${bootstrapUrl}?cb=${Date.now()}`);
     document.head.appendChild(scriptElement);
     if (!window.KambiWidget) {
       const scriptElement = document.createElement('script');
@@ -334,7 +334,7 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
               containerRef.current.nextSibling,
             );
             updateWindowKambiConfig(kambiConfig);
-            insertKambiBootstrap();
+            insertKambiBootstrap(retail);
           });
         } else {
           const kambiContainer = document.getElementById(kambiId);
