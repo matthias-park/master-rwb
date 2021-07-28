@@ -50,7 +50,8 @@
         "host": "192.168.51.45",
         "port": 6379,
         "db": 12,
-        "prefix": "reactNodeProd-"
+        "prefix": "reactNodeProd-",
+        "password": "06f7wePTnYxIvwdPJESl4b"
       }
     }
   ],
