@@ -23,6 +23,7 @@ interface Props {
   title?: string;
   disableCopyPaste?: boolean;
   validation?: FormFieldValidation;
+  disableCheckMark?: boolean;
   tooltip?: string;
   toggleVisibility?: boolean;
   type?: string;
@@ -47,6 +48,7 @@ interface Props {
 interface UncontrolledProps extends FormControlProps {
   title?: string;
   validation?: FormFieldValidation;
+  disableCheckMark?: boolean;
   onValueChange?: (values: any) => void;
   format?: string | ((value: string) => string);
   allowEmptyFormatting?: boolean;
@@ -76,7 +78,7 @@ export const UncontrolledTextInput = React.forwardRef(
       <Form.Group
         className={clsx(
           props.isInvalid && 'has-error',
-          props.isValid && 'success',
+          props.isValid && !props.disableCheckMark && 'success',
           !!props.errorMsg && 'with-message',
         )}
       >
@@ -142,6 +144,7 @@ const TextInput = ({
   title,
   disableCopyPaste,
   validation,
+  disableCheckMark,
   tooltip,
   toggleVisibility,
   type = 'text',
@@ -204,6 +207,7 @@ const TextInput = ({
       isInvalid={hasErrors}
       isValid={isValid}
       validation={validation}
+      disableCheckMark={disableCheckMark}
       errorMsg={fieldState.error?.message}
       onBlur={() => {
         onBlur?.();
