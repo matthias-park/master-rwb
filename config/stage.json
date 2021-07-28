@@ -41,7 +41,13 @@
         "/assets/images/promo/mobile/profitboost/LIVEProfitBoost-Mobile_1@3x.png"
       ],
       "themeColor": "#000541",
-      "iconSizes": ["128", "192", "512"]
+      "iconSizes": ["128", "192", "512"],
+      "redis": {
+        "host": "192.168.109.106",
+        "port": 6379,
+        "db": 0,
+        "prefix": "reactNodeStage-"
+      }
     }
   ],
   "port": 3800,

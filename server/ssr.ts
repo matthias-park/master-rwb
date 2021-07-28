@@ -6,27 +6,33 @@ import {
   BUILD_FOLDER,
   PRERENDER_HEADER,
   BROWSER_KEEP_ALIVE,
-  HOLD_RENDERED_PAGE_INTERVAL,
   MAX_PRERENDER_PAGES,
 } from './constants';
 import logger from './logger';
-import { getCache } from './utils';
+import redisCache from './redisCache';
+import { cacheKeys } from './utils';
 
+let openTabs = 0;
 export const getRenderedPage = async (req: Request): Promise<string | null> => {
-  const cacheKey = req.url!;
-  const html = getCache(
-    cacheKey,
-    HOLD_RENDERED_PAGE_INTERVAL,
-    async () =>
-      await render(req).catch(err => {
-        logger.error(err);
-        return null;
-      }),
-  );
+  const cacheKey = `${cacheKeys(req.hostname).prerender}${req.url}`;
+  let html = await redisCache.get<string>(req, cacheKey);
+  if (!html && openTabs < MAX_PRERENDER_PAGES) {
+    openTabs++;
+    const profileId = `${req.hostname} - page rendered ${req.url}`;
+    logger.profile(profileId);
+    html = await render(req).catch(err => {
+      logger.error(err);
+      return null;
+    });
+    logger.profile(profileId);
+    openTabs--;
+    if (html) {
+      await redisCache.set(req, cacheKey, html);
+    }
+  }
   return html;
 };
 
-let openTabs = 0;
 let browser: Browser | null = null;
 let browserCloseTimeout: number = 0;
 export const render = async (req: Request) => {
@@ -37,11 +43,6 @@ export const render = async (req: Request) => {
       headless: true,
     });
   }
-  if (openTabs > MAX_PRERENDER_PAGES) {
-    throw new Error(`To many prerender requests - ${openTabs + 1} tabs open`);
-  }
-  logger.profile(`page rendered ${req.url}`);
-  openTabs++;
   const page = await browser.newPage();
   await page.setExtraHTTPHeaders({
     [PRERENDER_HEADER]: 'true',
@@ -119,7 +120,6 @@ export const render = async (req: Request) => {
   await page
     .waitForSelector('#page-loading-spinner', { hidden: true })
     .catch(async () => {
-      openTabs--;
       await page.close();
     });
   const cache = await page.evaluate(() => {
@@ -135,9 +135,7 @@ export const render = async (req: Request) => {
       '\\"',
     )}")`,
   );
-  openTabs--;
   await page.close();
-  logger.profile(`page rendered ${req.url}`);
   if (browserCloseTimeout) clearTimeout(browserCloseTimeout);
   browserCloseTimeout = setTimeout(async () => {
     if (browser) {

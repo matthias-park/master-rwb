@@ -46,7 +46,13 @@
       "googleRecaptchaKey": "6Lezp2oaAAAAADpwV6q_a2k7yVPD52Qb89Z2zFcR",
       "basicAuthEnabled": true,
       "themeColor": "#000541",
-      "iconSizes": ["128", "192", "512"]
+      "iconSizes": ["128", "192", "512"],
+      "redis": {
+        "host": "192.168.109.106",
+        "port": 6379,
+        "db": 0,
+        "prefix": "reactNodeTest-"
+      }
     }
   ],
   "port": 3805,

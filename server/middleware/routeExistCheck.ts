@@ -1,6 +1,6 @@
 import { Request, NextFunction, Response } from 'express';
-import { getRailsConstants } from '../utils';
 import { matchPath } from 'react-router-dom';
+import { getRailsConstants } from '../utils';
 
 const routeExistCheck = async (
   req: Request,

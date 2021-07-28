@@ -19,7 +19,7 @@ const logger = createLogger({
 });
 
 if (!DEVELOPMENT) {
-  logger.transports.push(
+  logger.add(
     new DailyRotationFile({
       filename: 'log/%DATE%.log',
       datePattern: 'YYYY-MM-DD',

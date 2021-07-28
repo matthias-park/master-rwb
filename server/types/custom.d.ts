@@ -1,3 +1,11 @@
+export interface RedisCache {
+  host: string;
+  port: number;
+  db: number;
+  prefix: string;
+  password?: string;
+}
+
 export interface FranchiseConfig {
   name: string;
   domains: {
@@ -8,6 +16,7 @@ export interface FranchiseConfig {
   theme: string;
   basicAuthEnabled: boolean;
   excludeBasicAuthFiles?: string[];
+  redis?: RedisCache;
 }
 declare global {
   namespace Express {
