@@ -63,9 +63,12 @@ app.use(middleware.routeExistCheck);
 
 app.get('*', async (req, res) => {
   if (shouldPrerender(req)) {
-    const html = await getRenderedPage(req);
-    if (html) {
-      return res.send(html);
+    const renderRes = await getRenderedPage(req);
+    if (renderRes.html) {
+      return res
+        .status(renderRes.status)
+        .location(renderRes.path)
+        .send(renderRes.html);
     }
   }
   const hostname = req.hostname.replace('www.', '');

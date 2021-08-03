@@ -52,7 +52,12 @@ const getSitemap = async (req: Request, res: Response) => {
         link => link.lang !== locale.lang,
       );
       for (const route of railsContants?.navigation_routes) {
-        if (route.hiddenSitemap || route.protected || route.redirectTo)
+        if (
+          route.hiddenSitemap ||
+          route.protected ||
+          route.redirectTo ||
+          route.id === 14
+        )
           continue;
         const localeLinks = otherLocaleLinks.map(link => ({
           ...link,

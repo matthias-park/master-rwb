@@ -10,17 +10,52 @@ import {
 } from './constants';
 import logger from './logger';
 import redisCache from './redisCache';
-import { cacheKeys } from './utils';
+import { cacheKeys, getRailsConstants } from './utils';
+
+const renderingRoute = async (req: Request) => {
+  const railsConstants = await getRailsConstants(req);
+  if (!req.locale) {
+    const selectLanguageRoute = railsConstants?.navigation_routes.find(
+      route => route.id === 20,
+    );
+    if (selectLanguageRoute?.path && req.path !== selectLanguageRoute.path) {
+      return { status: 301, path: selectLanguageRoute.path };
+    }
+  } else if (!req.pathExist) {
+    const pageNotFoundRoute = railsConstants?.navigation_routes.find(
+      path => path.id === 14,
+    );
+    if (pageNotFoundRoute?.path && req.path !== pageNotFoundRoute.path) {
+      const locale = req.locale ? `/${req.locale}` : '';
+      return { status: 404, path: `${locale}${pageNotFoundRoute.path}` };
+    }
+  } else if (req.redirectTo) {
+    const locale = req.locale ? `/${req.locale}` : '';
+    return { status: 301, path: `${locale}${req.redirectTo}` };
+  } else if (!req.path.startsWith(`/${req.locale}`)) {
+    return { status: 301, path: `/${req.locale}${req.path}` };
+  }
+  return { status: 200, path: req.path };
+};
+
+interface GetRenderedPage {
+  status: number;
+  path: string;
+  html: string | null;
+}
 
 let openTabs = 0;
-export const getRenderedPage = async (req: Request): Promise<string | null> => {
-  const cacheKey = `${cacheKeys(req.hostname).prerender}${req.url}`;
+export const getRenderedPage = async (
+  req: Request,
+): Promise<GetRenderedPage> => {
+  const route = await renderingRoute(req);
+  const cacheKey = `${cacheKeys(req.hostname).prerender}${route.path}`;
   let html = await redisCache.get<string>(req, cacheKey);
   if (!html && openTabs < MAX_PRERENDER_PAGES) {
     openTabs++;
-    const profileId = `${req.hostname} - page rendered ${req.url}`;
+    const profileId = `${req.hostname} - page rendered ${route.path}`;
     logger.profile(profileId);
-    html = await render(req).catch(err => {
+    html = await render(req, route.path).catch(err => {
       logger.error(err);
       return null;
     });
@@ -30,12 +65,12 @@ export const getRenderedPage = async (req: Request): Promise<string | null> => {
       await redisCache.set(req, cacheKey, html);
     }
   }
-  return html;
+  return { ...route, html };
 };
 
 let browser: Browser | null = null;
 let browserCloseTimeout: number = 0;
-export const render = async (req: Request) => {
+export const render = async (req: Request, pathname: string) => {
   if (!browser) {
     logger.info('Starting puppeteer');
     browser = await puppeteer.launch({
@@ -58,6 +93,7 @@ export const render = async (req: Request) => {
       return req.abort();
     }
     const blocklist = [
+      'google.com',
       'www.google-analytics.com',
       '/gtag/js',
       'ga.js',
@@ -100,7 +136,6 @@ export const render = async (req: Request) => {
     req.continue();
   });
 
-  const lang = req.url.split('/')?.[1] || '';
   const currentHostnameApi = req.franchise.domains
     .find(domain => domain.hostname === req.hostname.replace('www.', ''))
     ?.api?.replace('https://', '');
@@ -108,12 +143,12 @@ export const render = async (req: Request) => {
   if (currentHostnameApi) {
     await page.setCookie({
       name: 'user_locale',
-      value: lang,
+      value: req.locale || '',
       domain: currentHostnameApi,
     });
   }
 
-  const fullUrl = buildReqUrl(req);
+  const fullUrl = buildReqUrl(req, pathname);
   await page.goto(fullUrl, {
     waitUntil: ['networkidle0', 'domcontentloaded'],
   });
@@ -147,8 +182,8 @@ export const render = async (req: Request) => {
   return html;
 };
 
-const buildReqUrl = (req: Request) => {
-  var protocol = 'https';
+const buildReqUrl = (req: Request, pathname: string) => {
+  var protocol = 'http';
   const cfVisitorHeader = req.header('cf-visitor');
   if (cfVisitorHeader) {
     var match = cfVisitorHeader.match(/"scheme":"(http|https)"/);
@@ -162,6 +197,6 @@ const buildReqUrl = (req: Request) => {
     protocol +
     '://' +
     (req.headers['x-forwarded-host'] || req.headers['host']) +
-    req.url
+    pathname
   );
 };

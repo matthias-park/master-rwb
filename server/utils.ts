@@ -37,7 +37,7 @@ export const getRailsConstants = async (
         if (!data?.Data?.navigation_routes) return null;
         const navigation_routes = data.Data.navigation_routes.filter(
           route =>
-            ![14, 19].includes(route.id) &&
+            route.id !== 19 &&
             route.path !== '*' &&
             !route.externalLinkTranslation,
         );

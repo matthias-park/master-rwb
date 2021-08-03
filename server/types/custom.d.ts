@@ -22,6 +22,9 @@ declare global {
   namespace Express {
     export interface Request {
       franchise: FranchiseConfig;
+      locale?: string;
+      pathExist: boolean;
+      redirectTo?: string;
     }
   }
 }
