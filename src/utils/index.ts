@@ -89,7 +89,7 @@ export const cleanPostBody = (obj: { [key: string]: unknown }) =>
   }, {});
 
 export const errorHandler = (event: ErrorEvent) => {
-  if (event.error?.stack.includes('kambi-chunk')) {
+  if (event.error?.stack?.includes('kambi-chunk')) {
     const kambiErrorId = 'kambi-error-reload';
     const kambiErrorRetryCount = Lockr.get(kambiErrorId, 0) + 1;
     if (kambiErrorRetryCount < 3) {
