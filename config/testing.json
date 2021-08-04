@@ -53,6 +53,19 @@
         "port": 6379,
         "db": 0,
         "prefix": "reactNodeTest-"
+      },
+      "dateFormat": "YYYY-MM-DD",
+      "componentSettings": {
+        "login": {
+          "emailLogin": true
+        },
+        "modals": {
+          "TnC": true,
+          "ResponsibleGambling": true,
+          "ValidationFailed": true,
+          "CookiePolicy": true,
+          "AddBankAccount": true
+        }
       }
     }
   ],

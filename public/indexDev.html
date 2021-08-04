@@ -27,11 +27,12 @@
     <title></title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>You need to enable JavaScript to open this website.</noscript>
     <div id="root"></div>
     <div id="backdrop" class="bg-overlay"></div>
-    <div id="page-loading-spinner" class="page-loading-spinner">
+    <div id="page-loading-spinner" class="page-loading-spinner d-none">
       <img class="spinner-img" src="%PUBLIC_URL%/assets/loading-spinner.svg"/>
     </div>
+    <script>document.getElementById('page-loading-spinner').classList.remove('d-none')</script>
   </body>
 </html>

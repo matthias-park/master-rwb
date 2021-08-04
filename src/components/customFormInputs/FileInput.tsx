@@ -20,6 +20,12 @@ const FileInput = ({ id, rules, disabled, className, title }: Props) => {
     rules: rules,
     defaultValue: null,
   });
+
+  function removeFile() {
+    setFilename('');
+    field.onChange(null);
+  }
+
   return (
     <Form.Group>
       <Form.File
@@ -43,6 +49,11 @@ const FileInput = ({ id, rules, disabled, className, title }: Props) => {
         <Form.File.Label data-browse={t('file_upload_browse')}>
           {(!!field.value && filename) || title}
         </Form.File.Label>
+        {!!field.value && (
+          <span className="custom-file__remove" onClick={removeFile}>
+            <i className="icon-close"></i>
+          </span>
+        )}
       </Form.File>
     </Form.Group>
   );

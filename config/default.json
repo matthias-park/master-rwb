@@ -20,6 +20,19 @@
         "port": 6379,
         "db": 0,
         "prefix": "reactNodeStage-"
+      },
+      "dateFormat": "YYYY-MM-DD",
+      "componentSettings": {
+        "login": {
+          "emailLogin": true
+        },
+        "modals": {
+          "TnC": true,
+          "ResponsibleGambling": true,
+          "ValidationFailed": true,
+          "CookiePolicy": true,
+          "AddBankAccount": true
+        }
       }
     },
     {
@@ -31,6 +44,40 @@
         }
       ],
       "theme": "safeCasino"
+    },
+    {
+      "name": "strive",
+      "domains": [
+        {
+          "hostname": "strive.local",
+          "api": "https://strive-dev.tglab.dev"
+        }
+      ],
+      "theme": "strive",
+      "geoComplyKey": "ShzolMaAK",
+      "dateFormat": "MM-DD-YYYY",
+      "redis": {
+        "host": "192.168.109.106",
+        "port": 6379,
+        "db": 0,
+        "prefix": "reactNodeStage-"
+      },
+      "componentSettings": {
+        "v2Auth": "wss://strive-ws.tglab.dev",
+        "userIdleTimeout": 30,
+        "login": {
+          "loginCookiesAccept": true
+        },
+        "modals": {
+          "TnC": true,
+          "ResponsibleGambling": false,
+          "ValidationFailed": true,
+          "CookiePolicy": true,
+          "AddBankAccount": true,
+          "GeoComply": true,
+          "PlayerDisabled": true
+        }
+      }
     }
   ],
   "port": 3800

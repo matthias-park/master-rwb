@@ -48,6 +48,55 @@
         "port": 6379,
         "db": 0,
         "prefix": "reactNodeStage-"
+      },
+      "dateFormat": "YYYY-MM-DD",
+      "componentSettings": {
+        "login": {
+          "emailLogin": true
+        },
+        "modals": {
+          "TnC": true,
+          "ResponsibleGambling": true,
+          "ValidationFailed": true,
+          "CookiePolicy": true,
+          "AddBankAccount": true
+        }
+      }
+    },
+    {
+      "name": "strive",
+      "basicAuthEnabled": true,
+      "domains": [
+        {
+          "hostname": "strive-rj.tglab.dev",
+          "api": "https://strive-dev.tglab.dev"
+        }
+      ],
+      "themeColor": "#000541",
+      "theme": "strive",
+      "geoComplyKey": "ShzolMaAK",
+      "redis": {
+        "host": "192.168.109.106",
+        "port": 6379,
+        "db": 0,
+        "prefix": "reactNodeStage-"
+      },
+      "dateFormat": "MM-DD-YYYY",
+      "componentSettings": {
+        "v2Auth": "wss://strive-ws.tglab.dev",
+        "userIdleTimeout": 30,
+        "login": {
+          "loginCookiesAccept": true
+        },
+        "modals": {
+          "TnC": true,
+          "ResponsibleGambling": false,
+          "ValidationFailed": true,
+          "CookiePolicy": true,
+          "AddBankAccount": true,
+          "GeoComply": true,
+          "PlayerDisabled": true
+        }
       }
     }
   ],

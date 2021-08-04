@@ -7,6 +7,10 @@ export interface NET_USER {
   Code: number;
   Message: string;
   error?: string;
+  currency?: string;
+}
+export interface TwoFactorAuth {
+  authentication_required: boolean;
 }
 
 export enum VALIDATOR_STATUS {
@@ -19,13 +23,13 @@ export enum VALIDATOR_STATUS {
 
 export interface UserStatus {
   loading: boolean;
-  logout?: true;
+  logout?: boolean;
   logged_in: boolean;
   login_click?: boolean;
   token?: string;
   id?: number;
   name?: string;
-  balance?: string;
+  balance?: number;
   currency?: string;
   email?: string;
   first_name?: string;
@@ -35,6 +39,7 @@ export interface UserStatus {
   barcode?: string;
   max_deposit?: number | null;
   tnc_required?: boolean;
+  authentication_enabled?: boolean;
 }
 
 export interface UserBankAccount {

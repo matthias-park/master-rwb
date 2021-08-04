@@ -53,6 +53,52 @@
         "db": 12,
         "prefix": "reactNodeProd-",
         "password": "06f7wePTnYxIvwdPJESl4b"
+      },
+      "dateFormat": "YYYY-MM-DD",
+      "componentSettings": {
+        "login": {
+          "emailLogin": true
+        },
+        "modals": {
+          "TnC": true,
+          "ResponsibleGambling": true,
+          "ValidationFailed": true,
+          "CookiePolicy": true,
+          "AddBankAccount": true
+        }
+      }
+    },
+    {
+      "name": "strive",
+      "basicAuthEnabled": true,
+      "domains": [
+        {
+          "hostname": "demo.strivegaming.us",
+          "api": "https://demo-api.strivegaming.us"
+        }
+      ],
+      "themeColor": "#000541",
+      "theme": "strive",
+      "geoComplyKey": "ShzolMaAK",
+      "redis": {
+        "host": "192.168.86.41",
+        "port": 6379,
+        "db": 12,
+        "prefix": "reactNodeProd-",
+        "password": "cua0AqzLrrrcPfPq6O"
+      },
+      "dateFormat": "MM-DD-YYYY",
+      "componentSettings": {
+        "v2Auth": "wss://demo-wss.strivegaming.us",
+        "modals": {
+          "TnC": true,
+          "ResponsibleGambling": false,
+          "ValidationFailed": true,
+          "CookiePolicy": true,
+          "AddBankAccount": true,
+          "GeoComply": true,
+          "PlayerDisabled": true
+        }
       }
     }
   ],

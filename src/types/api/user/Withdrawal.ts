@@ -4,6 +4,7 @@ export interface Withdrawal {
   requests?: Request[];
   info: string;
   default_account?: DefaultAccount;
+  accounts?: DefaultAccount[];
 }
 
 export interface DefaultAccount {

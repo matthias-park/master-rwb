@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ResponsibleGamblingModal from './components/modals/ResponsibleGamblingModal';
 import CookiePolicyModal from './components/modals/CookiePolicyModal';
 import AddBankAccountModal from './components/modals/AddBankAccountModal';
@@ -8,8 +8,10 @@ import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { removeFalsyFromObject } from '../../utils/index';
 import ValidationFailedModal from './components/modals/ValidationFailedModal';
 import { useI18n } from '../../hooks/useI18n';
-import { useModal } from '../../hooks/useModal';
 import { ComponentName } from '../../constants';
+import useGTM from '../../hooks/useGTM';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../state';
 
 const addBankAccountSubmit = async data => {
   removeFalsyFromObject(data);
@@ -22,7 +24,18 @@ const addBankAccountSubmit = async data => {
 
 const Modals = () => {
   const { hasTranslations } = useI18n();
-  const { activeModal } = useModal();
+  const sendDataToGTM = useGTM();
+  const activeModal = useSelector((state: RootState) => state.modals[0]);
+
+  useEffect(() => {
+    if (activeModal && typeof activeModal === 'string') {
+      sendDataToGTM({
+        'tglab.ActiveModal': activeModal,
+        event: 'ModalActiveChange',
+      });
+    }
+  }, [activeModal]);
+
   if (!hasTranslations) {
     return null;
   }

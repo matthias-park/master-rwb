@@ -47,7 +47,7 @@ export interface PostOptions {
 
 export const postApi = <T>(
   url: string,
-  body?: { [key: string]: number | string | Blob | boolean },
+  body?: { [key: string]: number | string | Blob | boolean | undefined | null },
   options: PostOptions = {},
 ): Promise<T> => {
   const config: RequestInit = {

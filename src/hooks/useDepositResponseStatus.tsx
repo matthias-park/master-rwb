@@ -23,6 +23,7 @@ const useDepositResponseStatus = () => {
   const history = useHistory();
   const depositBaseUrl = useRoutePath(PagesName.DepositPage, true);
   const responseLoading = bankResponse === 'loading';
+  const responseCanceled = bankResponse === 'cancel';
   const [id, setId] = useLocalStorage<number | string | null>(
     'deposit_id',
     null,
@@ -50,7 +51,7 @@ const useDepositResponseStatus = () => {
   });
 
   useEffect(() => {
-    if (bankResponse && bankResponse !== 'loading' && !state) {
+    if (bankResponse && !responseLoading && !responseCanceled && !state) {
       history.replace(depositBaseUrl);
     }
   }, [bankResponse]);
@@ -75,9 +76,9 @@ const useDepositResponseStatus = () => {
       status = data.Code;
     }
     if (depositStatus === DepositStatus.Timeout) status = depositStatus;
-
+    if (responseCanceled) status = DepositStatus.Canceled;
     if (
-      responseLoading &&
+      (responseLoading || responseCanceled) &&
       (status !== depositStatus || status === DepositStatus.Timeout)
     ) {
       setDepositStatus(status);
@@ -89,6 +90,7 @@ const useDepositResponseStatus = () => {
         let newDepositPath = 'error';
         if (status === DepositStatus.Confirmed) newDepositPath = 'success';
         if (status === DepositStatus.Rejected) newDepositPath = 'rejected';
+        if (status === DepositStatus.Canceled) newDepositPath = 'canceled';
         setId(null);
         const newPathname = pathname.replace(bankResponse, newDepositPath);
         history.replace(newPathname, {

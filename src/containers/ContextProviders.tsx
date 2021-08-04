@@ -7,7 +7,6 @@ import { SWRConfig } from 'swr';
 import { AuthProvider } from '../hooks/useAuth';
 import { ConfigProvider, useConfig } from '../hooks/useConfig';
 import { I18nProvider } from '../hooks/useI18n';
-import { ModalProvider } from '../hooks/useModal';
 import { UIConfigProvider } from '../hooks/useUIConfig';
 import { ConfigLoaded } from '../types/Config';
 import { SwrFetcherConfig } from '../utils/apiUtils';
@@ -59,6 +58,12 @@ const LoadableRecaptcha = loadable(
       .then(component => component.CaptchaProvider)
       .catch(() => 'div') as Promise<DefaultComponent<unknown>>,
 );
+const LoadableGeoComply = loadable(
+  () =>
+    import('../hooks/useGeoComply')
+      .then(component => component.GeoComplyProvider)
+      .catch(() => 'div') as Promise<DefaultComponent<unknown>>,
+);
 
 const ContextProviders = ({ children }: Props) => {
   const providers: Provider[] = [
@@ -70,10 +75,10 @@ const ContextProviders = ({ children }: Props) => {
     AuthProvider,
     HelmetProvider,
     BrowserRouterProvider,
-    ModalProvider,
     UIConfigProvider,
     !!window.__config__.googleRecaptchaKey && LoadableRecaptcha,
     !!window.__config__.kambi && LoadableKambiProvider,
+    !!window.__config__.geoComplyKey && LoadableGeoComply,
   ];
 
   return (

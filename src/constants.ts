@@ -1,5 +1,5 @@
 import RailsApiResponse from './types/api/RailsApiResponse';
-
+export const DevEnv = process.env.TARGET_ENV === 'development';
 export const TestEnv = process.env.TARGET_ENV === 'test';
 export enum ComponentName {
   Header,
@@ -18,6 +18,8 @@ export enum ComponentName {
   ValidationFailedModal = 'validationFailedModal',
   TermsAndConditionsModal = 'termsAndConditionsModal',
   CookiesModal = 'cookiesModal',
+  GeoComplyModal = 'geoComplyModal',
+  PlayerDisabledModal = 'playerDisabledModal',
 }
 
 export const ModalPriority = {
@@ -55,6 +57,7 @@ export enum PagesName {
   LoginPage = 26,
   TermsAndConditionsPage = 27,
   SportsPlayRetailPage = 28,
+  RequiredDocuments = 29,
 }
 
 export enum FormFieldValidation {
@@ -450,8 +453,16 @@ export const VALIDATIONS = {
       ).length > 2
     );
   },
+  validDateFormat: (dayjs: any, value: string = '') => {
+    if (!value) return false;
+    return dayjs(value, franchiseDateFormat, true).isValid();
+  },
+  over_21: (dayjs: any, value: string = '') => {
+    if (!value) return false;
+    const age = dayjs(value, franchiseDateFormat).add(21, 'year');
+    return dayjs().isAfter(age);
+  },
 };
-
 export const PAGES_WITH_CAPTCHA_ICON = [
   PagesName.RegisterPage,
   PagesName.ContactUsPage,
@@ -463,3 +474,9 @@ export const CONTENT_PAGES = [
   PagesName.FaqPage,
   PagesName.ResponsibleGamingPage,
 ];
+
+export const franchiseDateFormat = window.__config__.dateFormat || 'YYYY-MM-DD';
+
+export enum CustomWindowEvents {
+  ResetIdleTimer = 'resetIdleTimer',
+}

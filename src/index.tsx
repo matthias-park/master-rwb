@@ -6,10 +6,11 @@ import * as ReactDOM from 'react-dom';
 import App from './containers/App';
 import * as Sentry from '@sentry/react';
 import { errorHandler } from './utils';
+import { DevEnv } from './constants';
 // import { Workbox } from 'workbox-window';
 // import Lockr from 'lockr';
 
-if (process.env.TARGET_ENV !== 'development' && window.__config__.sentryDsn) {
+if (!DevEnv && window.__config__.sentryDsn) {
   Sentry.init({
     dsn: window.__config__.sentryDsn,
     environment: process.env.TARGET_ENV,

@@ -82,7 +82,7 @@ export const clearUserLocalStorage = () => {
 
 export const cleanPostBody = (obj: { [key: string]: unknown }) =>
   Object.entries(obj).reduce((obj, [key, value]) => {
-    if (!key.includes('temp_field_')) {
+    if (!key.includes('temp_field_') && value != null) {
       obj[key] = typeof value === 'string' ? value.trim() : value;
     }
     return obj;

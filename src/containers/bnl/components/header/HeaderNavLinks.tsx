@@ -54,7 +54,6 @@ export const HeaderNavClassicLink = ({
   const currentLinkActive = active?.includes(
     `${!desktopWidth ? 'hover:' : ''}${data.name}`,
   );
-
   useEffect(() => {
     let timer: number | undefined;
     if (desktopWidth) {

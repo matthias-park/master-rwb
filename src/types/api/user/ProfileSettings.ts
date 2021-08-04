@@ -33,6 +33,7 @@ export interface SettingsField {
   visible?: boolean;
   disabled?: boolean;
   value?: string | number;
+  formatting?: 'currency' | 'hour' | 'date' | 'none';
 }
 
 export enum SettingsFieldStyle {

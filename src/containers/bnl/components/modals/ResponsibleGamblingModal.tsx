@@ -8,16 +8,12 @@ import { stringToMiliseconds } from '../../../../utils/index';
 import { ComponentName, PagesName } from '../../../../constants';
 import { useModal } from '../../../../hooks/useModal';
 import { useAuth } from '../../../../hooks/useAuth';
-import { usePrevious } from '../../../../hooks';
 import Link from '../../../../components/Link';
 import { useRoutePath } from '../../../../hooks/index';
 
 const ResponsibleGamblingModal = () => {
   const { user } = useAuth();
   const { jsxT, t } = useI18n();
-  const prevUser = usePrevious(
-    user.tnc_required !== undefined ? user.logged_in : false,
-  );
   const intervalRef = useRef(0);
   const { activeModal, enableModal, disableModal } = useModal();
   const modalActive = activeModal === ComponentName.ResponsibleGamblingModal;
@@ -34,11 +30,7 @@ const ResponsibleGamblingModal = () => {
       !(user.tnc_required ?? true) &&
       interval
     ) {
-      if (user.logged_in && !prevUser && user.login_click) {
-        setModal();
-      } else {
-        intervalRef.current = setInterval(setModal, interval);
-      }
+      intervalRef.current = setInterval(setModal, interval);
     }
     return () => clearInterval(intervalRef.current);
   }, [modalActive, user]);

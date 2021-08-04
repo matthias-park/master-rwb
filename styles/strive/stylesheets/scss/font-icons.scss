@@ -1,0 +1,572 @@
+@font-face {
+    font-family: 'icomoon';
+    src:  url('../fonts/icons/fonts/icomoon.eot?jv2j9t');
+    src:  url('../fonts/icons/fonts/icomoon.eot?jv2j9t#iefix') format('embedded-opentype'),
+      url('../fonts/icons/fonts/icomoon.ttf?jv2j9t') format('truetype'),
+      url('../fonts/icons/fonts/icomoon.woff?jv2j9t') format('woff'),
+      url('../fonts/icons/fonts/icomoon.svg?jv2j9t#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  [class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+  
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .icon-our-games .path1:before {
+    content: "\e900";
+    color: rgb(0, 175, 67);
+  }
+  .icon-our-games .path2:before {
+    content: "\e901";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-play-in-a-shop .path1:before {
+    content: "\e902";
+    color: rgb(0, 175, 67);
+  }
+  .icon-play-in-a-shop .path2:before {
+    content: "\e903";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-results .path1:before {
+    content: "\e904";
+    color: rgb(0, 175, 67);
+  }
+  .icon-results .path2:before {
+    content: "\e905";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-account-formulas .path1:before {
+    content: "\e906";
+    color: rgb(0, 175, 67);
+  }
+  .icon-account-formulas .path2:before {
+    content: "\e907";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-win .path1:before {
+    content: "\e908";
+    color: rgb(0, 175, 67);
+  }
+  .icon-win .path2:before {
+    content: "\e909";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-play-online .path1:before {
+    content: "\e90a";
+    color: rgb(0, 175, 67);
+  }
+  .icon-play-online .path2:before {
+    content: "\e90b";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-draw-games .path1:before {
+    content: "\e90c";
+    color: rgb(0, 175, 67);
+  }
+  .icon-draw-games .path2:before {
+    content: "\e90d";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-scratch-games .path1:before {
+    content: "\e90e";
+    color: rgb(0, 175, 67);
+  }
+  .icon-scratch-games .path2:before {
+    content: "\e90f";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-continious-play .path1:before {
+    content: "\e910";
+    color: rgb(0, 0, 0);
+  }
+  .icon-continious-play .path2:before {
+    content: "\e911";
+    margin-left: -1em;
+    color: rgb(0, 175, 67);
+  }
+  .icon-promo .path1:before {
+    content: "\e912";
+    color: rgb(0, 175, 67);
+  }
+  .icon-promo .path2:before {
+    content: "\e913";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-404 .path1:before {
+    content: "\e914";
+    color: rgb(0, 175, 67);
+  }
+  .icon-404 .path2:before {
+    content: "\e915";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-flip-phone .path1:before {
+    content: "\e916";
+    color: rgb(0, 175, 67);
+  }
+  .icon-flip-phone .path2:before {
+    content: "\e917";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-send-mail .path1:before {
+    content: "\e918";
+    color: rgb(0, 175, 67);
+  }
+  .icon-send-mail .path2:before {
+    content: "\e919";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-payment-of-wins .path1:before {
+    content: "\e91a";
+    color: $brand-text;
+  }
+  .icon-payment-of-wins .path2:before {
+    content: "\e91b";
+    margin-left: -1em;
+    color: $brand-light;
+  }
+  .icon-food .path1:before {
+    content: "\e91c";
+    color: rgb(0, 175, 67);
+  }
+  .icon-food .path2:before {
+    content: "\e91d";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-newspaper .path1:before {
+    content: "\e91e";
+    color: rgb(0, 175, 67);
+  }
+  .icon-newspaper .path2:before {
+    content: "\e91f";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-gasstation .path1:before {
+    content: "\e920";
+    color: rgb(0, 175, 67);
+  }
+  .icon-gasstation .path2:before {
+    content: "\e921";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-diverse .path1:before {
+    content: "\e922";
+    color: rgb(0, 175, 67);
+  }
+  .icon-diverse .path2:before {
+    content: "\e923";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-player-account .path1:before {
+    content: "\e924";
+    color: rgb(0, 175, 67);
+  }
+  .icon-player-account .path2:before {
+    content: "\e925";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-financial-transactions .path1:before {
+    content: "\e926";
+    color: rgb(0, 175, 67);
+  }
+  .icon-financial-transactions .path2:before {
+    content: "\e927";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-personal-data .path1:before {
+    content: "\e928";
+    color: rgb(0, 175, 67);
+  }
+  .icon-personal-data .path2:before {
+    content: "\e929";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-become-a-member .path1:before {
+    content: "\e92a";
+    color: rgb(0, 175, 67);
+  }
+  .icon-become-a-member .path2:before {
+    content: "\e92b";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-games-wins-and-results .path1:before {
+    content: "\e92c";
+    color: rgb(0, 175, 67);
+  }
+  .icon-games-wins-and-results .path2:before {
+    content: "\e92d";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-notifications .path1:before {
+    content: "\e92e";
+    color: rgb(0, 175, 67);
+  }
+  .icon-notifications .path2:before {
+    content: "\e92f";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-lock .path1:before {
+    content: "\e930";
+    color: rgb(0, 175, 67);
+  }
+  .icon-lock .path2:before {
+    content: "\e931";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-stop .path1:before {
+    content: "\e932";
+    color: rgb(0, 175, 67);
+  }
+  .icon-stop .path2:before {
+    content: "\e933";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-id-card .path1:before {
+    content: "\e934";
+    color: rgb(0, 175, 67);
+  }
+  .icon-id-card .path2:before {
+    content: "\e935";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-gifts .path1:before {
+    content: "\e936";
+    color: rgb(0, 175, 67);
+  }
+  .icon-gifts .path2:before {
+    content: "\e937";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-gear .path1:before {
+    content: "\e938";
+    color: rgb(0, 175, 67);
+  }
+  .icon-gear .path2:before {
+    content: "\e939";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-qr .path1:before {
+    content: "\e93a";
+    color: rgb(0, 175, 67);
+  }
+  .icon-qr .path2:before {
+    content: "\e93b";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-how-to-subscribe .path1:before {
+    content: "\e93c";
+    color: rgb(0, 175, 67);
+  }
+  .icon-how-to-subscribe .path2:before {
+    content: "\e93d";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-direct-debit .path1:before {
+    content: "\e93e";
+    color: rgb(0, 175, 67);
+  }
+  .icon-direct-debit .path2:before {
+    content: "\e93f";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-grants .path1:before {
+    content: "\e940";
+    color: rgb(0, 175, 67);
+  }
+  .icon-grants .path2:before {
+    content: "\e941";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-getting-gains .path1:before {
+    content: "\e942";
+    color: rgb(0, 175, 67);
+  }
+  .icon-getting-gains .path2:before {
+    content: "\e943";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-taxed .path1:before {
+    content: "\e944";
+    color: rgb(0, 175, 67);
+  }
+  .icon-taxed .path2:before {
+    content: "\e945";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-sponsoring .path1:before {
+    content: "\e946";
+    color: rgb(0, 175, 67);
+  }
+  .icon-sponsoring .path2:before {
+    content: "\e947";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-mission .path1:before {
+    content: "\e948";
+    color: rgb(0, 175, 67);
+  }
+  .icon-mission .path2:before {
+    content: "\e949";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-security .path1:before {
+    content: "\e94a";
+    color: rgb(0, 175, 67);
+  }
+  .icon-security .path2:before {
+    content: "\e94b";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-app .path1:before {
+    content: "\e94c";
+    color: rgb(0, 175, 67);
+  }
+  .icon-app .path2:before {
+    content: "\e94d";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-responsibly .path1:before {
+    content: "\e94e";
+    color: rgb(0, 175, 67);
+  }
+  .icon-responsibly .path2:before {
+    content: "\e94f";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-about .path1:before {
+    content: "\e950";
+    color: rgb(0, 175, 67);
+  }
+  .icon-about .path2:before {
+    content: "\e951";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-check:before,
+  .icon-success:before {
+    content: "\e952";
+  }
+  .icon-date-navigation:before {
+    content: "\e953";
+  }
+  .icon-exclamation:before,
+  .icon-danger:before,
+  .icon-info:before {
+    content: "\e954";
+  }
+  .icon-location:before {
+    content: "\e955";
+  }
+  .icon-lock1:before {
+    content: "\e956";
+  }
+  .icon-mail:before {
+    content: "\e957";
+  }
+  .icon-number:before {
+    content: "\e958";
+  }
+  .icon-phone:before {
+    content: "\e959";
+  }
+  .icon-phone-mobile:before {
+    content: "\e95a";
+  }
+  .icon-questions:before {
+    content: "\e95b";
+  }
+  .icon-redirect:before {
+    content: "\e95c";
+  }
+  .icon-results2:before {
+    content: "\e95d";
+  }
+  .icon-settings:before {
+    content: "\e95e";
+  }
+  .icon-thumbs:before {
+    content: "\e95f";
+  }
+  .icon-tooltip:before {
+    content: "\e960";
+  }
+  .icon-account:before {
+    content: "\e961";
+  }
+  .icon-add-action-1:before {
+    content: "\e962";
+  }
+  .icon-card:before {
+    content: "\e963";
+  }
+  .icon-close:before {
+    content: "\e964";
+  }
+  .icon-down:before {
+    content: "\e965";
+  }
+  .icon-download:before {
+    content: "\e966";
+  }
+  .icon-favorite:before {
+    content: "\e967";
+  }
+  .icon-last-bulletin:before {
+    content: "\e968";
+  }
+  .icon-left:before {
+    content: "\e969";
+  }
+  .icon-menu:before {
+    content: "\e96a";
+  }
+  .icon-menu-close:before {
+    content: "\e96b";
+  }
+  .icon-quick-pick:before {
+    content: "\e96c";
+  }
+  .icon-reset:before {
+    content: "\e96d";
+  }
+  .icon-right:before {
+    content: "\e96e";
+  }
+  .icon-up:before {
+    content: "\e96f";
+  }
+  .icon-add:before {
+    content: "\e970";
+  }
+  .icon-arrow-label .path1:before {
+    content: "\e971";
+    color: rgb(255, 255, 255);
+  }
+  .icon-arrow-label .path2:before {
+    content: "\e972";
+    margin-left: -1em;
+    color: rgb(0, 0, 0);
+  }
+  .icon-calendar-d:before {
+    content: "\e973";
+  }
+  .icon-calendar-m:before {
+    content: "\e974";
+  }
+  .icon-delete:before {
+    content: "\e975";
+  }
+  .icon-down1:before {
+    content: "\e976";
+  }
+  .icon-eye-off:before {
+    content: "\e977";
+  }
+  .icon-eye-on:before {
+    content: "\e978";
+  }
+  .icon-left1:before {
+    content: "\e979";
+  }
+  .icon-maximise:before {
+    content: "\e97a";
+  }
+  .icon-right1:before {
+    content: "\e97b";
+  }
+  .icon-search-main:before {
+    content: "\e97c";
+  }
+  .icon-search-nav:before {
+    content: "\e97d";
+  }
+  .icon-statistics:before {
+    content: "\e97e";
+  }
+  .icon-stop1:before {
+    content: "\e97f";
+  }
+  .icon-up1:before {
+    content: "\e980";
+  }
+  .icon-video:before {
+    content: "\e981";
+  }
+  .icon-mail2:before {
+    content: "\e982";
+  }
+  .icon-facebook:before {
+    content: "\e983";
+  }
+  .icon-youtube:before {
+    content: "\e984";
+  }
+  .icon-twitter:before {
+    content: "\e985";
+  }
+  .icon-nsta:before {
+    content: "\e986";
+  }
+  .icon-linkedin:before {
+    content: "\e987";
+  }
+  .icon-clock:before {
+    content: "\e988";
+  }
+  .icon-cookies:before {
+    content: "\e989";
+  }
+  
+  
+  

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import LoginForm from '../../LoginForm';
 import { useI18n } from '../../../hooks/useI18n';
 import { useConfig } from '../../../hooks/useConfig';
 import { useRoutePath } from '../../../hooks/index';
@@ -8,6 +7,7 @@ import Link from '../../../components/Link';
 import { useHistory, useLocation } from 'react-router';
 import { useAuth } from '../../../hooks/useAuth';
 import Spinner from 'react-bootstrap/Spinner';
+import LoginForm from '../../LoginForm';
 
 const LoginPage = () => {
   const { t } = useI18n();

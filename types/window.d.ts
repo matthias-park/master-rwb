@@ -1,4 +1,5 @@
 import { AddToast } from 'react-toast-notifications';
+import { ComponentSettings } from '../src/types/ComponentSettings';
 import KambiConfig, { CustomerSettings } from '../src/types/KambiConfig';
 
 export declare global {
@@ -14,6 +15,9 @@ export declare global {
         api: string;
       };
       googleRecaptchaKey?: string;
+      geoComplyKey?: string;
+      dateFormat?: string;
+      componentSettings?: ComponentSettings;
     };
     toast?: AddToast;
     _wbUpdate?: boolean;
@@ -22,5 +26,6 @@ export declare global {
     _kc?: KambiConfig;
     _kbc?: { dispose: any };
     KambiWidget?: { ready: Promise<any> };
+    GeoComply?: { Client: any };
   }
 }

@@ -184,6 +184,7 @@ const WithdrawalPage = () => {
         'tglab.withdrawal.id': id,
       });
       mutate();
+      updateUser();
       window.scrollTo(0, 0);
       return setSubmitResponse({
         success: response.Success,
@@ -194,13 +195,13 @@ const WithdrawalPage = () => {
   );
   const requestWithdrawal = useCallback(
     async (amount: number) => {
-      setWithdrawalLoading(true);
       if (!data?.Data.default_account) {
         return addToast('account not found for withdrawal', {
           appearance: 'error',
           autoDismiss: true,
         });
       }
+      setWithdrawalLoading(true);
       const response = await postApi<RailsApiResponse<WithdrawalConfirmation>>(
         '/railsapi/v1/withdrawals',
         {

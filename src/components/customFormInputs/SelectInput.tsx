@@ -36,6 +36,7 @@ const SelectInput = ({
       },
     },
   });
+  const { ref, ...fieldWithoutRef } = field;
 
   return (
     <Form.Group
@@ -46,12 +47,11 @@ const SelectInput = ({
     >
       <div className="form-control-wrp">
         <Form.Control
-          {...field}
+          {...fieldWithoutRef}
           as="select"
           disabled={disabled}
           isInvalid={!!fieldState.error}
           size={size}
-          type="text"
           placeholder=" "
         >
           {!defaultValue && title && (

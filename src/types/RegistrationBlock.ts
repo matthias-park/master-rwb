@@ -10,7 +10,8 @@ export interface OnlineFormBlockField {
     | 'checkbox'
     | 'number'
     | 'email'
-    | 'postal_code';
+    | 'postal_code'
+    | 'select';
   required?: boolean;
   validate?: (value: string) => boolean | string | Promise<boolean | string>;
   triggerId?: string;
@@ -18,9 +19,12 @@ export interface OnlineFormBlockField {
   inputFormatting?: {
     format?: string | ((value: string) => string);
     allowEmptyFormatting?: boolean;
-    mask?: string;
+    mask?: string | string[];
+    useFormatted?: boolean;
   };
   disableCopyPaste?: boolean;
+  valueAs?: (value: string) => unknown;
+  selectValues?: { value: string | number; text: string; default?: boolean }[];
 }
 
 export interface OnlineFormBlock {

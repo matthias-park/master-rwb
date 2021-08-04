@@ -34,10 +34,11 @@ interface Props {
   maskedInput?: {
     format?: string | ((value: string) => string);
     allowEmptyFormatting?: boolean;
-    mask?: string;
+    mask?: string | string[];
     thousandSeparator?: boolean;
     prefix?: string;
     allowNegative?: boolean;
+    useFormatted?: boolean;
   };
   onEnterPress?: () => void;
   autoComplete?: string;
@@ -49,7 +50,7 @@ interface UncontrolledProps extends FormControlProps {
   onValueChange?: (values: any) => void;
   format?: string | ((value: string) => string);
   allowEmptyFormatting?: boolean;
-  mask?: string;
+  mask?: string | string[];
   tooltip?: string;
   toggleVisibility?: boolean;
   prefix?: string;
@@ -223,7 +224,9 @@ const TextInput = ({
       onValueChange={
         maskedInput
           ? values => {
-              field.onChange?.(values.value);
+              field.onChange?.(
+                maskedInput.useFormatted ? values.formattedValue : values.value,
+              );
             }
           : undefined
       }

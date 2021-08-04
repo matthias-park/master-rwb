@@ -1,73 +1,22 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { ComponentName, ModalPriority } from '../constants';
-import { sortAscending } from '../utils';
-import useGTM from './useGTM';
+import { useDispatch, useSelector } from 'react-redux';
+import { ComponentName } from '../constants';
+import { RootState } from '../state';
+import { disableModal, enableModal } from '../state/reducers/modals';
 
-type ModalContextState = ComponentName[];
 interface ModalContext {
   allActiveModals: ComponentName[];
   activeModal?: ComponentName;
   enableModal: (name: ComponentName) => void;
   disableModal: (name: ComponentName) => void;
 }
-
-export const modalContext = createContext<ModalContext | null>(null);
-
 export function useModal(): ModalContext {
-  const instance = useContext<ModalContext | null>(modalContext);
-  if (!instance) {
-    throw new Error(
-      'There was an error getting UI Config instance from context',
-    );
-  }
-  return instance;
+  const state = useSelector((state: RootState) => state.modals);
+  const dispatch = useDispatch();
+
+  return {
+    allActiveModals: state,
+    activeModal: state[0],
+    enableModal: (name: ComponentName) => dispatch(enableModal(name)),
+    disableModal: (name: ComponentName) => dispatch(disableModal(name)),
+  };
 }
-
-const sortModalsPriority = (modals: ModalContextState) =>
-  modals.sort((a, b) => {
-    const aPriority = ModalPriority[a] || 100;
-    const bPriority = ModalPriority[b] || 100;
-    return sortAscending(aPriority, bPriority);
-  });
-
-export const ModalProvider = props => {
-  const sendDataToGTM = useGTM();
-  const [modals, setModals] = useState<ModalContextState>([]);
-
-  const enableModal = (name: ComponentName) => {
-    if (name && !modals.includes(name)) {
-      setModals(sortModalsPriority([...modals, name]));
-    }
-  };
-
-  const disableModal = (name: ComponentName) => {
-    if (name && modals.includes(name)) {
-      const elIndex = modals.indexOf(name);
-      const newModals = [...modals];
-      newModals.splice(elIndex, 1);
-      setModals(newModals);
-    }
-  };
-
-  const value = {
-    allActiveModals: modals,
-    activeModal: modals[0],
-    enableModal,
-    disableModal,
-  };
-
-  useEffect(() => {
-    if (typeof value.activeModal === 'string') {
-      sendDataToGTM({
-        'tglab.ActiveModal': value.activeModal,
-        event: 'ModalActiveChange',
-      });
-    }
-  }, [value.activeModal]);
-
-  return (
-    <modalContext.Provider value={value}>
-      {props.children}
-    </modalContext.Provider>
-  );
-};

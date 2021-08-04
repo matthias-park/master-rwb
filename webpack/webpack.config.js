@@ -184,6 +184,9 @@ module.exports = function (webpackEnv, buildFranchises) {
                 sentryDsn: franchise.sentryDsn,
                 kambi: franchise.kambi,
                 googleRecaptchaKey: franchise.googleRecaptchaKey,
+                geoComplyKey: franchise.geoComplyKey,
+                dateFormat: franchise.dateFormat,
+                componentSettings: franchise.componentSettings,
               }),
             },
             isEnvProduction
