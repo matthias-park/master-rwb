@@ -16,7 +16,9 @@ const ResponsibleGamblingModal = () => {
   const { jsxT, t } = useI18n();
   const intervalRef = useRef(0);
   const { activeModal, enableModal, disableModal } = useModal();
-  const modalActive = activeModal === ComponentName.ResponsibleGamblingModal;
+  const modalActive =
+    user.tnc_required != null &&
+    activeModal === ComponentName.ResponsibleGamblingModal;
   useEffect(() => {
     const setModal = () => {
       enableModal(ComponentName.ResponsibleGamblingModal);

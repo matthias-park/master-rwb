@@ -156,7 +156,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
               <p className="play-limits__limit-title">{t('used_limit')}</p>
               <p className="play-limits__limit-total">
                 {user.currency}{' '}
-                {!!limitData.limit_amount && !!limitData.amount_left
+                {limitData.limit_amount != null && limitData.amount_left != null
                   ? Number(
                       (limitData.limit_amount - limitData.amount_left).toFixed(
                         2,
@@ -169,7 +169,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
               <p className="play-limits__limit-title">{t('left_limit')}</p>
               <p className="play-limits__limit-total">
                 {user.currency}{' '}
-                {limitData?.amount_left || limitData.limit_amount}
+                {limitData?.amount_left ?? limitData.limit_amount}
               </p>
             </li>
           </ul>
