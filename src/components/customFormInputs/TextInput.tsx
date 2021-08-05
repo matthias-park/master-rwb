@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Control, FieldValues, useController } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import clsx from 'clsx';
@@ -9,6 +9,7 @@ import loadable from '@loadable/component';
 import { FormControlProps } from 'react-bootstrap/FormControl';
 import { enterKeyPress } from '../../utils/uiUtils';
 import LoadingSpinner from '../LoadingSpinner';
+import useOnClickOutside from '../../hooks/useOnClickOutside';
 
 const LoadableNumberFormat = loadable(() => import('react-number-format'), {
   fallback: <input />,
@@ -70,10 +71,13 @@ interface UncontrolledProps extends FormControlProps {
 export const UncontrolledTextInput = React.forwardRef(
   (props: UncontrolledProps, ref) => {
     const [showPassword, setShowPassword] = useState(false);
+    const [showTooltip, setShowTooltip] = useState(false);
     const togglePasswordVisibility = useCallback(
       () => setShowPassword(prevValue => !prevValue),
       [],
     );
+    const tooltipRef = useRef(null);
+    useOnClickOutside(tooltipRef, () => setShowTooltip(false));
     return (
       <Form.Group
         className={clsx(
@@ -98,8 +102,10 @@ export const UncontrolledTextInput = React.forwardRef(
               small
               show={props.validation === FormFieldValidation.Validating}
             />
+
             {!!props.tooltip && (
               <OverlayTrigger
+                show={showTooltip}
                 placement={'bottom'}
                 overlay={
                   <Tooltip id={`tooltip-${props.id}`} className="tooltip--big">
@@ -109,9 +115,14 @@ export const UncontrolledTextInput = React.forwardRef(
                   </Tooltip>
                 }
               >
-                <i className="icon-tooltip"></i>
+                <i
+                  ref={tooltipRef}
+                  className="icon-tooltip"
+                  onClick={() => setShowTooltip(!showTooltip)}
+                />
               </OverlayTrigger>
             )}
+
             {props.toggleVisibility && (
               <i
                 className={clsx(
