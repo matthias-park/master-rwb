@@ -9,7 +9,6 @@ import QuestionsContainer from '../components/account-settings/QuestionsContaine
 import HelpBlock from '../components/HelpBlock';
 import clsx from 'clsx';
 import CustomAlert from '../components/CustomAlert';
-
 interface PersonalInfoProps {
   personalInfoData: {
     id: string;
@@ -25,6 +24,7 @@ interface PersonalInfoProps {
 
 const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
   const { id, title, note, data, disabled, fields, action } = personalInfoData;
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { t } = useI18n();
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
@@ -41,11 +41,12 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
           {note && <p className="text-14 text-gray-700 pt-1">{t(note)}</p>}
           {!!fields && !disabled && (
             <Accordion.Toggle
+              onClick={() => setIsOpen(!isOpen)}
               as="button"
               eventKey={id}
               className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
             >
-              {t('profile_edit')}
+              {isOpen ? t('cancel') : t('profile_edit')}
             </Accordion.Toggle>
           )}
         </div>

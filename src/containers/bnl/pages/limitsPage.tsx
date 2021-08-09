@@ -32,6 +32,7 @@ const timeoutCards = ['disable_player_time_out', 'self_exclusion'];
 const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
   const { t, jsxT } = useI18n();
   const { user } = useAuth();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
     msg: string;
@@ -56,10 +57,11 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
           {!limitData.disabled && (
             <Accordion.Toggle
               as="button"
+              onClick={() => setIsOpen(!isOpen)}
               eventKey={limitData.id}
               className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
             >
-              {jsxT('timeout_edit')}
+              {isOpen ? t('cancel') : t('timeout_edit')}
             </Accordion.Toggle>
           )}
         </div>
@@ -114,6 +116,7 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
 const LimitsCard = ({ limitData, mutate }: LimitProps) => {
   const { t } = useI18n();
   const { user } = useAuth();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
     msg: string;
@@ -134,10 +137,11 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
           {!limitData.disabled && (
             <Accordion.Toggle
               as="button"
+              onClick={() => setIsOpen(!isOpen)}
               eventKey={limitData.id}
               className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
             >
-              {t('limits_edit')}
+              {isOpen ? t('cancel') : t('limits_edit')}
             </Accordion.Toggle>
           )}
         </div>

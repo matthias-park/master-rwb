@@ -22,6 +22,7 @@ interface CloseAccountProps {
 const CloseAccountCard = ({ closeAccountData }: CloseAccountProps) => {
   const { t } = useI18n();
   const { id, title, note, fields, action } = closeAccountData;
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
     msg: string;
@@ -36,10 +37,11 @@ const CloseAccountCard = ({ closeAccountData }: CloseAccountProps) => {
           </p>
           <Accordion.Toggle
             as="button"
+            onClick={() => setIsOpen(!isOpen)}
             eventKey={id}
             className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
           >
-            {t('close_account_edit')}
+            {isOpen ? t('cancel') : t('close_account_edit')}
           </Accordion.Toggle>
         </div>
         <p className="text-14 text-gray-700 pt-1">{t(note)}</p>
