@@ -243,24 +243,31 @@
   position: relative;
   z-index: 1;
   &__remove {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 110px;
     line-height: 14px;
     font-size: 16px;
     color: $gray-500;
     z-index: 2;
     cursor: pointer;
   }
+  &__text {
+    margin-right: auto;
+  }
   label {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding-right: 80px;
     padding-top: 10px;
     &:after {
       padding-top: 9px;
     }
+  }
+  .custom-file-input {
+    z-index: 1;
+  }
+  .custom-file-label:after {
+    position: relative;
+    top: -10px;
+    right: -13px;
+    height: calc(100% + 16px);
   }
 }

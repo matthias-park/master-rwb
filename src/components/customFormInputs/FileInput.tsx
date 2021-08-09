@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Control, FieldValues, useController } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import { useI18n } from '../../hooks/useI18n';
@@ -15,15 +15,18 @@ interface Props {
 const FileInput = ({ id, rules, disabled, className, title }: Props) => {
   const { t } = useI18n();
   const [filename, setFilename] = useState('');
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { field, fieldState } = useController({
     name: id,
     rules: rules,
     defaultValue: null,
   });
 
-  function removeFile() {
+  function removeFile(e) {
+    e.preventDefault();
     setFilename('');
     field.onChange(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   }
 
   return (
@@ -37,6 +40,7 @@ const FileInput = ({ id, rules, disabled, className, title }: Props) => {
       >
         <Form.File.Input
           {...field}
+          ref={fileInputRef}
           value={undefined}
           onChange={e => {
             const file = e.target.files?.[0];
@@ -46,14 +50,19 @@ const FileInput = ({ id, rules, disabled, className, title }: Props) => {
             }
           }}
         />
-        <Form.File.Label data-browse={t('file_upload_browse')}>
-          {(!!field.value && filename) || title}
-        </Form.File.Label>
-        {!!field.value && (
-          <span className="custom-file__remove" onClick={removeFile}>
-            <i className="icon-close"></i>
+        <Form.File.Label
+          data-browse={t('file_upload_browse')}
+          className="d-flex"
+        >
+          <span className="custom-file__text">
+            {(!!field.value && filename) || title}
           </span>
-        )}
+          {!!field.value && (
+            <span className="custom-file__remove" onClick={e => removeFile(e)}>
+              <i className="icon-close"></i>
+            </span>
+          )}
+        </Form.File.Label>
       </Form.File>
     </Form.Group>
   );
