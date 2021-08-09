@@ -118,9 +118,16 @@ const PageHeader = () => {
   const { header } = useConfig((prev, next) => !!prev.header === !!next.header);
   const { backdrop, headerNav } = useUIConfig();
   const desktopWidth = useDesktopWidth(1199);
+  const closeNavWidth = useDesktopWidth(1100);
   const [navExpanded, setNavExpanded] = useState(false);
   const navbarLinksRef = useRef(null);
   const navbarContainerRef = useRef(null);
+  useEffect(() => {
+    if (closeNavWidth) {
+      setNavExpanded(false);
+      backdrop.hide();
+    }
+  }, [closeNavWidth]);
   useOnClickOutside(
     navbarLinksRef,
     () =>
