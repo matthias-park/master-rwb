@@ -116,6 +116,7 @@ const LoginForm = () => {
               title={t(`login_${loginId}`)}
               autoComplete={loginId}
               validation={apiError ? FormFieldValidation.Invalid : undefined}
+              disableCheckMark
             />
             <TextInput
               rules={{
@@ -127,6 +128,7 @@ const LoginForm = () => {
               title={t('login_password')}
               autoComplete="current-password"
               toggleVisibility
+              disableCheckMark
             />
             <div className="d-flex align-items-center flex-wrap">
               <Link
@@ -137,7 +139,7 @@ const LoginForm = () => {
               </Link>
             </div>
           </>
-        )}{' '}
+        )}
         <LoadingButton
           disabled={
             !formState.isDirty ||
