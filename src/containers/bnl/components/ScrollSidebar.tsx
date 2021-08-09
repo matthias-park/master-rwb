@@ -13,7 +13,12 @@ interface Props {
 
 const ScrollSidebar = ({ links, setActive, active }: Props) => {
   return (
-    <div className="left-sidebar sticky">
+    <div
+      className={clsx(
+        `left-sidebar sticky`,
+        !!!links.length && `left-sidebar__hidden `,
+      )}
+    >
       <ul className="sidebar-list">
         {links.map(link => (
           <ScrollLink

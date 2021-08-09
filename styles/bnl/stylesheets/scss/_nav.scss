@@ -9,6 +9,9 @@
   @include media-breakpoint-down(sm) {
     display: none;
   }
+  &__hidden {
+    background-color: inherit;
+  }
   &.sticky {
     .sidebar-list {
       position: sticky;
