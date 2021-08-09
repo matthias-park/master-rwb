@@ -8,6 +8,7 @@ import useGTM from '../hooks/useGTM';
 import Link from '../components/Link';
 import LoginForm from './LoginForm';
 import clsx from 'clsx';
+import FocusLock from 'react-focus-lock';
 import { useUIConfig } from '../hooks/useUIConfig';
 
 interface Props {
@@ -47,14 +48,15 @@ const LoginDropdown = ({
     backdrop.toggle(showDropdown, [ComponentName.Header]);
   }, [showDropdown]);
 
-  const toggleDropdown = isOpen => {
-    if (isOpen) {
-      sendDataToGTM({
-        event: 'LoginIntention',
-      });
+  const toggleDropdown = (isOpen, _, metadata) => {
+    if (metadata.source !== 'keydown') {
+      if (isOpen) {
+        sendDataToGTM({
+          event: 'LoginIntention',
+        });
+      }
+      setShowDropdown(isOpen);
     }
-    backdrop.toggle(isOpen, [ComponentName.Header]);
-    setShowDropdown(isOpen);
   };
 
   return (
@@ -83,7 +85,9 @@ const LoginDropdown = ({
         {t('login_btn')}
       </Dropdown.Toggle>
       <Dropdown.Menu className="login-dropdown__menu">
-        <LoginForm />
+        <FocusLock>
+          <LoginForm />
+        </FocusLock>
         <RegistrationLink />
       </Dropdown.Menu>
     </Dropdown>
