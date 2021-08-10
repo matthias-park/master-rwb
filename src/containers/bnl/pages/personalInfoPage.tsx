@@ -9,7 +9,6 @@ import QuestionsContainer from '../components/account-settings/QuestionsContaine
 import HelpBlock from '../components/HelpBlock';
 import clsx from 'clsx';
 import CustomAlert from '../components/CustomAlert';
-import { isMobile } from 'react-device-detect';
 interface PersonalInfoProps {
   personalInfoData: {
     id: string;
@@ -45,9 +44,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
               onClick={() => setIsOpen(!isOpen)}
               as="button"
               eventKey={id}
-              className={`${
-                isMobile ? 'btn-light-mobile' : ''
-              } info-container__edit btn btn-light-custom btn-sm px-3 ml-auto`}
+              className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
             >
               {isOpen ? t('cancel') : t('profile_edit')}
             </Accordion.Toggle>

@@ -53,31 +53,12 @@
     }
 }
 
-.btn-light,
-.btn-light-custom {
-  color: $brand-light;
-  background-color: $white;
-  border-color: $white;
-  &:focus:not(:hover) {
-      color: $brand-light;
-      background-color: $white; 
-      border-color: $white;
-  }
-  &:active,
-  &:hover {
-      color: $white !important;
-      background-color: $brand-light !important;
-      border-color: $white;
-  }
-  &-mobile {
-    &:hover {
-      color: $brand-light!important;
-      background-color: $white !important;
+.btn-light {
+    color: $brand-light;
+    &:hover,
+    &:active,
+    &:focus {
+        background-color: $brand-light !important;
+        color: $white !important;
     }
-    &:active {
-      color: $white !important;
-      background-color: $brand-light!important;
-      transition: all ease-in-out;
-    }
-  }
 }

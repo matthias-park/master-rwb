@@ -7,8 +7,6 @@ import useGTM from '../../../hooks/useGTM';
 import { isEqual } from 'lodash';
 import { useConfig } from '../../../hooks/useConfig';
 import { Cookies } from '../../../types/Config';
-import { isMobile } from 'react-device-detect';
-import clsx from 'clsx';
 
 const CookieConsent = () => {
   const { enableModal } = useModal();
@@ -47,10 +45,8 @@ const CookieConsent = () => {
       </div>
       <div className="cookies-nav__buttons">
         <Button
-          className={clsx(
-            `${isMobile && 'btn-light-mobile'}`,
-            'btn btn-light-custom btn-header mr-2 mr-xl-3 ml-auto',
-          )}
+          size="sm"
+          variant="outline-light"
           onClick={() => enableModal(ComponentName.CookiesModal)}
         >
           {t('cookies_modal_button')}
