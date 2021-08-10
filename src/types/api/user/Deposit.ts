@@ -1,3 +1,18 @@
+export interface DepositLimits {
+  MaxDepositLimitType: string;
+  MaxDepositLimitAmout: number;
+  MaxDepositAmountLeft: number;
+  MaxDepositResetTime: string;
+  RequestLimitAmount: number | null;
+  RequestLimitType: string;
+  RequestLimitCreated: null;
+  ActivationCode: null;
+  RequestActionType: null;
+  ValidTo: null;
+  FutureLimitAmount: number | null;
+  FutureLimitValidFrom: number | null;
+  CoolingOffPeriodByHours: string;
+}
 export interface DepositResponse {
   Code: number;
   DepositRequestId: number;

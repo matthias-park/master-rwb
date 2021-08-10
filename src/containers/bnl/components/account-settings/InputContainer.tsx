@@ -12,7 +12,7 @@ interface Props {
   buttonClassName?: string;
   loading?: boolean;
   min?: number | string;
-  max?: number | string;
+  max?: number | string | null;
   onSubmit: (inputValue: number) => Promise<boolean | void>;
   quickAmounts?: number[];
   disabled?: boolean;
@@ -83,9 +83,9 @@ const InputContainer = ({
     let inputAmount = Number(value);
     const minNumber = Number(min);
     const maxNumber = Number(max);
-    if (minNumber && inputAmount < minNumber) {
+    if (min != null && !isNaN(minNumber) && inputAmount < minNumber) {
       return t(`${validationErrorPrefix}amount_below_minimum`);
-    } else if (maxNumber && inputAmount > maxNumber) {
+    } else if (max != null && !isNaN(maxNumber) && inputAmount > maxNumber) {
       return t(`${validationErrorPrefix}amount_above_maximum`);
     }
     return true;

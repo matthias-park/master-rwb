@@ -4,6 +4,7 @@ import QuestionsContainer from '../components/account-settings/QuestionsContaine
 import HelpBlock from '../components/HelpBlock';
 import { postApi } from '../../../utils/apiUtils';
 import {
+  DepositLimits,
   DepositRequest,
   DepositResponse,
   DepositStatus,
@@ -18,10 +19,16 @@ import useDepositResponseStatus from '../../../hooks/useDepositResponseStatus';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import useApi from '../../../hooks/useApi';
+import clsx from 'clsx';
 
 const DepositPage = () => {
   const { user } = useAuth();
   const { t, jsxT } = useI18n();
+  const { data: depositData, error: depositError } = useApi<
+    RailsApiResponse<DepositLimits[] | null>
+  >('/railsapi/v1/user/max_deposit');
+  const depositDataLoading = !depositData && !depositError;
   const [depositLoading, setDepositLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const depositBaseUrl = useRoutePath(PagesName.DepositPage, true);
@@ -79,10 +86,28 @@ const DepositPage = () => {
     setDepositLoading(false);
     return false;
   }, []);
+  useEffect(() => {
+    if (!depositDataLoading && (!depositData?.Success || depositError)) {
+      setApiError(t('api_deposit_request_error'));
+    }
+  }, [depositData, depositError]);
 
-  const minDeposit = t('bancontact_min_deposit');
-  const maxDeposit =
-    user.max_deposit !== null ? user.max_deposit : t('bancontact_max_deposit');
+  const minDeposit = t('bancontact_min_deposit', true);
+  const maxDeposit = useMemo(() => {
+    if (depositData?.Data?.length) {
+      const getDepositLimit = (type: string) =>
+        depositData.Data!.find(limit => limit.MaxDepositLimitType === type)
+          ?.MaxDepositAmountLeft;
+      const dayLimit = getDepositLimit('Day');
+      const weekLimit = getDepositLimit('Week');
+      const monthLimit = getDepositLimit('Month');
+      const depositLimit = dayLimit ?? weekLimit ?? monthLimit;
+      if (depositLimit != null) {
+        return depositLimit;
+      }
+    }
+    return null;
+  }, [depositData?.Data, t]);
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       <h1>{jsxT('deposit_page_title')}</h1>
@@ -95,7 +120,10 @@ const DepositPage = () => {
         {apiError}
       </CustomAlert>
       <LoadingSpinner
-        show={depositStatus.depositStatus === DepositStatus.Pending}
+        show={
+          depositStatus.depositStatus === DepositStatus.Pending ||
+          depositDataLoading
+        }
         className="d-block mx-auto my-4"
       />
       <CustomAlert
@@ -137,9 +165,13 @@ const DepositPage = () => {
         onSubmit={handleRequestDeposit}
         quickAmounts={[10, 20, 50, 100]}
         currency={user.currency}
-        subText={`${t('min_deposit')}: ${minDeposit} ${user.currency} - ${t(
-          'max_deposit',
-        )}: ${maxDeposit} ${user.currency}`}
+        subText={clsx(
+          minDeposit != null &&
+            `${t('min_deposit')}: ${minDeposit} ${user.currency}`,
+          minDeposit != null && maxDeposit != null && '-',
+          maxDeposit != null &&
+            `${t('max_deposit')}: ${maxDeposit} ${user.currency}`,
+        )}
         header={
           <div className="input-container__header d-flex align-items-center">
             <h2 className="ml-3 mb-0">{t('deposit_input_container_title')}</h2>
@@ -147,7 +179,8 @@ const DepositPage = () => {
         }
         disabled={
           user.validator_status === VALIDATOR_STATUS.MAJOR_ERROR ||
-          depositStatus.depositStatus === DepositStatus.Pending
+          depositStatus.depositStatus === DepositStatus.Pending ||
+          depositDataLoading
         }
       />
       <QuestionsContainer items={questionItems} />
