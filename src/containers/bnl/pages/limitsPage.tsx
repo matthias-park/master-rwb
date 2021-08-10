@@ -10,6 +10,7 @@ import QuestionsContainer from '../components/account-settings/QuestionsContaine
 import HelpBlock from '../components/HelpBlock';
 import { useAuth } from '../../../hooks/useAuth';
 import dayjs from 'dayjs';
+import { isMobile } from 'react-device-detect';
 
 interface LimitProps {
   limitData: {
@@ -59,7 +60,9 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
               as="button"
               onClick={() => setIsOpen(!isOpen)}
               eventKey={limitData.id}
-              className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
+              className={`${
+                isMobile ? 'btn-light-mobile' : ''
+              } info-container__edit btn btn-light-custom btn-sm px-3 ml-auto`}
             >
               {isOpen ? t('cancel') : t('timeout_edit')}
             </Accordion.Toggle>
@@ -139,7 +142,9 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
               as="button"
               onClick={() => setIsOpen(!isOpen)}
               eventKey={limitData.id}
-              className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
+              className={`${
+                isMobile ? 'btn-light-mobile' : ''
+              } info-container__edit btn btn-light-custom btn-sm px-3 ml-auto`}
             >
               {isOpen ? t('cancel') : t('limits_edit')}
             </Accordion.Toggle>

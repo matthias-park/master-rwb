@@ -8,6 +8,7 @@ import useGTM from '../hooks/useGTM';
 import Link from '../components/Link';
 import LoginForm from './LoginForm';
 import clsx from 'clsx';
+import { isMobile } from 'react-device-detect';
 import FocusLock from 'react-focus-lock';
 import { useUIConfig } from '../hooks/useUIConfig';
 
@@ -67,7 +68,8 @@ const LoginDropdown = ({
     >
       <Link
         className={clsx(
-          'btn btn-light btn-header mr-2 mr-xl-3 ml-auto',
+          `${isMobile && 'btn-light-mobile'}`,
+          'btn-light-custom btn-sm',
           userLoading && 'visibility-hidden',
         )}
         to={registerRoute}
