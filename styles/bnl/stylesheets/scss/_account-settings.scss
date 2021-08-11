@@ -228,6 +228,46 @@
       font-size: 34px;
       pointer-events: none;
     }
+    &-input {
+      color: black;
+      white-space: nowrap;
+      width: 100%;
+      overflow: visible;
+      max-width: 110px;
+      border: 1px solid #E0E0E0;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+      font-size: 12px;
+      padding: 10px;
+      padding-right: 40px;
+      cursor: pointer;
+      @include media-breakpoint-down(sm){
+       max-width: unset;
+       width: 100%;
+      }
+    }
+    .react-datepicker {
+      position: absolute;
+      will-change: transform;
+      top: 0px;
+      left: 0px;
+      transform: translate3d(0px, 36px, 0px);
+      margin-top: 10px;
+      z-index: 3;
+      &__triangle {
+        box-sizing: content-box;
+        position: absolute;
+        height: 0;
+        width: 1px;
+        content: "";
+        z-index: -1;
+        border: 8px solid transparent;
+        left: 25px;
+        border-top: none;
+        border-bottom-color: #f0f0f0;
+        top: -8px;
+      }
+    }
   }
   @include media-breakpoint-down(sm) {
     .account-tabs {

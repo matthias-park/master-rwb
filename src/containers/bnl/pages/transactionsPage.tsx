@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 import { formatUrl } from '../../../utils/apiUtils';
 import { useI18n } from '../../../hooks/useI18n';
@@ -191,14 +191,17 @@ const TransactionsPeriodFilter = ({ dateFrom, dateTo, updateUrl }) => {
 };
 
 const DatepickerInput = ({ ...props }) => (
-  <input type="text" {...props} readOnly />
+  <div className="date-filter__picker-wrp-input" {...props}>
+    {props.value}
+  </div>
 );
 
 const TransactionsDateFilter = ({ dateTo, dateFrom, updateUrl }) => {
   const { t } = useI18n();
   const [newDateFrom, setNewDateFrom] = useState<Dayjs>(dateFrom);
   const [newDateTo, setNewDateTo] = useState<Dayjs>(dateTo);
-  const validDate = newDateTo.diff(newDateFrom) >= 0;
+  const [isOpen, setIsOpen] = useState<string>('');
+  const validDate = newDateTo.diff(newDateFrom, 'd') >= 0;
 
   useEffect(() => {
     setNewDateFrom(dateFrom);
@@ -216,32 +219,51 @@ const TransactionsDateFilter = ({ dateTo, dateFrom, updateUrl }) => {
   return (
     <>
       <div className="date-filter__picker-wrp mb-sm-3">
-        <DatePicker
-          popperPlacement="bottom-start"
-          selected={newDateFrom.toDate()}
-          onChange={date => {
-            setNewDateFrom(dayjs(date as Date));
+        <DatepickerInput
+          value={dayjs(newDateFrom.toDate()).format('YYYY-MM-DD')}
+          onClick={() => {
+            isOpen === 'from-date' ? setIsOpen('') : setIsOpen('from-date');
           }}
-          dateFormat="yyyy-MM-dd"
-          maxDate={dateTo.toDate()}
-          customInput={<DatepickerInput />}
         />
+        <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
+        {isOpen === 'from-date' && (
+          <DatePicker
+            onFocus={() => setIsOpen('from-date')}
+            selected={newDateFrom.toDate()}
+            onChange={date => {
+              setIsOpen('');
+              setNewDateFrom(dayjs(date as Date));
+            }}
+            dateFormat="yyyy-MM-dd"
+            maxDate={dateTo.toDate()}
+            inline
+          />
+        )}
         <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
       </div>
       <span className="text-gray-400 mx-auto mx-sm-1 mb-sm-3">-</span>
       <div className="date-filter__picker-wrp mb-sm-3">
-        <DatePicker
-          popperPlacement="bottom-start"
-          minDate={newDateFrom.toDate()}
-          selected={newDateTo.toDate()}
-          onChange={date => {
-            setNewDateTo(dayjs(date as Date));
+        <DatepickerInput
+          value={dayjs(newDateTo.toDate()).format('YYYY-MM-DD')}
+          onClick={() => {
+            isOpen === 'to-date' ? setIsOpen('') : setIsOpen('to-date');
           }}
-          dateFormat="yyyy-MM-dd"
-          maxDate={dayjs().toDate()}
-          customInput={<DatepickerInput />}
         />
         <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
+        {isOpen === 'to-date' && (
+          <DatePicker
+            onFocus={() => setIsOpen('to-date')}
+            minDate={newDateFrom.toDate()}
+            selected={newDateTo.toDate()}
+            onChange={date => {
+              setIsOpen('');
+              setNewDateTo(dayjs(date as Date));
+            }}
+            dateFormat="yyyy-MM-dd"
+            maxDate={dayjs().toDate()}
+            inline
+          />
+        )}
       </div>
       <Button
         className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3 btn--small-radius"
