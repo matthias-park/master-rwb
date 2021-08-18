@@ -27,11 +27,17 @@ body {
         .header:before {
           margin-right: -97px;
         }
+        .cookies-nav {
+          padding-right: 115px;
+        }
       }
       @include media-breakpoint-down(xl) {
         padding-right: 45px !important;
         .header:before {
           margin-right: -62px;
+        }
+        .cookies-nav {
+          padding-right: 62px;
         }
       }
       @include media-breakpoint-down(lg) {
@@ -44,6 +50,9 @@ body {
         padding-right: 3px !important;
         .header:before {
           margin-right: 0;
+        }
+        .cookies-nav {
+          padding-right: 47px;
         }
       }
     }
@@ -353,7 +362,13 @@ a:hover {
   z-index: 1000;
   background-color: $brand-light;
   color: $gray-custom-200;
-  padding: 20px 6% 14px 6%;
+  padding: 20px 115px 14px 115px;
+  @include media-breakpoint-down(xl) {
+    padding: 20px 45px 14px 45px;
+  }
+  @include media-breakpoint-down(sm){
+    padding: 20px 30px 14px 30px;
+  }
   box-shadow: 0 0px 12px rgba($white, 0.2);
   @include media-breakpoint-down(sm) {
     flex-direction: column;
