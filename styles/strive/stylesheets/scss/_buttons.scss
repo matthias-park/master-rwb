@@ -39,9 +39,10 @@
 }
 
 .btn-primary,
+.btn-primary:focus,
 .btn-primary.disabled,
 .btn-primary:disabled {
-  color: $brand-text;
+  color: $brand-text !important;
 }
 .btn-primary,
 .btn-primary:hover,
