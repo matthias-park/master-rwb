@@ -251,11 +251,11 @@
   }
   &__text {
     margin-right: auto;
-  }
-  label {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  label {
     padding-top: 10px;
     &:after {
       padding-top: 9px;
