@@ -231,7 +231,7 @@ const setCustomerSettings = ({
     },
     hideHeader: true,
     enableOddsFormatSelector: true,
-    enableMyBetsHarmonization: true,
+    enableMyBetsHarmonization: false,
   };
 };
 
