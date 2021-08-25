@@ -4,6 +4,7 @@ import { useRoutePath } from '../../../../hooks';
 import { useI18n } from '../../../../hooks/useI18n';
 import Link from '../../../../components/Link';
 import { useAuth } from '../../../../hooks/useAuth';
+import LoadingSpinner from '../../../../components/LoadingSpinner';
 
 const RegWelcome = () => {
   const { t, jsxT } = useI18n();
@@ -18,15 +19,21 @@ const RegWelcome = () => {
       <p className="reg-welcome__sub-title">{t('reg_welcome_sub_title')}</p>
       <div className="reg-welcome__container">
         <div className="action-block">
-          <p className="action-block__title mb-2">
-            <b>{t('reg_welcome_action_title')}</b>
-          </p>
-          <p className="action-block__text mb-3">
-            {t('reg_welcome_action_text')}
-          </p>
-          <Link to={depositPath} className="btn btn-primary">
-            {t('reg_welcome_action_button')}
-          </Link>
+          {user.logged_in ? (
+            <>
+              <p className="action-block__title mb-2">
+                <b>{t('reg_welcome_action_title')}</b>
+              </p>
+              <p className="action-block__text mb-3">
+                {t('reg_welcome_action_text')}
+              </p>
+              <Link to={depositPath} className="btn btn-primary">
+                {t('reg_welcome_action_button')}
+              </Link>
+            </>
+          ) : (
+            <LoadingSpinner show={true} />
+          )}
         </div>
         <div className="info-block mt-4">
           <h4 className="info-block__title">
