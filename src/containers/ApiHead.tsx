@@ -15,6 +15,7 @@ import {
 } from '../constants';
 import clsx from 'clsx';
 import { ConfigLoaded } from '../types/Config';
+import { isIOS } from 'react-device-detect';
 
 const ApiHead = () => {
   const { locales, locale, routes, configLoaded } = useConfig((prev, next) => {
@@ -92,6 +93,14 @@ const ApiHead = () => {
           name="description"
           content={seoData?.description || t('seo_description', true)}
         />
+
+        {isIOS && (
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+          />
+        )}
+
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.href} />
         <meta property="og:site_name" content={t('seo_site_name', true)} />
