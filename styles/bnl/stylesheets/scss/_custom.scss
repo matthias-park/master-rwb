@@ -12,10 +12,10 @@ body {
     margin: auto;
     overflow-x: hidden;
     @include media-breakpoint-down(xl) {
-        padding: 0 45px;
+        padding: 0 45px !important;
     }
     @include media-breakpoint-down(lg) {
-        padding: 0 20px;
+        padding: 0 20px !important;
     }
     &.modal-open-windows {
       transform: translateX(-8px);
