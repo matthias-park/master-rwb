@@ -14,6 +14,7 @@ import RedirectNotFound from '../../../components/RedirectNotFound';
 import { useRoutePath } from '../../../hooks';
 import { PagesName } from '../../../constants';
 import { filterPromotionsList } from '../../../utils';
+import { Helmet } from 'react-helmet-async';
 
 const PromoLinkEl = ({
   item,
@@ -179,6 +180,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
   const { data, error } = useApi<RailsApiResponse<PostItem>>(
     `/railsapi/v1/content/promotion/${slug}`,
   );
+  const { t } = useI18n();
   const history = useHistory();
   const desktopWidth = useDesktopWidth(568);
   const [promoImageLoaded, setPromoImageLoaded] = useState(false);
@@ -208,8 +210,19 @@ const PromotionPage = ({ slug }: { slug: string }) => {
     ? '/assets/images/promo/promo-inner-lg.png'
     : '/assets/images/promo/promo-inner-sm.png';
 
+  const promoTitle = data?.Data?.title;
   return (
     <main className="pt-xl-5 min-vh-70">
+      <Helmet
+        title={clsx(promoTitle && `${promoTitle} - `, t('seo_site_name'))}
+        defer={false}
+        async
+      >
+        <meta
+          property="og:title"
+          content={clsx(promoTitle && `${promoTitle} - `, t('seo_site_name'))}
+        />
+      </Helmet>
       {(isDataLoading || !promoImageLoaded) && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />
@@ -226,8 +239,8 @@ const PromotionPage = ({ slug }: { slug: string }) => {
               src={bannerImg || fallbackBannerImg}
             ></img>
             <div className="promo-bg-text">
-              {data?.Data.title && (
-                <h3 className="promo-bg-text__subtitle">{data?.Data?.title}</h3>
+              {promoTitle && (
+                <h3 className="promo-bg-text__subtitle">{promoTitle}</h3>
               )}
               <h2 className="promo-bg-text__title">{data?.Data?.page_title}</h2>
               {data?.Data.button_text && data?.Data.inner_page_button_link && (
