@@ -163,6 +163,7 @@ const TextInput = ({
   clearDefaultValueOnFocus,
   autoComplete,
 }: Props) => {
+  const hasFocus = useRef<boolean>(false);
   const { field, fieldState } = useController({
     name: id,
     control,
@@ -219,10 +220,21 @@ const TextInput = ({
       onBlur={() => {
         onBlur?.();
         field.onBlur();
+        hasFocus.current = false;
       }}
-      onFocus={onFocusHandle}
+      onFocus={() => {
+        hasFocus.current = true;
+        onFocusHandle();
+      }}
       onKeyUp={onEnterPress ? e => enterKeyPress(e, onEnterPress) : undefined}
-      onChange={maskedInput ? undefined : field.onChange}
+      onChange={e => {
+        if (!maskedInput) {
+          field.onChange(e);
+        }
+        if (!hasFocus.current) {
+          field.onBlur();
+        }
+      }}
       as={inputAs}
       size={size}
       onCopy={preventCopyPaste}
