@@ -137,8 +137,8 @@ const SettingsForm = ({
         success: res.Success,
         msg: res.Message || t('api_response_failed'),
       });
+    reset(null, { keepValues: true });
     if (res.Success) {
-      reset(null, { keepValues: true });
       resetValues.forEach(id => formMethods.setValue(id, ''));
     }
     mutateData && setTimeout(() => mutateData(), 1000);
