@@ -576,6 +576,9 @@ a:hover {
   &__img {
     max-width: 100%;
   }
+  a {
+    word-wrap: break-word;
+  }
 }
 
 .custom-modal {
