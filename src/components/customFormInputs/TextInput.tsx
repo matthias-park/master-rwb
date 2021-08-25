@@ -5,15 +5,11 @@ import clsx from 'clsx';
 import { FormFieldValidation } from '../../constants';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import loadable from '@loadable/component';
 import { FormControlProps } from 'react-bootstrap/FormControl';
 import { enterKeyPress } from '../../utils/uiUtils';
 import LoadingSpinner from '../LoadingSpinner';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
-
-const LoadableNumberFormat = loadable(() => import('react-number-format'), {
-  fallback: <input />,
-});
+import LoadableNumberFormat from 'react-number-format';
 
 interface Props {
   id: string;
