@@ -54,7 +54,7 @@ const TermsAndConditionsModal = () => {
   const acceptHandler = async () => {
     setLoadingBtn(LoadingBtnState.Accept);
     const result = await getApi<RailsApiResponse<{}>>(
-      '/railsapi/v1/user/accept_tnc',
+      '/restapi/v1/user/accept_tnc',
     ).catch(err => err);
     if (result.Success) {
       updateUser();

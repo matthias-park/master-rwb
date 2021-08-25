@@ -35,7 +35,7 @@ export const getRailsConstants = async (
   if (!railsConstants) {
     logger.warn(`${req.hostname} - no rails constants cache`);
     railsConstants = await fetch(
-      `${req.franchise.domains[0].api}/railsapi/v1/content/constants`,
+      `${req.franchise.domains[0].api}/restapi/v1/content/constants`,
     ).then(async res => {
       if (res.ok) {
         const data = await res.json();

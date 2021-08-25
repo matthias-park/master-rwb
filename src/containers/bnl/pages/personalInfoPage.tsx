@@ -117,7 +117,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
 const PersonalInfoPage = () => {
   const { t, jsxT } = useI18n();
   const { data, error, mutate } = useApi<any>(
-    '/railsapi/v1/user/profile/personal_info',
+    '/restapi/v1/user/profile/personal_info',
   );
   const isDataLoading = !data && !error;
 

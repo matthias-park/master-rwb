@@ -21,7 +21,7 @@ const useConstants = () => {
   const [cache, setCache] = useLocalStorage<
     RailsApiResponse<PageConfig> | undefined
   >('api-constants-cache', undefined);
-  const constantsUrl = '/railsapi/v1/content/constants';
+  const constantsUrl = '/restapi/v1/content/constants';
   const { data, mutate, error } = useApi<RailsApiResponse<PageConfig>>(
     constantsUrl,
     {
@@ -117,7 +117,7 @@ export const ConfigProvider = ({ ...props }: ConfigProviderProps) => {
     if (constants) {
       const setApiLocale = async (lang: string) => {
         if (!window.PRERENDER_CACHE) {
-          await postApi('/railsapi/v1/locale', {
+          await postApi('/restapi/v1/locale', {
             locale: lang,
           }).then(() => {
             updateConstants();

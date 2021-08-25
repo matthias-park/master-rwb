@@ -51,7 +51,7 @@ const ApiHead = () => {
   );
   const { data } = useApi<RailsApiResponse<SeoPages>>(
     configLoaded === ConfigLoaded.Loaded
-      ? ['/railsapi/v1/content/seo_pages', params]
+      ? ['/restapi/v1/content/seo_pages', params]
       : null,
     postApi,
     {

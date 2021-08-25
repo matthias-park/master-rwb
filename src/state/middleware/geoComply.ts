@@ -66,7 +66,7 @@ const fetchSetLicenseKey = (
         ) {
           console.log('geoComply getting new license from server');
           getApi<RailsApiResponse<GeoComplyLicense>>(
-            '/railsapi/v1/geocomply/license',
+            '/restapi/v1/geocomply/license',
           ).then(res => {
             if (res.Success && res.Data.License) {
               Lockr.set(cacheKey, res.Data);
@@ -161,7 +161,7 @@ const actions: {
       const state = (storeApi.getState() as RootState).geoComply;
       const { dispatch } = storeApi;
       postApi<RailsApiResponse<GeoComplyValidate>>(
-        '/railsapi/v1/geocomply/validate',
+        '/restapi/v1/geocomply/validate',
         {
           text: actionPayload,
         },

@@ -314,7 +314,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
 const LimitsPage = () => {
   const { t, jsxT } = useI18n();
   const { data, error, mutate } = useApi<any>(
-    '/railsapi/v1/user/profile/play_limits',
+    '/restapi/v1/user/profile/play_limits',
   );
   const isDataLoading = !data && !error;
 

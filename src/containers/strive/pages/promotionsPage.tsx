@@ -81,7 +81,7 @@ const PromoItem = ({
 
 const PromotionsList = () => {
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
-    '/railsapi/v1/content/promotions',
+    '/restapi/v1/content/promotions',
   );
   const { t } = useI18n();
   const [imagesLoaded, setImagesLoaded] = useState({});
@@ -129,7 +129,7 @@ const PromotionsList = () => {
 const PromotionsListBlock = ({ currentSlug }) => {
   const { t } = useI18n();
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
-    '/railsapi/v1/content/promotions',
+    '/restapi/v1/content/promotions',
   );
   const numberOfPromotions = data?.Data.slice(0, 4).find(
     promo => promo.slug === currentSlug,
@@ -176,7 +176,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
 
 const PromotionPage = ({ slug }: { slug: string }) => {
   const { data, error } = useApi<RailsApiResponse<PostItem>>(
-    `/railsapi/v1/content/promotion/${slug}`,
+    `/restapi/v1/content/promotion/${slug}`,
   );
   const { t } = useI18n();
   const history = useHistory();

@@ -78,9 +78,7 @@ const CloseAccountCard = ({ closeAccountData }: CloseAccountProps) => {
 
 const CloseAccountPage = () => {
   const { t, jsxT } = useI18n();
-  const { data, error } = useApi<any>(
-    '/railsapi/v1/user/profile/close_account',
-  );
+  const { data, error } = useApi<any>('/restapi/v1/user/profile/close_account');
   const isDataLoading = !data && !error;
   const questionItems = useMemo(
     () => [

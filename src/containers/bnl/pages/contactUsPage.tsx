@@ -39,7 +39,7 @@ const ContactUsPage = () => {
     msg: string | null;
   } | null>(null);
   const { data, error, isValidating } = useApi<JSONFormPage>(
-    user.loading ? null : [`/railsapi/v1/contact_us/form`, user.logged_in],
+    user.loading ? null : [`/restapi/v1/contact_us/form`, user.logged_in],
   );
   const defaultValues = useMemo(
     () =>

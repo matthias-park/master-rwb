@@ -31,7 +31,7 @@ const getSitemap = async (req: Request, res: Response) => {
     if (promotionRoute) {
       for (const locale of locales) {
         const localePromotions: { slug: string }[] = await fetch(
-          `${req.franchise.domains[0].api}/railsapi/v1/content/promotions`,
+          `${req.franchise.domains[0].api}/restapi/v1/content/promotions`,
           {
             headers: {
               cookie: `user_locale=${locale.lang}`,

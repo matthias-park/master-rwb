@@ -29,7 +29,7 @@ const ChangePasswordForm = () => {
   const submitChangePassword = async ({ email }: changePostForm) => {
     setApiResponse(null);
     const result = await postApi<RailsApiResponse<Authenticate2fa>>(
-      '/railsapi/v1/user/login/forgot_password',
+      '/restapi/v1/user/login/forgot_password',
       {
         email,
       },

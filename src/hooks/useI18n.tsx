@@ -42,7 +42,7 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   }>(`translations-cache`, {});
   const translationsUrl =
     !TestEnv && configLoaded === ConfigLoaded.Loaded && locale
-      ? ['/railsapi/v1/translations', locale]
+      ? ['/restapi/v1/translations', locale]
       : null;
   const { data, mutate } = useApi<RailsApiResponse<Translations>>(
     translationsUrl,

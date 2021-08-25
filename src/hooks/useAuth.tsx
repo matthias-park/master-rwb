@@ -71,7 +71,7 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
     UserStatus | null,
     StatusResponseError
   >(
-    !TestEnv && !window.PRERENDER_CACHE ? '/railsapi/v1/user/status' : null,
+    !TestEnv && !window.PRERENDER_CACHE ? '/restapi/v1/user/status' : null,
     url =>
       getApi<RailsApiResponse<UserStatus>>(url).then(res => {
         if (!res.Success) throw new StatusResponseError(res);
@@ -139,7 +139,7 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
   const signin = async (login: string, password: string, pin?: number) => {
     const res = await postApi<
       RailsApiResponse<NET_USER | TwoFactorAuth | null>
-    >('/railsapi/v1/user/login', {
+    >('/restapi/v1/user/login', {
       login,
       password,
       pin,
@@ -171,7 +171,7 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
     };
   };
   const signout = async () => {
-    await getApi('/railsapi/v1/user/logout').catch(err => err);
+    await getApi('/restapi/v1/user/logout').catch(err => err);
     dispatch(setLogout());
     return;
   };

@@ -15,7 +15,7 @@ const SportsPage = () => {
   const { user } = useAuth();
   const [sbLoaded, setSbLoaded] = useState(false);
   const { data, error } = useApi<RailsApiResponse<string | {}>>([
-    '/railsapi/v1/sportsbook/get_token',
+    '/restapi/v1/sportsbook/get_token',
     user.logged_in,
   ]);
 

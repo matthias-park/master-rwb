@@ -10,7 +10,7 @@ import { useAuth } from './useAuth';
 import { useI18n } from './useI18n';
 import useLocalStorage from './useLocalStorage';
 
-const postUrl = '/railsapi/v1/deposits/status';
+const postUrl = '/restapi/v1/deposits/status';
 
 const useDepositResponseStatus = () => {
   const { jsxT } = useI18n();

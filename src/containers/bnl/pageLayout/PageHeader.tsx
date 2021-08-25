@@ -32,7 +32,7 @@ const SubNavLinks = ({
   const { t } = useI18n();
   const sendDataToGTM = useGTM();
   const changeLocale = async (lang: string) => {
-    return postApi('/railsapi/v1/locale', {
+    return postApi('/restapi/v1/locale', {
       locale: lang,
     }).then(() => setLocale(lang, true));
   };

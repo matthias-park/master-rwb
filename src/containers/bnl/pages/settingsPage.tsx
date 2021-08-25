@@ -34,7 +34,7 @@ const SettingsPage = () => {
   } | null>(null);
   const { addToast } = useToasts();
   const { data, error, mutate } = useApi<ProfileSettings>(
-    '/railsapi/v1/user/profile',
+    '/restapi/v1/user/profile',
   );
   const isDataLoading = !data && !error;
   const handleOnSubmit = async (

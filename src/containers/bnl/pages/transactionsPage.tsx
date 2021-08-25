@@ -312,7 +312,7 @@ const TransactionsPage = () => {
     if (from && dateFrom !== from) setDateFrom(from);
     if (to && dateTo !== to) setDateTo(to);
 
-    const newUrl = formatUrl('/railsapi/v1/user/transactions', {
+    const newUrl = formatUrl('/restapi/v1/user/transactions', {
       from: (from || dateFrom).format('DD/MM/YYYY'),
       to: (to || dateTo).format('DD/MM/YYYY'),
       page: page || 1,

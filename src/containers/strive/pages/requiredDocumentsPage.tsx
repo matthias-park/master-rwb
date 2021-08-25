@@ -10,7 +10,7 @@ import CustomAlert from '../components/CustomAlert';
 const RequiredDocumentsPage = () => {
   const { t, jsxT } = useI18n();
   const { data, error, mutate } = useApi<any>(
-    '/railsapi/v1/user/profile/required_documents',
+    '/restapi/v1/user/profile/required_documents',
   );
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;

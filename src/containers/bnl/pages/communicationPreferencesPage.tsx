@@ -70,7 +70,7 @@ const CommunicationPreferencesPage = () => {
   const { user } = useAuth();
   const { t, jsxT } = useI18n();
   const { data, error } = useApi<any>(
-    '/railsapi/v1/user/profile/communication_preferences',
+    '/restapi/v1/user/profile/communication_preferences',
   );
   const { watch, handleSubmit, formState, register, reset } = useForm();
   const [checkboxValues, setCheckboxValues] = useState({});

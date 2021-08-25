@@ -106,7 +106,7 @@ export const formatSuccesfullRailsApiResponse = <T>(
 export const API_VALIDATIONS = {
   email: async (email: string): Promise<RailsApiResponse<{}>> => {
     const res = await postApi<RailsApiResponse<{}>>(
-      '/railsapi/v1/registration/check/email',
+      '/restapi/v1/registration/check/email',
       {
         email,
       },
@@ -117,7 +117,7 @@ export const API_VALIDATIONS = {
     personal_code: string,
   ): Promise<RailsApiResponse<{}>> => {
     const res = await postApi<RailsApiResponse<{}>>(
-      '/railsapi/v1/registration/check/personal_code',
+      '/restapi/v1/registration/check/personal_code',
       {
         personal_code,
       },
@@ -129,7 +129,7 @@ export const API_VALIDATIONS = {
   ): Promise<RailsApiResponse<RegistrationPostalCodeAutofill | null>> => {
     const res = await postApi<
       RailsApiResponse<RegistrationPostalCodeAutofill | null>
-    >('/railsapi/v1/registration/check/post_code', {
+    >('/restapi/v1/registration/check/post_code', {
       post_code,
     }).catch((err: RailsApiResponse<null>) => err);
     return res;

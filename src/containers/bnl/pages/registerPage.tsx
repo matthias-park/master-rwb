@@ -118,7 +118,7 @@ const RegisterPage = () => {
         return obj;
       }, {});
       const res = await postApi<RailsApiResponse<RegistrationResponse>>(
-        '/railsapi/v1/registration/new',
+        '/restapi/v1/registration/new',
         finalForm,
       ).catch((res: RailsApiResponse<null>) => {
         res.Code = 4;

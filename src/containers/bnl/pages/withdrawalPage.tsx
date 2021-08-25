@@ -129,7 +129,7 @@ const WithdrawalPage = () => {
   );
   const sendDataToGTM = useGTM();
   const { data, error, mutate } = useApi<RailsApiResponse<Withdrawal>>(
-    '/railsapi/v1/withdrawals',
+    '/restapi/v1/withdrawals',
   );
   const isDataLoading = !data && !error;
   useEffect(() => {
@@ -165,7 +165,7 @@ const WithdrawalPage = () => {
   const cancelRequest = useCallback(
     async (id: number): Promise<void> => {
       const response = await postApi<RailsApiResponse<null>>(
-        '/railsapi/v1/withdrawals/cancel',
+        '/restapi/v1/withdrawals/cancel',
         {
           request_id: id,
         },
@@ -203,7 +203,7 @@ const WithdrawalPage = () => {
       }
       setWithdrawalLoading(true);
       const response = await postApi<RailsApiResponse<WithdrawalConfirmation>>(
-        '/railsapi/v1/withdrawals',
+        '/restapi/v1/withdrawals',
         {
           amount: amount.toString(),
           id: data?.Data.default_account.uniq_id,
@@ -230,7 +230,7 @@ const WithdrawalPage = () => {
     async (data: any) => {
       setWithdrawalLoading(true);
       const response = await postApi<RailsApiResponse<null>>(
-        '/railsapi/v1/withdrawals/confirm',
+        '/restapi/v1/withdrawals/confirm',
         data,
         {
           formData: true,

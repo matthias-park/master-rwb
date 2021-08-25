@@ -10,7 +10,7 @@ import CustomAlert from '../components/CustomAlert';
 const ChangePasswordPage = () => {
   const { t, jsxT } = useI18n();
   const { data, error } = useApi<any>(
-    '/railsapi/v1/user/profile/change_password',
+    '/restapi/v1/user/profile/change_password',
   );
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;

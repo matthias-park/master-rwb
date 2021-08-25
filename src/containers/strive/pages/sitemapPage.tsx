@@ -121,7 +121,7 @@ const SitemapPage = () => {
     (prev, next) => prev.routes.length === next.routes.length,
   );
   const { data: promotions } = useApi<RailsApiResponse<PostItem[]>>(
-    '/railsapi/v1/content/promotions',
+    '/restapi/v1/content/promotions',
   );
   const { user } = useAuth();
   const [activeItem, setActiveItem] = useState<string | null>(null);

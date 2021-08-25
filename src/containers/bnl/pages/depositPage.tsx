@@ -34,7 +34,7 @@ const DepositPage = () => {
   const { t, jsxT } = useI18n();
   const { data: depositData, error: depositError } = useApi<
     RailsApiResponse<DepositLimits[] | null>
-  >('/railsapi/v1/user/max_deposit');
+  >('/restapi/v1/user/max_deposit');
   const depositDataLoading = !depositData && !depositError;
   const [depositLoading, setDepositLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -104,7 +104,7 @@ const DepositPage = () => {
       };
       const response: RailsApiResponse<DepositResponse | null> = await postApi<
         RailsApiResponse<DepositResponse>
-      >('/railsapi/v1/deposits/perform', depositParams).catch(
+      >('/restapi/v1/deposits/perform', depositParams).catch(
         (res: RailsApiResponse<null>) => {
           return res;
         },

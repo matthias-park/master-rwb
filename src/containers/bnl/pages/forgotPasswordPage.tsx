@@ -46,7 +46,7 @@ const ForgotPasswordPage = () => {
     let form: { [key: string]: string } = { email };
     if (captchaToken) form.captcha_token = captchaToken;
     const result = await postApi<RailsApiResponse<ForgotPasswordResponse>>(
-      '/railsapi/v1/user/login/forgot_password',
+      '/restapi/v1/user/login/forgot_password',
       form,
     ).catch((res: RailsApiResponse<null>) => res);
 

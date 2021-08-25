@@ -35,7 +35,7 @@ const ChangePassword2fa = () => {
   const toggle2fa = async ({ pin }: authenticatePostForm) => {
     setApiResponse(null);
     const result = await postApi<RailsApiResponse<Authenticate2fa>>(
-      '/railsapi/v1/user/settings/authentication',
+      '/restapi/v1/user/settings/authentication',
       {
         enable: !user.authentication_enabled,
         pin,

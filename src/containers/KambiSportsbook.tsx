@@ -274,7 +274,7 @@ const getSBParams = async (
   const data =
     playerId && !retail
       ? await getApi<RailsApiResponse<string>>(
-          '/railsapi/v1/kambi/get_token',
+          '/restapi/v1/kambi/get_token',
         ).catch((res: RailsApiResponse<null>) => {
           return res;
         })
@@ -285,7 +285,7 @@ const getSBParams = async (
     ticket: data?.Data || '',
     currency: 'EUR',
     market: 'BE',
-    getApiBalance: '/railsapi/v1/user/balance',
+    getApiBalance: '/restapi/v1/user/balance',
     retail,
   };
 };

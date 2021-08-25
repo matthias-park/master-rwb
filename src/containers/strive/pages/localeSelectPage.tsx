@@ -33,7 +33,7 @@ const LocaleSelectPage = () => {
 
   const changeLocale = async (lang: string, link?: string) => {
     setButtonLoading(lang);
-    return postApi('/railsapi/v1/locale', {
+    return postApi('/restapi/v1/locale', {
       locale: lang,
     }).then(() =>
       link

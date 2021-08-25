@@ -26,7 +26,7 @@ const TemplatePage = () => {
   const { headerNav } = useUIConfig();
   const { t } = useI18n();
   const { data, error } = useApi<RailsApiResponse<ContentPage>>(
-    `/railsapi/v1/content/page/${page}`,
+    `/restapi/v1/content/page/${page}`,
   );
   const isDataLoading = !data && !error;
   const [links, setLinks] = useState<{ link: string; name: string }[]>([]);
