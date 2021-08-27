@@ -6,7 +6,7 @@ export type Symbols = { [key: string]: string };
 
 const missingSymbolsSent: string[] = [];
 
-const i18n = (lang: string, data: Symbols = {}) => {
+const i18n = (lang: string, data: Symbols = {}, cacheTranslations = true) => {
   const hasTranslations = !!Object.keys(data).length;
 
   return {
@@ -18,7 +18,8 @@ const i18n = (lang: string, data: Symbols = {}) => {
         hasTranslations &&
         !noFallback &&
         !data[key] &&
-        !missingSymbolsSent.includes(key)
+        !missingSymbolsSent.includes(key) &&
+        !cacheTranslations
       ) {
         missingSymbolsSent.push(key);
         Sentry.captureMessage(`missing symbol:${key}`);
@@ -27,7 +28,12 @@ const i18n = (lang: string, data: Symbols = {}) => {
       return val;
     },
     jsxT(key: string, props: any = {}) {
-      if (hasTranslations && !data[key] && !missingSymbolsSent.includes(key)) {
+      if (
+        hasTranslations &&
+        !data[key] &&
+        !missingSymbolsSent.includes(key) &&
+        !cacheTranslations
+      ) {
         missingSymbolsSent.push(key);
         Sentry.captureMessage(`missing symbol:${key}`);
       }

@@ -47,7 +47,6 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
   const { data, mutate } = useApi<RailsApiResponse<Translations>>(
     translationsUrl,
     {
-      initialData: locale && cache ? cache[locale] : undefined,
       revalidateOnMount: true,
       onSuccess: data => {
         if (data?.Data?._locale_) {
@@ -61,24 +60,11 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
     },
   );
 
-  // useEffect(() => {
-  //   navigator.serviceWorker?.addEventListener('message', async ({ data }) => {
-  //     if (
-  //       data.meta === 'workbox-broadcast-update' &&
-  //       data.payload.updatedURL.includes(translationsUrl)
-  //     ) {
-  //       const { cacheName, updatedUrl } = data.payload;
-  //       const cache = await caches.open(cacheName);
-  //       const updatedResponse = await cache.match(updatedUrl);
-  //       const updatedJson = updatedResponse && (await updatedResponse.json());
-  //       mutate(updatedJson, false);
-  //       console.log('translations updated');
-  //     }
-  //   });
-  // }, []);
-
   const [translations, setTranslations] = useState(() =>
-    i18n(data?.Data?._locale_ || '', data?.Data || {}),
+    i18n(
+      data?.Data?._locale_ || cache?.[locale]?.Data?._locale_ || '',
+      data?.Data || cache?.[locale]?.Data || {},
+    ),
   );
 
   useEffect(() => {
@@ -89,7 +75,7 @@ export const I18nProvider = ({ ...props }: I18nProviderProps) => {
 
   useEffect(() => {
     if (data?.Data?._locale_)
-      setTranslations(i18n(data.Data._locale_, data.Data));
+      setTranslations(i18n(data.Data._locale_, data.Data, false));
     else mutate(undefined, true);
   }, [data?.Data]);
 
