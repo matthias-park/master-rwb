@@ -81,8 +81,10 @@
             margin-right: 4px;
         }
         .spinner-border {
-          position: relative;
-          right: 8px;
+          margin: 8px;
+          &.ios {
+            margin: 11px;
+          }
         }
     }
     select,

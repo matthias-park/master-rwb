@@ -1,3 +1,8 @@
+export interface SelectValue {
+  value: string | number;
+  text: string;
+  default?: boolean;
+}
 export interface OnlineFormBlockField {
   id: string;
   value?: string;
@@ -24,7 +29,7 @@ export interface OnlineFormBlockField {
   };
   disableCopyPaste?: boolean;
   valueAs?: (value: string) => unknown;
-  selectValues?: { value: string | number; text: string; default?: boolean }[];
+  selectValues?: (() => Promise<SelectValue[]>) | SelectValue[];
 }
 
 export interface OnlineFormBlock {

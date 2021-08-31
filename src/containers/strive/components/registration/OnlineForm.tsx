@@ -14,7 +14,7 @@ import { RegistrationResponse } from '../../../../types/api/user/Registration';
 import LoadingButton from '../../../../components/LoadingButton';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import CheckboxInput from '../../../../components/customFormInputs/CheckboxInput';
-import { API_VALIDATIONS } from '../../../../utils/apiUtils';
+import { API_VALIDATIONS, getApi } from '../../../../utils/apiUtils';
 import clsx from 'clsx';
 import SelectInput from '../../../../components/customFormInputs/SelectInput';
 import dayjs from 'dayjs';
@@ -59,8 +59,20 @@ const blocks = (
         autoComplete: 'address-level1',
         type: 'select',
         required: true,
-        valueAs: (value: string) => parseInt(value),
-        selectValues: [{ text: 'Colorado', value: '69' }],
+        valueAs: (value: string) => value.toString(),
+        selectValues: async () => {
+          const res = await getApi<
+            RailsApiResponse<{ [key: string]: string } | null>
+          >('/restapi/v1/provinces');
+          if (res.Success && res.Data) {
+            const values = Object.entries(res.Data);
+            return values.map(([id, name]) => ({
+              text: name,
+              value: id.toString(),
+            }));
+          }
+          return [];
+        },
       },
       {
         id: 'city',
@@ -348,9 +360,6 @@ const OnlineForm = (props: Props) => {
                         validate: field.validate,
                       }}
                       values={field.selectValues || []}
-                      defaultValue={field.selectValues?.find(
-                        value => value.default,
-                      )}
                       title={t(`register_input_${field.id}`)}
                     />
                   );
