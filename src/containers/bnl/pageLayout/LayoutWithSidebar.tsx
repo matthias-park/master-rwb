@@ -27,7 +27,7 @@ const LayoutWithSidebar = ({
       <Sidebar links={sidebar} />
       {children}
       {rightSidebar && (
-        <div className="right-sidebar">
+        <div className="right-sidebar d-none d-xl-block">
           <HelpBlock
             title={'user_help_title'}
             blocks={['faq', 'phone', 'email']}

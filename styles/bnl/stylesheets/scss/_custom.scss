@@ -262,9 +262,6 @@ a:hover {
           }
       }
   }
-  @include media-breakpoint-down(lg) {
-      display: none;
-  }
   &.default {
     #{ $self }__title {
       color: $black-custom;
