@@ -356,10 +356,6 @@ a:hover {
   @include media-breakpoint-down(sm) {
     flex-direction: column;
   }
-  @include media-breakpoint-up(xxxl) {
-    position: sticky;
-    margin: 0 -80px;
-  }
   &__icon {
     font-size: 25px;
     margin-right: 15px;
