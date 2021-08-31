@@ -72,7 +72,7 @@ const CommunicationPreferencesPage = () => {
   const { data, error } = useApi<any>(
     '/railsapi/v1/user/profile/communication_preferences',
   );
-  const { handleSubmit, formState, register } = useForm();
+  const { watch, handleSubmit, formState, register, reset } = useForm();
   const [checkboxValues, setCheckboxValues] = useState({});
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
@@ -126,6 +126,9 @@ const CommunicationPreferencesPage = () => {
       }
       return res;
     });
+    if (res.Success) {
+      reset({ ...watch() });
+    }
     setApiResponse({
       success: res.Success,
       msg: res.Message || t('api_response_failed'),
@@ -189,7 +192,7 @@ const CommunicationPreferencesPage = () => {
             </div>
             <LoadingButton
               loading={formState.isSubmitting}
-              disabled={!!!Object.keys(formState.dirtyFields).length}
+              disabled={!formState.isDirty}
               className="mt-3"
               variant="primary"
               type="submit"
