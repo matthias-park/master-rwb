@@ -29,7 +29,7 @@ const RegistrationReturnCode = {
   '1': 'sitemap_registerVerification',
   '2': 'sitemap_registerMajorError',
   '3': 'sitemap_registerExclusion',
-  '4': 'sitemap_registerExclusion',
+  '4': 'sitemap_registerTechnicalError',
 };
 const localStorageSaveKey = 'register-saved';
 
