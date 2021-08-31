@@ -113,7 +113,7 @@ export const UncontrolledTextInput = React.forwardRef(
               >
                 <i
                   ref={tooltipRef}
-                  className="icon-tooltip"
+                  className="icon-tooltip cursor-pointer"
                   onClick={() => setShowTooltip(!showTooltip)}
                 />
               </OverlayTrigger>
