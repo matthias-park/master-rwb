@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Button from 'react-bootstrap/Button';
 import { ComponentName, PagesName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { useRoutePath } from '../hooks/index';
 import useGTM from '../hooks/useGTM';
 import Link from '../components/Link';
@@ -10,6 +11,8 @@ import LoginForm from './LoginForm';
 import clsx from 'clsx';
 import FocusLock from 'react-focus-lock';
 import { useUIConfig } from '../hooks/useUIConfig';
+import { useConfig } from '../hooks/useConfig';
+import { useModal } from '../hooks/useModal';
 
 interface Props {
   dropdownClasses?: string;
@@ -36,6 +39,11 @@ const LoginDropdown = ({
 }: Props) => {
   const { t } = useI18n();
   const location = useLocation();
+  const history = useHistory();
+  const { cookies } = useConfig();
+  const { enableModal } = useModal();
+  const [loginIntention, setLoginIntention] = useState(false);
+  const [regIntention, setRegIntention] = useState(false);
   const { backdrop } = useUIConfig();
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const sendDataToGTM = useGTM();
@@ -50,14 +58,39 @@ const LoginDropdown = ({
 
   const toggleDropdown = (isOpen, _, metadata) => {
     if (metadata.source !== 'keydown') {
-      if (isOpen) {
-        sendDataToGTM({
-          event: 'LoginIntention',
-        });
+      if (
+        !window.__config__.componentSettings?.login?.loginCookiesAccept ||
+        cookies.cookies.accepted
+      ) {
+        if (isOpen) {
+          sendDataToGTM({
+            event: 'LoginIntention',
+          });
+        }
+        setShowDropdown(isOpen);
+      } else {
+        enableModal(ComponentName.CookiesModal);
+        setLoginIntention(true);
+        setRegIntention(false);
       }
-      setShowDropdown(isOpen);
     }
   };
+
+  const handleRegClick = () => {
+    enableModal(ComponentName.CookiesModal);
+    setRegIntention(true);
+    setLoginIntention(false);
+  };
+
+  useEffect(() => {
+    if (loginIntention && cookies.cookies.accepted) {
+      setShowDropdown(true);
+      setLoginIntention(false);
+    } else if (regIntention && cookies.cookies.accepted) {
+      history.push(registerRoute);
+      setRegIntention(false);
+    }
+  }, [cookies.cookies.accepted]);
 
   return (
     <Dropdown
@@ -65,15 +98,29 @@ const LoginDropdown = ({
       show={showDropdown}
       onToggle={toggleDropdown}
     >
-      <Link
-        className={clsx(
-          'btn btn-light btn-header mr-2 mr-xl-3 ml-auto',
-          userLoading && 'visibility-hidden',
-        )}
-        to={registerRoute}
-      >
-        {t('register_btn')}
-      </Link>
+      {!window.__config__.componentSettings?.login?.loginCookiesAccept ||
+      cookies.cookies.accepted ? (
+        <Link
+          className={clsx(
+            'btn btn-light btn-header mr-2 mr-xl-3 ml-auto',
+            userLoading && 'visibility-hidden',
+          )}
+          to={registerRoute}
+        >
+          {t('register_btn')}
+        </Link>
+      ) : (
+        <Button
+          variant="light"
+          className={clsx(
+            'btn btn-light btn-header mr-2 mr-xl-3 ml-auto',
+            userLoading && 'visibility-hidden',
+          )}
+          onClick={() => handleRegClick()}
+        >
+          {t('register_btn')}
+        </Button>
+      )}
       <Dropdown.Toggle
         variant="primary"
         className={clsx(
