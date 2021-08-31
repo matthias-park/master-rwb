@@ -4,11 +4,19 @@ import { useRoutePath } from '../../../../hooks';
 import { useI18n } from '../../../../hooks/useI18n';
 import Link from '../../../../components/Link';
 import { useAuth } from '../../../../hooks/useAuth';
+import { useHistory } from 'react-router-dom';
+import useEffectSkipInitial from '../../../../hooks/useEffectSkipInitial';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
 
 const RegWelcome = () => {
   const { t, jsxT } = useI18n();
   const { user } = useAuth();
+  const history = useHistory();
+  const homePagePath = useRoutePath(PagesName.HomePage);
+
+  useEffectSkipInitial(() => {
+    !user.logged_in && history.replace(homePagePath, {});
+  }, [user.logged_in]);
 
   const depositPath = useRoutePath(PagesName.DepositPage, true);
   return (
