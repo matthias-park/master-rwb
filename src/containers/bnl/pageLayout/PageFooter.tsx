@@ -27,8 +27,8 @@ const FooterHeader = () => {
     true,
   );
   return (
-    <div className="row flex-column flex-sm-row footer-pre align-items-sm-center py-3">
-      <div className="session-block mb-2 mb-sm-0">
+    <div className="footer-pre py-3">
+      <div className="session-block">
         <span className="session-block__text text-14">
           {t('time_spent_in_website')}
         </span>
@@ -37,18 +37,18 @@ const FooterHeader = () => {
           <SessionTimer />
         </span>
       </div>
-      <h3 className="text-gray-100 ml-1 ml-sm-auto mr-md-5 mb-2 mb-sm-0">
+      <h3 className="footer-pre__title text-gray-100">
         {t('moderation_gamble')}
       </h3>
       <div className="restrictions-block">
         <img
-          className="restrictions-block__img d-none d-sm-block d-md-none d-lg-block"
+          className="restrictions-block__img"
           alt=""
           src="/assets/images/restrictions/18-label.png"
           width="40"
           height="37"
         />
-        <span className="restrictions-block__text text-14 mr-3 d-none d-sm-block d-md-none d-lg-block">
+        <span className="restrictions-block__text text-14">
           {t('minimum_age_disclaimer')}
         </span>
         <Link to={responsibleGamingPath}>
