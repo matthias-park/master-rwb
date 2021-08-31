@@ -160,6 +160,7 @@ a:hover {
     }
   }
   &--big {
+    z-index: 999;
     .tooltip-inner {
       max-width: 300px !important;
     }
