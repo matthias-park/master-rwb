@@ -235,7 +235,7 @@ const SocialSection = ({
 
 const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
   const { t, jsxT } = useI18n();
-  const desktopWidth = useDesktopWidth(768);
+  const desktopWidth = useDesktopWidth(767);
   const sendDataToGTM = useGTM();
   const FooterLink = useMemo(
     () => ({
