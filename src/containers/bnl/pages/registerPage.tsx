@@ -152,7 +152,7 @@ const RegisterPage = () => {
       }
       return res;
     },
-    [],
+    [getToken],
   );
 
   if (user.logged_in && !location?.state?.welcomeScreen) {
