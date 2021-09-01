@@ -218,6 +218,7 @@ const WithdrawalPage = () => {
         event: 'withdrawalRequested',
         'tglab.withdrawal.amount': data.amount,
       });
+      setSelectedBankAccount(null);
       setWithdrawalLoading(false);
       setWithdrawalConfirmData(null);
       mutate();
