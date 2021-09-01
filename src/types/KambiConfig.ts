@@ -743,8 +743,7 @@ export interface CustomerSettings {
    */
   getBalance?: (
     success: (balance: number) => void,
-    failure: (err: any) => void,
-    $: any,
+    failure: (err?: any) => void,
   ) => void;
   /**
    * Inform the operator that the current user should be logged out.

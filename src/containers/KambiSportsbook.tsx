@@ -18,6 +18,8 @@ import { matchPath, useHistory, useLocation } from 'react-router-dom';
 import { hideKambiSportsbook, showKambiSportsbook } from '../utils/uiUtils';
 import { useAuth } from '../hooks/useAuth';
 import { useRoutePath } from '../hooks';
+import { useDispatch } from 'react-redux';
+import { setBalance } from '../state/reducers/user';
 
 interface KambiContext {
   sportsbookLoaded: boolean;
@@ -160,7 +162,7 @@ export const KambiProvider = ({ children }) => {
 
 interface SetCustomerSettingsProps {
   getApiBalance: string;
-  updateBalance: () => void;
+  updateBalance: (balance: number) => void;
   setKambiLoaded: () => void;
   urlChangeRequested: (page: PagesName) => void;
   locale: string;
@@ -201,10 +203,15 @@ const setCustomerSettings = ({
 }: SetCustomerSettingsProps) => {
   window.customerSettings = {
     getBalance: function (successFunc, failureFunc) {
-      updateBalance();
       getApi<string>(getApiBalance, { responseText: true })
         .then(res => {
-          successFunc(parseFloat(res));
+          const balance = parseFloat(res);
+          if (!isNaN(balance)) {
+            updateBalance(balance);
+            successFunc(balance);
+          } else {
+            failureFunc();
+          }
         })
         .catch(e => {
           failureFunc(e);
@@ -298,7 +305,8 @@ const kambiId = 'KambiBC';
 const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
   const context = useContext(kambiContext);
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
-  const { user, updateUser } = useAuth();
+  const dispatch = useDispatch();
+  const { user } = useAuth();
   const loginPagePath = useRoutePath(PagesName.LoginPage, true);
   const history = useHistory();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -317,7 +325,7 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
           getSBParams(locale, user.id?.toString(), retail).then(kambiConfig => {
             setCustomerSettings({
               getApiBalance: kambiConfig?.getApiBalance,
-              updateBalance: () => updateUser(),
+              updateBalance: (balance: number) => dispatch(setBalance(balance)),
               setKambiLoaded: () => context.setSportsbookLoaded(true),
               urlChangeRequested: (page: PagesName) => {
                 if (page === PagesName.LoginPage) {
