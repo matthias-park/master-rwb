@@ -1,4 +1,5 @@
 import { AddToast } from 'react-toast-notifications';
+import { DefaultTheme } from 'styled-components';
 import { ComponentSettings } from '../src/types/ComponentSettings';
 import KambiConfig, { CustomerSettings } from '../src/types/KambiConfig';
 
@@ -18,6 +19,7 @@ export declare global {
       geoComplyKey?: string;
       dateFormat?: string;
       componentSettings?: ComponentSettings;
+      themeSettings?: DefaultTheme;
     };
     toast?: AddToast;
     _wbUpdate?: boolean;

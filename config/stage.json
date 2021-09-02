@@ -99,6 +99,21 @@
           "GeoComply": true,
           "PlayerDisabled": true
         }
+      },
+      "themeSettings": {
+        "colors": {
+          "primary": {
+            "main": "#44d9e6",
+            "light": "#5eed53",
+            "hover": "#00C537"
+          },
+          "brand": {
+            "main": "#000",
+            "light": "#000",
+            "text": "#031442"
+          },
+          "secondary": "#666666"
+        }
       }
     }
   ],

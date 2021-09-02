@@ -187,6 +187,7 @@ module.exports = function (webpackEnv, buildFranchises) {
                 geoComplyKey: franchise.geoComplyKey,
                 dateFormat: franchise.dateFormat,
                 componentSettings: franchise.componentSettings,
+                themeSettings: franchise.themeSettings,
               }),
             },
             isEnvProduction
