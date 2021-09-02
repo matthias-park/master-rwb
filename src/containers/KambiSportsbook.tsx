@@ -347,7 +347,7 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
         }
       }
     })();
-  }, [user, locale, containerRef.current]);
+  }, [user.loading, locale, containerRef.current]);
 
   return (
     <>
