@@ -523,6 +523,9 @@ a:hover {
     @include media-breakpoint-down(lg) {
         margin-right: 20px;
     }
+    &.container {
+      margin-right: auto;
+    }
   }
   .custom-dropdown {
     .dropdown-toggle {

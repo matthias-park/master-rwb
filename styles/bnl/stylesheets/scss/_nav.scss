@@ -10,6 +10,9 @@
     display: none;
   }
   &__hidden {
+    @include media-breakpoint-down(lg) {
+      display: none;
+    }
     background-color: inherit;
   }
   &.sticky {

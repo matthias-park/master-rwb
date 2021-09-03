@@ -16,7 +16,7 @@ const ScrollSidebar = ({ links, setActive, active }: Props) => {
     <div
       className={clsx(
         `left-sidebar sticky`,
-        !!!links.length && `left-sidebar__hidden `,
+        !links.length && `left-sidebar__hidden`,
       )}
     >
       <ul className="sidebar-list">

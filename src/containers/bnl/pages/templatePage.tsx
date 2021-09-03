@@ -16,6 +16,7 @@ import ContentPage from '../../../types/api/content/ContentPage';
 import { useConfig } from '../../../hooks/useConfig';
 import { Helmet } from 'react-helmet-async';
 import { replaceStringTagsReact } from '../../../utils/reactUtils';
+import useDesktopWidth from '../../../hooks/useDesktopWidth';
 
 const TemplatePage = () => {
   const { slug } = useParams<{ slug?: string }>();
@@ -29,6 +30,8 @@ const TemplatePage = () => {
     `/restapi/v1/content/page/${page}`,
   );
   const isDataLoading = !data && !error;
+  const desktopWidth = useDesktopWidth(1199);
+
   const [links, setLinks] = useState<{ link: string; name: string }[]>([]);
   const { header } = useConfig();
 
@@ -99,8 +102,18 @@ const TemplatePage = () => {
           )}
         >
           <ScrollSidebar links={links} setActive={setActive} active={active} />
-          <div className="w-100 ml-0 ml-md-5 ml-xl-0 d-flex flex-column flex-xl-row mx-auto">
-            <main className="container px-0 px-4 pl-xxl-150 mb-4 pt-4 pt-sm-5">
+          <div
+            className={clsx(
+              'w-100 ml-0 ml-xl-0 d-flex flex-column flex-xl-row mx-auto',
+              !!links.length && 'ml-md-5',
+            )}
+          >
+            <main
+              className={clsx(
+                'container mb-4 pt-4 pt-sm-5 pr-xl-5',
+                !!links.length ? 'pl-xxl-150' : 'pl-sm-0',
+              )}
+            >
               {!!data.Data.structure.content && (
                 <>
                   <h1 className="mb-3 text-brand-text mt-xl-2">{pageTitle}</h1>
@@ -164,7 +177,12 @@ const TemplatePage = () => {
                 </>
               )}
             </main>
-            <div className="right-sidebar px-4 px-xl-0">
+            <div className={clsx(
+                'right-sidebar',
+                !links.length && !desktopWidth
+                  ? 'container pl-sm-0'
+                  : ' px-4 px-xl-0',
+            )}>
               <HelpBlock
                 title={'user_help_title'}
                 blocks={['faq', 'phone', 'email']}
