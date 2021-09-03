@@ -19,7 +19,8 @@
         "host": "192.168.109.106",
         "port": 6379,
         "db": 0,
-        "prefix": "reactNodeStage-"
+        "prefix": "reactNodeStage-",
+        "password": "yAw6H44cHUtvnjC"
       },
       "dateFormat": "YYYY-MM-DD",
       "componentSettings": {
@@ -60,7 +61,8 @@
         "host": "192.168.109.106",
         "port": 6379,
         "db": 0,
-        "prefix": "reactNodeStage-"
+        "prefix": "reactNodeStage-",
+        "password": "yAw6H44cHUtvnjC"
       },
       "componentSettings": {
         "v2Auth": "wss://strive-ws.tglab.dev",

@@ -1,5 +1,9 @@
 import { Request } from 'express';
-import { extensionsToIgnore, PRERENDER_HEADER } from './constants';
+import {
+  EXCLUDED_BOTS,
+  extensionsToIgnore,
+  PRERENDER_HEADER,
+} from './constants';
 import fetch from 'isomorphic-unfetch';
 import { PageConfig } from './types/PageConfig';
 import redisCache from './redisCache';
@@ -8,14 +12,16 @@ import logger from './logger';
 export const shouldPrerender = (req: Request) => {
   const prerenderHeader = req.headers[PRERENDER_HEADER];
   if (!req.useragent || req.method !== 'GET' || prerenderHeader) return false;
-  // Don't prerender static files
+  const isBot: boolean | string = req.useragent.isBot;
+  // Don't prerender static files or excluded bots
   if (
     extensionsToIgnore.some(
       extension => req.url.toLowerCase().indexOf(extension) !== -1,
-    )
+    ) ||
+    (typeof isBot === 'string' && EXCLUDED_BOTS.includes(isBot))
   )
     return false;
-  return req.useragent.isBot;
+  return isBot;
 };
 
 interface ContentPages {

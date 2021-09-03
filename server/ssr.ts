@@ -14,7 +14,12 @@ import { cacheKeys, getRailsConstants } from './utils';
 
 const renderingRoute = async (req: Request) => {
   const railsConstants = await getRailsConstants(req);
-  if (!req.locale) {
+  if (
+    !req.locale ||
+    !railsConstants?.available_locales.some(
+      lang => lang.iso === req.locale?.toLowerCase(),
+    )
+  ) {
     const selectLanguageRoute = railsConstants?.navigation_routes.find(
       route => route.id === 20,
     );

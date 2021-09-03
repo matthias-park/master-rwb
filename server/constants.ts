@@ -54,7 +54,7 @@ export const extensionsToIgnore = [
   '.svg',
   '.webmanifest',
 ];
-
+export const EXCLUDED_BOTS = ['pingdom'];
 export const BROWSER_KEEP_ALIVE = 300000; // 5min
 
 export const DOMAINS_TO_FRANCHISE: {
