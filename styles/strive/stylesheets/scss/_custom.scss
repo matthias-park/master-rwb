@@ -17,7 +17,7 @@ body {
     @include media-breakpoint-down(lg) {
         padding: 0 20px;
     }
-    &.modal-open-desktop {
+    &.modal-open-windows {
       transform: translateX(-8px);
       padding-right: 80px !important;
       @media only screen and (max-width: 1920px) {
@@ -27,11 +27,17 @@ body {
         .header:before {
           margin-right: -97px;
         }
+        .cookies-nav {
+          padding-right: 115px;
+        }
       }
       @include media-breakpoint-down(xl) {
         padding-right: 45px !important;
         .header:before {
           margin-right: -62px;
+        }
+        .cookies-nav {
+          padding-right: 62px;
         }
       }
       @include media-breakpoint-down(lg) {
@@ -44,6 +50,9 @@ body {
         padding-right: 3px !important;
         .header:before {
           margin-right: 0;
+        }
+        .cookies-nav {
+          padding-right: 47px;
         }
       }
     }
@@ -337,10 +346,21 @@ a:hover {
   z-index: 1100;
   background-color: $brand-light;
   color: $gray-custom-200;
-  padding: 20px 6% 14px 6%;
+  padding: 20px 115px 14px 115px;
   box-shadow: 0 0px 12px rgba($white, 0.2);
+  @include media-breakpoint-down(xl) {
+    padding: 20px 45px 14px 45px;
+  }
+  @include media-breakpoint-down(sm){
+    padding: 20px 30px 14px 30px;
+  }
   @include media-breakpoint-down(xs) {
     flex-direction: column;
+  }
+  @include media-breakpoint-up(xxxl) {
+    margin: auto;
+    position: sticky;
+    margin: 0 -80px;
   }
   &__icon {
     font-size: 25px;
@@ -609,6 +629,10 @@ a:hover {
     min-width: 200px;
     white-space: nowrap;
   }
+}
+
+.modal {
+  height: 100vh !important;
 }
 
 .generic-modal-width {

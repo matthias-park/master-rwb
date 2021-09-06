@@ -621,6 +621,10 @@ a:hover {
   }
 }
 
+.modal-backdrop {
+  width: 100vh;
+}
+
 .generic-modal-width {
   width: 680px;
   max-width: none !important;
