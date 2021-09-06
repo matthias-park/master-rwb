@@ -43,6 +43,22 @@ export const replaceStringTagsReact = (text: string, props: any = {}) => {
             {domToReact(domNode.children, htmlParseOptions)}
           </Link>
         );
+      } else if (domNode.type === 'script') {
+        return (
+          <script
+            {...domNode.attribs}
+            ref={ref => {
+              if (ref && !ref.innerHTML.length) {
+                const script = document.createElement('script');
+                script.innerHTML = domToReact(
+                  domNode.children,
+                  htmlParseOptions,
+                ) as string;
+                ref.replaceWith(script);
+              }
+            }}
+          />
+        );
       }
     },
   };
