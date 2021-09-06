@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import { LimitData } from '../../../types/api/user/Limits';
 import { franchiseDateFormat } from '../../../constants';
 import { sortAscending } from '../../../utils';
+import clsx from 'clsx';
 
 interface LimitProps {
   limitData: {
@@ -153,7 +154,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                 limitTypeOrder.indexOf(b.LimitType),
               ),
             )
-            .map(limit => {
+            .map((limit, i) => {
               let formattedCurrentLimit: string | null = null;
               let formattedFutureLimit: string | null = null;
               switch (limit.Formatting) {
@@ -196,6 +197,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                   )
                 : null;
 
+              const lastLimit = i + 1 === limitData.data.length;
               return (
                 <div>
                   <p className="mt-1">
@@ -251,6 +253,23 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                       </>
                     )}
                   </ul>
+                  {limit.ValidTo &&
+                    !limit.FutureLimitAmount &&
+                    !limit.FutureLimitValidFrom && (
+                      <p
+                        className={clsx(
+                          'mt-1',
+                          lastLimit ? 'mb-0 pb-2' : 'pb-3',
+                        )}
+                      >
+                        {t('limit_valid_until')}{' '}
+                        <b>
+                          {dayjs(limit.ValidTo).format(
+                            `${franchiseDateFormat} HH:MM`,
+                          )}
+                        </b>
+                      </p>
+                    )}
                 </div>
               );
             })
@@ -282,6 +301,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                 fixedData={fixedData}
                 mutateData={mutate}
                 translatableDefaultValues={true}
+                formData={limitData.data}
               />
             </>
           </Accordion.Collapse>

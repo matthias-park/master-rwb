@@ -17,7 +17,7 @@ interface SettingProps {
   id: string;
   fields: SettingsField[];
   action: string;
-  fixedData?: { id: string; value?: number | string | undefined }[];
+  fixedData?: { id: string; value?: string | number | undefined }[];
   setResponse?: (
     resp: {
       success: boolean;
@@ -28,6 +28,7 @@ interface SettingProps {
   translatableDefaultValues?: boolean;
   formBody?: boolean;
   validateBeforeRequest?: (any) => { valid: boolean; message: string };
+  formData?: any;
 }
 
 const FormsWithUpdateUser = ['deposit_limit', 'identity'];
@@ -36,6 +37,11 @@ const formsWithLogoutUser = [
   'self_exclusion',
   'disable_player_time_out',
   'disable_player',
+];
+const formLimitsKeys = [
+  'limit_amount_day',
+  'limit_amount_week',
+  'limit_amount_month',
 ];
 
 const SettingsForm = ({
@@ -48,6 +54,7 @@ const SettingsForm = ({
   translatableDefaultValues,
   formBody,
   validateBeforeRequest,
+  formData,
 }: SettingProps) => {
   const { t } = useI18n();
   const { user, updateUser, signout } = useAuth();
@@ -55,7 +62,16 @@ const SettingsForm = ({
   const formMethods = useForm<any, any>({
     mode: 'onBlur',
   });
-  const { handleSubmit, watch, formState, reset } = formMethods;
+  const {
+    handleSubmit,
+    watch,
+    formState,
+    reset,
+    register,
+    setValue,
+    getValues,
+  } = formMethods;
+  const watchPassword = watch('password');
   const watchAllFields = watch(
     fields
       .filter(
@@ -118,7 +134,10 @@ const SettingsForm = ({
   ): Promise<void> => {
     setResponse && setResponse(null);
     body = Object.entries(body).reduce(
-      (acc, [k, v]) => (!v ? acc : (acc[k] = v), acc),
+      (acc, [k, v]) => (
+        !v ? (formLimitsKeys.includes(k) ? (acc[k] = 0) : acc) : (acc[k] = v),
+        acc
+      ),
       {},
     );
     const checkRequest = validateBeforeRequest && validateBeforeRequest(body);
@@ -200,23 +219,45 @@ const SettingsForm = ({
               }
               switch (field.type) {
                 case 'submit': {
+                  const isDeleteButton = field.id === 'submit_button_delete';
+                  const submitWithCurrentAction =
+                    field.value &&
+                    getValues(field.value?.id) === field.value?.value;
                   return (
-                    <LoadingButton
-                      key={field.id}
-                      data-testid={field.id}
-                      loading={!!formState.isSubmitting}
-                      disabled={
-                        field.disabled ||
-                        Object.values(watchAllFields).some(
-                          value => !value || value === 'default',
-                        )
-                      }
-                      className="mt-2"
-                      variant="primary"
-                      type="submit"
-                    >
-                      {t(field.title)}
-                    </LoadingButton>
+                    <>
+                      {field.value && field.value.id && (
+                        <input
+                          type="hidden"
+                          {...register(field.value.id)}
+                        ></input>
+                      )}
+
+                      <LoadingButton
+                        key={field.id}
+                        data-testid={field.id}
+                        loading={
+                          !!formState.isSubmitting &&
+                          (!field.value || submitWithCurrentAction)
+                        }
+                        disabled={
+                          field.disabled || isDeleteButton
+                            ? !watchPassword
+                            : Object.values(watchAllFields).some(
+                                value => !value || value === 'default',
+                              ) ||
+                              (isDeleteButton && !Object.keys(formData).length)
+                        }
+                        className="mt-2 mr-2"
+                        variant="primary"
+                        type="submit"
+                        onClick={() =>
+                          field.value &&
+                          setValue(field.value?.id, field.value?.value)
+                        }
+                      >
+                        {t(field.title)}
+                      </LoadingButton>
+                    </>
                   );
                 }
                 case 'file': {
@@ -317,15 +358,21 @@ const SettingsForm = ({
                       };
                     }
                   }
+                  const isDepositLossBetLimits = [
+                    'deposit_limit',
+                    'loss_limit',
+                    'bet_limit',
+                    'session_limit',
+                  ].includes(id);
                   return (
                     <TextInput
                       id={field.id}
                       key={field.id}
                       rules={
                         !field.disabled && {
-                          required: `${t(field.title)} ${t(
-                            'settings_field_required',
-                          )}`,
+                          required:
+                            !isDepositLossBetLimits &&
+                            `${t(field.title)} ${t('settings_field_required')}`,
                           validate: value => {
                             if (isNewPassword)
                               return (

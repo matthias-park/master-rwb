@@ -32,7 +32,7 @@ export interface SettingsField {
   values?: SettingsFieldValue[];
   visible?: boolean;
   disabled?: boolean;
-  value?: string | number;
+  value?: any;
   formatting?: 'currency' | 'hour' | 'date' | 'none';
 }
 
