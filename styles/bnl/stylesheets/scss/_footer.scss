@@ -430,6 +430,7 @@ footer:not(.KambiBC-footer) {
             border-radius: 4px;
             &.white-corners {
               border: 3px solid $white;
+              background-color: white;
             }
           }
         }
