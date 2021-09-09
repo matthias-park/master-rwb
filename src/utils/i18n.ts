@@ -51,7 +51,7 @@ export const getWindowUrlLocale = (): string | null => {
     if (window.__config__.name === 'bnl' && urlLocale === 'de') {
       return 'fr';
     }
-    return urlLocale;
+    return urlLocale.toLocaleLowerCase();
   }
   return null;
 };
