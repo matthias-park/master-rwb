@@ -13,7 +13,9 @@ import clsx from 'clsx';
 import RedirectNotFound from '../../../components/RedirectNotFound';
 import { useRoutePath } from '../../../hooks';
 import { PagesName } from '../../../constants';
+import { filterPromotionsList } from '../../../utils';
 import { Helmet } from 'react-helmet-async';
+import * as Sentry from '@sentry/react';
 
 const PromoLinkEl = ({
   item,
@@ -40,15 +42,7 @@ const PromoLinkEl = ({
   );
 };
 
-const PromoItem = ({
-  item,
-  variant,
-  imageLoaded,
-}: {
-  item: PostItem;
-  variant?: string;
-  imageLoaded?: () => void;
-}) => {
+const PromoItem = ({ item, variant }: { item: PostItem; variant?: string }) => {
   return (
     <PromoLinkEl
       item={item}
@@ -60,8 +54,6 @@ const PromoItem = ({
       <img
         alt="promo"
         className="promotion-block__img"
-        onLoad={imageLoaded}
-        onError={imageLoaded}
         src={item.image.url || '/assets/images/promo/promo-front.png'}
       ></img>
       <div className="promotion-block__body">
@@ -84,44 +76,55 @@ const PromotionsList = () => {
     '/restapi/v1/content/promotions',
   );
   const { t } = useI18n();
-  const [imagesLoaded, setImagesLoaded] = useState({});
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const isDataLoading = !data && !error;
 
-  const setImageLoaded = (id: number) =>
-    setImagesLoaded(prev => ({ ...prev, [id]: true }));
+  const promotions = filterPromotionsList(data?.Data || []);
 
   useEffect(() => {
-    if (data?.Data) {
-      setImagesLoaded(
-        data?.Data.reduce((obj, cur) => ({ ...obj, [cur.id]: false }), {}),
-      );
+    if (promotions.length && !imagesLoaded) {
+      const loadImage = image => {
+        return new Promise((resolve, reject) => {
+          const loadImg = new Image();
+          loadImg.src = image.url;
+          loadImg.onload = () => resolve(image.url);
+          loadImg.onerror = (err: any) => reject(err);
+        });
+      };
+      Promise.all(promotions.map(promo => loadImage(promo.image)))
+        .then(() => setImagesLoaded(true))
+        .catch(err => {
+          Sentry.captureMessage(
+            `Failed to load promotion image ${
+              err?.path?.[0]?.currentSrc || ''
+            }`,
+            Sentry.Severity.Error,
+          );
+          setImagesLoaded(true);
+        });
+    } else if (!promotions.length) {
+      setImagesLoaded(true);
     }
   }, [data?.Data]);
 
-  const allImagesLoaded = !Object.values(imagesLoaded).some(loaded => !loaded);
   return (
     <main className="mb-5 pt-0 pt-xl-5 min-vh-70">
-      {(isDataLoading || !allImagesLoaded) && (
-        <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="black" className="mx-auto" />
-        </div>
-      )}
       {!!error && (
         <h2 className="mt-3 mb-5 text-center">
           {t('promotions_failed_to_load')}
         </h2>
       )}
-      <div
-        className={clsx('promotions-list mt-4', !allImagesLoaded && 'd-none')}
-      >
-        {data?.Data.map(item => (
-          <PromoItem
-            key={item.id}
-            item={item}
-            imageLoaded={() => setImageLoaded(item.id)}
-          />
-        ))}
-      </div>
+      {isDataLoading || !imagesLoaded ? (
+        <div className="d-flex justify-content-center pt-4 pb-3">
+          <Spinner animation="border" variant="black" className="mx-auto" />
+        </div>
+      ) : (
+        <div className="promotions-list mt-4">
+          {promotions.map(item => (
+            <PromoItem key={item.id} item={item} />
+          ))}
+        </div>
+      )}
     </main>
   );
 };
