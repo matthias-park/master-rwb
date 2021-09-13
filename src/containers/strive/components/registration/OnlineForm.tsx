@@ -87,11 +87,6 @@ const blocks = (
         required: true,
       },
       {
-        id: 'building_number',
-        type: 'text',
-        required: true,
-      },
-      {
         id: 'postal_code',
         required: true,
         type: 'text',
@@ -124,18 +119,6 @@ const blocks = (
           !value.length ||
           VALIDATIONS.phone(value) ||
           t('phone_number_invalid'),
-      },
-      {
-        id: 'gender',
-        type: 'select',
-        required: true,
-        selectValues: [
-          { text: t('gender_male'), value: 'M' },
-          {
-            text: t('gender_female'),
-            value: 'F',
-          },
-        ],
       },
     ],
   },
