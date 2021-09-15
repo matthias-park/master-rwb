@@ -54,7 +54,11 @@ export const replaceStringTagsReact = (text: string, props: any = {}) => {
                   domNode.children,
                   htmlParseOptions,
                 ) as string;
-                ref.replaceWith(script);
+                const scriptParent = ref.parentNode;
+                if (scriptParent) {
+                  scriptParent.removeChild(ref);
+                  scriptParent.appendChild(script);
+                }
               }
             }}
           />

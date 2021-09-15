@@ -5,7 +5,7 @@ import {
 } from 'react-google-recaptcha-v3';
 import { ConfigLoaded } from '../types/Config';
 import { useConfig } from './useConfig';
-
+import { isIE } from 'react-device-detect';
 interface ProviderProps {
   children: any;
 }
@@ -17,7 +17,8 @@ export const CaptchaProvider = ({ children }: ProviderProps) => {
   });
   if (
     configLoaded !== ConfigLoaded.Loaded ||
-    !window.__config__.googleRecaptchaKey
+    !window.__config__.googleRecaptchaKey ||
+    isIE
   )
     return children;
 
@@ -36,6 +37,6 @@ export const CaptchaProvider = ({ children }: ProviderProps) => {
 
 export const useCaptcha = () => {
   const execute = useContext(GoogleReCaptchaContext).executeRecaptcha;
-  if (window.__config__.googleRecaptchaKey) return execute;
+  if (window.__config__.googleRecaptchaKey && !isIE) return execute;
   return null;
 };
