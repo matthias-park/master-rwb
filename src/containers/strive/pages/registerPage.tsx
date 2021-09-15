@@ -6,7 +6,6 @@ import { useConfig } from '../../../hooks/useConfig';
 import { Redirect, useHistory, useLocation } from 'react-router-dom';
 import { postApi } from '../../../utils/apiUtils';
 import { PostRegistration } from '../../../types/api/user/Registration';
-import { RegistrationResponse } from '../../../types/api/user/Registration';
 import dayjs from 'dayjs';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
@@ -22,6 +21,9 @@ import { FormProvider, useForm } from 'react-hook-form';
 import RegError from '../components/registration/RegError';
 import { useCaptcha } from '../../../hooks/useGoogleRecaptcha';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { useDispatch } from 'react-redux';
+import { setRegistered } from '../../../state/reducers/user';
+import { NET_USER } from '../../../types/UserStatus';
 dayjs.extend(customParseFormat);
 
 const RegistrationReturnCode = {
@@ -64,6 +66,7 @@ const RegisterPage = () => {
     return localeEqual && localesEqual && routesEqual;
   });
   const { user, updateUser } = useAuth();
+  const dispatch = useDispatch();
   const getToken = useCaptcha();
   const sendDataToGTM = useGTM();
   const formMethods = useForm<RegistrationFields>({
@@ -94,7 +97,7 @@ const RegisterPage = () => {
   const handleRegisterSubmit = useCallback(
     async (
       form: PostRegistration,
-    ): Promise<RailsApiResponse<RegistrationResponse | null>> => {
+    ): Promise<RailsApiResponse<NET_USER | null>> => {
       sendDataToGTM({
         event: 'RegistrationSubmitted',
       });
@@ -118,7 +121,7 @@ const RegisterPage = () => {
         }
         return obj;
       }, {});
-      const res = await postApi<RailsApiResponse<RegistrationResponse>>(
+      const res = await postApi<RailsApiResponse<NET_USER>>(
         '/restapi/v1/registration/new',
         finalForm,
       ).catch((res: RailsApiResponse<null>) => {
@@ -133,7 +136,8 @@ const RegisterPage = () => {
       );
       if (res?.Success && res.Data) {
         sessionStorage.removeItem(localStorageSaveKey);
-        updateUser();
+        dispatch(setRegistered(res.Data));
+        updateUser(true);
         sendDataToGTM({
           'tglab.user.GUID': res.Data.PlayerId,
           event: 'ConfirmedRegistration',

@@ -22,6 +22,7 @@ export enum VALIDATOR_STATUS {
 }
 
 export interface UserStatus {
+  needsSync?: boolean;
   loading: boolean;
   logout?: boolean;
   logged_in: boolean;

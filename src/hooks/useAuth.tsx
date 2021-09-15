@@ -3,7 +3,7 @@ import React, {
   createContext,
   useEffect,
   ReactNode,
-  useState,
+  useRef,
 } from 'react';
 import { TestEnv } from '../constants';
 import RailsApiResponse from '../types/api/RailsApiResponse';
@@ -13,10 +13,9 @@ import { getApi, postApi } from '../utils/apiUtils';
 import useGTM from './useGTM';
 import { useConfig } from './useConfig';
 import { isMobile } from 'react-device-detect';
-import { clearUserLocalStorage } from '../utils/';
 import { setUser as sentrySetUser } from '@sentry/react';
 import { ConfigLoaded } from '../types/Config';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { setLogout, setLogin, setUser } from '../state/reducers/user';
 import { RootState } from '../state';
 import useIdleTicker from './useIdleTicker';
@@ -32,7 +31,7 @@ export interface UserAuth {
     twoFactorAuthRequired?: boolean;
   }>;
   signout: () => Promise<void>;
-  updateUser: () => void;
+  updateUser: (forceUpdate?: boolean) => void;
 }
 
 export const AuthContext = createContext<UserAuth | null>(null);
@@ -58,6 +57,7 @@ class StatusResponseError {
 }
 
 export const AuthProvider = ({ ...props }: AuthProviderProps) => {
+  const retryCount = useRef(0);
   const sendDataToGTM = useGTM();
   const { configLoaded, locale } = useConfig((prev, next) => {
     const localeEqual = prev.locale === next.locale;
@@ -65,12 +65,8 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
     return localeEqual && configEqual;
   });
   const dispatch = useDispatch();
-  const [prevUser, setPrevUser] = useState<UserStatus | null>(null);
   const user = useSelector((state: RootState) => state.user);
-  const { data, error, mutate } = useApi<
-    UserStatus | null,
-    StatusResponseError
-  >(
+  const { error, mutate } = useApi<UserStatus | null, StatusResponseError>(
     !TestEnv && !window.PRERENDER_CACHE ? '/restapi/v1/user/status' : null,
     url =>
       getApi<RailsApiResponse<UserStatus>>(url).then(res => {
@@ -79,48 +75,65 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
       }),
     {
       revalidateOnFocus: !window.__config__.componentSettings?.v2Auth,
-      refreshInterval: window.__config__.componentSettings?.v2Auth ? 0 : 300000, //v2 - disabled, otherwise - 5 min
+      refreshInterval: window.__config__.componentSettings?.v2Auth ? 0 : 600000, //v2 - disabled, otherwise - 10 min
       onSuccess: data => {
-        setPrevUser(data);
+        retryCount.current = 0;
+        let formattedUser: UserStatus = {
+          logged_in: false,
+          loading: false,
+          needsSync: false,
+        };
+        if (data?.id != null) {
+          formattedUser = {
+            ...formattedUser,
+            ...data,
+            logged_in: !!data.id,
+          };
+        }
+        if (!shallowEqual(user, formattedUser)) {
+          dispatch(setUser(formattedUser));
+        }
       },
       onErrorRetry: (
         error: StatusResponseError,
         _,
         _1,
         revalidate,
-        { retryCount = 0 },
+        options,
       ) => {
+        retryCount.current++;
+        const loggedOutUser = {
+          logged_in: false,
+          loading: false,
+          needsSync: false,
+        };
         if (error.notLoggedIn) {
-          if (retryCount > 2) return;
-          setTimeout(() => revalidate({ retryCount }), 2000);
+          if (retryCount.current > 2 || !user.logged_in) {
+            retryCount.current = 0;
+            if (!shallowEqual(user, loggedOutUser))
+              dispatch(setUser(loggedOutUser));
+            return;
+          }
+          setTimeout(() => revalidate(options), 2000);
         } else {
-          if (retryCount > 10) return;
-          setTimeout(() => revalidate({ retryCount }), 10000);
+          if (retryCount.current > 10) {
+            retryCount.current = 0;
+            if (!shallowEqual(user, loggedOutUser))
+              dispatch(
+                setUser({
+                  logged_in: false,
+                  loading: false,
+                  needsSync: false,
+                }),
+              );
+            return;
+          }
+          setTimeout(() => revalidate(options), 10000);
         }
       },
+      isPaused: () => !(user.needsSync || user.logged_in),
     },
   );
-  useEffect(() => {
-    let formattedUser: UserStatus =
-      !error?.notLoggedIn && prevUser?.logged_in
-        ? prevUser
-        : { logged_in: false, loading: false };
-    if (!data && !error && !window.PRERENDER_CACHE) {
-      formattedUser.loading = true;
-    } else if (data && !error) {
-      formattedUser = data;
-      formattedUser.logged_in = !!formattedUser.id;
-      formattedUser.loading = false;
-    }
-    if (user !== formattedUser) {
-      dispatch(setUser(formattedUser));
-    }
-  }, [data, error]);
-  useEffect(() => {
-    if ((!prevUser || prevUser.logged_in) && !user.logged_in && !user.loading) {
-      clearUserLocalStorage();
-    }
-  }, [data, prevUser]);
   useEffect(() => {
     if (!user.loading && configLoaded === ConfigLoaded.Loaded) {
       if (user.logged_in && user.id) {
@@ -179,7 +192,11 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
     !!window.__config__.componentSettings?.userIdleTimeout && user.logged_in,
     signout,
   );
-  const updateUser = () => mutate();
+  const updateUser = (forceUpdate: boolean = false) => {
+    if ((!error && !retryCount.current && user.logged_in) || forceUpdate) {
+      mutate();
+    }
+  };
   const value: UserAuth = {
     user,
     signin,

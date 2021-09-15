@@ -6,17 +6,17 @@ import { useFormContext } from 'react-hook-form';
 import { FormFieldValidation, VALIDATIONS } from '../../../../constants';
 import { OnlineFormBlock } from '../../../../types/RegistrationBlock';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
-import { RegistrationResponse } from '../../../../types/api/user/Registration';
 import LoadingButton from '../../../../components/LoadingButton';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import CheckboxInput from '../../../../components/customFormInputs/CheckboxInput';
 import { API_VALIDATIONS } from '../../../../utils/apiUtils';
 import AutocompletePostalCode from '../AutocompletePostalCode';
 import clsx from 'clsx';
+import { NET_USER } from '../../../../types/UserStatus';
 interface Props {
   handleRegisterSubmit: (
     form: any,
-  ) => Promise<RailsApiResponse<RegistrationResponse | null>>;
+  ) => Promise<RailsApiResponse<NET_USER | null>>;
   fieldChange: (fieldName: string) => void;
 }
 

@@ -29,15 +29,6 @@ export interface ValidateRegisterPersonalCode {
   };
 }
 
-export interface RegistrationResponse {
-  RegistrationId: number;
-  Email: string;
-  Login: string;
-  PlayerId: number;
-  Code: number;
-  Message: string;
-}
-
 export interface PostCodeInfo {
   district_name: string;
   locality: string;

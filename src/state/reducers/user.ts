@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import UserStatus, { NET_USER } from '../../types/UserStatus';
+import { clearUserLocalStorage } from '../../utils';
 
 const initialState: UserStatus = {
   logged_in: false,
-  loading: false,
+  loading: true,
+  needsSync: true,
 };
 
 export const userSlice = createSlice({
@@ -11,10 +13,16 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<UserStatus>) => {
+      if (!action.payload.logged_in) {
+        clearUserLocalStorage();
+      }
       if (state.logged_in !== action.payload.logged_in) {
         return action.payload;
       }
-      return { ...state, ...action.payload };
+      return {
+        ...state,
+        ...action.payload,
+      };
     },
     setBalance: (state, action: PayloadAction<number>) => {
       state.balance = action.payload;
@@ -29,13 +37,27 @@ export const userSlice = createSlice({
         currency: action.payload.currency,
       };
     },
+    setRegistered: (_, action: PayloadAction<NET_USER>) => {
+      return {
+        id: action.payload.PlayerId,
+        balance: 0,
+        logged_in: true,
+        loading: true,
+        needsSync: true,
+        name: action.payload.Login,
+      };
+    },
     setLogout: () => {
+      clearUserLocalStorage();
       return {
         ...initialState,
         logout: true,
+        loading: false,
+        needsSync: false,
       };
     },
     removeUserData: () => {
+      clearUserLocalStorage();
       return initialState;
     },
     setTwoFactoAuth: (state, action: PayloadAction<boolean>) => {
@@ -51,6 +73,7 @@ export const {
   setLogout,
   setLogin,
   setTwoFactoAuth,
+  setRegistered,
 } = userSlice.actions;
 
 export default userSlice.reducer;

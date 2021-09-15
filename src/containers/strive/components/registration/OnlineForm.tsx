@@ -10,7 +10,6 @@ import {
 } from '../../../../constants';
 import { OnlineFormBlock } from '../../../../types/RegistrationBlock';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
-import { RegistrationResponse } from '../../../../types/api/user/Registration';
 import LoadingButton from '../../../../components/LoadingButton';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import CheckboxInput from '../../../../components/customFormInputs/CheckboxInput';
@@ -18,11 +17,12 @@ import { API_VALIDATIONS, getApi } from '../../../../utils/apiUtils';
 import clsx from 'clsx';
 import SelectInput from '../../../../components/customFormInputs/SelectInput';
 import dayjs from 'dayjs';
+import { NET_USER } from '../../../../types/UserStatus';
 
 interface Props {
   handleRegisterSubmit: (
     form: any,
-  ) => Promise<RailsApiResponse<RegistrationResponse | null>>;
+  ) => Promise<RailsApiResponse<NET_USER | null>>;
   fieldChange: (fieldName: string) => void;
 }
 

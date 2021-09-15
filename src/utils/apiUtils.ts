@@ -92,6 +92,9 @@ export const SwrFetcherConfig: ConfigInterface<
   revalidateOnFocus: false,
   revalidateOnReconnect: false,
   errorRetryCount: 2,
+  dedupingInterval: 30000,
+  focusThrottleInterval: 10000,
+  errorRetryInterval: 10000,
 };
 
 export const formatSuccesfullRailsApiResponse = <T>(
