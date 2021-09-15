@@ -18,6 +18,7 @@ import clsx from 'clsx';
 import SelectInput from '../../../../components/customFormInputs/SelectInput';
 import dayjs from 'dayjs';
 import { NET_USER } from '../../../../types/UserStatus';
+import Province from '../../../../types/api/Province';
 
 interface Props {
   handleRegisterSubmit: (
@@ -61,14 +62,13 @@ const blocks = (
         required: true,
         valueAs: (value: string) => value.toString(),
         selectValues: async () => {
-          const res = await getApi<
-            RailsApiResponse<{ [key: string]: string } | null>
-          >('/restapi/v1/provinces');
-          if (res.Success && res.Data) {
-            const values = Object.entries(res.Data);
-            return values.map(([id, name]) => ({
-              text: name,
-              value: id.toString(),
+          const res = await getApi<RailsApiResponse<Province | null>>(
+            '/restapi/v1/provinces',
+          );
+          if (res.Success && res.Data && Array.isArray(res.Data)) {
+            return res.Data.map(province => ({
+              text: province.name,
+              value: province.id.toString(),
             }));
           }
           return [];
