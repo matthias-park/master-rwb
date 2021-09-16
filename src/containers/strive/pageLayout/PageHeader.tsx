@@ -3,7 +3,6 @@ import { useConfig } from '../../../hooks/useConfig';
 import { postApi } from '../../../utils/apiUtils';
 import LoginDropdown from '../../LoginDropdown';
 import UserInfoBlock from '../components/header/UserInfoBlock';
-import { Navbar } from 'react-bootstrap';
 import { useUIConfig } from '../../../hooks/useUIConfig';
 import { ComponentName } from '../../../constants';
 import clsx from 'clsx';
@@ -19,6 +18,12 @@ import Link from '../../../components/Link';
 import { useAuth } from '../../../hooks/useAuth';
 import { usePrevious } from '../../../hooks';
 import { HeaderRouteLink } from '../../../types/api/PageConfig';
+import StyledHeader, {
+  StyledCollapseWrp,
+  StyledHeaderNav,
+  StyledHeaderNavItem,
+  StyledNavToggler,
+} from '../components/styled/StyledHeader';
 
 const SubNavLinks = ({
   links,
@@ -46,7 +51,7 @@ const SubNavLinks = ({
   };
   return (
     <div className="row w-100 align-items-start order-2 order-xl-1">
-      <ul className="header__nav header__nav--secondary mr-auto mr-lg-0 ml-lg-auto">
+      <StyledHeaderNav secondary className="mr-auto mr-lg-0 ml-lg-auto">
         {
           //[
           // {
@@ -63,10 +68,10 @@ const SubNavLinks = ({
           // },
           // ]
           links.map(link => (
-            <li key={link.text} className="header__nav-item">
+            <StyledHeaderNavItem className="styled-nav-item" key={link.text}>
               {link.path?.includes('https') ? (
                 <a
-                  className="header__nav-item-link"
+                  className="nav-link"
                   target="_blank"
                   rel="noreferrer"
                   href={link.path}
@@ -77,13 +82,13 @@ const SubNavLinks = ({
                 <Link
                   key={link.text}
                   onClick={() => navLinkClick(link.text)}
-                  className="header__nav-item-link"
+                  className="nav-link"
                   to={link.path || '/'}
                 >
                   {t(link.text)}
                 </Link>
               )}
-            </li>
+            </StyledHeaderNavItem>
           ))
         }
         <LocaleSelector
@@ -91,7 +96,7 @@ const SubNavLinks = ({
           current={locale}
           setLocale={changeLocale}
         />
-      </ul>
+      </StyledHeaderNav>
     </div>
   );
 };
@@ -149,12 +154,11 @@ const PageHeader = () => {
   const subLinks = header?.find(link => link.subLinks);
 
   return (
-    <Navbar
+    <StyledHeader
       ref={navbarContainerRef}
       variant="dark"
       expand="xl"
       className={clsx(
-        'header',
         backdrop.ignoredComponents.includes(ComponentName.Header) && 'on-top',
       )}
       expanded={navExpanded}
@@ -165,26 +169,20 @@ const PageHeader = () => {
     >
       {!desktopWidth && (
         <>
-          <Navbar.Toggle
-            className="header__nav-toggler pl-0 pr-1 mr-2 ml-n1"
-            type="button"
-          >
-            <span className="icon-menu"></span>
-          </Navbar.Toggle>
+          <StyledNavToggler className="pl-0 pr-1 mr-2 ml-n1" type="button">
+            <span className="icon-menu" />
+          </StyledNavToggler>
           <BrandLogo mobile={true} />
           <UserBlock mobile={true} />
         </>
       )}
       <div className="container-fluid px-0">
         {desktopWidth && <BrandLogo mobile={false} />}
-        <Navbar.Collapse
-          className="header__collapse-wrp d-flex"
-          id="headerCollapse"
-        >
+        <StyledCollapseWrp className="d-flex" id="headerCollapse">
           {!desktopWidth && (
-            <Navbar.Toggle className="header__nav-toggler ml-auto mr-1 mt-2 d-block d-xl-none">
+            <StyledNavToggler className="ml-auto mr-1 mt-2 d-block d-xl-none">
               <span className="icon-menu-close"></span>
-            </Navbar.Toggle>
+            </StyledNavToggler>
           )}
           {!!subLinks && (
             <SubNavLinks
@@ -193,7 +191,7 @@ const PageHeader = () => {
             />
           )}
           <div className="row w-100 mt-0 mt-lg-2 align-items-end order-1 order-xl-2">
-            <ul ref={navbarLinksRef} className="header__nav header__nav--main">
+            <StyledHeaderNav ref={navbarLinksRef} main className="navbar-nav">
               {header
                 ?.sort((a, b) => sortAscending(a.order!, b.order!))
                 .map(link => {
@@ -209,12 +207,12 @@ const PageHeader = () => {
                     />
                   );
                 })}
-            </ul>
+            </StyledHeaderNav>
             {desktopWidth && <UserBlock mobile={false} />}
           </div>
-        </Navbar.Collapse>
+        </StyledCollapseWrp>
       </div>
-    </Navbar>
+    </StyledHeader>
   );
 };
 

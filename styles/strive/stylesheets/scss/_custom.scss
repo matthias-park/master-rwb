@@ -777,3 +777,27 @@ noscript {
     line-height: 1.5;
   }
 }
+
+.styled-nav-item {
+  &.dropdown .dropdown-toggle {
+      &:after {
+        content: '\e965';
+        font-family: 'icomoon';
+        top: 0;
+        border: none;
+        font-size: 20px;
+        vertical-align: middle;
+      }
+    }
+}
+.user-menu__list-item-link--toggler:after {
+  font-family: "icomoon";
+  content: '\e976';
+  border: none;
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  font-size: 28px;
+  color: #ccc;
+  cursor: pointer;
+}

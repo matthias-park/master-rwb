@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { AvailableLocale } from '../../../../types/api/PageConfig';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
+import { StyledHeaderNavItem } from '../styled/StyledHeader';
 
 interface Props {
   available: AvailableLocale[];
@@ -20,11 +21,11 @@ const LocaleSelector = ({ available, current, setLocale }: Props) => {
   };
   return (
     <>
-      <Dropdown className="header__nav-item">
+      <Dropdown as={StyledHeaderNavItem}>
         <Dropdown.Toggle
           data-testid="dropdown-trigger"
           variant="link"
-          className="header__nav-item-link d-none d-xl-block"
+          className="nav-link d-none d-xl-block"
           id="navbarDropdownMenuLink"
           disabled={!!updatingLocale}
         >
@@ -39,7 +40,7 @@ const LocaleSelector = ({ available, current, setLocale }: Props) => {
               data-testid={`desktop-locale-${lang.iso}`}
               className={clsx(
                 `lang-${lang.iso}`,
-                'header__nav-item-link text-uppercase',
+                'nav-link text-uppercase',
                 lang.iso !== current && 'cursor-pointer',
               )}
               key={lang.id}
@@ -58,7 +59,7 @@ const LocaleSelector = ({ available, current, setLocale }: Props) => {
           <div
             className={clsx(
               `lang-${lang.iso}`,
-              'header__nav-item-link text-uppercase cursor-pointer',
+              'nav-link text-uppercase cursor-pointer',
               ((lang.iso === current && !updatingLocale) ||
                 lang.iso === updatingLocale) &&
                 'font-weight-bold',

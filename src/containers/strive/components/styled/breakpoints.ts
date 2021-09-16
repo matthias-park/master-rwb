@@ -1,17 +1,29 @@
-export const mediaBreakpointUp = (
-  breakpoint: number | string,
-  vertical = false,
-) =>
-  `@media (min-${vertical ? 'height' : 'width'}: calc(${breakpoint} + 0.02px))`;
-export const mediaBreakpointDown = (
-  breakpoint: number | string,
-  vertical = false,
-) => `@media (max-${vertical ? 'height' : 'width'}: ${breakpoint})`;
-export const mediaBreakpointBetween = (
-  breakpointMin: number | string,
-  breakpointMax: number | string,
-  vertical = false,
-) =>
-  `@media (max-${vertical ? 'height' : 'width'}: ${breakpointMax}) and (min-${
-    vertical ? 'height' : 'width'
-  }: calc(${breakpointMin} + 0.02px))`;
+const breakpointMin = (
+  name: string,
+  breakpoints: { [key: string]: string },
+) => {
+  const sizesKeys = Object.keys(breakpoints);
+  const breakpointIndex = sizesKeys?.indexOf(name);
+  if (breakpointIndex && breakpointIndex > 0)
+    return Object.values(breakpoints)[breakpointIndex - 1];
+  return '0';
+};
+const breakpointMax = (
+  name: string,
+  breakpoints: { [key: string]: string },
+) => {
+  const sizesKeys = Object.keys(breakpoints);
+  const breakpointIndex = sizesKeys?.indexOf(name);
+  if (breakpointIndex && breakpointIndex < --sizesKeys.length)
+    return `calc(${Object.values(breakpoints)[breakpointIndex + 1]} - 0.02px)`;
+  return '0';
+};
+
+export const mediaBreakpointUp = (breakpoint: string) => {
+  return props =>
+    `@media (min-width: ${breakpointMin(breakpoint, props.theme.sizes)})`;
+};
+export const mediaBreakpointDown = (breakpoint: string) => {
+  return props =>
+    `@media (max-width: ${breakpointMax(breakpoint, props.theme.sizes)})`;
+};

@@ -9,6 +9,7 @@ import { useConfig } from '../../../../hooks/useConfig';
 import { useRoutePath } from '../../../../hooks/index';
 import Accordion from 'react-bootstrap/Accordion';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
+import { StyledHeaderUserMenu } from '../styled/StyledHeader';
 
 const UserMenuLink = ({ link, name, setShowDropdown, children }) => {
   const { t } = useI18n();
@@ -74,34 +75,34 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
 
   return (
     <div className="d-flex justify-content-end flex-grow-1">
-      <Dropdown
-        className={`header__user-menu user-menu-dropdown ${dropdownClasses}`}
+      <StyledHeaderUserMenu
+        className={`menu-dropdown ${dropdownClasses}`}
         show={showDropdown}
         onToggle={isOpen => showUserMenu(isOpen)}
       >
-        <div className="header__user-menu-info">
-          <Link to={depositRoute} className="header__user-menu-info-balance">
+        <div className="menu-info">
+          <Link to={depositRoute} className="menu-info-balance">
             <span>
               {user.balance} {user.currency}
             </span>
             <i className="icon-add-action-1 ml-2"></i>
           </Link>
         </div>
-        <Dropdown.Toggle as="a" bsPrefix="header__user-menu-toggle">
-          <strong className="header__user-menu-toggle-name">
+        <Dropdown.Toggle as="a" bsPrefix="menu-toggle">
+          <strong className="menu-toggle-name">
             {t('hello')} {user.first_name}
           </strong>
-          <i className="header__user-menu-icon icon-account ml-2"></i>
-          <div className="header__user-menu-toggle-button user-menu-dropdown">
+          <i className="user-menu-icon icon-account ml-2"></i>
+          <div className="user-menu-toggle-button user-menu-dropdown">
             <i
               className={`icon-${
                 showDropdown ? 'up' : 'down'
-              } header__user-menu-toggle-icon`}
+              } user-menu-toggle-icon`}
             ></i>
           </div>
         </Dropdown.Toggle>
         <Dropdown.Menu className="dropdown-menu user-menu">
-          <div className="user-menu__wrp">
+          <div className="user-menu-wrp">
             <ul className="user-menu__list">
               <Dropdown.Item as="div" className="mt-3">
                 <Link
@@ -134,7 +135,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
             </div>
           </div>
         </Dropdown.Menu>
-      </Dropdown>
+      </StyledHeaderUserMenu>
     </div>
   );
 };
