@@ -550,3 +550,59 @@
     align-self:flex-start;
   }
 }
+
+.payment-methods {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(120px, 1fr));
+  grid-gap: 10px;
+  padding-left: 0;
+  margin-bottom: 0;
+  @include media-breakpoint-down(xxl) {
+    grid-template-columns: repeat(4, minmax(100px, 1fr));
+  }
+  @include media-breakpoint-down(xs) {
+    grid-template-columns: repeat(3, minmax(85px, 1fr));
+  }
+  @media only screen and (max-width: 375px) {
+    grid-template-columns: repeat(2, minmax(110px, 1fr));
+  }
+  li {
+    list-style-type: none;
+  }
+}
+
+.payment-method {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+  cursor: pointer;
+  $self: &;
+  &__img {
+    padding: 15px;
+    background-color: $white;
+    border-radius: 8px;
+    max-width: 100%;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+  }
+  &__title {
+    text-align: center;
+    margin-top: 6px;
+    font-size: 14px;
+    overflow: hidden;
+    max-width: 100%;
+    text-overflow: ellipsis;
+  }
+  &:hover {
+    #{ $self }__img {
+      border: 2px solid $primary;
+      padding: 13px;
+    }
+  }
+  &.selected,
+  &:active {
+    #{ $self }__img {
+      border: 2px solid $brand;
+      padding: 13px;
+    }
+  }
+}

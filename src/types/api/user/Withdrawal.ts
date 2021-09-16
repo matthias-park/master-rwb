@@ -18,6 +18,7 @@ export interface DefaultAccount {
   editable: boolean;
   allow_sepa_payout: boolean;
   net_balance: number;
+  icon?: string;
 }
 
 export interface Request {

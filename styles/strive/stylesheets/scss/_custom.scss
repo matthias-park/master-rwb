@@ -142,6 +142,11 @@ a:hover {
       max-width: 300px !important;
     }
   }
+  &--no-arrow {
+    .arrow {
+      display: none;
+    }
+  }
 }
 
 .toggle-check {

@@ -23,7 +23,8 @@ import LoadingButton from '../../../components/LoadingButton';
 import { useAuth } from '../../../hooks/useAuth';
 import useGTM from '../../../hooks/useGTM';
 import useGeoComply from '../../../hooks/useGeoComply';
-import { Form } from 'react-bootstrap';
+import PaymentMethods from '../components/account-settings/PaymentMethods';
+
 interface WithdrawalRequestsProps {
   requests: Request[];
   onCancelRequest: (id: number) => Promise<void>;
@@ -139,6 +140,7 @@ const WithdrawalPage = () => {
       );
     }
   }, [data]);
+
   const cancelRequest = useCallback(
     async (id: number): Promise<void> => {
       const response = await postApi<RailsApiResponse<null>>(
@@ -273,29 +275,22 @@ const WithdrawalPage = () => {
             </CustomAlert>
           )}
           {!!data.Data.accounts?.length && (
-            <div className="info-container mb-4">
-              <div className="info-container__text">
-                <ul className="list-unstyled mb-0">
-                  <li className="mb-1">{t('withdrawal_available_accounts')}</li>
-                  <li className="mb-1">
-                    {data.Data.accounts.map(acc => (
-                      <Form.Group key={acc.uniq_id} controlId={acc.uniq_id}>
-                        <Form.Check
-                          type="checkbox"
-                          disabled={!isGeoValid}
-                          checked={acc.uniq_id === selectedBankAccount?.uniq_id}
-                          onChange={e =>
-                            setSelectedBankAccount(
-                              e.target.checked ? acc : null,
-                            )
-                          }
-                          label={acc.account}
-                        />
-                      </Form.Group>
-                    ))}
-                  </li>
-                </ul>
-              </div>
+            <div className="input-container mb-4 py-3 px-4">
+              <h6 className="input-container__title text-14 mb-3">
+                {t('withdrawal_available_accounts')}
+              </h6>
+              <PaymentMethods
+                data={data.Data.accounts.map(acc => {
+                  return {
+                    id: acc.uniq_id,
+                    value: acc.uniq_id,
+                    icon: acc?.icon,
+                    title: acc.account,
+                    onChange: () => isGeoValid && setSelectedBankAccount(acc),
+                  };
+                })}
+                selected={selectedBankAccount?.uniq_id}
+              />
             </div>
           )}
           <InputContainer

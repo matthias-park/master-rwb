@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import InputContainer from '../components/account-settings/InputContainer';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
 import HelpBlock from '../components/HelpBlock';
 import { postApi } from '../../../utils/apiUtils';
@@ -20,7 +19,7 @@ import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import useApi from '../../../hooks/useApi';
-import clsx from 'clsx';
+import DepositForm from '../components/account-settings/DepositForm';
 
 const DepositPage = () => {
   const { user } = useAuth();
@@ -56,58 +55,40 @@ const DepositPage = () => {
     [t],
   );
 
-  const handleRequestDeposit = useCallback(async (depositValue: number) => {
-    setApiError(null);
-    setDepositLoading(true);
-    const depositParams: DepositRequest = {
-      BankId: 177,
-      Amount: depositValue,
-      ReturnSuccessUrl: `${window.location.origin}${depositBaseUrl}/loading`,
-      ReturnCancelUrl: `${window.location.origin}${depositBaseUrl}/cancel`,
-    };
-    const response: RailsApiResponse<DepositResponse | null> = await postApi<
-      RailsApiResponse<DepositResponse>
-    >('/restapi/v1/deposits/perform', depositParams).catch(
-      (res: RailsApiResponse<null>) => {
-        return res;
-      },
-    );
-    if (
-      response?.Success &&
-      response.Data?.RedirectUrl &&
-      response.Data?.DepositRequestId
-    ) {
-      depositStatus.setDepositId(response.Data.DepositRequestId);
-      return !!(window.location.href = response.Data.RedirectUrl);
-    }
-    if (!response || !response.Success || response.Message) {
-      setApiError(response?.Message || t('api_response_failed'));
-    }
-    setDepositLoading(false);
-    return false;
-  }, []);
-  useEffect(() => {
-    if (!depositDataLoading && (!depositData?.Success || depositError)) {
-      setApiError(t('api_deposit_request_error'));
-    }
-  }, [depositData, depositError]);
-
-  const minDeposit = t('bancontact_min_deposit', true);
-  const maxDeposit = useMemo(() => {
-    if (depositData?.Data?.length) {
-      const getDepositLimit = (type: string) =>
-        depositData.Data!.find(limit => limit.MaxDepositLimitType === type)
-          ?.MaxDepositAmountLeft;
-      const dayLimit = getDepositLimit('Day');
-      const weekLimit = getDepositLimit('Week');
-      const monthLimit = getDepositLimit('Month');
-      const depositLimit = dayLimit ?? weekLimit ?? monthLimit;
-      if (depositLimit != null) {
-        return depositLimit;
+  const handleRequestDeposit = useCallback(
+    async (depositValue: number, bankId: number) => {
+      setApiError(null);
+      setDepositLoading(true);
+      const depositParams: DepositRequest = {
+        BankId: bankId,
+        Amount: depositValue,
+        ReturnSuccessUrl: `${window.location.origin}${depositBaseUrl}/loading`,
+        ReturnCancelUrl: `${window.location.origin}${depositBaseUrl}/cancel`,
+      };
+      const response: RailsApiResponse<DepositResponse | null> = await postApi<
+        RailsApiResponse<DepositResponse>
+      >('/railsapi/v1/deposits/perform', depositParams).catch(
+        (res: RailsApiResponse<null>) => {
+          return res;
+        },
+      );
+      if (
+        response?.Success &&
+        response.Data?.RedirectUrl &&
+        response.Data?.DepositRequestId
+      ) {
+        depositStatus.setDepositId(response.Data.DepositRequestId);
+        return !!(window.location.href = response.Data.RedirectUrl);
       }
-    }
-    return null;
-  }, [depositData?.Data, t]);
+      if (!response || !response.Success || response.Message) {
+        setApiError(response?.Message || t('api_response_failed'));
+      }
+      setDepositLoading(false);
+      return false;
+    },
+    [],
+  );
+
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       <h1>{jsxT('deposit_page_title')}</h1>
@@ -147,41 +128,17 @@ const DepositPage = () => {
           </u>
         </div>
       </CustomAlert>
-      <InputContainer
-        title={t('select_amount')}
-        inputTitle={t('deposit_input_amount')}
-        defaultValue="0"
-        buttonText={
-          <>
-            <i className="icon-lock1 text-brand mr-1"></i>
-            {t('deposit_btn')}
-          </>
-        }
-        buttonClassName="mx-auto my-2"
-        validationErrorPrefix="deposit_"
-        min={minDeposit}
-        max={maxDeposit}
-        loading={depositLoading}
-        onSubmit={handleRequestDeposit}
-        quickAmounts={[10, 20, 50, 100]}
-        currency={user.currency}
-        subText={clsx(
-          minDeposit != null &&
-            `${t('min_deposit')}: ${minDeposit} ${user.currency}`,
-          minDeposit != null && maxDeposit != null && '-',
-          maxDeposit != null &&
-            `${t('max_deposit')}: ${maxDeposit} ${user.currency}`,
-        )}
-        header={
-          <div className="input-container__header d-flex align-items-center">
-            <h2 className="ml-3 mb-0">{t('deposit_input_container_title')}</h2>
-          </div>
-        }
+      <DepositForm
+        depositRequest={handleRequestDeposit}
         disabled={
           user.validator_status === VALIDATOR_STATUS.MAJOR_ERROR ||
           depositStatus.depositStatus === DepositStatus.Pending ||
           depositDataLoading
         }
+        loading={depositLoading}
+        setApiError={setApiError}
+        depositData={depositData}
+        depositError={!!depositError}
       />
       <QuestionsContainer items={questionItems} />
       <HelpBlock
