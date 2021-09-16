@@ -177,12 +177,14 @@ const TemplatePage = () => {
                 </>
               )}
             </main>
-            <div className={clsx(
+            <div
+              className={clsx(
                 'right-sidebar',
                 !links.length && !desktopWidth
                   ? 'container pl-sm-0'
                   : ' px-4 px-xl-0',
-            )}>
+              )}
+            >
               <HelpBlock
                 title={'user_help_title'}
                 blocks={['faq', 'phone', 'email']}
