@@ -92,6 +92,11 @@ const ContactUsPage = () => {
     if (date_of_birth) {
       fields.date_of_birth = dayjs(date_of_birth).format('YYYY-MM-DD');
     }
+    for (const field of data?.form || []) {
+      if (field.type === 'select' && fields[field.id] === '-1') {
+        delete fields[field.id];
+      }
+    }
     if (captchaToken) fields.captcha_token = captchaToken;
     const response = await postApi<RailsApiResponse<SeoPages>>(
       data!.action,
