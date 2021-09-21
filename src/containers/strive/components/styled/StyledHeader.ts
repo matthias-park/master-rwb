@@ -165,7 +165,6 @@ export const StyledHeaderNav = styled.ul<{
                 color: ${props => props.theme.colors.brand.text};
                 &:hover,
                 &:active,
-                &:focus,
                 &.active {
                   border-bottom: 3px solid
                     ${props => props.theme.colors.brand.main};
