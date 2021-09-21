@@ -22,7 +22,6 @@ import useApi from '../../../hooks/useApi';
 import LoadingButton from '../../../components/LoadingButton';
 import { useAuth } from '../../../hooks/useAuth';
 import useGTM from '../../../hooks/useGTM';
-import useGeoComply from '../../../hooks/useGeoComply';
 import PaymentMethods from '../components/account-settings/PaymentMethods';
 
 interface WithdrawalRequestsProps {
@@ -111,7 +110,6 @@ const WithdrawalPage = () => {
   const { t, addSymbols } = useI18n();
   const { user } = useAuth();
   const { addToast } = useToasts();
-  const { isGeoValid, isGeoInProgress } = useGeoComply();
   const [submitResponse, setSubmitResponse] = useState<{
     success: boolean;
     msg: string | null;
@@ -246,10 +244,6 @@ const WithdrawalPage = () => {
       variant: submitResponse.success ? 'success' : 'danger',
       msg: submitResponse.msg,
     };
-  else if (isGeoInProgress)
-    alertMessage = { variant: 'info', msg: t('withdrawal_geo_inprogress') };
-  else if (!isGeoValid)
-    alertMessage = { variant: 'danger', msg: t('withdrawal_geo_invalid') };
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
@@ -286,7 +280,7 @@ const WithdrawalPage = () => {
                     value: acc.uniq_id,
                     icon: acc?.icon,
                     title: acc.account,
-                    onChange: () => isGeoValid && setSelectedBankAccount(acc),
+                    onChange: () => setSelectedBankAccount(acc),
                   };
                 })}
                 selected={selectedBankAccount?.uniq_id}
@@ -309,7 +303,7 @@ const WithdrawalPage = () => {
             }
             loading={!withdrawalConfirmData && withdrawalLoading}
             onSubmit={requestWithdrawal}
-            disabled={!selectedBankAccount || !isGeoValid}
+            disabled={!selectedBankAccount}
             currency={user.currency}
           />
           {!!data.Data.requests && (
