@@ -64,6 +64,7 @@ const DepositPage = () => {
         Amount: depositValue,
         ReturnSuccessUrl: `${window.location.origin}${depositBaseUrl}/loading`,
         ReturnCancelUrl: `${window.location.origin}${depositBaseUrl}/cancel`,
+        locale: 'en_US',
       };
       const response: RailsApiResponse<DepositResponse | null> = await postApi<
         RailsApiResponse<DepositResponse>
