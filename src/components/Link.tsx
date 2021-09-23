@@ -2,16 +2,20 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 const Link: typeof RouterLink = React.forwardRef((props, ref) => {
-  return props.to.toString().includes('https://') ? (
-    <a
-      href={props.to.toString()}
-      ref={ref}
-      {...props}
-      onClick={e => props.onClick?.(e)}
-    >
-      {props.children}
-    </a>
-  ) : (
+  if (typeof props.to !== 'string') return null;
+  if (props.to.includes('https://')) {
+    return (
+      <a
+        href={props.to.toString()}
+        ref={ref}
+        {...props}
+        onClick={e => props.onClick?.(e)}
+      >
+        {props.children}
+      </a>
+    );
+  }
+  return (
     <RouterLink
       {...props}
       ref={ref}
