@@ -16,9 +16,11 @@ footer:not(.KambiBC-footer) {
         align-items: center;
         @include media-breakpoint-down (lg) {
           flex-direction: column;
+          margin-left: -15px;
         }
         @include media-breakpoint-down(sm) {
           align-items: start;
+          margin-left: -15px;
         }
         @include media-breakpoint-down(lg) {
           > * {
