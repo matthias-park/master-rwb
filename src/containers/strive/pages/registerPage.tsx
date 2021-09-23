@@ -24,6 +24,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useDispatch } from 'react-redux';
 import { setRegistered } from '../../../state/reducers/user';
 import { NET_USER } from '../../../types/UserStatus';
+import useGeoComply from '../../../hooks/useGeoComply';
 dayjs.extend(customParseFormat);
 
 const RegistrationReturnCode = {
@@ -69,6 +70,7 @@ const RegisterPage = () => {
   const dispatch = useDispatch();
   const getToken = useCaptcha();
   const sendDataToGTM = useGTM();
+  const geoComply = useGeoComply();
   const formMethods = useForm<RegistrationFields>({
     mode: 'onBlur',
     defaultValues: JSON.parse(
@@ -138,6 +140,7 @@ const RegisterPage = () => {
         sessionStorage.removeItem(localStorageSaveKey);
         dispatch(setRegistered(res.Data));
         updateUser(true);
+        geoComply.trigger('register');
         sendDataToGTM({
           'tglab.user.GUID': res.Data.PlayerId,
           event: 'ConfirmedRegistration',

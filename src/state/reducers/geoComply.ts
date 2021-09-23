@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import Lockr from 'lockr';
+import { GeoComplyErrorCodes } from '../../types/GeoComply';
 import { setLogin } from './user';
 interface GeoComplyState {
   isReady: boolean;
@@ -117,8 +118,8 @@ export const geoComplySlice = createSlice({
           } else if (!state.validationReason) {
             state.validationReason = 'expiredCacheValidation';
           }
-        } else {
-          state.validationReason = 'login';
+        } else if (!state.validationReason) {
+          state.error = GeoComplyErrorCodes.UserRejected;
         }
       }
     },
