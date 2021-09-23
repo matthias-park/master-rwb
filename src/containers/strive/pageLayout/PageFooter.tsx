@@ -66,6 +66,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
     >
       <ul className="footer-sub__nav mr-auto">
         {data?.links
+          ?.concat()
           .sort((a, b) => sortAscending(a.order, b.order))
           .map(link => (
             <li
@@ -183,10 +184,12 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
 
   if (!links) return null;
   return links
+    .concat()
     .sort((a, b) => sortAscending(a.order, b.order))
     .map((column, index) => (
       <section key={index} className="footer-links-block">
         {column.children
+          .concat()
           .sort((a, b) => sortAscending(a.order, b.order))
           .map(linkContainer => (
             <FooterLink.Container
@@ -198,6 +201,7 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
               </FooterLink.Title>
               <FooterLink.Children>
                 {linkContainer.children
+                  .concat()
                   .sort((a, b) => sortAscending(a.order, b.order))
                   .map((child, index) =>
                     child.external ? (

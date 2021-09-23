@@ -480,3 +480,10 @@ export const franchiseDateFormat = window.__config__.dateFormat || 'YYYY-MM-DD';
 export enum CustomWindowEvents {
   ResetIdleTimer = 'resetIdleTimer',
 }
+
+export enum LocalStorageKeys {
+  config = 'constantsCache',
+  locale = 'userLocale',
+  cookies = 'cookiesSettings',
+  translations = 'translationsCache',
+}

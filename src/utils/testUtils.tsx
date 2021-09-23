@@ -3,21 +3,19 @@ import { render } from '@testing-library/react';
 import { SWRConfig } from 'swr';
 import { SwrFetcherConfig } from './apiUtils';
 import { ToastProvider } from 'react-toast-notifications';
-import { ConfigProvider } from '../hooks/useConfig';
-import { I18nProvider } from '../hooks/useI18n';
 import { HelmetProvider } from 'react-helmet-async';
+import { Provider } from 'react-redux';
+import store from '../state';
 
 const AllTheProviders = ({ children }) => {
   return (
-    <SWRConfig value={SwrFetcherConfig}>
-      <ToastProvider>
-        <ConfigProvider>
-          <I18nProvider>
-            <HelmetProvider>{children}</HelmetProvider>
-          </I18nProvider>
-        </ConfigProvider>
-      </ToastProvider>
-    </SWRConfig>
+    <Provider store={store}>
+      <SWRConfig value={SwrFetcherConfig}>
+        <ToastProvider>
+          <HelmetProvider>{children}</HelmetProvider>
+        </ToastProvider>
+      </SWRConfig>
+    </Provider>
   );
 };
 

@@ -25,7 +25,7 @@ export const CaptchaProvider = ({ children }: ProviderProps) => {
   return (
     <GoogleReCaptchaProvider
       reCaptchaKey={window.__config__.googleRecaptchaKey}
-      language={locale}
+      language={locale || undefined}
       scriptProps={{
         defer: true,
       }}

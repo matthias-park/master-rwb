@@ -7,24 +7,29 @@ import useGTM from '../../../hooks/useGTM';
 import { isEqual } from 'lodash';
 import { useConfig } from '../../../hooks/useConfig';
 import { Cookies } from '../../../types/Config';
+import { useDispatch } from 'react-redux';
+import { setCookies } from '../../../state/reducers/config';
 
 const CookieConsent = () => {
   const { enableModal } = useModal();
   const { jsxT, t } = useI18n();
   const sendDataToGTM = useGTM();
+  const dispatch = useDispatch();
   const { cookies } = useConfig((prev, next) =>
-    isEqual(prev.cookies.cookies, next.cookies.cookies),
+    isEqual(prev.cookies, next.cookies),
   );
 
-  if (cookies.cookies.accepted) {
+  if (cookies.accepted) {
     return null;
   }
   const handleAccept = () => {
-    cookies.setCookies(
-      Object.keys(cookies.cookies).reduce((obj, id) => {
-        obj[id] = true;
-        return obj;
-      }, {}) as Cookies,
+    dispatch(
+      setCookies(
+        Object.keys(cookies).reduce((obj, id) => {
+          obj[id] = true;
+          return obj;
+        }, {}) as Cookies,
+      ),
     );
     sendDataToGTM({
       event: 'cookiePreferencesChange',

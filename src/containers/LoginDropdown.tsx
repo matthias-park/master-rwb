@@ -60,7 +60,7 @@ const LoginDropdown = ({
     if (metadata.source !== 'keydown') {
       if (
         !window.__config__.componentSettings?.login?.loginCookiesAccept ||
-        cookies.cookies.accepted
+        cookies.accepted
       ) {
         if (isOpen) {
           sendDataToGTM({
@@ -83,14 +83,14 @@ const LoginDropdown = ({
   };
 
   useEffect(() => {
-    if (loginIntention && cookies.cookies.accepted) {
+    if (loginIntention && cookies.accepted) {
       setShowDropdown(true);
       setLoginIntention(false);
-    } else if (regIntention && cookies.cookies.accepted) {
+    } else if (regIntention && cookies.accepted) {
       history.push(registerRoute);
       setRegIntention(false);
     }
-  }, [cookies.cookies.accepted]);
+  }, [cookies.accepted]);
 
   return (
     <Dropdown
@@ -99,7 +99,7 @@ const LoginDropdown = ({
       onToggle={toggleDropdown}
     >
       {!window.__config__.componentSettings?.login?.loginCookiesAccept ||
-      cookies.cookies.accepted ? (
+      cookies.accepted ? (
         <Link
           className={clsx(
             'btn btn-light btn-header mr-2 mr-xl-3 ml-auto',

@@ -3,14 +3,11 @@ import UIConfig from '../types/UIConfig';
 import {
   changeBackdropVisibility,
   createBackdropProviderValues,
-  removePageLoadingSpinner,
 } from '../utils/uiUtils';
 import { UIBackdropState } from '../types/UIConfig';
 import { useConfig } from './useConfig';
 import { useLocation } from 'react-router';
 import { createHeaderNavProviderValues } from '../utils/uiUtils';
-import { useI18n } from './useI18n';
-import { ConfigLoaded } from '../types/Config';
 
 export const uiConfig = createContext<UIConfig | null>(null);
 
@@ -25,16 +22,13 @@ export function useUIConfig(): UIConfig {
 }
 
 export const UIConfigProvider = props => {
-  const { header, configLoaded, locale } = useConfig((prev, next) => {
+  const { header, showPageLoader } = useConfig((prev, next) => {
     const headerEqual = prev.header?.length === next.header?.length;
-    const configLoadedEqual = prev.configLoaded === next.configLoaded;
-    const localeEqual = prev.locale === next.locale;
-    return headerEqual && configLoadedEqual && localeEqual;
+    const pageLoaderEqual = prev.showPageLoader === next.showPageLoader;
+    return headerEqual && pageLoaderEqual;
   });
-  const i18n = useI18n();
   const location = useLocation();
   const [activeHeaderNav, setActiveHeaderNav] = useState<string | null>(null);
-  const [initPageSpinner, setInitPageSpinner] = useState<boolean>(true);
   const [backdrop, setBackdrop] = useState<UIBackdropState>({
     active: false,
     ignoredComponents: [],
@@ -46,18 +40,8 @@ export const UIConfigProvider = props => {
     header,
   );
   useEffect(() => {
-    changeBackdropVisibility(initPageSpinner || backdrop.active);
-  }, [backdrop, initPageSpinner]);
-
-  useEffect(() => {
-    if (
-      [ConfigLoaded.Loaded, ConfigLoaded.Error].includes(configLoaded) &&
-      (!locale || (locale === i18n.locale && i18n.hasTranslations))
-    ) {
-      removePageLoadingSpinner();
-      setInitPageSpinner(false);
-    }
-  }, [configLoaded, i18n]);
+    changeBackdropVisibility(showPageLoader || backdrop.active);
+  }, [backdrop, showPageLoader]);
 
   useEffect(() => {
     headerNav.toggle();

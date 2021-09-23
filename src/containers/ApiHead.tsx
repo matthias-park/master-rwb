@@ -86,7 +86,7 @@ const ApiHead = () => {
         title={title}
         defer={false}
         async
-        htmlAttributes={{ lang: locale }}
+        htmlAttributes={{ lang: locale || undefined }}
       >
         <meta property="og:title" content={seoData?.title || fallbackTitle} />
         <meta

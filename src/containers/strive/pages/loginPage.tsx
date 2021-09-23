@@ -23,7 +23,7 @@ const LoginPage = () => {
 
   const showLoginForm = !user.logged_in && !user.loading;
 
-  if (!cookies.cookies.accepted) {
+  if (!cookies.accepted) {
     return <Redirect to="/" />;
   }
 

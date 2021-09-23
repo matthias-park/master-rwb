@@ -53,7 +53,7 @@ const LoginForm = () => {
   const onSubmit = async ({ username, email, password, pin }) => {
     if (
       window.__config__.componentSettings?.login?.loginCookiesAccept &&
-      !cookies.cookies.accepted
+      !cookies.accepted
     ) {
       enableModal(ComponentName.CookiesModal);
     } else {

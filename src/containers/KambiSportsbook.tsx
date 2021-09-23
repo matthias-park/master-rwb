@@ -17,7 +17,7 @@ import { KambiSbLocales, PagesName } from '../constants';
 import { matchPath, useHistory, useLocation } from 'react-router-dom';
 import { hideKambiSportsbook, showKambiSportsbook } from '../utils/uiUtils';
 import { useAuth } from '../hooks/useAuth';
-import { useRoutePath } from '../hooks';
+import { usePrevious, useRoutePath } from '../hooks';
 import { useDispatch } from 'react-redux';
 import { setBalance } from '../state/reducers/user';
 
@@ -54,8 +54,7 @@ export const KambiProvider = ({ children }) => {
   const { routes, locale, cookies } = useConfig((prev, next) => {
     const routesEqual = prev.routes.length === next.routes.length;
     const localeEqual = prev.locale === next.locale;
-    const cookiesEqual =
-      prev.cookies.cookies.analytics === next.cookies.cookies.analytics;
+    const cookiesEqual = prev.cookies.analytics === next.cookies.analytics;
     return routesEqual && localeEqual && cookiesEqual;
   });
   const apiLoadedIntervalRef = useRef<number>(0);
@@ -77,11 +76,11 @@ export const KambiProvider = ({ children }) => {
     [pathname, routes, locationKey],
   );
   useEffect(() => {
-    window['ga-disable-UA-45067452-1'] = !cookies.cookies.analytics;
-    window['ga-disable-UA-45067452-4'] = !cookies.cookies.analytics;
-  }, [cookies.cookies.analytics]);
+    window['ga-disable-UA-45067452-1'] = !cookies.analytics;
+    window['ga-disable-UA-45067452-4'] = !cookies.analytics;
+  }, [cookies.analytics]);
   useEffect(() => {
-    if (!!api && user.logged_in !== kambiUserLoggedIn) {
+    if (!!api && locale && user.logged_in !== kambiUserLoggedIn) {
       setSportsbookLoaded(false);
       setTimeout(() => setSportsbookLoaded(true), 20000);
       if (user.logged_in) {
@@ -305,6 +304,7 @@ const kambiId = 'KambiBC';
 const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
   const context = useContext(kambiContext);
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const prevLocale = usePrevious(locale);
   const dispatch = useDispatch();
   const { user } = useAuth();
   const loginPagePath = useRoutePath(PagesName.LoginPage, true);
@@ -314,7 +314,7 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
 
   useEffect(() => {
     (async () => {
-      if (retail !== window._kc?.betslipBarcodeMode) {
+      if (retail !== window._kc?.betslipBarcodeMode || prevLocale !== locale) {
         await disposeKambi();
         context.setApi(null);
         context.setSportsbookLoaded(false);

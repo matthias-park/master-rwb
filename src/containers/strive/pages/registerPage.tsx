@@ -163,7 +163,7 @@ const RegisterPage = () => {
     [],
   );
 
-  if (!cookies.cookies.accepted) {
+  if (!cookies.accepted) {
     return <Redirect to="/" />;
   }
   if (user.logged_in && !location?.state?.welcomeScreen) {

@@ -7,7 +7,7 @@ import { StyledHeaderNavItem } from '../styled/StyledHeader';
 
 interface Props {
   available: AvailableLocale[];
-  current: string;
+  current: string | null;
   setLocale: (locale: string) => Promise<void>;
 }
 
@@ -19,6 +19,7 @@ const LocaleSelector = ({ available, current, setLocale }: Props) => {
     await setLocale(lang);
     setUpdatingLocale('');
   };
+  if (!current) return null;
   return (
     <>
       <Dropdown as={StyledHeaderNavItem}>

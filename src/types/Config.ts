@@ -25,16 +25,16 @@ export interface CookiesConfig {
 }
 
 type Config = {
-  locale: string;
+  locale: string | null;
   locales: AvailableLocale[];
-  setLocale: (lang: string, setPageLoading?: boolean) => void;
   routes: NavigationRoute[];
   header?: HeaderRoute[];
   footer?: FooterData;
   sidebars?: Array<Sidebar[]>;
   helpBlock?: PagesName[];
   configLoaded: ConfigLoaded;
-  cookies: CookiesConfig;
+  cookies: Cookies;
+  showPageLoader: boolean;
 };
 
 export default Config;

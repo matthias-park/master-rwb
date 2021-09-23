@@ -40,18 +40,16 @@ const useGTMHookContext = createContext<ISnippetsParams | undefined>(
 );
 
 const useGTM = (): ((data: IDataGTM) => void) => {
-  const { cookies } = useConfig(
-    (prev, next) => prev.cookies.cookies === next.cookies.cookies,
-  );
+  const { cookies } = useConfig((prev, next) => prev.cookies === next.cookies);
   const gtmContextState = useContext(useGTMHookContext);
 
   const sendDataToGTM = useCallback(
     (data: IDataGTM): void => {
-      if (gtmContextState?.id && cookies.cookies.analytics) {
+      if (gtmContextState?.id && cookies.analytics) {
         sendToGTM({ data, dataLayerName: gtmContextState.dataLayerName! });
       }
     },
-    [gtmContextState, cookies.cookies.analytics],
+    [gtmContextState, cookies.analytics],
   );
 
   return sendDataToGTM;
@@ -60,9 +58,7 @@ const useGTM = (): ((data: IDataGTM) => void) => {
 export default useGTM;
 
 export const GtmProvider = ({ ...props }: GTMHookProviderProps) => {
-  const { cookies } = useConfig(
-    (prev, next) => prev.cookies.cookies === next.cookies.cookies,
-  );
+  const { cookies } = useConfig((prev, next) => prev.cookies === next.cookies);
   const [dataLayerState, setDataLayerState] = useState<ISnippetsParams>(
     initialState,
   );
@@ -79,10 +75,10 @@ export const GtmProvider = ({ ...props }: GTMHookProviderProps) => {
         sendToGTM({
           data: {
             event: 'cookiePreferencesChange',
-            'tglab.cookies.analytics': cookies.cookies.analytics,
-            'tglab.cookies.functional': cookies.cookies.functional,
-            'tglab.cookies.marketing': cookies.cookies.marketing,
-            'tglab.cookies.personalization': cookies.cookies.personalization,
+            'tglab.cookies.analytics': cookies.analytics,
+            'tglab.cookies.functional': cookies.functional,
+            'tglab.cookies.marketing': cookies.marketing,
+            'tglab.cookies.personalization': cookies.personalization,
           },
           dataLayerName: dataLayerState.dataLayerName!,
         });

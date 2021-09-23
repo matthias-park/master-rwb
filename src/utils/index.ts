@@ -1,8 +1,10 @@
-import { PagesName } from '../constants';
+import { LocalStorageKeys, PagesName } from '../constants';
 import { PageConfig } from '../types/api/PageConfig';
 import Lockr from 'lockr';
 import { PostItem } from '../types/api/Posts';
 import dayjs from 'dayjs';
+import Config, { ConfigLoaded, Cookies } from '../types/Config';
+import { getWindowUrlLocale, Symbols } from './i18n';
 
 export const sortAscending = (a: number, b: number) => a - b;
 export const sortDescending = (a: number, b: number) => b - a;
@@ -130,4 +132,47 @@ export const mergeDeep = (target, ...sources) => {
   }
 
   return mergeDeep(target, ...sources);
+};
+
+export const getCachedConfigAndTranslations = (): {
+  config: Config;
+  translations: Symbols | null;
+  cacheValid: boolean;
+} => {
+  const defaultCookies: Cookies = {
+    accepted: false,
+    functional: true,
+    analytics: false,
+    marketing: false,
+    personalization: false,
+  };
+  const cachedConstants = Lockr.get(LocalStorageKeys.config, null);
+  const savedCookieSettings = Lockr.get(
+    LocalStorageKeys.cookies,
+    defaultCookies,
+  );
+  const savedLocale = Lockr.get(LocalStorageKeys.locale, null);
+  const urlLocale = getWindowUrlLocale();
+  const translationsCache =
+    urlLocale === savedLocale
+      ? Lockr.get(
+          `${LocalStorageKeys.translations}-${urlLocale || savedLocale}`,
+          null,
+        )
+      : null;
+  const isCacheValid =
+    cachedConstants && translationsCache && urlLocale === savedLocale;
+  return {
+    config: {
+      locales: [],
+      routes: [],
+      ...(cachedConstants || {}),
+      locale: savedLocale,
+      configLoaded: isCacheValid ? ConfigLoaded.Loaded : ConfigLoaded.Loading,
+      cookies: savedCookieSettings,
+      showPageLoader: !isCacheValid,
+    },
+    translations: translationsCache,
+    cacheValid: !!isCacheValid,
+  };
 };

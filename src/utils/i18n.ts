@@ -40,7 +40,6 @@ const i18n = (lang: string, data: Symbols = {}, cacheTranslations = true) => {
       const val = data[key] || `missing symbol: ${key}`;
       return replaceStringTagsReact(val, props);
     },
-    addSymbols(data: Symbols) {},
   };
 };
 

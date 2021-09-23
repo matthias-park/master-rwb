@@ -7,8 +7,6 @@ import App from './containers/App';
 import * as Sentry from '@sentry/react';
 import { errorHandler } from './utils';
 import { DevEnv } from './constants';
-// import { Workbox } from 'workbox-window';
-// import Lockr from 'lockr';
 
 if (!DevEnv && window.__config__.sentryDsn) {
   Sentry.init({
@@ -41,39 +39,3 @@ ReactDOM.render(
   </React.StrictMode>,
   MOUNT_NODE,
 );
-
-// if (
-//   Lockr.get('service-worker') &&
-//   process.env.TARGET_ENV !== 'development' &&
-//   'serviceWorker' in navigator
-// ) {
-//   const wb = new Workbox(`/service-worker.js?name=${window.__config__.name}`);
-
-//   wb.addEventListener('installed', event => {
-//     if (event.isUpdate) {
-//       window._wbUpdate = true;
-//       window.toast?.('Website update available', {
-//         appearance: 'success',
-//         autoDismiss: false,
-//         onDismiss: () => window.location.reload(),
-//       });
-//     }
-//   });
-
-//   setInterval(() => {
-//     wb.update();
-//   }, 3600000); // 1hour
-
-//   wb.register();
-// } else {
-//   window.navigator.serviceWorker
-//     ?.getRegistrations()
-//     ?.then(function (registrations) {
-//       if (registrations.length) {
-//         for (let registration of registrations) {
-//           registration.unregister();
-//         }
-//         window.location.reload();
-//       }
-//     });
-// }

@@ -10,19 +10,19 @@ import useGTM from '../../../../hooks/useGTM';
 import { useConfig } from '../../../../hooks/useConfig';
 import { isEqual } from 'lodash';
 import { Cookies } from '../../../../types/Config';
+import { useDispatch } from 'react-redux';
+import { setCookies } from '../../../../state/reducers/config';
 
 const CookiePolicyModal = () => {
   const { jsxT } = useI18n();
   const { cookies } = useConfig((prev, next) =>
-    isEqual(prev.cookies.cookies, next.cookies.cookies),
+    isEqual(prev.cookies, next.cookies),
   );
-  const cookiesId = Object.keys(cookies.cookies);
+  const cookiesId = Object.keys(cookies);
   const sendDataToGTM = useGTM();
   const [open, setOpen] = useState<string>('');
-
-  const [cookieSettings, setCookieSettings] = useState<Cookies>(
-    cookies.cookies,
-  );
+  const dispatch = useDispatch();
+  const [cookieSettings, setCookieSettings] = useState<Cookies>(cookies);
   const { disableModal } = useModal();
   const toggleCookie = (e: React.SyntheticEvent<EventTarget>, id: string) => {
     setCookieSettings({ ...cookieSettings, [id]: !cookieSettings[id] });
@@ -41,7 +41,7 @@ const CookiePolicyModal = () => {
     } else {
       newCookies = { ...cookieSettings, accepted: true };
     }
-    cookies.setCookies(newCookies);
+    dispatch(setCookies(newCookies));
     sendDataToGTM({
       event: 'cookiePreferencesChange',
       'tglab.cookies.analytics': newCookies.analytics,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import DatePicker from 'react-datepicker';
 import { formatUrl } from '../../../utils/apiUtils';
 import { useI18n } from '../../../hooks/useI18n';

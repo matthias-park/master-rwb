@@ -23,6 +23,8 @@ import LoadingButton from '../../../components/LoadingButton';
 import { useAuth } from '../../../hooks/useAuth';
 import useGTM from '../../../hooks/useGTM';
 import PaymentMethods from '../components/account-settings/PaymentMethods';
+import { useDispatch } from 'react-redux';
+import { addSymbols } from '../../../state/reducers/translations';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -107,7 +109,7 @@ const WithdrawalRequests = ({
 };
 
 const WithdrawalPage = () => {
-  const { t, addSymbols } = useI18n();
+  const { t } = useI18n();
   const { user } = useAuth();
   const { addToast } = useToasts();
   const [submitResponse, setSubmitResponse] = useState<{
@@ -115,6 +117,7 @@ const WithdrawalPage = () => {
     msg: string | null;
   } | null>(null);
   const [withdrawalLoading, setWithdrawalLoading] = useState(false);
+  const dispatch = useDispatch();
   const [
     withdrawalConfirmData,
     setWithdrawalConfirmData,
@@ -130,11 +133,13 @@ const WithdrawalPage = () => {
   const isDataLoading = !data && !error;
   useEffect(() => {
     if (data?.Data.translations) {
-      addSymbols(
-        Object.keys(data.Data.translations).reduce((obj, key) => {
-          obj[`withdrawal_page_${key}`] = data.Data.translations![key];
-          return obj;
-        }, {}),
+      dispatch(
+        addSymbols(
+          Object.keys(data.Data.translations).reduce((obj, key) => {
+            obj[`withdrawal_page_${key}`] = data.Data.translations![key];
+            return obj;
+          }, {}),
+        ),
       );
     }
   }, [data]);

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useConfig } from '../../../hooks/useConfig';
-import { postApi } from '../../../utils/apiUtils';
 import LoginDropdown from '../../LoginDropdown';
 import UserInfoBlock from '../components/header/UserInfoBlock';
 import { Navbar } from 'react-bootstrap';
@@ -19,6 +18,8 @@ import Link from '../../../components/Link';
 import { useAuth } from '../../../hooks/useAuth';
 import { usePrevious } from '../../../hooks';
 import { HeaderRouteLink } from '../../../types/api/PageConfig';
+import { useDispatch } from 'react-redux';
+import { setLocale } from '../../../state/reducers/config';
 
 const SubNavLinks = ({
   links,
@@ -28,13 +29,12 @@ const SubNavLinks = ({
   setNavExpanded: (active: boolean) => void;
 }) => {
   const { backdrop } = useUIConfig();
-  const { locales, locale, setLocale } = useConfig();
+  const { locales, locale } = useConfig();
+  const dispatch = useDispatch();
   const { t } = useI18n();
   const sendDataToGTM = useGTM();
   const changeLocale = async (lang: string) => {
-    return postApi('/restapi/v1/locale', {
-      locale: lang,
-    }).then(() => setLocale(lang, true));
+    dispatch(setLocale(lang));
   };
   const navLinkClick = (linkName: string) => {
     setNavExpanded(false);
@@ -47,34 +47,18 @@ const SubNavLinks = ({
   return (
     <div className="row w-100 align-items-start order-2 order-xl-1">
       <ul className="header__nav header__nav--secondary mr-auto mr-lg-0 ml-lg-auto">
-        {
-          //[
-          // {
-          //   name: 'sub_header_help',
-          //   link: '/help',
-          // },
-          // {
-          //   name: 'sub_header_where_to_play',
-          //   link: '/',
-          // },
-          // {
-          //   name: 'sub_header_play_responsibly',
-          //   link: '/',
-          // },
-          // ]
-          links.map(link => (
-            <li key={link.text} className="header__nav-item">
-              <Link
-                key={link.text}
-                onClick={() => navLinkClick(link.text)}
-                className="header__nav-item-link"
-                to={link.path || '/'}
-              >
-                {t(link.text)}
-              </Link>
-            </li>
-          ))
-        }
+        {links.map(link => (
+          <li key={link.text} className="header__nav-item">
+            <Link
+              key={link.text}
+              onClick={() => navLinkClick(link.text)}
+              className="header__nav-item-link"
+              to={link.path || '/'}
+            >
+              {t(link.text)}
+            </Link>
+          </li>
+        ))}
         <LocaleSelector
           available={locales}
           current={locale}
@@ -143,7 +127,6 @@ const PageHeader = () => {
     }
   });
   const subLinks = header?.find(link => link.subLinks);
-
   return (
     <Navbar
       ref={navbarContainerRef}
@@ -191,7 +174,8 @@ const PageHeader = () => {
           <div className="row w-100 mt-0 mt-lg-2 align-items-end order-1 order-xl-2">
             <ul ref={navbarLinksRef} className="header__nav header__nav--main">
               {header
-                ?.sort((a, b) => sortAscending(a.order!, b.order!))
+                ?.concat()
+                .sort((a, b) => sortAscending(a.order!, b.order!))
                 .map(link => {
                   if (link.subLinks) return null;
                   return (

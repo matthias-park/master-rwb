@@ -143,7 +143,7 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
         'tglab.user.GUID': user.id,
         'tglab.user.LoginStatus': user.logged_in ? 'LoggedIn' : 'LoggedOut',
         'tglab.user.Platform': isMobile ? 'Mobile' : 'Desktop',
-        'tglab.user.Language': locale,
+        'tglab.user.Language': locale || '',
         event: 'userStatusChange',
       });
     }

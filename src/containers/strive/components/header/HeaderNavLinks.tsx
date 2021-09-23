@@ -49,7 +49,7 @@ export const HeaderNavClassicLink = ({
   const sendDataToGTM = useGTM();
   const hover = useHover(dropdownRef, desktopWidth);
   const dropdownLinks = useMemo(
-    () => data.links?.sort((a, b) => sortAscending(a.order, b.order)),
+    () => data.links?.concat().sort((a, b) => sortAscending(a.order, b.order)),
     [data.links],
   );
   const currentLinkActive = active?.includes(

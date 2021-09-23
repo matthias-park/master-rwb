@@ -1,13 +1,13 @@
 import loadable, { DefaultComponent } from '@loadable/component';
 import React, { ComponentType } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
+import { useSelector } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
 import { SWRConfig } from 'swr';
 import { AuthProvider } from '../hooks/useAuth';
-import { ConfigProvider, useConfig } from '../hooks/useConfig';
-import { I18nProvider } from '../hooks/useI18n';
 import { UIConfigProvider } from '../hooks/useUIConfig';
+import { RootState } from '../state';
 import { ConfigLoaded } from '../types/Config';
 import { SwrFetcherConfig } from '../utils/apiUtils';
 
@@ -16,11 +16,17 @@ interface Props {
 }
 
 const BrowserRouterProvider = ({ children }: Props) => {
-  const { locale, configLoaded } = useConfig((prev, next) => {
-    const localeEqual = !!prev.locale === !!next.locale;
-    const configLoadedEqual = prev.configLoaded === next.configLoaded;
-    return localeEqual && configLoadedEqual;
-  });
+  const { locale, configLoaded } = useSelector(
+    (state: RootState) => {
+      const { locale, configLoaded } = state.config;
+      return {
+        locale,
+        configLoaded,
+      };
+    },
+    (prev, next) =>
+      prev.locale === next.locale && prev.configLoaded === next.configLoaded,
+  );
   return (
     <BrowserRouter
       key={`${locale}-${configLoaded}`}
@@ -69,8 +75,6 @@ const ContextProviders = ({ children }: Props) => {
   const providers: Provider[] = [
     [SWRConfig, { value: SwrFetcherConfig }],
     ToastProvider,
-    ConfigProvider,
-    I18nProvider,
     !!window.__config__.gtmId && LoadableGtmProvider,
     AuthProvider,
     HelmetProvider,

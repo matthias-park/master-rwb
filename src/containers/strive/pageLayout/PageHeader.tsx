@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useConfig } from '../../../hooks/useConfig';
-import { postApi } from '../../../utils/apiUtils';
 import LoginDropdown from '../../LoginDropdown';
 import UserInfoBlock from '../components/header/UserInfoBlock';
 import { useUIConfig } from '../../../hooks/useUIConfig';
@@ -24,6 +23,8 @@ import StyledHeader, {
   StyledHeaderNavItem,
   StyledNavToggler,
 } from '../components/styled/StyledHeader';
+import { useDispatch } from 'react-redux';
+import { setLocale } from '../../../state/reducers/config';
 
 const SubNavLinks = ({
   links,
@@ -33,13 +34,12 @@ const SubNavLinks = ({
   setNavExpanded: (active: boolean) => void;
 }) => {
   const { backdrop } = useUIConfig();
-  const { locales, locale, setLocale } = useConfig();
+  const { locales, locale } = useConfig();
+  const dispatch = useDispatch();
   const { t } = useI18n();
   const sendDataToGTM = useGTM();
   const changeLocale = async (lang: string) => {
-    return postApi('/restapi/v1/locale', {
-      locale: lang,
-    }).then(() => setLocale(lang, true));
+    dispatch(setLocale(lang));
   };
   const navLinkClick = (linkName: string) => {
     setNavExpanded(false);
@@ -52,45 +52,29 @@ const SubNavLinks = ({
   return (
     <div className="row w-100 align-items-start order-2 order-xl-1">
       <StyledHeaderNav secondary className="mr-auto mr-lg-0 ml-lg-auto">
-        {
-          //[
-          // {
-          //   name: 'sub_header_help',
-          //   link: '/help',
-          // },
-          // {
-          //   name: 'sub_header_where_to_play',
-          //   link: '/',
-          // },
-          // {
-          //   name: 'sub_header_play_responsibly',
-          //   link: '/',
-          // },
-          // ]
-          links.map(link => (
-            <StyledHeaderNavItem className="styled-nav-item" key={link.text}>
-              {link.path?.includes('https') ? (
-                <a
-                  className="nav-link"
-                  target="_blank"
-                  rel="noreferrer"
-                  href={link.path}
-                >
-                  {t(link.text)}
-                </a>
-              ) : (
-                <Link
-                  key={link.text}
-                  onClick={() => navLinkClick(link.text)}
-                  className="nav-link"
-                  to={link.path || '/'}
-                >
-                  {t(link.text)}
-                </Link>
-              )}
-            </StyledHeaderNavItem>
-          ))
-        }
+        {links.map(link => (
+          <StyledHeaderNavItem className="styled-nav-item" key={link.text}>
+            {link.path?.includes('https') ? (
+              <a
+                className="nav-link"
+                target="_blank"
+                rel="noreferrer"
+                href={link.path}
+              >
+                {t(link.text)}
+              </a>
+            ) : (
+              <Link
+                key={link.text}
+                onClick={() => navLinkClick(link.text)}
+                className="nav-link"
+                to={link.path || '/'}
+              >
+                {t(link.text)}
+              </Link>
+            )}
+          </StyledHeaderNavItem>
+        ))}
         <LocaleSelector
           available={locales}
           current={locale}
@@ -193,7 +177,8 @@ const PageHeader = () => {
           <div className="row w-100 mt-0 mt-lg-2 align-items-end order-1 order-xl-2">
             <StyledHeaderNav ref={navbarLinksRef} main className="navbar-nav">
               {header
-                ?.sort((a, b) => sortAscending(a.order!, b.order!))
+                ?.concat()
+                .sort((a, b) => sortAscending(a.order!, b.order!))
                 .map(link => {
                   if (link.subLinks) return null;
                   return (

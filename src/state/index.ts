@@ -9,6 +9,8 @@ import userWebsocketMiddleware from './middleware/userWebsocket';
 import geoComply from './reducers/geoComply';
 import modals from './reducers/modals';
 import user from './reducers/user';
+import config from './reducers/config';
+import translations from './reducers/translations';
 
 const reduxMiddleware = [
   !!window.__config__.componentSettings?.v2Auth && userWebsocketMiddleware,
@@ -20,6 +22,8 @@ const store = configureStore({
     geoComply,
     modals,
     user,
+    config,
+    translations,
   },
   middleware: defaultMiddleware => defaultMiddleware().concat(reduxMiddleware),
 });
