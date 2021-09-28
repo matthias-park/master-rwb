@@ -26,6 +26,7 @@ export interface DepositResponse {
 }
 
 export enum DepositStatus {
+  Errored = -4,
   Canceled = -3,
   Timeout = -2,
   None = -1,

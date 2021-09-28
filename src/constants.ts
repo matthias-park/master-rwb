@@ -479,6 +479,8 @@ export const franchiseDateFormat = window.__config__.dateFormat || 'YYYY-MM-DD';
 
 export enum CustomWindowEvents {
   ResetIdleTimer = 'resetIdleTimer',
+  DepositPaymentSuccess = 'payment_success',
+  DepositPaymentError = 'payment_error',
 }
 
 export enum LocalStorageKeys {
