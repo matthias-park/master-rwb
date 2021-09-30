@@ -342,8 +342,8 @@ const getSBParams = async (
     locale: KambiSbLocales[locale.toLocaleLowerCase()] || 'en_GB',
     playerId,
     ticket: data?.Data || '',
-    currency: 'EUR',
-    market: 'BE',
+    currency: window.__config__.kambi!.currency,
+    market: window.__config__.kambi!.market,
     getApiBalance: '/restapi/v1/user/balance',
     retail,
   };

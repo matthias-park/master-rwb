@@ -18,6 +18,8 @@
       "gtmId": "GTM-P7D2MHW",
       "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17",
       "kambi": {
+        "market": "BE",
+        "currency": "EUR",
         "retail": "https://c3-static.kambi.com/client/bnlberl/kambi-bootstrap.js",
         "online": "https://c3-static.kambi.com/client/bnlbe/kambi-bootstrap.js",
         "api": "https://c3-static.kambi.com/client/widget-api/kambi-widget-api.js"
@@ -80,6 +82,12 @@
       "themeColor": "#000541",
       "theme": "strive",
       "geoComplyKey": "ShzolMaAK",
+      "kambi": {
+        "market": "US",
+        "currency": "USD",
+        "online": "https://c3-static.kambi.com/client/fanusny/kambi-bootstrap.js",
+        "api": "https://c3-static.kambi.com/client/widget-api/kambi-widget-api.js"
+      },
       "redis": {
         "host": "192.168.86.41",
         "port": 6379,

@@ -11,6 +11,8 @@ export declare global {
       gtmId?: string;
       sentryDsn?: string;
       kambi?: {
+        currency: string;
+        market: string;
         online: string;
         retail?: string;
         api: string;
