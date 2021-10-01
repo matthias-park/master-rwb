@@ -29,6 +29,7 @@ if (!DevEnv && window.__config__.sentryDsn) {
       return event;
     },
   });
+  Sentry.setTag('cookiesEnabled', window.navigator.cookieEnabled || 'n/a');
 }
 window.addEventListener('error', errorHandler);
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;

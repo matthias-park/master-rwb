@@ -4,8 +4,7 @@ import { RailsApiResponseFallback } from '../constants';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { RegistrationPostalCodeAutofill } from '../types/api/user/Registration';
 import { cleanPostBody } from '.';
-// For rails api testing in dev
-// const API_URL = window.API_URL;
+import * as Sentry from '@sentry/react';
 
 export const formatUrl = (
   url: string,
@@ -31,6 +30,10 @@ export const getApi = <T>(url: string, options?: GetApiOptions): Promise<T> => {
   };
   return fetch(`${window.__config__.apiUrl}${url}`, config).then(res => {
     if (!res.ok && res.status !== 400) {
+      Sentry.captureMessage(
+        `Request failed ${url} with status ${res.status}`,
+        Sentry.Severity.Fatal,
+      );
       return Promise.reject<RailsApiResponse<null>>({
         ...RailsApiResponseFallback,
         Code: res.status,
@@ -76,6 +79,10 @@ export const postApi = <T>(
     : `${window.__config__.apiUrl}${url}`;
   return fetch(postUrl, config).then(res => {
     if (!res.ok && res.status !== 400) {
+      Sentry.captureMessage(
+        `Request failed ${url} with status ${res.status}`,
+        Sentry.Severity.Fatal,
+      );
       return Promise.reject<RailsApiResponse<null>>({
         ...RailsApiResponseFallback,
         Code: res.status,
