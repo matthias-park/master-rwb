@@ -17,18 +17,14 @@ interface SitemapListItem {
   path: string;
   children?: SitemapListItem[];
   externalLink?: string;
-  name: string;
+  nameSymbol?: string;
+  name?: string;
   emptyRoute?: boolean;
   order?: number;
   redirectTo?: string;
 }
 
-const insertSitemapChildren = (
-  listItem: SitemapListItem,
-  route,
-  t,
-  translateRouteName = true,
-) => {
+const insertSitemapChildren = (listItem: SitemapListItem, route) => {
   if (route.path === listItem.path) return;
   if (!listItem.children) {
     listItem.children = [];
@@ -37,17 +33,17 @@ const insertSitemapChildren = (
       route.path.startsWith(item.path),
     );
     if (mapItem) {
-      return insertSitemapChildren(mapItem, route, t);
+      return insertSitemapChildren(mapItem, route);
     }
   }
   listItem.children.push({
     path: route.path,
-    name: translateRouteName ? t(route.name) : route.name,
+    nameSymbol: route.nameSymbol,
+    name: route.name,
     order: route.order,
     emptyRoute: route.id === PagesName.Null && !route.externalLinkTranslation,
     redirectTo: route.redirectTo,
-    externalLink:
-      route.externalLinkTranslation && t(route.externalLinkTranslation),
+    externalLink: route.externalLinkTranslation,
   });
 };
 
@@ -117,77 +113,69 @@ const TreeItem = ({
 
 const SitemapPage = () => {
   const { t } = useI18n();
-  const { routes } = useConfig(
-    (prev, next) => prev.routes.length === next.routes.length,
-  );
-  const { data: promotions } = useApi<RailsApiResponse<PostItem[]>>(
+  const { routes, locale } = useConfig((prev, next) => {
+    const routesEqual = prev.routes.length === next.routes.length;
+    const localeEqual = prev.locale === next.locale;
+    return routesEqual && localeEqual;
+  });
+  const { data: promotions } = useApi<RailsApiResponse<PostItem[]>>([
     '/restapi/v1/content/promotions',
-  );
+    locale,
+  ]);
   const { user } = useAuth();
   const [activeItem, setActiveItem] = useState<string | null>(null);
-  const sitemapList = useMemo(() => {
-    const list: SitemapListItem[] = [];
-    if (user.loading) return list;
-    for (const route of [...routes].reverse()) {
-      if (
-        route.hiddenSitemap ||
-        route.path === '/' ||
-        (route.protected && !user.logged_in) ||
-        route.id === PagesName.NotFoundPage ||
-        (user.logged_in &&
-          [
-            PagesName.ForgotLoginPage,
-            PagesName.ForgotPasswordPage,
-            PagesName.RegisterPage,
-            PagesName.LoginPage,
-          ].includes(route.id))
-      )
-        continue;
-      const mapItem = list.find(
-        item => route.path.startsWith(item.path) && route.name !== item.name,
-      );
-      if (mapItem) {
-        insertSitemapChildren(mapItem, route, t);
-      } else {
-        list.push({
-          path: route.path,
-          name: t(route.name),
-          emptyRoute: route.id === PagesName.Null,
-          order: route.order,
-          redirectTo: route.redirectTo,
-          externalLink:
-            route.externalLinkTranslation && t(route.externalLinkTranslation),
-        });
+  const sitemapList: SitemapListItem[] = [];
+  for (const route of [...routes].reverse()) {
+    if (
+      route.hiddenSitemap ||
+      route.path === '/' ||
+      (route.protected && !user.logged_in) ||
+      route.id === PagesName.NotFoundPage ||
+      (user.logged_in &&
+        [
+          PagesName.ForgotLoginPage,
+          PagesName.ForgotPasswordPage,
+          PagesName.RegisterPage,
+          PagesName.LoginPage,
+        ].includes(route.id))
+    )
+      continue;
+    const mapItem = sitemapList.find(
+      item => route.path.startsWith(item.path) && route.name !== item.name,
+    );
+    if (mapItem) {
+      insertSitemapChildren(mapItem, route);
+    } else {
+      sitemapList.push({
+        path: route.path,
+        nameSymbol: route.name,
+        emptyRoute: route.id === PagesName.Null,
+        order: route.order,
+        redirectTo: route.redirectTo,
+        externalLink: route.externalLinkTranslation,
+      });
+    }
+  }
+  if (promotions?.Data) {
+    const promotionsPath = routes.find(
+      route => route.id === PagesName.PromotionsPage && !route.hiddenSitemap,
+    );
+    const promotionsSitemapItem = sitemapList.find(
+      item =>
+        promotionsPath?.path.startsWith(item.path) &&
+        promotionsPath?.name !== item.name,
+    );
+    if (promotionsSitemapItem) {
+      for (const promotion of promotions.Data) {
+        insertSitemapChildren(promotionsSitemapItem, {
+          id: PagesName.TemplatePage,
+          name: promotion.title,
+          path: `${promotionsPath!.path}/${promotion.slug}`,
+          order: promotion.priority,
+        } as NavigationRoute);
       }
     }
-    if (promotions?.Data) {
-      const promotionsPath = routes.find(
-        route => route.id === PagesName.PromotionsPage && !route.hiddenSitemap,
-      );
-      const promotionsSitemapItem = list.find(
-        item =>
-          promotionsPath?.path.startsWith(item.path) &&
-          promotionsPath?.name !== item.name,
-      );
-      if (promotionsSitemapItem) {
-        for (const promotion of promotions.Data) {
-          insertSitemapChildren(
-            promotionsSitemapItem,
-            {
-              id: PagesName.TemplatePage,
-              name: promotion.title,
-              path: `${promotionsPath!.path}/${promotion.slug}`,
-              order: promotion.priority,
-            } as NavigationRoute,
-            t,
-            false,
-          );
-        }
-      }
-    }
-    return list;
-  }, [routes, user, promotions]);
-
+  }
   return (
     <main className="page-container">
       <div className="page-inner">

@@ -55,20 +55,15 @@ export const getWindowUrlLocale = (): string | null => {
   return null;
 };
 
-export const setLocalePathname = (newlocale: string, reloadPage = true) => {
+export const setLocalePathname = (newlocale: string) => {
   const paths = window.location.pathname.split('/');
   if (ALL_LOCALES.includes(paths[1].toLocaleLowerCase())) {
     paths[1] = newlocale;
   } else {
     paths.splice(1, 0, newlocale);
   }
-  if (reloadPage && !window.PRERENDER_CACHE) {
-    const newPath = paths.join('/');
-    window.location.pathname = newPath;
-  } else {
-    const newPath = paths.join('/') + window.location.hash;
-    window.history.pushState({}, '', newPath);
-  }
+  const newPath = paths.join('/') + window.location.hash;
+  window.history.replaceState({}, '', newPath);
 };
 
 export type I18n = ReturnType<typeof i18n>;

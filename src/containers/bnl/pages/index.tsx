@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import loadable from '@loadable/component';
 import ProtectedRoute from './ProtectedRoute';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
@@ -58,6 +58,16 @@ const Routes = () => {
     (prev, next) => prev.routes.length === next.routes.length,
   );
   const { pathname } = useLocation();
+  const localeSelectRoute = useMemo(
+    () => routes.find(route => route.id === PagesName.LocaleSelectPage)?.path,
+    [routes],
+  );
+  if (
+    pathname === window.location.pathname &&
+    pathname !== localeSelectRoute &&
+    pathname !== '/'
+  )
+    return null;
   return (
     <ErrorBoundary
       key={pathname}

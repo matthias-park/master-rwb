@@ -17,9 +17,11 @@ import { useConfig } from '../../../hooks/useConfig';
 import { Helmet } from 'react-helmet-async';
 import { replaceStringTagsReact } from '../../../utils/reactUtils';
 import useDesktopWidth from '../../../hooks/useDesktopWidth';
+import { getApi } from '../../../utils/apiUtils';
 
 const TemplatePage = () => {
   const { slug } = useParams<{ slug?: string }>();
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { pathname } = useLocation();
   const [active, setActive] = useState('');
   const [dropdownShow, setDropdownShow] = useState(false);
@@ -27,7 +29,8 @@ const TemplatePage = () => {
   const { headerNav } = useUIConfig();
   const { t } = useI18n();
   const { data, error } = useApi<RailsApiResponse<ContentPage>>(
-    `/restapi/v1/content/page/${page}`,
+    [`/restapi/v1/content/page/${page}`, locale],
+    url => getApi(url, { cache: 'no-store' }),
   );
   const isDataLoading = !data && !error;
   const desktopWidth = useDesktopWidth(1199);

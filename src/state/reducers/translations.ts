@@ -5,6 +5,7 @@ import Lockr from 'lockr';
 import * as Sentry from '@sentry/react';
 import { LocalStorageKeys } from '../../constants';
 import { getCachedConfigAndTranslations } from '../../utils';
+import { setLocale } from './config';
 
 export type Symbols = { [key: string]: string };
 
@@ -16,6 +17,7 @@ export const fetchTranslations = createAsyncThunk<
   async ({ locale, retryCount = 0 }, { dispatch, rejectWithValue }) => {
     const response = await getApi<RailsApiResponse<Symbols>>(
       '/restapi/v1/translations',
+      { cache: 'no-cache' },
     ).catch(() => null);
     if (response?.Success) {
       const responseLocale = response.Data?._locale_;
@@ -28,10 +30,14 @@ export const fetchTranslations = createAsyncThunk<
           },
         );
         return response.Data;
-      } else if (!responseLocale) {
-        Sentry.captureMessage('fetch translations: no locale parameter');
-      } else if (responseLocale !== locale) {
-        Sentry.captureMessage('fetch translations: locale mismatch');
+      } else {
+        if (!responseLocale) {
+          Sentry.captureMessage('fetch translations: no locale parameter');
+        } else if (responseLocale !== locale) {
+          Sentry.captureMessage('fetch translations: locale mismatch');
+        }
+        dispatch(setLocale(locale));
+        return rejectWithValue(true);
       }
     }
     const canRetry = retryCount < 10;

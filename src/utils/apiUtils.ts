@@ -19,12 +19,14 @@ export const formatUrl = (
 
 interface GetApiOptions {
   responseText?: boolean;
+  cache?: RequestCache;
 }
 
 export const getApi = <T>(url: string, options?: GetApiOptions): Promise<T> => {
   const config: RequestInit = {
     mode: 'cors',
     credentials: 'include',
+    cache: options?.cache,
     headers: new Headers(),
   };
   return fetch(`${window.__config__.apiUrl}${url}`, config).then(res => {

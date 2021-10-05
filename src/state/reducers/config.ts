@@ -16,6 +16,8 @@ import {
 } from '../../utils/uiUtils';
 import { WritableDraft } from '@reduxjs/toolkit/node_modules/immer/dist/internal';
 import { fetchTranslations } from './translations';
+import { RootState } from '..';
+import { cache } from 'swr';
 
 const setUserLocale = async (
   locale: string,
@@ -27,7 +29,8 @@ const setUserLocale = async (
     }).catch(() => RailsApiResponseFallback);
     if (!res.Success) return false;
   }
-  setLocalePathname(locale, false);
+  setLocalePathname(locale);
+  cache.clear();
   Lockr.set(LocalStorageKeys.locale, locale);
   return true;
 };
@@ -46,11 +49,32 @@ export const setLocale = createAsyncThunk<string, string, any>(
   },
 );
 
+export const checkLocale = createAsyncThunk(
+  'config/checkLocale',
+  async (_, thunkAPI) => {
+    const currentState = thunkAPI.getState() as RootState;
+    const currentLocale = currentState.config.locale;
+    const detectedLocale = getWindowUrlLocale();
+    if (detectedLocale && currentLocale !== detectedLocale) {
+      const detectedLocaleAvailable =
+        detectedLocale === 'en' ||
+        (detectedLocale &&
+          currentState.config.locales.some(
+            lang => lang.iso === detectedLocale,
+          ));
+      if (detectedLocaleAvailable) {
+        thunkAPI.dispatch(setLocale(detectedLocale));
+      }
+    }
+  },
+);
+
 export const fetchConstants = createAsyncThunk<PageConfig, number | undefined>(
   'config/fetchConfig',
   async (retryCount: number = 0, thunkAPI: any) => {
     const response = await getApi<RailsApiResponse<PageConfig>>(
       '/restapi/v1/content/constants',
+      { cache: 'no-cache' },
     ).catch(() => RailsApiResponseFallback);
 
     if (response.Success && response?.Data) {
@@ -77,7 +101,10 @@ export const fetchConstants = createAsyncThunk<PageConfig, number | undefined>(
         if (!localeError) {
           constants.locale = detectedLocale;
         }
-      } else if (railsLocale && !detectedLocaleAvailable) {
+      } else if (
+        railsLocale &&
+        (!detectedLocaleAvailable || urlLocale == null)
+      ) {
         setUserLocale(railsLocale);
       }
       if (!localeError) {

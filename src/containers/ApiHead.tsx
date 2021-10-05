@@ -59,7 +59,12 @@ const ApiHead = () => {
     },
   );
 
-  if (configLoaded !== ConfigLoaded.Loaded) {
+  if (
+    configLoaded !== ConfigLoaded.Loaded ||
+    (pathname === window.location.pathname &&
+      pathInfo?.id !== PagesName.LocaleSelectPage &&
+      pathname !== '/')
+  ) {
     return null;
   }
 

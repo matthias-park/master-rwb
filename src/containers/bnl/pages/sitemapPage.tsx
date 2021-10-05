@@ -187,7 +187,7 @@ const SitemapPage = () => {
       }
     }
     return list;
-  }, [routes, user, promotions]);
+  }, [routes, user, promotions, t]);
 
   return (
     <main className="page-container">
