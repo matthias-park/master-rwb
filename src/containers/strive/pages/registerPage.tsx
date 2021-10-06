@@ -9,6 +9,7 @@ import { PostRegistration } from '../../../types/api/user/Registration';
 import dayjs from 'dayjs';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
+import { useI18n } from '../../../hooks/useI18n';
 import {
   franchiseDateFormat,
   PagesName,
@@ -56,6 +57,7 @@ interface RegistrationFields {
 }
 
 const RegisterPage = () => {
+  const { t } = useI18n();
   const location = useLocation<RegistrationPathState>();
   const history = useHistory<RegistrationPathState>();
   const { locale, locales, routes, cookies } = useConfig((prev, next) => {
@@ -131,13 +133,6 @@ const RegisterPage = () => {
       if (!RegistrationReturnCode[res.Code]) {
         res.Code = 4;
       }
-
-      const registrationErrorMessage =
-        res.Code === 0
-          ? undefined
-          : res.Code > 0
-          ? `registration_error_${res.Code}`
-          : 'register_page_submit_error';
       const responseRoute = registrationResponseRoutes.find(
         route => route.name === RegistrationReturnCode[res.Code],
       );
@@ -152,7 +147,7 @@ const RegisterPage = () => {
         });
       } else {
         sendDataToGTM({
-          'tglab.Error': registrationErrorMessage,
+          'tglab.Error': res.Message || t('register_page_submit_error'),
           event: 'FailedAccountDetails',
         });
       }
@@ -160,7 +155,7 @@ const RegisterPage = () => {
         history.push(responseRoute.path, {
           welcomeScreen: !res.Code,
           resCode: res.Code,
-          message: registrationErrorMessage,
+          message: res.Message || t('register_page_submit_error'),
         });
       }
       return res;

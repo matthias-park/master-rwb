@@ -1,6 +1,7 @@
 import React from 'react';
 import CustomAlert from '../CustomAlert';
 import { useI18n } from '../../../../hooks/useI18n';
+import { replaceStringTagsReact } from '../../../../utils/reactUtils';
 const RegError = ({
   errMsg,
   onClose,
@@ -28,7 +29,7 @@ const RegError = ({
       <p className="mt-4">
         <b>{jsxT('reg_error_reasons')}</b>
       </p>
-      <div className="pt-2">{jsxT(errMsg)}</div>
+      <div className="pt-2">{replaceStringTagsReact(errMsg)}</div>
       <div className="info-block mt-4">
         <h4 className="info-block__title">
           {jsxT('reg_error_info_block_title')}
