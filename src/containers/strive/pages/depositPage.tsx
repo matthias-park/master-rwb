@@ -84,7 +84,10 @@ const DepositPage = () => {
         },
       );
       if (response.Success) {
-        if (response.Data?.DepositRequestId) {
+        if (
+          response.Data?.DepositRequestId ||
+          response.Data?.DepositRequestId === 0
+        ) {
           depositStatus.setDepositId(response.Data.DepositRequestId);
         }
         if (response.Data?.InnerText) {
@@ -108,7 +111,8 @@ const DepositPage = () => {
         } else if (
           response?.Success &&
           response.Data?.RedirectUrl &&
-          response.Data?.DepositRequestId
+          (response.Data?.DepositRequestId ||
+            response.Data?.DepositRequestId === 0)
         ) {
           return !!(window.location.href = response.Data.RedirectUrl);
         }
