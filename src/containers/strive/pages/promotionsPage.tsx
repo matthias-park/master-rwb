@@ -16,6 +16,8 @@ import { PagesName } from '../../../constants';
 import { filterPromotionsList } from '../../../utils';
 import { Helmet } from 'react-helmet-async';
 import * as Sentry from '@sentry/react';
+import { useConfig } from '../../../hooks/useConfig';
+import { getApi } from '../../../utils/apiUtils';
 
 const PromoLinkEl = ({
   item,
@@ -72,11 +74,18 @@ const PromoItem = ({ item, variant }: { item: PostItem; variant?: string }) => {
 };
 
 const PromotionsList = () => {
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
-    '/restapi/v1/content/promotions',
+    ['/restapi/v1/content/promotions', locale],
+    url => getApi(url, { cache: 'no-store' }),
+    {
+      onSuccess: () => {
+        setImagesLoaded(false);
+      },
+    },
   );
   const { t } = useI18n();
-  const [imagesLoaded, setImagesLoaded] = useState(false);
   const isDataLoading = !data && !error;
 
   const promotions = filterPromotionsList(data?.Data || []);
@@ -131,8 +140,10 @@ const PromotionsList = () => {
 
 const PromotionsListBlock = ({ currentSlug }) => {
   const { t } = useI18n();
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
-    '/restapi/v1/content/promotions',
+    ['/restapi/v1/content/promotions', locale],
+    url => getApi(url, { cache: 'no-store' }),
   );
   const numberOfPromotions = data?.Data.slice(0, 4).find(
     promo => promo.slug === currentSlug,
@@ -178,8 +189,10 @@ const PromotionsListBlock = ({ currentSlug }) => {
 };
 
 const PromotionPage = ({ slug }: { slug: string }) => {
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { data, error } = useApi<RailsApiResponse<PostItem>>(
-    `/restapi/v1/content/promotion/${slug}`,
+    [`/restapi/v1/content/promotion/${slug}`, locale],
+    url => getApi(url, { cache: 'no-store' }),
   );
   const { t } = useI18n();
   const history = useHistory();
