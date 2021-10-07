@@ -85,17 +85,22 @@ export const fetchConstants = createAsyncThunk<PageConfig, number | undefined>(
       const railsLocale = constants.locale;
       let localeError = false;
       const savedUserLocale = Lockr.get(LocalStorageKeys.locale, null);
-      const detectedLocale = urlLocale || savedUserLocale;
+      let detectedLocale = urlLocale || savedUserLocale;
       const detectedLocaleAvailable =
         detectedLocale === 'en' ||
         (detectedLocale &&
           constants.available_locales.some(
             lang => lang.iso === detectedLocale,
           ));
+      let forceSetLocale = false;
+      if (window.__config__.name === 'bnl' && detectedLocale === 'de') {
+        detectedLocale = savedUserLocale || 'fr';
+        forceSetLocale = true;
+      }
       if (
         detectedLocale &&
-        railsLocale !== detectedLocale &&
-        detectedLocaleAvailable
+        ((railsLocale !== detectedLocale && detectedLocaleAvailable) ||
+          forceSetLocale)
       ) {
         localeError = !(await setUserLocale(detectedLocale, true));
         if (!localeError) {

@@ -47,9 +47,6 @@ export const getWindowUrlLocale = (): string | null => {
   const windowPaths = window.location.pathname.split('/');
   let urlLocale = windowPaths[1];
   if (ALL_LOCALES.includes(urlLocale.toLocaleLowerCase())) {
-    if (window.__config__.name === 'bnl' && urlLocale === 'de') {
-      return 'fr';
-    }
     return urlLocale.toLocaleLowerCase();
   }
   return null;
