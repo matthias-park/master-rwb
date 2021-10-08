@@ -84,9 +84,13 @@ const useDepositResponseStatus = () => {
     }
     if (depositStatus === DepositStatus.Timeout) status = depositStatus;
     if (responseCanceled) status = DepositStatus.Canceled;
-    if (responseError) status = DepositStatus.Errored;
+    if (responseError && depositStatus === DepositStatus.None) {
+      status = DepositStatus.Errored;
+    }
     if (
-      (responseLoading || responseCanceled || responseError) &&
+      (responseLoading ||
+        responseCanceled ||
+        status === DepositStatus.Errored) &&
       (status !== depositStatus || status === DepositStatus.Timeout)
     ) {
       setDepositStatus(status);
