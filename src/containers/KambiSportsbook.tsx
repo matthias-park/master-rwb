@@ -4,7 +4,6 @@ import React, {
   useRef,
   createContext,
   useContext,
-  useMemo,
 } from 'react';
 import { useConfig } from '../hooks/useConfig';
 import useDesktopWidth from '../hooks/useDesktopWidth';
@@ -14,19 +13,26 @@ import { getApi } from '../utils/apiUtils';
 import { WidgetAPI } from '../types/KambiConfig';
 import Spinner from 'react-bootstrap/Spinner';
 import { KambiSbLocales, PagesName } from '../constants';
-import { matchPath, useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { hideKambiSportsbook, showKambiSportsbook } from '../utils/uiUtils';
 import { useAuth } from '../hooks/useAuth';
 import { usePrevious, useRoutePath } from '../hooks';
 import { useDispatch } from 'react-redux';
 import { setBalance } from '../state/reducers/user';
+import Lockr from 'lockr';
+import useEffectSkipInitial from '../hooks/useEffectSkipInitial';
 
 interface KambiContext {
   sportsbookLoaded: boolean;
   setSportsbookLoaded: (loaded: boolean) => void;
   api: WidgetAPI | null;
   setApi: (api: WidgetAPI | null) => void;
-  kambiUserLoggedIn: boolean;
+  kambiUserLoggedIn: { loggedIn: boolean; retries: number };
+  setKambiUserLoggedIn: (loggedIn: boolean) => void;
+  showKambi: boolean;
+  setRetailMode: (retail: boolean) => void;
+  setRendered: (rendered: boolean) => void;
+  setKambiMaintenance: (maintenance: boolean) => void;
 }
 
 const kambiContext = createContext<KambiContext>({
@@ -34,7 +40,12 @@ const kambiContext = createContext<KambiContext>({
   setSportsbookLoaded: () => {},
   api: null,
   setApi: () => {},
-  kambiUserLoggedIn: false,
+  kambiUserLoggedIn: { loggedIn: false, retries: 0 },
+  setKambiUserLoggedIn: () => {},
+  showKambi: false,
+  setRetailMode: () => {},
+  setRendered: () => {},
+  setKambiMaintenance: () => {},
 });
 
 const kambiLogin = (api: WidgetAPI, locale: string, userId?: string) => {
@@ -51,7 +62,7 @@ const kambiLogin = (api: WidgetAPI, locale: string, userId?: string) => {
 const kambiLogout = (api: WidgetAPI) => api.request(api.LOGOUT);
 
 export const KambiProvider = ({ children }) => {
-  const { routes, locale, cookies } = useConfig((prev, next) => {
+  const { locale, cookies } = useConfig((prev, next) => {
     const routesEqual = prev.routes.length === next.routes.length;
     const localeEqual = prev.locale === next.locale;
     const cookiesEqual = prev.cookies.analytics === next.cookies.analytics;
@@ -61,30 +72,40 @@ export const KambiProvider = ({ children }) => {
   const { user } = useAuth();
   const [sportsbookLoaded, setSportsbookLoaded] = useState(false);
   const [api, setApi] = useState<WidgetAPI | null>(null);
-  const [kambiUserLoggedIn, setKambiUserLoggedIn] = useState(false);
-  const { hash, key: locationKey, pathname } = useLocation();
-  const visibleSportsbook = useMemo(
-    () =>
-      [PagesName.SportsPage, PagesName.SportsPlayRetailPage].includes(
-        routes.find(route =>
-          matchPath(pathname, {
-            path: route.path,
-            exact: route.exact ?? true,
-          }),
-        )?.id || PagesName.Null,
-      ),
-    [pathname, routes, locationKey],
-  );
+  const [retailMode, setRetailMode] = useState(false);
+  const [showKambi, setShowKambi] = useState(false);
+  const [rendered, setRendered] = useState(false);
+  const [kambiMaintenance, setKambiMaintenance] = useState(false);
+  const [kambiUserLoggedIn, setKambiUserLoggedIn] = useState({
+    loggedIn: false,
+    retries: 0,
+  });
+  const { hash, key: locationKey } = useLocation();
   useEffect(() => {
     window['ga-disable-UA-45067452-1'] = !cookies.analytics;
     window['ga-disable-UA-45067452-4'] = !cookies.analytics;
   }, [cookies.analytics]);
   useEffect(() => {
-    if (!!api && locale && user.logged_in !== kambiUserLoggedIn) {
-      setSportsbookLoaded(false);
-      setTimeout(() => setSportsbookLoaded(true), 20000);
+    if (
+      !!api &&
+      !kambiMaintenance &&
+      locale &&
+      user.logged_in !== kambiUserLoggedIn.loggedIn &&
+      kambiUserLoggedIn.retries < 5 &&
+      !retailMode
+    ) {
       if (user.logged_in) {
-        kambiLogin(api, locale, user.id!.toString());
+        setShowKambi(false);
+        if (kambiUserLoggedIn.retries === 0) {
+          kambiLogin(api, locale, user.id!.toString());
+        } else {
+          setTimeout(
+            () => {
+              kambiLogin(api, locale, user.id!.toString());
+            },
+            kambiUserLoggedIn.retries < 2 ? 4000 : 6000,
+          );
+        }
       } else {
         kambiLogout(api);
       }
@@ -92,7 +113,7 @@ export const KambiProvider = ({ children }) => {
   }, [user.logged_in, kambiUserLoggedIn]);
 
   useEffect(() => {
-    if (!api) {
+    if (!api && !kambiMaintenance) {
       window.KambiWidget?.ready.then(wapi => {
         setApi(wapi);
       });
@@ -100,21 +121,10 @@ export const KambiProvider = ({ children }) => {
   }, [sportsbookLoaded]);
 
   useEffect(() => {
-    if (api) {
+    if (api || kambiMaintenance) {
       if (apiLoadedIntervalRef.current)
         clearInterval(apiLoadedIntervalRef.current);
-
-      api.request(api.USER_SESSION_CHANGE);
-      api.subscribe(response => {
-        switch (response.type) {
-          case api.USER_SESSION_CHANGE: {
-            setKambiUserLoggedIn(!!response.data?.isLoggedIn);
-            setSportsbookLoaded(true);
-            break;
-          }
-        }
-      });
-    } else if (!apiLoadedIntervalRef.current && visibleSportsbook) {
+    } else if (!apiLoadedIntervalRef.current && rendered) {
       apiLoadedIntervalRef.current = setInterval(() => {
         window.KambiWidget?.ready.then(wapi => {
           setApi(wapi);
@@ -123,31 +133,40 @@ export const KambiProvider = ({ children }) => {
       }, 1000);
     }
   }, [!!api]);
-
   useEffect(() => {
-    if (api && locationKey && visibleSportsbook) {
+    const userSynched =
+      kambiUserLoggedIn.loggedIn === user.logged_in ||
+      kambiUserLoggedIn.retries > 4 ||
+      retailMode;
+    const newValue =
+      ((sportsbookLoaded && userSynched) || kambiMaintenance) && rendered;
+    if (showKambi !== newValue) {
+      setShowKambi(newValue);
+    }
+  }, [
+    sportsbookLoaded,
+    kambiUserLoggedIn,
+    user.logged_in,
+    kambiMaintenance,
+    rendered,
+  ]);
+
+  useEffectSkipInitial(() => {
+    if (api && locationKey && rendered) {
       api.navigateClient(hash || 'home', 'sportsbook');
     }
   }, [hash, !!api]);
   useEffect(() => {
-    if (visibleSportsbook && sportsbookLoaded) {
+    if (showKambi) {
       showKambiSportsbook();
     } else {
       hideKambiSportsbook();
     }
     if (api) {
-      api.set(
-        visibleSportsbook && sportsbookLoaded
-          ? api.CLIENT_SHOW
-          : api.CLIENT_HIDE,
-      );
-      api.set(
-        visibleSportsbook && sportsbookLoaded
-          ? api.BETSLIP_SHOW
-          : api.BETSLIP_HIDE,
-      );
+      api.set(showKambi ? api.CLIENT_SHOW : api.CLIENT_HIDE);
+      api.set(showKambi ? api.BETSLIP_SHOW : api.BETSLIP_HIDE);
     }
-  }, [api, visibleSportsbook, sportsbookLoaded]);
+  }, [api, showKambi]);
 
   const value: KambiContext = {
     sportsbookLoaded,
@@ -155,6 +174,15 @@ export const KambiProvider = ({ children }) => {
     api,
     setApi,
     kambiUserLoggedIn,
+    setKambiUserLoggedIn: (loggedIn: boolean) =>
+      setKambiUserLoggedIn(prev => ({
+        loggedIn,
+        retries: prev.loggedIn === loggedIn ? ++prev.retries : 0,
+      })),
+    showKambi,
+    setRetailMode,
+    setRendered,
+    setKambiMaintenance,
   };
   return <kambiContext.Provider value={value} children={children} />;
 };
@@ -164,6 +192,8 @@ interface SetCustomerSettingsProps {
   updateBalance: (balance: number) => void;
   setKambiLoaded: () => void;
   urlChangeRequested: (page: PagesName) => void;
+  setKambiUserLoggedIn: (loggedIn: boolean) => void;
+  setKambiMaintenance: () => void;
   locale: string;
 }
 
@@ -198,8 +228,11 @@ const setCustomerSettings = ({
   updateBalance,
   setKambiLoaded,
   urlChangeRequested,
+  setKambiUserLoggedIn,
+  setKambiMaintenance,
   locale,
 }: SetCustomerSettingsProps) => {
+  const kambiErrorId = 'kambi-error-reload';
   window.customerSettings = {
     getBalance: function (successFunc, failureFunc) {
       getApi<string>(getApiBalance, { responseText: true })
@@ -218,13 +251,36 @@ const setCustomerSettings = ({
     },
     notification: function (event) {
       switch (event.name) {
-        case 'KambiMaintenance':
+        case 'KambiMaintenance': {
+          setKambiMaintenance();
+          break;
+        }
         case 'pageRendered': {
+          const kambiErrorRetryCount = Lockr.get(kambiErrorId, null);
+          if (kambiErrorRetryCount != null) {
+            Lockr.rm(kambiErrorId);
+          }
           setKambiLoaded();
           break;
         }
         case 'loginRequested': {
           urlChangeRequested(PagesName.LoginPage);
+          break;
+        }
+        case 'loginRequestDone': {
+          setKambiUserLoggedIn(event.data);
+          break;
+        }
+        case 'sessionTimedOut': {
+          setKambiUserLoggedIn(false);
+          break;
+        }
+        case 'loadingError': {
+          const kambiErrorRetryCount = Lockr.get(kambiErrorId, 0) + 1;
+          if (kambiErrorRetryCount < 3) {
+            Lockr.set(kambiErrorId, kambiErrorRetryCount);
+            window.location.reload();
+          }
           break;
         }
       }
@@ -241,11 +297,8 @@ const setCustomerSettings = ({
   };
 };
 
-let kambiLock = false;
 const insertKambiBootstrap = async (retail?: boolean): Promise<void> => {
   return new Promise(resolve => {
-    if (kambiLock) return resolve();
-    kambiLock = true;
     if (!window.__config__.kambi) return resolve();
     document.body.classList.add('body-background');
     const scriptElement = document.createElement('script');
@@ -310,57 +363,88 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
   const loginPagePath = useRoutePath(PagesName.LoginPage, true);
   const history = useHistory();
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const kambiLock = useRef<boolean>(false);
   const desktopWidth = useDesktopWidth(1199);
-
   useEffect(() => {
-    (async () => {
-      if (retail !== window._kc?.betslipBarcodeMode || prevLocale !== locale) {
-        await disposeKambi();
+    if (
+      retail !== window._kc?.betslipBarcodeMode ||
+      prevLocale !== locale ||
+      !context.api
+    ) {
+      context.setRetailMode(!!retail);
+      disposeKambi().then(() => {
         context.setApi(null);
         context.setSportsbookLoaded(false);
-        kambiLock = false;
-      }
-      if (!user.loading && containerRef.current && locale) {
-        if (!context.api && !document.getElementById(kambiId)) {
-          getSBParams(locale, user.id?.toString(), retail).then(kambiConfig => {
-            setCustomerSettings({
-              getApiBalance: kambiConfig?.getApiBalance,
-              updateBalance: (balance: number) => dispatch(setBalance(balance)),
-              setKambiLoaded: () => context.setSportsbookLoaded(true),
-              urlChangeRequested: (page: PagesName) => {
-                if (page === PagesName.LoginPage) {
-                  history.push(loginPagePath);
-                }
-              },
-              locale,
-            });
-            const kambiContainer = document.createElement('div');
-            kambiContainer.id = 'KambiBC';
-            kambiContainer.classList.add('kambiHidden');
-            containerRef.current?.parentNode?.insertBefore(
-              kambiContainer,
-              containerRef.current.nextSibling,
-            );
-            updateWindowKambiConfig(kambiConfig);
-            insertKambiBootstrap(retail);
+        kambiLock.current = false;
+      });
+    }
+    context.setRendered(true);
+    return () => {
+      context.setRendered(false);
+    };
+  }, [locale]);
+
+  useEffect(() => {
+    if (!user.loading && containerRef.current && locale) {
+      if (
+        !context.sportsbookLoaded &&
+        !context.api &&
+        !document.getElementById(kambiId) &&
+        !kambiLock.current
+      ) {
+        kambiLock.current = true;
+        getSBParams(locale, user.id?.toString(), retail).then(kambiConfig => {
+          setCustomerSettings({
+            getApiBalance: kambiConfig?.getApiBalance,
+            updateBalance: (balance: number) => dispatch(setBalance(balance)),
+            setKambiLoaded: () => {
+              context.setSportsbookLoaded(true);
+              kambiLock.current = false;
+            },
+            setKambiMaintenance: () => {
+              context.setKambiMaintenance(true);
+              kambiLock.current = false;
+            },
+            urlChangeRequested: (page: PagesName) => {
+              if (page === PagesName.LoginPage) {
+                history.push(loginPagePath);
+              }
+            },
+            setKambiUserLoggedIn: context.setKambiUserLoggedIn,
+            locale,
           });
-        } else {
-          const kambiContainer = document.getElementById(kambiId);
-          if (kambiContainer) {
-            containerRef.current?.parentNode?.insertBefore(
-              kambiContainer as Node,
-              containerRef.current.nextSibling,
-            );
-          }
+          const kambiContainer = document.createElement('div');
+          kambiContainer.id = 'KambiBC';
+          kambiContainer.classList.add('kambiHidden');
+          containerRef.current?.parentNode?.insertBefore(
+            kambiContainer,
+            containerRef.current.nextSibling,
+          );
+          updateWindowKambiConfig(kambiConfig);
+          insertKambiBootstrap(retail);
+        });
+      } else {
+        const kambiContainer = document.getElementById(kambiId);
+        if (kambiContainer) {
+          containerRef.current?.parentNode?.insertBefore(
+            kambiContainer as Node,
+            containerRef.current.nextSibling,
+          );
         }
       }
-    })();
-  }, [user.loading, locale, containerRef.current]);
+    }
+  }, [
+    context.api,
+    user.loading,
+    locale,
+    containerRef.current,
+    context.sportsbookLoaded,
+  ]);
 
   return (
     <>
       <div ref={containerRef} className={clsx(desktopWidth && 'mt-5')} />
-      {!context.sportsbookLoaded && (
+      {!context.showKambi && (
         <div className="position-relative mt-5 min-vh-70">
           <div className="position-absolute w-100 d-flex justify-content-center pt-4 pb-3">
             <Spinner animation="border" variant="black" className="mx-auto" />
