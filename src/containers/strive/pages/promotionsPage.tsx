@@ -79,11 +79,6 @@ const PromotionsList = () => {
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
     ['/restapi/v1/content/promotions', locale],
     url => getApi(url, { cache: 'no-store' }),
-    {
-      onSuccess: () => {
-        setImagesLoaded(false);
-      },
-    },
   );
   const { t } = useI18n();
   const isDataLoading = !data && !error;
