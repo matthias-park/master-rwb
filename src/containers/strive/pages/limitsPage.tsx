@@ -161,9 +161,23 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
               let formattedFutureLimit: string | null = null;
               switch (limit.Formatting) {
                 case 'hour': {
-                  formattedCurrentLimit = `${limit.LimitAmount} ${t(
-                    'limits_hours',
-                  )}`;
+                  const totalMinutes =
+                    limit.LimitAmount * 60 - (limit.AccumulatedDuration || 0);
+                  if (totalMinutes > 0) {
+                    const hours = Math.floor(totalMinutes / 60);
+                    const minutes = totalMinutes % 60;
+                    let hoursFormatting = hours.toString();
+                    if (!!minutes) {
+                      hoursFormatting += `:${
+                        minutes < 10 ? '0' : ''
+                      }${minutes}`;
+                    }
+                    formattedCurrentLimit = `${hoursFormatting} ${t(
+                      'limits_hours',
+                    )}`;
+                  } else {
+                    formattedCurrentLimit = `0 ${t('limits_hours')}`;
+                  }
                   formattedFutureLimit = limit.FutureLimitAmount
                     ? `${limit.FutureLimitAmount} ${t('limits_hours')}`
                     : null;

@@ -37,6 +37,7 @@ interface Props {
     prefix?: string;
     allowNegative?: boolean;
     useFormatted?: boolean;
+    decimalScale?: number;
   };
   onEnterPress?: () => void;
   autoComplete?: string;
@@ -50,6 +51,7 @@ interface UncontrolledProps extends FormControlProps {
   format?: string | ((value: string) => string);
   allowEmptyFormatting?: boolean;
   mask?: string | string[];
+  decimalScale?: number;
   tooltip?: string;
   toggleVisibility?: boolean;
   prefix?: string;
@@ -259,6 +261,7 @@ const TextInput = ({
       thousandSeparator={maskedInput?.thousandSeparator}
       allowNegative={maskedInput?.allowNegative}
       mask={maskedInput?.mask}
+      decimalScale={maskedInput?.decimalScale}
       autoComplete={autoComplete}
     />
   );

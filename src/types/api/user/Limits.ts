@@ -1,5 +1,6 @@
 export interface LimitData {
   AmountLeft: number;
+  AccumulatedDuration?: number;
   Formatting: 'currency' | 'hour' | 'none';
   FutureLimitAmount: number;
   FutureLimitValidFrom: number;

@@ -326,9 +326,7 @@ const SettingsForm = ({
                   if (field.formatting !== 'none') {
                     if (field.formatting === 'hour') {
                       masketInput = {
-                        format: '##:00',
-                        mask: 'H',
-                        allowEmptyFormatting: true,
+                        decimalScale: 0,
                       };
                     } else if (
                       field.formatting === 'currency' ||
@@ -386,29 +384,41 @@ const SettingsForm = ({
                                 t('phone_number_invalid')
                               );
                             if (
+                              id === 'session_limit' &&
                               field.id.includes('amount') &&
                               value &&
                               !isNaN(value)
                             ) {
-                              const weekValue = watch(
-                                field.id.replace('day', 'week'),
-                              );
-                              const monthValue = watch(
-                                field.id.replace('week', 'month'),
-                              );
-
-                              if (
-                                field.id.includes('day') &&
-                                weekValue &&
-                                Number(weekValue) < Number(value)
-                              )
-                                return t('limit_day_over_week');
-                              if (
-                                field.id.includes('week') &&
-                                monthValue &&
-                                Number(monthValue) < Number(value)
-                              )
-                                return t('limit_week_over_month');
+                              const weekValue = watch('limit_amount_week');
+                              const monthValue = watch('limit_amount_month');
+                              if (field.id.includes('day')) {
+                                const numberValue = Number(value);
+                                if (
+                                  weekValue &&
+                                  Number(weekValue) < numberValue
+                                ) {
+                                  return t('limit_day_over_week');
+                                } else if (numberValue > 24) {
+                                  return t('limit_day_over_24');
+                                }
+                              } else if (field.id.includes('week')) {
+                                formMethods.trigger('limit_amount_day');
+                                const numberValue = Number(value);
+                                if (
+                                  monthValue &&
+                                  Number(monthValue) < numberValue
+                                ) {
+                                  return t('limit_week_over_month');
+                                } else if (numberValue > 168) {
+                                  return t('limit_week_over_week');
+                                }
+                              } else if (field.id.includes('month')) {
+                                formMethods.trigger('limit_amount_week');
+                                const numberValue = Number(value);
+                                if (numberValue > 744) {
+                                  return t('limit_month_over_month');
+                                }
+                              }
                             }
                             if (
                               ['first_name', 'last_name'].includes(field.id)
