@@ -1,33 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/assets/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="manifest" href="%PUBLIC_URL%/assets/manifest.json" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <% if (htmlWebpackPlugin.options.iconSizes && htmlWebpackPlugin.options.iconSizes.length > 0) { %>
-      <% for (var index in htmlWebpackPlugin.options.iconSizes) { %>
-        <link rel="apple-touch-icon" sizes="<%= htmlWebpackPlugin.options.iconSizes[index]%>x<%= htmlWebpackPlugin.options.iconSizes[index]%>" href="%PUBLIC_URL%/assets/images/icons/<%= htmlWebpackPlugin.options.iconSizes[index]%>px.png">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/assets/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="manifest" href="%PUBLIC_URL%/assets/manifest.json" />
+  <link rel="stylesheet" importance="high" href="%PUBLIC_URL%/assets/loader.css" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <script nomodule src="/polyfills/core-js.min.js"></script>
+  <script nomodule src="/polyfills/bluebird.min.js"></script>
+  <script nomodule src="/polyfills/whatwg-fetch.js"></script>
+  <% if (htmlWebpackPlugin.options.iconSizes && htmlWebpackPlugin.options.iconSizes.length> 0) { %>
+    <% for (var index in htmlWebpackPlugin.options.iconSizes) { %>
+      <link rel="apple-touch-icon"
+        sizes="<%= htmlWebpackPlugin.options.iconSizes[index]%>x<%= htmlWebpackPlugin.options.iconSizes[index]%>"
+        href="%PUBLIC_URL%/assets/images/icons/<%= htmlWebpackPlugin.options.iconSizes[index]%>px.png">
       <% } %>
-    <% } %>
-    <title></title>
-    <script>
-      window.__config__ = JSON.parse('<%= htmlWebpackPlugin.options.config %>');
-    </script>
-  <% if (htmlWebpackPlugin.files.css.find(href => href.includes(htmlWebpackPlugin.options.franchiseTheme))) { %>
-    <link href="<%= htmlWebpackPlugin.files.css.find(href => href.includes(htmlWebpackPlugin.options.franchiseTheme)) %>" rel="stylesheet">
-  <% } %>
-  <%= htmlWebpackPlugin.tags.headTags.filter((tag) => tag.tagName === 'meta').join('') %>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to open this website.</noscript>
-    <div id="root"></div>
-    <div id="backdrop" class="bg-overlay"></div>
-    <div id="page-loading-spinner" class="page-loading-spinner d-none">
-      <img class="spinner-img" src="%PUBLIC_URL%/assets/loading-spinner.svg"/>
-    </div>
-    <script>document.getElementById('page-loading-spinner').classList.remove('d-none')</script>
-    <%= htmlWebpackPlugin.tags.bodyTags %>
-  </body>
+        <% } %>
+          <title></title>
+          <script>
+            window.__config__ = JSON.parse('<%= htmlWebpackPlugin.options.config %>');
+          </script>
+          <% if (htmlWebpackPlugin.files.css.find(href=> href.includes(htmlWebpackPlugin.options.franchiseTheme))) { %>
+            <link
+              href="<%= htmlWebpackPlugin.files.css.find(href => href.includes(htmlWebpackPlugin.options.franchiseTheme)) %>"
+              rel="stylesheet">
+            <% } %>
+              <%= htmlWebpackPlugin.tags.headTags.filter((tag)=> tag.tagName === 'meta').join('') %>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to open this website.</noscript>
+  <div id="root"></div>
+  <div id="backdrop" class="bg-overlay"></div>
+  <div id="page-loading-spinner" class="page-loading-spinner d-none">
+    <img class="spinner-img" importance="high" src="%PUBLIC_URL%/assets/loading-spinner.svg" />
+  </div>
+  <script>document.getElementById('page-loading-spinner').classList.remove('d-none')</script>
+  <%= htmlWebpackPlugin.tags.bodyTags %>
+</body>
+
 </html>

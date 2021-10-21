@@ -303,7 +303,7 @@ const insertKambiBootstrap = async (retail?: boolean): Promise<void> => {
     document.body.classList.add('body-background');
     const scriptElement = document.createElement('script');
     scriptElement.setAttribute('type', 'text/javascript');
-    scriptElement.defer = true;
+    scriptElement.async = true;
     const bootstrapUrl = retail
       ? window.__config__.kambi.retail
       : window.__config__.kambi.online;
@@ -316,7 +316,7 @@ const insertKambiBootstrap = async (retail?: boolean): Promise<void> => {
         'src',
         `${window.__config__.kambi?.api}?cb=${Date.now()}`,
       );
-      scriptElement.defer = true;
+      scriptElement.async = true;
       scriptElement.addEventListener('load', () => resolve());
       document.head.appendChild(scriptElement);
     } else {

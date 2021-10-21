@@ -58,33 +58,34 @@ const useGTM = (): ((data: IDataGTM) => void) => {
 export default useGTM;
 
 export const GtmProvider = ({ ...props }: GTMHookProviderProps) => {
-  const { cookies } = useConfig((prev, next) => prev.cookies === next.cookies);
+  const { cookies, domLoaded } = useConfig(
+    (prev, next) =>
+      prev.cookies === next.cookies && prev.domLoaded === next.domLoaded,
+  );
   const [dataLayerState, setDataLayerState] = useState<ISnippetsParams>(
     initialState,
   );
 
   useEffect(() => {
-    if (dataLayerState.id) {
+    if (dataLayerState.id && domLoaded) {
       initGTM({
         dataLayer: dataLayerState.dataLayer,
         dataLayerName: dataLayerState.dataLayerName,
         environment: dataLayerState.environment,
         id: dataLayerState.id,
       });
-      if (dataLayerState?.id) {
-        sendToGTM({
-          data: {
-            event: 'cookiePreferencesChange',
-            'tglab.cookies.analytics': cookies.analytics,
-            'tglab.cookies.functional': cookies.functional,
-            'tglab.cookies.marketing': cookies.marketing,
-            'tglab.cookies.personalization': cookies.personalization,
-          },
-          dataLayerName: dataLayerState.dataLayerName!,
-        });
-      }
+      sendToGTM({
+        data: {
+          event: 'cookiePreferencesChange',
+          'tglab.cookies.analytics': cookies.analytics,
+          'tglab.cookies.functional': cookies.functional,
+          'tglab.cookies.marketing': cookies.marketing,
+          'tglab.cookies.personalization': cookies.personalization,
+        },
+        dataLayerName: dataLayerState.dataLayerName!,
+      });
     }
-  }, [dataLayerState]);
+  }, [dataLayerState, domLoaded]);
   useEffect(() => {
     if (window.__config__.gtmId) {
       setDataLayerState(state => ({

@@ -37,9 +37,10 @@ const FooterHeader = () => {
       </h3>
       <div className="restrictions-block">
         <img
+          loading="lazy"
           className="restrictions-block__img d-none d-sm-block d-md-none d-lg-block"
           alt=""
-          src="/assets/images/restrictions/21-label.png"
+          src="/assets/images/restrictions/21-label.webp"
           width="40"
           height="37"
         />
@@ -120,6 +121,7 @@ const SocialSection = ({
                       className="section-social__icons-link"
                       target={externalLink ? '_blank' : undefined}
                       rel={externalLink ? 'noreferrer' : undefined}
+                      aria-label={iconName[key] || key}
                     >
                       <i className={`icon-${iconName[key] || key}`}></i>
                     </Component>
@@ -144,9 +146,10 @@ const SocialSection = ({
                     rel="noreferrer"
                   >
                     <img
+                      loading="lazy"
                       alt={`partner-${key}`}
                       height="42"
-                      src={`/assets/images/footer/${key}.jpg`}
+                      src={`/assets/images/footer/${key}.webp`}
                     />
                   </a>
                 ))}

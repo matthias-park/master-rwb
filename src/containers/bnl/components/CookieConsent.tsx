@@ -4,7 +4,7 @@ import { useI18n } from '../../../hooks/useI18n';
 import { useModal } from '../../../hooks/useModal';
 import Button from 'react-bootstrap/Button';
 import useGTM from '../../../hooks/useGTM';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 import { useConfig } from '../../../hooks/useConfig';
 import { Cookies } from '../../../types/Config';
 import { useDispatch } from 'react-redux';
