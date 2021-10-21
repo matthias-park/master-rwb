@@ -3,11 +3,11 @@ export interface Withdrawal {
   translations?: { [key: string]: string };
   requests?: Request[];
   info: string;
-  default_account?: DefaultAccount;
-  accounts?: DefaultAccount[];
+  default_account?: BankAccount;
+  accounts?: BankAccount[];
 }
 
-export interface DefaultAccount {
+export interface BankAccount {
   uniq_id: string;
   bank: string;
   bank_id: number;

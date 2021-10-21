@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import clsx from 'clsx';
-import { DefaultAccount } from '../../../../types/api/user/Withdrawal';
+import { BankAccount } from '../../../../types/api/user/Withdrawal';
 import Overlay from 'react-bootstrap/Overlay';
 import Tooltip from 'react-bootstrap/Tooltip';
 
@@ -9,7 +9,7 @@ interface PaymentMethodObj {
   value: string;
   icon?: string;
   title: string;
-  toSelect?: DefaultAccount;
+  toSelect?: BankAccount;
   onChange?: () => void;
 }
 
@@ -96,6 +96,7 @@ const PaymentMethods = ({
       {data?.map(acc => {
         return (
           <PaymentMethod
+            key={acc.id}
             acc={acc}
             selected={selected}
             registerName={registerName}

@@ -1,3 +1,5 @@
+import { BankAccount } from './api/user/Withdrawal';
+
 export interface NET_USER {
   PlayerId: number;
   Login: string;

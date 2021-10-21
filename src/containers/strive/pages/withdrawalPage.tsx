@@ -9,7 +9,7 @@ import {
   Withdrawal,
   Request,
   WithdrawalConfirmation,
-  DefaultAccount,
+  BankAccount,
 } from '../../../types/api/user/Withdrawal';
 import Table from 'react-bootstrap/Table';
 import { useCallback } from 'react';
@@ -118,6 +118,7 @@ const WithdrawalPage = () => {
   } | null>(null);
   const [withdrawalLoading, setWithdrawalLoading] = useState(false);
   const dispatch = useDispatch();
+  const [withdrawalError, setWithdrawalError] = useState<string | null>(null);
   const [
     withdrawalConfirmData,
     setWithdrawalConfirmData,
@@ -129,7 +130,7 @@ const WithdrawalPage = () => {
   const [
     selectedBankAccount,
     setSelectedBankAccount,
-  ] = useState<DefaultAccount | null>(null);
+  ] = useState<BankAccount | null>(null);
   const isDataLoading = !data && !error;
   useEffect(() => {
     if (data?.Data.translations) {
@@ -189,15 +190,13 @@ const WithdrawalPage = () => {
           amount: amount.toString(),
           id: selectedBankAccount.uniq_id,
         },
-      ).catch(() => {
-        addToast('failed to withdraw amount', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-        return null;
-      });
+      ).catch(() => null);
       setWithdrawalLoading(false);
-      return setWithdrawalConfirmData(response?.Data || null);
+      if (response?.Success && response.Data.confirm_info) {
+        return setWithdrawalConfirmData(response?.Data || null);
+      } else {
+        setWithdrawalError(t('withdrawal_request_error'));
+      }
     },
     [selectedBankAccount, user],
   );
@@ -242,7 +241,9 @@ const WithdrawalPage = () => {
     [t],
   );
   let alertMessage: { variant: string; msg: string } | undefined;
-  if (!data?.Data.accounts?.length && data?.Message)
+  if (withdrawalError) {
+    alertMessage = { variant: 'danger', msg: withdrawalError };
+  } else if (!data?.Data.accounts?.length && data?.Message)
     alertMessage = { variant: 'danger', msg: data.Message };
   else if (submitResponse?.msg)
     alertMessage = {

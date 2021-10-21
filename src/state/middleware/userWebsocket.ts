@@ -5,6 +5,7 @@ import io from 'socket.io-client';
 import StatusMessage from '../../types/WebsocketUserStatus';
 import { enableModal } from '../reducers/modals';
 import { ComponentName } from '../../constants';
+import { mutate } from 'swr';
 
 let userSocketIO;
 const userWebsocketMiddleware: Middleware = storeApi => next => action => {
@@ -31,6 +32,10 @@ const userWebsocketMiddleware: Middleware = storeApi => next => action => {
               if (wsData.data) {
                 storeApi.dispatch(setBalance(wsData.data.balance_after));
               }
+              break;
+            }
+            case 'bank_account_changed': {
+              mutate('/restapi/v1/withdrawals');
               break;
             }
           }
