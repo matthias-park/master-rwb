@@ -240,12 +240,13 @@ const SettingsForm = ({
                           (!field.value || submitWithCurrentAction)
                         }
                         disabled={
-                          field.disabled || isDeleteButton
+                          field.disabled
                             ? !watchPassword
+                            : isDeleteButton
+                            ? !formData.some(field => field.LimitAmount != null)
                             : Object.values(watchAllFields).some(
                                 value => !value || value === 'default',
-                              ) ||
-                              (isDeleteButton && !Object.keys(formData).length)
+                              )
                         }
                         className="mt-2 mr-2"
                         variant="primary"

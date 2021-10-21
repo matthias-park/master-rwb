@@ -14,6 +14,8 @@ import { LimitData } from '../../../types/api/user/Limits';
 import { franchiseDateFormat } from '../../../constants';
 import { sortAscending } from '../../../utils';
 import clsx from 'clsx';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 interface LimitProps {
   limitData: {
@@ -193,7 +195,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                 | string
                 | null = limit.FutureLimitValidFrom
                 ? dayjs(limit.FutureLimitValidFrom).format(
-                    `${franchiseDateFormat} HH:MM`,
+                    `${franchiseDateFormat} HH:mm`,
                   )
                 : null;
 
@@ -265,7 +267,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                         {t('limit_valid_until')}{' '}
                         <b>
                           {dayjs(limit.ValidTo).format(
-                            `${franchiseDateFormat} HH:MM`,
+                            `${franchiseDateFormat} HH:mm`,
                           )}
                         </b>
                       </p>
