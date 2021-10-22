@@ -3,7 +3,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import { mediaBreakpointDown, mediaBreakpointUp } from './breakpoints';
 import { fullBg } from './mixins';
 import Link from '../../../../components/Link';
-import Dropdown from 'react-bootstrap/Dropdown';
+import { Dropdown } from 'react-bootstrap';
 
 export const StyledNavToggler = styled(Navbar.Toggle)`
   display: flex;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, cleanup } from '../../../../utils/testUtils';
 import FieldFromJson from '../FieldFromJson';
-import Form from 'react-bootstrap/Form';
+import { Form } from 'react-bootstrap';
 import { FormProvider, useForm } from 'react-hook-form';
 
 beforeEach(cleanup);

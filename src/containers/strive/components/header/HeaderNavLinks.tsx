@@ -1,5 +1,5 @@
 import React, { useRef, useMemo, useEffect } from 'react';
-import Dropdown from 'react-bootstrap/Dropdown';
+import { Dropdown } from 'react-bootstrap';
 import { sortAscending } from '../../../../utils/index';
 import clsx from 'clsx';
 import { useI18n } from '../../../../hooks/useI18n';

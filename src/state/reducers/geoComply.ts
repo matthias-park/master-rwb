@@ -2,10 +2,22 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import Lockr from 'lockr';
 import { GeoComplyErrorCodes } from '../../types/GeoComply';
-import GeoComplyState, {
-  LocalStorageState,
-} from '../../types/state/GeoComplyState';
 import { setLogin } from './user';
+interface GeoComplyState {
+  isReady: boolean;
+  isConnecting: boolean;
+  isConnected: boolean;
+  isGeoAllowed: boolean;
+  error: number | null;
+  geoLocation: string | null;
+  license: string | null;
+  geoInProgress: boolean;
+  wasConnected: boolean;
+  revalidateIn: string | null | undefined;
+  userId: number | null;
+  validationReason: string | null;
+  savedState: LocalStorageState | null;
+}
 
 const localStorageId = 'geoComplyValidation';
 
@@ -24,6 +36,10 @@ const initialState: GeoComplyState = {
   validationReason: null,
   savedState: Lockr.get<LocalStorageState | null>(localStorageId, null),
 };
+interface LocalStorageState {
+  id: number;
+  nextGeoCheck: string;
+}
 
 export const geoComplySlice = createSlice({
   name: 'geoComply',

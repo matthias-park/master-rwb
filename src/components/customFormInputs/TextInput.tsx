@@ -9,7 +9,7 @@ import { FormControlProps } from 'react-bootstrap/FormControl';
 import { enterKeyPress } from '../../utils/uiUtils';
 import LoadingSpinner from '../LoadingSpinner';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
-import NumberFormat from 'react-number-format';
+import LoadableNumberFormat from 'react-number-format';
 
 interface Props {
   id: string;
@@ -203,7 +203,7 @@ const TextInput = ({
     (validation === FormFieldValidation.Valid ||
       (!fieldState.isValidating && fieldState.isTouched));
   const inputAs = useMemo(() => {
-    if (maskedInput) return NumberFormat;
+    if (maskedInput) return LoadableNumberFormat;
     if (textArea) return 'textarea';
     return 'input';
   }, [maskedInput, textArea]);

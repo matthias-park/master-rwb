@@ -18,22 +18,13 @@ import { ConfigLoaded } from '../types/Config';
 import { isIOS } from 'react-device-detect';
 
 const ApiHead = () => {
-  const { locales, locale, routes, configLoaded, domLoaded } = useConfig(
-    (prev, next) => {
-      const localeEqual = prev.locale === next.locale;
-      const localesEqual = prev.locales.length === next.locales.length;
-      const routesEqual = prev.routes.length === next.routes.length;
-      const configLoadedEqual = prev.configLoaded === next.configLoaded;
-      const domLoadedEqual = prev.domLoaded === next.domLoaded;
-      return (
-        localeEqual &&
-        localesEqual &&
-        routesEqual &&
-        configLoadedEqual &&
-        domLoadedEqual
-      );
-    },
-  );
+  const { locales, locale, routes, configLoaded } = useConfig((prev, next) => {
+    const localeEqual = prev.locale === next.locale;
+    const localesEqual = prev.locales.length === next.locales.length;
+    const routesEqual = prev.routes.length === next.routes.length;
+    const configLoadedEqual = prev.configLoaded === next.configLoaded;
+    return localeEqual && localesEqual && routesEqual && configLoadedEqual;
+  });
   const { t, hasTranslations } = useI18n();
   const { pathname, hash } = useLocation();
   const pathInfo = useMemo(() => {
@@ -59,7 +50,7 @@ const ApiHead = () => {
     [pathname, locale],
   );
   const { data } = useApi<RailsApiResponse<SeoPages>>(
-    configLoaded === ConfigLoaded.Loaded && domLoaded
+    configLoaded === ConfigLoaded.Loaded
       ? ['/restapi/v1/content/seo_pages', params]
       : null,
     postApi,

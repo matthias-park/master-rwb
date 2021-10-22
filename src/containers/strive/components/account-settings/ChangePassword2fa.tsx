@@ -3,7 +3,7 @@ import LoadingButton from '../../../../components/LoadingButton';
 import { useI18n } from '../../../../hooks/useI18n';
 import { useAuth } from '../../../../hooks/useAuth';
 import { FormProvider, useForm } from 'react-hook-form';
-import Form from 'react-bootstrap/Form';
+import { Form } from 'react-bootstrap';
 import { postApi } from '../../../../utils/apiUtils';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';

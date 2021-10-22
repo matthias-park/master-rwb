@@ -150,12 +150,6 @@ export const configSlice = createSlice({
       Lockr.set(LocalStorageKeys.cookies, action.payload);
       state.cookies = action.payload;
     },
-    setDomLoaded: state => {
-      state.domLoaded = true;
-      if (state.locale && state.configLoaded !== ConfigLoaded.Loading) {
-        setPageLoader(state, false);
-      }
-    },
   },
   extraReducers: builder => {
     builder
@@ -185,7 +179,7 @@ export const configSlice = createSlice({
           state.sidebars = sidebars;
           state.locale = locale;
           Lockr.set(LocalStorageKeys.config, state);
-          if (!locale && state.domLoaded) {
+          if (!locale) {
             setPageLoader(state, false);
           }
         },
@@ -205,7 +199,7 @@ export const configSlice = createSlice({
         state.locale = action.payload;
       })
       .addCase(fetchTranslations.fulfilled, state => {
-        if (state.domLoaded) setPageLoader(state, false);
+        setPageLoader(state, false);
       })
       .addCase(
         fetchTranslations.rejected,
@@ -218,10 +212,6 @@ export const configSlice = createSlice({
   },
 });
 
-export const {
-  setShowPageLoader,
-  setCookies,
-  setDomLoaded,
-} = configSlice.actions;
+export const { setShowPageLoader, setCookies } = configSlice.actions;
 
 export default configSlice.reducer;

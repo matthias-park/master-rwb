@@ -1,20 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { render } from '@testing-library/react';
 import { SWRConfig } from 'swr';
 import { SwrFetcherConfig } from './apiUtils';
 import { ToastProvider } from 'react-toast-notifications';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
-import createStoreAsync from '../state';
+import store from '../state';
 
 const AllTheProviders = ({ children }) => {
-  const [state, setState] = useState<any>(null);
-  useEffect(() => {
-    createStoreAsync().then(store => setState(store));
-  }, []);
-  if (!state) return null;
   return (
-    <Provider store={state}>
+    <Provider store={store}>
       <SWRConfig value={SwrFetcherConfig}>
         <ToastProvider>
           <HelmetProvider>{children}</HelmetProvider>
