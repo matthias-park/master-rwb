@@ -1,8 +1,13 @@
 import React from 'react';
 import Link from '../components/Link';
 import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser';
+import loadable from '@loadable/component';
 
-const convertStylesStringToObject = stringStyles =>
+const LoadableIframe = loadable(
+  () => import('../components/ComponentFromString/Iframe'),
+);
+
+export const convertStylesStringToObject = stringStyles =>
   typeof stringStyles === 'string'
     ? stringStyles.split(';').reduce((acc, style) => {
         const colonPosition = style.indexOf(':');
@@ -63,6 +68,8 @@ export const replaceStringTagsReact = (text: string, props: any = {}) => {
             }}
           />
         );
+      } else if (domNode.type === 'tag' && domNode.name === 'iframe') {
+        return <LoadableIframe {...domNode.attribs} />;
       }
     },
   };
