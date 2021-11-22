@@ -10,15 +10,17 @@ interface ProviderProps {
   children: any;
 }
 export const CaptchaProvider = ({ children }: ProviderProps) => {
-  const { locale, configLoaded } = useConfig((prev, next) => {
+  const { locale, configLoaded, domLoaded } = useConfig((prev, next) => {
     const localeEqual = prev.locale === next.locale;
     const configEqual = prev.configLoaded === next.configLoaded;
-    return localeEqual && configEqual;
+    const domLoadedEqual = prev.domLoaded === next.domLoaded;
+    return localeEqual && configEqual && domLoadedEqual;
   });
   if (
     configLoaded !== ConfigLoaded.Loaded ||
     !window.__config__.googleRecaptchaKey ||
-    isIE
+    isIE ||
+    !domLoaded
   )
     return children;
 
@@ -27,7 +29,7 @@ export const CaptchaProvider = ({ children }: ProviderProps) => {
       reCaptchaKey={window.__config__.googleRecaptchaKey}
       language={locale || undefined}
       scriptProps={{
-        defer: true,
+        async: true,
       }}
     >
       {children}

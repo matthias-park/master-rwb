@@ -5,6 +5,7 @@
     <link rel="icon" href="%PUBLIC_URL%/assets/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="manifest" href="%PUBLIC_URL%/assets/manifest.json" />
+    <link rel="stylesheet" importance="high" href="%PUBLIC_URL%/assets/loader.css" />
     <script>
       var franchises = JSON.parse('<%= htmlWebpackPlugin.options.franchises %>');
       var windowDomain = window.location.hostname;
@@ -31,7 +32,7 @@
     <div id="root"></div>
     <div id="backdrop" class="bg-overlay"></div>
     <div id="page-loading-spinner" class="page-loading-spinner d-none">
-      <img class="spinner-img" src="%PUBLIC_URL%/assets/loading-spinner.svg"/>
+      <img class="spinner-img" importance="high" src="%PUBLIC_URL%/assets/loading-spinner.svg"/>
     </div>
     <script>document.getElementById('page-loading-spinner').classList.remove('d-none')</script>
   </body>
