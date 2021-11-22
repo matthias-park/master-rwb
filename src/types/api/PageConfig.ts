@@ -10,6 +10,8 @@ export interface PageConfig {
   locale: string | null;
   content_pages: { [key: string]: string[] };
   cached?: boolean;
+  welcome_casino_categories?: string[];
+  featured_casino_categories?: string[];
 }
 
 export interface Sidebar {
@@ -18,6 +20,25 @@ export interface Sidebar {
   children?: {
     name: string;
     link: string;
+  }[];
+  main?: { name: string; link?: string; icon?: string; menu_name?: string }[];
+  info_menu?: {
+    name: string;
+    link?: string;
+    icon?: string;
+    menu_name?: string;
+    protected?: boolean;
+  }[];
+  sub_menu?: {
+    name: string;
+    link?: string;
+    icon?: string;
+    menu_name?: string;
+    protected?: boolean;
+  }[];
+  expand_menus?: {
+    name: string;
+    children: { name: string; link?: string; icon?: string; modal?: string }[];
   }[];
 }
 export interface AvailableLocale {
@@ -30,6 +51,7 @@ export interface FooterData {
   partners: Partners;
   links: FooterDataLink[];
   subFooter: SubFooter;
+  providers: ImageLink[];
 }
 
 export interface FooterDataLink {
@@ -45,6 +67,7 @@ export interface Child {
 
 export interface ChildElement {
   name: string;
+  icon: string;
   link?: string;
   translationPath?: string;
   order: number;
@@ -54,10 +77,16 @@ export interface ChildElement {
 }
 
 export interface Partners {
+  links: ImageLink[];
   reddevils: string;
   redflames: string;
   superleague: string;
   rscs: string;
+}
+
+export interface ImageLink {
+  link: string;
+  img_src: string;
 }
 
 export interface Social {

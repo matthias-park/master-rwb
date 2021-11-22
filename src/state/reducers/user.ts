@@ -35,6 +35,7 @@ export const userSlice = createSlice({
         loading: false,
         name: action.payload.Login,
         currency: action.payload.currency,
+        token: action.payload.token,
       };
     },
     setRegistered: (_, action: PayloadAction<NET_USER>) => {

@@ -9,14 +9,17 @@ import useApi from './useApi';
 import { useAuth } from './useAuth';
 import { useI18n } from './useI18n';
 import useLocalStorage from './useLocalStorage';
+import * as Sentry from '@sentry/react';
 
 const postUrl = '/restapi/v1/deposits/status';
+
+const banksPostBeforeStatus = [123, 189];
 
 const useDepositResponseStatus = () => {
   const { jsxT } = useI18n();
   const { updateUser } = useAuth();
   const { bankResponse } = useParams<{ bankResponse?: string }>();
-  const { pathname, state } = useLocation<{
+  const { pathname, state, search } = useLocation<{
     status: DepositStatus;
     message: string | null;
   } | null>();
@@ -29,6 +32,17 @@ const useDepositResponseStatus = () => {
     'deposit_id',
     null,
   );
+  const [bankId, setBankId] = useLocalStorage<number | null>(
+    'deposit_bank_id',
+    null,
+  );
+  const queryParams = useMemo(
+    () =>
+      search && bankId && banksPostBeforeStatus.includes(bankId)
+        ? Object.fromEntries(new URLSearchParams(search))
+        : null,
+    [search],
+  );
   const [depositStatus, setDepositStatus] = useState<DepositStatus>(
     state?.status ?? DepositStatus.None,
   );
@@ -36,6 +50,7 @@ const useDepositResponseStatus = () => {
     if (
       id &&
       responseLoading &&
+      !queryParams &&
       [DepositStatus.None, DepositStatus.Pending].includes(depositStatus)
     ) {
       return [
@@ -46,10 +61,76 @@ const useDepositResponseStatus = () => {
       ];
     }
     return null;
-  }, [responseLoading, id, depositStatus]);
+  }, [responseLoading, id, depositStatus, queryParams]);
+
   const { data, error } = useApi<RailsApiResponse<{}>>(request, postApi, {
     refreshInterval: 5000,
   });
+
+  useEffect(() => {
+    if (
+      bankId === 123 &&
+      queryParams &&
+      queryParams.token &&
+      queryParams.PayerID
+    ) {
+      postApi<RailsApiResponse<null>>('/railsapi/v1/deposits/paypal', {
+        token: queryParams.token,
+        payer_id: queryParams.PayerID,
+      })
+        .then(res => {
+          if (res.Success) {
+            history.replace({
+              search: '',
+            });
+          } else {
+            Sentry.captureMessage('Paypal execute deposit error', {
+              level: Sentry.Severity.Fatal,
+              tags: {
+                searchQuery: window.location.search,
+              },
+            });
+            setId(null);
+            setBankId(null);
+            history.replace(`${depositBaseUrl}/error`, {
+              status: DepositStatus.Errored,
+            });
+          }
+        })
+        .catch(() => {});
+    } else if (bankId && queryParams && Object.keys(queryParams).length) {
+      postApi<RailsApiResponse<null>>('/railsapi/v1/deposits/request_return', {
+        bank_id: bankId.toString(),
+        data: JSON.stringify({
+          ...queryParams,
+          depositRequestId: id,
+        }),
+      })
+        .then(res => {
+          if (res.Success) {
+            history.replace({
+              search: '',
+            });
+          } else {
+            Sentry.captureMessage(
+              `Request return deposit error bankId: ${bankId}`,
+              {
+                level: Sentry.Severity.Fatal,
+                tags: {
+                  searchQuery: window.location.search,
+                },
+              },
+            );
+            setId(null);
+            setBankId(null);
+            history.replace(`${depositBaseUrl}/error`, {
+              status: DepositStatus.Errored,
+            });
+          }
+        })
+        .catch(() => {});
+    }
+  }, [queryParams]);
 
   useEffect(() => {
     if (
@@ -97,13 +178,15 @@ const useDepositResponseStatus = () => {
       if (DepositStatus.Confirmed === status) updateUser();
       if (
         ![DepositStatus.None, DepositStatus.Pending].includes(status) &&
-        bankResponse
+        bankResponse &&
+        !queryParams
       ) {
         let newDepositPath = 'error';
         if (status === DepositStatus.Confirmed) newDepositPath = 'success';
         if (status === DepositStatus.Rejected) newDepositPath = 'rejected';
         if (status === DepositStatus.Canceled) newDepositPath = 'canceled';
         setId(null);
+        setBankId(null);
         const newPathname = pathname.replace(bankResponse, newDepositPath);
         history.replace(newPathname, {
           status: status,
@@ -119,7 +202,10 @@ const useDepositResponseStatus = () => {
     message = state?.message || jsxT(`deposit_status_${depositStatus}`);
   }
   return {
-    setDepositId: (id: string | number) => setId(id),
+    setDepositId: (id: string | number, bankId?: number) => {
+      setId(id);
+      if (bankId) setBankId(bankId);
+    },
     startCheckingStatus: () => {
       history.push(`${depositBaseUrl}/loading`);
     },

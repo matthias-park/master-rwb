@@ -6,9 +6,14 @@ export interface PostRegistration {
   address: string;
   postal_code: string;
   city: string;
-  date_of_birth: string;
+  date_of_birth: string | null;
   language_id?: number;
   captcha_token?: string;
+  firstname?: string;
+  lastname?: string;
+  datepicker_year?: string;
+  datepicker_month?: string;
+  datepicker_day?: string;
 }
 export interface ValidateRegisterInput {
   Exists: boolean;

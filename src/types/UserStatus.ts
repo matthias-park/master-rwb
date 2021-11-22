@@ -1,5 +1,3 @@
-import { BankAccount } from './api/user/Withdrawal';
-
 export interface NET_USER {
   PlayerId: number;
   Login: string;
@@ -10,6 +8,7 @@ export interface NET_USER {
   Message: string;
   error?: string;
   currency?: string;
+  token?: string;
 }
 export interface TwoFactorAuth {
   authentication_required: boolean;

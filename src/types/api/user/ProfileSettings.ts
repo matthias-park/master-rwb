@@ -27,7 +27,7 @@ export interface SettingsField {
   date?: string;
   status?: string[];
   style?: SettingsFieldStyle;
-  default?: number | null | string;
+  default?: any;
   enabled?: boolean;
   values?: SettingsFieldValue[];
   visible?: boolean;

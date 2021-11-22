@@ -17,9 +17,9 @@ const AsyncFranchise = (name: string) =>
   );
 
 const App = () => {
-  const franchiseName = window.__config__.name;
-  const FranchiseIndex = franchiseName
-    ? AsyncFranchise(window.__config__.name)
+  const franchiseTheme = window.__config__.theme;
+  const FranchiseIndex = franchiseTheme
+    ? AsyncFranchise(franchiseTheme)
     : 'div';
   return (
     <ContextProviders>

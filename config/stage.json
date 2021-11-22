@@ -122,6 +122,39 @@
           "secondary": "#666666"
         }
       }
+    },
+    {
+      "name": "xcasino",
+      "basicAuthEnabled": true,
+      "domains": [
+        {
+          "hostname": "xcasino-rj.tglab.dev",
+          "api": "https://pla-dev.tglab.dev"
+        }
+      ],
+      "themeColor": "#000541",
+      "theme": "xcasino",
+      "redis": {
+        "host": "192.168.109.106",
+        "port": 6379,
+        "db": 0,
+        "prefix": "reactNodeStage-",
+        "password": "yAw6H44cHUtvnjC"
+      },
+      "tgLabSb": {
+        "id": 56,
+        "bundle": "https://nstest.tonybet.com/js/sbwrp.js",
+        "format": "eu"
+      },
+      "componentSettings": {
+        "v2Auth": "wss://xcasino-ws.tglab.dev",
+        "limitsOnAction": ["login", "logout", "playCasino"],
+        "modals": {
+          "limits": true
+        }
+      },
+      "casino": true,
+      "dateFormat": "YYYY-MM-DD"
     }
   ],
   "sentryDsn": "https://bc58950e0bc549ceab635a17b85e928b@sentry.tglab.dev/9",

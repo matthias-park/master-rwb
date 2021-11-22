@@ -1,0 +1,14 @@
+.block-links-slider {
+  margin-bottom: $spacing-4;
+  @include media-breakpoint-down(lg) {
+    margin-bottom: $spacing-1;
+  }
+  &__card {
+    &.white {
+      @include bg-image-card($white);
+    }
+    &.light-grey {
+      @include bg-image-card($gray-700);
+    }
+  }
+}

@@ -7,9 +7,12 @@ import translations, { Symbols } from './reducers/translations';
 import UserStatus from '../types/UserStatus';
 import Config from '../types/Config';
 import GeoComplyState from '../types/state/GeoComplyState';
+import TgLabSb from '../types/TgLabSb';
 
 const geoComplyEnabled = !!window.__config__.geoComplyKey;
 const v2AuthEnabled = !!window.__config__.componentSettings?.v2Auth;
+const tgLabSbEnabled = !!window.__config__.tgLabSb;
+
 const sentryReduxEnhancer = Sentry.createReduxEnhancer({
   actionTransformer: action => {
     return null;
@@ -50,6 +53,14 @@ const createStoreAsync = async () => {
       };
     });
   }
+  if (tgLabSbEnabled) {
+    await import('./reducers/tgLabSb').then(tgLabSb => {
+      reducers = {
+        ...reducers,
+        tgLabSb: tgLabSb.default,
+      };
+    });
+  }
   const reduxMiddleware = await Promise.all(asyncReduxMiddleware)
     .then(modules => modules.map(module => module.default))
     .catch(() => []);
@@ -64,6 +75,7 @@ export type RootState = {
   geoComply: GeoComplyState;
   modals: ModalsState;
   user: UserStatus;
+  tgLabSb: TgLabSb;
   config: Config;
   translations: Symbols | null;
 };

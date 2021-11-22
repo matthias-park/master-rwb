@@ -1,0 +1,239 @@
+.info-payment-page,
+.info-template-page {
+  min-height: 90vh;
+  .table {
+    td {
+      max-width: 90px;
+      padding: $spacing-1;
+      vertical-align: middle;
+    }
+    .btn {
+      padding: $spacing-1 $spacing-3;
+      font-size: $text-body;
+      min-width: 120px;
+    }
+  }
+  .icon-circle-info {
+    color: $tertiary;
+  }
+  &__content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-top: $spacing-5;
+    font-size: $text-body;
+    @include media-breakpoint-down(xxl) {
+      padding: $spacing-5 $spacing-4;
+    }
+  }
+  &__section {
+    &-title {
+      color: $white;
+    }
+    padding: $spacing-2 0;
+    color: $white-opacity-mid;
+    ol {
+      padding-inline-start: $spacing-4;
+    }
+  }
+  &__text {
+    color: $white-opacity-mid;
+  }
+}
+
+.info-affiliate-page {
+  .swiper-container {
+    margin: 0 -20%;
+  }
+  .swiper-slide-next {
+    transform: translateX(-50%) scale(0.9);
+  }
+  .swiper-slide-prev {
+    transform: translateX(50%) scale(0.9);
+  }
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    transition: all 0.3s ease-in;
+    .card {
+      min-height: 324px;
+      max-width: 50%;
+    }
+  }
+  .section {
+    border-bottom: 1px solid $gray-300;
+    margin-bottom: $spacing-5;
+    padding-bottom: $spacing-5;
+    &-title {
+      text-transform: uppsercase;
+      text-align: center;
+      margin-bottom: $spacing-5;
+    }
+  }
+  &__wrp {
+    width: 90%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  &__banner {
+    position: relative;
+    margin: $spacing-5 auto;
+    max-width: 900px;
+    width: 100%;
+    @include media-breakpoint-down(lg) {
+      margin: 0;
+      margin-bottom: $spacing-5;
+      max-width: unset;
+    }
+    &-content {
+      position: absolute;
+      top: clamp(30px, 3vw, $spacing-7);
+      left: $spacing-7;
+      width: 300px;
+      @include media-breakpoint-down(sm) {
+        top: unset;
+        left: $spacing-3;
+        bottom: 10px;
+        width: 100%;
+      }
+    }
+    &-image-mob {
+      width: 100%;
+    }
+    &-image-mob::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.7));
+    }
+    &-image {
+      width: 100%;
+    }
+    &-title {
+      text-transform: uppercase;
+      font-size: clamp(25px, 2.4vw, 2.25rem);
+    }
+    &-subtitle {
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #D1B07A;
+      font-size: clamp(25px, 2.4vw, 2.25rem);
+    }
+    &-text {
+      font-size: clamp(14px, 1.1vw, 0.875rem);
+    }
+    &-btn {
+      padding-top: clamp(5px, 1vw, 1rem);
+      padding-bottom: clamp(5px, 1vw, 1rem);
+      padding-right: clamp(5px, 7vw, 5rem);
+      padding-left: clamp(5px, 7vw, 5rem);
+      font-size: $text-body;
+    }
+    .icon-left {
+      position: absolute;
+      right: $spacing-6;
+      bottom: $spacing-3;
+      background-color: $secondary;
+      height: 48px;
+      width: 48px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+    }
+  }
+  &__info {
+    &-text {
+      font-size: $text-body;
+      color: $white-opacity-mid;
+    }
+    &-images {
+      display: flex;
+      margin-top: $spacing-7;
+      justify-content: space-evenly;
+      @include media-breakpoint-down(sm) {
+        flex-direction: column;
+      }
+    }
+    &-image {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-basis: 30%;
+      @include media-breakpoint-up(lg) {
+        max-width: 180px;
+      }
+      @include media-breakpoint-down(sm) {
+        margin: $spacing-4 0;
+      }
+      .image {
+        max-width: 130px;
+      }
+      .text {
+        margin-top: $spacing-3;
+        text-align: center;
+        white-space: pre-wrap;
+      }
+    }
+  }
+  &__tesimonials {
+    &-cards {
+      display: flex;
+      justify-content: center;
+      @include media-breakpoint-down(sm) {
+        flex-direction: column;
+      }
+      .card {
+        &-body {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+        &-quotation-left {
+          text-align: left;
+        }
+        &-quotation-right {
+          text-align: right;
+        }
+      }
+    }
+    &-review {
+      color: $white-opacity-mid;
+      font-size: $text-body;
+    }
+  }
+  &__faq {
+    .card {
+      border-radius: 0;
+      margin: 0;
+    }
+    .accordion-toggle {
+      text-align: left;
+      padding: $spacing-2;
+      border: none;
+      background-color: $gray-700;
+      color: $white-opacity-mid;
+      font-size: $text-body;
+      transition: background-color 0.1s ease-in;
+      &.active {
+        background-color: $gray-600;
+        color: $white;
+      }
+    }
+    .card-body {
+      background-color: $gray-800;
+      font-size: $text-body;
+      color: $white-opacity-mid;
+    }
+  }
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: $spacing-5;
+    @include media-breakpoint-down(md){
+      flex-direction: column;
+    }
+    .btn-secondary {
+      max-width: 140px;
+    }
+  }
+}

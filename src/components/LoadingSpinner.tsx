@@ -6,11 +6,12 @@ interface Props {
   show?: boolean;
   className?: string;
   small?: boolean;
+  variant?: string;
 }
 
-const LoadingSpinner = ({ show, className, small }: Props) => {
+const LoadingSpinner = ({ show, className, small, variant }: Props) => {
   return (
-    <span>
+    <span className="d-inline-flex">
       {show && (
         <Spinner
           as="span"
@@ -18,6 +19,7 @@ const LoadingSpinner = ({ show, className, small }: Props) => {
           size={small ? 'sm' : undefined}
           role="status"
           className={className + `${isIOS ? ' ios' : ''}`}
+          variant={variant}
         />
       )}
     </span>

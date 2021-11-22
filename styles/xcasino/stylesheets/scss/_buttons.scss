@@ -1,0 +1,29 @@
+.btn {
+  border-color: transparent !important;
+  white-space: nowrap;
+  &--icon {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: calc(#{ $spacing-4 } + #{ $spacing-1 });
+    i {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: $spacing-2;
+      font-size: 14px;
+    }
+  }
+  &:hover,
+  &:active,
+  &:focus {
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+}
+
+.btn-tertiary,
+.btn-tertiary:disabled {
+  color: $white;
+}

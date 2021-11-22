@@ -5,6 +5,7 @@ export interface ComponentSettings {
     loginCookiesAccept?: boolean;
     emailLogin?: boolean;
   };
+  limitsOnAction?: string[];
   modals: {
     TnC: boolean;
     ResponsibleGambling: boolean;
@@ -13,5 +14,6 @@ export interface ComponentSettings {
     AddBankAccount: boolean;
     GeoComply: boolean;
     PlayerDisabled: boolean;
+    limits: boolean;
   };
 }

@@ -26,6 +26,7 @@ export const changeBodyScroll = (enabledScroll: boolean) => {
       ? classList.remove(DISABLED_SCROLL_CLASS, DISABLED_SCROLL_CLASS_WINDOWS)
       : classList.remove(DISABLED_SCROLL_CLASS);
   }
+  document.body.setAttribute('style', '');
   return isWindows
     ? classList.add(DISABLED_SCROLL_CLASS, DISABLED_SCROLL_CLASS_WINDOWS)
     : classList.add(DISABLED_SCROLL_CLASS);

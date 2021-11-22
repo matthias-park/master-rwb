@@ -1,0 +1,111 @@
+.layout-wrp {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-columns: auto 1fr;
+  min-height: 100vh;
+  @include media-breakpoint-down(md) {
+    grid-template-columns: auto;
+  }
+}
+
+.header {
+  position: relative;
+  z-index: 2;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+
+.main-banner {
+  position: relative;
+  z-index: 1;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  overflow: hidden;
+  @include media-breakpoint-down(md) {
+    grid-column-start: 1;
+    grid-column-end: 2;
+  }
+}
+
+.main {
+  position: relative;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  grid-column-start: 2;
+  max-width: 1920px;
+  margin: 0 auto;
+  overflow: hidden;
+  width: 100%;
+  @include media-breakpoint-down(md) {
+    grid-column-start: 1;
+    grid-column-end: 2;
+  }
+}
+
+.sidebar-left {
+  position: relative;
+  z-index: 2;
+  grid-row-start: 1;
+  grid-row-end: 5;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  width: 250px;
+}
+
+.footer {
+  position: relative;
+  z-index: 1;
+  grid-row-start: 4;
+  grid-row-end: 5;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  @include media-breakpoint-down(md) {
+    grid-column-start: 1;
+    grid-column-end: 2;
+  }
+}
+
+.page-content {
+  padding: $spacing-2 $spacing-7;
+  @include media-breakpoint-down(lg) {
+    padding: $spacing-2 $spacing-5;
+  }
+  @include media-breakpoint-down(xs) {
+    padding: $spacing-2;
+  }
+}
+
+.expand-right {
+  width: calc(100% + #{ $spacing-7 }) !important;
+  @include media-breakpoint-up(xxxl) {
+    width: 100% !important;
+  }
+  @include media-breakpoint-down(lg) {
+    width: calc(100% + #{ $spacing-5 }) !important;
+  }
+  @include media-breakpoint-down(xs) {
+    width: calc(100% + #{ $spacing-2 }) !important;
+  }
+}
+
+.expand-both {
+  position: relative;
+  left: -$spacing-7;
+  width: calc(100% + (#{ $spacing-7 } * 2));
+  @include media-breakpoint-up(xxxl) {
+    left: 0;
+    width: 100%;
+  }
+  @include media-breakpoint-down(lg) {
+    left: -$spacing-5;
+    width: calc(100% + (#{ $spacing-5 } * 2));
+  }
+  @include media-breakpoint-down(xs) {
+    left: -$spacing-2;
+    width: calc(100% + (#{ $spacing-2 } * 2));
+  }
+}

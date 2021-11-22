@@ -32,6 +32,8 @@ type Config = {
   footer?: FooterData;
   sidebars?: Array<Sidebar[]>;
   helpBlock?: PagesName[];
+  welcomeCasinoCategories?: string[];
+  featuredCasinoCategories?: string[];
   configLoaded: ConfigLoaded;
   cookies: Cookies;
   showPageLoader: boolean;

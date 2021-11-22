@@ -46,7 +46,7 @@ const DepositForm = ({
     },
   });
   const { data: banksData, error: banksError } = useApi<any>(
-    '/railsapi/v1/user/available_banks',
+    '/restapi/v1/user/available_banks',
   );
   const depositDataLoading = !depositData && !depositError;
   const banksDataLoading = !banksData && !banksError;

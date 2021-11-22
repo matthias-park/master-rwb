@@ -54,7 +54,9 @@ export interface PostOptions {
 
 export const postApi = <T>(
   url: string,
-  body?: { [key: string]: number | string | Blob | boolean | undefined | null },
+  body?: {
+    [key: string]: number | string | Blob | boolean | undefined | null | object;
+  },
   options: PostOptions = {},
 ): Promise<T> => {
   const config: RequestInit = {
@@ -68,7 +70,13 @@ export const postApi = <T>(
       const formData = new FormData();
       const formBody = cleanPostBody(body);
       for (const key in formBody) {
-        formData.append(key, formBody[key] as string | Blob);
+        if (Array.isArray(formBody[key])) {
+          for (const item of formBody[key]) {
+            formData.append(key, item as string | Blob);
+          }
+        } else {
+          formData.append(key, formBody[key] as string | Blob);
+        }
       }
       config.body = formData;
     } else {

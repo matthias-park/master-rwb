@@ -70,6 +70,18 @@ const LoadableGeoComply = loadable(
       .then(component => component.GeoComplyProvider)
       .catch(() => 'div') as Promise<DefaultComponent<unknown>>,
 );
+const LoadableCasinoConfig = loadable(
+  () =>
+    import('../hooks/useCasinoConfig')
+      .then(component => component.CasinoConfigProvider)
+      .catch(() => 'div') as Promise<DefaultComponent<unknown>>,
+);
+const LoadableRegisterContext = loadable(
+  () =>
+    import('../hooks/useCompleteRegistration')
+      .then(component => component.CompleteRegistrationProvider)
+      .catch(() => 'div') as Promise<DefaultComponent<unknown>>,
+);
 
 const ContextProviders = ({ children }: Props) => {
   const providers: Provider[] = [
@@ -80,6 +92,8 @@ const ContextProviders = ({ children }: Props) => {
     HelmetProvider,
     BrowserRouterProvider,
     UIConfigProvider,
+    !!window.__config__.casino && LoadableCasinoConfig,
+    !!window.__config__.casino && LoadableRegisterContext,
     !!window.__config__.googleRecaptchaKey && LoadableRecaptcha,
     !!window.__config__.kambi && LoadableKambiProvider,
     !!window.__config__.geoComplyKey && LoadableGeoComply,

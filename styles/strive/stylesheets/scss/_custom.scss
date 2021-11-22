@@ -205,6 +205,10 @@ a:hover {
 .help-block {
   width: 306px;
   $self: &;
+  @include media-breakpoint-down(lg){
+    width: 100%;
+    max-width: none !important;
+  }
   &__title {
       font-weight: 500;
       margin-bottom: 16px;

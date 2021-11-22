@@ -1,0 +1,129 @@
+.table {
+  font-size: $text-body;
+  border: 1px solid rgba($white, 0.2);
+  thead {
+    tr {
+      background-color: $gray-700;
+      th {
+        color: $white-opacity-high;
+        border-bottom-width: 1px;
+      }
+    }
+  }
+  tbody {
+    tr {
+      .mobile-td-wrp {
+        display: contents;
+        .mobile-th {
+          display: none;
+        }
+      }
+    }
+  }
+  thead tr th,
+  tbody tr td {
+    white-space: nowrap;
+  }
+  i {
+    display: inline-block;
+    font-size: 20px;
+    color: $white-opacity-mid;
+    line-height: 12px;
+    transform: translateY(3px);
+    transition: color $transition-main;
+    cursor: pointer;
+    &:hover {
+      color: $white;
+    }
+  }
+  @include media-breakpoint-down(sm) {
+    border: none;
+    background-color: transparent;
+    thead {
+      display: none;
+    }
+    tbody {
+      tr {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: $spacing-1;
+        border: 1px solid rgba($white, 0.2);
+        background-color: $gray-800;
+        .mobile-td-wrp {
+          display: flex;
+          align-items: center;
+          border-bottom: 1px solid rgba($gray-900, 0.5);
+          .mobile-th {
+            display: block;
+            flex-basis: 50%;
+            background-color: $gray-700;
+            color: $white-opacity-high;
+          }
+          td {
+            max-width: 65%;
+            border: none;
+          }
+          .mobile-th {
+            max-width: 35%;
+          }
+          .mobile-th,
+          td {
+            padding: 0.75rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.pagination-table {
+   &__pagination {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      color: $white-opacity-low;
+      font-size: $text-body;
+      &-icons {
+          display: flex;
+          align-items: center;
+      }
+      .dropdown-toggle,
+      .dropdown-toggle:focus,
+      .dropdown-toggle:active {
+        padding: unset !important;
+        background-color: unset !important;
+        font-size: unset !important;
+        color: $white-opacity-low;
+      }
+      .dropdown-toggle:after {
+        margin-left: $spacing-2;
+      }
+      .dropdown-item {
+        color: $white-opacity-mid;
+      }
+   }
+   &__pagination-icons {
+    i {
+      font-size: 19px;
+      margin: 0 $spacing-1;
+      color: $white-opacity-low;
+      transition: color $transition-main;
+      cursor: pointer;
+      &.active {
+        color: $white-opacity-mid;
+        &:hover {
+          color: $white-opacity-high;
+        }
+      }
+    }
+    .icon-arrow-dropdown {
+      font-size: 30px;
+      &.right  {
+        transform: rotate(270deg);
+      }
+      &.left {
+        transform: rotate(90deg);
+      }
+    }
+   }
+}

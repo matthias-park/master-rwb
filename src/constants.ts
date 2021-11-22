@@ -4,6 +4,8 @@ export const TestEnv = process.env.TARGET_ENV === 'test';
 export enum ComponentName {
   Header,
   Footer,
+  LeftSidebar,
+  RightSidebar,
   LoginDropdown,
   RequiredDocuments,
   MarketingSettings,
@@ -17,9 +19,17 @@ export enum ComponentName {
   ResponsibleGamblingModal = 'responsibleGamblingModal',
   ValidationFailedModal = 'validationFailedModal',
   TermsAndConditionsModal = 'termsAndConditionsModal',
+  RegisterModal = 'registerModal',
+  LoginModal = 'loginModal',
   CookiesModal = 'cookiesModal',
   GeoComplyModal = 'geoComplyModal',
   PlayerDisabledModal = 'playerDisabledModal',
+  ForgotPasswordModal = 'forgotPasswordModal',
+  ResetPasswordModal = 'resetPasswordModal',
+  LimitsModal = 'limitsModal',
+  ResendEmailModal = 'resendEmailModal',
+  MaxBalanceModal = 'maxBalanceModal',
+  BettingHistory = 'bettingHistory',
 }
 
 export const ModalPriority = {
@@ -58,6 +68,20 @@ export enum PagesName {
   TermsAndConditionsPage = 27,
   SportsPlayRetailPage = 28,
   RequiredDocuments = 29,
+  WelcomePage = 30,
+  CasinoPage = 31,
+  CasinoInnerPage = 32,
+  PromotionsInnerPage = 33,
+  CasinoCategoryPage = 34,
+  GameRoundsPage = 35,
+  VerifyAccountPage = 36,
+  RewardsDashboardPage = 37,
+  RedeemRewardsPage = 38,
+  InfoAffiliatePage = 39,
+  InfoPaymentPage = 40,
+  LiveSportsPage = 41,
+  LiveCasinoPage = 42,
+  CasinoGameInfoPage = 44,
 }
 
 export enum FormFieldValidation {
@@ -462,6 +486,7 @@ export const VALIDATIONS = {
     const age = dayjs(value, franchiseDateFormat).add(21, 'year');
     return dayjs().isAfter(age);
   },
+  isAlpha: value => /^[a-zA-Z]*$/.test(value),
 };
 export const PAGES_WITH_CAPTCHA_ICON = [
   PagesName.RegisterPage,
@@ -481,6 +506,8 @@ export enum CustomWindowEvents {
   ResetIdleTimer = 'resetIdleTimer',
   DepositPaymentSuccess = 'payment_success',
   DepositPaymentError = 'payment_error',
+  DepositRequestReturn = 'deposit_request_return',
+  DepositVerifyPayment = 'verify_payment_action',
 }
 
 export enum LocalStorageKeys {

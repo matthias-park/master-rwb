@@ -1,6 +1,10 @@
 import React from 'react';
 import Link from '../components/Link';
-import parse, { domToReact, HTMLReactParserOptions } from 'html-react-parser';
+import parse, {
+  domToReact,
+  HTMLReactParserOptions,
+  attributesToProps,
+} from 'html-react-parser';
 import loadable from '@loadable/component';
 
 const LoadableIframe = loadable(
@@ -55,6 +59,10 @@ export const replaceStringTagsReact = (text: string, props: any = {}) => {
             ref={ref => {
               if (ref && !ref.innerHTML.length) {
                 const script = document.createElement('script');
+                const scriptProps = attributesToProps(domNode.attribs);
+                Object.keys(scriptProps).forEach(key => {
+                  script[key] = scriptProps[key];
+                });
                 script.innerHTML = domToReact(
                   domNode.children,
                   htmlParseOptions,

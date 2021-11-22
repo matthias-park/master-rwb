@@ -183,6 +183,7 @@ module.exports = function (webpackEnv, buildFranchises) {
               },
               config: JSON.stringify({
                 name: franchise.name,
+                theme: franchise.theme,
                 apiUrl: domain.api,
                 gtmId: franchise.gtmId,
                 sentryDsn: jsonConfig.has('sentryDsn')
@@ -194,6 +195,8 @@ module.exports = function (webpackEnv, buildFranchises) {
                 dateFormat: franchise.dateFormat,
                 componentSettings: franchise.componentSettings,
                 themeSettings: franchise.themeSettings,
+                tgLabSb: franchise.tgLabSb,
+                casino: franchise.casino,
               }),
             },
             isEnvProduction

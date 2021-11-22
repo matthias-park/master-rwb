@@ -1,0 +1,379 @@
+.rewards-header {
+  flex-direction: column;
+  padding-bottom: 0;
+  flex-wrap: wrap;
+}
+
+.rewards-filter {
+  display: flex;
+  align-items: flex-start;
+  margin-top: $spacing-3;
+  &__token-counter {
+      display: flex;
+      position: absolute;
+      right: 0;
+      @include media-breakpoint-down(md) {
+          padding-top: $spacing-4;
+          padding-left: 4%;
+          position: initial;
+      }
+      @include media-breakpoint-down(xs) {
+        padding-left: 6%;
+      }
+      &-text-wrp {
+        @include media-breakpoint-down(md) {
+          display: flex;
+          align-items: center;
+        }
+      }
+      &-title {
+        @include media-breakpoint-down(md) {
+          font-size: 1.1rem;
+          margin: $spacing-1;
+          margin-right: $spacing-3;
+          order: 2;
+        }
+      }
+      &-text {
+        color: $primary;
+        @include media-breakpoint-down(md) {
+          order: 1;
+          margin: $spacing-1;
+          margin-left: 0;
+        }
+      }
+      .icon-tokens {
+        font-size: 5rem;
+        color: $tertiary;
+        padding-left: $spacing-2;
+        @include media-breakpoint-down(md) {
+          font-size: 2.5rem;
+          transform: rotate(45deg);
+          color: white;
+          padding-left: 0;
+        }
+      }
+  }
+  &__categories {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    align-self: center;
+    &-item {
+      display: flex;
+      align-items: center;
+      color: $white-opacity-mid;
+      list-style-type: none;
+      cursor: pointer;
+      margin-right: $spacing-6;
+      margin-bottom: $spacing-2;
+      @include media-breakpoint-down(xs) {
+        margin-right: 7vw;
+        margin-bottom: 0;
+      }
+      i {
+        font-size: 25px;
+        margin-right: $spacing-1;
+        transition: color $transition-main;
+        @include media-breakpoint-down(md) {
+          color: white;
+        }
+      }
+      &.active {
+        i {
+          color: $tertiary;
+        }
+      }
+      &:hover,
+      &:active {
+        i {
+          color: $primary;
+        }
+      }
+    }
+  }
+  @include media-breakpoint-down(md) {
+    padding-left: 4%;
+    &__categories {
+      position: relative;
+      flex-wrap: nowrap;
+      overflow: hidden;
+      overflow-x: auto;
+      @include scrollbar-invisible;
+      &-item {
+        display: flex;
+        flex-direction: column;
+        font-size: $text-small;
+        i {
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+  @include media-breakpoint-down(xs) {
+    justify-content: center;
+  }
+}
+
+.promotions-page,
+.redeem-rewards-page {
+    &__cards {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    @include media-breakpoint-down(lg) {
+      padding: $spacing-3 3%;
+    }
+    @include media-breakpoint-down(sm) {
+      padding: 0 3%;
+    }
+    @include media-breakpoint-down(xs) {
+      padding: 0;
+    }
+    .card {
+      flex-basis: calc((100% / 3) - ( #{ $spacing-1 } * 2 ));
+      text-align: center;
+      @include media-breakpoint-down(lg) {
+        flex-basis: 48%;
+        margin: 1%;
+      }
+      @include media-breakpoint-down(xs) {
+        flex-basis: 100%;
+      }
+      .btn {
+        font-size: $font-size-sm;
+        padding: $spacing-2 4rem;
+        border-radius: $border-radius-lg;
+      }
+    }
+  }
+}
+
+.redeem-rewards-page {
+  &__cards {
+    padding: $spacing-6;
+    @include media-breakpoint-down(sm) {
+      margin-top: unset;
+    }
+    .card {
+      @include media-breakpoint-down(xs) {
+        margin: $spacing-1 $spacing-3;
+      }
+    }
+    .card-body {
+      padding: $spacing-6;
+    }
+    .card-subtitle {
+      color: $primary;
+    }
+    .card-text {
+      margin: $spacing-3;
+      p {
+        font-size: $text-small;
+        margin-bottom: 0;
+      }
+    }
+  }
+  &__footer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: $spacing-7;
+    font-size: $text-body;
+    color: $white-opacity-low;
+  }
+}
+
+.promotions-page {
+  max-width: 85%;
+  margin: 0 auto;
+  padding: $spacing-5 0;
+  min-height: 85vh;
+  @include media-breakpoint-down(xl){
+    max-width: 95%;
+  }
+  @include media-breakpoint-down(xs) {
+    padding: 0;
+    max-width: unset;
+  }
+  &__cards {
+    @include media-breakpoint-down(xs) {
+      margin-top: -$spacing-1;
+    }
+    .card {
+      @include media-breakpoint-down(xs) {
+        min-width: 100%;
+        border-radius: unset;
+        margin: $spacing-1 0;
+      }
+      .card-img {
+        @include media-breakpoint-down(xs) {
+            border-radius: unset;
+        }
+      }
+      .card-text {
+          font-size: $text-body;
+      }				
+      .btn {
+        max-width: 90%;
+      }
+    }
+  }
+}
+
+.promotions-inner-page {
+  &__content {
+    width: 70%;
+    margin: 0 auto;
+    padding: $spacing-7 0;
+    @include media-breakpoint-down(md) {
+      padding: $spacing-1 0;
+      width: 90%;
+    }
+    section {
+      border-bottom: 1px solid $gray-300;
+      margin-bottom: $spacing-3;
+      p {
+        margin: $spacing-5 0;
+      }
+      ul {
+        list-style: none;
+        padding-left: 0;
+        li {
+          margin: $spacing-5 0;
+        }
+        .icon-account {
+          margin-right: $spacing-1;
+        }
+      }
+      .table-toggle {
+        color: $primary;
+      }
+    }
+  }
+  &__conditions-section {
+    padding-top: $spacing-5;
+    border-bottom: none !important;
+    h3 {
+      margin-top: $spacing-5;
+    }
+    p {
+      margin-top: $spacing-1 !important;
+    }
+  }
+}
+
+.dashboard-page {
+  background-color: $gray-800;
+  &__cards {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    max-width: 1350px;
+    margin: 0 auto;
+    padding: 0 7rem;
+    padding-top: $spacing-5;
+    @include media-breakpoint-down(xxl) {
+        padding: 0 $spacing-5;
+    }
+    @include media-breakpoint-down(xl) {
+        padding: 0 $spacing-2;
+    }
+    @include media-breakpoint-down(xs) {
+        flex-wrap: nowrap;
+    }
+    &-row {
+      display: flex;
+      @include media-breakpoint-down(sm) { 
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+    .card {
+      flex-grow: 1;
+      background-color: $gray-700;
+      margin-top: $spacing-3;
+      margin-right: $spacing-3;
+      border-radius: $border-radius-mid;
+      @include media-breakpoint-down(xl) {
+          margin-top: $spacing-2;
+          margin-right: $spacing-2;
+      }
+      @include media-breakpoint-down(sm) {
+          width: 500px;
+          margin-right: unset;
+      }
+      @include media-breakpoint-down(xs) {
+          width: 100%;
+      }
+      &:last-of-type {
+          margin-right: 0;
+      }
+    }
+    .dashboard-card {
+      .card-img {
+        border-radius: $border-radius-mid;
+        border-bottom-left-radius: unset;
+        border-bottom-right-radius: unset;
+        box-shadow: 0px 15px 30px -15px black;  
+      }
+      .card-text {
+        color: $primary;
+        font-size: $text-body;
+      }
+      .card-body {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-3;
+        @include media-breakpoint-down(xl) {
+            padding: $spacing-3 $spacing-1;
+        }
+        @include media-breakpoint-down(sm) {
+            padding: $spacing-3;
+        }
+      }
+      .btn {
+        padding: $spacing-2 $spacing-6;
+        transition: padding 0.3s ease-in-out;
+        font-size: $text-body;
+        @include media-breakpoint-down(lg) {
+            padding: $spacing-2 $spacing-3;
+        }
+        @include media-breakpoint-down(sm) {
+            padding: $spacing-2 $spacing-6;
+        }
+      }
+    }
+  }
+  &__large-card { 
+    margin-bottom: $spacing-7;
+    color: $primary;
+    flex-basis: 100%;
+    @include media-breakpoint-down(sm){
+      margin-right: auto !important;
+      margin-left: auto;
+    }
+    .card-body {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: $spacing-2;
+    }
+    .card-text {
+      margin: 0;
+      margin-right: $spacing-1;
+    }
+    .btn {
+      background-color: $gray-500;
+      margin: $spacing-1;
+      border-radius: $border-radius-sm;
+    }
+  }
+  &__attractions {
+    padding: $spacing-6;
+    background-color: $gray-900;
+  }
+}

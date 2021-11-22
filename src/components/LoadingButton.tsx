@@ -9,8 +9,10 @@ type Props = {
 const LoadingButton = (props: Props) => {
   return (
     <Button {...props} disabled={props.disabled || props.loading}>
-      <LoadingSpinner show={props.loading} small className="mr-1" />
-      {props.children}
+      <div className="d-flex align-items-center justify-content-center">
+        <LoadingSpinner show={props.loading} small className="mr-1" />
+        {props.children}
+      </div>
     </Button>
   );
 };

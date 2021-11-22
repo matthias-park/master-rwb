@@ -16,6 +16,24 @@ export interface Sidebar {
     name: string;
     link: string;
   }[];
+  main?: { name: string; link?: string; icon?: string; menu_name?: string }[];
+  info_menu?: {
+    name: string;
+    link?: string;
+    icon?: string;
+    menu_name?: string;
+    protected?: boolean;
+  }[];
+  sub_menu?: {
+    name: string;
+    link?: string;
+    icon?: string;
+    menu_name?: string;
+  }[];
+  expand_menus?: {
+    name: string;
+    children: { name: string; link?: string; icon?: string }[];
+  }[];
 }
 export interface AvailableLocale {
   id: number;

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useConfig } from '../../../hooks/useConfig';
 import { useI18n } from '../../../hooks/useI18n';
 import Link from '../../../components/Link';

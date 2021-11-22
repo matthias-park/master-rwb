@@ -31,6 +31,30 @@ if (!DevEnv && window.__config__.sentryDsn) {
   Sentry.setTag('cookiesEnabled', window.navigator.cookieEnabled || 'n/a');
   Sentry.setTag('franchise', window.__config__.name || 'n/a');
 }
+if (DevEnv) {
+  import('url').then(url => {
+    const connection = new WebSocket(
+      url.format({
+        protocol: 'ws',
+        hostname: window.location.hostname,
+        port: window.location.port,
+        pathname: '/sockjs-node',
+        slashes: true,
+      }),
+    );
+    connection.addEventListener('message', ev => {
+      const data = JSON.parse(ev.data);
+      if (data.type === 'styleChange') {
+        const brand = data.data?.replace(/\\/g, '/').split('/')?.[1];
+        if (brand) {
+          (document.getElementById(
+            'devStyles',
+          ) as HTMLLinkElement).href = `/static/css/theme-${brand}.css?reload=${new Date().getTime()}`;
+        }
+      }
+    });
+  });
+}
 window.addEventListener('error', errorHandler);
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 

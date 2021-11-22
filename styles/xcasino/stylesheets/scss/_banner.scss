@@ -1,0 +1,98 @@
+.banner {
+  min-width: 100%;
+  &.fixed-aspect,
+  .fixed-aspect,
+  .fixed-aspect:before {
+    @include media-breakpoint-up(sm) {
+      aspect-ratio: 50/21;
+    }
+  }
+  &__item {
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: $gradient-banner;
+    }
+    &-img {
+      width: 100%;
+    }
+    &-text {
+      position: absolute;
+      top: 35%;
+      left: 6vw;
+      &-sub {
+        font-size: 2vw;
+        color: $white;
+        margin-bottom: 0;
+        line-height: 1;
+      }
+      &-main {
+        font-size: 4vw;
+        color: $primary-light;
+      }
+      &-btn {
+        margin-top: 1vw;
+        font-size: 1.8vw;
+        padding: 0.3vw 4.5vw;
+      }
+    }
+    @include media-breakpoint-down(md) {
+      &-text {
+        &-sub {
+          font-size: 3vw;
+        }
+        &-main {
+          font-size: 6.5vw;
+        }
+        &-btn {
+          font-size: 3vw;
+          padding: 0.5vw 7vw;
+        }
+      }
+    }
+    @include media-breakpoint-down(xs) {
+      display: flex;
+      flex-direction: column;
+      &-text {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transform: none;
+        padding: $spacing-3;
+        background-color: $gray-800;
+        text-align: center;
+        min-height: 180px;
+        &-sub {
+          font-size: $h5-font-size;
+          margin-bottom: $spacing-2;
+        }
+        &-main {
+          font-size: $h3-font-size;
+          margin-bottom: $spacing-3;
+        }
+        &-btn {
+          font-size: $font-size-base;
+          padding: $spacing-1 $spacing-7;
+          margin-top: 0;
+          max-width: 50%;
+        }
+      }
+      &:before {
+        display: none;
+      }
+    }
+  }
+  @media only screen and (min-width: 2170px) {
+    padding-top: $spacing-2;
+    border-radius: $border-radius-mid;
+    &__item {
+      border-radius: $border-radius-mid;
+      overflow: hidden;
+    }
+  }
+}

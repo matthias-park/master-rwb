@@ -69,6 +69,7 @@ interface UncontrolledProps extends FormControlProps {
 export const UncontrolledTextInput = React.forwardRef(
   (props: UncontrolledProps, ref) => {
     const [showPassword, setShowPassword] = useState(false);
+    const [showEye, setShowEye] = useState(false);
     const [showTooltip, setShowTooltip] = useState(false);
     const togglePasswordVisibility = useCallback(
       () => setShowPassword(prevValue => !prevValue),
@@ -83,14 +84,24 @@ export const UncontrolledTextInput = React.forwardRef(
           props.isValid && !props.disableCheckMark && 'success',
           !!props.errorMsg && 'with-message',
         )}
+        onChange={e =>
+          !!e.target.value ? setShowEye(true) : setShowEye(false)
+        }
       >
         <div className="form-control-wrp">
           <Form.Control
             {...props}
+            getInputRef={ref}
             ref={ref}
             type={showPassword ? 'text' : props.type}
             placeholder=" "
-            autoComplete={props.autoComplete}
+            autoComplete={
+              window.__config__.name === 'strive' ? 'off' : props.autoComplete
+            }
+            onKeyUp={e =>
+              !!e.target.value ? setShowEye(true) : setShowEye(false)
+            }
+            autoFocus={false}
           />
           <label htmlFor={props.id} className="text-14">
             {props.title}
@@ -117,11 +128,11 @@ export const UncontrolledTextInput = React.forwardRef(
                   ref={tooltipRef}
                   className="icon-tooltip cursor-pointer"
                   onClick={() => setShowTooltip(!showTooltip)}
+                  style={{ cursor: 'pointer' }}
                 />
               </OverlayTrigger>
             )}
-
-            {props.toggleVisibility && (
+            {props.toggleVisibility && showEye && (
               <i
                 className={clsx(
                   'icon-eye-off show-password',

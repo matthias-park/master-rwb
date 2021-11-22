@@ -1,64 +1,64 @@
 .btn {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 600;
-    max-height: 39px;
-    i {
-        font-size: 26px;
-        line-height: 14px;
-        margin-right: 6px;
-    }
-    &:focus,
-    &:active {
-        box-shadow: none !important;
-    }
-    &.btn-sm {
-        max-height: 28px;
-    }
-    &.btn-lg {
-        max-height: 48px;
-    }
-    &--small-radius {
-      border-radius: 2px;
-    }
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  max-height: 39px;
+  i {
+      font-size: 26px;
+      line-height: 14px;
+      margin-right: 6px;
+  }
+  &:focus,
+  &:active {
+      box-shadow: none !important;
+  }
+  &.btn-sm {
+      max-height: 28px;
+  }
+  &.btn-lg {
+      max-height: 48px;
+  }
+  &--small-radius {
+    border-radius: 2px;
+  }
 }
 
 .btn-header {
-  min-height: 44px;
-  border-radius: 16px;
-  padding: 0 20px;
-  font-size: 13px;
-  min-width: 85px;
-  @include media-breakpoint-down(lg) {
-    min-height: 39px;
-  }
-  @include media-breakpoint-down(xs) {
-    padding: 0 12px;
-  }
+min-height: 44px;
+border-radius: 16px;
+padding: 0 20px;
+font-size: 13px;
+min-width: 85px;
+@include media-breakpoint-down(lg) {
+  min-height: 39px;
+}
+@include media-breakpoint-down(xs) {
+  padding: 0 12px;
+}
 }
 
 .btn-primary,
 .btn-primary.disabled,
 .btn-primary:disabled {
-  color: $brand-text;
+color: $brand-text;
 }
 
 .btn-outline-light {
-    &:hover,
-    &:active,
-    &:focus {
-        background-color: $white !important;
-        color: $brand-text !important;
-    }
+  &:hover,
+  &:active,
+  &:focus {
+      background-color: $white !important;
+      color: $brand-text !important;
+  }
 }
 
 .btn-light {
-    color: $brand-light;
-    &:hover,
-    &:active,
-    &:focus {
-        background-color: $brand-light !important;
-        color: $white !important;
-    }
+  color: $brand-light;
+  &:hover,
+  &:active,
+  &:focus {
+      background-color: $brand-light !important;
+      color: $white !important;
+  }
 }

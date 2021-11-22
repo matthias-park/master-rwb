@@ -19,6 +19,7 @@ export interface Content {
 
 export interface Section {
   menu_item?: DropdownButtonTranslations;
+  page_title?: DropdownButtonTranslations;
   section_title: DropdownButtonTranslations;
   section_content: DropdownButtonTranslations;
   section_image_url?: DropdownButtonTranslations;
