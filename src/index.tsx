@@ -12,24 +12,24 @@ if (!DevEnv && window.__config__.sentryDsn) {
   Sentry.init({
     dsn: window.__config__.sentryDsn,
     environment: process.env.TARGET_ENV,
+    release: process.env.RELEASE ? `react@${process.env.RELEASE}` : undefined,
     beforeSend(event, hint) {
       if (hint?.originalException === 'Timeout') return null;
       const originalException = hint?.originalException?.toString();
       if (originalException?.includes('kambi')) {
-        if (
-          originalException.includes('ChunkLoadError') ||
-          originalException.includes('geannuleerd') ||
-          originalException.includes('annulé') ||
-          originalException.includes('anulowane')
-        )
-          return null;
-        if (event.level === Sentry.Severity.Error)
-          event.level = Sentry.Severity.Warning;
-      }
+        event.level = Sentry.Severity.Warning;
+      } else if (
+        originalException?.includes('geannuleerd') ||
+        originalException?.includes('annulé') ||
+        originalException?.includes('anulowane') ||
+        originalException?.includes('vazgeçildi')
+      )
+        return null;
       return event;
     },
   });
   Sentry.setTag('cookiesEnabled', window.navigator.cookieEnabled || 'n/a');
+  Sentry.setTag('franchise', window.__config__.name || 'n/a');
 }
 window.addEventListener('error', errorHandler);
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;

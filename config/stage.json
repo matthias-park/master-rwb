@@ -11,7 +11,6 @@
       ],
       "theme": "bnl",
       "gtmId": "GTM-PGRW8BQ",
-      "sentryDsn": "https://b313c7bdce124815aa35884d0a8dc43a@sentry.tglab.io/17",
       "kambi": {
         "market": "BE",
         "currency": "EUR",
@@ -125,6 +124,7 @@
       }
     }
   ],
+  "sentryDsn": "https://bc58950e0bc549ceab635a17b85e928b@sentry.tglab.dev/9",
   "port": 3800,
   "basicAuth": {
     "whitelistedIp": [

@@ -5,6 +5,7 @@ import { PostItem } from '../types/api/Posts';
 import dayjs from 'dayjs';
 import Config, { ConfigLoaded, Cookies } from '../types/Config';
 import { getWindowUrlLocale, Symbols } from './i18n';
+import * as Sentry from '@sentry/react';
 
 export const sortAscending = (a: number, b: number) => a - b;
 export const sortDescending = (a: number, b: number) => b - a;
@@ -95,6 +96,10 @@ export const errorHandler = (event: ErrorEvent) => {
     const kambiErrorId = 'kambi-error-reload';
     const kambiErrorRetryCount = Lockr.get(kambiErrorId, 0) + 1;
     if (kambiErrorRetryCount < 3) {
+      Sentry.captureMessage(`Kambi chunk error`, {
+        level: Sentry.Severity.Critical,
+        extra: event.error,
+      });
       Lockr.set(kambiErrorId, kambiErrorRetryCount);
       window.location.reload();
     }

@@ -21,6 +21,7 @@ import { useDispatch } from 'react-redux';
 import { setBalance } from '../state/reducers/user';
 import Lockr from 'lockr';
 import useEffectSkipInitial from '../hooks/useEffectSkipInitial';
+import * as Sentry from '@sentry/react';
 
 interface KambiContext {
   sportsbookLoaded: boolean;
@@ -279,6 +280,10 @@ const setCustomerSettings = ({
           const kambiErrorRetryCount = Lockr.get(kambiErrorId, 0) + 1;
           if (kambiErrorRetryCount < 3) {
             Lockr.set(kambiErrorId, kambiErrorRetryCount);
+            Sentry.captureMessage(`Kambi loading error`, {
+              level: Sentry.Severity.Critical,
+              extra: event.data,
+            });
             window.location.reload();
           }
           break;

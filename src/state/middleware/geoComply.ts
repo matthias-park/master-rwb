@@ -175,24 +175,29 @@ const actions: {
         {
           text: actionPayload,
         },
-      ).then(res => {
-        if (res?.Data.Success && res?.Data.Code === GeoComplyValidateCodes.Ok) {
-          console.log(`geoComply-.net success validation`);
-        } else if (typeof res?.Data.Code === 'number') {
-          console.log(
-            `geoComply-.net ERROR got code: ${res.Data.Code} message: ${res.Data.Message}`,
-          );
-          if (state.error !== res.Data.Code) {
-            dispatch(setError(res.Data.Code));
+      )
+        .then(res => {
+          if (
+            res?.Data.Success &&
+            res?.Data.Code === GeoComplyValidateCodes.Ok
+          ) {
+            console.log(`geoComply-.net success validation`);
+          } else if (typeof res?.Data.Code === 'number') {
+            console.log(
+              `geoComply-.net ERROR got code: ${res.Data.Code} message: ${res.Data.Message}`,
+            );
+            if (state.error !== res.Data.Code) {
+              dispatch(setError(res.Data.Code));
+            }
           }
-        }
-        dispatch(
-          setGeoAllowed({
-            isGeoAllowed: res?.Data.Code === GeoComplyValidateCodes.Ok,
-            revalidateIn: res?.Data.GeolocateIn,
-          }),
-        );
-      });
+          dispatch(
+            setGeoAllowed({
+              isGeoAllowed: res?.Data.Code === GeoComplyValidateCodes.Ok,
+              revalidateIn: res?.Data.GeolocateIn,
+            }),
+          );
+        })
+        .catch(() => {});
     },
   },
   [setGeoAllowed.toString()]: {

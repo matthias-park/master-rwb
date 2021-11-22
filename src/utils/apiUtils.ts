@@ -30,10 +30,12 @@ export const getApi = <T>(url: string, options?: GetApiOptions): Promise<T> => {
   };
   return fetch(`${window.__config__.apiUrl}${url}`, config).then(res => {
     if (!res.ok && res.status !== 400) {
-      Sentry.captureMessage(
-        `Request failed ${url} with status ${res.status}`,
-        Sentry.Severity.Fatal,
-      );
+      if (![401, 403].includes(res.status)) {
+        Sentry.captureMessage(
+          `Request failed ${url} with status ${res.status}`,
+          Sentry.Severity.Fatal,
+        );
+      }
       return Promise.reject<RailsApiResponse<null>>({
         ...RailsApiResponseFallback,
         Code: res.status,
@@ -79,10 +81,12 @@ export const postApi = <T>(
     : `${window.__config__.apiUrl}${url}`;
   return fetch(postUrl, config).then(res => {
     if (!res.ok && res.status !== 400) {
-      Sentry.captureMessage(
-        `Request failed ${url} with status ${res.status}`,
-        Sentry.Severity.Fatal,
-      );
+      if (![401, 403].includes(res.status)) {
+        Sentry.captureMessage(
+          `Request failed ${url} with status ${res.status}`,
+          Sentry.Severity.Fatal,
+        );
+      }
       return Promise.reject<RailsApiResponse<null>>({
         ...RailsApiResponseFallback,
         Code: res.status,
@@ -104,6 +108,14 @@ export const SwrFetcherConfig: ConfigInterface<
   dedupingInterval: 30000,
   focusThrottleInterval: 10000,
   errorRetryInterval: 10000,
+  onError: (err, key) => {
+    if (![401, 403].includes(err.status)) {
+      Sentry.captureMessage(
+        `Request failed ${key} with status ${err.status}`,
+        Sentry.Severity.Fatal,
+      );
+    }
+  },
 };
 
 export const formatSuccesfullRailsApiResponse = <T>(

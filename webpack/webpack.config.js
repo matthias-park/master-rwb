@@ -25,6 +25,7 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const postcssNormalize = require('postcss-normalize');
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
+const jsonConfig = require('config');
 
 const appPackageJson = require(paths.appPackageJson);
 
@@ -88,6 +89,7 @@ module.exports = function (webpackEnv, buildFranchises) {
   // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
   // Get environment variables to inject into our app.
   const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
+  const BuildDate = new Date().getTime().toString();
 
   const shouldUseReactRefresh = isEnvDevelopment;
 
@@ -183,7 +185,9 @@ module.exports = function (webpackEnv, buildFranchises) {
                 name: franchise.name,
                 apiUrl: domain.api,
                 gtmId: franchise.gtmId,
-                sentryDsn: franchise.sentryDsn,
+                sentryDsn: jsonConfig.has('sentryDsn')
+                  ? jsonConfig.get('sentryDsn')
+                  : null,
                 kambi: franchise.kambi,
                 googleRecaptchaKey: franchise.googleRecaptchaKey,
                 geoComplyKey: franchise.geoComplyKey,
@@ -732,6 +736,11 @@ module.exports = function (webpackEnv, buildFranchises) {
             },
           },
         }),
+      new webpack.DefinePlugin({
+        'process.env': {
+          RELEASE: BuildDate,
+        },
+      }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell webpack to provide empty mocks for them so importing them works.

@@ -7,11 +7,16 @@ import { PagesName } from '../../../constants';
 import Spinner from 'react-bootstrap/Spinner';
 import ErrorBoundary from '../../ErrorBoundary';
 import { useI18n } from '../../../hooks/useI18n';
+import * as Sentry from '@sentry/react';
 
 const AsyncPage = (pageName: string) =>
   loadable(
     () =>
       import(`./${pageName}`).catch(() => {
+        Sentry.captureMessage(
+          `Could not load page - ${pageName}`,
+          Sentry.Severity.Critical,
+        );
         window.location.reload();
         return 'div';
       }),

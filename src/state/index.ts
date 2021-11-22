@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import modals, { ModalsState } from './reducers/modals';
+import * as Sentry from '@sentry/react';
 import user from './reducers/user';
 import config from './reducers/config';
 import translations, { Symbols } from './reducers/translations';
@@ -9,6 +10,26 @@ import GeoComplyState from '../types/state/GeoComplyState';
 
 const geoComplyEnabled = !!window.__config__.geoComplyKey;
 const v2AuthEnabled = !!window.__config__.componentSettings?.v2Auth;
+const sentryReduxEnhancer = Sentry.createReduxEnhancer({
+  actionTransformer: action => {
+    return null;
+  },
+  stateTransformer: (state: RootState) => {
+    const transformedState = {
+      ...state,
+      config: null,
+      translations: null,
+      user: null,
+      geoComply: {
+        ...state.geoComply,
+        license: null,
+        geoLocation: null,
+        savedState: null,
+      },
+    };
+    return transformedState;
+  },
+});
 
 const createStoreAsync = async () => {
   const asyncReduxMiddleware = [
@@ -36,6 +57,7 @@ const createStoreAsync = async () => {
     reducer: reducers,
     middleware: defaultMiddleware =>
       defaultMiddleware().concat(reduxMiddleware),
+    enhancers: [sentryReduxEnhancer],
   });
 };
 export type RootState = {

@@ -6,6 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import {
   FormFieldValidation,
   franchiseDateFormat,
+  RailsApiResponseFallback,
   VALIDATIONS,
 } from '../../../../constants';
 import { OnlineFormBlock } from '../../../../types/RegistrationBlock';
@@ -19,6 +20,7 @@ import SelectInput from '../../../../components/customFormInputs/SelectInput';
 import dayjs from 'dayjs';
 import { NET_USER } from '../../../../types/UserStatus';
 import Province from '../../../../types/api/Province';
+import * as Sentry from '@sentry/react';
 
 interface Props {
   handleRegisterSubmit: (
@@ -62,9 +64,16 @@ const blocks = (
         required: true,
         valueAs: (value: string) => value.toString(),
         selectValues: async () => {
+          const url = '/restapi/v1/provinces';
           const res = await getApi<RailsApiResponse<Province | null>>(
-            '/restapi/v1/provinces',
-          );
+            url,
+          ).catch(res => {
+            Sentry.captureMessage(
+              `Request failed ${url} with status ${res.status}`,
+              Sentry.Severity.Fatal,
+            );
+            return RailsApiResponseFallback;
+          });
           if (res.Success && res.Data && Array.isArray(res.Data)) {
             return res.Data.map(province => ({
               text: province.name,
