@@ -11,6 +11,7 @@ interface GeoComplyState {
   error: number | null;
   geoLocation: string | null;
   license: string | null;
+  licenseExpiresAt: string | null;
   geoInProgress: boolean;
   wasConnected: boolean;
   revalidateIn: string | null | undefined;

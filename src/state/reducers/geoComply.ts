@@ -15,6 +15,7 @@ const initialState: GeoComplyState = {
   isConnected: false,
   isGeoAllowed: false,
   license: null,
+  licenseExpiresAt: null,
   geoInProgress: false,
   error: null,
   geoLocation: null,
@@ -51,11 +52,18 @@ export const geoComplySlice = createSlice({
     setGeoLocation: (state, action: PayloadAction<string | null>) => {
       state.geoLocation = action.payload;
     },
-    setLicense: (state, action: PayloadAction<string | null>) => {
-      state.license = action.payload;
+    setLicense: (
+      state,
+      action: PayloadAction<{
+        license: string | null;
+        expiresAt: string | null;
+      }>,
+    ) => {
+      state.license = action.payload.license;
+      state.licenseExpiresAt = action.payload.expiresAt;
       if (window.GeoComply?.Client.getLicense() !== action.payload) {
         console.log('geoComply setting license');
-        window.GeoComply?.Client.setLicense(action.payload);
+        window.GeoComply?.Client.setLicense(action.payload.license);
       }
     },
     setGeoAllowed: (

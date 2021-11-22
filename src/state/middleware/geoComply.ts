@@ -48,43 +48,51 @@ const fetchSetLicenseKey = (
 ) => {
   const state = (storeApi.getState() as RootState).geoComply;
   const { dispatch } = storeApi;
-  const setLicenseKey = (license: string) => {
-    dispatch(setLicense(license));
+  const setLicenseKey = (license: string, expiresAt: string | null) => {
+    dispatch(setLicense({ license, expiresAt }));
   };
   const userLoggedIn = (storeApi.getState() as RootState).user.logged_in;
-  if (state.isConnected) {
-    if (userLoggedIn) {
-      if (!state.license || data.forceGetNewLicense) {
-        const cacheKey = 'geoComplyLicense';
-        const license =
-          !data.forceGetNewLicense &&
-          Lockr.get<GeoComplyLicense | false>(cacheKey, false);
-        if (
-          !license ||
-          dayjs(license.ExpiresAtUtc).isBefore(dayjs()) ||
-          data.forceGetNewLicense
-        ) {
-          console.log('geoComply getting new license from server');
-          getApi<RailsApiResponse<GeoComplyLicense>>(
-            '/restapi/v1/geocomply/license',
-          ).then(res => {
-            if (res.Success && res.Data.License) {
-              Lockr.set(cacheKey, res.Data);
-              setLicenseKey(res.Data.License);
-              if (data.forceGetNewLicense) {
-                dispatch(setValidationReason('licenseErrorRetry'));
-              }
-            }
-          });
-        } else {
-          setLicenseKey(license.License);
+  if (state.isConnected && userLoggedIn) {
+    const cacheKey = 'geoComplyLicense';
+    const cacheLicense = !data.forceGetNewLicense
+      ? Lockr.get<GeoComplyLicense | null>(cacheKey, null)
+      : null;
+    const license = state.license || cacheLicense?.License;
+    const expiresAt =
+      state.licenseExpiresAt || cacheLicense?.ExpiresAtUtc || null;
+    console.log(
+      `checking geoComply license | license: ${!!license} | isExpired: ${
+        expiresAt && dayjs(expiresAt).isBefore(dayjs())
+      } | force new license:${!!data.forceGetNewLicense}`,
+    );
+    if (
+      !license ||
+      (expiresAt && dayjs(expiresAt).isBefore(dayjs())) ||
+      data.forceGetNewLicense
+    ) {
+      console.log('geoComply getting new license from server');
+      getApi<RailsApiResponse<GeoComplyLicense>>(
+        '/restapi/v1/geocomply/license',
+      ).then(res => {
+        if (res.Success && res.Data.License) {
+          Lockr.set(cacheKey, res.Data);
+          setLicenseKey(res.Data.License, res.Data.ExpiresAtUtc);
+          if (data.forceGetNewLicense) {
+            dispatch(setValidationReason('licenseErrorRetry'));
+          }
         }
-      } else {
-        setLicenseKey(state.license);
-      }
+      });
+    } else {
+      setLicenseKey(license, expiresAt);
     }
   }
 };
+
+const licenseKeyErrorCodes = [
+  GeoComplyErrorCodes.CLNT_ERROR_LICENSE_EXPIRED,
+  GeoComplyErrorCodes.CLNT_ERROR_INVALID_LICENSE_FORMAT,
+  GeoComplyErrorCodes.CLNT_ERROR_CLIENT_LICENSE_UNAUTHORIZED,
+];
 
 let revalidateTimeout: number | null = null;
 type actionFunction = (
@@ -131,7 +139,9 @@ const actions: {
                       'geoComply no client software on pc NOT found - disconnecting',
                     );
                   }
-                  dispatch(setError(code));
+                  if (!licenseKeyErrorCodes.includes(code)) {
+                    dispatch(setError(code));
+                  }
                 })
                 .on('geolocation', geoLocation => {
                   console.log('geoComply got geo-location hash');
@@ -218,11 +228,9 @@ const actions: {
   },
   [setError.toString()]: {
     before: (storeApi, actionPayload) => {
-      const forceGetNewLicense = [
-        GeoComplyErrorCodes.CLNT_ERROR_LICENSE_EXPIRED,
-        GeoComplyErrorCodes.CLNT_ERROR_INVALID_LICENSE_FORMAT,
-        GeoComplyErrorCodes.CLNT_ERROR_CLIENT_LICENSE_UNAUTHORIZED,
-      ].includes(Number(actionPayload || 0));
+      const forceGetNewLicense = licenseKeyErrorCodes.includes(
+        Number(actionPayload || 0),
+      );
       if (forceGetNewLicense) {
         fetchSetLicenseKey(storeApi, {
           forceGetNewLicense,
@@ -268,6 +276,11 @@ const actions: {
         console.log('geoComply reconnect after user change');
         dispatch(connectToGeo());
       }
+    },
+  },
+  [setValidationReason.toString()]: {
+    before: storeApi => {
+      fetchSetLicenseKey(storeApi);
     },
   },
   [resetState.toString()]: {

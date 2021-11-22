@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../state';
 import * as stateActions from '../state/reducers/geoComply';
 import { CustomWindowEvents } from '../constants';
+import dayjs from 'dayjs';
 type GeoComplyHookProviderProps = { children: ReactNode };
 
 interface GeoComplyContext {
@@ -71,12 +72,15 @@ export const GeoComplyProvider = ({ ...props }: GeoComplyHookProviderProps) => {
           state.geoInProgress
         } | user logged in ${!!state.userId} | license set ${!!state.license} | reason ${
           state.validationReason
-        }| continue : ${!!(
+        }| license valid by date ${dayjs(state.licenseExpiresAt).isAfter(
+          dayjs(),
+        )} (${state.licenseExpiresAt}) | continue : ${!!(
           !!state.isConnected &&
           !!state.license &&
           !state.geoInProgress &&
           !!state.userId &&
-          !!state.validationReason
+          !!state.validationReason &&
+          !!dayjs(state.licenseExpiresAt).isAfter(dayjs())
         )}`,
       );
       if (
@@ -84,7 +88,8 @@ export const GeoComplyProvider = ({ ...props }: GeoComplyHookProviderProps) => {
         !!state.license &&
         !state.geoInProgress &&
         !!state.userId &&
-        state.validationReason
+        state.validationReason &&
+        dayjs(state.licenseExpiresAt).isAfter(dayjs())
       ) {
         console.log(
           `geoComply location-check reason: ${state.validationReason}`,
