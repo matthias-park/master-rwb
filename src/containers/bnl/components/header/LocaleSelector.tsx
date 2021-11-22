@@ -21,7 +21,7 @@ const LocaleSelector = ({ available, current, setLocale }: Props) => {
   if (!current) return null;
   return (
     <>
-      <Dropdown className="header__nav-item">
+      <Dropdown as="li" className="header__nav-item">
         <Dropdown.Toggle
           data-testid="dropdown-trigger"
           variant="link"

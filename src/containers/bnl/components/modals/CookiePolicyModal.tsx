@@ -8,7 +8,7 @@ import { ComponentName } from '../../../../constants';
 import { useModal } from '../../../../hooks/useModal';
 import useGTM from '../../../../hooks/useGTM';
 import { useConfig } from '../../../../hooks/useConfig';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 import { Cookies } from '../../../../types/Config';
 import { useDispatch } from 'react-redux';
 import { setCookies } from '../../../../state/reducers/config';

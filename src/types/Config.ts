@@ -35,6 +35,7 @@ type Config = {
   configLoaded: ConfigLoaded;
   cookies: Cookies;
   showPageLoader: boolean;
+  domLoaded: boolean;
 };
 
 export default Config;

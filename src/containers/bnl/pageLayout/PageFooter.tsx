@@ -42,9 +42,10 @@ const FooterHeader = () => {
       </h3>
       <div className="restrictions-block">
         <img
+          loading="lazy"
           className="restrictions-block__img"
           alt=""
-          src="/assets/images/restrictions/18-label.png"
+          src="/assets/images/restrictions/18-label.webp"
           width="40"
           height="37"
         />
@@ -53,10 +54,12 @@ const FooterHeader = () => {
         </span>
         <Link to={responsibleGamingPath}>
           <img
+            loading="lazy"
             className="restrictions-block__img mr-3"
             alt="responsible gaming"
             src={`/assets/images/restrictions/bnl-${locale}.svg`}
             width="200"
+            height="47"
           />
         </Link>
       </div>
@@ -101,11 +104,12 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
         <li className="footer-sub__nav-img">
           <a target="_blank" rel="noreferrer" href={t('play_legally_href')}>
             <img
+              loading="lazy"
               alt="play legally"
               className="mb-2 mb-lg-0 white-corners"
               height="50"
               width="55"
-              src="/assets/images/footer/play-legally.jpg"
+              src="/assets/images/footer/play-legally.webp"
             />
           </a>
         </li>
@@ -116,42 +120,48 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
             href={t('responsible_gaming_href')}
           >
             <img
+              loading="lazy"
               alt="responsible gaming"
               className="ml-2 ml-lg-3 mb-2 mb-lg-0 white-corners"
               height="40"
               width="129"
-              src={`/assets/images/footer/res-gaming-${locale}.png`}
+              src={`/assets/images/footer/res-gaming-${locale}.webp`}
             />
           </a>
         </li>
         <li className="footer-sub__nav-img">
           <a target="_blank" rel="noreferrer" href={t('bgc_href')}>
             <img
+              loading="lazy"
               alt="bgc"
               className="ml-2 ml-lg-3 mb-2 mb-lg-0 white-corners"
               height="40"
               width="90"
-              src={`/assets/images/footer/bgc-${locale}.jpg`}
+              src={`/assets/images/footer/bgc-${locale}.webp`}
             />
           </a>
         </li>
         <li className="footer-sub__nav-img">
           <a target="_blank" rel="noreferrer" href={t('bnl_href')}>
             <img
+              loading="lazy"
               alt="bnl"
               className="ml-1 ml-lg-2 mb-2 mb-lg-0"
               height="45"
-              src={`/assets/images/footer/loterij-${locale}.png`}
+              width="119"
+              src={`/assets/images/footer/loterij-${locale}.webp`}
             />
           </a>
         </li>
         <li className="footer-sub__nav-img">
           <a target="_blank" rel="noreferrer" href={t('el_href')}>
             <img
+              loading="lazy"
               alt="european lotteries"
               className="ml-1 ml-lg-2 mb-2 mb-lg-0"
               height="45"
-              src="/assets/images/footer/european.jpg"
+              width="114"
+              src="/assets/images/footer/european.webp"
             />
           </a>
         </li>
@@ -193,6 +203,7 @@ const SocialSection = ({
                       className="section-social__icons-link"
                       target={externalLink ? '_blank' : undefined}
                       rel={externalLink ? 'noreferrer' : undefined}
+                      aria-label={iconName[key] || key}
                     >
                       <i className={`icon-${iconName[key] || key}`}></i>
                     </Component>
@@ -215,9 +226,10 @@ const SocialSection = ({
                     rel="noreferrer"
                   >
                     <img
+                      loading="lazy"
                       alt={`partner-${key}`}
                       height="42"
-                      src={`/assets/images/footer/${key}.jpg`}
+                      src={`/assets/images/footer/${key}.webp`}
                     />
                   </a>
                 ))}

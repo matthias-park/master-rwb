@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useConfig } from '../../../hooks/useConfig';
-import LoginDropdown from '../../LoginDropdown';
-import UserInfoBlock from '../components/header/UserInfoBlock';
-import { Navbar } from 'react-bootstrap';
+import Navbar from 'react-bootstrap/Navbar';
 import { useUIConfig } from '../../../hooks/useUIConfig';
 import { ComponentName } from '../../../constants';
 import clsx from 'clsx';
@@ -20,6 +18,7 @@ import { usePrevious } from '../../../hooks';
 import { HeaderRouteLink } from '../../../types/api/PageConfig';
 import { useDispatch } from 'react-redux';
 import { setLocale } from '../../../state/reducers/config';
+import loadable from '@loadable/component';
 
 const SubNavLinks = ({
   links,
@@ -71,6 +70,10 @@ const SubNavLinks = ({
 interface UserBlockProps {
   mobile: boolean;
 }
+const LoadableUserInfoBlock = loadable(
+  () => import('../components/header/UserInfoBlock'),
+);
+const LoadableLoginDropdown = loadable(() => import('../../LoginDropdown'));
 const UserBlock = ({ mobile }: UserBlockProps) => {
   const { user, signout } = useAuth();
   const { backdrop } = useUIConfig();
@@ -82,7 +85,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
   }, [user]);
   if (user.id) {
     return (
-      <UserInfoBlock
+      <LoadableUserInfoBlock
         dropdownClasses={clsx('d-flex ml-auto', !mobile && 'mr-1')}
         isMobile={mobile}
         user={user}
@@ -91,7 +94,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
     );
   }
   return (
-    <LoginDropdown
+    <LoadableLoginDropdown
       dropdownClasses={mobile ? 'ml-auto mr-0' : 'ml-auto mt-0 mt-lg-2'}
       userLoading={user.loading}
     />

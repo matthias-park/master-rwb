@@ -7,12 +7,12 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { useRoutePath } from '../hooks/index';
 import useGTM from '../hooks/useGTM';
 import Link from '../components/Link';
-import LoginForm from './LoginForm';
 import clsx from 'clsx';
 import FocusLock from 'react-focus-lock';
 import { useUIConfig } from '../hooks/useUIConfig';
 import { useConfig } from '../hooks/useConfig';
 import { useModal } from '../hooks/useModal';
+import loadable from '@loadable/component';
 
 interface Props {
   dropdownClasses?: string;
@@ -31,6 +31,8 @@ const RegistrationLink = () => {
     </div>
   );
 };
+
+const LoadableLoginForm = loadable(() => import('./LoginForm'));
 
 const LoginDropdown = ({
   dropdownClasses,
@@ -128,12 +130,13 @@ const LoginDropdown = ({
           toggleClasses,
           userLoading && 'visibility-hidden',
         )}
+        onMouseEnter={() => LoadableLoginForm.preload()}
       >
         {t('login_btn')}
       </Dropdown.Toggle>
       <Dropdown.Menu className="login-dropdown__menu">
         <FocusLock>
-          <LoginForm />
+          <LoadableLoginForm />
         </FocusLock>
         <RegistrationLink />
       </Dropdown.Menu>

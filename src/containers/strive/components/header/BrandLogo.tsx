@@ -15,7 +15,7 @@ const BrandLogo = ({ mobile }: BrandLogoProps) => {
     <StyledLogo mobile={mobile} to={homePageRoute}>
       <img
         alt="logo"
-        src={`/assets/images/logo/logo${logoSuffix}.png`}
+        src={`/assets/images/logo/logo${logoSuffix}.webp`}
         className={clsx(!mobile && 'mt-4')}
         width={mobile ? 25 : 90}
         height={mobile ? 25 : 50}

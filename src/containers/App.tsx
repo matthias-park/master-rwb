@@ -2,7 +2,6 @@ import loadable from '@loadable/component';
 import React from 'react';
 import ApiHead from './ApiHead';
 import ContextProviders from './ContextProviders';
-import StateProvider from './StateProvider';
 
 const AsyncFranchise = (name: string) =>
   loadable(() =>
@@ -18,12 +17,10 @@ const App = () => {
     ? AsyncFranchise(window.__config__.name)
     : 'div';
   return (
-    <StateProvider>
-      <ContextProviders>
-        <ApiHead />
-        <FranchiseIndex />
-      </ContextProviders>
-    </StateProvider>
+    <ContextProviders>
+      <ApiHead />
+      <FranchiseIndex />
+    </ContextProviders>
   );
 };
 

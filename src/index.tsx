@@ -1,12 +1,12 @@
-import 'core-js';
-import 'react-app-polyfill/ie11';
-import 'react-app-polyfill/stable';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './containers/App';
 import * as Sentry from '@sentry/react';
 import { errorHandler } from './utils';
 import { DevEnv } from './constants';
+import createStoreAsync from './state';
+import StateProvider from './containers/StateProvider';
+import { setDomLoaded } from './state/reducers/config';
 
 if (!DevEnv && window.__config__.sentryDsn) {
   Sentry.init({
@@ -34,9 +34,16 @@ if (!DevEnv && window.__config__.sentryDsn) {
 window.addEventListener('error', errorHandler);
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  MOUNT_NODE,
-);
+createStoreAsync().then(store => {
+  window.addEventListener('load', () => {
+    store.dispatch(setDomLoaded());
+  });
+  ReactDOM.render(
+    <React.StrictMode>
+      <StateProvider store={store}>
+        <App />
+      </StateProvider>
+    </React.StrictMode>,
+    MOUNT_NODE,
+  );
+});

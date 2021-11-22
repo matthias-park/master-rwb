@@ -303,7 +303,7 @@ const insertKambiBootstrap = async (retail?: boolean): Promise<void> => {
     document.body.classList.add('body-background');
     const scriptElement = document.createElement('script');
     scriptElement.setAttribute('type', 'text/javascript');
-    scriptElement.defer = true;
+    scriptElement.async = true;
     const bootstrapUrl = retail
       ? window.__config__.kambi.retail
       : window.__config__.kambi.online;
@@ -316,7 +316,7 @@ const insertKambiBootstrap = async (retail?: boolean): Promise<void> => {
         'src',
         `${window.__config__.kambi?.api}?cb=${Date.now()}`,
       );
-      scriptElement.defer = true;
+      scriptElement.async = true;
       scriptElement.addEventListener('load', () => resolve());
       document.head.appendChild(scriptElement);
     } else {
@@ -356,7 +356,10 @@ const kambiId = 'KambiBC';
 
 const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
   const context = useContext(kambiContext);
-  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const { locale, domLoaded } = useConfig(
+    (prev, next) =>
+      prev.locale === next.locale && prev.domLoaded === next.domLoaded,
+  );
   const prevLocale = usePrevious(locale);
   const dispatch = useDispatch();
   const { user } = useAuth();
@@ -385,7 +388,7 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
   }, [locale]);
 
   useEffect(() => {
-    if (!user.loading && containerRef.current && locale) {
+    if (!user.loading && containerRef.current && locale && domLoaded) {
       if (
         !context.sportsbookLoaded &&
         !context.api &&
@@ -439,6 +442,7 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
     locale,
     containerRef.current,
     context.sportsbookLoaded,
+    domLoaded,
   ]);
 
   return (

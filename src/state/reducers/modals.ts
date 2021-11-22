@@ -4,7 +4,7 @@ import { sortAscending } from '../../utils';
 import { setLogin } from './user';
 import { changeBodyScroll } from '../../utils/uiUtils';
 
-type ModalsState = ComponentName[];
+export type ModalsState = ComponentName[];
 
 const initialState: ModalsState = [];
 
