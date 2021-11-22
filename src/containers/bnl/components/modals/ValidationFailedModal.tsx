@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import GenericModal from './GenericModal';
 import { useI18n } from '../../../../hooks/useI18n';
-import { VALIDATOR_STATUS } from '../../../../types/UserStatus';
+import { BGC_VALIDATOR_STATUS } from '../../../../types/UserStatus';
 import { useModal } from '../../../../hooks/useModal';
 import { ComponentName } from '../../../../constants';
 import { useAuth } from '../../../../hooks/useAuth';
@@ -24,9 +24,10 @@ const ValidationFailedModal = () => {
 
   useEffect(() => {
     if (
-      [VALIDATOR_STATUS.MINOR_ERROR, VALIDATOR_STATUS.MAJOR_ERROR].includes(
-        user.validator_status || 0,
-      )
+      [
+        BGC_VALIDATOR_STATUS.MINOR_ERROR,
+        BGC_VALIDATOR_STATUS.MAJOR_ERROR,
+      ].includes(user.validator_status || 0)
     ) {
       enableModal(ComponentName.ValidationFailedModal);
     } else if (

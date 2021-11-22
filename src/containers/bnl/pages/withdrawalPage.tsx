@@ -24,7 +24,7 @@ import { useModal } from '../../../hooks/useModal';
 import { usePrevious } from '../../../hooks';
 import useUserBankAccountModal from '../../../hooks/useUserBankAccountModal';
 import { useAuth } from '../../../hooks/useAuth';
-import { VALIDATOR_STATUS } from '../../../types/UserStatus';
+import { BGC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 import { replaceStringTagsReact } from '../../../utils/reactUtils';
 import useGTM from '../../../hooks/useGTM';
 import { useDispatch } from 'react-redux';
@@ -138,7 +138,7 @@ const WithdrawalPage = () => {
   useEffect(() => {
     if (
       user.logged_in &&
-      user.validator_status !== VALIDATOR_STATUS.MAJOR_ERROR &&
+      user.validator_status !== BGC_VALIDATOR_STATUS.MAJOR_ERROR &&
       !bankAccount.loading &&
       !bankAccount.hasBankAccount &&
       !bankAccount.error

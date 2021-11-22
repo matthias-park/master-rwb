@@ -17,7 +17,7 @@ import useUserBankAccountModal from '../../../hooks/useUserBankAccountModal';
 import { usePrevious, useRoutePath } from '../../../hooks';
 import { useModal } from '../../../hooks/useModal';
 import { useAuth } from '../../../hooks/useAuth';
-import { VALIDATOR_STATUS } from '../../../types/UserStatus';
+import { BGC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 import { structuredBankCommunications } from '../../../utils/index';
 import useDepositResponseStatus from '../../../hooks/useDepositResponseStatus';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
@@ -48,7 +48,7 @@ const DepositPage = () => {
   useEffect(() => {
     if (
       user.logged_in &&
-      user.validator_status !== VALIDATOR_STATUS.MAJOR_ERROR &&
+      user.validator_status !== BGC_VALIDATOR_STATUS.MAJOR_ERROR &&
       !bankAccount.loading &&
       !bankAccount.hasBankAccount &&
       !bankAccount.error
@@ -223,7 +223,7 @@ const DepositPage = () => {
         }
         disabled={
           !bankAccount.hasBankAccount ||
-          user.validator_status === VALIDATOR_STATUS.MAJOR_ERROR ||
+          user.validator_status === BGC_VALIDATOR_STATUS.MAJOR_ERROR ||
           depositStatus.depositStatus === DepositStatus.Pending ||
           depositDataLoading
         }

@@ -1,43 +1,69 @@
 import React, { useEffect } from 'react';
 import GenericModal from './GenericModal';
 import { useI18n } from '../../../../hooks/useI18n';
-import { VALIDATOR_STATUS } from '../../../../types/UserStatus';
+import { KYC_VALIDATOR_STATUS } from '../../../../types/UserStatus';
 import { useModal } from '../../../../hooks/useModal';
-import { ComponentName } from '../../../../constants';
+import { ComponentName, RailsApiResponseFallback } from '../../../../constants';
 import { useAuth } from '../../../../hooks/useAuth';
 import { useRoutePath } from '../../../../hooks';
 import { PagesName } from '../../../../constants';
 import Link from '../../../../components/Link';
+import useApi from '../../../../hooks/useApi';
+import RailsApiResponse from '../../../../types/api/RailsApiResponse';
+import KycAttempts from '../../../../types/api/user/KycAttempts';
+import clsx from 'clsx';
+import Spinner from 'react-bootstrap/Spinner';
 
 const ValidationFailedModal = () => {
   const { user } = useAuth();
   const { t, jsxT } = useI18n();
   const personalInfoRoute = useRoutePath(PagesName.PersonalInfoPage);
+  const RequiredDocumentsRoute = useRoutePath(PagesName.RequiredDocuments);
   const {
     activeModal,
     allActiveModals,
     enableModal,
     disableModal,
   } = useModal();
+  const modalActive = activeModal === ComponentName.ValidationFailedModal;
+  const validatorNotOk = [
+    KYC_VALIDATOR_STATUS.CanPlayAndShouldUpdatePersonalData,
+    KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataOnly,
+    KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataLimitedAttempts,
+    KYC_VALIDATOR_STATUS.ShouldUploadDocumentForKyc,
+  ].includes(user.validator_status || 0);
+  const { data, mutate } = useApi<RailsApiResponse<KycAttempts | null>>(
+    user.logged_in && validatorNotOk ? '/railsapi/v1/user/kyc_attempts' : null,
+  );
+
   useEffect(() => {
-    if (
-      [VALIDATOR_STATUS.MINOR_ERROR, VALIDATOR_STATUS.MAJOR_ERROR].includes(
-        user.validator_status || 0,
-      )
-    ) {
+    if (validatorNotOk) {
       enableModal(ComponentName.ValidationFailedModal);
+      if (data?.Success) mutate(RailsApiResponseFallback, true);
     } else if (
       !user.logged_in &&
       allActiveModals.includes(ComponentName.ValidationFailedModal)
     ) {
       disableModal(ComponentName.ValidationFailedModal);
+      mutate(RailsApiResponseFallback, false);
     }
   }, [user.validator_status]);
 
   const hideModal = () => disableModal(ComponentName.ValidationFailedModal);
 
-  if (activeModal !== ComponentName.ValidationFailedModal) return null;
-
+  if (!modalActive) return null;
+  const { attempts, max_attempts } = data?.Data || {};
+  const allowPersonalInfoBtn =
+    user.validator_status ===
+      KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataLimitedAttempts &&
+    attempts != null &&
+    max_attempts != null &&
+    attempts < max_attempts;
+  const allowDocumentUploadBtn =
+    user.validator_status === KYC_VALIDATOR_STATUS.ShouldUploadDocumentForKyc &&
+    attempts != null &&
+    max_attempts != null &&
+    attempts >= max_attempts;
   return (
     <GenericModal
       show
@@ -51,9 +77,34 @@ const ValidationFailedModal = () => {
       <Link
         to={personalInfoRoute}
         onClick={hideModal}
-        className="btn btn-primary mx-auto mt-4 px-4"
+        className={clsx(
+          'btn btn-primary mx-auto mt-4 px-4',
+          !allowPersonalInfoBtn && 'disabled',
+        )}
       >
-        {t('validation_failed_profile_link')}
+        {t('validation_failed_profile_link')}{' '}
+        {data?.Data?.attempts != null ? (
+          `${attempts}/${max_attempts}`
+        ) : (
+          <Spinner
+            as="span"
+            size="sm"
+            role="status"
+            animation="border"
+            variant="black"
+            className="ml-1"
+          />
+        )}
+      </Link>
+      <Link
+        to={RequiredDocumentsRoute}
+        onClick={hideModal}
+        className={clsx(
+          'btn btn-primary mt-4 px-4 ml-1',
+          !allowDocumentUploadBtn && 'disabled',
+        )}
+      >
+        {t('validation_failed_documents_link')}
       </Link>
     </GenericModal>
   );

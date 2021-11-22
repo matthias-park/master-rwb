@@ -63,6 +63,9 @@ export const userSlice = createSlice({
     setTwoFactoAuth: (state, action: PayloadAction<boolean>) => {
       state.authentication_enabled = action.payload;
     },
+    setValidationStatus: (state, action: PayloadAction<any>) => {
+      state.validator_status = action.payload;
+    },
   },
 });
 
@@ -74,6 +77,7 @@ export const {
   setLogin,
   setTwoFactoAuth,
   setRegistered,
+  setValidationStatus,
 } = userSlice.actions;
 
 export default userSlice.reducer;

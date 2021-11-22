@@ -19,7 +19,7 @@ import { CustomWindowEvents, PagesName } from '../../../constants';
 import CustomAlert from '../components/CustomAlert';
 import { useRoutePath } from '../../../hooks';
 import { useAuth } from '../../../hooks/useAuth';
-import { VALIDATOR_STATUS } from '../../../types/UserStatus';
+import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 import useDepositResponseStatus from '../../../hooks/useDepositResponseStatus';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
@@ -198,7 +198,8 @@ const DepositPage = () => {
           <DepositForm
             depositRequest={handleRequestDeposit}
             disabled={
-              user.validator_status === VALIDATOR_STATUS.MAJOR_ERROR ||
+              user.validator_status ===
+                KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataOnly ||
               depositStatus.depositStatus === DepositStatus.Pending ||
               depositDataLoading
             }

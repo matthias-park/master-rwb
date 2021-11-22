@@ -15,13 +15,24 @@ export interface TwoFactorAuth {
   authentication_required: boolean;
 }
 
-export enum VALIDATOR_STATUS {
+export enum KYC_VALIDATOR_STATUS {
+  Unknown = 0,
+  Success = 1,
+  CanPlayAndShouldUpdatePersonalData = 2,
+  ShouldUpdatePersonalDataOnly = 3,
+  NotAllowed = 4,
+  ShouldUpdatePersonalDataLimitedAttempts = 5,
+  ShouldUploadDocumentForKyc = 6,
+}
+export enum BGC_VALIDATOR_STATUS {
   OK = 0,
   SMALL_ERROR = 1,
   MINOR_ERROR = 2,
   MAJOR_ERROR = 3,
   NONE = 4,
 }
+
+export type VALIDATOR_STATUS = BGC_VALIDATOR_STATUS & KYC_VALIDATOR_STATUS;
 
 export interface UserStatus {
   needsSync?: boolean;

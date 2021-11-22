@@ -346,7 +346,10 @@ const SettingsForm = ({
                         allowEmptyFormatting: true,
                         useFormatted: true,
                       };
-                    } else if (field.id === 'social_security_number') {
+                    } else if (
+                      field.id === 'social_security_number' &&
+                      !field.disabled
+                    ) {
                       if (field.default?.toString().length !== 9) {
                         field.default = '';
                       }

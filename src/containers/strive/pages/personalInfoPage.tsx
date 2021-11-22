@@ -9,6 +9,9 @@ import QuestionsContainer from '../components/account-settings/QuestionsContaine
 import HelpBlock from '../components/HelpBlock';
 import clsx from 'clsx';
 import CustomAlert from '../components/CustomAlert';
+import { useDispatch } from 'react-redux';
+import { setValidationStatus } from '../../../state/reducers/user';
+import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 
 interface PersonalInfoProps {
   personalInfoData: {
@@ -25,6 +28,7 @@ interface PersonalInfoProps {
 
 const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
   const { id, title, note, data, disabled, fields, action } = personalInfoData;
+  const dispatch = useDispatch();
   const { t } = useI18n();
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
@@ -101,7 +105,12 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
                 id={id}
                 fields={fields}
                 action={action}
-                setResponse={setApiResponse}
+                setResponse={resp => {
+                  if (resp?.success) {
+                    dispatch(setValidationStatus(KYC_VALIDATOR_STATUS.Unknown));
+                  }
+                  setApiResponse(resp);
+                }}
                 mutateData={mutate}
                 fixedData={[{ id: 'phone_number' }]}
               />
