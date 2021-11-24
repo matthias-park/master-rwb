@@ -74,8 +74,8 @@
       "basicAuthEnabled": true,
       "domains": [
         {
-          "hostname": "demo.strivegaming.us",
-          "api": "https://demo-api.strivegaming.us"
+          "hostname": "co.betsafe.com",
+          "api": "https://co-api.betsafe.com"
         }
       ],
       "themeColor": "#000541",
@@ -88,15 +88,19 @@
         "api": "https://c3-static.kambi.com/client/widget-api/kambi-widget-api.js"
       },
       "redis": {
-        "host": "192.168.86.41",
+        "host": "192.168.60.40",
         "port": 6379,
         "db": 12,
         "prefix": "reactNodeProd-",
-        "password": "cua0AqzLrrrcPfPq6O"
+        "password": "uZa5MY4Z4fy2L2mDy7R7"
       },
       "dateFormat": "MM-DD-YYYY",
       "componentSettings": {
-        "v2Auth": "wss://demo-wss.strivegaming.us",
+        "v2Auth": "wss://ws-co.betsafe.com",
+        "userIdleTimeout": 30,
+        "login": {
+          "loginCookiesAccept": true
+        },
         "modals": {
           "TnC": true,
           "ResponsibleGambling": false,
