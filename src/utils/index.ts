@@ -165,6 +165,9 @@ export const getCachedConfigAndTranslations = (): {
           null,
         )
       : null;
+  const mobileView = !!new URLSearchParams(window.location.search).get(
+    'mobile-view',
+  );
   const isCacheValid =
     cachedConstants && translationsCache && urlLocale === savedLocale;
   return {
@@ -177,6 +180,7 @@ export const getCachedConfigAndTranslations = (): {
       cookies: savedCookieSettings,
       showPageLoader: true,
       domLoaded: false,
+      mobileView,
     },
     translations: translationsCache,
     cacheValid: !!isCacheValid,

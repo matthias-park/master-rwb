@@ -22,7 +22,9 @@ import { Franchise } from '../../../constants';
 
 const TemplatePage = () => {
   const { slug } = useParams<{ slug?: string }>();
-  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const { locale, mobileView } = useConfig(
+    (prev, next) => prev.locale === next.locale,
+  );
   const { pathname } = useLocation();
   const [active, setActive] = useState('');
   const [dropdownShow, setDropdownShow] = useState(false);
@@ -217,13 +219,15 @@ const TemplatePage = () => {
                   </>
                 )}
               </main>
-              <div className="right-sidebar px-4 px-xl-0">
-                <HelpBlock
-                  title={'user_help_title'}
-                  blocks={['faq', 'phone', 'email']}
-                  className="default mx-auto mx-md-0"
-                />
-              </div>
+              {!mobileView && (
+                <div className="right-sidebar px-4 px-xl-0">
+                  <HelpBlock
+                    title={'user_help_title'}
+                    blocks={['faq', 'phone', 'email']}
+                    className="default mx-auto mx-md-0"
+                  />
+                </div>
+              )}
             </div>
           </div>
         ))}

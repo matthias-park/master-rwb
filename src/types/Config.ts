@@ -38,6 +38,7 @@ type Config = {
   cookies: Cookies;
   showPageLoader: boolean;
   domLoaded: boolean;
+  mobileView: boolean;
 };
 
 export default Config;
