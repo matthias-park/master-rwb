@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
 import { SWRConfig } from 'swr';
+import { Config } from '../constants';
 import { AuthProvider } from '../hooks/useAuth';
 import { UIConfigProvider } from '../hooks/useUIConfig';
 import { RootState } from '../state';
@@ -87,16 +88,16 @@ const ContextProviders = ({ children }: Props) => {
   const providers: Provider[] = [
     [SWRConfig, { value: SwrFetcherConfig }],
     ToastProvider,
-    !!window.__config__.gtmId && LoadableGtmProvider,
+    !!Config.gtmId && LoadableGtmProvider,
     AuthProvider,
     HelmetProvider,
     BrowserRouterProvider,
     UIConfigProvider,
-    !!window.__config__.casino && LoadableCasinoConfig,
-    !!window.__config__.casino && LoadableRegisterContext,
-    !!window.__config__.googleRecaptchaKey && LoadableRecaptcha,
-    !!window.__config__.kambi && LoadableKambiProvider,
-    !!window.__config__.geoComplyKey && LoadableGeoComply,
+    !!Config.casino && LoadableCasinoConfig,
+    !!Config.casino && LoadableRegisterContext,
+    !!Config.googleRecaptchaKey && LoadableRecaptcha,
+    !!Config.kambi && LoadableKambiProvider,
+    !!Config.geoComplyKey && LoadableGeoComply,
   ];
 
   return (

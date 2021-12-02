@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useI18n } from '../../../hooks/useI18n';
 import Accordion from 'react-bootstrap/Accordion';
 import Spinner from 'react-bootstrap/Spinner';
 import CustomAlert from '../components/CustomAlert';
+import Table from 'react-bootstrap/Table';
 import useApi from '../../../hooks/useApi';
 import SettingsForm from '../components/account-settings/SettingsForm';
 import { SettingsField } from '../../../types/api/user/ProfileSettings';
@@ -15,6 +16,9 @@ import { franchiseDateFormat } from '../../../constants';
 import { sortAscending } from '../../../utils';
 import clsx from 'clsx';
 import utc from 'dayjs/plugin/utc';
+import { formatUrl } from '../../../utils/apiUtils';
+import RailsApiResponse from '../../../types/api/RailsApiResponse';
+import TablePagination from '../components/account-settings/TablePagination';
 dayjs.extend(utc);
 
 interface LimitProps {
@@ -52,15 +56,20 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
   return (
     <Accordion className="info-container info-container--gray mb-3">
       <div className="info-container__info pt-3">
-        <div className="d-flex">
-          <p className="mb-2 pr-3">
+        <div className="d-flex align-items-center">
+          <p className="info-container__title pr-3">
             <b>{t(limitData.title)}</b>
           </p>
           {!limitData.disabled && (
             <Accordion.Toggle
               as="button"
               eventKey={limitData.id}
-              className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
+              className={clsx(
+                'info-container__edit btn btn-sm px-3 ml-auto',
+                window.__config__.name === 'strive'
+                  ? 'btn-light'
+                  : 'btn-secondary',
+              )}
             >
               {jsxT('timeout_edit')}
             </Accordion.Toggle>
@@ -83,7 +92,9 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
         {!limitData.disabled && (
           <Accordion.Collapse eventKey={limitData.id}>
             <>
-              <hr className="pt-1 mb-0"></hr>
+              {window.__config__.name === 'strive' && (
+                <hr className="pt-1 mb-0"></hr>
+              )}
               <CustomAlert
                 show={!!apiResponse}
                 variant={
@@ -131,15 +142,20 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
   return (
     <Accordion className="info-container mb-3">
       <div className="info-container__info pt-3">
-        <div className="d-flex">
-          <p className="mb-2 pr-3">
+        <div className="d-flex align-items-center">
+          <p className="info-container__title pr-3">
             <b>{t(limitData.title)}</b>
           </p>
           {!limitData.disabled && (
             <Accordion.Toggle
               as="button"
               eventKey={limitData.id}
-              className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
+              className={clsx(
+                'info-container__edit btn btn-sm px-3 ml-auto',
+                window.__config__.name === 'strive'
+                  ? 'btn-light'
+                  : 'btn-secondary',
+              )}
             >
               {t('limits_edit')}
             </Accordion.Toggle>
@@ -216,7 +232,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
               const lastLimit = i + 1 === limitData.data.length;
               return (
                 <div>
-                  <p className="mt-1">
+                  <p className="mt-1 play-limits-title">
                     {t(`limit_type_${limit.LimitType.toLowerCase()}`)}
                   </p>
                   <ul className="list-unstyled mb-0 play-limits">
@@ -224,7 +240,12 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                       <p className="play-limits__limit-title">
                         {t('current_limit')}
                       </p>
-                      <p className="play-limits__limit-total text-primary">
+                      <p
+                        className={clsx(
+                          'play-limits__limit-total',
+                          window.__config__.name === 'strive' && 'text-primary',
+                        )}
+                      >
                         {formattedCurrentLimit}
                       </p>
                     </li>
@@ -254,7 +275,13 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                           <p className="play-limits__limit-title">
                             {t('future_limit')}
                           </p>
-                          <p className="play-limits__limit-total text-primary">
+                          <p
+                            className={clsx(
+                              'play-limits__limit-total',
+                              window.__config__.name === 'strive' &&
+                                'text-primary',
+                            )}
+                          >
                             {formattedFutureLimit}
                           </p>
                         </li>
@@ -295,7 +322,9 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
         {!limitData.disabled && (
           <Accordion.Collapse eventKey={limitData.id}>
             <>
-              <hr className="pt-1 mb-0"></hr>
+              {window.__config__.name === 'strive' && (
+                <hr className="pt-1 mb-0"></hr>
+              )}
               <CustomAlert
                 show={!!apiResponse}
                 variant={
@@ -327,6 +356,106 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
   );
 };
 
+type LimitsHistoryData = {
+  TotalPages: number;
+  LimitsHistory: {
+    Id: number;
+    PlayerId: number;
+    CreatedAt: string;
+    Amount: any;
+    LimitTypeToString: string;
+    LimitDurationToString: string;
+    IsDeleted: boolean;
+  }[];
+};
+
+const timeLimits = ['GambleTimeLimit', 'SessionTimeLimit'];
+const LimitsHistory = ({ limitsData }) => {
+  const { t, jsxT } = useI18n();
+  const { user } = useAuth();
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, error, mutate } = useApi<RailsApiResponse<LimitsHistoryData>>(
+    formatUrl(`/restapi/v1/user/limits_history`, {
+      page_size: 10,
+      page_number: currentPage,
+    }),
+  );
+  const totalPages: number = (!!data && data.Data?.TotalPages) || 0;
+
+  useEffect(() => {
+    mutate();
+  }, [limitsData]);
+
+  return (
+    <div className="info-container mb-3">
+      <div className="info-container__info pt-3">
+        <div className="d-flex align-items-center">
+          <p className="info-container__title pr-3">
+            <b>{t('limits_history')}</b>
+          </p>
+        </div>
+      </div>
+      <div className="info-container__text">
+        {!data ? (
+          <div className="d-flex justify-content-center pt-4 pb-3">
+            <Spinner animation="border" variant="brand" className="mx-auto" />
+          </div>
+        ) : !!data && data?.Data.LimitsHistory?.length ? (
+          <div className="table-container d-flex flex-column mb-2">
+            <Table hover className="limits-history-table">
+              <thead>
+                <tr>
+                  <th>{t('_date')}</th>
+                  <th>{t('save')}</th>
+                  <th>{t('amount')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.Data.LimitsHistory.map((limit, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>
+                        <strong className="heading-sm">{t('_date')}</strong>
+                        {dayjs(new Date(limit.CreatedAt)).format('YYYY-MM-DD')}
+                      </td>
+                      <td>
+                        <strong className="heading-sm">{t('save')}</strong>
+                        <strong>
+                          {t(limit.LimitTypeToString)}{' '}
+                          {limit.LimitDurationToString &&
+                            ` - ${t(limit.LimitDurationToString)}`}
+                        </strong>
+                      </td>
+                      <td>
+                        <strong className="heading-sm">{t('amount')}</strong>
+                        <div className="d-inline-flex align-items-center">
+                          {timeLimits.includes(limit.LimitTypeToString)
+                            ? `${limit.Amount} ${t('hours')}`
+                            : `${user.currency} ${limit.Amount}`}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+            {totalPages > 1 && (
+              <TablePagination
+                data={data}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            )}
+          </div>
+        ) : (
+          <h2 className="my-3 text-center">{t('limits_no_data')}</h2>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const LimitsPage = () => {
   const { t, jsxT } = useI18n();
   const { data, error, mutate } = useApi<any>(
@@ -344,12 +473,16 @@ const LimitsPage = () => {
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
-      <h1>{jsxT('limits_page_title')}</h1>
-      <p className="mb-4">{jsxT('limits_page_sub_text')}</p>
-      <div className="play-responsible-block mb-3 px-2">
-        <i className="icon-thumbs"></i>
-        {jsxT('play_responsible_block_link')}
-      </div>
+      <h1 className="account-settings__title">{jsxT('limits_page_title')}</h1>
+      <p className="account-settings__sub-text">
+        {jsxT('limits_page_sub_text')}
+      </p>
+      {window.__config__.name === 'strive' && (
+        <div className="play-responsible-block mb-3 px-2">
+          <i className={clsx(`icon-${window.__config__.name}-thumbs`)}></i>
+          {jsxT('play_responsible_block_link')}
+        </div>
+      )}
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />
@@ -371,6 +504,7 @@ const LimitsPage = () => {
           )}
         </>
       )}
+      <LimitsHistory limitsData={data} />
       <QuestionsContainer items={questionItems} className="mt-5" />
       <HelpBlock
         title={'user_help_title'}

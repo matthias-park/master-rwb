@@ -4,6 +4,7 @@ import { useRoutePath } from '../../../../hooks';
 import { useI18n } from '../../../../hooks/useI18n';
 import Link from '../../../../components/Link';
 import { useAuth } from '../../../../hooks/useAuth';
+import clsx from 'clsx';
 
 const RegWelcome = () => {
   const { t, jsxT } = useI18n();
@@ -30,7 +31,7 @@ const RegWelcome = () => {
         </div>
         <div className="info-block mt-4">
           <h4 className="info-block__title">
-            <i className="icon-thumbs"></i>
+            <i className={clsx(`icon-${window.__config__.name}-thumbs`)}></i>
             {t('reg_welcome_info_block_title')}
           </h4>
           <p className="info-block__text">{t('reg_welcome_info_block_text')}</p>

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import HelpBlock from '../components/HelpBlock';
 import OnlineForm from '../components/registration/OnlineForm';
 import RegWelcome from '../components/registration/RegWelcome';
@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
 import {
+  ComponentName,
   franchiseDateFormat,
   PagesName,
   REDIRECT_PROTECTED_NOT_LOGGED_IN,
@@ -24,6 +25,8 @@ import { useDispatch } from 'react-redux';
 import { setRegistered } from '../../../state/reducers/user';
 import { NET_USER } from '../../../types/UserStatus';
 import useGeoComply from '../../../hooks/useGeoComply';
+import { useModal } from '../../../hooks/useModal';
+import clsx from 'clsx';
 dayjs.extend(customParseFormat);
 
 const RegistrationReturnCode = {
@@ -68,6 +71,7 @@ const RegisterPage = () => {
   const dispatch = useDispatch();
   const getToken = useCaptcha();
   const sendDataToGTM = useGTM();
+  const { enableModal } = useModal();
   const geoComply = useGeoComply();
   const formMethods = useForm<RegistrationFields>({
     mode: 'onBlur',
@@ -102,6 +106,9 @@ const RegisterPage = () => {
         event: 'RegistrationSubmitted',
       });
       form.language_id = locales.find(lang => lang.iso === locale)?.id;
+      if (!form.login && form.email) {
+        form['login'] = form['email'];
+      }
       const captchaToken = await getToken?.('registration').catch(() => '');
       if (captchaToken) form.captcha_token = captchaToken;
       const finalForm = Object.keys(form).reduce((obj, key) => {
@@ -145,7 +152,7 @@ const RegisterPage = () => {
         sessionStorage.removeItem(localStorageSaveKey);
         dispatch(setRegistered(res.Data));
         updateUser(true);
-        geoComply.trigger('register');
+        geoComply?.trigger('register');
         sendDataToGTM({
           'tglab.user.GUID': res.Data.PlayerId,
           event: 'ConfirmedRegistration',
@@ -167,10 +174,15 @@ const RegisterPage = () => {
     },
     [],
   );
+  useEffect(() => {
+    if (
+      !cookies.accepted &&
+      window.__config__.componentSettings?.login?.loginCookiesAccept
+    ) {
+      enableModal(ComponentName.CookiesModal);
+    }
+  }, []);
 
-  if (!cookies.accepted) {
-    return <Redirect to="/" />;
-  }
   if (user.logged_in && !location?.state?.welcomeScreen) {
     const redirectRoute = routes.find(
       route => route.id === REDIRECT_PROTECTED_NOT_LOGGED_IN,
@@ -189,7 +201,12 @@ const RegisterPage = () => {
 
   return (
     <main className="registration">
-      <div className="reg-block">
+      <div
+        className={clsx(
+          'reg-block',
+          location?.state?.resCode !== undefined && 'reg-block__small',
+        )}
+      >
         <FormProvider {...formMethods}>
           <HelpBlock
             title={'user_help_title'}
@@ -209,7 +226,6 @@ const RegisterPage = () => {
               }}
             />
           )}
-
           {location?.state?.resCode === undefined && (
             <OnlineForm
               fieldChange={fieldChange}

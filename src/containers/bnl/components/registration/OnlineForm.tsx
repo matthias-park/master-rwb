@@ -247,6 +247,7 @@ const OnlineForm = (props: Props) => {
               <p className="mb-3">{jsxT(`register_${block.description}`)}</p>
             )}
             {block.fields.map(field => {
+              if (!field) return null;
               switch (field.type) {
                 case 'checkbox': {
                   return (

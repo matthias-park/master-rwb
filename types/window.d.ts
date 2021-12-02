@@ -8,7 +8,7 @@ export declare global {
   interface Window {
     //Webpack
     __config__: {
-      name: string;
+      name: FranchiseNames;
       apiUrl: string;
       gtmId?: string;
       sentryDsn?: string;
@@ -20,6 +20,8 @@ export declare global {
         retail?: string;
         api: string;
       };
+      zendesk?: string;
+      smartyStreets?: string;
       tgLabSb?: {
         id: number;
         bundle: string;
@@ -27,12 +29,14 @@ export declare global {
       };
       googleRecaptchaKey?: string;
       geoComplyKey?: string;
+      xtremepush?: string;
       dateFormat?: string;
       componentSettings?: ComponentSettings;
       themeSettings?: DefaultTheme;
       casino?: boolean;
     };
     toast?: AddToast;
+    xtremepush?: any;
     _wbUpdate?: boolean;
     PRERENDER_CACHE?: { [key: string]: any };
     //Webpack end

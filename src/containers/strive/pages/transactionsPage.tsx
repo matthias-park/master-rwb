@@ -8,13 +8,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
-import Pagination from 'react-bootstrap/Pagination';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
 import HelpBlock from '../components/HelpBlock';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useApi from '../../../hooks/useApi';
 import useLocalStorage from '../../../hooks/useLocalStorage';
-import { checkHrOverflow } from '../../../utils/uiUtils';
+import BalancesContainer from '../components/account-settings/BalancesContainer';
+import TablePagination from '../components/account-settings/TablePagination';
 
 interface Transactions {
   pages: number;
@@ -32,7 +32,6 @@ interface Transactions {
 const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
   const { t, jsxT } = useI18n();
   const [currentPage, setCurrentPage] = useState(1);
-  const [paginationOverflow, setPaginationOverflow] = useState(false);
 
   useEffect(() => {
     updateUrl(dateFrom, dateTo, currentPage.toString());
@@ -41,10 +40,6 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
   useEffect(() => {
     setCurrentPage(1);
   }, [dateTo.format('YYYY-MM-DD'), dateFrom.format('YYYY-MM-DD')]);
-
-  useEffect(() => {
-    setPaginationOverflow(checkHrOverflow('.table-container', '.pagination'));
-  }, [data]);
 
   return (
     <div className="d-flex flex-column">
@@ -90,62 +85,17 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
               })}
             </tbody>
           </Table>
-          {data.pages > 1 && (
-            <Pagination className="mt-3 mb-n2 mx-auto mr-md-3 ml-md-auto">
-              {!paginationOverflow ? (
-                [...Array(data.pages)].map((_, i) => {
-                  return (
-                    <Pagination.Item
-                      key={i}
-                      onClick={() => setCurrentPage(i + 1)}
-                      active={i + 1 === currentPage}
-                    >
-                      {i + 1}
-                    </Pagination.Item>
-                  );
-                })
-              ) : (
-                <>
-                  {currentPage > 2 && (
-                    <>
-                      <Pagination.Item onClick={() => setCurrentPage(1)}>
-                        1
-                      </Pagination.Item>
-                      {currentPage !== 3 && <Pagination.Ellipsis />}
-                    </>
-                  )}
-                  {[...Array(data.pages)].map(
-                    (_, i) =>
-                      i >= currentPage - 2 &&
-                      i < currentPage + 1 && (
-                        <Pagination.Item
-                          key={i}
-                          onClick={() => setCurrentPage(i + 1)}
-                          active={i + 1 === currentPage}
-                        >
-                          {i + 1}
-                        </Pagination.Item>
-                      ),
-                  )}
-                  {currentPage < data.pages - 1 && (
-                    <>
-                      {currentPage !== data.pages - 2 && (
-                        <Pagination.Ellipsis />
-                      )}
-                      <Pagination.Item
-                        onClick={() => setCurrentPage(data.pages)}
-                      >
-                        {data.pages}
-                      </Pagination.Item>
-                    </>
-                  )}
-                </>
-              )}
-            </Pagination>
+          <TablePagination
+            data={data}
+            totalPages={data.pages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+          {window.__config__.name === 'strive' && (
+            <div className="table-container__info">
+              {data && jsxT(data.time_limitation_notice)}
+            </div>
           )}
-          <div className="table-container__info">
-            {data && jsxT(data.time_limitation_notice)}
-          </div>
         </div>
       ) : (
         <h2 className="mt-3 mb-5 text-center">{t('transactions_no_data')}</h2>
@@ -224,7 +174,12 @@ const TransactionsDateFilter = ({ dateTo, dateFrom, updateUrl }) => {
           maxDate={dateTo.toDate()}
           customInput={<DatepickerInput />}
         />
-        <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
+        <i
+          className={clsx(
+            `icon-${window.__config__.name}-calendar-m`,
+            'date-filter__picker-wrp-icon',
+          )}
+        ></i>
       </div>
       <span className="text-gray-400 mx-auto mx-sm-1 mb-sm-3">-</span>
       <div className="date-filter__picker-wrp mb-sm-3">
@@ -239,7 +194,12 @@ const TransactionsDateFilter = ({ dateTo, dateFrom, updateUrl }) => {
           maxDate={dayjs().toDate()}
           customInput={<DatepickerInput />}
         />
-        <i className="date-filter__picker-wrp-icon icon-calendar-m"></i>
+        <i
+          className={clsx(
+            `icon-${window.__config__.name}-calendar-m`,
+            'date-filter__picker-wrp-icon',
+          )}
+        ></i>
       </div>
       <Button
         className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3 btn--small-radius"
@@ -304,25 +264,36 @@ const TransactionsPage = () => {
 
   return (
     <main className="container-fluid px-0 px-sm-4 pl-md-5 mb-4 pt-5">
-      <h1 className="mb-4">{t('transactions_page_title')}</h1>
-      <div className="date-filter mb-4 pb-sm-2">
-        <TransactionsDateFilter
+      <BalancesContainer />
+      <h1 className="account-settings__title mb-4">
+        {t('transactions_page_title')}
+      </h1>
+      <div
+        className={clsx(
+          window.__config__.name === 'desertDiamond'
+            ? 'bg-white p-4 mb-4'
+            : 'd-contents',
+        )}
+      >
+        <div className="date-filter mb-4 pb-sm-2">
+          <TransactionsDateFilter
+            dateTo={dateTo}
+            dateFrom={dateFrom}
+            updateUrl={updateUrl}
+          />
+          <TransactionsPeriodFilter
+            dateFrom={dateFrom}
+            dateTo={dateTo}
+            updateUrl={updateUrl}
+          />
+        </div>
+        <TransactionsTable
           dateTo={dateTo}
           dateFrom={dateFrom}
           updateUrl={updateUrl}
-        />
-        <TransactionsPeriodFilter
-          dateFrom={dateFrom}
-          dateTo={dateTo}
-          updateUrl={updateUrl}
+          data={data}
         />
       </div>
-      <TransactionsTable
-        dateTo={dateTo}
-        dateFrom={dateFrom}
-        updateUrl={updateUrl}
-        data={data}
-      />
       <QuestionsContainer items={questionItems} />
       <HelpBlock
         title={'user_help_title'}

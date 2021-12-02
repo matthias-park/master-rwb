@@ -60,7 +60,7 @@ const PaymentMethod = ({
         onMouseOver={e => checkOverflow()}
         onMouseLeave={() => setShowTooltip(null)}
       >
-        <img src={acc?.icon} className="payment-method__img" />
+        <img alt="" src={acc?.icon} className="payment-method__img" />
         <span ref={titleRef} className="payment-method__title">
           {acc?.title}
         </span>

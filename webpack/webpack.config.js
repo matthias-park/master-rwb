@@ -190,8 +190,11 @@ module.exports = function (webpackEnv, buildFranchises) {
                   ? jsonConfig.get('sentryDsn')
                   : null,
                 kambi: franchise.kambi,
+                smartyStreets: franchise.smartyStreets,
+                zendesk: franchise.zendesk,
                 googleRecaptchaKey: franchise.googleRecaptchaKey,
                 geoComplyKey: franchise.geoComplyKey,
+                xtremepush: franchise.xtremepush,
                 dateFormat: franchise.dateFormat,
                 componentSettings: franchise.componentSettings,
                 themeSettings: franchise.themeSettings,

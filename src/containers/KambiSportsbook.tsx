@@ -12,7 +12,7 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { getApi } from '../utils/apiUtils';
 import { WidgetAPI } from '../types/KambiConfig';
 import Spinner from 'react-bootstrap/Spinner';
-import { KambiSbLocales, PagesName } from '../constants';
+import { Config, Franchise, KambiSbLocales, PagesName } from '../constants';
 import { useHistory, useLocation } from 'react-router-dom';
 import { hideKambiSportsbook, showKambiSportsbook } from '../utils/uiUtils';
 import { useAuth } from '../hooks/useAuth';
@@ -304,14 +304,12 @@ const setCustomerSettings = ({
 
 const insertKambiBootstrap = async (retail?: boolean): Promise<void> => {
   return new Promise(resolve => {
-    if (!window.__config__.kambi) return resolve();
+    if (!Config.kambi) return resolve();
     document.body.classList.add('body-background');
     const scriptElement = document.createElement('script');
     scriptElement.setAttribute('type', 'text/javascript');
     scriptElement.async = true;
-    const bootstrapUrl = retail
-      ? window.__config__.kambi.retail
-      : window.__config__.kambi.online;
+    const bootstrapUrl = retail ? Config.kambi.retail : Config.kambi.online;
     scriptElement.setAttribute('src', `${bootstrapUrl}?cb=${Date.now()}`);
     document.head.appendChild(scriptElement);
     if (!window.KambiWidget) {
@@ -319,7 +317,7 @@ const insertKambiBootstrap = async (retail?: boolean): Promise<void> => {
       scriptElement.setAttribute('type', 'text/javascript');
       scriptElement.setAttribute(
         'src',
-        `${window.__config__.kambi?.api}?cb=${Date.now()}`,
+        `${Config.kambi?.api}?cb=${Date.now()}`,
       );
       scriptElement.async = true;
       scriptElement.addEventListener('load', () => resolve());
@@ -347,8 +345,8 @@ const getSBParams = async (
     locale: KambiSbLocales[locale.toLocaleLowerCase()] || 'en_GB',
     playerId,
     ticket: data?.Data || '',
-    currency: window.__config__.kambi!.currency,
-    market: window.__config__.kambi!.market,
+    currency: Config.kambi!.currency,
+    market: Config.kambi!.market,
     getApiBalance: '/restapi/v1/user/balance',
     retail,
   };
@@ -452,7 +450,10 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
 
   return (
     <>
-      <div ref={containerRef} className={clsx(desktopWidth && 'mt-5')} />
+      <div
+        ref={containerRef}
+        className={clsx(desktopWidth && Franchise.strive && 'mt-5')}
+      />
       {!context.showKambi && (
         <div className="position-relative mt-5 min-vh-70">
           <div className="position-absolute w-100 d-flex justify-content-center pt-4 pb-3">

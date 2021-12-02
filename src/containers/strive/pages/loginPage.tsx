@@ -1,15 +1,19 @@
 import React, { useEffect } from 'react';
 import { useI18n } from '../../../hooks/useI18n';
-import { useHistory, useLocation, Redirect } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { useAuth } from '../../../hooks/useAuth';
 import { useConfig } from '../../../hooks/useConfig';
 import Spinner from 'react-bootstrap/Spinner';
 import LoginForm from '../../LoginForm';
+import clsx from 'clsx';
+import { useModal } from '../../../hooks/useModal';
+import { ComponentName, Franchise } from '../../../constants';
 
 const LoginPage = () => {
   const { t } = useI18n();
   const { user } = useAuth();
   const { cookies } = useConfig();
+  const { enableModal } = useModal();
   const location = useLocation<{
     from?: string;
     protectedRoute?: boolean;
@@ -20,18 +24,27 @@ const LoginPage = () => {
     const fromPathname = location.state?.from;
     if (user.logged_in) history.push(fromPathname || '/');
   }, [user.logged_in]);
+  useEffect(() => {
+    if (
+      !cookies.accepted &&
+      window.__config__.componentSettings?.login?.loginCookiesAccept
+    ) {
+      enableModal(ComponentName.CookiesModal);
+    }
+  }, []);
 
   const showLoginForm = !user.logged_in && !user.loading;
 
-  if (!cookies.accepted) {
-    return <Redirect to="/" />;
-  }
-
   return (
     <main className="page-container">
-      <div className="page-inner page-inner--small">
+      <div
+        className={clsx(
+          'page-inner page-inner--small',
+          Franchise.desertDiamond && 'page-inner--bg',
+        )}
+      >
         <h1
-          className={`mb-${
+          className={`page-inner__title mb-${
             showLoginForm && location.state?.protectedRoute ? '3' : '5'
           }`}
         >

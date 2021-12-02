@@ -25,6 +25,7 @@ import useGTM from '../../../hooks/useGTM';
 import PaymentMethods from '../components/account-settings/PaymentMethods';
 import { useDispatch } from 'react-redux';
 import { addSymbols } from '../../../state/reducers/translations';
+import BalancesContainer from '../components/account-settings/BalancesContainer';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -263,55 +264,66 @@ const WithdrawalPage = () => {
       )}
       {data && (
         <>
-          <h1 className="mb-4">{data.Data.title}</h1>
-          <AmountContainer
-            title={t('total_playable_amount')}
-            amount={user.balance!}
-            tooltip={t('playable_amount_tooltip')}
-          />
+          {window.__config__.name === 'desertDiamond' && <BalancesContainer />}
+          <h1 className="account-settings__title mb-4">{data.Data.title}</h1>
+          {window.__config__.name === 'strive' && (
+            <AmountContainer
+              title={t('total_playable_amount')}
+              amount={user.balance!}
+              tooltip={t('playable_amount_tooltip')}
+            />
+          )}
           {alertMessage && (
             <CustomAlert show variant={alertMessage.variant}>
               {alertMessage.msg}
             </CustomAlert>
           )}
-          {!!data.Data.accounts?.length && (
-            <div className="input-container mb-4 py-3 px-4">
-              <h6 className="input-container__title text-14 mb-3">
-                {t('withdrawal_available_accounts')}
-              </h6>
-              <PaymentMethods
-                data={data.Data.accounts.map(acc => {
-                  return {
-                    id: acc.uniq_id,
-                    value: acc.uniq_id,
-                    icon: acc?.icon,
-                    title: acc.account,
-                    onChange: () => setSelectedBankAccount(acc),
-                  };
-                })}
-                selected={selectedBankAccount?.uniq_id}
-              />
-            </div>
-          )}
-          <InputContainer
-            title={t('withdrawal_amount')}
-            inputTitle={t('withdrawal_input_amount')}
-            defaultValue="0"
-            validationErrorPrefix="withdrawal_"
-            buttonText={t('withdrawal_btn')}
-            min={selectedBankAccount?.min_withdraw_amount}
-            max={
-              selectedBankAccount?.max_withdraw_amount &&
-              (selectedBankAccount.max_withdraw_amount < Number(user.balance) ||
-                isNaN(Number(user.balance)))
-                ? selectedBankAccount.max_withdraw_amount
-                : user.balance
-            }
-            loading={!withdrawalConfirmData && withdrawalLoading}
-            onSubmit={requestWithdrawal}
-            disabled={!selectedBankAccount}
-            currency={user.currency}
-          />
+          <div className="d-flex flex-column w-100">
+            {!!data.Data.accounts?.length && (
+              <div className="input-container mb-4 py-3 px-4">
+                <h6 className="input-container__title text-14 mb-3">
+                  {t('withdrawal_available_accounts')}
+                </h6>
+                <PaymentMethods
+                  data={data.Data.accounts.map(acc => {
+                    return {
+                      id: acc.uniq_id,
+                      value: acc.uniq_id,
+                      icon: acc?.icon,
+                      title: acc.account,
+                      onChange: () => setSelectedBankAccount(acc),
+                    };
+                  })}
+                  selected={selectedBankAccount?.uniq_id}
+                />
+              </div>
+            )}
+            <InputContainer
+              title={t('withdrawal_amount')}
+              inputTitle={t('withdrawal_input_amount')}
+              defaultValue="0"
+              validationErrorPrefix="withdrawal_"
+              buttonText={t('withdrawal_btn')}
+              min={selectedBankAccount?.min_withdraw_amount}
+              max={
+                selectedBankAccount?.max_withdraw_amount &&
+                (selectedBankAccount.max_withdraw_amount <
+                  Number(user.balance) ||
+                  isNaN(Number(user.balance)))
+                  ? selectedBankAccount.max_withdraw_amount
+                  : user.balance
+              }
+              loading={!withdrawalConfirmData && withdrawalLoading}
+              onSubmit={requestWithdrawal}
+              disabled={!selectedBankAccount}
+              currency={user.currency}
+              quickAmounts={
+                window.__config__.name === 'desertDiamond'
+                  ? [10, 20, 50, 100]
+                  : []
+              }
+            />
+          </div>
           {!!data.Data.requests && (
             <WithdrawalRequests
               onCancelRequest={cancelRequest}

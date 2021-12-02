@@ -5,7 +5,7 @@ const breakpointMin = (
   const sizesKeys = Object.keys(breakpoints);
   const breakpointIndex = sizesKeys?.indexOf(name);
   if (breakpointIndex && breakpointIndex > 0)
-    return Object.values(breakpoints)[breakpointIndex - 1];
+    return Object.values(breakpoints)[breakpointIndex];
   return '0';
 };
 const breakpointMax = (
@@ -14,7 +14,7 @@ const breakpointMax = (
 ) => {
   const sizesKeys = Object.keys(breakpoints);
   const breakpointIndex = sizesKeys?.indexOf(name);
-  if (breakpointIndex && breakpointIndex < --sizesKeys.length)
+  if (breakpointIndex != null && breakpointIndex < sizesKeys.length - 1)
     return `calc(${Object.values(breakpoints)[breakpointIndex + 1]} - 0.02px)`;
   return '0';
 };

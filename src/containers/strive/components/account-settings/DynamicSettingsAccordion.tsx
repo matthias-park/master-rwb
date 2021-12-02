@@ -198,7 +198,10 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
         </Card.Body>
       </Accordion.Collapse>
       <i
-        className="settings-card__icon icon-down1"
+        className={clsx(
+          `icon-${window.__config__.name}-down1`,
+          'settings-card__icon',
+        )}
         onClick={accordionOnClick}
       />{' '}
     </Card>

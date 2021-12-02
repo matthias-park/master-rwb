@@ -30,20 +30,20 @@ const HelpBlock = ({
             className="help-block__body-item"
           >
             <span className="help-block__body-item-icon">
-              <i className="icon-questions"></i>
+              <i className={`icon-${window.__config__.name}-questions`}></i>
             </span>
             <div className="help-block__body-item-text">
-              <p className="weight-500">{jsxT('help_check_faq')}</p>
+              <p className="title">{jsxT('help_check_faq')}</p>
             </div>
           </a>
         )}
         {blocks.includes('phone') && (
           <div className="help-block__body-item">
             <span className="help-block__body-item-icon">
-              <i className="icon-phone"></i>
+              <i className={`icon-${window.__config__.name}-phone`}></i>
             </span>
             <div className="help-block__body-item-text">
-              <p className="weight-500">{jsxT('help_call_us_number')}</p>
+              <p className="title">{jsxT('help_call_us_number')}</p>
               <p className="text-14 weight-500 mb-2">
                 {jsxT('help_call_us_number_data')}
               </p>
@@ -66,10 +66,10 @@ const HelpBlock = ({
             className="help-block__body-item"
           >
             <span className="help-block__body-item-icon">
-              <i className="icon-mail"></i>
+              <i className={`icon-${window.__config__.name}-mail2`}></i>
             </span>
             <div className="help-block__body-item-text">
-              <p className="weight-500">{jsxT('help_mail_title')}</p>
+              <p className="title">{jsxT('help_mail_title')}</p>
               <p className="text-14 gray">{jsxT('help_mail_description')}</p>
             </div>
           </Link>

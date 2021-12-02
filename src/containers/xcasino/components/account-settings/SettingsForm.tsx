@@ -6,7 +6,6 @@ import LoadingButton from '../../../../components/LoadingButton';
 import { useI18n } from '../../../../hooks/useI18n';
 import { franchiseDateFormat, VALIDATIONS } from '../../../../constants';
 import TextInput from '../../../../components/customFormInputs/TextInput';
-import FileInput from '../../../../components/customFormInputs/FileInput';
 import { useAuth } from '../../../../hooks/useAuth';
 import { postApi } from '../../../../utils/apiUtils';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';

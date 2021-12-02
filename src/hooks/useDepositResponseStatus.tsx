@@ -13,8 +13,6 @@ import * as Sentry from '@sentry/react';
 
 const postUrl = '/restapi/v1/deposits/status';
 
-const banksPostBeforeStatus = [123, 189];
-
 const useDepositResponseStatus = () => {
   const { jsxT } = useI18n();
   const { updateUser } = useAuth();
@@ -38,9 +36,7 @@ const useDepositResponseStatus = () => {
   );
   const queryParams = useMemo(
     () =>
-      search && bankId && banksPostBeforeStatus.includes(bankId)
-        ? Object.fromEntries(new URLSearchParams(search))
-        : null,
+      search && bankId ? Object.fromEntries(new URLSearchParams(search)) : null,
     [search],
   );
   const [depositStatus, setDepositStatus] = useState<DepositStatus>(

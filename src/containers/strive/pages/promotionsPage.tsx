@@ -112,7 +112,19 @@ const PromotionsList = () => {
   }, [data?.Data]);
 
   return (
-    <main className="mb-5 pt-0 pt-xl-5 min-vh-70">
+    <main
+      className={clsx(
+        window.__config__.name === 'desertDiamond'
+          ? 'px-sm-3'
+          : 'mb-5 pt-0 pt-xl-5',
+        'min-vh-70',
+      )}
+    >
+      {window.__config__.name === 'desertDiamond' && (
+        <h1 className="account-settings__title pl-1 mb-2">
+          {t('promotions_page_title')}
+        </h1>
+      )}
       {!!error && (
         <h2 className="mt-3 mb-5 text-center">
           {t('promotions_failed_to_load')}
@@ -123,10 +135,41 @@ const PromotionsList = () => {
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
       ) : (
-        <div className="promotions-list mt-4">
-          {promotions.map(item => (
-            <PromoItem key={item.id} item={item} />
-          ))}
+        <div
+          className={clsx(
+            window.__config__.name === 'desertDiamond'
+              ? 'promotions-list-inner'
+              : 'mt-4 promotions-list',
+          )}
+        >
+          {promotions.map(item => {
+            if (window.__config__.name === 'desertDiamond') {
+              return (
+                <div key={item.id} className="promo-card promo-card--big">
+                  <PromoItem item={item} variant="sm" />
+                  <div className="promo-card__body">
+                    <h5 className="promo-card__body-title">
+                      {item.page_title}
+                    </h5>
+                    <h6 className="promo-card__body-subtitle">{item.title}</h6>
+                    <p className="promo-card__body-text">
+                      {item.short_description}
+                    </p>
+                    <PromoLinkEl item={item} className="mt-auto">
+                      <Button
+                        variant="primary"
+                        className="text-line-overflow d-inline-block"
+                      >
+                        {item.button_text || t('promotions_details')}
+                      </Button>
+                    </PromoLinkEl>
+                  </div>
+                </div>
+              );
+            } else {
+              return <PromoItem key={item.id} item={item} />;
+            }
+          })}
         </div>
       )}
     </main>
@@ -221,7 +264,12 @@ const PromotionPage = ({ slug }: { slug: string }) => {
 
   const promoTitle = data?.Data?.title;
   return (
-    <main className="pt-xl-5 min-vh-70">
+    <main
+      className={clsx(
+        window.__config__.name === 'desertDiamond' ? 'pl-3' : 'pt-xl-5',
+        'min-vh-70',
+      )}
+    >
       <Helmet
         title={clsx(promoTitle && `${promoTitle} - `, t('seo_site_name'))}
         defer={false}
@@ -232,13 +280,28 @@ const PromotionPage = ({ slug }: { slug: string }) => {
           content={clsx(promoTitle && `${promoTitle} - `, t('seo_site_name'))}
         />
       </Helmet>
+      {window.__config__.name === 'desertDiamond' && (
+        <Link to={'/promotions'}>
+          <h1 className="account-settings__title d-flex align-items-center mb-3">
+            <i className="icon-desertDiamond-left1 mr-2"></i>
+            {t('promotions_page_title')}
+          </h1>
+        </Link>
+      )}
       {(isDataLoading || !promoImageLoaded) && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />
         </div>
       )}
       {!!data && (
-        <div className={clsx('promotion-inner', !promoImageLoaded && 'd-none')}>
+        <div
+          className={clsx(
+            window.__config__.name === 'desertDiamond'
+              ? 'promotion-inner promotion-inner--block'
+              : 'promotion-inner',
+            !promoImageLoaded && 'd-none',
+          )}
+        >
           <div className="promotion-inner__banner">
             <img
               alt="banner"
@@ -271,8 +334,8 @@ const PromotionPage = ({ slug }: { slug: string }) => {
               dangerouslySetInnerHTML={{ __html: data?.Data.body || '' }}
               onClick={event => jsxRedirect(event)}
             />
-            <PromotionsListBlock currentSlug={data?.Data.slug} />
           </div>
+          <PromotionsListBlock currentSlug={data?.Data.slug} />
         </div>
       )}
     </main>

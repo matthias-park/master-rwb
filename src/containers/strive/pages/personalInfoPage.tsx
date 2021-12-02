@@ -14,20 +14,21 @@ import { setValidationStatus } from '../../../state/reducers/user';
 import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 
 interface PersonalInfoProps {
-  personalInfoData: {
-    id: string;
-    title: string;
-    note?: string;
-    data: ({ value: string; symbol: boolean } | string)[];
-    disabled: boolean;
-    fields: SettingsField[];
-    action: string;
-  };
+  personalInfoData: any;
   mutate: () => void;
 }
 
 const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
-  const { id, title, note, data, disabled, fields, action } = personalInfoData;
+  const {
+    id,
+    title,
+    note,
+    data,
+    disabled,
+    fields,
+    action,
+    blocks,
+  } = personalInfoData;
   const dispatch = useDispatch();
   const { t } = useI18n();
   const [apiResponse, setApiResponse] = useState<{
@@ -38,16 +39,21 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
   return (
     <Accordion className="info-container mb-3">
       <div className="info-container__info pt-3">
-        <div className="d-flex">
-          <p className="mb-2">
+        <div className="d-flex align-items-center">
+          <p className="info-container__title">
             <b>{t(title)}</b>
           </p>
           {note && <p className="text-14 text-gray-700 pt-1">{t(note)}</p>}
-          {!!fields && !disabled && (
+          {(!!fields || !!blocks) && !disabled && (
             <Accordion.Toggle
               as="button"
               eventKey={id}
-              className="info-container__edit btn btn-light btn-sm px-3 ml-auto"
+              className={clsx(
+                'info-container__edit btn btn-sm px-3 ml-auto',
+                window.__config__.name === 'strive'
+                  ? 'btn-light'
+                  : 'btn-secondary',
+              )}
             >
               {t('profile_edit')}
             </Accordion.Toggle>
@@ -55,7 +61,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
         </div>
       </div>
       <div className="info-container__text">
-        {data.map((info, index) => {
+        {data?.map((info, index) => {
           let text = '';
           if (typeof info === 'string') text = info;
           else if (Array.isArray(info))
@@ -69,22 +75,17 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
             <ul key={index} className="list-unstyled mb-0">
               {!index ? (
                 <li className={clsx(index + 1 !== data.length && 'mb-1')}>
-                  <b>{text}</b>
+                  <b className="info-container__text-bold">{text}</b>
                 </li>
               ) : (
-                <li
-                  className={clsx(
-                    'text-gray-400',
-                    index + 1 !== data.length && 'mb-1',
-                  )}
-                >
+                <li className={clsx(index + 1 !== data.length && 'mb-1')}>
                   {text}
                 </li>
               )}
             </ul>
           );
         })}
-        {!!fields && !disabled && (
+        {(!!fields || !!blocks) && !disabled && (
           <Accordion.Collapse eventKey={id}>
             <>
               <hr className="mt-2 mb-0"></hr>
@@ -104,6 +105,13 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
               <SettingsForm
                 id={id}
                 fields={fields}
+                blocks={
+                  blocks && {
+                    items: blocks,
+                    className: 'personal-info-block',
+                    titleClassName: 'personal-info-block__title',
+                  }
+                }
                 action={action}
                 setResponse={resp => {
                   if (resp?.success) {
@@ -139,8 +147,12 @@ const PersonalInfoPage = () => {
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
-      <h1>{jsxT('personal_info_page_title')}</h1>
-      <p className="mb-4">{jsxT('personal_info_page_sub_text')}</p>
+      <h1 className="account-settings__title">
+        {jsxT('personal_info_page_title')}
+      </h1>
+      <p className="account-settings__sub-text">
+        {jsxT('personal_info_page_sub_text')}
+      </p>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" variant="black" className="mx-auto" />

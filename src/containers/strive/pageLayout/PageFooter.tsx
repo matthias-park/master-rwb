@@ -18,36 +18,50 @@ import {
 import Link from '../../../components/Link';
 import { useModal } from '../../../hooks/useModal';
 import clsx from 'clsx';
+import {
+  StyledFooter,
+  StyledFooterInfoText,
+  StyledSectionItem,
+  StyledSectionItemDropdown,
+  StyledSectionItemExternalLink,
+  StyledSectionItemLink,
+  StyledSectionItemTitle,
+  StyledSocialSection,
+  StyledFooterSessionBlock,
+  StyledFooterRestrictionBlock,
+  StyledFooterSub,
+  StyledFooterPreTitle,
+} from '../components/styled/StyledFooter';
 
 const FooterHeader = () => {
   const { t } = useI18n();
   return (
-    <div className="row flex-column flex-sm-row footer-pre align-items-sm-center py-3">
-      <div className="session-block mb-2 mb-sm-0">
+    <div className="footer-pre pt-3 pb-0 pb-md-3">
+      <StyledFooterSessionBlock className="mb-2 mb-sm-0">
         <span className="session-block__text text-14">
           {t('time_spent_in_website')}
         </span>
-        <i className="icon-clock"></i>
+        <i className={clsx(`icon-${window.__config__.name}-clock`)}></i>
         <span className="session-block__time text-14">
           <SessionTimer />
         </span>
-      </div>
-      <h3 className="text-gray-100 ml-1 ml-sm-auto mr-md-5 mb-2 mb-sm-0">
+      </StyledFooterSessionBlock>
+      <StyledFooterPreTitle className="text-gray-100">
         {t('moderation_gamble')}
-      </h3>
-      <div className="restrictions-block">
+      </StyledFooterPreTitle>
+      <StyledFooterRestrictionBlock>
         <img
           loading="lazy"
-          className="restrictions-block__img d-none d-sm-block d-md-none d-lg-block"
+          className="restrictions-block__img"
           alt=""
           src="/assets/images/restrictions/21-label.webp"
-          width="40"
-          height="37"
+          width={window.__config__.name === 'strive' ? '40' : '38'}
+          height={window.__config__.name === 'strive' ? '37' : '38'}
         />
-        <span className="restrictions-block__text text-14 mr-3 d-none d-sm-block d-md-none d-lg-block">
+        <span className="restrictions-block__text text-14">
           {t('minimum_age_disclaimer')}
         </span>
-      </div>
+      </StyledFooterRestrictionBlock>
     </div>
   );
 };
@@ -59,9 +73,9 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
   const isLive = useIsRouteActive('sportsLive');
 
   return (
-    <div
+    <StyledFooterSub
       className={clsx(
-        'row no-gutters footer-sub',
+        'row no-gutters',
         isMobile && (isSports || isLive) && 'with-bottom-nav',
       )}
     >
@@ -84,7 +98,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
             </li>
           ))}
       </ul>
-    </div>
+    </StyledFooterSub>
   );
 };
 
@@ -101,12 +115,10 @@ const SocialSection = ({
   return (
     <>
       <section className="footer-social-block ml-auto pt-4 mt-0 mt-md-4 mt-lg-0 pt-lg-0">
-        <div className="section-social">
-          <h2 className="section-social__head-title">
-            {t('footer_social_title')}
-          </h2>
-          <p className="section-social__title">{t('find_us_in_social')}</p>
-          <p className="section-social__icons">
+        <StyledSocialSection>
+          <h2 className="social__head-title">{t('footer_social_title')}</h2>
+          <p className="social__title">{t('find_us_in_social')}</p>
+          <p className="social__icons">
             {!!webSocial &&
               Object.entries(webSocial)
                 .filter(Boolean)
@@ -118,22 +130,26 @@ const SocialSection = ({
                       key={key}
                       to={!externalLink ? value : undefined}
                       href={externalLink ? value : undefined}
-                      className="section-social__icons-link"
+                      className="social__icons-link"
                       target={externalLink ? '_blank' : undefined}
                       rel={externalLink ? 'noreferrer' : undefined}
                       aria-label={iconName[key] || key}
                     >
-                      <i className={`icon-${iconName[key] || key}`}></i>
+                      <i
+                        className={`icon-${window.__config__.name}-${
+                          iconName[key] || key
+                        }`}
+                      ></i>
                     </Component>
                   );
                 })}
           </p>
           {partners && !!Object.keys(partners).length && (
-            <h2 className="section-social__head-title mt-4">
+            <h2 className="social__head-title mt-4">
               {t('official_partners_title')}
             </h2>
           )}
-          <p className="section-social__icons d-flex align-items-center">
+          <p className="social__icons d-flex align-items-center">
             {!!partners &&
               Object.entries(partners)
                 .filter(Boolean)
@@ -141,7 +157,7 @@ const SocialSection = ({
                   <a
                     key={key}
                     href={t(value)}
-                    className="section-social__icons-link"
+                    className="social__icons-link"
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -154,14 +170,14 @@ const SocialSection = ({
                   </a>
                 ))}
           </p>
-        </div>
-        <div className="footer-info-text d-none d-xxl-flex align-items-end ml-3 mb-2">
+        </StyledSocialSection>
+        <StyledFooterInfoText className="d-none d-xxl-flex align-items-end ml-3 mb-2">
           <p>{jsxT('footer_info_text')}</p>
-        </div>
+        </StyledFooterInfoText>
       </section>
-      <div className="footer-info-text d-flex d-xxl-none mt-3 mb-2 mb-lg-0">
+      <StyledFooterInfoText className="d-flex d-xxl-none mt-3 mb-2 mb-lg-0">
         <p>{jsxT('footer_info_text')}</p>
-      </div>
+      </StyledFooterInfoText>
     </>
   );
 };
@@ -172,8 +188,8 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
   const sendDataToGTM = useGTM();
   const FooterLink = useMemo(
     () => ({
-      Container: desktopWidth ? 'div' : Dropdown,
-      Title: desktopWidth ? 'h3' : Dropdown.Toggle,
+      Container: desktopWidth ? StyledSectionItem : StyledSectionItemDropdown,
+      Title: desktopWidth ? StyledSectionItemTitle : Dropdown.Toggle,
       Children: desktopWidth ? 'div' : Dropdown.Menu,
     }),
     [desktopWidth],
@@ -195,11 +211,14 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
           .concat()
           .sort((a, b) => sortAscending(a.order, b.order))
           .map(linkContainer => (
-            <FooterLink.Container
-              key={linkContainer.name}
-              className="section-item"
-            >
-              <FooterLink.Title as="h3" className="section-item__title">
+            <FooterLink.Container key={linkContainer.name}>
+              <FooterLink.Title
+                as={StyledSectionItemTitle}
+                className={clsx(
+                  'section-item-title--toggler',
+                  !linkContainer.children.length && 'disable-dropdown-arrow',
+                )}
+              >
                 {jsxT(linkContainer.name)}
               </FooterLink.Title>
               <FooterLink.Children>
@@ -208,7 +227,7 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
                   .sort((a, b) => sortAscending(a.order, b.order))
                   .map((child, index) =>
                     child.external ? (
-                      <a
+                      <StyledSectionItemExternalLink
                         key={`${child.name}-${index}`}
                         href={child.link || t(child.translationPath!)}
                         target="_blank"
@@ -220,9 +239,9 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
                         }
                       >
                         {t(child.name)}
-                      </a>
+                      </StyledSectionItemExternalLink>
                     ) : (
-                      <Link
+                      <StyledSectionItemLink
                         key={child.name}
                         to={child.link || '#'}
                         onClick={() => onGtmLinkClick(child.name)}
@@ -233,7 +252,7 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
                         }
                       >
                         {t(child.name)}
-                      </Link>
+                      </StyledSectionItemLink>
                     ),
                   )}
               </FooterLink.Children>
@@ -246,7 +265,7 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
 const PageFooter = () => {
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
   return (
-    <footer>
+    <StyledFooter>
       <div className="container-fluid">
         <FooterHeader />
         <div className="row footer-main pt-0 pt-md-4 pb-2 pb-lg-4 pt-lg-5">
@@ -255,7 +274,7 @@ const PageFooter = () => {
         </div>
         <FooterBottom data={footer?.subFooter} />
       </div>
-    </footer>
+    </StyledFooter>
   );
 };
 

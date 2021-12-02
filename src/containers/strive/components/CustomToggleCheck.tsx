@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { useI18n } from '../../../hooks/useI18n';
+import { useFormContext } from 'react-hook-form';
+import { Franchise } from '../../../constants';
 
 const CustomToggleCheck = React.forwardRef(
   (
@@ -10,17 +12,43 @@ const CustomToggleCheck = React.forwardRef(
       name?: string;
       onChange?: (e: any) => void;
       onClick: (e: any) => void;
+      className?: string;
+      label?: string;
+      rules?: {
+        required: boolean;
+      };
     },
     ref: any,
   ) => {
     const { t } = useI18n();
+    const [isInvalid, setIsInvalid] = useState(false);
+    const [toggleCount, setToggleCount] = useState(0);
+    const formContext = useFormContext();
+
+    useEffect(() => {
+      const hasErrors =
+        (formContext?.formState?.isSubmitted || !!toggleCount) &&
+        !props.checked &&
+        props?.rules?.required;
+      if (hasErrors) {
+        setIsInvalid(true);
+      }
+      props.checked && setIsInvalid(false);
+    }, [formContext?.formState, props.checked]);
 
     return (
-      <label className="d-flex mb-0">
+      <label
+        className={clsx(
+          'd-flex toggle-check-wrp',
+          props.className,
+          isInvalid && 'is-invalid',
+        )}
+      >
         <div
           className={clsx(
             'toggle-check',
             props.checked && 'toggle-check--checked',
+            isInvalid && 'is-invalid',
           )}
         >
           <input
@@ -28,18 +56,26 @@ const CustomToggleCheck = React.forwardRef(
             id={props.id}
             ref={ref}
             name={props.name}
-            onChange={props.onChange}
+            onChange={e => {
+              setToggleCount(toggleCount + 1);
+              !!props.onChange && props.onChange(e);
+            }}
             onClick={props.onClick}
             readOnly
           ></input>
           <span className="toggle-check__slider"></span>
-          <span className="toggle-check__checked">
-            {t('custom_checkbox_checked')}
-          </span>
-          <span className="toggle-check__unchecked">
-            {t('custom_checkbox_unchecked')}
-          </span>
+          {!Franchise.desertDiamond && (
+            <span className="toggle-check__checked">
+              {t('custom_checkbox_checked')}
+            </span>
+          )}
+          {!Franchise.desertDiamond && (
+            <span className="toggle-check__unchecked">
+              {t('custom_checkbox_unchecked')}
+            </span>
+          )}
         </div>
+        {props.label && <p className="toggle-check__label">{props.label}</p>}
       </label>
     );
   },

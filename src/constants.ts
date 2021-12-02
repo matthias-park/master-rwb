@@ -1,4 +1,5 @@
 import RailsApiResponse from './types/api/RailsApiResponse';
+import { FranchiseNames } from './types/FranchiseNames';
 export const DevEnv = process.env.TARGET_ENV === 'development';
 export const TestEnv = process.env.TARGET_ENV === 'test';
 export enum ComponentName {
@@ -81,6 +82,7 @@ export enum PagesName {
   InfoPaymentPage = 40,
   LiveSportsPage = 41,
   LiveCasinoPage = 42,
+  TaxPage = 43,
   CasinoGameInfoPage = 44,
 }
 
@@ -499,8 +501,9 @@ export const CONTENT_PAGES = [
   PagesName.FaqPage,
   PagesName.ResponsibleGamingPage,
 ];
-
-export const franchiseDateFormat = window.__config__.dateFormat || 'YYYY-MM-DD';
+export const Config = window.__config__;
+export const franchiseDateFormat = Config.dateFormat || 'YYYY-MM-DD';
+export const ComponentSettings = Config.componentSettings;
 
 export enum CustomWindowEvents {
   ResetIdleTimer = 'resetIdleTimer',
@@ -516,3 +519,10 @@ export enum LocalStorageKeys {
   cookies = 'cookiesSettings',
   translations = 'translationsCache',
 }
+
+export const Franchise = {
+  bnl: Config.name === FranchiseNames.Bnl,
+  strive: Config.name === FranchiseNames.Strive,
+  desertDiamond: Config.name === FranchiseNames.DesertDiamond,
+  xCasino: Config.name === FranchiseNames.Xcasino,
+};

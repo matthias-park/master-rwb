@@ -3,7 +3,6 @@ import dayjs, { Dayjs } from 'dayjs';
 import DatePicker from 'react-datepicker';
 import { Button } from 'react-bootstrap';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useI18n } from '../../../../hooks/useI18n';
 
 const DateFilterInput = forwardRef(
   (
@@ -36,10 +35,8 @@ const DateFilter = ({
   dateFrom: Dayjs;
   updateUrl: (dateFrom: Dayjs, dateTo: Dayjs) => void;
 }) => {
-  const { t } = useI18n();
   const [newDateFrom, setNewDateFrom] = useState<Dayjs>(dateFrom);
   const [newDateTo, setNewDateTo] = useState<Dayjs>(dateTo);
-  const [isOpen, setIsOpen] = useState<string>('');
   const validDate = newDateTo.diff(newDateFrom, 'd') >= 0;
 
   useEffect(() => {
@@ -69,7 +66,6 @@ const DateFilter = ({
           }
           selected={newDateFrom.toDate()}
           onChange={date => {
-            setIsOpen('');
             setNewDateFrom(dayjs(date as Date));
           }}
           dateFormat="yyyy-MM-dd"
@@ -84,7 +80,6 @@ const DateFilter = ({
           }
           selected={newDateTo.toDate()}
           onChange={date => {
-            setIsOpen('');
             setNewDateTo(dayjs(date as Date));
           }}
           dateFormat="yyyy-MM-dd"

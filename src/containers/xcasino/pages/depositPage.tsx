@@ -32,12 +32,6 @@ import { useConfig } from '../../../hooks/useConfig';
 import RequestReturn from '../../../types/api/deposits/RequestReturn';
 import { replaceStringTagsReact } from '../../../utils/reactUtils';
 
-const StyledIframe = styled.iframe`
-  width: 100%;
-  height: 75vh;
-  border: none;
-`;
-
 const AmountContainer = ({
   handleRequestDeposit,
   depositStatus,
@@ -234,10 +228,7 @@ const DepositPage = () => {
     RailsApiResponse<DepositLimits[] | null>
   >('/restapi/v1/user/max_deposit');
   const [apiError, setApiError] = useState<string | null>(null);
-  const [customHtml, setCustomHtml] = useState<{
-    html: string;
-    iframe: boolean;
-  } | null>(null);
+  const [customHtml, setCustomHtml] = useState<string | null>(null);
   const depositBaseUrl = useRoutePath(PagesName.DepositPage, true);
   const depositStatus = useDepositResponseStatus();
   const sendDataToGTM = useGTM();
@@ -322,7 +313,9 @@ const DepositPage = () => {
                 const data = {
                   ...event.detail,
                   depositRequestId: response.Data?.DepositRequestId,
-                  browserInfo: {
+                };
+                if (bankId === 189) {
+                  data.browserInfo = {
                     acceptHeader: '*',
                     colorDepth: window.screen.colorDepth,
                     javaEnabled: false,
@@ -331,8 +324,8 @@ const DepositPage = () => {
                     screenWidth: window.innerWidth,
                     timeZoneOffset: new Date().getTimezoneOffset(),
                     userAgent: window.navigator.userAgent,
-                  },
-                };
+                  };
+                }
                 postApi<RailsApiResponse<RequestReturn>>(
                   '/railsapi/v1/deposits/request_return',
                   {
@@ -379,14 +372,11 @@ const DepositPage = () => {
           );
           setCurrentStep(prev => prev + 1);
           let html = atob(response.Data.InnerText);
-          const iframeHtml = bankId !== 189;
-          if (!iframeHtml) {
-            html = html.replace(
-              /<(\/?|!?)(DOCTYPE html|html|head|body)>/gm,
-              '',
-            );
-          }
-          return setCustomHtml({ html, iframe: iframeHtml });
+          html = html.replace(
+            /<(\/?|!?)(DOCTYPE html|html|head|body|meta)([^>]*)>/gm,
+            '',
+          );
+          return setCustomHtml(html);
         } else if (
           response?.Success &&
           response.Data?.RedirectUrl &&
@@ -444,32 +434,7 @@ const DepositPage = () => {
 
   const depositFrame = useMemo(() => {
     if (!customHtml) return null;
-    if (customHtml.iframe)
-      return (
-        <StyledIframe
-          title="Payment"
-          allowTransparency
-          onLoad={() => {
-            setDepositLoading(false);
-          }}
-          onError={() => {
-            setDepositLoading(false);
-            setCustomHtml(null);
-          }}
-          ref={ref => {
-            if (
-              ref &&
-              customHtml &&
-              !ref.contentWindow?.document?.body?.innerHTML.length
-            ) {
-              ref?.contentWindow?.document.open();
-              ref?.contentWindow?.document.write(customHtml.html);
-              ref?.contentWindow?.document.close();
-            }
-          }}
-        />
-      );
-    return replaceStringTagsReact(customHtml.html);
+    return replaceStringTagsReact(customHtml);
   }, [customHtml]);
   return (
     <Main title="Cashier" icon="icon-deposit">
@@ -545,7 +510,7 @@ const DepositPage = () => {
                       {
                         title: 'Deposit Details',
                         content: (
-                          <div className="accordion-steps__menu-content">
+                          <div className="accordion-steps__menu-content text-dark">
                             {depositFrame}
                           </div>
                         ),

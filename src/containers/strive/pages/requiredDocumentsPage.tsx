@@ -28,7 +28,9 @@ const RequiredDocumentsPage = () => {
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
-      <h1>{jsxT('required_documents_page_title')}</h1>
+      <h1 className="account-settings__title">
+        {jsxT('required_documents_page_title')}
+      </h1>
       <div className="outer-info-block pt-3 pb-4 mt-4">
         {!!error && (
           <h2 className="mt-3 mb-5 text-center">

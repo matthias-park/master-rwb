@@ -22,10 +22,10 @@ interface GeoComplyContext {
 }
 const geoComplyHookContext = createContext<GeoComplyContext | null>(null);
 
-export function useGeoComply(): GeoComplyContext {
+export function useGeoComply(): GeoComplyContext | null {
   const instance = useContext<GeoComplyContext | null>(geoComplyHookContext);
   if (!instance) {
-    throw new Error('There was an error getting i18n instance from context');
+    return null;
   }
   return instance;
 }

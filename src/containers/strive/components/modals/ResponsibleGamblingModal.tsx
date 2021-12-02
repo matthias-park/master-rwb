@@ -7,6 +7,7 @@ import { stringToMiliseconds } from '../../../../utils/index';
 import { ComponentName } from '../../../../constants';
 import { useModal } from '../../../../hooks/useModal';
 import { useAuth } from '../../../../hooks/useAuth';
+import clsx from 'clsx';
 
 const ResponsibleGamblingModal = () => {
   const { user } = useAuth();
@@ -44,7 +45,7 @@ const ResponsibleGamblingModal = () => {
       className="text-center pb-4"
     >
       <div className="play-responsible-block mb-3 py-3 py-sm-1 pl-2 pr-4 pr-sm-2">
-        <i className="icon-thumbs"></i>
+        <i className={clsx(`icon-${window.__config__.name}-thumbs`)}></i>
         {jsxT('play_responsible_block_link', {
           onClick: hideModal,
         })}

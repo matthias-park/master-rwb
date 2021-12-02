@@ -3,6 +3,7 @@ import React from 'react';
 import ApiHead from './ApiHead';
 import ContextProviders from './ContextProviders';
 import * as Sentry from '@sentry/react';
+import { Config } from '../constants';
 
 const AsyncFranchise = (name: string) =>
   loadable(() =>
@@ -17,7 +18,7 @@ const AsyncFranchise = (name: string) =>
   );
 
 const App = () => {
-  const franchiseTheme = window.__config__.theme;
+  const franchiseTheme = Config.theme;
   const FranchiseIndex = franchiseTheme
     ? AsyncFranchise(franchiseTheme)
     : 'div';

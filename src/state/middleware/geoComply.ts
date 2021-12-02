@@ -33,10 +33,7 @@ const insertGeoComplyScript = async (): Promise<boolean> =>
     scriptElement.setAttribute('type', 'text/javascript');
     scriptElement.id = id;
     scriptElement.defer = true;
-    scriptElement.setAttribute(
-      'src',
-      `/assets/scripts/geocomply-client.min.js`,
-    );
+    scriptElement.setAttribute('src', `/scripts/geocomply-client.min.js`);
     scriptElement.addEventListener('load', () => resolve(true));
     scriptElement.addEventListener('error', err => reject(err));
     document.head.appendChild(scriptElement);

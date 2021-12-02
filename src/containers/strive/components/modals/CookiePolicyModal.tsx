@@ -4,7 +4,11 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Accordion from 'react-bootstrap/Accordion';
 import CustomToggleCheck from '../CustomToggleCheck';
-import { ComponentName } from '../../../../constants';
+import {
+  ComponentName,
+  ComponentSettings,
+  PagesName,
+} from '../../../../constants';
 import { useModal } from '../../../../hooks/useModal';
 import useGTM from '../../../../hooks/useGTM';
 import { useConfig } from '../../../../hooks/useConfig';
@@ -12,25 +16,40 @@ import isEqual from 'lodash.isequal';
 import { Cookies } from '../../../../types/Config';
 import { useDispatch } from 'react-redux';
 import { setCookies } from '../../../../state/reducers/config';
+import { matchPath, useHistory, useLocation } from 'react-router';
 
 const CookiePolicyModal = () => {
   const { jsxT } = useI18n();
-  const { cookies } = useConfig((prev, next) =>
-    isEqual(prev.cookies, next.cookies),
+  const { cookies, routes } = useConfig(
+    (prev, next) =>
+      isEqual(prev.cookies, next.cookies) && isEqual(prev.routes, next.routes),
   );
   const cookiesId = Object.keys(cookies);
   const sendDataToGTM = useGTM();
+  const [open, setOpen] = useState<string>('');
   const dispatch = useDispatch();
   const [cookieSettings, setCookieSettings] = useState<Cookies>(cookies);
   const { disableModal } = useModal();
+  const { pathname } = useLocation();
+  const history = useHistory();
   const toggleCookie = (e: React.SyntheticEvent<EventTarget>, id: string) => {
-    e.stopPropagation();
     setCookieSettings({ ...cookieSettings, [id]: !cookieSettings[id] });
   };
   const isChecked = (id: string): boolean => {
     return cookieSettings[id];
   };
-  const hideModal = () => disableModal(ComponentName.CookiesModal);
+  const hideModal = () => {
+    if (ComponentSettings?.login?.loginCookiesAccept && !cookies.accepted) {
+      const currentRoute = routes.find(route => matchPath(pathname, route));
+      if (
+        currentRoute &&
+        [PagesName.LoginPage, PagesName.RegisterPage].includes(currentRoute.id)
+      ) {
+        history.push('/');
+      }
+    }
+    disableModal(ComponentName.CookiesModal);
+  };
   const handleBtnClick = (id: string) => {
     let newCookies: Cookies = cookieSettings;
     if (id === 'all') {
@@ -56,20 +75,15 @@ const CookiePolicyModal = () => {
     <Modal centered show onHide={hideModal}>
       <Modal.Body className="custom-modal">
         <i className="icon-close custom-modal__close" onClick={hideModal}></i>
-        <h2 className="mb-2 text-gray-800">
+        <h2 className="mb-2">
           {jsxT('cookie_modal_title', { onClick: hideModal })}
         </h2>
-        <p className="text-gray-700">
-          {jsxT('cookie_modal_text', { onClick: hideModal })}
-        </p>
-        <Accordion defaultActiveKey="0" className="cookies-accordion mt-3">
+        <p className="">{jsxT('cookie_modal_text', { onClick: hideModal })}</p>
+        <Accordion className="cookies-accordion mt-3">
           {cookiesId.map((id, index) =>
             id === 'accepted' ? null : (
               <div key={id} className="position-relative">
-                <Accordion.Toggle
-                  eventKey={index.toString()}
-                  className="cookies-accordion__toggle"
-                >
+                <div className="cookies-accordion__card">
                   <div className="d-flex align-items-center">
                     {id === 'functional' ? (
                       <i className="icon-check mx-3"></i>
@@ -77,32 +91,52 @@ const CookiePolicyModal = () => {
                       <CustomToggleCheck
                         id="checkbox_all"
                         checked={isChecked(id)}
-                        onClick={e => toggleCookie(e, id)}
+                        onClick={e => {
+                          toggleCookie(e, id);
+                        }}
                       ></CustomToggleCheck>
                     )}
-                    <div className="ml-3 text-left text-wrap">
-                      <h4 className="mb-0 text-14 weight-500 text-gray-800">
-                        {jsxT(`cookies_check_${id}_title`, {
-                          onClick: hideModal,
-                        })}
-                      </h4>
-                      <small className="text-gray-700">
-                        {jsxT(`cookies_check_${id}_short_desc`, {
-                          onClick: hideModal,
-                        })}
-                      </small>
-                    </div>
+
+                    <Accordion.Toggle
+                      onClick={e =>
+                        setOpen(
+                          index.toString() !== open ? index.toString() : '',
+                        )
+                      }
+                      eventKey={index.toString()}
+                      className="cookies-accordion__toggle ml-3 text-left text-wrap"
+                    >
+                      <div className="cookies-accordion__content">
+                        <h4 className="mb-0 text-14 weight-500">
+                          {jsxT(`cookies_check_${id}_title`, {
+                            onClick: hideModal,
+                          })}
+                        </h4>
+                        <small className="">
+                          {jsxT(`cookies_check_${id}_short_desc`, {
+                            onClick: hideModal,
+                          })}
+                        </small>
+                      </div>
+
+                      <i
+                        className={
+                          `${open === index.toString() ? 'open' : ''}` +
+                          ` icon-${window.__config__.name}-down1` +
+                          ' cookies-accordion__icon'
+                        }
+                      ></i>
+                    </Accordion.Toggle>
                   </div>
-                </Accordion.Toggle>
+                </div>
                 <Accordion.Collapse
                   eventKey={index.toString()}
                   className="cookies-accordion__body"
                 >
-                  <p className="text-14 text-gray-700 mb-0">
+                  <p className="text-14 mb-0">
                     {jsxT(`cookies_check_${id}_desc`, { onClick: hideModal })}
                   </p>
                 </Accordion.Collapse>
-                <i className="icon-down1 cookies-accordion__icon"></i>
               </div>
             ),
           )}

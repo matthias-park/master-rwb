@@ -5,7 +5,8 @@ const isClient = typeof window === 'object';
 const useDesktopWidth = (maxMobileWidth: number) => {
   const resizeId = useRef(0);
   const getIsDesktopWidth = useCallback(
-    () => (isClient ? window.innerWidth > maxMobileWidth : false),
+    () =>
+      isClient ? document.documentElement.clientWidth > maxMobileWidth : false,
     [maxMobileWidth],
   );
   const [desktopWidth, setDesktopWidth] = useState(getIsDesktopWidth);

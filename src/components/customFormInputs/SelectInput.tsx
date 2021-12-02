@@ -76,6 +76,7 @@ const SelectInput = ({
           isInvalid={!!fieldState.error}
           size={size}
           placeholder=" "
+          className="form-select"
         >
           {!defaultValue && title && (
             <option key="-1" value="-1">

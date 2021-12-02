@@ -13,6 +13,7 @@ import { useI18n } from '../../../../hooks/useI18n';
 import LoadingButton from '../../../../components/LoadingButton';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import FileInput from '../../../../components/customFormInputs/FileInput';
+import clsx from 'clsx';
 
 interface SettingProps {
   form: SettingsForm;
@@ -126,7 +127,10 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
         </Card.Body>
       </Accordion.Collapse>
       <i
-        className="settings-card__icon icon-down1"
+        className={clsx(
+          `icon-${window.__config__.name}-down1`,
+          'settings-card__icon',
+        )}
         onClick={accordionOnClick}
       />
     </Card>

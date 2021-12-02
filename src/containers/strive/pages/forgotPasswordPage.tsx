@@ -58,7 +58,9 @@ const ForgotPasswordPage = () => {
   return (
     <main className="page-container">
       <div className="page-inner page-inner--small">
-        <h2 className="mb-4">{t('forgot_password_page_title')}</h2>
+        <h2 className="page-inner__title mb-4">
+          {t('forgot_password_page_title')}
+        </h2>
         <CustomAlert
           show={!!apiResponse}
           variant={

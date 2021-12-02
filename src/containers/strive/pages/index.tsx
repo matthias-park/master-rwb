@@ -55,6 +55,7 @@ const COMPONENT_PAGES = {
   [PagesName.CloseAccountPage]: AsyncPage('closeAccountPage'),
   [PagesName.LoginPage]: AsyncPage('loginPage'),
   [PagesName.RequiredDocuments]: AsyncPage('requiredDocumentsPage'),
+  [PagesName.TaxPage]: AsyncPage('taxPage'),
 };
 
 const Routes = () => {

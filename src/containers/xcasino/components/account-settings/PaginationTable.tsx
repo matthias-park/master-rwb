@@ -5,9 +5,8 @@ import clsx from 'clsx';
 import Spinner from 'react-bootstrap/Spinner';
 
 const PaginationTable = ({ data, updateUrl, dateFrom, dateTo, totalPages }) => {
-  const { t, jsxT } = useI18n();
+  const { t } = useI18n();
   const [currentPage, setCurrentPage] = useState(1);
-  const rangeOptions = [10, 25, 50];
 
   useEffect(() => {
     updateUrl(null, null, currentPage.toString());

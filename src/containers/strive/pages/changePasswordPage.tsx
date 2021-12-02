@@ -23,8 +23,12 @@ const ChangePasswordPage = () => {
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
-      <h1>{jsxT('change_password_page_title')}</h1>
-      <p className="mb-4">{t('change_password_sub_text')}</p>
+      <h1 className="account-settings__title">
+        {jsxT('change_password_page_title')}
+      </h1>
+      <p className="account-settings__sub-text">
+        {t('change_password_sub_text')}
+      </p>
       <div className="outer-info-block change-pw">
         <ChangePasswordForm />
         <ChangePassword2fa />

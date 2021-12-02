@@ -6,6 +6,7 @@ import {
 import { ComponentName } from '../constants';
 import { HeaderRoute } from '../types/api/PageConfig';
 import { isWindows } from 'react-device-detect';
+import * as Sentry from '@sentry/react';
 
 export const changeBackdropVisibility = (visibility: boolean) => {
   const SHOW_CLASS = 'show';
@@ -160,4 +161,16 @@ export const checkHrOverflow = (containerSelector, itemSelector) => {
     document.querySelectorAll(itemSelector)[0]?.offsetWidth >=
     document.querySelectorAll(containerSelector)[0]?.offsetWidth
   );
+};
+
+export const injectZendeskScript = () => {
+  const key = window.__config__.zendesk;
+  if (!key) return;
+  const scriptTag = document.createElement('script');
+  scriptTag.id = 'ze-snippet';
+  scriptTag.src = `https://static.zdassets.com/ekr/snippet.js?key=${window.__config__.zendesk}`;
+  scriptTag.onerror = e => {
+    Sentry.captureEvent(e);
+  };
+  document.body.appendChild(scriptTag);
 };

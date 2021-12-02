@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../../../../hooks/useUIConfig';
-import { ComponentName, PagesName } from '../../../../constants';
+import { ComponentName, Franchise, PagesName } from '../../../../constants';
 import { useI18n } from '../../../../hooks/useI18n';
 import Link from '../../../../components/Link';
 import { cache as SWRCache } from 'swr';
@@ -10,8 +10,28 @@ import { useRoutePath } from '../../../../hooks/index';
 import Accordion from 'react-bootstrap/Accordion';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
 import { StyledHeaderUserMenu } from '../styled/StyledHeader';
+import loadable from '@loadable/component';
+import clsx from 'clsx';
+import Button from 'react-bootstrap/Button';
+import useDesktopWidth from '../../../../hooks/useDesktopWidth';
 
-const UserMenuLink = ({ link, name, setShowDropdown, children }) => {
+const LoadableXtremePush = loadable(
+  () => import('../../../../components/XtremePushInbox'),
+);
+
+const UserMenuLink = ({
+  icon,
+  link,
+  name,
+  setShowDropdown,
+  children,
+}: {
+  icon?: string;
+  link: string;
+  name: string;
+  setShowDropdown: (value: boolean) => void;
+  children: any;
+}) => {
   const { t } = useI18n();
   return (
     <>
@@ -22,7 +42,12 @@ const UserMenuLink = ({ link, name, setShowDropdown, children }) => {
             as="li"
             eventKey={name}
           >
-            <span className="user-menu__list-item-link">{name}</span>
+            <span className="user-menu__list-item-link">
+              {icon && (
+                <i className={clsx(icon, 'user-menu__list-item-icon mr-3')}></i>
+              )}
+              {name}
+            </span>
             <Accordion.Collapse eventKey={name}>
               <>
                 {children.map(childLink => (
@@ -32,6 +57,9 @@ const UserMenuLink = ({ link, name, setShowDropdown, children }) => {
                     className="user-menu__list-sub-item"
                     onClick={() => setShowDropdown(false)}
                   >
+                    {Franchise.desertDiamond && (
+                      <i className="user-menu__list-item-icon icon-tooltip invisible mr-3"></i>
+                    )}
                     {t(childLink.name)}
                   </Link>
                 ))}
@@ -46,6 +74,9 @@ const UserMenuLink = ({ link, name, setShowDropdown, children }) => {
             onClick={() => setShowDropdown(false)}
             className="user-menu__list-item-link"
           >
+            {icon && (
+              <i className={clsx(icon, 'user-menu__list-item-icon mr-3')}></i>
+            )}
             {name}
           </Link>
         </li>
@@ -61,6 +92,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const { backdrop } = useUIConfig();
   const { sidebars } = useConfig();
   const depositRoute = useRoutePath(PagesName.DepositPage, true);
+  const desktopWidth = useDesktopWidth(1199);
 
   const showUserMenu = isOpen => {
     setShowDropdown(isOpen);
@@ -70,73 +102,155 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
     setLoggingOut(true);
     await handleLogout();
     setLoggingOut(false);
+    backdrop.hide();
     SWRCache.clear();
   };
 
   return (
-    <div className="d-flex justify-content-end flex-grow-1">
-      <StyledHeaderUserMenu
-        className={`menu-dropdown ${dropdownClasses}`}
-        show={showDropdown}
-        onToggle={isOpen => showUserMenu(isOpen)}
-      >
-        <div className="menu-info">
-          <Link to={depositRoute} className="menu-info-balance">
-            <span>
-              {user.balance} {user.currency}
-            </span>
-            <i className="icon-add-action-1 ml-2"></i>
-          </Link>
-        </div>
-        <Dropdown.Toggle as="a" bsPrefix="menu-toggle">
-          <strong className="menu-toggle-name">
-            {t('hello')} {user.first_name}
-          </strong>
-          <i className="user-menu-icon icon-account ml-2"></i>
-          <div className="user-menu-toggle-button user-menu-dropdown">
-            <i
-              className={`icon-${
-                showDropdown ? 'up' : 'down'
-              } user-menu-toggle-icon`}
-            ></i>
-          </div>
-        </Dropdown.Toggle>
-        <Dropdown.Menu className="dropdown-menu user-menu">
-          <div className="user-menu-wrp">
-            <ul className="user-menu__list">
-              <Dropdown.Item as="div" className="mt-3">
-                <Link
-                  to={depositRoute}
-                  className="btn btn-outline-brand btn-lg text-14 px-3"
+    <>
+      <div className="d-flex justify-content-end flex-grow-1">
+        <StyledHeaderUserMenu
+          className={clsx(
+            'menu-dropdown',
+            !window.__config__.xtremepush && 'ml-auto',
+            dropdownClasses,
+          )}
+          show={showDropdown}
+          onToggle={isOpen => showUserMenu(isOpen)}
+        >
+          {Franchise.desertDiamond ? (
+            <>
+              <Button
+                as={Link}
+                to={depositRoute}
+                variant="secondary"
+                className="pr-2 pl-3"
+              >
+                {user.balance} {user.currency}
+                <i className="icon-add-action-1 ml-2"></i>
+              </Button>
+              {!!window.__config__.xtremepush && (
+                <LoadableXtremePush className="mx-4" />
+              )}
+              {desktopWidth ? (
+                <Dropdown.Toggle
+                  as={Button}
+                  variant="secondary"
+                  bsPrefix="menu-toggle"
+                  className="pl-3 pr-1"
                 >
-                  <i className="icon-card"></i>
-                  {t('deposit_link')}
+                  <span className="text-capitalize">
+                    {t('hello')} {user.first_name}
+                  </span>
+                  <i
+                    className={clsx(
+                      `icon-${window.__config__.name}-down1`,
+                      'mx-1',
+                    )}
+                  ></i>
+                </Dropdown.Toggle>
+              ) : (
+                <Dropdown.Toggle as="span" className="mobile-user-menu">
+                  <i
+                    className={clsx(`icon-${window.__config__.name}-account`)}
+                  />
+                </Dropdown.Toggle>
+              )}
+            </>
+          ) : (
+            <>
+              <div className="menu-info">
+                <Link to={depositRoute} className="menu-info-balance">
+                  <span>
+                    {user.balance} {user.currency}
+                  </span>
+                  <i className="icon-add-action-1 ml-2"></i>
                 </Link>
-              </Dropdown.Item>
-              <Accordion>
-                {sidebars &&
-                  sidebars[0].map(link => (
-                    <UserMenuLink
-                      key={`${link.link}-${link.name}`}
-                      link={link.link}
-                      name={t(link.name)}
-                      children={link.children ? link.children : null}
-                      setShowDropdown={showUserMenu}
-                    />
-                  ))}
-              </Accordion>
-            </ul>
-            <div
-              className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
-              onClick={onLogoutClick}
-            >
-              <LoadingSpinner show={loggingOut} small className="mr-1" />
-              {t('logout')}
+              </div>
+              <Dropdown.Toggle as="a" bsPrefix="menu-toggle">
+                <strong className="menu-toggle-name">
+                  {t('hello')} {user.first_name}
+                </strong>
+                <i
+                  className={clsx(
+                    `icon-${window.__config__.name}-account`,
+                    'user-menu-icon ml-2',
+                  )}
+                ></i>
+                <div className="user-menu-toggle-button user-menu-dropdown">
+                  <i
+                    className={`icon-${window.__config__.name}-${
+                      showDropdown ? 'up' : 'down'
+                    } user-menu-toggle-icon`}
+                  ></i>
+                </div>
+              </Dropdown.Toggle>
+            </>
+          )}
+          <Dropdown.Menu
+            className="dropdown-menu user-menu"
+            data-display="static"
+          >
+            <div className="user-menu-wrp">
+              <ul className="user-menu__list">
+                {Franchise.desertDiamond ? (
+                  <Dropdown.Item as="div" className="my-2 px-0">
+                    <Link
+                      to={depositRoute}
+                      className={clsx('btn btn-primary text-14 w-100')}
+                    >
+                      {t('deposit_link')}
+                    </Link>
+                  </Dropdown.Item>
+                ) : (
+                  <Dropdown.Item as="div" className="mt-3">
+                    <Link
+                      to={depositRoute}
+                      className={clsx(
+                        'btn btn-outline-brand btn-lg text-14 px-3',
+                      )}
+                    >
+                      <i
+                        className={clsx(`icon-${window.__config__.name}-card`)}
+                      ></i>
+                      {t('deposit_link')}
+                    </Link>
+                  </Dropdown.Item>
+                )}
+                <Accordion>
+                  {sidebars &&
+                    sidebars[0].map(link => (
+                      <UserMenuLink
+                        key={`${link.link}-${link.name}`}
+                        icon={link.icon}
+                        link={link.link}
+                        name={t(link.name)}
+                        children={link.children ? link.children : null}
+                        setShowDropdown={showUserMenu}
+                      />
+                    ))}
+                </Accordion>
+              </ul>
+              <div
+                className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
+                onClick={onLogoutClick}
+              >
+                <LoadingSpinner show={loggingOut} small className="mr-1" />
+                {Franchise.desertDiamond && (
+                  <i
+                    className={clsx(
+                      'icon-desertDiamond-logout',
+                      'user-menu__list-item-icon mr-3',
+                    )}
+                  ></i>
+                )}
+                {t('logout')}
+              </div>
             </div>
-          </div>
-        </Dropdown.Menu>
-      </StyledHeaderUserMenu>
-    </div>
+          </Dropdown.Menu>
+        </StyledHeaderUserMenu>
+      </div>
+    </>
   );
 };
 export default HeaderUserInfo;

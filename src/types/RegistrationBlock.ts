@@ -16,7 +16,8 @@ export interface OnlineFormBlockField {
     | 'number'
     | 'email'
     | 'postal_code'
-    | 'select';
+    | 'select'
+    | 'smartyStreets';
   required?: boolean;
   validate?: (value: string) => boolean | string | Promise<boolean | string>;
   triggerId?: string;
@@ -35,5 +36,5 @@ export interface OnlineFormBlockField {
 export interface OnlineFormBlock {
   title?: string;
   description?: string;
-  fields: OnlineFormBlockField[];
+  fields: any;
 }

@@ -58,19 +58,236 @@
       ],
       "theme": "strive",
       "themeSettings": {
+        "boxShadow": {
+          "generic": "rgb(0 0 0 / 12%) 0px 0px 5px 0px"
+        },
+        "borderRadius": {
+          "sm": "8px"
+        },
         "colors": {
           "primary": {
             "main": "#44d9e6",
             "light": "#5eed53",
-            "hover": "#00C537"
+            "hover": "#1ab6c3"
           },
           "brand": {
             "main": "#000",
             "light": "#000",
             "text": "#031442"
           },
-          "secondary": "#666666"
-        }
+          "secondary": {
+            "main": "#666666"
+          },
+          "footer": {
+            "bottomText": "rgba(255,255,255,0.75)"
+          },
+          "body": "#fafafa",
+          "lightSpacer": "#ffffff"
+        },
+        "spacing": {
+          "bodyPadding": 80,
+          "bodyPaddingMedium": 45,
+          "bodyPaddingSmall": 20,
+          "footerMainTopPadding": 3,
+          "footerMainBottomPadding": 1.5,
+          "settingsBodyPadding": "0 25px 0 0",
+          "settingsMarginTop": 50
+        },
+        "buttons": {
+          "borderRadius": 16,
+          "fontSize": 13
+        },
+        "fonts": {
+          "family": "Dax offc",
+          "weight": {
+            "bold": 500
+          },
+          "size": {
+            "lg": "16px"
+          }
+        },
+        "footer": {
+          "listColor": "rgba(255, 255, 255, 0.75)",
+          "listTitleWeight": 500,
+          "subFooterHeight": 80,
+          "clockIconSize": 35,
+          "clockIzonMargin": "0"
+        },
+        "communicationPrefs": {
+          "items": {
+            "backgroundColor": "#f9f9f9",
+            "border": "1px solid rgb(229, 229, 229)"
+          }
+        },
+        "pageContainer": {
+          "backgroundColor": "#ECF0F3"
+        },
+        "pageInnerContainer": {
+          "titleWeight": 400
+        },
+        "login": {
+          "formBorderBottom": "1px solid #e5e5e5"
+        },
+        "registration": {
+          "width": 630,
+          "borderRadius": 10,
+          "boxShadow": "0 0 5px 0 rgb(0 0 0 / 12%)",
+          "blockTitleWeight": 500,
+          "blockTitleFontSize": 16,
+          "titleWeight": 400
+        },
+        "inputs": {
+          "border": "1px solid #cccccc",
+          "borderRadius": 4,
+          "padding": "17px 0.75rem 0.375rem 0.75rem",
+          "fontSize": 15,
+          "height": 38,
+          "backgroundColor": "#f9f9f9",
+          "color": "#4c4c4c",
+          "labelLeft": 12,
+          "labelTop": 12,
+          "labelActiveFontSize": 9,
+          "labelActiveTop": 4,
+          "labelActiveLeft": 12,
+          "labelBackgroundColor": "transparent",
+          "labelPadding": 0,
+          "marginBottom": 8,
+          "selectPadding": "0 5px",
+          "disabled": {
+            "backgroundColor": "#e5e5e5",
+            "border": "1px solid #cccccc",
+            "color": "#4c4c4c"
+          }
+        },
+        "customFileInput": {
+          "backgroundColor": "#f9f9f9",
+          "labelColor": "#4c4c4c",
+          "buttonFontColor": "#4c4c4c",
+          "buttonFontWeight": 400,
+          "buttonFontSize": "16px",
+          "buttonColor": "#ccc",
+          "border": "1px solid #cccccc"
+        },
+        "toggleCheck": {
+          "slider": {
+            "width": "20px",
+            "height": "20px",
+            "left": "5px",
+            "checkedLeft": "60%",
+            "boxShadow": "rgb(0 0 0 / 30%) 0px 2px 4px 0px"
+          },
+          "height": "32px",
+          "minWidth": "62px",
+          "backgroundColor": "rgb(229, 229, 229)",
+          "checkedBgColor": "rgb(68, 217, 230)"
+        },
+        "helpBlock": {
+          "titleWeight": 500,
+          "titleColor": "#202020",
+          "padding": "12px 16px 0 16px",
+          "border": "1px solid #dfdfdf",
+          "color": "#202020",
+          "blockTitleWeight": 500,
+          "iconSize": 36
+        },
+        "userMenu": {
+          "boxShadow": "0 -2px 20px 0 rgb(0 0 0 / 30%)",
+          "borderRadius": 8,
+          "itemBorder": "1px solid #e5e5e5",
+          "itemWeight": 400,
+          "itemHeight": 64,
+          "itemFontSize": 16,
+          "width": 330,
+          "backgroundColor": "#fafafa",
+          "subItemBgColor": "#efeff4"
+        },
+        "settingsMenu": {
+          "fontSize": 16,
+          "color": "rgba(3, 20, 66, 0.7)",
+          "fullHeight": true,
+          "subItemBorder": "1px solid #e5e5e5",
+          "subBackgroundColor": "rgb(239, 239, 244)"
+        },
+        "inputContainer": {
+          "backgroundColor": "#efeff4",
+          "padding": 15,
+          "iconButton": true,
+          "borderRadius": 8,
+          "inputHeight": 38,
+          "quickBoxShadow": "0 2px 10px 0 rgb(0 0 0 / 20%)",
+          "quickBorderRadius": 8,
+          "quickPadding": "23px 0",
+          "quickColor": "#051B35",
+          "quickFontWeight": 500,
+          "quickBorder": "none",
+          "quickBg": "#fff"
+        },
+        "paymentMethods": {
+          "inRow": 6,
+          "padding": "15px",
+          "textAlign": "center",
+          "boxShadow": "0 2px 10px 0 rgb(0 0 0 / 20%)",
+          "borderRadius": 8
+        },
+        "settingsPage": {
+          "titleFontWeight": 500,
+          "titleMargin": "0",
+          "subTextMargin": "0 0 24px 0"
+        },
+        "dateFilter": {
+          "padding": "20px 22px",
+          "margin": "0 0 1.5rem 0",
+          "periodBgColor": "#fff",
+          "periodColor": "rgba(0,0,0,0.8)",
+          "periodActiveColor": "rgba(0,0,0,0.8)",
+          "periodBorderRadius": 8,
+          "dateInputBg": "#fff",
+          "borderColor": "#44d9e6"
+        },
+        "table": {
+          "headerFontSize": 12,
+          "headerColor": "#202020",
+          "itemColor": "#202020",
+          "itemFontSize": 11,
+          "itemBorder": "1px solid #cccccc"
+        },
+        "questionsContainer": {
+          "borderRadius": 8,
+          "titleFontWeight": 500,
+          "border": "1px solid #cccccc",
+          "itemBorder": "1px solid #cccccc"
+        },
+        "infoContainer": {
+          "bgColor": "#cff3e1",
+          "color": "#999999",
+          "boldColor": "#000000",
+          "borderRadius": 8,
+          "border": "1px solid #cccccc",
+          "titleMargin": "0 0 8px 0",
+          "limitNumberColor": "#44d9e6",
+          "limitNumberFontSize": 14,
+          "limitNumberFontWeight": 500,
+          "limitInfoColor": "#051B35",
+          "limitInfoTitleWeight": 500
+        },
+        "alert": {
+          "color": "#4c4c4c",
+          "padding": "20px 15px",
+          "iconColor": "#fff",
+          "fontSize": 14,
+          "iconSize": 24,
+          "iconBgSize": 32,
+          "transparentBg": true
+        },
+        "promotions": {},
+        "modals": {
+          "color": "#323232",
+          "title": {
+            "fontWeight": 500,
+            "fontSize": "1.375rem"
+          }
+        },
+        "genericModalWidth": "680px"
       },
       "geoComplyKey": "ShzolMaAK",
       "kambi": {
@@ -79,6 +296,7 @@
         "online": "https://ctn-static.kambi.com/client/fanusny/kambi-bootstrap.js",
         "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js"
       },
+      "xtremepush": "xIPqGJt6fuQgTzDOSuSTN72PPi7rRk6F",
       "dateFormat": "MM-DD-YYYY",
       "redis": {
         "host": "192.168.109.106",
@@ -92,6 +310,325 @@
         "userIdleTimeout": 30,
         "login": {
           "loginCookiesAccept": true
+        },
+        "modals": {
+          "TnC": true,
+          "ResponsibleGambling": false,
+          "ValidationFailed": true,
+          "CookiePolicy": true,
+          "AddBankAccount": true,
+          "GeoComply": true,
+          "PlayerDisabled": true
+        }
+      }
+    },
+    {
+      "name": "desertDiamond",
+      "domains": [
+        {
+          "hostname": "pdd.local",
+          "api": "https://ddmapi-dev.strivegaming.us"
+        }
+      ],
+      "theme": "strive",
+      "dateFormat": "MM-DD-YYYY",
+      "kambi": {
+        "market": "US",
+        "currency": "USD",
+        "online": "https://ctn-static.kambi.com/client/ddusaz/kambi-bootstrap.js",
+        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js"
+      },
+      "geoComplyKey": "ShzolMaAK",
+      "smartyStreets": "108064515683753034",
+      "xtremepush": "xIPqGJt6fuQgTzDOSuSTN72PPi7rRk6F",
+      "zendesk": "TSZNwz1QotpJKs7gf5v8pqT6hb694gZX3assz993",
+      "redis": {
+        "host": "192.168.109.106",
+        "port": 6379,
+        "db": 0,
+        "prefix": "reactNodeStage-",
+        "password": "yAw6H44cHUtvnjC"
+      },
+      "themeSettings": {
+        "boxShadow": {
+          "generic": "none"
+        },
+        "borderRadius": {
+          "sm": "4px"
+        },
+        "colors": {
+          "primary": {
+            "main": "#08A4DA",
+            "light": "#5eed53",
+            "hover": "#0790bf"
+          },
+          "brand": {
+            "main": "#051B35",
+            "light": "#051B35",
+            "text": "#051B35"
+          },
+          "secondary": {
+            "main": "#334C6C",
+            "hover": "#2c425f",
+            "light": "#778CA6"
+          },
+          "danger": {
+            "main": "#F44336"
+          },
+          "success": {
+            "main": "#5CB660"
+          },
+          "info": "#52ADF5",
+          "footer": {
+            "bottomText": "#778CA6"
+          },
+          "body": "#ECF0F3",
+          "lightSpacer": "rgba(119,140,166,0.15)"
+        },
+        "spacing": {
+          "bodyPadding": 25,
+          "bodyPaddingMedium": 20,
+          "bodyPaddingSmall": 20,
+          "footerMainTopPadding": 1.5,
+          "footerMainBottomPadding": 0,
+          "footerPrePadding": 0,
+          "settingsBodyPadding": "30px 15px",
+          "settingsMarginTop": 15
+        },
+        "buttons": {
+          "borderRadius": 3,
+          "fontSize": 16,
+          "color": "#FFF",
+          "transform": "uppercase"
+        },
+        "fonts": {
+          "family": "Proxima Nova",
+          "weight": {
+            "bold": 700
+          },
+          "size": {
+            "lg": "18px",
+            "md": "16"
+          }
+        },
+        "footer": {
+          "listColor": "#fff",
+          "listTitleWeight": 700,
+          "timerBgColor": "#213956",
+          "iconsBg": "#213956",
+          "subFooterHeight": 60,
+          "clockIconSize": 18,
+          "clockIconMargin": "0 6px"
+        },
+        "communicationPrefs": {
+          "items": {
+            "backgroundColor": "#ffffff",
+            "border": "none"
+          }
+        },
+        "pageContainer": {
+          "smallMaxWidth": 480,
+          "backgroundColor": "#ECF0F3"
+        },
+        "pageInnerContainer": {
+          "boxShadow": "0px 2px 4px rgba(5, 27, 53, 0.1)",
+          "titleWeight": 700
+        },
+        "login": {
+          "bgImgTop": "/assets/images/container-bg-img.webp",
+          "linkDecoration": "none",
+          "linkColor": "#08A4DA",
+          "linkFontSize": 16,
+          "buttonFullWidth": true
+        },
+        "registration": {
+          "width": 480,
+          "left": "-5%",
+          "borderRadius": 4,
+          "boxShadow": "0px 4px 4px rgba(5, 27, 53, 0.1)",
+          "bgImg": "/assets/images/container-bg-img.webp",
+          "titleWeight": 700,
+          "blockTitleWeight": 700,
+          "blockTitleTransform": "uppercase",
+          "blockTitleBorder": "1px solid #E6ECF1",
+          "blockTitleColor": "#778CA6",
+          "blockTitleFontSize": 12,
+          "blockTitlePaddingBottom": 8
+        },
+        "inputs": {
+          "border": "1px solid #9DB4C8",
+          "borderRadius": 4,
+          "padding": "10px 13px",
+          "fontSize": 16,
+          "height": 48,
+          "backgroundColor": "#ffff",
+          "color": "#051B35",
+          "labelLeft": 20,
+          "labelTop": 16,
+          "labelActiveFontSize": 12,
+          "labelActiveTop": -10,
+          "labelActiveLeft": 10,
+          "labelBackgroundColor": "#fff",
+          "labelPadding": 4,
+          "marginBottom": 18,
+          "selectPadding": "10px 13px",
+          "disabled": {
+            "border": "none",
+            "backgroundColor": "#E6ECF1",
+            "color": "#778CA6"
+          }
+        },
+        "customFileInput": {
+          "backgroundColor": "#E6ECF1",
+          "labelColor": "#051B35",
+          "buttonFontColor": "#FFF",
+          "buttonFontWeight": 700,
+          "buttonFontSize": "15px",
+          "buttonColor": "#334C6C",
+          "border": "none"
+        },
+        "toggleCheck": {
+          "slider": {
+            "width": "18px",
+            "height": "18px",
+            "left": "4px",
+            "checkedLeft": "55%",
+            "boxShadow": "none"
+          },
+          "height": "24px",
+          "minWidth": "48px",
+          "backgroundColor": "#778CA6",
+          "checkedBgColor": "#08A4DA"
+        },
+        "helpBlock": {
+          "titleWeight": 700,
+          "titleColor": "#778CA6",
+          "padding": "0",
+          "color": "#051B35",
+          "blockTitleWeight": 700,
+          "blockTitleColor": "#051B35",
+          "iconSize": 20
+        },
+        "userMenu": {
+          "boxShadow": "0px 4px 4px rgba(5, 27, 53, 0.1)",
+          "borderRadius": 4,
+          "itemBorder": "1px solid rgba(119, 140, 166, 0.15)",
+          "itemWeight": 700,
+          "itemTransform": "uppercase",
+          "itemFontSize": 14,
+          "itemHeight": 48,
+          "width": 330,
+          "backgroundColor": "#fff",
+          "subItemBgColor": "#ECF0F3",
+          "itemIconColor": "#778CA6"
+        },
+        "settingsMenu": {
+          "fontSize": 14,
+          "color": "#051B35",
+          "borderRadius": 4,
+          "activeBgColor": "#E6ECF1",
+          "fontWeight": 700,
+          "fontTransform": "uppercase",
+          "subBackgroundColor": "#fff",
+          "iconColor": "#778CA6"
+        },
+        "inputContainer": {
+          "backgroundColor": "#fff",
+          "borderRadius": 0,
+          "padding": 25,
+          "fullWidthButton": true,
+          "iconButton": false,
+          "customInput": true,
+          "inputHeight": 68,
+          "inputBgColor": "#E6ECF1",
+          "inputFontSize": 24,
+          "inputFontWeight": 700,
+          "inputAlign": "center",
+          "quickBorderRadius": 4,
+          "quickPadding": "10px 0",
+          "quickColor": "#fff",
+          "quickFontWeight": 700,
+          "quickBorder": "none",
+          "quickBg": "#334C6C"
+        },
+        "paymentMethods": {
+          "inRow": 4,
+          "padding": "25px 40px",
+          "textAlign": "left",
+          "border": "1px solid #E6ECF1",
+          "borderRadius": 4
+        },
+        "settingsPage": {
+          "titleFontWeight": 700,
+          "titleMargin": "0 0 15px 0",
+          "subTextMargin": "0 0 16px 0"
+        },
+        "dateFilter": {
+          "padding": "0",
+          "margin": "0",
+          "periodBgColor": "#E6ECF1",
+          "periodColor": "#051B35",
+          "periodActiveColor": "#fff",
+          "periodBorderRadius": 4,
+          "dateInputBg": "#E6ECF1",
+          "borderColor": "none"
+        },
+        "table": {
+          "headerFontSize": 12,
+          "headerColor": "#778CA6",
+          "itemColor": "#051B35",
+          "itemFontSize": 14,
+          "itemBorder": "1px solid #E6ECF1"
+        },
+        "questionsContainer": {
+          "borderRadius": 4,
+          "bgColor": "#fff",
+          "titleFontWeight": 700,
+          "itemBorder": "1px solid #E6ECF1"
+        },
+        "infoContainer": {
+          "bgColor": "#fff",
+          "color": "#051B35",
+          "boldColor": "#051B35",
+          "borderRadius": 4,
+          "borderTop": "1px solid rgba(119, 140, 166, 0.15)",
+          "titleMargin": "0",
+          "limitNumberColor": "#051B35",
+          "limitNumberFontSize": 18,
+          "limitNumberFontWeight": 700,
+          "limitInfoColor": "#778CA6",
+          "limitInfoTitleWeight": 700,
+          "limitInfoTitleTransform": "uppercase",
+          "limitInfoBorder": "1px solid rgba(119, 140, 166, 0.15)"
+        },
+        "alert": {
+          "color": "#051B35",
+          "padding": "16px 16px",
+          "iconColor": "#FFF",
+          "fontSize": 16,
+          "iconSize": 16,
+          "iconBgSize": 20,
+          "margin": "15px 0 !important",
+          "invertedIconBg": false,
+          "transparentBg": true
+        },
+        "promotions": {
+          "cardPadding": "24px"
+        },
+        "modals": {
+          "color": "#051B35",
+          "title": {
+            "fontWeight": 700,
+            "fontSize": "24px"
+          }
+        },
+        "genericModalWidth": "480px"
+      },
+      "componentSettings": {
+        "userIdleTimeout": 30,
+        "login": {
+          "loginCookiesAccept": true,
+          "emailLogin": true
         },
         "modals": {
           "TnC": true,

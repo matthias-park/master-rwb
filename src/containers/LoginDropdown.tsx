@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
-import { ComponentName, PagesName } from '../constants';
+import { ComponentName, ComponentSettings, PagesName } from '../constants';
 import { useI18n } from '../hooks/useI18n';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useRoutePath } from '../hooks/index';
@@ -60,10 +60,7 @@ const LoginDropdown = ({
 
   const toggleDropdown = (isOpen, _, metadata) => {
     if (metadata.source !== 'keydown') {
-      if (
-        !window.__config__.componentSettings?.login?.loginCookiesAccept ||
-        cookies.accepted
-      ) {
+      if (!ComponentSettings?.login?.loginCookiesAccept || cookies.accepted) {
         if (isOpen) {
           sendDataToGTM({
             event: 'LoginIntention',
@@ -100,8 +97,7 @@ const LoginDropdown = ({
       show={showDropdown}
       onToggle={toggleDropdown}
     >
-      {!window.__config__.componentSettings?.login?.loginCookiesAccept ||
-      cookies.accepted ? (
+      {!ComponentSettings?.login?.loginCookiesAccept || cookies.accepted ? (
         <Link
           className={clsx(
             'btn btn-light btn-header mr-2 mr-xl-3 ml-auto',

@@ -14,8 +14,9 @@ const GeoComplyModal = () => {
     enableModal,
     allActiveModals,
   } = useModal();
-  const { errorCode } = useGeoComply();
+  const { errorCode } = useGeoComply() || {};
   const hideModal = () => disableModal(ComponentName.GeoComplyModal);
+
   useEffect(() => {
     if (
       errorCode &&
@@ -43,10 +44,28 @@ const GeoComplyModal = () => {
       hideCallback={() => hideModal()}
       className="pb-5"
     >
-      <h2 className="mb-2 text-gray-800">{t('geo_comply_modal_title')}</h2>
-      <p className="text-gray-700 mb-3">
-        {errorCode != null ? jsxT(`geo_comply_error_${errorCode}`) : ''}
-      </p>
+      <h2 className="mb-2 modal-title">{t('geo_comply_modal_title')}</h2>
+      <p className="mb-3">{jsxT(`geo_comply_error_${errorCode}`)}</p>
+      <>
+        {errorCode === 612 && (
+          <div className="geocomply-links">
+            <a
+              href={t('geocomply_windows_download_link')}
+              className="geocomply-link"
+            >
+              <i className={`icon icon-${window.__config__.name}-windows8`}></i>
+              {t('geocomply_windows_download')}
+            </a>
+            <a
+              href={t('geocomply_mac_download_link')}
+              className="geocomply-link"
+            >
+              <i className={`icon icon-${window.__config__.name}-appleinc`}></i>
+              {t('geocomply_mac_download')}
+            </a>
+          </div>
+        )}
+      </>
     </GenericModal>
   );
 };

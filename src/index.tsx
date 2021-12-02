@@ -3,14 +3,14 @@ import * as ReactDOM from 'react-dom';
 import App from './containers/App';
 import * as Sentry from '@sentry/react';
 import { errorHandler } from './utils';
-import { DevEnv } from './constants';
+import { Config, DevEnv } from './constants';
 import createStoreAsync from './state';
 import StateProvider from './containers/StateProvider';
 import { setDomLoaded } from './state/reducers/config';
 
-if (!DevEnv && window.__config__.sentryDsn) {
+if (!DevEnv && Config.sentryDsn) {
   Sentry.init({
-    dsn: window.__config__.sentryDsn,
+    dsn: Config.sentryDsn,
     environment: process.env.TARGET_ENV,
     release: process.env.RELEASE ? `react@${process.env.RELEASE}` : undefined,
     beforeSend(event, hint) {
@@ -29,7 +29,7 @@ if (!DevEnv && window.__config__.sentryDsn) {
     },
   });
   Sentry.setTag('cookiesEnabled', window.navigator.cookieEnabled || 'n/a');
-  Sentry.setTag('franchise', window.__config__.name || 'n/a');
+  Sentry.setTag('franchise', Config.name || 'n/a');
 }
 if (DevEnv) {
   import('url').then(url => {
@@ -61,6 +61,15 @@ const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 createStoreAsync().then(store => {
   window.addEventListener('load', () => {
     store.dispatch(setDomLoaded());
+    if (Config.zendesk) {
+      import('./utils/uiUtils')
+        .then(({ injectZendeskScript }) => {
+          injectZendeskScript();
+        })
+        .catch(e => {
+          Sentry.captureMessage(e);
+        });
+    }
   });
   ReactDOM.render(
     <React.StrictMode>

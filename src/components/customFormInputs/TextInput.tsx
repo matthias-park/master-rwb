@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Control, FieldValues, useController } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import clsx from 'clsx';
-import { FormFieldValidation } from '../../constants';
+import { FormFieldValidation, Franchise } from '../../constants';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { FormControlProps } from 'react-bootstrap/FormControl';
@@ -41,6 +41,7 @@ interface Props {
   };
   onEnterPress?: () => void;
   autoComplete?: string;
+  customInputStyle?: boolean;
 }
 
 interface UncontrolledProps extends FormControlProps {
@@ -62,8 +63,10 @@ interface UncontrolledProps extends FormControlProps {
   onCopy?: (e) => void;
   onPaste?: (e) => void;
   onKeyUp?: (e) => void;
-  onFocus?: () => void;
+  onFocus?: (e) => void;
   autoComplete?: string;
+  className?: string;
+  customInputStyle?: boolean;
 }
 
 export const UncontrolledTextInput = React.forwardRef(
@@ -95,8 +98,9 @@ export const UncontrolledTextInput = React.forwardRef(
             ref={ref}
             type={showPassword ? 'text' : props.type}
             placeholder=" "
-            autoComplete={
-              window.__config__.name === 'strive' ? 'off' : props.autoComplete
+            autoComplete={Franchise.strive ? 'off' : props.autoComplete}
+            bsPrefix={
+              props.customInputStyle && props.className ? 'custom-input' : ''
             }
             onKeyUp={e =>
               !!e.target.value ? setShowEye(true) : setShowEye(false)
@@ -171,10 +175,12 @@ const TextInput = ({
   textArea,
   onBlur,
   maskedInput,
+  className,
   size,
   onEnterPress,
   clearDefaultValueOnFocus,
   autoComplete,
+  customInputStyle,
 }: Props) => {
   const hasFocus = useRef<boolean>(false);
   const { field, fieldState } = useController({
@@ -230,6 +236,7 @@ const TextInput = ({
       validation={validation}
       disableCheckMark={disableCheckMark}
       errorMsg={fieldState.error?.message}
+      className={className}
       onBlur={() => {
         onBlur?.();
         field.onBlur();
@@ -274,6 +281,7 @@ const TextInput = ({
       mask={maskedInput?.mask}
       decimalScale={maskedInput?.decimalScale}
       autoComplete={autoComplete}
+      customInputStyle={customInputStyle}
     />
   );
 };

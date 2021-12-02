@@ -51,7 +51,7 @@ const ChangePasswordForm = () => {
             <div>{replaceStringTagsReact(apiResponse?.msg!)}</div>
           </CustomAlert>
         )}
-        <p className="change-pw__title mt-4">
+        <p className="change-pw__title">
           {jsxT('change_password_reset_title')}
         </p>
         <p>{jsxT('change_password_reset_desc')}</p>

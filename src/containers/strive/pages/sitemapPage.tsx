@@ -12,6 +12,11 @@ import { PostItem } from '../../../types/api/Posts';
 import { NavigationRoute } from '../../../types/api/PageConfig';
 import { sortAscending } from '../../../utils';
 import Spinner from 'react-bootstrap/Spinner';
+import {
+  StyledSitemapItem,
+  StyledSitemapItemTitle,
+  StyledSitemapItemToggle,
+} from '../components/styled/StyledSitemap';
 
 interface SitemapListItem {
   path: string;
@@ -59,14 +64,14 @@ const TreeItem = ({
   if (route.emptyRoute && !route.children) return null;
 
   return (
-    <div className="sitemap-accordion__item">
+    <StyledSitemapItem>
       {route.children && (
         <Accordion.Toggle
           className={clsx(
-            'sitemap-accordion__item-toggle icon-add',
+            `icon-${window.__config__.name}-add`,
             active === `key_${route.name}` && 'active',
           )}
-          as="i"
+          as={StyledSitemapItemToggle}
           eventKey={`key_${route.name}`}
           onClick={() =>
             setActive(
@@ -76,9 +81,9 @@ const TreeItem = ({
         ></Accordion.Toggle>
       )}
       {route.emptyRoute ? (
-        <div className="sitemap-accordion__item-title">{route.name}</div>
+        <StyledSitemapItemTitle>{route.name}</StyledSitemapItemTitle>
       ) : (
-        <div className="sitemap-accordion__item-title">
+        <StyledSitemapItemTitle>
           {route.externalLink ? (
             <a href={route.externalLink} target="_blank" rel="noreferrer">
               {route.name}
@@ -86,7 +91,7 @@ const TreeItem = ({
           ) : (
             <Link to={route.redirectTo || route.path}>{route.name}</Link>
           )}
-        </div>
+        </StyledSitemapItemTitle>
       )}
       {route.children && (
         <Accordion.Collapse
@@ -107,7 +112,7 @@ const TreeItem = ({
           </>
         </Accordion.Collapse>
       )}
-    </div>
+    </StyledSitemapItem>
   );
 };
 

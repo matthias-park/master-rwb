@@ -11,6 +11,7 @@ import Form from 'react-bootstrap/Form';
 import useApi from '../../../../hooks/useApi';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
 import PaymentMethods from '../../components/account-settings/PaymentMethods';
+import { Franchise } from '../../../../constants';
 
 interface Props {
   depositRequest: (
@@ -120,9 +121,11 @@ const DepositForm = ({
 
   return (
     <div className="input-container mb-4">
-      <div className="input-container__header d-flex align-items-center">
-        <h2 className="ml-3 mb-0">{t('deposit_input_container_title')}</h2>
-      </div>
+      {Franchise.strive && (
+        <div className="input-container__header d-flex align-items-center">
+          <h2 className="ml-3 mb-0">{t('deposit_input_container_title')}</h2>
+        </div>
+      )}
       <p data-testid="title" className="input-container__title text-14 mb-2">
         {t('select_amount')}
       </p>
@@ -134,88 +137,101 @@ const DepositForm = ({
       </div>
       {banksData && depositData && (
         <FormProvider {...formMethods}>
-          <div className="w-100 mt-2">
-            <LoadingSpinner
-              show={banksDataLoading}
-              className="d-block mx-auto mb-2"
-            />
-            <PaymentMethods
-              data={banksData?.Data.map(acc => {
-                return {
-                  id: acc.bank_id,
-                  value: acc.bank_id,
-                  icon: acc?.icon,
-                  title: acc.name,
-                  onChange: () => setValue('bank_id', acc.bank_id),
-                };
-              })}
-              selected={watch('bank_id')}
-              registerName={'bank_id'}
-              registerOptions={{ required: t('bank_id_required') }}
-              register={register}
-            />
-            <small
-              data-testid="error"
-              className="d-block form-group__error-msg"
+          <div className="d-flex flex-column w-100">
+            <div
+              className={clsx(
+                Franchise.desertDiamond && 'order-2',
+                'w-100 mt-2',
+              )}
             >
-              {formState && formState?.errors['bank_id']?.message}
-            </small>
-          </div>
-          <Form.Group className="w-100">
-            <div className="quick-amounts">
-              {[10, 20, 50, 100].map(value => (
-                <button
-                  key={value}
-                  className={clsx(
-                    'quick-amounts__btn',
-                    watch('amount') === value.toString() && 'active',
-                  )}
-                  onClick={() =>
-                    setValue('amount', value.toString(), {
-                      shouldValidate: true,
-                      shouldDirty: true,
-                    })
-                  }
-                  disabled={disabled}
-                >
-                  {`${user.currency} ${value}`}
-                </button>
-              ))}
+              <LoadingSpinner
+                show={banksDataLoading}
+                className="d-block mx-auto mb-2 w-100"
+              />
+              <PaymentMethods
+                data={banksData?.Data.map(acc => {
+                  return {
+                    id: acc.bank_id,
+                    value: acc.bank_id,
+                    icon: acc?.icon,
+                    title: acc.name,
+                    onChange: () => setValue('bank_id', acc.bank_id),
+                  };
+                })}
+                selected={watch('bank_id')}
+                registerName={'bank_id'}
+                registerOptions={{ required: t('bank_id_required') }}
+                register={register}
+              />
+              <small
+                data-testid="error"
+                className="d-block form-group__error-msg"
+              >
+                {formState && formState?.errors['bank_id']?.message}
+              </small>
             </div>
-            <TextInput
-              id="amount"
-              className="input-container__input"
-              title={t('deposit_input_amount')}
-              maskedInput={{
-                allowEmptyFormatting: true,
-                prefix: `${user.currency} `,
-                thousandSeparator: true,
-                allowNegative: false,
-              }}
-              rules={{
-                validate: validateAmount,
-              }}
-              onBlur={() => {
-                const amount = watch('amount', '');
-                if (!amount.length) {
-                  resetAmount();
-                }
-              }}
-              disabled={disabled}
-              onEnterPress={() => handleSubmit()}
-              clearDefaultValueOnFocus
-              defaultValue={defaultValue.toString()}
-            />
-          </Form.Group>
-          <small className="mb-2">
-            {clsx(
-              minDeposit != null &&
-                `${t('min_deposit')}: ${minDeposit} ${user.currency}`,
-              minDeposit != null && maxDeposit != null && '-',
-              maxDeposit != null &&
-                `${t('max_deposit')}: ${maxDeposit} ${user.currency}`,
-            )}
-          </small>
+            <Form.Group className="d-flex flex-column w-100">
+              <div
+                className={clsx(
+                  Franchise.desertDiamond && 'order-2',
+                  'quick-amounts',
+                )}
+              >
+                {[10, 20, 50, 100].map(value => (
+                  <button
+                    key={value}
+                    className={clsx(
+                      'quick-amounts__btn',
+                      watch('amount') === value.toString() && 'active',
+                    )}
+                    onClick={() =>
+                      setValue('amount', value.toString(), {
+                        shouldValidate: true,
+                        shouldDirty: true,
+                      })
+                    }
+                    disabled={disabled}
+                  >
+                    {`${user.currency} ${value}`}
+                  </button>
+                ))}
+              </div>
+              <TextInput
+                id="amount"
+                className="input-container__input"
+                title={t('deposit_input_amount')}
+                maskedInput={{
+                  allowEmptyFormatting: true,
+                  prefix: `${user.currency} `,
+                  thousandSeparator: true,
+                  allowNegative: false,
+                }}
+                rules={{
+                  validate: validateAmount,
+                }}
+                onBlur={() => {
+                  const amount = watch('amount', '');
+                  if (!amount.length) {
+                    resetAmount();
+                  }
+                }}
+                disabled={disabled}
+                onEnterPress={() => handleSubmit()}
+                clearDefaultValueOnFocus
+                defaultValue={defaultValue.toString()}
+                customInputStyle={Franchise.desertDiamond}
+              />
+              <small className="my-2">
+                {clsx(
+                  minDeposit != null &&
+                    `${t('min_deposit')}: ${minDeposit} ${user.currency}`,
+                  minDeposit != null && maxDeposit != null && '-',
+                  maxDeposit != null &&
+                    `${t('max_deposit')}: ${maxDeposit} ${user.currency}`,
+                )}
+              </small>
+            </Form.Group>
+          </div>
           <LoadingButton
             variant="primary"
             disabled={
@@ -223,7 +239,7 @@ const DepositForm = ({
               !watch('amount', '') ||
               validateAmount(watch('amount', '')) !== true
             }
-            className={clsx('mx-auto my-2' ? 'mx-auto my-2' : '')}
+            className={clsx(Franchise.desertDiamond ? 'mt-3' : 'mx-auto my-2')}
             onClick={handleSubmit}
             data-testid="button"
             loading={!!formState.isSubmitting || loading}

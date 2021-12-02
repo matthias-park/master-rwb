@@ -17,6 +17,7 @@ export interface PageConfig {
 export interface Sidebar {
   name: string;
   link: string;
+  icon?: string;
   children?: {
     name: string;
     link: string;

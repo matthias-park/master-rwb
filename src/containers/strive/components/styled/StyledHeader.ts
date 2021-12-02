@@ -3,7 +3,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import { mediaBreakpointDown, mediaBreakpointUp } from './breakpoints';
 import { fullBg } from './mixins';
 import Link from '../../../../components/Link';
-import Dropdown from 'react-bootstrap/Dropdown';
+import { Dropdown } from 'react-bootstrap';
+import { rgba } from './mixins';
 
 export const StyledNavToggler = styled(Navbar.Toggle)`
   display: flex;
@@ -11,10 +12,10 @@ export const StyledNavToggler = styled(Navbar.Toggle)`
   margin-left: 8px;
   border: none;
   border-radius: 0;
-  .icon-menu {
+  .icon-${window.__config__.name}-menu {
     color: ${props => props.theme.colors.white.main};
   }
-  .icon-menu-close {
+  .icon-${window.__config__.name}-menu-close {
     color: ${props => props.theme.colors.brand.light};
   }
   ${mediaBreakpointDown('xs')} {
@@ -73,6 +74,7 @@ export const StyledCollapseWrp = styled(Navbar.Collapse)`
     }
   }
 `;
+export const StyledHeaderNavItemAnchor = styled.a``;
 export const StyledHeaderNavItem = styled.li``;
 export const StyledHeaderNavItemDiv = styled.div``;
 export const StyledHeaderNav = styled.ul<{
@@ -83,7 +85,7 @@ export const StyledHeaderNav = styled.ul<{
     props.main &&
     css`
       z-index: 2;
-      ${StyledHeaderNavItem}, ${StyledHeaderNavItemDiv} {
+      ${StyledHeaderNavItem}, ${StyledHeaderNavItemDiv}, ${StyledHeaderNavItemAnchor} {
         position: relative;
         &:first-of-type {
           .nav-link {
@@ -120,7 +122,7 @@ export const StyledHeaderNav = styled.ul<{
           i {
             font-size: 23px;
             vertical-align: text-bottom;
-            color: rgba(${props => props.theme.colors.white.main}, 0.85);
+            color: ${props => rgba(props.theme.colors.white.main, 0.85)};
 
             ${mediaBreakpointDown('xl')} {
               line-height: 19px;
@@ -129,7 +131,7 @@ export const StyledHeaderNav = styled.ul<{
 
             ${mediaBreakpointDown('lg')} {
               transform: translateX(26px) translateY(-1px);
-              color: rgba(${props => props.theme.colors.brand.text}, 0.85);
+              color: ${props => rgba(props.theme.colors.brand.text, 0.85)};
             }
           }
         }
@@ -150,10 +152,10 @@ export const StyledHeaderNav = styled.ul<{
               position: absolute;
               align-items: center;
               top: 134px;
-              left: -80px;
+              left: -${props => props.theme.spacing.bodyPadding}px;
               border-radius: 0;
               width: calc(100% + 160px);
-              height: 49px;
+              height: 48px;
               padding: 0 75px;
               z-index: 0;
               .dropdown-item {
@@ -204,7 +206,7 @@ export const StyledHeaderNav = styled.ul<{
             }
             .dropdown-menu {
               padding: 0 40px;
-              left: -45px;
+              left: -${props => props.theme.spacing.bodyPaddingMedium}px;
               width: calc(100% + 90px);
             }
           }
@@ -405,17 +407,17 @@ export const StyledHeaderNav = styled.ul<{
 export const StyledHeaderUserMenuItem = styled.li``;
 export const StyledHeaderUserMenu = styled(Dropdown)`
   .user-menu {
-    width: 330px;
+    width: ${props => props.theme.userMenu.width}px;
     left: calc(100% - 148px);
     transform: translateX(-50%);
-    top: calc(100% + 12px);
+    top: calc(100% + 12px) !important;
     padding: 0;
-    background-color: ${props => props.theme.colors.gray.custom_300};
+    background-color: ${props => props.theme.userMenu.backgroundColor};
     text-align: center;
     padding-bottom: 0;
     z-index: 1100;
-    box-shadow: 0 -2px 20px 0 rgba(0, 0, 0, 0.3);
-
+    box-shadow: ${props => props.theme.userMenu.boxShadow};
+    border-radius: ${props => props.theme.userMenu.borderRadius}px;
     ${mediaBreakpointDown('lg')} {
       left: unset;
       transform: none;
@@ -448,9 +450,12 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
         align-items: center;
         width: 100%;
         height: 100%;
-        height: 64px;
+        height: ${props => props.theme.userMenu.itemHeight}px;
         padding: 0 20px;
         color: ${props => props.theme.colors.brand.text};
+        font-weight: ${props => props.theme.userMenu.itemWeight};
+        text-transform: ${props => props.theme.userMenu.itemTransform};
+        font-size: ${props => props.theme.userMenu.itemFontSize}px;
         cursor: pointer;
         &:before {
           content: '';
@@ -459,7 +464,7 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
           left: 50%;
           transform: translateX(-50%);
           width: 100%;
-          border-bottom: 1px solid ${props => props.theme.colors.gray[100]};
+          border-bottom: ${props => props.theme.userMenu.itemBorder};
         }
         &:hover,
         &:active,
@@ -467,6 +472,9 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
           text-decoration: none;
           background-color: ${props => props.theme.colors.brand.light};
           color: ${props => props.theme.colors.white.main};
+          i {
+            color: ${props => props.theme.colors.white.main};
+          }
         }
         &--no-divider {
           &:before {
@@ -475,11 +483,19 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
           &:hover,
           &:active,
           &:focus {
-            background-color: ${props => props.theme.colors.gray.custom_300};
+            background-color: transparent;
             color: ${props => props.theme.colors.brand.text};
-            font-weight: 500;
+            font-weight: 700;
+            i {
+              color: ${props => props.theme.userMenu.itemIconColor};
+            }
           }
         }
+      }
+      &-icon {
+        font-size: 20px;
+        color: ${props => props.theme.userMenu.itemIconColor};
+        transform: translateY(-1px);
       }
     }
     &-sub-item {
@@ -489,7 +505,11 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
       align-items: center;
       height: 48px;
       color: ${props => props.theme.colors.brand.text};
-      background-color: ${props => props.theme.colors.gray.custom};
+      font-weight: ${props => props.theme.userMenu.itemWeight};
+      text-transform: ${props => props.theme.userMenu.itemTransform};
+      font-size: ${props => props.theme.userMenu.itemFontSize}px;
+      color: ${props => props.theme.colors.brand.text};
+      background-color: ${props => props.theme.userMenu.subItemBgColor};
       padding: 0 20px;
       &:not(:last-of-type):after {
         content: '';
@@ -502,21 +522,9 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
       &:hover,
       &:active,
       &:focus {
-        background-color: rgba(0, 0, 0, 0.9);
+        background-color: ${props => props.theme.colors.primary.main};
         color: ${props => props.theme.colors.white.main};
       }
-    }
-  }
-  .club-card {
-    position: relative;
-    &:before {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% + 40px);
-      border-bottom: 1px solid ${props => props.theme.colors.gray[200]};
     }
   }
   .user-menu:after {
@@ -539,12 +547,82 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
       right: 22px;
     }
   }
+`;
 
-  ${mediaBreakpointDown('xs')} {
-    width: 97.5vw;
-    right: -16px;
-    left: auto;
-    transform: none;
+export const StyledRowHeader = styled('header')`
+  position: relative;
+  display: flex;
+  height: 90px;
+  background-color: ${props => props.theme.colors.brand.main};
+  margin: 0 -${props => props.theme.spacing.bodyPadding}px;
+  padding: ${props => props.theme.spacing.bodyPadding}px;
+  background: url('/assets/images/header/BG.webp');
+  background-size: cover;
+  ${mediaBreakpointDown('xl')} {
+    margin: 0 -${props => props.theme.spacing.bodyPaddingMedium}px;
+  }
+  ${mediaBreakpointDown('lg')} {
+    background: linear-gradient(180deg, #051b35 0%, #053451 100%);
+    margin: 0 -${props => props.theme.spacing.bodyPaddingSmall}px;
+  }
+  .header-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 300px;
+  }
+  .header-logo-mobile {
+    width: 35px;
+  }
+  .mobile-user-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    i {
+      font-size: 30px;
+      color: #778ca6;
+      transition: color 0.3s;
+    }
+    &:after {
+      content: unset;
+    }
+    &:hover,
+    &:focus,
+    &:active {
+      i {
+        color: #fff;
+      }
+    }
+  }
+  .icon-add-action-1 {
+    position: relative;
+    color: ${props => props.theme.colors.secondary.main};
+    font-size: 24px;
+    z-index: 1;
+    &:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
+      background-color: ${props => props.theme.colors.primary.main};
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      z-index: -1;
+    }
+  }
+  .user-menu {
+    margin: unset !important;
+    inset: unset !important;
+    transform: unset !important;
+    top: calc(100% + 15px) !important;
+    right: -11px !important;
+    ${mediaBreakpointDown('xs')} {
+      right: -16px !important;
+    }
   }
 `;
 

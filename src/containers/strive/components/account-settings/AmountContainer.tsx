@@ -1,7 +1,7 @@
 import React from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-
+import clsx from 'clsx';
 interface Props {
   title: string;
   amount: string | number;
@@ -24,7 +24,10 @@ const AmountContainer = ({ title, amount, tooltip }: Props) => {
         >
           <i
             data-testid="amount-tooltip"
-            className="amount-container__icon icon-tooltip"
+            className={clsx(
+              `icon-${window.__config__.name}-tooltip`,
+              'amount-container__icon',
+            )}
           />
         </OverlayTrigger>
       )}

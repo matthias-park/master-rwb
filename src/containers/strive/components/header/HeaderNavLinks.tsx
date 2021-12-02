@@ -12,7 +12,10 @@ import { matchPath, useLocation } from 'react-router';
 import useDesktopWidth from '../../../../hooks/useDesktopWidth';
 import { useAuth } from '../../../../hooks/useAuth';
 import useHover from '../../../../hooks/useHover';
-import { StyledHeaderNavItem } from '../styled/StyledHeader';
+import {
+  StyledHeaderNavItem,
+  StyledHeaderNavItemAnchor,
+} from '../styled/StyledHeader';
 
 interface HeaderNavLinkProps {
   data: HeaderRoute;
@@ -79,12 +82,15 @@ export const HeaderNavClassicLink = ({
     });
   };
 
+  const disableDropdown = data.links.length === 1 && mobile;
+
   return (
     <Dropdown
       ref={dropdownRef}
-      as={StyledHeaderNavItem}
+      href={disableDropdown ? data.links[0].path : ''}
+      as={disableDropdown ? StyledHeaderNavItemAnchor : StyledHeaderNavItem}
       className="nav-item"
-      show={currentLinkActive}
+      show={currentLinkActive && !disableDropdown}
     >
       {!mobile ? (
         <Dropdown.Toggle
@@ -119,7 +125,14 @@ export const HeaderNavClassicLink = ({
             <span>{t(data.name)}</span>
             {data.externalLink && <i className="icon-redirect"></i>}
           </span>
-          <i className="nav-icon icon-down"></i>
+          {
+            <i
+              className={clsx(
+                'nav-icon ',
+                !disableDropdown && 'icon-strive-down',
+              )}
+            ></i>
+          }
         </Dropdown.Toggle>
       )}
       <Dropdown.Menu>

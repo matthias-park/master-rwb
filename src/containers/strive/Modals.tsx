@@ -1,18 +1,30 @@
 import React from 'react';
-// import ResponsibleGamblingModal from './components/modals/ResponsibleGamblingModal';
-import CookiePolicyModal from './components/modals/CookiePolicyModal';
-import AddBankAccountModal from './components/modals/AddBankAccountModal';
-import TermsAndConditionsModal from './components/modals/TermsAndConditionsModal';
 import { postApi } from '../../utils/apiUtils';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { removeFalsyFromObject } from '../../utils/index';
 import ValidationFailedModal from './components/modals/ValidationFailedModal';
 import { useI18n } from '../../hooks/useI18n';
-import { ComponentName } from '../../constants';
-import GeoComplyModal from './components/modals/GeoComplyModal';
+import { ComponentName, ComponentSettings } from '../../constants';
 import PlayerDisabledModal from './components/modals/PlayerDisabledModal';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state';
+import loadable from '@loadable/component';
+
+const LoadableTermsAndConditionsModal = loadable(
+  () => import('./components/modals/TermsAndConditionsModal'),
+);
+const LoadableResponsibleGamblingModal = loadable(
+  () => import('./components/modals/ResponsibleGamblingModal'),
+);
+const LoadableGeoComplyModal = loadable(
+  () => import('./components/modals/GeoComplyModal'),
+);
+const LoadableCookiePolicyModal = loadable(
+  () => import('./components/modals/CookiePolicyModal'),
+);
+const LoadableAddBankAccountModal = loadable(
+  () => import('./components/modals/AddBankAccountModal'),
+);
 
 const addBankAccountSubmit = async data => {
   removeFalsyFromObject(data);
@@ -31,14 +43,18 @@ const Modals = () => {
   }
   return (
     <>
-      <TermsAndConditionsModal />
-      {/* <ResponsibleGamblingModal /> */}
+      <LoadableTermsAndConditionsModal />
+      {ComponentSettings?.modals.ResponsibleGambling && (
+        <LoadableResponsibleGamblingModal />
+      )}
       <ValidationFailedModal />
-      <GeoComplyModal />
+      {ComponentSettings?.modals.GeoComply && <LoadableGeoComplyModal />}
       <PlayerDisabledModal />
-      {activeModal === ComponentName.CookiesModal && <CookiePolicyModal />}
+      {activeModal === ComponentName.CookiesModal && (
+        <LoadableCookiePolicyModal />
+      )}
       {activeModal === ComponentName.AddBankAccountModal && (
-        <AddBankAccountModal onSubmit={addBankAccountSubmit} />
+        <LoadableAddBankAccountModal onSubmit={addBankAccountSubmit} />
       )}
     </>
   );

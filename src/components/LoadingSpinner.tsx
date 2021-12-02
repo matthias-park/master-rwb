@@ -5,13 +5,20 @@ import { isIOS } from 'react-device-detect';
 interface Props {
   show?: boolean;
   className?: string;
+  wrapperClassName?: string;
   small?: boolean;
   variant?: string;
 }
 
-const LoadingSpinner = ({ show, className, small, variant }: Props) => {
+const LoadingSpinner = ({
+  show,
+  className,
+  small,
+  variant,
+  wrapperClassName,
+}: Props) => {
   return (
-    <span className="d-inline-flex">
+    <span className={wrapperClassName}>
       {show && (
         <Spinner
           as="span"

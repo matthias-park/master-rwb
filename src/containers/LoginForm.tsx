@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   ComponentName,
+  ComponentSettings,
   FormFieldValidation,
   PagesName,
   VALIDATIONS,
@@ -22,9 +23,7 @@ import Button from 'react-bootstrap/Button';
 const LoginForm = () => {
   const { t } = useI18n();
   const [apiError, setApiError] = useState<string | null>(null);
-  const loginId = window.__config__.componentSettings?.login?.emailLogin
-    ? 'email'
-    : 'username';
+  const loginId = ComponentSettings?.login?.emailLogin ? 'email' : 'username';
   const [pinRequired, setPinRequired] = useState(false);
   const formMethods = useForm<{
     username: string;
@@ -51,10 +50,7 @@ const LoginForm = () => {
     setPinRequired(false);
   };
   const onSubmit = async ({ username, email, password, pin }) => {
-    if (
-      window.__config__.componentSettings?.login?.loginCookiesAccept &&
-      !cookies.accepted
-    ) {
+    if (ComponentSettings?.login?.loginCookiesAccept && !cookies.accepted) {
       enableModal(ComponentName.CookiesModal);
     } else {
       setApiError(null);

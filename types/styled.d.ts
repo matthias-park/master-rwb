@@ -39,9 +39,16 @@ declare module 'styled-components' {
       green: string;
       teal: string;
       cyan: string;
-      success: string;
+      success: {
+        main: string;
+        alt: string;
+      };
       warning: string;
-      danger: string;
+      danger: {
+        main: string;
+        bg: string;
+      };
+      info: string;
       light: string;
       dark: string;
       subBrand: string;
@@ -59,7 +66,21 @@ declare module 'styled-components' {
         light: string;
         text: string;
       };
-      secondary: string;
+      secondary: {
+        main: string;
+        light?: string;
+        hover: string;
+      };
+      body: string;
+      footer: {
+        bottomText: string;
+      };
+    };
+    borderRadius: {
+      sm: string;
+    };
+    boxShadow: {
+      generic: string;
     };
     sizes: {
       xs: string;
@@ -72,5 +93,252 @@ declare module 'styled-components' {
       xxxlg: string;
       xxxl: string;
     };
+    spacing: {
+      bodyPadding: number;
+      bodyPaddingMedium: number;
+      bodyPaddingSmall: number;
+      footerMainTopPadding: number;
+      footerMainBottomPadding: number;
+      footerPrePadding: number;
+      settingsBodyPadding: string;
+      settingsMarginTop: number;
+    };
+    buttons: {
+      borderRadius: number;
+      fontSize: number;
+      color?: string;
+      transform?: string;
+    };
+    fonts: {
+      family: string;
+      weight: {
+        bold: number;
+      };
+      size: {
+        lg: string;
+        md: string;
+      };
+    };
+    footer: {
+      listColor: string;
+      listTitleWeight: number;
+      timerBgColor?: string;
+      iconsBg?: string;
+      subFooterHeight: number;
+      clockIconSize: number;
+      clockIconMargin: string;
+    };
+    pageContainer: {
+      smallMaxWidth: number;
+      backgroundColor: string;
+    };
+    communicationPrefs: {
+      items: {
+        backgroundColor: string;
+        border: string;
+      };
+    };
+    pageInnerContainer: {
+      boxShadow?: string;
+      titleWeight: number;
+    };
+    login: {
+      bgImgTop?: string;
+      linkDecoration?: string;
+      linkColor?: string;
+      linkFontSize?: number;
+      buttonFullWidth?: boolean;
+      formBorderBottom?: string;
+    };
+    registration: {
+      width: number;
+      left: string;
+      borderRadius: number;
+      boxShadow: string;
+      bgImg?: string;
+      titleWeight: number;
+      blockTitleWeight: number;
+      blockTitleTransform?: string;
+      blockTitleBorder?: string;
+      blockTitleColor?: string;
+      blockTitleFontSize: number;
+      blockTitlePaddingBottom?: number;
+    };
+    inputs: {
+      border: string;
+      borderRadius: number;
+      padding: string;
+      fontSize: number;
+      height: number;
+      backgroundColor: string;
+      color: string;
+      labelTop: number;
+      labelLeft: number;
+      labelActiveFontSize: number;
+      labelActiveTop: number;
+      labelActiveLeft: number;
+      labelBackgroundColor: string;
+      labelPadding: number;
+      selectPadding: string;
+      marginBottom: number;
+      disabled: {
+        border: string;
+        backgroundColor: string;
+        color: string;
+      };
+    };
+    customFileInput: {
+      buttonColor: string;
+      labelColor: string;
+      buttonFontColor: string;
+      backgroundColor: string;
+      buttonFontWeight: number;
+      buttonFontSize: string;
+      border: string;
+    };
+    toggleCheck: {
+      slider: {
+        width: string;
+        height: string;
+        left: string;
+        checkedLeft: string;
+        boxShadow: string;
+      };
+      height: string;
+      minWidth: string;
+      backgroundColor: string;
+      checkedBgColor: string;
+    };
+    helpBlock: {
+      titleWeight: number;
+      titleColor: string;
+      padding: string;
+      border?: string;
+      color: string;
+      blockTitleWeight: number;
+      blockTitleColor: string;
+      iconSize: number;
+    };
+    userMenu: {
+      boxShadow: string;
+      borderRadius: number;
+      itemBorder: string;
+      itemWeight: number;
+      itemTransform?: string;
+      itemFontSize: number;
+      itemHeight: number;
+      itemIconColor?: string;
+      width: number;
+      backgroundColor: string;
+      subItemBgColor: string;
+    };
+    settingsMenu: {
+      fontSize: number;
+      color: string;
+      fullHeight?: boolean;
+      borderRadius?: number;
+      activeBgColor?: string;
+      fontWeight?: number;
+      fontTransform?: string;
+      subBackgroundColor: string;
+      subItemBorder: string;
+      iconColor?: string;
+    };
+    inputContainer: {
+      backgroundColor: string;
+      borderRadius: number;
+      padding: number;
+      fullWidthButton?: boolean;
+      iconButton?: boolean;
+      customInput?: boolean;
+      inputHeight?: number;
+      inputBgColor?: string;
+      inputFontSize?: number;
+      inputFontWeight?: number;
+      inputAlign?: string;
+      quickBoxShadow?: string;
+      quickBorderRadius: number;
+      quickPadding: string;
+      quickColor: string;
+      quickFontWeight: number;
+      quickBorder: string;
+      quickBg?: string;
+    };
+    paymentMethods: {
+      inRow: number;
+      padding: string;
+      textAlign: string;
+      boxShadow?: string;
+      border?: string;
+      borderRadius: number;
+    };
+    settingsPage: {
+      titleFontWeight: number;
+      titleMargin: string;
+      subTextMargin: string;
+    };
+    dateFilter: {
+      padding: string;
+      margin: string;
+      periodBgColor: string;
+      periodColor: string;
+      periodActiveColor: string;
+      periodBorderRadius: number;
+      dateInputBg: string;
+      borderColor: string;
+    };
+    table: {
+      headerFontSize: number;
+      headerColor: string;
+      itemColor: string;
+      itemFontSize: number;
+      itemBorder: string;
+    };
+    questionsContainer: {
+      borderRadius: number;
+      bgColor?: string;
+      titleFontWeight: number;
+      border?: string;
+      itemBorder: string;
+    };
+    infoContainer: {
+      bgColor: string;
+      color: string;
+      borderRadius: number;
+      border?: string;
+      borderTop?: string;
+      titleMargin?: string;
+      limitNumberColor: string;
+      limitNumberFontSize: number;
+      limitNumberFontWeight: number;
+      limitInfoColor: string;
+      limitInfoTitleWeight: number;
+      limitInfoTitleTransform?: string;
+      limitInfoBorder?: string;
+      boldColor: string;
+    };
+    alert: {
+      color: string;
+      padding: string;
+      iconColor: string;
+      iconSize: number;
+      iconBgSize: number;
+      fontSize: number;
+      invertedIconBg?: boolean;
+      transparentBg?: boolean;
+      margin: string;
+    };
+    promotions: {
+      cardPadding?: string;
+      cardShadow?: string;
+    };
+    modals: {
+      color: string;
+      title: {
+        fontWeight: number;
+        fontSize: string;
+      };
+    };
+    genericModalWidth: string;
   }
 }

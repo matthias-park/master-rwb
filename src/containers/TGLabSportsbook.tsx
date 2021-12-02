@@ -3,7 +3,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 import { Dispatch } from 'redux';
-import { PagesName } from '../constants';
+import { Config, PagesName } from '../constants';
 import { useRoutePath } from '../hooks';
 import { useAuth } from '../hooks/useAuth';
 import { useConfig } from '../hooks/useConfig';
@@ -30,13 +30,13 @@ const insertSbConfig = (
 ) => {
   window.__SB_INIT__ = {
     config: {
-      fr: window.__config__.tgLabSb!.id,
+      fr: Config.tgLabSb!.id,
       lang: locale,
       country: 'lt',
       tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
       pre_path: prematchPath ? `/${locale}${prematchPath}` : null,
       live_path: livePath ? `/${locale}${livePath}` : null,
-      format: window.__config__.tgLabSb!.format,
+      format: Config.tgLabSb!.format,
       preloader: true,
       load_history: false,
       token,
@@ -121,7 +121,7 @@ const TGLabSportsbook = ({ liveSports }: TGLabSportsbookProps) => {
   useEffect(() => {
     if (
       locale &&
-      window.__config__.tgLabSb &&
+      Config.tgLabSb &&
       !user.loading &&
       (!user.logged_in || state.userToken)
     ) {
@@ -142,7 +142,7 @@ const TGLabSportsbook = ({ liveSports }: TGLabSportsbookProps) => {
         scriptElement.id = scriptId;
         scriptElement.async = true;
         scriptElement.setAttribute('type', 'text/javascript');
-        scriptElement.setAttribute('src', window.__config__.tgLabSb!.bundle);
+        scriptElement.setAttribute('src', Config.tgLabSb!.bundle);
         document.head.appendChild(scriptElement);
       }
       const sbContainer = document.getElementById(containerDivId);

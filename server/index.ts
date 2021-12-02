@@ -74,6 +74,7 @@ app.get('*', async (req, res) => {
   const hostname = req.hostname.replace('www.', '');
   const filePath = path.join(BUILD_FOLDER, `/${hostname}.html`);
   if (fs.existsSync(filePath)) {
+    res.set('Cache-Control', 'no-store');
     return res.sendFile(filePath);
   }
   logger.error(`file not found ${filePath}`);

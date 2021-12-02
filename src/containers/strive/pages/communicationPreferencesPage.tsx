@@ -51,12 +51,13 @@ const CommunicationPrefCard = ({
               {...registerField(field.id)}
               id={t(field.id)}
               checked={values[field.id] === 1 ? true : false}
-              onClick={() =>
+              className="mb-0"
+              onClick={() => {
                 setValues({
                   ...values,
                   [field.id]: values[field.id] === 1 ? 0 : 1,
-                })
-              }
+                });
+              }}
             />
           </span>
         </div>
@@ -146,8 +147,10 @@ const CommunicationPreferencesPage = () => {
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       <form onSubmit={handleSubmit(updateSettingsSubmit)}>
-        <h1>{jsxT('communication_preferences_page_title')}</h1>
-        <p className="mb-4">
+        <h1 className="account-settings__title">
+          {jsxT('communication_preferences_page_title')}
+        </h1>
+        <p className="account-settings__sub-text">
           {jsxT('communication_preferences_page_sub_text')}
         </p>
         {isDataLoading && (
@@ -168,13 +171,13 @@ const CommunicationPreferencesPage = () => {
                 (apiResponse && (apiResponse.success ? 'success' : 'danger')) ||
                 ''
               }
-              className="mb-0"
+              className="mb-3"
             >
               <div
                 dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }}
               />
             </CustomAlert>
-            <div className="list-unstyled communication-prefs">
+            <ul className="list-unstyled communication-prefs">
               {data.blocks.map(block => (
                 <CommunicationPrefCard
                   key={block.id}
@@ -186,11 +189,10 @@ const CommunicationPreferencesPage = () => {
                   registerField={register}
                 />
               ))}
-            </div>
+            </ul>
             <LoadingButton
               loading={formState.isSubmitting}
               disabled={!!!Object.keys(formState.dirtyFields).length}
-              className="mt-3"
               variant="primary"
               type="submit"
             >

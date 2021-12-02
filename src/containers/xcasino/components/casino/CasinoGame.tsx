@@ -1,7 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
-import { useAuth } from '../../../../hooks/useAuth';
 import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
 import LazyLoad from 'react-lazyload';
 import Spinner from 'react-bootstrap/Spinner';
