@@ -124,9 +124,7 @@ const theme: DefaultTheme = mergeDeep(
     pageInnerContainer: {
       titleWeight: 400,
     },
-    login: {
-      formBorderBottom: '1px solid #e5e5e5',
-    },
+    login: {},
     registration: {
       width: 630,
       borderRadius: 10,
@@ -184,7 +182,6 @@ const theme: DefaultTheme = mergeDeep(
       titleWeight: 500,
       titleColor: '#202020',
       padding: '12px 16px 0 16px',
-      border: '1px solid #dfdfdf',
       color: '#202020',
       blockTitleWeight: 500,
       iconSize: 36,
@@ -203,29 +200,23 @@ const theme: DefaultTheme = mergeDeep(
     settingsMenu: {
       fontSize: 16,
       color: 'rgba(3, 20, 66, 0.7)',
-      fullHeight: true,
       subItemBorder: '1px solid #e5e5e5',
       subBackgroundColor: 'rgb(239, 239, 244)',
     },
     inputContainer: {
       backgroundColor: '#efeff4',
       padding: 15,
-      iconButton: true,
       borderRadius: 8,
-      inputHeight: 38,
-      quickBoxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
       quickBorderRadius: 8,
       quickPadding: '23px 0',
       quickColor: '#051B35',
       quickFontWeight: 500,
       quickBorder: 'none',
-      quickBg: '#fff',
     },
     paymentMethods: {
       inRow: 6,
       padding: '15px',
       textAlign: 'center',
-      boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
       borderRadius: 8,
     },
     settingsPage: {
@@ -253,7 +244,6 @@ const theme: DefaultTheme = mergeDeep(
     questionsContainer: {
       borderRadius: 8,
       titleFontWeight: 500,
-      border: '1px solid #cccccc',
       itemBorder: '1px solid #cccccc',
     },
     infoContainer: {
@@ -261,8 +251,6 @@ const theme: DefaultTheme = mergeDeep(
       color: '#999999',
       boldColor: '#000000',
       borderRadius: 8,
-      border: '1px solid #cccccc',
-      titleMargin: '0 0 8px 0',
       limitNumberColor: '#44d9e6',
       limitNumberFontSize: 14,
       limitNumberFontWeight: 500,
@@ -276,7 +264,6 @@ const theme: DefaultTheme = mergeDeep(
       fontSize: 14,
       iconSize: 24,
       iconBgSize: 32,
-      transparentBg: true,
     },
     promotions: {},
     modals: {

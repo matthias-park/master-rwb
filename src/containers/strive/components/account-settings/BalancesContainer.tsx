@@ -22,7 +22,7 @@ const BalancesContainer = () => {
         </div>
       )}
       <ul className="balances-list">
-        {!!data.Data &&
+        {!!data?.Data &&
           Object.entries(data.Data).map(([key, value]) => (
             <li className="balances-list__item">
               <div className="balances-list__content">
