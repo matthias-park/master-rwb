@@ -25,6 +25,7 @@ import useGTM from '../../../hooks/useGTM';
 import PaymentMethods from '../components/account-settings/PaymentMethods';
 import { useDispatch } from 'react-redux';
 import { addSymbols } from '../../../state/reducers/translations';
+import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 import BalancesContainer from '../components/account-settings/BalancesContainer';
 import { Franchise } from '../../../constants';
 
@@ -253,6 +254,12 @@ const WithdrawalPage = () => {
       msg: submitResponse.msg,
     };
 
+  const kycValidationOkay = [
+    KYC_VALIDATOR_STATUS.Success,
+    KYC_VALIDATOR_STATUS.CanPlayAndShouldUpdatePersonalData,
+    KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataOnly,
+  ].includes(Number(user?.validator_status));
+
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       {isDataLoading && (
@@ -318,7 +325,7 @@ const WithdrawalPage = () => {
               }
               loading={!withdrawalConfirmData && withdrawalLoading}
               onSubmit={requestWithdrawal}
-              disabled={!selectedBankAccount}
+              disabled={!selectedBankAccount || !kycValidationOkay}
               currency={user.currency}
               quickAmounts={
                 Franchise.desertDiamond || Franchise.gnogaz
