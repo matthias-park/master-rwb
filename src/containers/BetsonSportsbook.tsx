@@ -5,6 +5,7 @@ import { CustomWindowEvents } from '../constants';
 import useApi from '../hooks/useApi';
 import { useAuth } from '../hooks/useAuth';
 import RailsApiResponse from '../types/api/RailsApiResponse';
+import { deviceType } from 'react-device-detect';
 
 interface sportsbookMessage {
   type: 'interaction';
@@ -14,8 +15,22 @@ const BetsonSportsbook = () => {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const { user } = useAuth();
   const [sbLoaded, setSbLoaded] = useState(false);
+
+  const tokenParams = (() => {
+    switch (deviceType) {
+      case 'browser':
+        return { type: '3', channel: '1' };
+      case 'mobile':
+        return { type: '2', channel: '2' };
+      case 'tablet':
+        return { type: '4', channel: '2' };
+      default:
+        return { type: '1', channel: '1' };
+    }
+  })();
+
   const { data, error } = useApi<RailsApiResponse<string | {}>>([
-    '/restapi/v1/sportsbook/get_token',
+    `/restapi/v1/sportsbook/get_token?channel=${tokenParams.channel}&device_type=${tokenParams.type}`,
     user.logged_in,
   ]);
 
