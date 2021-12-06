@@ -140,7 +140,7 @@ const DepositForm = ({
           <div className="d-flex flex-column w-100">
             <div
               className={clsx(
-                Franchise.desertDiamond && 'order-2',
+                (Franchise.desertDiamond || Franchise.gnogaz) && 'order-2',
                 'w-100 mt-2',
               )}
             >
@@ -173,7 +173,7 @@ const DepositForm = ({
             <Form.Group className="d-flex flex-column w-100">
               <div
                 className={clsx(
-                  Franchise.desertDiamond && 'order-2',
+                  (Franchise.desertDiamond || Franchise.gnogaz) && 'order-2',
                   'quick-amounts',
                 )}
               >
@@ -219,7 +219,7 @@ const DepositForm = ({
                 onEnterPress={() => handleSubmit()}
                 clearDefaultValueOnFocus
                 defaultValue={defaultValue.toString()}
-                customInputStyle={Franchise.desertDiamond}
+                customInputStyle={Franchise.desertDiamond || Franchise.gnogaz}
               />
               <small className="my-2">
                 {clsx(
@@ -239,7 +239,11 @@ const DepositForm = ({
               !watch('amount', '') ||
               validateAmount(watch('amount', '')) !== true
             }
-            className={clsx(Franchise.desertDiamond ? 'mt-3' : 'mx-auto my-2')}
+            className={clsx(
+              Franchise.desertDiamond || Franchise.gnogaz
+                ? 'mt-3'
+                : 'mx-auto my-2',
+            )}
             onClick={handleSubmit}
             data-testid="button"
             loading={!!formState.isSubmitting || loading}

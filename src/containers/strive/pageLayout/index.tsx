@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
 import PageHeader from './PageHeader';
-import PageFooter from './PageFooter';
 import CookieConsent from '../components/CookieConsent';
 import { matchPath, useHistory, useLocation } from 'react-router-dom';
 import LayoutWithSidebar from './LayoutWithSidebar';
@@ -9,10 +8,14 @@ import { useUIConfig } from '../../../hooks/useUIConfig';
 import ErrorBoundary from '../../ErrorBoundary';
 import { useI18n } from '../../../hooks/useI18n';
 import useGTM from '../../../hooks/useGTM';
-import { PagesName } from '../../../constants';
+import { PagesName, Franchise } from '../../../constants';
 import { ConfigLoaded } from '../../../types/Config';
 import NotFoundPage from '../pages/notFoundPage';
 import { useAuth } from '../../../hooks/useAuth';
+import loadable from '@loadable/component';
+
+const LoadablePageColumnFooter = loadable(() => import('./PageColumnFooter'));
+const LoadablePageFooter = loadable(() => import('./PageFooter'));
 
 let prevPathname: string | null = null;
 
@@ -117,7 +120,11 @@ const PageLayout = ({ children }) => {
           {configLoaded === ConfigLoaded.Loaded && children}
           {configLoaded === ConfigLoaded.Error && <NotFoundPage />}
           <ErrorBoundary>
-            <PageFooter />
+            {Franchise.gnogaz ? (
+              <LoadablePageColumnFooter />
+            ) : (
+              <LoadablePageFooter />
+            )}
           </ErrorBoundary>
         </>
       )}

@@ -182,7 +182,8 @@ export const promotionsStyles = css`
     flex-direction: column;
     flex-basis: calc(25% - 8px);
     margin: 4px;
-    background-color: ${props => props.theme.colors.white.main};
+    background-color: ${props =>
+      props.theme.promotions.containerBgColor || props.theme.colors.white.main};
     font-family: 'Roboto', sans-serif;
     box-shadow: ${props => props.theme.promotions.cardShadow};
     border-bottom-right-radius: ${props => props.theme.borderRadius.sm};
@@ -202,7 +203,9 @@ export const promotionsStyles = css`
       padding: ${props => props.theme.promotions.cardPadding};
       &-title {
         font-size: 16px;
-        color: ${props => rgba(props.theme.colors.black.main, 0.87)};
+        color: ${props =>
+          props.theme.promotions.containerTitleColor ||
+          rgba(props.theme.colors.black.main, 0.87)};
         font-weight: 600;
         margin-bottom: 4px;
       }
@@ -214,7 +217,9 @@ export const promotionsStyles = css`
       }
       &-text {
         font-size: 14px;
-        color: ${props => props.theme.colors.gray[700]};
+        color: ${props =>
+          props.theme.promotions.containerColor ||
+          props.theme.colors.gray[700]};
         margin-bottom: 15px;
       }
     }
@@ -400,7 +405,10 @@ export const promotionsStyles = css`
       }
       .promotion-inner__body {
         padding: 25px;
-        background-color: ${props => props.theme.colors.white.main};
+        background-color: ${props =>
+          props.theme.promotions.containerBgColor ||
+          props.theme.colors.white.main};
+        color: ${props => props.theme.promotions.containerColor};
       }
       .promo-container {
         width: 100%;

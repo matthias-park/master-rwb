@@ -26,6 +26,7 @@ import PaymentMethods from '../components/account-settings/PaymentMethods';
 import { useDispatch } from 'react-redux';
 import { addSymbols } from '../../../state/reducers/translations';
 import BalancesContainer from '../components/account-settings/BalancesContainer';
+import { Franchise } from '../../../constants';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -264,7 +265,9 @@ const WithdrawalPage = () => {
       )}
       {data && (
         <>
-          {window.__config__.name === 'desertDiamond' && <BalancesContainer />}
+          {(Franchise.desertDiamond || Franchise.gnogaz) && (
+            <BalancesContainer />
+          )}
           <h1 className="account-settings__title mb-4">{data.Data.title}</h1>
           {window.__config__.name === 'strive' && (
             <AmountContainer
@@ -318,7 +321,7 @@ const WithdrawalPage = () => {
               disabled={!selectedBankAccount}
               currency={user.currency}
               quickAmounts={
-                window.__config__.name === 'desertDiamond'
+                Franchise.desertDiamond || Franchise.gnogaz
                   ? [10, 20, 50, 100]
                   : []
               }

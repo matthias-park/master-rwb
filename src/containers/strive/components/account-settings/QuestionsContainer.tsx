@@ -1,6 +1,6 @@
 import React from 'react';
 import Accordion from 'react-bootstrap/Accordion';
-import { PagesName } from '../../../../constants';
+import { PagesName, Franchise } from '../../../../constants';
 import { useRoutePath } from '../../../../hooks';
 import { useI18n } from '../../../../hooks/useI18n';
 import Link from '../../../../components/Link';
@@ -42,6 +42,8 @@ const QuestionItem = ({ item, index }) => {
 const QuestionsContainer = ({ items, className }: Props) => {
   const { t } = useI18n();
   const faqRoute = useRoutePath(PagesName.FaqPage);
+
+  if (Franchise.gnogaz) return null;
   return (
     <div className={className ? className : ''}>
       <h3 className="mb-3 questions-title">{t('user_questions')}</h3>

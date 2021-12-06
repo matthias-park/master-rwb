@@ -525,4 +525,5 @@ export const Franchise = {
   strive: Config.name === FranchiseNames.Strive,
   desertDiamond: Config.name === FranchiseNames.DesertDiamond,
   xCasino: Config.name === FranchiseNames.Xcasino,
+  gnogaz: Config.name === FranchiseNames.Gnogaz,
 };

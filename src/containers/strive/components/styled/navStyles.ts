@@ -23,7 +23,8 @@ export const navStyles = css`
         top: 50px;
         min-height: ${props => props.theme.settingsMenu?.fullHeight && '225px'};
         max-height: 77vh;
-        background-color: ${props => props.theme.colors.white.main};
+        background-color: ${props =>
+          props.theme.settingsMenu.bgColor || props.theme.colors.white.main};
         overflow-y: auto;
         &::-webkit-scrollbar {
           width: 8px;
@@ -75,7 +76,10 @@ export const navStyles = css`
         left: 0;
         bottom: 0;
         width: 95%;
-        border-bottom: 1px solid ${props => props.theme.colors.gray[100]};
+        border-bottom: 1px solid
+          ${props =>
+            props.theme.settingsMenu.bottomBorderColor ||
+            props.theme.colors.gray[100]};
       }
       &-link {
         align-items: center;
@@ -91,7 +95,7 @@ export const navStyles = css`
       }
       &-title-icon {
         transform: none !important;
-        font-size: 20px;
+        font-size: ${props => props.theme.settingsMenu.iconSize || 20}px;
         vertical-align: bottom;
         &:before {
           color: ${props => props.theme.settingsMenu.iconColor};
@@ -127,7 +131,12 @@ export const navStyles = css`
           left: 0;
           bottom: 0;
           width: 95%;
-          border-bottom: ${props => props.theme.settingsMenu?.subItemBorder};
+          border-bottom: ${props =>
+            props.theme.settingsMenu.subItemBorder ||
+            `1px solid ${
+              props.theme.settingsMenu.bottomBorderColor ||
+              props.theme.colors.gray[100]
+            }`};
         }
         &-link {
           display: block;

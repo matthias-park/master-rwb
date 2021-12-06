@@ -28,7 +28,8 @@ import { useDispatch } from 'react-redux';
 import { setLocale } from '../../../state/reducers/config';
 import Button from 'react-bootstrap/Button';
 import { useRoutePath } from '../../../hooks';
-import { PagesName } from '../../../constants';
+import { PagesName, Franchise } from '../../../constants';
+import { useLocation } from 'react-router-dom';
 
 const SubNavLinks = ({
   links,
@@ -115,7 +116,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
   }
   return (
     <>
-      {window.__config__.name === 'desertDiamond' ? (
+      {Franchise.desertDiamond || Franchise.gnogaz ? (
         <>
           <Button
             as={Link}
@@ -162,10 +163,11 @@ const PageHeader = () => {
   });
   const subLinks = header?.find(link => link.subLinks);
   const homePageRoute = useRoutePath(PagesName.HomePage, true);
+  const location = useLocation();
 
   return (
     <>
-      {window.__config__.name === 'desertDiamond' ? (
+      {Franchise.desertDiamond || Franchise.gnogaz ? (
         <StyledRowHeader
           className={clsx(
             backdrop.ignoredComponents.includes(ComponentName.Header) &&
@@ -173,7 +175,7 @@ const PageHeader = () => {
           )}
         >
           {desktopWidth ? (
-            <Link to={homePageRoute} className="d-flex">
+            <Link to={homePageRoute} className="header-logo-wrp">
               <img
                 alt="logo"
                 className="header-logo"
@@ -181,13 +183,31 @@ const PageHeader = () => {
               />
             </Link>
           ) : (
-            <Link to={homePageRoute} className="d-flex">
+            <Link
+              to={homePageRoute}
+              className={clsx(
+                'header-logo-mobile-wrp',
+                Franchise.desertDiamond && 'd-flex',
+              )}
+            >
               <img
                 alt="logo"
                 className="header-logo-mobile"
                 src={`/assets/images/logo/logo-small.svg`}
               />
             </Link>
+          )}
+          {Franchise.gnogaz && (
+            <ul className="nav-links">
+              <li
+                className={clsx(
+                  'nav-links__link',
+                  location.pathname.includes('/sports') && 'active',
+                )}
+              >
+                <Link to="/sports">Sports</Link>
+              </li>
+            </ul>
           )}
           <div className="ml-auto">
             <UserBlock mobile={true} />

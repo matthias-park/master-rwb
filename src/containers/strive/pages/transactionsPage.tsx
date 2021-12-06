@@ -15,6 +15,7 @@ import useApi from '../../../hooks/useApi';
 import useLocalStorage from '../../../hooks/useLocalStorage';
 import BalancesContainer from '../components/account-settings/BalancesContainer';
 import TablePagination from '../components/account-settings/TablePagination';
+import { Franchise } from '../../../constants';
 
 interface Transactions {
   pages: number;
@@ -270,8 +271,8 @@ const TransactionsPage = () => {
       </h1>
       <div
         className={clsx(
-          window.__config__.name === 'desertDiamond'
-            ? 'bg-white p-4 mb-4'
+          Franchise.desertDiamond || Franchise.gnogaz
+            ? 'outer-info-block p-4 mb-4'
             : 'd-contents',
         )}
       >

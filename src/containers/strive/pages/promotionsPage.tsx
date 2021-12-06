@@ -12,7 +12,7 @@ import { makeCollapsible } from '../../../utils/uiUtils';
 import clsx from 'clsx';
 import RedirectNotFound from '../../../components/RedirectNotFound';
 import { useRoutePath } from '../../../hooks';
-import { PagesName } from '../../../constants';
+import { PagesName, Franchise } from '../../../constants';
 import { filterPromotionsList } from '../../../utils';
 import { Helmet } from 'react-helmet-async';
 import * as Sentry from '@sentry/react';
@@ -26,7 +26,7 @@ const PromoLinkEl = ({
 }: {
   item: PostItem;
   className?: string;
-  children: JSX.Element | JSX.Element[];
+  children: React.ReactNode;
 }) => {
   const promotionsPath = useRoutePath(PagesName.PromotionsPage);
   const linkTo = promotionsPath.replace(':slug', item.slug);
@@ -57,18 +57,20 @@ const PromoItem = ({ item, variant }: { item: PostItem; variant?: string }) => {
         alt="promo"
         className="promotion-block__img"
         src={item.image.url || '/assets/images/promo/promo-front.png'}
-      ></img>
-      <div className="promotion-block__body">
-        {item.title && (
-          <h3 className="promotion-block__body-subtitle">{item.title}</h3>
-        )}
-        <h2 className="promotion-block__body-title">{item.page_title}</h2>
-        {item.button_text && (
-          <button className="promo-button promotion-block__body-button">
-            {item.button_text}
-          </button>
-        )}
-      </div>
+      />
+      {!Franchise.gnogaz && (
+        <div className="promotion-block__body">
+          {item.title && (
+            <h3 className="promotion-block__body-subtitle">{item.title}</h3>
+          )}
+          <h2 className="promotion-block__body-title">{item.page_title}</h2>
+          {item.button_text && (
+            <button className="promo-button promotion-block__body-button">
+              {item.button_text}
+            </button>
+          )}
+        </div>
+      )}
     </PromoLinkEl>
   );
 };
@@ -114,13 +116,13 @@ const PromotionsList = () => {
   return (
     <main
       className={clsx(
-        window.__config__.name === 'desertDiamond'
+        Franchise.desertDiamond || Franchise.gnogaz
           ? 'px-sm-3'
           : 'mb-5 pt-0 pt-xl-5',
         'min-vh-70',
       )}
     >
-      {window.__config__.name === 'desertDiamond' && (
+      {(Franchise.desertDiamond || Franchise.gnogaz) && (
         <h1 className="account-settings__title pl-1 mb-2">
           {t('promotions_page_title')}
         </h1>
@@ -137,13 +139,13 @@ const PromotionsList = () => {
       ) : (
         <div
           className={clsx(
-            window.__config__.name === 'desertDiamond'
+            Franchise.desertDiamond || Franchise.gnogaz
               ? 'promotions-list-inner'
               : 'mt-4 promotions-list',
           )}
         >
           {promotions.map(item => {
-            if (window.__config__.name === 'desertDiamond') {
+            if (Franchise.desertDiamond || Franchise.gnogaz) {
               return (
                 <div key={item.id} className="promo-card promo-card--big">
                   <PromoItem item={item} variant="sm" />
@@ -266,7 +268,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
   return (
     <main
       className={clsx(
-        window.__config__.name === 'desertDiamond' ? 'pl-3' : 'pt-xl-5',
+        Franchise.desertDiamond || Franchise.gnogaz ? 'pl-3' : 'pt-xl-5',
         'min-vh-70',
       )}
     >
@@ -280,7 +282,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
           content={clsx(promoTitle && `${promoTitle} - `, t('seo_site_name'))}
         />
       </Helmet>
-      {window.__config__.name === 'desertDiamond' && (
+      {(Franchise.desertDiamond || Franchise.gnogaz) && (
         <Link to={'/promotions'}>
           <h1 className="account-settings__title d-flex align-items-center mb-3">
             <i className="icon-desertDiamond-left1 mr-2"></i>
@@ -296,7 +298,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
       {!!data && (
         <div
           className={clsx(
-            window.__config__.name === 'desertDiamond'
+            Franchise.desertDiamond || Franchise.gnogaz
               ? 'promotion-inner promotion-inner--block'
               : 'promotion-inner',
             !promoImageLoaded && 'd-none',
@@ -310,20 +312,24 @@ const PromotionPage = ({ slug }: { slug: string }) => {
               onError={() => setPromoImageLoaded(true)}
               src={bannerImg || fallbackBannerImg}
             ></img>
-            <div className="promo-bg-text">
-              {promoTitle && (
-                <h3 className="promo-bg-text__subtitle">{promoTitle}</h3>
-              )}
-              <h2 className="promo-bg-text__title">{data?.Data?.page_title}</h2>
-              {data?.Data.button_text && data?.Data.inner_page_button_link && (
-                <Link
-                  to={data?.Data?.inner_page_button_link}
-                  className="promo-button promo-bg-text__button d-inline-block"
-                >
-                  {data?.Data.button_text}
-                </Link>
-              )}
-            </div>
+            {!Franchise.gnogaz && (
+              <div className="promo-bg-text">
+                {promoTitle && (
+                  <h3 className="promo-bg-text__subtitle">{promoTitle}</h3>
+                )}
+                <h2 className="promo-bg-text__title">
+                  {data?.Data?.page_title}
+                </h2>
+                {data?.Data.button_text && data?.Data.inner_page_button_link && (
+                  <Link
+                    to={data?.Data?.inner_page_button_link}
+                    className="promo-button promo-bg-text__button d-inline-block"
+                  >
+                    {data?.Data.button_text}
+                  </Link>
+                )}
+              </div>
+            )}
           </div>
           <div className="promotion-inner__body promo-container">
             <p className="promotion-inner__body-short">

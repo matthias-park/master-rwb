@@ -39,8 +39,8 @@ const LoginPage = () => {
     <main className="page-container">
       <div
         className={clsx(
-          'page-inner page-inner--small',
-          Franchise.desertDiamond && 'page-inner--bg',
+          'page-inner page-inner--small login',
+          (Franchise.desertDiamond || Franchise.gnogaz) && 'page-inner--bg',
         )}
       >
         <h1

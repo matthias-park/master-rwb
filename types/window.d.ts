@@ -20,6 +20,7 @@ export declare global {
         retail?: string;
         api: string;
       };
+      sbTechUrl?: string;
       zendesk?: string;
       smartyStreets?: string;
       tgLabSb?: {

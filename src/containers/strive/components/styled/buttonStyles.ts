@@ -7,11 +7,13 @@ const buttonStyles = css`
     justify-content: center;
     align-items: center;
     font-weight: 600;
-    max-height: 39px;
+    max-height: ${props => props.theme.buttons.maxHeight || 39}px;
     border-radius: ${props => props.theme.buttons.borderRadius}px !important;
     font-size: ${props => props.theme.buttons.fontSize}px !important;
     color: ${props => props.theme.buttons.color} !important;
     text-transform: ${props => props.theme.buttons.transform};
+    padding-top: ${props => props.theme.buttons.paddingY}px;
+    padding-bottom: ${props => props.theme.buttons.paddingY}px;
     span {
       display: inline-flex;
       margin-right: 4px;
@@ -54,30 +56,53 @@ const buttonStyles = css`
     &&,
     &&&.disabled,
     &&&:disabled {
-      background-color: ${props => props.theme.colors.primary.main};
-      border-color: ${props => props.theme.colors.primary.main};
-      color: ${props => props.theme.colors.brand.text};
+      background-color: ${props =>
+        props.theme.buttons.primaryBgColor ||
+        props.theme.colors.primary.main} !important;
+      border-color: ${props =>
+        props.theme.buttons.primaryBgColor ||
+        props.theme.colors.primary.main} !important;
+      color: ${props =>
+        props.theme.buttons.primaryColor ||
+        props.theme.colors.brand.text} !important;
     }
     &:active,
     &:focus {
-      background-color: ${props => props.theme.colors.primary.main} !important;
-      color: ${props => props.theme.colors.brand.text} !important;
+      background-color: ${props =>
+        props.theme.buttons.primaryBgColor ||
+        props.theme.colors.primary.main} !important;
+      color: ${props =>
+        props.theme.buttons.primaryColor ||
+        props.theme.colors.brand.text} !important;
     }
     &:hover {
-      background-color: ${props => props.theme.colors.primary.hover} !important;
-      border-color: ${props => props.theme.colors.primary.hover} !important;
+      background-color: ${props =>
+        props.theme.buttons.primaryBgHoverColor ||
+        props.theme.colors.primary.hover} !important;
+      border-color: ${props =>
+        props.theme.buttons.primaryBgHoverColor ||
+        props.theme.colors.primary.hover} !important;
     }
   }
   .btn-secondary {
-    background-color: ${props => props.theme.colors.secondary.main};
-    border-color: ${props => props.theme.colors.secondary.main};
+    background-color: ${props =>
+      props.theme.buttons.secondaryBgColor ||
+      props.theme.colors.secondary.main};
+    border-color: ${props =>
+      props.theme.buttons.secondaryBgColor ||
+      props.theme.colors.secondary.main};
+    color: ${props =>
+      props.theme.buttons.secondaryColor || props.theme.colors.white.main};
     &.active,
     &:hover,
     &:focus,
     &:active {
       background-color: ${props =>
+        props.theme.buttons.secondaryBgHoverColor ||
         props.theme.colors.secondary.hover} !important;
-      border-color: ${props => props.theme.colors.secondary.hover} !important;
+      border-color: ${props =>
+        props.theme.buttons.secondaryBgHoverColor ||
+        props.theme.colors.secondary.hover} !important;
     }
   }
   .btn-outline-light {

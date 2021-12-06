@@ -12,14 +12,18 @@ const customStyles = css`
     -webkit-overflow-scrolling: touch;
   }
 
+  html, body {
+    overflow-x: hidden;
+  }
+
   body {
     font-family: ${props => props.theme.fonts.family}, 'Myriad Pro', sans-serif;
     max-width: 1920px;
     padding: 0 ${props => props.theme.spacing.bodyPadding}px 0
       ${props => props.theme.spacing.bodyPadding}px !important;
     margin: auto;
-    overflow-x: hidden;
     background-color: ${props => props.theme.colors.body} !important;
+    color: ${props => props.theme.colors.brand.text} !important;
     ${mediaBreakpointDown('xl')} {
       padding: 0 ${props => props.theme.spacing.bodyPaddingMedium}px 0
         ${props => props.theme.spacing.bodyPaddingMedium}px !important;
@@ -40,9 +44,14 @@ const customStyles = css`
     }
   }
 
+  a {
+    color: ${props => props.theme.colors.brand.text};
+  }
+
   a:hover {
     text-decoration: none;
     cursor: pointer;
+    color: ${props => props.theme.colors.brand.hover};
   }
 
   .text-line-overflow {
@@ -97,7 +106,8 @@ const customStyles = css`
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: ${props =>
+      props.theme.backdrop?.bgColor || 'rgba(255, 255, 255, 0.6)'};
     z-index: 1000;
     &.show {
       display: block;
@@ -172,6 +182,7 @@ const customStyles = css`
     height: ${props => props.theme.toggleCheck.height};
     min-width: ${props => props.theme.toggleCheck.minWidth};
     background-color: ${props => props.theme.toggleCheck.backgroundColor};
+    border: ${props => props.theme.toggleCheck.border};
     border-radius: 16px;
     cursor: pointer;
     input {
@@ -234,7 +245,8 @@ const customStyles = css`
       margin-bottom: 16px;
     }
     &__body {
-      background-color: rgba(255, 255, 255, 0.08);
+      background-color: ${props =>
+        props.theme.helpBlock.bgColor || 'rgba(255, 255, 255, 0.08)'};
       border-radius: 8px;
       padding: ${props => props.theme.helpBlock.padding};
       &-item {
@@ -250,11 +262,38 @@ const customStyles = css`
           border-bottom: ${props => props.theme.helpBlock.border};
         }
         &-icon {
+          position: relative;
           font-size: ${props => props.theme.helpBlock.iconSize - 3}px;
-          margin-right: 15px;
+          margin-right: ${props =>
+            props.theme.helpBlock.iconBgColor ? '25px' : '15px'};
           margin-left: 3px;
-          opacity: 0.8;
-          color: ${props => props.theme.helpBlock.titleColor};
+          color: ${props =>
+            props.theme.helpBlock.iconColor ||
+            props.theme.helpBlock.titleColor};
+          i {
+            position: relative;
+            &:before {
+              z-index: 1;
+              position: relative;
+            }
+            &:after {
+              background-color:  ${props => props.theme.helpBlock.iconBgColor};
+            }
+            ${props =>
+              props.theme.helpBlock.iconBgColor &&
+              `
+            &:after {
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              content: "";
+              height: 40px;
+              width: 40px;
+              transform: translateY(-50%) translateX(-50%);
+              border-radius: 50%;
+            }
+          `}
+          }
         }
         &-text {
           .title {
@@ -264,8 +303,7 @@ const customStyles = css`
           padding-right: 15px;
           .gray {
             color: ${props =>
-              props.theme.helpBlock.blockTitleColor ||
-              props.theme.colors.black.custom};
+              props.theme.helpBlock.color || props.theme.colors.black.custom};
           }
         }
       }
@@ -278,14 +316,44 @@ const customStyles = css`
         color: $black-custom;
       }
       .help-block__body {
-        background-color: rgba(255, 255, 255, 0.08);
+        background-color: ${props =>
+          props.theme.helpBlock.bgColor || 'rgba(255, 255, 255, 0.08)'};
         border: ${props => props.theme.helpBlock.border};
         padding: ${props => props.theme.helpBlock.padding};
         &-item {
           &-icon {
+            position: relative;
             color: ${props => props.theme.helpBlock.titleColor};
             opacity: 1;
             font-size: ${props => props.theme.helpBlock.iconSize}px;
+            color: ${props =>
+              props.theme.helpBlock.iconColor ||
+              props.theme.helpBlock.titleColor};
+            i {
+              position: relative;
+              &:before {
+                z-index: 1;
+                position: relative;
+              }
+              &:after {
+                background-color:  ${props =>
+                  props.theme.helpBlock.iconBgColor};
+              }
+              ${props =>
+                props.theme.helpBlock.iconBgColor &&
+                `
+                &:after {
+                  position: absolute;
+                  left: 50%;
+                  top: 50%;
+                  content: "";
+                  height: 40px;
+                  width: 40px;
+                  transform: translateY(-50%) translateX(-50%);
+                  border-radius: 50%;
+                }
+              `}
+            }
           }
           &-text {
             .title {
@@ -295,8 +363,7 @@ const customStyles = css`
             color: ${props => props.theme.colors.black.custom};
             .gray {
               color: ${props =>
-                props.theme.helpBlock.blockTitleColor ||
-                props.theme.colors.black.custom};
+                props.theme.helpBlock.color || props.theme.colors.black.custom};
             }
           }
         }
@@ -533,13 +600,20 @@ const customStyles = css`
       min-width: 850px;
       max-width: 1200px;
       align-self: center;
-      background-color: ${props => props.theme.colors.white.main};
+      background-color: ${props =>
+        props.theme.pageInnerContainer.bgColor ||
+        props.theme.colors.white.main};
       box-shadow: ${props => props.theme.pageInnerContainer.boxShadow};
       padding: 40px;
       margin: 40px 0;
       border-radius: 4px;
       &__title {
         font-weight: ${props => props.theme.pageInnerContainer.titleWeight};
+      }
+      &.login {
+        .page-inner__title {
+          color: ${props => props.theme.login.titleColor};
+        }
       }
       &--small {
         width: 35%;
@@ -720,23 +794,28 @@ const customStyles = css`
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: ${props => props.theme.colors.gray.custom};
+    background-color: ${props =>
+      props.theme.registration?.blockBgColor || props.theme.colors.gray.custom};
+    
+
     padding: 30px 40px;
     border-radius: 8px;
     &__text {
-      color: ${props => props.theme.colors.gray[700]};
+      color: ${props => props.theme.colors.brand.text};
     }
   }
   .outer-info-block {
     display: flex;
     flex-direction: column;
-    background-color: ${props => props.theme.colors.white.main};
+    background-color: ${props =>
+      props.theme.outerInfoBlock?.bgColor || props.theme.colors.white.main};
     border-radius: ${props => props.theme.borderRadius.sm};
     padding: 25px 30px;
     box-shadow: ${props => props.theme.boxShadow.generic};
   }
   .info-block {
-    background-color: ${props => props.theme.colors.gray[100]};
+    background-color: ${props =>
+      props.theme.registration?.blockBgColor || props.theme.colors.gray[100]};
     border-radius: 8px;
     padding: 16px;
     &__title {
@@ -751,7 +830,7 @@ const customStyles = css`
       }
     }
     &__text {
-      color: ${props => props.theme.colors.gray[700]};
+      color: ${props => props.theme.colors.brand.text};
       font-size: 14px;
     }
   }
@@ -775,6 +854,7 @@ const customStyles = css`
     &__content {
       color: ${props => props.theme.alert.color};
       font-size: ${props => props.theme.alert.fontSize}px;
+      font-weight: ${props => props.theme.alert.fontWeight};
       padding: 0 15px;
       line-height: 20px;
       margin-bottom: 0;
@@ -867,6 +947,73 @@ const customStyles = css`
       font-size: 14px;
       text-align: center;
     }
+  }
+  .sb-bottom-nav {
+    display: none;
+    position: fixed;
+    justify-content: space-around;
+    align-items: center;
+    bottom: 0;
+    left: 0;
+    height: 70px;
+    width: 100%;
+    background-color: #000;
+    box-shadow: inset 0px 1px 0px rgb(184 184 184 / 25%);
+    padding-left: 0;
+    margin-bottom: 0;
+    z-index: 3;
+    &__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      list-style-type: none;
+      font-size: 12px;
+      color: ${props => props.theme.colors.secondary.light};
+      transition: color 0.3s;
+      i {
+        font-size: 24px;
+        margin-bottom: 8px;
+        color: ${props => props.theme.colors.secondary.light};
+        transition: color 0.3s;
+        &.icon-gnogaz-all,
+        &.icon-gnogaz-in-play {
+          font-size: 27px;
+        }
+      }
+      &.active {
+        color: ${props => props.theme.colors.primary.main};
+        i {
+          color: ${props => props.theme.colors.primary.main};
+        }
+      }
+    }
+    ${mediaBreakpointDown('md')} {
+      display: flex;
+    }
+  }
+  
+  }
+  .sb-iframe {
+    position: relative !important;
+    z-index: 2 !important;
+    width: calc(100% + ${props =>
+      props.theme.spacing.bodyPadding * 2}px) !important;
+    right: ${props => props.theme.spacing.bodyPadding}px !important;
+    ${mediaBreakpointDown('xl')} {
+      width: calc(100% + ${props =>
+        props.theme.spacing.bodyPaddingMedium * 2}px) !important;
+      right: ${props => props.theme.spacing.bodyPaddingMedium}px !important;
+    }
+    ${mediaBreakpointDown('lg')} {
+      width: calc(100% + ${props =>
+        props.theme.spacing.bodyPaddingSmall * 2}px) !important;
+      right: ${props => props.theme.spacing.bodyPaddingSmall}px !important;
+    }
+    &-container {
+      overflow-y: hidden !important;
+    }
+    border: none;
+    width: 100%;
   }
 `;
 

@@ -1,9 +1,12 @@
 import React from 'react';
-import PageFooter from './PageFooter';
 import Sidebar from '../components/Sidebar';
 import HelpBlock from '../components/HelpBlock';
 import { Sidebar as SidebarProps } from '../../../types/api/PageConfig';
+import { Franchise } from '../../../constants';
+import loadable from '@loadable/component';
 
+const LoadablePageColumnFooter = loadable(() => import('./PageColumnFooter'));
+const LoadablePageFooter = loadable(() => import('./PageFooter'));
 interface Props {
   sidebar: SidebarProps[];
   rightSidebar: boolean;
@@ -36,7 +39,7 @@ const LayoutWithSidebar = ({
         </div>
       )}
     </div>
-    <PageFooter />
+    {Franchise.gnogaz ? <LoadablePageColumnFooter /> : <LoadablePageFooter />}
   </>
 );
 

@@ -185,7 +185,7 @@ const ContactUsPage = () => {
     [t],
   );
 
-  if (Franchise.desertDiamond) {
+  if (Franchise.desertDiamond || Franchise.gnogaz) {
     return (
       <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
         {isDataLoading && (

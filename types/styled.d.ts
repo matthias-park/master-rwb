@@ -65,6 +65,7 @@ declare module 'styled-components' {
         main: string;
         light: string;
         text: string;
+        hover: string;
       };
       secondary: {
         main: string;
@@ -75,6 +76,7 @@ declare module 'styled-components' {
       footer: {
         bottomText: string;
       };
+      container?: string;
     };
     borderRadius: {
       sm: string;
@@ -108,6 +110,14 @@ declare module 'styled-components' {
       fontSize: number;
       color?: string;
       transform?: string;
+      primaryBgColor?: string;
+      primaryBgHoverColor?: string;
+      secondaryBgColor?: string;
+      secondaryBgHoverColor?: string;
+      primaryColor?: string;
+      secondaryColor?: string;
+      paddingY?: number;
+      maxHeight?: number;
     };
     fonts: {
       family: string;
@@ -118,6 +128,16 @@ declare module 'styled-components' {
         lg: string;
         md: string;
       };
+    };
+    header: {
+      logoSize?: number;
+      logoSizeMobile?: number;
+      logoPosition?: string;
+      borderBottom?: string;
+      topOffset?: number;
+      backgroundMobile?: string;
+      marginBottom?: number;
+      navHeightMobile?: number;
     };
     footer: {
       listColor: string;
@@ -133,6 +153,8 @@ declare module 'styled-components' {
       backgroundColor: string;
     };
     communicationPrefs: {
+      bgColor?: string;
+      color?: string;
       items: {
         backgroundColor: string;
         border: string;
@@ -141,6 +163,7 @@ declare module 'styled-components' {
     pageInnerContainer: {
       boxShadow?: string;
       titleWeight: number;
+      bgColor?: string;
     };
     login: {
       bgImgTop?: string;
@@ -149,6 +172,7 @@ declare module 'styled-components' {
       linkFontSize?: number;
       buttonFullWidth?: boolean;
       formBorderBottom?: string;
+      titleColor?: string;
     };
     registration: {
       width: number;
@@ -157,12 +181,15 @@ declare module 'styled-components' {
       boxShadow: string;
       bgImg?: string;
       titleWeight: number;
+      titleColor?: string;
       blockTitleWeight: number;
       blockTitleTransform?: string;
       blockTitleBorder?: string;
       blockTitleColor?: string;
       blockTitleFontSize: number;
       blockTitlePaddingBottom?: number;
+      bgColor?: string;
+      blockBgColor?: string;
     };
     inputs: {
       border: string;
@@ -181,6 +208,7 @@ declare module 'styled-components' {
       labelPadding: number;
       selectPadding: string;
       marginBottom: number;
+      iconColor: string;
       disabled: {
         border: string;
         backgroundColor: string;
@@ -208,6 +236,7 @@ declare module 'styled-components' {
       minWidth: string;
       backgroundColor: string;
       checkedBgColor: string;
+      border?: string;
     };
     helpBlock: {
       titleWeight: number;
@@ -218,6 +247,9 @@ declare module 'styled-components' {
       blockTitleWeight: number;
       blockTitleColor: string;
       iconSize: number;
+      iconColor?: string;
+      iconBgColor?: string;
+      bgColor: string;
     };
     userMenu: {
       boxShadow: string;
@@ -240,9 +272,12 @@ declare module 'styled-components' {
       activeBgColor?: string;
       fontWeight?: number;
       fontTransform?: string;
+      bgColor?: string;
       subBackgroundColor: string;
-      subItemBorder: string;
+      subItemBorder?: string;
       iconColor?: string;
+      iconSize?: number;
+      bottomBorderColor?: string;
     };
     inputContainer: {
       backgroundColor: string;
@@ -256,6 +291,7 @@ declare module 'styled-components' {
       inputFontSize?: number;
       inputFontWeight?: number;
       inputAlign?: string;
+      inputColor?: string;
       quickBoxShadow?: string;
       quickBorderRadius: number;
       quickPadding: string;
@@ -276,6 +312,8 @@ declare module 'styled-components' {
       titleFontWeight: number;
       titleMargin: string;
       subTextMargin: string;
+      minHeight?: string;
+      marginTop?: number;
     };
     dateFilter: {
       padding: string;
@@ -285,6 +323,8 @@ declare module 'styled-components' {
       periodActiveColor: string;
       periodBorderRadius: number;
       dateInputBg: string;
+      dateInputColor?: string;
+      dateInputBoder?: string;
       borderColor: string;
     };
     table: {
@@ -303,6 +343,7 @@ declare module 'styled-components' {
     };
     infoContainer: {
       bgColor: string;
+      textBgColor: string;
       color: string;
       borderRadius: number;
       border?: string;
@@ -317,6 +358,12 @@ declare module 'styled-components' {
       limitInfoBorder?: string;
       boldColor: string;
     };
+    outerInfoBlock: {
+      bgColor?: string;
+    };
+    balancesList: {
+      titleColor?: string;
+    };
     alert: {
       color: string;
       padding: string;
@@ -324,6 +371,7 @@ declare module 'styled-components' {
       iconSize: number;
       iconBgSize: number;
       fontSize: number;
+      fontWeight?: number;
       invertedIconBg?: boolean;
       transparentBg?: boolean;
       margin: string;
@@ -331,6 +379,9 @@ declare module 'styled-components' {
     promotions: {
       cardPadding?: string;
       cardShadow?: string;
+      containerBgColor?: string;
+      containerTitleColor?: string;
+      containerColor?: string;
     };
     modals: {
       color: string;
@@ -340,5 +391,8 @@ declare module 'styled-components' {
       };
     };
     genericModalWidth: string;
+    backdrop: {
+      bgColor?: string;
+    };
   }
 }

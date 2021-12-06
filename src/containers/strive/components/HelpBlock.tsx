@@ -44,9 +44,7 @@ const HelpBlock = ({
             </span>
             <div className="help-block__body-item-text">
               <p className="title">{jsxT('help_call_us_number')}</p>
-              <p className="text-14 weight-500 mb-2">
-                {jsxT('help_call_us_number_data')}
-              </p>
+              <p className="text-14 gray">{jsxT('help_call_us_number_data')}</p>
               {['', '_2', '_3'].map(id => (
                 <p key={id} className="text-14 gray">
                   {jsxT(`help_call_days${id}`)}

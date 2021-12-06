@@ -29,7 +29,8 @@ export const registrationStyles = css`
     left: ${props => props.theme.registration.left};
     margin: auto;
     border-radius: ${props => props.theme.registration.borderRadius}px;
-    background-color: ${props => props.theme.colors.white.main};
+    background-color: ${props =>
+      props.theme.registration.bgColor || props.theme.colors.white.main};
     box-shadow: ${props => props.theme.registration.boxShadow};
     background-image: url(${props => props.theme.registration.bgImg});
     background-position: 200% -2%;
@@ -118,6 +119,7 @@ export const registrationStyles = css`
       margin-bottom: 16px;
       padding-right: 100px;
       font-weight: ${props => props.theme.registration.titleWeight};
+      color: ${props => props.theme.registration.titleColor};
       ${mediaBreakpointDown('sm')} {
         padding-right: 70px;
       }

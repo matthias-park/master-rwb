@@ -57,7 +57,7 @@ const UserMenuLink = ({
                     className="user-menu__list-sub-item"
                     onClick={() => setShowDropdown(false)}
                   >
-                    {Franchise.desertDiamond && (
+                    {(Franchise.desertDiamond || Franchise.gnogaz) && (
                       <i className="user-menu__list-item-icon icon-tooltip invisible mr-3"></i>
                     )}
                     {t(childLink.name)}
@@ -118,7 +118,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
           show={showDropdown}
           onToggle={isOpen => showUserMenu(isOpen)}
         >
-          {Franchise.desertDiamond ? (
+          {Franchise.desertDiamond || Franchise.gnogaz ? (
             <>
               <Button
                 as={Link}
@@ -129,8 +129,10 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 {user.balance} {user.currency}
                 <i className="icon-add-action-1 ml-2"></i>
               </Button>
-              {!!window.__config__.xtremepush && (
+              {!!window.__config__.xtremepush ? (
                 <LoadableXtremePush className="mx-4" />
+              ) : (
+                <div className="px-2"></div>
               )}
               {desktopWidth ? (
                 <Dropdown.Toggle
@@ -193,7 +195,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
           >
             <div className="user-menu-wrp">
               <ul className="user-menu__list">
-                {Franchise.desertDiamond ? (
+                {Franchise.desertDiamond || Franchise.gnogaz ? (
                   <Dropdown.Item as="div" className="my-2 px-0">
                     <Link
                       to={depositRoute}
@@ -236,7 +238,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 onClick={onLogoutClick}
               >
                 <LoadingSpinner show={loggingOut} small className="mr-1" />
-                {Franchise.desertDiamond && (
+                {(Franchise.desertDiamond || Franchise.gnogaz) && (
                   <i
                     className={clsx(
                       'icon-desertDiamond-logout',

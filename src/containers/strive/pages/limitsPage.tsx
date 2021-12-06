@@ -75,7 +75,7 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
             </Accordion.Toggle>
           )}
         </div>
-        <p className="text-14 text-gray-700 pt-1">{t(limitData.note)}</p>
+        <p className="text-14 pt-1">{t(limitData.note)}</p>
       </div>
       <div className="info-container__text">
         <p className="text-gray-400 mb-0">
@@ -161,7 +161,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
             </Accordion.Toggle>
           )}
         </div>
-        <p className="text-14 text-gray-700 pt-1">{t(limitData.note)}</p>
+        <p className="text-14 pt-1">{t(limitData.note)}</p>
       </div>
       <div className="info-container__text">
         {limitData.data.length ? (

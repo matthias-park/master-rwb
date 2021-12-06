@@ -62,8 +62,8 @@ const BetsonSportsbook = () => {
             width="100%"
             onLoad={() => setSbLoaded(true)}
             onError={() => setSbLoaded(true)}
-            height="100%"
-            className={clsx('mt-xl-5 sb-iframe', !sbLoaded && 'd-none')}
+            height="100vh"
+            className={clsx('mt-xl-5 sb-iframe vh-100', !sbLoaded && 'd-none')}
           />
         )}
       {(!data?.Data || !sbLoaded) && (

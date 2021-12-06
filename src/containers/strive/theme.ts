@@ -200,7 +200,6 @@ const theme: DefaultTheme = mergeDeep(
     settingsMenu: {
       fontSize: 16,
       color: 'rgba(3, 20, 66, 0.7)',
-      subItemBorder: '1px solid #e5e5e5',
       subBackgroundColor: 'rgb(239, 239, 244)',
     },
     inputContainer: {

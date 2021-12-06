@@ -10,6 +10,9 @@ const LoadableKambiSportsbook = loadable(() => import('../../KambiSportsbook'));
 const LoadableBetsonSportsbook = loadable(
   () => import('../../BetsonSportsbook'),
 );
+const LoadableSBTechSportsbook = loadable(
+  () => import('../../SBTechSportsbook'),
+);
 const BetssonRouteName = 'betssonSb_link';
 
 const SportsPage = () => {
@@ -27,6 +30,9 @@ const SportsPage = () => {
 
   if (isBetssonSbActive) {
     return <LoadableBetsonSportsbook />;
+  }
+  if (window.__config__.sbTechUrl) {
+    return <LoadableSBTechSportsbook />;
   }
   return <LoadableKambiSportsbook />;
 };

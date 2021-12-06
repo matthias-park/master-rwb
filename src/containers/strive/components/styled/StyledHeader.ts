@@ -493,7 +493,7 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
         }
       }
       &-icon {
-        font-size: 20px;
+        font-size: ${props => props.theme.settingsMenu.iconSize || 20}px;
         color: ${props => props.theme.userMenu.itemIconColor};
         transform: translateY(-1px);
       }
@@ -517,7 +517,7 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
         right: 0;
         bottom: 0;
         width: 100%;
-        border-bottom: 1px solid ${props => props.theme.colors.gray[100]};
+        border-bottom: ${props => props.theme.userMenu.itemBorder};
       }
       &:hover,
       &:active,
@@ -536,7 +536,7 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-bottom: 8px solid ${props => props.theme.colors.gray.custom_300};
+    border-bottom: 8px solid ${props => props.theme.userMenu.backgroundColor};
     border-radius: 2px;
 
     ${mediaBreakpointDown('lg')} {
@@ -554,26 +554,82 @@ export const StyledRowHeader = styled('header')`
   display: flex;
   height: 90px;
   background-color: ${props => props.theme.colors.brand.main};
-  margin: 0 -${props => props.theme.spacing.bodyPadding}px;
-  padding: ${props => props.theme.spacing.bodyPadding}px;
+  margin-left: -${props => props.theme.spacing.bodyPadding}px;
+  margin-right: -${props => props.theme.spacing.bodyPadding}px;
+  margin-bottom: ${props => props.theme.header.marginBottom}px;
+  padding: 25px ${props => props.theme.spacing.bodyPadding}px;
   background: url('/assets/images/header/BG.webp');
   background-size: cover;
+  border-bottom: ${props => props.theme.header.borderBottom};
   ${mediaBreakpointDown('xl')} {
-    margin: 0 -${props => props.theme.spacing.bodyPaddingMedium}px;
+    margin-left: -${props => props.theme.spacing.bodyPaddingMedium}px;
+    margin-right: -${props => props.theme.spacing.bodyPaddingMedium}px;
   }
   ${mediaBreakpointDown('lg')} {
-    background: linear-gradient(180deg, #051b35 0%, #053451 100%);
-    margin: 0 -${props => props.theme.spacing.bodyPaddingSmall}px;
+    background: ${props => props.theme.header.backgroundMobile};
+    margin-left: -${props => props.theme.spacing.bodyPaddingSmall}px;
+    margin-right: -${props => props.theme.spacing.bodyPaddingSmall}px;
   }
-  .header-logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    width: 300px;
+  ${mediaBreakpointDown('sm')} {
+    margin-bottom: calc(${props => props.theme.header.navHeightMobile}px - 1px);
   }
-  .header-logo-mobile {
-    width: 35px;
+  .header-logo-wrp {
+    display: flex;
+    width: ${props => props.theme.header.logoSize || 300}px;
+    .header-logo {
+      position: absolute;
+      top: calc(50% + ${props => props.theme.header.topOffset || 0}px);
+      left: ${props =>
+        (props.theme.header.logoPosition === 'left' && '90px') || '50%'};
+      transform: translateX(-50%) translateY(-50%);
+      width: ${props => props.theme.header.logoSize || 300}px;
+    }
+  }
+  .header-logo-mobile-wrp {
+    width: ${props => props.theme.header.logoSizeMobile || 35}px;
+    .header-logo-mobile {
+      width: ${props => props.theme.header.logoSizeMobile || 35}px;
+    }
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    padding-left: 35px;
+    &__link {
+      position: relative;
+      list-style-type: none;
+      font-size: 14px;
+      text-transform: uppercase;
+      font-weight: 700;
+      &:before {
+        content: '';
+        position: absolute;
+        bottom: -36px;
+        border-bottom: 2px solid transparent;
+        width: 100%;
+        transition: border-bottom-color 0.3s;
+        ${mediaBreakpointDown('sm')} {
+          bottom: -16px;
+        }
+      }
+      &:hover,
+      &.active {
+        &:before {
+          border-bottom-color: ${props => props.theme.colors.primary.main};
+        }
+      }
+    }
+    ${mediaBreakpointDown('sm')} {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      bottom: -${props => props.theme.header.navHeightMobile}px;
+      height: ${props => props.theme.header.navHeightMobile}px;
+      justify-content: flex-end;
+      padding: 0 25px;
+      border-bottom: ${props => props.theme.header.borderBottom};
+    }
   }
   .mobile-user-menu {
     display: flex;
@@ -582,7 +638,7 @@ export const StyledRowHeader = styled('header')`
     cursor: pointer;
     i {
       font-size: 30px;
-      color: #778ca6;
+      color: ${props => props.theme.colors.secondary.light};
       transition: color 0.3s;
     }
     &:after {

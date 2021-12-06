@@ -75,6 +75,9 @@ const formStyles = css`
       &::-ms-reveal {
         display: none;
       }
+      &-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+      }
     }
     .form-control {
       @supports (-webkit-touch-callout: none) {
@@ -92,7 +95,8 @@ const formStyles = css`
       border: 12px solid transparent;
       border-right: 0;
       .icon-eye-off {
-        color: ${props => props.theme.colors.brand.light};
+        color: ${props =>
+          props.theme.inputs.iconColor || props.theme.colors.brand.light};
         cursor: pointer;
       }
       .icon-check {

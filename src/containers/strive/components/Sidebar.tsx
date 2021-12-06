@@ -36,7 +36,7 @@ const Sidebar = ({ links }: Props) => {
 
   return (
     <div className="left-sidebar sticky">
-      {!(Franchise.desertDiamond && !user.logged_in) && (
+      {!((Franchise.desertDiamond || Franchise.gnogaz) && !user.logged_in) && (
         <ul className="sidebar-list">
           <Accordion activeKey={expandedGrouping}>
             {links.map((link, i) =>
@@ -91,7 +91,8 @@ const Sidebar = ({ links }: Props) => {
                               className={clsx('sidebar-list__sub-item-link')}
                             >
                               <div className="d-flex align-items-center">
-                                {Franchise.desertDiamond && (
+                                {(Franchise.desertDiamond ||
+                                  Franchise.gnogaz) && (
                                   <i className="sidebar-list__item-title-icon icon-tooltip invisible mr-3"></i>
                                 )}
                                 <div>{t(childLink.name)}</div>

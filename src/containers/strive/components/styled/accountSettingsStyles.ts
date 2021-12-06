@@ -7,15 +7,19 @@ const accountSettingsStyles = css`
     display: flex;
     padding: ${props => props.theme.spacing.settingsBodyPadding};
     margin: 0 -${props => props.theme.spacing.bodyPadding}px;
+    margin-top: ${props => props.theme.settingsPage.marginTop}px;
     color: ${props => props.theme.colors.brand.text};
     background-color: ${props => props.theme.colors.body};
+    min-height: ${props => props.theme.settingsPage?.minHeight} !important;
     ${mediaBreakpointDown('xl')} {
       padding-right: ${props => props.theme.spacing.bodyPaddingMedium}px;
       margin: 0 -${props => props.theme.spacing.bodyPaddingMedium}px;
+      margin-top: ${props => props.theme.settingsPage.marginTop}px;
     }
     ${mediaBreakpointDown('lg')} {
       padding-right: ${props => props.theme.spacing.bodyPaddingSmall}px;
       margin: 0 -${props => props.theme.spacing.bodyPaddingSmall}px;
+      margin-top: ${props => props.theme.settingsPage.marginTop}px;
     }
     ${mediaBreakpointDown('sm')} {
       padding-right: ${props => props.theme.spacing.bodyPaddingSmall}px;
@@ -63,7 +67,7 @@ const accountSettingsStyles = css`
       flex-basis: 80%;
       &-title {
         font-size: 14px;
-        color: #778ca6;
+        color: ${props => props.theme.balancesList?.titleColor || '#778ca6'};
         margin-bottom: 5px;
       }
       &-value {
@@ -79,11 +83,13 @@ const accountSettingsStyles = css`
       color: ${props => props.theme.colors.primary.main};
       font-size: 22px;
       &.icon-strive-locked_balance,
-      &.icon-desertDiamond-locked_balance {
+      &.icon-desertDiamond-locked_balance,
+      &.icon-gnogaz-locked_balance {
         font-size: 44px;
       }
-      &.icon-strive-playable_balance,
-      &.icon-desertDiamond-playable_balance {
+      &.icon-strive-locked_balance,
+      &.icon-desertDiamond-playable_balance,
+      &.icon-gnogaz-playable_balance {
         font-size: 20px;
       }
     }
@@ -176,7 +182,6 @@ const accountSettingsStyles = css`
     }
     &__input {
       border-radius: 4px;
-      background-color: ${props => props.theme.colors.white.main};
       border: ${props =>
         !props.theme.inputContainer.customInput ? '1px solid #e0e0e0' : 'none'};
       height: ${props => props.theme.inputContainer.inputHeight}px;
@@ -185,6 +190,7 @@ const accountSettingsStyles = css`
       font-size: ${props => props.theme.inputContainer?.inputFontSize}px;
       font-weight: ${props => props.theme.inputContainer?.inputFontWeight};
       text-align: ${props => props.theme.inputContainer?.inputAlign};
+      color: ${props => props.theme.inputContainer?.inputColor};
       padding: 0 10px;
       width: 100%;
       order: ${props => props.theme.inputContainer.customInput && '2'};
@@ -209,7 +215,8 @@ const accountSettingsStyles = css`
         color: ${props => props.theme.infoContainer.boldColor};
       }
       padding: 12px 18px;
-      background-color: ${props => props.theme.colors.white.main};
+      background-color: ${props =>
+        props.theme.infoContainer.textBgColor || props.theme.colors.white.main};
       border-top-left-radius: ${props =>
         props.theme.infoContainer.borderRadius}px;
       border-top-right-radius: ${props =>
@@ -355,7 +362,8 @@ const accountSettingsStyles = css`
     flex-wrap: wrap;
     align-items: center;
     border-radius: 8px;
-    background-color: ${props => props.theme.colors.white.main};
+    background-color: ${props =>
+      props.theme.colors.container || props.theme.colors.white.main};
     padding: ${props => props.theme.dateFilter.padding};
     margin: ${props => props.theme.dateFilter.margin} !important;
     &__picker-wrp {
@@ -397,9 +405,10 @@ const accountSettingsStyles = css`
       input {
         height: 36px;
         max-width: 110px;
-        border: 1px solid #e0e0e0;
+        border: ${props => props.theme.dateFilter.dateInputBorder || 'none'};
         border-radius: 4px;
         background-color: ${props => props.theme.dateFilter.dateInputBg};
+        color: ${props => props.theme.dateFilter.dateInputColor};
         font-size: 12px;
         padding-top: 3px;
         padding-left: 8px;
@@ -423,7 +432,8 @@ const accountSettingsStyles = css`
       background-color: ${props => props.theme.dateFilter.periodBgColor};
       height: 100%;
       font-size: 12px;
-      color: rgba(0, 0, 0, 0.8);
+      color: ${props =>
+        props.theme.dateFilter.periodColor || 'rgba(0, 0, 0, 0.8)'};
       font-weight: 500;
       padding: 0 10px;
       &--w-140 {
@@ -439,7 +449,8 @@ const accountSettingsStyles = css`
   .table-container {
     border-radius: 8px;
     overflow: hidden;
-    background-color: ${props => props.theme.colors.white.main};
+    background-color: ${props =>
+      props.theme.colors.container || props.theme.colors.white.main};
     .page-item.active {
       .page-link {
         background-color: ${props => props.theme.colors.primary.main};
@@ -447,7 +458,8 @@ const accountSettingsStyles = css`
       }
     }
     .table {
-      background-color: ${props => props.theme.colors.white.main};
+      background-color: ${props =>
+        props.theme.colors.container || props.theme.colors.white.main};
       margin-bottom: 0;
       thead {
         th {
@@ -517,6 +529,7 @@ const accountSettingsStyles = css`
     tbody tr td:last-of-type {
       display: flex;
       justify-content: flex-end;
+      transform: translateY(-1px);
     }
     ${mediaBreakpointDown('xs')} {
       thead tr th:last-of-type,
@@ -622,7 +635,6 @@ const accountSettingsStyles = css`
       border-radius: ${props => props.theme.inputContainer.quickBorderRadius}px;
       font-weight: ${props => props.theme.inputContainer.quickFontWeight};
       color: ${props => props.theme.inputContainer.quickColor};
-      border: 1px solid ${props => props.theme.colors.gray[100]};
       &:hover,
       &:focus,
       &.active {
@@ -686,10 +698,12 @@ const accountSettingsStyles = css`
   }
 
   .communication-prefs-wrp {
-    background-color: ${props => props.theme.colors.white.main};
+    background-color: ${props =>
+      props.theme.communicationPrefs.bgColor || props.theme.colors.white.main};
     border-radius: ${props => props.theme.borderRadius.sm};
     box-shadow: ${props => props.theme.boxShadow.generic};
     padding: 16px 18px;
+    color: ${props => props.theme.communicationPrefs.color};
     .communication-prefs {
       &__pref {
         &-title {
@@ -697,7 +711,9 @@ const accountSettingsStyles = css`
         }
         &-text {
           font-size: 12px;
-          color: ${props => props.theme.colors.gray[700]};
+          color: ${props =>
+            props.theme.communicationPrefs.color ||
+            props.theme.colors.gray[700]};
           margin-bottom: 10px;
         }
         &-item {

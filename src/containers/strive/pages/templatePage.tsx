@@ -18,6 +18,7 @@ import { Helmet } from 'react-helmet-async';
 import { replaceStringTagsReact } from '../../../utils/reactUtils';
 import { getApi } from '../../../utils/apiUtils';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
+import { Franchise } from '../../../constants';
 
 const TemplatePage = () => {
   const { slug } = useParams<{ slug?: string }>();
@@ -106,7 +107,7 @@ const TemplatePage = () => {
         </Helmet>
       )}
       {!!data?.Success &&
-        (window.__config__.name === 'desertDiamond' ? (
+        (Franchise.desertDiamond || Franchise.gnogaz ? (
           <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
             <h1 className="account-settings__title">{pageTitle}</h1>
             <div className="outer-info-block">

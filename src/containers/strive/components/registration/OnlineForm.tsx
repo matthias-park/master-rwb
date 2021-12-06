@@ -5,10 +5,10 @@ import { animateScroll as scroll } from 'react-scroll';
 import { useFormContext } from 'react-hook-form';
 import {
   FormFieldValidation,
-  Franchise,
   franchiseDateFormat,
   RailsApiResponseFallback,
   VALIDATIONS,
+  Franchise,
 } from '../../../../constants';
 import { OnlineFormBlock } from '../../../../types/RegistrationBlock';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
@@ -536,7 +536,7 @@ const FormField = ({
 
   switch (field.type) {
     case 'checkbox': {
-      return window.__config__.name === 'desertDiamond' ? (
+      return Franchise.desertDiamond || Franchise.gnogaz ? (
         <CustomToggleCheck
           {...registerField(field.id)}
           id={field.id}
