@@ -3,7 +3,7 @@ import { useConfig } from '../../../hooks/useConfig';
 import LoginDropdown from '../../LoginDropdown';
 import UserInfoBlock from '../components/header/UserInfoBlock';
 import { useUIConfig } from '../../../hooks/useUIConfig';
-import { ComponentName } from '../../../constants';
+import { ComponentName, Config } from '../../../constants';
 import clsx from 'clsx';
 import useDesktopWidth from '../../../hooks/useDesktopWidth';
 import { sortAscending } from '../../../utils/index';
@@ -147,6 +147,7 @@ const PageHeader = () => {
   const [navExpanded, setNavExpanded] = useState(false);
   const navbarLinksRef = useRef(null);
   const navbarContainerRef = useRef(null);
+  const { t } = useI18n();
   useOnClickOutside(
     navbarLinksRef,
     () =>
@@ -199,14 +200,31 @@ const PageHeader = () => {
           )}
           {Franchise.gnogaz && (
             <ul className="nav-links">
-              <li
-                className={clsx(
-                  'nav-links__link',
-                  location.pathname.includes('/sports') && 'active',
-                )}
-              >
-                <Link to="/sports">Sports</Link>
-              </li>
+              {header
+                ?.concat()
+                .sort((a, b) => sortAscending(a.order || 0, b.order || 0))
+                .map(link => {
+                  if (!link.path) return null;
+                  return (
+                    <li
+                      key={link.path}
+                      className={clsx(
+                        'nav-links__link',
+                        location.pathname.startsWith(link.path) && 'active',
+                      )}
+                    >
+                      <Link
+                        className="d-flex align-items-center"
+                        to={link.path}
+                      >
+                        {link.icon && (
+                          <i className={`icon-${Config.name}-${link.icon}`} />
+                        )}
+                        {t(link.name)}
+                      </Link>
+                    </li>
+                  );
+                })}
             </ul>
           )}
           <div className="ml-auto">

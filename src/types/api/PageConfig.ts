@@ -108,6 +108,8 @@ export interface HeaderRoute {
   subLinks?: boolean;
   name: string;
   prefix?: string;
+  path?: string;
+  icon?: string;
   order: number;
   links: HeaderRouteLink[];
   externalLink?: boolean;
