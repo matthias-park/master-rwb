@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { postApi } from '../../utils/apiUtils';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { removeFalsyFromObject } from '../../utils/index';
@@ -9,6 +9,7 @@ import PlayerDisabledModal from './components/modals/PlayerDisabledModal';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state';
 import loadable from '@loadable/component';
+import useGTM from '../../hooks/useGTM';
 
 const LoadableTermsAndConditionsModal = loadable(
   () => import('./components/modals/TermsAndConditionsModal'),
@@ -37,7 +38,18 @@ const addBankAccountSubmit = async data => {
 
 const Modals = () => {
   const { hasTranslations } = useI18n();
+  const sendDataToGTM = useGTM();
   const activeModal = useSelector((state: RootState) => state.modals[0]);
+
+  useEffect(() => {
+    if (hasTranslations && activeModal && typeof activeModal === 'string') {
+      sendDataToGTM({
+        'tglab.ActiveModal': activeModal,
+        event: 'ModalActiveChange',
+      });
+    }
+  }, [hasTranslations, activeModal]);
+
   if (!hasTranslations) {
     return null;
   }

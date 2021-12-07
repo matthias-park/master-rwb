@@ -147,6 +147,7 @@ const PageHeader = () => {
   const location = useLocation();
   const { header } = useConfig((prev, next) => !!prev.header === !!next.header);
   const { backdrop, headerNav } = useUIConfig();
+  const sendDataToGTM = useGTM();
   const desktopWidth = useDesktopWidth(1199);
   const [navExpanded, setNavExpanded] = useState(false);
   const navbarLinksRef = useRef(null);
@@ -166,6 +167,12 @@ const PageHeader = () => {
       }, 200);
     }
   });
+  const onGtmLinkClick = (name: string) => {
+    sendDataToGTM({
+      event: 'MainNavigationClick',
+      'tglab.ItemClicked': t(name),
+    });
+  };
   const subLinks = header?.find(link => link.subLinks);
   const homePageRoute = useRoutePath(PagesName.HomePage, true);
 
@@ -221,6 +228,7 @@ const PageHeader = () => {
                       <Link
                         className="d-flex align-items-center"
                         to={link.path}
+                        onClick={() => onGtmLinkClick(link.name)}
                       >
                         {link.icon && (
                           <i className={`icon-${Config.name}-${link.icon}`} />

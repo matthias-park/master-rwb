@@ -85,6 +85,7 @@ module.exports = {
       ],
       sbTechUrl: 'https://az-sports-live.goldennuggetsports.com',
       xtremepush: 'https://us.webpu.sh/6MCTOZTZCr1IsiPan9ce90gdq4Og2mvk/sdk.js',
+      gtmId: 'GTM-T6WHQHV',
       redis: {
         host: '192.168.150.40',
         port: 6379,

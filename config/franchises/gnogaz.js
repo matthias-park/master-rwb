@@ -13,6 +13,7 @@ module.exports = {
   xtremepush: 'https://us.webpu.sh/Zgwm8SC36q1F-0S5QAuaKhanJF8k7fmN/sdk.js',
   geoComplyKey: '5YZkkL4ADJ',
   themeColor: '#000541',
+  gtmId: 'GTM-5W6F66G',
   themeSettings: require('./themeSettings/gnogaz'),
   dateFormat: 'MM-DD-YYYY',
   redis: {
