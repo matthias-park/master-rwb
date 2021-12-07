@@ -29,7 +29,7 @@ interface SettingProps {
   mutateData?: () => void;
   translatableDefaultValues?: boolean;
   formBody?: boolean;
-  validateBeforeRequest?: (any) => { valid: boolean; message: string };
+  allowSubmit?: (any) => boolean;
   formData?: any;
   blocks?: {
     items: {
@@ -57,6 +57,7 @@ const formLimitsKeys = [
 const FormFields = ({
   id,
   fields = [],
+  allowSubmit,
   formData,
   translatableDefaultValues,
 }: SettingProps) => {
@@ -140,6 +141,19 @@ const FormFields = ({
               const submitWithCurrentAction =
                 field.value &&
                 getValues(field.value?.id) === field.value?.value;
+              let isDisabled = false;
+              if (field.disabled) {
+                isDisabled = !watchPassword;
+              } else if (isDeleteButton) {
+                isDisabled = !formData.some(field => field.LimitAmount != null);
+              } else if (allowSubmit) {
+                isDisabled = !allowSubmit(watch());
+              } else {
+                isDisabled = Object.values(watchAllFields).some(
+                  value => !value || value === 'default' || value === '-1',
+                );
+              }
+
               return (
                 <>
                   {field.value && field.value.id && (
@@ -153,15 +167,7 @@ const FormFields = ({
                       !!formState.isSubmitting &&
                       (!field.value || submitWithCurrentAction)
                     }
-                    disabled={
-                      field.disabled
-                        ? !watchPassword
-                        : isDeleteButton
-                        ? !formData.some(field => field.LimitAmount != null)
-                        : Object.values(watchAllFields).some(
-                            value => !value || value === 'default',
-                          )
-                    }
+                    disabled={isDisabled}
                     className="mt-2 mr-2"
                     variant="primary"
                     type="submit"
@@ -389,7 +395,6 @@ const SettingsForm = (props: SettingProps) => {
     fixedData,
     mutateData,
     formBody,
-    validateBeforeRequest,
     blocks,
   } = props;
   const { t } = useI18n();
@@ -433,15 +438,6 @@ const SettingsForm = (props: SettingProps) => {
       ),
       {},
     );
-    const checkRequest = validateBeforeRequest && validateBeforeRequest(body);
-    if (checkRequest && !checkRequest?.valid) {
-      setResponse &&
-        setResponse({
-          success: checkRequest.valid,
-          msg: checkRequest.message,
-        });
-      return;
-    }
     if (fixedData) {
       for (const item of fixedData) {
         if (item.id && item.value) {

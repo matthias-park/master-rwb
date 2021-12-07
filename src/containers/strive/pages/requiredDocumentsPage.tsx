@@ -65,16 +65,18 @@ const RequiredDocumentsPage = () => {
               setResponse={setApiResponse}
               mutateData={mutate}
               formBody={true}
-              validateBeforeRequest={body => {
-                const noFilesAdded =
-                  (Object.entries(body).length === 0 ||
-                    Object.entries(body).length === 1) &&
-                  Object.keys(body)[0] &&
-                  Object.keys(body)[0] === 'password';
-                return {
-                  valid: !noFilesAdded,
-                  message: t('atleast_one_file_required'),
-                };
+              allowSubmit={fields => {
+                const fileUploaded = Object.entries(fields)
+                  .filter(
+                    ([field]) =>
+                      !['password', 'image_id_sub_type'].includes(field),
+                  )
+                  .some(([_, value]) => !!value);
+                const idTypeSelected = fields.image_id
+                  ? (fields.image_id_sub_type || '-1') !== '-1'
+                  : true;
+                const passwordEntered = !!fields.password;
+                return fileUploaded && idTypeSelected && passwordEntered;
               }}
             />
           </>
