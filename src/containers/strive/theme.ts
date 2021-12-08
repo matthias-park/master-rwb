@@ -155,6 +155,12 @@ const theme: DefaultTheme = mergeDeep(
         border: '1px solid #cccccc',
         color: '#4c4c4c',
       },
+      active: {
+        borderColor: '#4be48c',
+      },
+      invalid: {
+        backgroundColor: 'inherit',
+      },
     },
     customFileInput: {
       backgroundColor: '#f9f9f9',

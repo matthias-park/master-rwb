@@ -163,6 +163,8 @@ const accountSettingsStyles = css`
     }
     .btn {
       width: ${props => props.theme.inputContainer.fullWidthButton && '100%'};
+      margin-top: ${props =>
+        !props.theme.inputContainer.fullWidthButton && '1rem'};
       i:before {
         content: ${props => !props.theme.inputContainer.iconButton && 'unset'};
       }

@@ -214,6 +214,12 @@ declare module 'styled-components' {
         backgroundColor: string;
         color: string;
       };
+      active: {
+        borderColor: string;
+      };
+      invalid: {
+        backgroundColor: string;
+      };
     };
     customFileInput: {
       buttonColor: string;

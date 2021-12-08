@@ -10,7 +10,9 @@ const formStyles = css`
     .form-select {
       padding: ${props => props.theme.inputs.selectPadding} !important;
     }
-    .form-control:not(:disabled) {
+    .form-control:not(:disabled),
+    .form-control:not(:focus),
+    .form-control:not(.is-valid) {
       background-color: ${props =>
         props.theme.inputs.backgroundColor} !important;
       color: ${props => props.theme.inputs.color} !important;
@@ -23,6 +25,13 @@ const formStyles = css`
       border-radius: ${props => props.theme.inputs.borderRadius}px !important;
       font-size: ${props => props.theme.inputs.fontSize}px !important;
       height: ${props => props.theme.inputs.height}px !important;
+      &.is-valid {
+        border-color: ${props => props.theme.colors.success.main};
+      }
+      &.is-invalid {
+        border-color: ${props => props.theme.colors.danger.main};
+        background-color: ${props => props.theme.inputs.invalid.backgroundColor} !important;
+      }
       + label {
         position: absolute;
         top: ${props => props.theme.inputs.labelTop}px;
@@ -31,6 +40,9 @@ const formStyles = css`
         color: ${props => props.theme.inputs.color};
         pointer-events: none;
         transition: all 0.3s;
+      }
+      &:focus:not(.is-invalid) {
+        border-color: ${props => props.theme.inputs.active.borderColor};
       }
       &:disabled {
         background-color: ${props =>

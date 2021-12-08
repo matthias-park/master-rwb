@@ -131,8 +131,7 @@
           "footer": {
             "bottomText": "rgba(255,255,255,0.75)"
           },
-          "body": "#fafafa",
-          "lightSpacer": "#ffffff"
+          "body": "#fafafa"
         },
         "spacing": {
           "bodyPadding": 80,
@@ -207,6 +206,9 @@
             "backgroundColor": "#e5e5e5",
             "border": "1px solid #cccccc",
             "color": "#4c4c4c"
+          },
+          "invalid": {
+            "backgroundColor": "#fef5f5"
           }
         },
         "customFileInput": {
@@ -505,6 +507,9 @@
             "border": "none",
             "backgroundColor": "#E6ECF1",
             "color": "#778CA6"
+          },
+          "active": {
+            "borderColor": "#08A4DA"
           }
         },
         "customFileInput": {
