@@ -87,7 +87,7 @@ const accountSettingsStyles = css`
       &.icon-gnogaz-locked_balance {
         font-size: 44px;
       }
-      &.icon-strive-locked_balance,
+      &.icon-strive-playable_balance,
       &.icon-desertDiamond-playable_balance,
       &.icon-gnogaz-playable_balance {
         font-size: 20px;
