@@ -81,7 +81,7 @@ app.get('*', async (req, res) => {
   return res.sendStatus(404);
 });
 
-const port = config.get('port') || 3800;
-app.listen(port, () => {
+const port: number = config.get('port') || 3800;
+app.listen(port, '0.0.0.0', () => {
   logger.info(`Server is listening on port ${port}`);
 });

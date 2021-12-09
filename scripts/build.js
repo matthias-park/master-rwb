@@ -217,7 +217,11 @@ function copyPublicFolder() {
       return (
         file === paths.appPublic ||
         franchiseName === 'all' ||
-        franchises.some(fr => file.startsWith(fr))
+        franchises.some(fr => file.startsWith(fr)) ||
+        ['scripts', 'polyfills', 'sportsbook'].some(folder => {
+          const folderPath = path.join(paths.appPublic, `/${folder}`);
+          return file.startsWith(folderPath);
+        })
       );
     },
   });

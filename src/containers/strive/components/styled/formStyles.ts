@@ -30,7 +30,8 @@ const formStyles = css`
       }
       &.is-invalid {
         border-color: ${props => props.theme.colors.danger.main};
-        background-color: ${props => props.theme.inputs.invalid.backgroundColor} !important;
+        background-color: ${props =>
+          props.theme.inputs.invalid.backgroundColor} !important;
       }
       + label {
         position: absolute;
