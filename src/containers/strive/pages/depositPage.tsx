@@ -95,7 +95,7 @@ const DepositPage = () => {
           response.Data?.DepositRequestId ||
           response.Data?.DepositRequestId === 0
         ) {
-          depositStatus.setDepositId(response.Data.DepositRequestId);
+          depositStatus.setDepositId(response.Data.DepositRequestId, bankId);
         }
         if (response.Data?.InnerText) {
           window.addEventListener(
