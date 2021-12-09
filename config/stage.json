@@ -16,7 +16,8 @@
         "currency": "EUR",
         "retail": "https://ctn-static.kambi.com/client/bnlberl/kambi-bootstrap.js",
         "online": "https://ctn-static.kambi.com/client/bnlbe/kambi-bootstrap.js",
-        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js"
+        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js",
+        "eventStatistics": "https://s5.sir.sportradar.com/scooorebe/{{locale}}/match/m{{eventId}}"
       },
       "googleRecaptchaKey": "6Lezp2oaAAAAADpwV6q_a2k7yVPD52Qb89Z2zFcR",
       "basicAuthEnabled": true,
@@ -81,7 +82,8 @@
         "market": "US",
         "currency": "USD",
         "online": "https://ctn-static.kambi.com/client/fanusny/kambi-bootstrap.js",
-        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js"
+        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js",
+        "oddsFormat": "american"
       },
       "redis": {
         "host": "192.168.109.106",
@@ -358,7 +360,8 @@
         "market": "US",
         "currency": "USD",
         "online": "https://ctn-static.kambi.com/client/ddusaz/kambi-bootstrap.js",
-        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js"
+        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js",
+        "oddsFormat": "american"
       },
       "geoComplyKey": "ShzolMaAK",
       "smartyStreets": "108064515683753034",
@@ -721,12 +724,6 @@
       ],
       "themeColor": "#000541",
       "theme": "strive",
-      "kambi": {
-        "market": "US",
-        "currency": "USD",
-        "online": "https://ctn-static.kambi.com/client/fanusny/kambi-bootstrap.js",
-        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js"
-      },
       "redis": {
         "host": "192.168.109.106",
         "port": 6379,

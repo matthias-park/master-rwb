@@ -14,7 +14,8 @@
         "currency": "EUR",
         "retail": "https://ctn-static.kambi.com/client/bnlberl/kambi-bootstrap.js",
         "online": "https://ctn-static.kambi.com/client/bnlbe/kambi-bootstrap.js",
-        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js"
+        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js",
+        "eventStatistics": "https://s5.sir.sportradar.com/scooorebe/{{locale}}/match/m{{eventId}}"
       },
       "googleRecaptchaKey": "6Lezp2oaAAAAADpwV6q_a2k7yVPD52Qb89Z2zFcR",
       "redis": {
@@ -297,7 +298,8 @@
         "market": "US",
         "currency": "USD",
         "online": "https://ctn-static.kambi.com/client/fanusny/kambi-bootstrap.js",
-        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js"
+        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js",
+        "oddsFormat": "american"
       },
       "xtremepush": "xIPqGJt6fuQgTzDOSuSTN72PPi7rRk6F",
       "dateFormat": "MM-DD-YYYY",
@@ -339,7 +341,8 @@
         "market": "US",
         "currency": "USD",
         "online": "https://ctn-static.kambi.com/client/ddusaz/kambi-bootstrap.js",
-        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js"
+        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js",
+        "oddsFormat": "american"
       },
       "geoComplyKey": "ShzolMaAK",
       "smartyStreets": "108064515683753034",

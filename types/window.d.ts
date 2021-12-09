@@ -19,6 +19,8 @@ export declare global {
         online: string;
         retail?: string;
         api: string;
+        oddsFormat?: string;
+        eventStatistics?: string;
       };
       sbTechUrl?: string;
       zendesk?: string;

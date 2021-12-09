@@ -89,7 +89,7 @@ module.exports = function (webpackEnv, buildFranchises) {
   // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
   // Get environment variables to inject into our app.
   const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
-  const BuildDate = new Date().toJSON().slice(0, 10);
+  const BuildDate = new Date().toJSON().slice(0, 10).replace(/-/g, '');
 
   const shouldUseReactRefresh = isEnvDevelopment;
 

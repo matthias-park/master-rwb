@@ -206,6 +206,7 @@ interface KambiSportsbookProps {
   currency: string;
   market: string;
   retail?: boolean;
+  oddsFormat: string;
 }
 
 const updateWindowKambiConfig = (params: KambiSportsbookProps) => {
@@ -215,7 +216,7 @@ const updateWindowKambiConfig = (params: KambiSportsbookProps) => {
     market: params.market,
     playerId: params.playerId || '',
     ticket: params.ticket,
-    oddsFormat: 'decimal',
+    oddsFormat: params.oddsFormat,
     streamingAllowedForPlayer: 'false',
     racingMode: 'false',
   };
@@ -291,11 +292,16 @@ const setCustomerSettings = ({
       }
     },
     loginUrl: 'notification',
-    showEventStatistics: function (eventId) {
-      const url = `https://s5.sir.sportradar.com/scooorebe/${locale}/match/m${eventId}`;
-      const newStatisticsTab = window.open(url, '_blank');
-      newStatisticsTab?.focus();
-    },
+    showEventStatistics: Config.kambi?.eventStatistics
+      ? eventId => {
+          let statisticsUrl = Config.kambi!.eventStatistics!.replace(
+            '{{locale}}',
+            locale,
+          ).replace('{{eventId}}', eventId);
+          const newStatisticsTab = window.open(statisticsUrl, '_blank');
+          newStatisticsTab?.focus();
+        }
+      : undefined,
     hideHeader: true,
     enableOddsFormatSelector: true,
     enableMyBetsHarmonization: true,
@@ -347,6 +353,7 @@ const getSBParams = async (
     ticket: data?.Data || '',
     currency: Config.kambi!.currency,
     market: Config.kambi!.market,
+    oddsFormat: Config.kambi!.oddsFormat || 'decimal',
     getApiBalance: '/restapi/v1/user/balance',
     retail,
   };
