@@ -346,8 +346,8 @@
       },
       "geoComplyKey": "ShzolMaAK",
       "smartyStreets": "108064515683753034",
-      "xtremepush": "xIPqGJt6fuQgTzDOSuSTN72PPi7rRk6F",
-      "zendesk": "TSZNwz1QotpJKs7gf5v8pqT6hb694gZX3assz993",
+      "xtremepush": "nC8ND1beMmODTqzbby-l6JgLXVd4AdH2",
+      "zendesk": "35d43606-f8bf-4f03-8b8b-6aa6b7690498",
       "redis": {
         "host": "192.168.109.106",
         "port": 6379,
