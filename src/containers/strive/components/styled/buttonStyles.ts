@@ -103,6 +103,12 @@ const buttonStyles = css`
         props.theme.colors.secondary.hover} !important;
     }
   }
+  .btn-outline-danger {
+    color: ${props => props.theme.colors.danger.main} !important;
+    &:not(:disabled):hover {
+      color: ${props => props.theme.colors.white.main} !important;
+    }
+  }
   .btn-outline-light {
     &:hover,
     &:active,

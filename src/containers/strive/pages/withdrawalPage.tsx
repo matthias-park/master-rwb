@@ -28,6 +28,7 @@ import { addSymbols } from '../../../state/reducers/translations';
 import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 import BalancesContainer from '../components/account-settings/BalancesContainer';
 import { Franchise } from '../../../constants';
+import clsx from 'clsx';
 
 interface WithdrawalRequestsProps {
   requests: Request[];
@@ -46,9 +47,20 @@ const WithdrawalRequests = ({
     setCancelLoading(null);
   };
   return (
-    <div className="d-flex flex-column">
-      <div className="table-container d-flex flex-column mb-4">
-        <Table hover>
+    <div
+      className={clsx(
+        (Franchise.desertDiamond || Franchise.gnogaz) &&
+          'outer-info-block mb-4',
+        'd-flex flex-column',
+      )}
+    >
+      <div
+        className={clsx(
+          !Franchise.desertDiamond && !Franchise.gnogaz && 'mb-4',
+          'table-container d-flex flex-column',
+        )}
+      >
+        <Table>
           <thead>
             <tr>
               <th>{t('withdrawal_requests_id')}</th>
