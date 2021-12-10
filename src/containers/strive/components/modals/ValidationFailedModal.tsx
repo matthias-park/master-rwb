@@ -70,42 +70,46 @@ const ValidationFailedModal = () => {
       hideCallback={hideModal}
       isCentered={true}
       isStatic={true}
-      className="text-center pb-5"
+      className="p-4"
     >
-      <h2 className="mb-3 mt-4">{jsxT('validation_failed_title')}</h2>
-      <p>{jsxT(`validation_failed_body_${user.validator_status}`)}</p>
-      <Link
-        to={personalInfoRoute}
-        onClick={hideModal}
-        className={clsx(
-          'btn btn-primary mx-auto mt-4 px-4',
-          !allowPersonalInfoBtn && 'disabled',
-        )}
-      >
-        {t('validation_failed_profile_link')}{' '}
-        {data?.Data?.attempts != null ? (
-          `${attempts}/${max_attempts}`
-        ) : (
-          <Spinner
-            as="span"
-            size="sm"
-            role="status"
-            animation="border"
-            variant="black"
-            className="ml-1"
-          />
-        )}
-      </Link>
-      <Link
-        to={RequiredDocumentsRoute}
-        onClick={hideModal}
-        className={clsx(
-          'btn btn-primary mt-4 px-4 ml-1',
-          !allowDocumentUploadBtn && 'disabled',
-        )}
-      >
-        {t('validation_failed_documents_link')}
-      </Link>
+      <div className="p-sm-2">
+        <h2 className="mb-2 mt-1">{jsxT('validation_failed_title')}</h2>
+        <p>{jsxT(`validation_failed_body_${user.validator_status}`)}</p>
+        <div className="d-flex flex-column flex-sm-row">
+          <Link
+            to={personalInfoRoute}
+            onClick={hideModal}
+            className={clsx(
+              'btn btn-primary mt-3 mt-sm-4 px-4',
+              !allowPersonalInfoBtn && 'disabled',
+            )}
+          >
+            {t('validation_failed_profile_link')}{' '}
+            {data?.Data?.attempts != null ? (
+              `${attempts}/${max_attempts}`
+            ) : (
+              <Spinner
+                as="span"
+                size="sm"
+                role="status"
+                animation="border"
+                variant="black"
+                className="ml-1"
+              />
+            )}
+          </Link>
+          <Link
+            to={RequiredDocumentsRoute}
+            onClick={hideModal}
+            className={clsx(
+              'btn btn-primary mt-2 mt-sm-4 px-4 ml-sm-1',
+              !allowDocumentUploadBtn && 'disabled',
+            )}
+          >
+            {t('validation_failed_documents_link')}
+          </Link>
+        </div>
+      </div>
     </GenericModal>
   );
 };

@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../../../../hooks/useUIConfig';
-import { ComponentName, Franchise, PagesName } from '../../../../constants';
+import {
+  ComponentName,
+  Franchise,
+  PagesName,
+  Config,
+} from '../../../../constants';
 import { useI18n } from '../../../../hooks/useI18n';
 import Link from '../../../../components/Link';
 import { cache as SWRCache } from 'swr';
@@ -127,7 +132,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 className="pr-2 pl-3"
               >
                 {user.balance} {user.currency}
-                <i className="icon-add-action-1 ml-2"></i>
+                <i className={clsx(`icon-${Config.name}-plus`, 'ml-2')}></i>
               </Button>
               {!!window.__config__.xtremepush ? (
                 <LoadableXtremePush className="mx-4" />

@@ -146,7 +146,10 @@
         },
         "buttons": {
           "borderRadius": 16,
-          "fontSize": 13
+          "fontSize": 13,
+          "primaryBgColor": "#44d9e6",
+          "primaryBgHoverColor": "#1dcfdf",
+          "primaryColor": "#031442"
         },
         "fonts": {
           "family": "Dax offc",
@@ -424,16 +427,14 @@
           "borderRadius": 3,
           "fontSize": 16,
           "color": "#FFF",
-          "primaryBgColor": "#08A4DA",
-          "primaryBgHoverColor": "#0790bf",
-          "primaryColor": "#fff",
-          "secondaryBgColor": "#334C6C",
-          "secondaryBgHoverColor": "#2c425f",
-          "secondaryColor": "#fff",
-          "transform": "uppercase"
+          "transform": "uppercase",
+          "disabled": {
+            "backgroundColor": "#0794C5",
+            "color": "rgba(255,255,255, 0.5)"
+          }
         },
         "fonts": {
-          "family": "Proxima Nova",
+          "family": "Roboto",
           "weight": {
             "bold": 700
           },
@@ -443,7 +444,9 @@
           }
         },
         "header": {
-          "backgroundMobile": "linear-gradient(180deg,#051b35 0%,#053451 100%)"
+          "backgroundMobile": "linear-gradient(180deg,#051b35 0%,#053451 100%)",
+          "navHeightMobile": 0,
+          "navFontSize": 16
         },
         "footer": {
           "listColor": "#fff",
@@ -498,9 +501,9 @@
           "backgroundColor": "#ffff",
           "color": "#051B35",
           "labelLeft": 20,
-          "labelTop": 16,
+          "labelTop": 15,
           "labelActiveFontSize": 12,
-          "labelActiveTop": -10,
+          "labelActiveTop": -8,
           "labelActiveLeft": 10,
           "labelBackgroundColor": "#fff",
           "labelPadding": 4,
@@ -556,7 +559,7 @@
           "itemHeight": 48,
           "width": 330,
           "backgroundColor": "#fff",
-          "subItemBgColor": "#ECF0F3",
+          "subItemBgColor": "#fff",
           "itemIconColor": "#778CA6"
         },
         "settingsMenu": {
@@ -660,7 +663,7 @@
             "fontSize": "24px"
           }
         },
-        "genericModalWidth": "480px"
+        "genericModalWidth": "505px"
       },
       "componentSettings": {
         "userIdleTimeout": 30,
@@ -888,7 +891,7 @@
           "backgroundColor": "#222",
           "color": "#fff",
           "labelLeft": 20,
-          "labelTop": 16,
+          "labelTop": 15,
           "labelActiveFontSize": 12,
           "labelActiveTop": -10,
           "labelActiveLeft": 10,

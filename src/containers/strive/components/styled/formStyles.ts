@@ -75,21 +75,25 @@ const formStyles = css`
       }
       &:focus,
       &:active,
-      &:not(:placeholder-shown),
-      &:-webkit-autofill {
+      &:not(:placeholder-shown) {
         + label {
           font-size: ${props => props.theme.inputs.labelActiveFontSize}px;
           top: ${props => props.theme.inputs.labelActiveTop}px;
           left: ${props => props.theme.inputs.labelActiveLeft}px;
           background-color: ${props => props.theme.inputs.labelBackgroundColor};
-          padding: ${props => props.theme.inputs.labelPadding}px;
+          padding: ${props => props.theme.inputs.labelPadding - 3}px
+            ${props => props.theme.inputs.labelPadding}px;
+          border-radius: 4px;
         }
       }
       &::-ms-reveal {
         display: none;
       }
-      &-webkit-autofill {
-        -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus,
+      &:-webkit-autofill:active {
+        transition: background-color 5000000s ease-in-out 0s;
       }
     }
     .form-control {
@@ -111,6 +115,13 @@ const formStyles = css`
         color: ${props =>
           props.theme.inputs.iconColor || props.theme.colors.brand.light};
         cursor: pointer;
+      }
+      .icon-desertDiamond-eye-off,
+      .icon-desertDiamond-eye-on,
+      .icon-gnogaz-eye-off,
+      .icon-gnogaz-eye-on {
+        font-size: 28px;
+        color: ${props => props.theme.colors.secondary.light};
       }
       .icon-check {
         display: none;

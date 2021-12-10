@@ -5,6 +5,7 @@ import { fullBg } from './mixins';
 import Link from '../../../../components/Link';
 import { Dropdown } from 'react-bootstrap';
 import { rgba } from './mixins';
+import { Config } from '../../../../constants';
 
 export const StyledNavToggler = styled(Navbar.Toggle)`
   display: flex;
@@ -470,11 +471,7 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
         &:active,
         &:focus {
           text-decoration: none;
-          background-color: ${props => props.theme.colors.brand.light};
-          color: ${props => props.theme.colors.white.main};
-          i {
-            color: ${props => props.theme.colors.white.main};
-          }
+          background-color: ${props => props.theme.settingsMenu?.activeBgColor};
         }
         &--no-divider {
           &:before {
@@ -522,8 +519,7 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
       &:hover,
       &:active,
       &:focus {
-        background-color: ${props => props.theme.colors.primary.main};
-        color: ${props => props.theme.colors.white.main};
+        background-color: ${props => props.theme.settingsMenu?.activeBgColor};
       }
     }
   }
@@ -531,14 +527,13 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
     content: '';
     position: absolute;
     top: -7px;
-    right: 7.5%;
+    right: 4.5%;
     width: 0;
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
     border-bottom: 8px solid ${props => props.theme.userMenu.backgroundColor};
     border-radius: 2px;
-
     ${mediaBreakpointDown('lg')} {
       right: 5%;
     }
@@ -575,7 +570,10 @@ export const StyledRowHeader = styled('header')`
   }
   .header-logo-wrp {
     display: flex;
-    width: ${props => props.theme.header.logoSize || 300}px;
+    width: ${props =>
+      props.theme.header.logoPosition === 'left'
+        ? props.theme.header.logoSize || 300
+        : 0}px;
     .header-logo {
       position: absolute;
       top: calc(50% + ${props => props.theme.header.topOffset || 0}px);
@@ -595,18 +593,28 @@ export const StyledRowHeader = styled('header')`
     display: flex;
     align-items: center;
     margin-bottom: 0;
-    padding-left: 35px;
+    padding-left: ${props =>
+      props.theme.header.logoPosition === 'left' ? 35 : 10}px;
     &__link {
       position: relative;
+      display: flex;
+      align-items: center;
       list-style-type: none;
-      font-size: 14px;
+      font-size: ${props => props.theme.header.navFontSize || 14}px;
       text-transform: uppercase;
       font-weight: 700;
+      a {
+        color: ${props => props.theme.colors.white.main};
+      }
+      i {
+        font-size: 24px;
+        margin-right: 12px;
+      }
       &:before {
         content: '';
         position: absolute;
-        bottom: -36px;
-        border-bottom: 2px solid transparent;
+        bottom: -${props => 20 + (props.theme.header.navFontSize || 14) - 3}px;
+        border-bottom: 3px solid transparent;
         width: 100%;
         transition: border-bottom-color 0.3s;
         ${mediaBreakpointDown('sm')} {
@@ -620,7 +628,11 @@ export const StyledRowHeader = styled('header')`
         }
       }
     }
+    ${mediaBreakpointDown('lg')} {
+      padding-left: 35px;
+    }
     ${mediaBreakpointDown('sm')} {
+      display: ${props => props.theme.header.navHeightMobile === 0 && 'none'};
       position: absolute;
       left: 0;
       width: 100%;
@@ -652,30 +664,19 @@ export const StyledRowHeader = styled('header')`
       }
     }
   }
-  .icon-add-action-1 {
-    position: relative;
-    color: ${props => props.theme.colors.secondary.main};
-    font-size: 24px;
-    z-index: 1;
-    &:after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translateY(-50%) translateX(-50%);
-      background-color: ${props => props.theme.colors.primary.main};
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      z-index: -1;
-    }
+  .icon-${Config.name}-plus {
+    color: ${props => props.theme.colors.primary.main};
+    font-size: 21px;
   }
   .user-menu {
     margin: unset !important;
     inset: unset !important;
     transform: unset !important;
     top: calc(100% + 15px) !important;
-    right: -11px !important;
+    right: 0px !important;
+    ${mediaBreakpointDown('lg')} {
+      right: -11px !important;
+    }
     ${mediaBreakpointDown('xs')} {
       right: -16px !important;
     }

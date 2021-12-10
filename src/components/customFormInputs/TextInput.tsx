@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Control, FieldValues, useController } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import clsx from 'clsx';
-import { FormFieldValidation, Franchise } from '../../constants';
+import { FormFieldValidation, Franchise, Config } from '../../constants';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { FormControlProps } from 'react-bootstrap/FormControl';
@@ -139,7 +139,8 @@ export const UncontrolledTextInput = React.forwardRef(
             {props.toggleVisibility && showEye && (
               <i
                 className={clsx(
-                  'icon-eye-off show-password',
+                  `icon-${Config.name}-eye-${showPassword ? 'on' : 'off'}`,
+                  'show-password',
                   showPassword && 'show',
                 )}
                 onClick={togglePasswordVisibility}

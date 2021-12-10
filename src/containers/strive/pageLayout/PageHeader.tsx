@@ -141,13 +141,15 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
 };
 
 const PageHeader = () => {
+  const { t } = useI18n();
+  const location = useLocation();
   const { header } = useConfig((prev, next) => !!prev.header === !!next.header);
   const { backdrop, headerNav } = useUIConfig();
   const desktopWidth = useDesktopWidth(1199);
   const [navExpanded, setNavExpanded] = useState(false);
   const navbarLinksRef = useRef(null);
   const navbarContainerRef = useRef(null);
-  const { t } = useI18n();
+
   useOnClickOutside(
     navbarLinksRef,
     () =>
@@ -164,7 +166,6 @@ const PageHeader = () => {
   });
   const subLinks = header?.find(link => link.subLinks);
   const homePageRoute = useRoutePath(PagesName.HomePage, true);
-  const location = useLocation();
 
   return (
     <>
@@ -198,7 +199,7 @@ const PageHeader = () => {
               />
             </Link>
           )}
-          {Franchise.gnogaz && (
+          {(Franchise.gnogaz || Franchise.desertDiamond) && (
             <ul className="nav-links">
               {header
                 ?.concat()

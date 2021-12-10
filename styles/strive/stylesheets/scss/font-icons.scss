@@ -1,402 +1,405 @@
 @font-face {
-    font-family: 'icomoon';
-    src:  url('../fonts/icons/fonts/icomoon.eot?jv2j9t');
-    src:  url('../fonts/icons/fonts/icomoon.eot?jv2j9t#iefix') format('embedded-opentype'),
-      url('../fonts/icons/fonts/icomoon.ttf?jv2j9t') format('truetype'),
-      url('../fonts/icons/fonts/icomoon.woff?jv2j9t') format('woff'),
-      url('../fonts/icons/fonts/icomoon.svg?jv2j9t#icomoon') format('svg');
-    font-weight: normal;
-    font-style: normal;
-  }
-  
-  [class^="icon-"], [class*=" icon-"] {
-    /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'icomoon' !important;
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-  
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+  font-family: 'icomoon';
+  src:  url('../fonts/icons/fonts/icomoon.eot?jv2j9t');
+  src:  url('../fonts/icons/fonts/icomoon.eot?jv2j9t#iefix') format('embedded-opentype'),
+    url('../fonts/icons/fonts/icomoon.ttf?jv2j9t') format('truetype'),
+    url('../fonts/icons/fonts/icomoon.woff?jv2j9t') format('woff'),
+    url('../fonts/icons/fonts/icomoon.svg?jv2j9t#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 
-  .icon-strive-check:before,
-  .icon-strive-success:before,
-  .icon-check:before,
-  .icon-success:before {
-    content: "\e952";
-  }
-  .icon-strive-date-navigation:before {
-    content: "\e953";
-  }
-  .icon-strive-exclamation:before,
-  .icon-strive-danger:before,
-  .icon-exclamation:before,
-  .icon-danger:before {
-    content: "\e954";
-  }
-  .icon-lock1:before {
-    content: "\e956";
-    color: #27a9e0;
-  }
-  .icon-strive-mail:before {
-    content: "\e957";
-  }
-  .icon-strive-phone:before {
-    content: "\e959";
-  }
-  .icon-strive-phone-mobile:before {
-    content: "\e95a";
-  }
-  .icon-strive-questions:before {
-    content: "\e95b";
-  }
-  .icon-strive-redirect:before,
-  .icon-redirect {
-    content: "\e95c";
-  }
-  .icon-strive-thumbs:before {
-    content: "\e95f";
-  }
-  .icon-strive-tooltip:before,
-  .icon-tooltip:before {
-    content: "\e960";
-  }
-  .icon-strive-account:before {
-    content: "\e961";
-  }
-  .icon-strive-add-action-1:before,
-  .icon-add-action-1:before {
-    content: "\e962";
-  }
-  .icon-strive-card:before {
-    content: "\e963";
-  }
-  .icon-strive-close:before,
-  .icon-close:before {
-    content: "\e964";
-  }
-  .icon-strive-down:before {
-    content: "\e965";
-  }
-  .icon-strive-download:before {
-    content: "\e966";
-  }
-  .icon-strive-favorite:before {
-    content: "\e967";
-  }
-  .icon-strive-last-bulletin:before {
-    content: "\e968";
-  }
-  .icon-strive-left:before {
-    content: "\e969";
-  }
-  .icon-strive-menu:before {
-    content: "\e96a";
-  }
-  .icon-strive-menu-close:before {
-    content: "\e96b";
-  }
-  .icon-strive-reset:before {
-    content: "\e96d";
-  }
-  .icon-strive-right:before {
-    content: "\e96e";
-  }
-  .icon-strive-up:before {
-    content: "\e96f";
-  }
-  .icon-strive-add:before {
-    content: "\e970";
-  }
-  .icon-strive-arrow-label .path1:before {
-    content: "\e971";
-    color: rgb(255, 255, 255);
-  }
-  .icon-strive-arrow-label .path2:before {
-    content: "\e972";
-    margin-left: -1em;
-    color: rgb(0, 0, 0);
-  }
-  .icon-strive-calendar-d:before {
-    content: "\e973";
-  }
-  .icon-strive-calendar-m:before {
-    content: "\e974";
-  }
-  .icon-strive-delete:before {
-    content: "\e975";
-  }
-  .icon-strive-down1:before {
-    content: "\e976";
-  }
-  .icon-strive-eye-off:before,
-  .icon-eye-off:before {
-    content: "\e977";
-  }
-  .icon-strive-eye-on:before,
-  .icon-eye-on:before {
-    content: "\e978";
-  }
-  .icon-strive-left1:before {
-    content: "\e979";
-  }
-  .icon-strive-maximise:before {
-    content: "\e97a";
-  }
-  .icon-strive-right1:before {
-    content: "\e97b";
-  }
-  .icon-strive-search-main:before {
-    content: "\e97c";
-  }
-  .icon-strive-search-nav:before {
-    content: "\e97d";
-  }
-  .icon-strive-statistics:before {
-    content: "\e97e";
-  }
-  .icon-strive-stop1:before {
-    content: "\e97f";
-  }
-  .icon-strive-up1:before {
-    content: "\e980";
-  }
-  .icon-strive-video:before {
-    content: "\e981";
-  }
-  .icon-strive-mail2:before {
-    content: "\e982";
-  }
-  .icon-strive-facebook:before {
-    content: "\e983";
-  }
-  .icon-strive-youtube:before {
-    content: "\e984";
-  }
-  .icon-strive-twitter:before {
-    content: "\e985";
-  }
-  .icon-strive-nsta:before {
-    content: "\e986";
-  }
-  .icon-strive-linkedin:before,
-  .icon-linkedin:before {
-    content: "\e987";
-  }
-  .icon-strive-clock:before {
-    content: "\e988";
-    color: #4c4c4c;
-  }
-  .icon-strive-cookies:before,
-  .icon-cookies:before {
-    content: "\e989";
-  }
-  .icon-desertDiamond-deposit:before {
-    content: "\e900";
-  }
-  .icon-desertDiamond-star:before,
-  .icon-strive-bonus_balance:before,
-  .icon-desertDiamond-bonus_balance:before {
-    content: "\e901";
-  }
-  .icon-desertDiamond-logout:before {
-    content: "\e902";
-  }
-  .icon-desertDiamond-promo:before {
-    content: "\e903";
-  }
-  .icon-desertDiamond-bell:before {
-    content: "\e904";
-  }
-  .icon-desertDiamond-mail2:before {
-    content: "\e905";
-  }
-  .icon-desertDiamond-phone:before {
-    content: "\e906";
-  }
-  .icon-desertDiamond-questions:before {
-    content: "\e907";
-  }
-  .icon-desertDiamond-documents:before {
-    content: "\e908";
-  }
-  .icon-desertDiamond-account:before {
-    content: "\e909";
-  }
-  .icon-desertDiamond-clock:before {
-    content: "\e90a";
-  }
-  .icon-desertDiamond-responsible:before {
-    content: "\e90b";
-  }
-  .icon-desertDiamond-up1:before {
-    content: "\e90c";
-  }
-  .icon-desertDiamond-down1:before {
-    content: "\e90d";
-  }
-  .icon-desertDiamond-eye-off:before {
-    content: "\e90e";
-  }
-  .icon-desertDiamond-eye-on:before {
-    content: "\e90f";
-  }
-  .icon-desertDiamond-left1:before {
-    content: "\e910";
-  }
-  .icon-desertDiamond-right1:before {
-    content: "\e911";
-  }
-  .icon-desertDiamond-left:before {
-    content: "\e912";
-  }
-  .icon-desertDiamond-download:before {
-    content: "\e913";
-  }
-  .icon-desertDiamond-down:before {
-    content: "\e914";
-  }
-  .icon-desertDiamond-lock:before,
-  .icon-strive-locked_balance:before ,
-  .icon-desertDiamond-locked_balance:before {
-    content: "\e915";
-  }
-  .icon-desertDiamond-exclamation:before,
-  .icon-desertDiamond-danger:before {
-    content: "\e916";
-  }
-  .icon-desertDiamond-check:before,
-  .icon-desertDiamond-success:before {
-    content: "\e917";
-  }
-  .icon-desertDiamond-close:before {
-    content: "\e918";
-  }
-  .icon-desertDiamond-calendar-m:before {
-    content: "\e919";
-  }
-  .icon-desertDiamond-linkedin:before {
-    content: "\e91a";
-  }
-  .icon-desertDiamond-nsta:before {
-    content: "\e91b";
-  }
-  .icon-desertDiamond-withdraw:before,
-  .icon-strive-withdrawable_balance:before,
-  .icon-desertDiamond-withdrawable_balance:before {
-    content: "\e91c";
-  }
-  .icon-desertDiamond-balance:before,
-  .icon-strive-playable_balance:before,
-  .icon-desertDiamond-playable_balance:before {
-    content: "\e91d";
-  }
-  .icon-desertDiamond-windows8:before {
-    content: "\e935";
-  }
-  .icon-desertDiamond-appleinc:before {
-    content: "\e936";
-  }
-  .icon-gnogaz-youtube:before {
-    content: "\e91e";
-  }
-  .icon-gnogaz-account:before {
-    content: "\e91f";
-  }
-  .icon-gnogaz-responsible:before {
-    content: "\e920";
-  }
-  .icon-gnogaz-tooltip:before {
-    content: "\e921";
-  }
-  .icon-gnogaz-star:before {
-    content: "\e922";
-  }
-  .icon-gnogaz-twitter:before {
-    content: "\e923";
-  }
-  .icon-gnogaz-eye-on:before {
-    content: "\e924";
-  }
-  .icon-gnogaz-deposit:before {
-    content: "\e925";
-  }
-  .icon-gnogaz-mail2:before {
-    content: "\e926";
-  }
-  .icon-gnogaz-phone:before {
-    content: "\e927";
-  }
-  .icon-gnogaz-logout:before {
-    content: "\e928";
-  }
-  .icon-gnogaz-nsta:before {
-    content: "\e929";
-  }
-  .icon-gnogaz-bell:before {
-    content: "\e92a";
-  }
-  .icon-gnogaz-questions:before {
-    content: "\e92b";
-  }
-  .icon-gnogaz-clock:before {
-    content: "\e92c";
-  }
-  .icon-gnogaz-documents:before {
-    content: "\e92d";
-  }
-  .icon-gnogaz-facebook:before {
-    content: "\e92e";
-  }
-  .icon-gnogaz-eye-off:before {
-    content: "\e92f";
-  }
-  .icon-gnogaz-promo:before {
-    content: "\e930";
-  }
-  .icon-gnogaz-withdraw:before,
-  .icon-gnogaz-withdrawable_balance:before {
-    content: "\e931";
-  }
-  .icon-gnogaz-bonus_balance:before {
-    content: "\e932";
-  }
-  .icon-gnogaz-lock:before,
-  .icon-gnogaz-locked_balance:before {
-    content: "\e933";
-  }
-  .icon-gnogaz-balance:before,
-  .icon-gnogaz-playable_balance:before {
-    content: "\e934";
-  }
-  .icon-gnogaz-home:before {
-    content: "\e937";
-  }
-  .icon-gnogaz-soon:before {
-    content: "\e938";
-  }
-  .icon-gnogaz-bets:before {
-    content: "\e939";
-  }
-  .icon-gnogaz-in-play:before {
-    content: "\e93a";
-  }
-  .icon-gnogaz-all:before {
-    content: "\e93b";
-  }
-  
-  
-  .icon-strive-appleinc:before,
-  .icon-desertDiamond-appleinc:before {
-    content: "\eabe";
-  }
-  .icon-strive-windows8:before,
-  .icon-desertDiamond-windows8:before {
-    content: "\eac2";
-  }
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
 
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-strive-check:before,
+.icon-strive-success:before,
+.icon-check:before,
+.icon-success:before {
+  content: "\e952";
+}
+.icon-strive-date-navigation:before {
+  content: "\e953";
+}
+.icon-strive-exclamation:before,
+.icon-strive-danger:before,
+.icon-exclamation:before,
+.icon-danger:before {
+  content: "\e954";
+}
+.icon-lock1:before {
+  content: "\e956";
+  color: #27a9e0;
+}
+.icon-strive-mail:before {
+  content: "\e957";
+}
+.icon-strive-phone:before {
+  content: "\e959";
+}
+.icon-strive-phone-mobile:before {
+  content: "\e95a";
+}
+.icon-strive-questions:before {
+  content: "\e95b";
+}
+.icon-strive-redirect:before,
+.icon-redirect {
+  content: "\e95c";
+}
+.icon-strive-thumbs:before {
+  content: "\e95f";
+}
+.icon-strive-tooltip:before,
+.icon-tooltip:before {
+  content: "\e960";
+}
+.icon-strive-account:before {
+  content: "\e961";
+}
+.icon-strive-add-action-1:before,
+.icon-add-action-1:before {
+  content: "\e962";
+}
+.icon-strive-card:before {
+  content: "\e963";
+}
+.icon-strive-close:before,
+.icon-close:before {
+  content: "\e964";
+}
+.icon-strive-down:before {
+  content: "\e965";
+}
+.icon-strive-download:before {
+  content: "\e966";
+}
+.icon-strive-favorite:before {
+  content: "\e967";
+}
+.icon-strive-last-bulletin:before {
+  content: "\e968";
+}
+.icon-strive-left:before {
+  content: "\e969";
+}
+.icon-strive-menu:before {
+  content: "\e96a";
+}
+.icon-strive-menu-close:before {
+  content: "\e96b";
+}
+.icon-strive-reset:before {
+  content: "\e96d";
+}
+.icon-strive-right:before {
+  content: "\e96e";
+}
+.icon-strive-up:before {
+  content: "\e96f";
+}
+.icon-strive-add:before {
+  content: "\e970";
+}
+.icon-strive-arrow-label .path1:before {
+  content: "\e971";
+  color: rgb(255, 255, 255);
+}
+.icon-strive-arrow-label .path2:before {
+  content: "\e972";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-strive-calendar-d:before {
+  content: "\e973";
+}
+.icon-strive-calendar-m:before {
+  content: "\e974";
+}
+.icon-strive-delete:before {
+  content: "\e975";
+}
+.icon-strive-down1:before {
+  content: "\e976";
+}
+.icon-strive-eye-off:before,
+.icon-eye-off:before {
+  content: "\e977";
+}
+.icon-strive-eye-on:before,
+.icon-eye-on:before {
+  content: "\e978";
+}
+.icon-strive-left1:before {
+  content: "\e979";
+}
+.icon-strive-maximise:before {
+  content: "\e97a";
+}
+.icon-strive-right1:before {
+  content: "\e97b";
+}
+.icon-strive-search-main:before {
+  content: "\e97c";
+}
+.icon-strive-search-nav:before {
+  content: "\e97d";
+}
+.icon-strive-statistics:before {
+  content: "\e97e";
+}
+.icon-strive-stop1:before {
+  content: "\e97f";
+}
+.icon-strive-up1:before {
+  content: "\e980";
+}
+.icon-strive-video:before {
+  content: "\e981";
+}
+.icon-strive-mail2:before {
+  content: "\e982";
+}
+.icon-strive-facebook:before {
+  content: "\e983";
+}
+.icon-strive-youtube:before {
+  content: "\e984";
+}
+.icon-strive-twitter:before {
+  content: "\e985";
+}
+.icon-strive-nsta:before {
+  content: "\e986";
+}
+.icon-strive-linkedin:before,
+.icon-linkedin:before {
+  content: "\e987";
+}
+.icon-strive-clock:before {
+  content: "\e988";
+  color: #4c4c4c;
+}
+.icon-strive-cookies:before,
+.icon-cookies:before {
+  content: "\e989";
+}
+.icon-desertDiamond-deposit:before {
+  content: "\e900";
+}
+.icon-desertDiamond-star:before,
+.icon-strive-bonus_balance:before,
+.icon-desertDiamond-bonus_balance:before {
+  content: "\e901";
+}
+.icon-desertDiamond-logout:before {
+  content: "\e902";
+}
+.icon-desertDiamond-promo:before {
+  content: "\e903";
+}
+.icon-desertDiamond-bell:before {
+  content: "\e904";
+}
+.icon-desertDiamond-mail2:before {
+  content: "\e905";
+}
+.icon-desertDiamond-phone:before {
+  content: "\e906";
+}
+.icon-desertDiamond-questions:before {
+  content: "\e907";
+}
+.icon-desertDiamond-documents:before {
+  content: "\e908";
+}
+.icon-desertDiamond-account:before {
+  content: "\e909";
+}
+.icon-desertDiamond-clock:before {
+  content: "\e90a";
+}
+.icon-desertDiamond-responsible:before {
+  content: "\e90b";
+}
+.icon-desertDiamond-up1:before {
+  content: "\e90c";
+}
+.icon-desertDiamond-down1:before {
+  content: "\e90d";
+}
+.icon-desertDiamond-eye-off:before {
+  content: "\e90e";
+}
+.icon-desertDiamond-eye-on:before {
+  content: "\e90f";
+}
+.icon-desertDiamond-left1:before {
+  content: "\e910";
+}
+.icon-desertDiamond-right1:before {
+  content: "\e911";
+}
+.icon-desertDiamond-left:before {
+  content: "\e912";
+}
+.icon-desertDiamond-download:before {
+  content: "\e913";
+}
+.icon-desertDiamond-down:before {
+  content: "\e914";
+}
+.icon-desertDiamond-lock:before,
+.icon-strive-locked_balance:before ,
+.icon-desertDiamond-locked_balance:before {
+  content: "\e915";
+}
+.icon-desertDiamond-exclamation:before,
+.icon-desertDiamond-danger:before {
+  content: "\e916";
+}
+.icon-desertDiamond-check:before,
+.icon-desertDiamond-success:before {
+  content: "\e917";
+}
+.icon-desertDiamond-close:before {
+  content: "\e918";
+}
+.icon-desertDiamond-calendar-m:before {
+  content: "\e919";
+}
+.icon-desertDiamond-linkedin:before {
+  content: "\e91a";
+}
+.icon-desertDiamond-nsta:before {
+  content: "\e91b";
+}
+.icon-desertDiamond-withdraw:before,
+.icon-strive-withdrawable_balance:before,
+.icon-desertDiamond-withdrawable_balance:before {
+  content: "\e91c";
+}
+.icon-desertDiamond-balance:before,
+.icon-strive-playable_balance:before,
+.icon-desertDiamond-playable_balance:before {
+  content: "\e91d";
+}
+.icon-strive-windows8:before,
+.icon-desertDiamond-windows8:before {
+  content: "\e935";
+}
+.icon-strive-appleinc:before,
+.icon-desertDiamond-appleinc:before {
+  content: "\e936";
+}
+.icon-desertDiamond-plus:before {
+  content: "\e93e";
+}
+.icon-desertDiamond-sports:before {
+  content: "\e93c";
+}
+.icon-gnogaz-youtube:before {
+  content: "\e91e";
+}
+.icon-gnogaz-account:before {
+  content: "\e91f";
+}
+.icon-gnogaz-responsible:before {
+  content: "\e920";
+}
+.icon-gnogaz-tooltip:before {
+  content: "\e921";
+}
+.icon-gnogaz-star:before {
+  content: "\e922";
+}
+.icon-gnogaz-twitter:before {
+  content: "\e923";
+}
+.icon-gnogaz-eye-on:before {
+  content: "\e924";
+}
+.icon-gnogaz-deposit:before {
+  content: "\e925";
+}
+.icon-gnogaz-mail2:before {
+  content: "\e926";
+}
+.icon-gnogaz-phone:before {
+  content: "\e927";
+}
+.icon-gnogaz-logout:before {
+  content: "\e928";
+}
+.icon-gnogaz-nsta:before {
+  content: "\e929";
+}
+.icon-gnogaz-bell:before {
+  content: "\e92a";
+}
+.icon-gnogaz-questions:before {
+  content: "\e92b";
+}
+.icon-gnogaz-clock:before {
+  content: "\e92c";
+}
+.icon-gnogaz-documents:before {
+  content: "\e92d";
+}
+.icon-gnogaz-facebook:before {
+  content: "\e92e";
+}
+.icon-gnogaz-eye-off:before {
+  content: "\e92f";
+}
+.icon-gnogaz-promo:before {
+  content: "\e930";
+}
+.icon-gnogaz-withdraw:before,
+.icon-gnogaz-withdrawable_balance:before {
+  content: "\e931";
+}
+.icon-gnogaz-bonus_balance:before {
+  content: "\e932";
+}
+.icon-gnogaz-lock:before,
+.icon-gnogaz-locked_balance:before {
+  content: "\e933";
+}
+.icon-gnogaz-balance:before,
+.icon-gnogaz-playable_balance:before {
+  content: "\e934";
+}
+.icon-gnogaz-home:before {
+  content: "\e937";
+}
+.icon-gnogaz-soon:before {
+  content: "\e938";
+}
+.icon-gnogaz-bets:before {
+  content: "\e939";
+}
+.icon-gnogaz-in-play:before {
+  content: "\e93a";
+}
+.icon-gnogaz-all:before {
+  content: "\e93b";
+}
+.icon-gnogaz-sports:before {
+  content: "\e93d";
+}
+.icon-gnogaz-plus:before {
+  content: "\e93f";
+}

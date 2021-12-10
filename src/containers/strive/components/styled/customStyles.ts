@@ -12,10 +12,10 @@ const customStyles = css`
     -webkit-overflow-scrolling: touch;
   }
 
-  html, body {
+  html,
+  body {
     overflow-x: hidden;
   }
-
   body {
     font-family: ${props => props.theme.fonts.family}, 'Myriad Pro', sans-serif;
     max-width: 1920px;
@@ -712,6 +712,8 @@ const customStyles = css`
   .custom-modal {
     position: relative;
     border: none;
+    max-width: 600px;
+    margin: auto;
     &__close {
       position: absolute;
       top: 15px;

@@ -675,7 +675,7 @@ const accountSettingsStyles = css`
     display: grid;
     grid-template-columns: repeat(
       3,
-      ${props => props.theme.infoContainer.limitNumberFontSize * 7.5}px
+      ${props => props.theme.infoContainer.limitNumberFontSize * 8.5}px
     );
     border-bottom: ${props => props.theme.infoContainer.limitInfoBorder};
     padding-bottom: ${props =>

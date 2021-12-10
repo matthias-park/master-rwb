@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?a9l530');
-  src:  url('fonts/icomoon.eot?a9l530#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?a9l530') format('truetype'),
-    url('fonts/icomoon.woff?a9l530') format('woff'),
-    url('fonts/icomoon.svg?a9l530#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?h7xjy3');
+  src:  url('fonts/icomoon.eot?h7xjy3#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?h7xjy3') format('truetype'),
+    url('fonts/icomoon.woff?h7xjy3') format('woff'),
+    url('fonts/icomoon.svg?h7xjy3#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -279,6 +279,12 @@
 .icon-desertDiamond-appleinc:before {
   content: "\e936";
 }
+.icon-desertDiamond-plus:before {
+  content: "\e93e";
+}
+.icon-desertDiamond-sports:before {
+  content: "\e93c";
+}
 .icon-gnogaz-youtube:before {
   content: "\e91e";
 }
@@ -362,4 +368,10 @@
 }
 .icon-gnogaz-all:before {
   content: "\e93b";
+}
+.icon-gnogaz-sports:before {
+  content: "\e93d";
+}
+.icon-gnogaz-plus:before {
+  content: "\e93f";
 }

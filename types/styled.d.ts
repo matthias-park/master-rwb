@@ -118,6 +118,10 @@ declare module 'styled-components' {
       secondaryColor?: string;
       paddingY?: number;
       maxHeight?: number;
+      disabled?: {
+        backgroundColor: string;
+        color: string;
+      };
     };
     fonts: {
       family: string;
@@ -138,6 +142,7 @@ declare module 'styled-components' {
       backgroundMobile?: string;
       marginBottom?: number;
       navHeightMobile?: number;
+      navFontSize?: number;
     };
     footer: {
       listColor: string;

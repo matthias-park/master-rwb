@@ -53,18 +53,16 @@ const buttonStyles = css`
   }
   .btn-primary,
   .btn-primary.dropdown-toggle {
-    &&,
-    &&&.disabled,
-    &&&:disabled {
+    && {
+      background-color: ${props => props.theme.buttons.primaryBgColor};
+      border-color: ${props => props.theme.buttons.primaryBgColor};
+      color: ${props => props.theme.buttons.primaryColor} !important;
+    }
+    &:disabled {
+      color: ${props => props.theme.buttons.disabled?.color} !important;
       background-color: ${props =>
-        props.theme.buttons.primaryBgColor ||
-        props.theme.colors.primary.main} !important;
-      border-color: ${props =>
-        props.theme.buttons.primaryBgColor ||
-        props.theme.colors.primary.main} !important;
-      color: ${props =>
-        props.theme.buttons.primaryColor ||
-        props.theme.colors.brand.text} !important;
+        props.theme.buttons.disabled?.backgroundColor};
+      border-color: ${props => props.theme.buttons.disabled?.backgroundColor};
     }
     &:active,
     &:focus {
