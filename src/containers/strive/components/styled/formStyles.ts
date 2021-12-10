@@ -13,9 +13,8 @@ const formStyles = css`
     .form-control:not(:disabled),
     .form-control:not(:focus),
     .form-control:not(.is-valid) {
-      background-color: ${props =>
-        props.theme.inputs.backgroundColor} !important;
-      color: ${props => props.theme.inputs.color} !important;
+      background-color: ${props => props.theme.inputs.backgroundColor};
+      color: ${props => props.theme.inputs.color};
     }
     .form-control:not(.form-select) {
       padding: ${props => props.theme.inputs.padding} !important;

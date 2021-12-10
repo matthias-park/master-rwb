@@ -17,7 +17,7 @@ import clsx from 'clsx';
 
 interface SettingProps {
   id: string;
-  fields: SettingsField[];
+  fields?: SettingsField[];
   action: string;
   fixedData?: { id: string; value?: string | number | undefined }[];
   setResponse?: (
@@ -445,9 +445,11 @@ const SettingsForm = (props: SettingProps) => {
         }
       }
     }
-    for (const field of fields) {
-      if (!body[field.id] && field.default)
-        body[field.id] = field.default.toString();
+    if (fields !== undefined) {
+      for (const field of fields) {
+        if (!body[field.id] && field.default)
+          body[field.id] = field.default.toString();
+      }
     }
     const res = await postApi<RailsApiResponse<null>>(url, body, {
       formData: formBody,

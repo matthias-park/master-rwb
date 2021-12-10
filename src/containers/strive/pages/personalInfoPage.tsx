@@ -104,7 +104,6 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
               </CustomAlert>
               <SettingsForm
                 id={id}
-                fields={fields}
                 blocks={
                   blocks && {
                     items: blocks,
