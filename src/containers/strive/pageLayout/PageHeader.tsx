@@ -114,29 +114,31 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
       />
     );
   }
+  if (Franchise.desertDiamond || Franchise.gnogaz) {
+    if (user.loading) {
+      return null;
+    }
+    return (
+      <>
+        <Button
+          as={Link}
+          to={loginPagePath}
+          variant="secondary"
+          className="mr-2"
+        >
+          {t('login_btn')}
+        </Button>
+        <Button as={Link} to={registerPagePath} variant="primary">
+          {t('register_btn')}
+        </Button>
+      </>
+    );
+  }
   return (
-    <>
-      {Franchise.desertDiamond || Franchise.gnogaz ? (
-        <>
-          <Button
-            as={Link}
-            to={loginPagePath}
-            variant="secondary"
-            className="mr-2"
-          >
-            {t('login_btn')}
-          </Button>
-          <Button as={Link} to={registerPagePath} variant="primary">
-            {t('register_btn')}
-          </Button>
-        </>
-      ) : (
-        <LoginDropdown
-          dropdownClasses={mobile ? 'ml-auto mr-0' : 'ml-auto mt-0 mt-lg-2'}
-          userLoading={user.loading}
-        />
-      )}
-    </>
+    <LoginDropdown
+      dropdownClasses={mobile ? 'ml-auto mr-0' : 'ml-auto mt-0 mt-lg-2'}
+      userLoading={user.loading}
+    />
   );
 };
 
