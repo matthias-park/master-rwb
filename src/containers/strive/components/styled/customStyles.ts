@@ -173,6 +173,7 @@ const customStyles = css`
   .toggle-check-wrp {
     &.is-invalid * {
       color: ${props => props.theme.colors.danger.main};
+      margin-bottom: 0;
     }
   }
 
@@ -231,6 +232,10 @@ const customStyles = css`
       font-size: 14px;
       line-height: 1.5;
       padding-left: 0.5rem;
+    }
+    &__errMsg {
+      margin-left: 55px;
+      margin-bottom: 1.5rem;
     }
     &.is-invalid {
       background-color: ${props => props.theme.colors.danger.main};

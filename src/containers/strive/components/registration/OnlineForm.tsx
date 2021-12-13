@@ -532,13 +532,16 @@ const FormField = ({
   registerField,
 }) => {
   const { t, jsxT } = useI18n();
-  const [checked, setChecked] = useState(false);
+  const { watch } = useFormContext();
+  const [checked, setChecked] = useState(watch(field.id));
 
   switch (field.type) {
     case 'checkbox': {
       return Franchise.desertDiamond || Franchise.gnogaz ? (
         <CustomToggleCheck
-          {...registerField(field.id)}
+          {...registerField(field.id, {
+            required: field.required,
+          })}
           id={field.id}
           checked={checked}
           name={field.id}
@@ -547,6 +550,9 @@ const FormField = ({
           }}
           className="mb-7"
           label={jsxT(`register_input_${field.id}_label`)}
+          errMsg={`${t(`register_input_${field.id}`)} ${t(
+            'register_input_required',
+          )}`}
           rules={{
             required: !!field.required,
           }}
