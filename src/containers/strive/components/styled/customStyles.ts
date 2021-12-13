@@ -564,7 +564,7 @@ const customStyles = css`
   }
 
   .body-background {
-    background-color: ${props => props.theme.colors.white.main} !important;
+    background-color: ${props => props.theme.colors.body} !important;
   }
 
   .page-title {

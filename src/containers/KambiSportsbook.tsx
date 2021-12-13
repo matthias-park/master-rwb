@@ -428,11 +428,14 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
           });
           const kambiContainer = document.createElement('div');
           kambiContainer.id = 'KambiBC';
-          kambiContainer.classList.add('kambiHidden');
-          containerRef.current?.parentNode?.insertBefore(
-            kambiContainer,
-            containerRef.current.nextSibling,
-          );
+          if (containerRef.current?.parentNode) {
+            containerRef.current.parentNode.insertBefore(
+              kambiContainer,
+              containerRef.current.nextSibling,
+            );
+          } else {
+            document.getElementById('root')?.append(kambiContainer);
+          }
           updateWindowKambiConfig(kambiConfig);
           insertKambiBootstrap(retail);
         });
