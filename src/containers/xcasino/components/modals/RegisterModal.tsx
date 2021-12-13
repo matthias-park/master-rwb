@@ -44,21 +44,21 @@ const PersonalDetailsForm = ({ formState, apiError }) => {
       />
       <TextInput
         type="text"
+        id={'middlename'}
+        rules={{
+          required: false,
+          validate: value => VALIDATIONS.isAlpha(value),
+        }}
+        title={t('register_input_middlename')}
+      />
+      <TextInput
+        type="text"
         id={'lastname'}
         rules={{
           required: false,
           validate: value => VALIDATIONS.isAlpha(value),
         }}
         title={t('register_input_lastname')}
-      />
-      <TextInput
-        type="text"
-        maskedInput={{
-          allowEmptyFormatting: true,
-        }}
-        id={'social_security_number'}
-        rules={{ required: false }}
-        title={t('register_input_personal_code')}
       />
       <div className="register-modal__checks">
         <CheckboxInput
@@ -174,6 +174,15 @@ const CredentialsForm = ({ setValue, selectedMonth, selectedYear }) => {
             t('phone_number_invalid'),
         }}
         title={t('register_input_phone_number')}
+      />
+      <TextInput
+        type="text"
+        maskedInput={{
+          allowEmptyFormatting: true,
+        }}
+        id={'social_security_number'}
+        rules={{ required: false }}
+        title={t('register_input_personal_code')}
       />
       <div className="split-datepicker">
         <CustomSelectInput
