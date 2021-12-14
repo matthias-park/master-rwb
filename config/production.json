@@ -367,8 +367,8 @@
       "kambi": {
         "market": "US",
         "currency": "USD",
-        "online": "https://ctn-static.kambi.com/client/ddusaz/kambi-bootstrap.js",
-        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js",
+        "online": "https://static.kambicdn.com/client/ddusaz/kambi-bootstrap.js",
+        "api": "https://static.kambicdn.com/client/widget-api/kambi-widget-api.js",
         "oddsFormat": "american"
       },
       "geoComplyKey": "ShzolMaAK",
