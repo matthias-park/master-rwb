@@ -12,6 +12,7 @@ import CustomAlert from '../components/CustomAlert';
 import { useDispatch } from 'react-redux';
 import { setValidationStatus } from '../../../state/reducers/user';
 import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
+import { Franchise } from '../../../constants';
 
 interface PersonalInfoProps {
   personalInfoData: any;
@@ -104,7 +105,9 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
               </CustomAlert>
               <SettingsForm
                 id={id}
+                fields={Franchise.strive ? fields : null}
                 blocks={
+                  (Franchise.gnogaz || Franchise.desertDiamond) &&
                   blocks && {
                     items: blocks,
                     className: 'personal-info-block',

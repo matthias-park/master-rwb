@@ -445,7 +445,7 @@ const SettingsForm = (props: SettingProps) => {
         }
       }
     }
-    if (fields !== undefined) {
+    if (fields) {
       for (const field of fields) {
         if (!body[field.id] && field.default)
           body[field.id] = field.default.toString();
