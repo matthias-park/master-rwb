@@ -76,7 +76,8 @@ const formStyles = css`
       }
       &:focus,
       &:active,
-      &:not(:placeholder-shown) {
+      &:not(:placeholder-shown),
+      &:-webkit-autofill {
         + label {
           font-size: ${props => props.theme.inputs.labelActiveFontSize}px;
           top: ${props => props.theme.inputs.labelActiveTop}px;
