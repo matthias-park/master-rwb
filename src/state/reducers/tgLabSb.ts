@@ -10,7 +10,7 @@ export const fetchUserSbToken = createAsyncThunk<string, number, any>(
   'tgLabSb/fetchUserSbToken',
   async (_, thunkAPI: any) => {
     const response = await getApi<RailsApiResponse<string>>(
-      '/railsapi/v1/user/sb_auth_token',
+      '/restapi/v1/user/sb_auth_token',
     ).catch(() => RailsApiResponseFallback);
     if (response.Data) {
       return response.Data;

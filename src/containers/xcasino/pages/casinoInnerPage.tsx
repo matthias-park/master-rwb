@@ -71,7 +71,7 @@ const CasinoInnerPage = () => {
   const getLaunchUrl = async () => {
     const res = await postApi<
       RailsApiResponse<{ url: string; html_base_64: any } | null>
-    >('/railsapi/v1/casino/launch_url', {
+    >('/restapi/v1/casino/launch_url', {
       reload_game_url: window.location.href,
       game_provider: provider,
       game_id: gameId,

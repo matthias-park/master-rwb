@@ -68,19 +68,19 @@ export const CasinoConfigProvider = props => {
   const { enableModal } = useModal();
   const history = useHistory();
   const { data: categoriesData, error: categoriesError } = useApi<any>(
-    '/railsapi/v1/casino/categories',
+    '/restapi/v1/casino/categories',
   );
   const { data: providersData, error: providersError } = useApi<any>(
-    '/railsapi/v1/casino/custom_providers',
+    '/restapi/v1/casino/custom_providers',
   );
   const { data: liveCategoriesData, error: liveCategoriesError } = useApi<any>(
-    '/railsapi/v1/casino/live_categories',
+    '/restapi/v1/casino/live_categories',
   );
   const {
     data: favouriteGamesData,
     error: favouriteGamesDataError,
     mutate: favouriteGamesDataMutate,
-  } = useApi<any>(user.logged_in ? '/railsapi/v1/casino/favourite_games' : '');
+  } = useApi<any>(user.logged_in ? '/restapi/v1/casino/favourite_games' : '');
   const [params, setParams] = useState<{
     category?: string;
     provider?: string;

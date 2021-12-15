@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import Lockr from 'lockr';
+import { ProdEnv } from '../../constants';
 import { GeoComplyErrorCodes } from '../../types/GeoComply';
 import GeoComplyState, {
   LocalStorageState,
@@ -62,7 +63,9 @@ export const geoComplySlice = createSlice({
       state.license = action.payload.license;
       state.licenseExpiresAt = action.payload.expiresAt;
       if (window.GeoComply?.Client.getLicense() !== action.payload) {
-        console.log('geoComply setting license');
+        if (!ProdEnv) {
+          console.log('geoComply setting license');
+        }
         window.GeoComply?.Client.setLicense(action.payload.license);
       }
     },
@@ -92,7 +95,9 @@ export const geoComplySlice = createSlice({
     setUserId: (state, action: PayloadAction<number>) => {
       if (state.isConnected && state.userId !== action.payload) {
         state.userId = action.payload;
-        console.log('geoComply setting user id');
+        if (!ProdEnv) {
+          console.log('geoComply setting user id');
+        }
         window.GeoComply?.Client.setUserId(action.payload);
         const { savedState } = state;
         const savedStateCurrentUser = savedState?.id === action.payload;

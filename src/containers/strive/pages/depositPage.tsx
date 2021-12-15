@@ -85,7 +85,7 @@ const DepositPage = () => {
       };
       const response: RailsApiResponse<DepositResponse | null> = await postApi<
         RailsApiResponse<DepositResponse>
-      >('/railsapi/v1/deposits/perform', depositParams).catch(
+      >('/restapi/v1/deposits/perform', depositParams).catch(
         (res: RailsApiResponse<null>) => {
           return res;
         },
@@ -123,7 +123,7 @@ const DepositPage = () => {
                   depositRequestId: response.Data?.DepositRequestId,
                 };
                 postApi<RailsApiResponse<RequestReturn>>(
-                  '/railsapi/v1/deposits/request_return',
+                  '/restapi/v1/deposits/request_return',
                   {
                     bank_id: bankId.toString(),
                     data: JSON.stringify(data),

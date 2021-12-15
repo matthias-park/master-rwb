@@ -5,7 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 
 const TransactionOverviewTable = () => {
   const [show, setShow] = useState(false);
-  const { data, error } = useApi('/railsapi/v1/user/session_details');
+  const { data, error } = useApi('/restapi/v1/user/session_details');
   const isDataLoading = !data && !error;
 
   return (

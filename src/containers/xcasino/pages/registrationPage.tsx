@@ -25,7 +25,7 @@ const RegistrationPage = () => {
   const { t } = useI18n();
   const [filteredLimits, setFilteredLimits] = useState<Object | null>(null);
   const [apiBankError, setApiBankErr] = useState('');
-  const { data, mutate } = useApi<any>('/railsapi/v1/user/profile/play_limits');
+  const { data, mutate } = useApi<any>('/restapi/v1/user/profile/play_limits');
 
   const [apiBankResponse, setApiBankResponse] = useState<{
     success: boolean | null;
@@ -68,7 +68,7 @@ const RegistrationPage = () => {
     data = {
       account_number: data.account_number,
       swift: 'swft',
-      address: '/railsapi/v1/user/bank',
+      address: '/restapi/v1/user/bank',
     };
     const res = await postApi<RailsApiResponse<any>>(
       '/restapi/v1/user/bank',

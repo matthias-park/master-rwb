@@ -7,7 +7,7 @@ import SettingsForm from '../components/account-settings/SettingsForm';
 
 const ChangePasswordPage = () => {
   const { data, error } = useApi<any>(
-    '/railsapi/v1/user/profile/change_password',
+    '/restapi/v1/user/profile/change_password',
   );
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;

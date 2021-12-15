@@ -31,7 +31,7 @@ const TaxPage = () => {
 
   const getTaxFile = async (bet_id, date) => {
     const response = await postApi<RailsApiResponse<any>>(
-      '/railsapi/v1/user/w9_file',
+      '/restapi/v1/user/w9_file',
       {
         bet_id,
       },
@@ -50,7 +50,7 @@ const TaxPage = () => {
 
   const getTaxesData = async (page = 1) => {
     const response = await postApi<RailsApiResponse<any>>(
-      '/railsapi/v1/user/w2g_taxes_list',
+      '/restapi/v1/user/w2g_taxes_list',
       {
         page_number: page,
         page_size: 25,

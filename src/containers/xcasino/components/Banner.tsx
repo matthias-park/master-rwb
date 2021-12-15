@@ -60,7 +60,7 @@ const Banner = ({ promoSlides, onLoad, onError, zone }: BannerProps) => {
     } else {
       (async () => {
         const data = await postApi<RailsApiResponse<any>>(
-          '/railsapi/v1/content/banners',
+          '/restapi/v1/content/banners',
           {
             zone: zone,
           },

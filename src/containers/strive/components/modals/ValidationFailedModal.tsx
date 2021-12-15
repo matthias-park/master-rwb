@@ -33,7 +33,7 @@ const ValidationFailedModal = () => {
     KYC_VALIDATOR_STATUS.ShouldUploadDocumentForKyc,
   ].includes(user.validator_status || 0);
   const { data, mutate } = useApi<RailsApiResponse<KycAttempts | null>>(
-    user.logged_in && validatorNotOk ? '/railsapi/v1/user/kyc_attempts' : null,
+    user.logged_in && validatorNotOk ? '/restapi/v1/user/kyc_attempts' : null,
   );
 
   useEffect(() => {

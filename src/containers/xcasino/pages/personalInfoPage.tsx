@@ -7,7 +7,7 @@ import SettingsForm from '../components/account-settings/SettingsForm';
 
 const PersonalInfoPage = () => {
   const { data, error, mutate } = useApi<any>(
-    '/railsapi/v1/user/profile/personal_info',
+    '/restapi/v1/user/profile/personal_info',
   );
   const isDataLoading = !data && !error;
   const [apiResponse, setApiResponse] = useState<{

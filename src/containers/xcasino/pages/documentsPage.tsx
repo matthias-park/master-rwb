@@ -16,7 +16,7 @@ import Spinner from 'react-bootstrap/Spinner';
 
 export const FilePicker = () => {
   const { data, error, mutate } = useApi<any>(
-    '/railsapi/v1/user/profile/required_documents',
+    '/restapi/v1/user/profile/required_documents',
   );
   const isDataLoading = !data && !error;
   const { addToast } = useToasts();

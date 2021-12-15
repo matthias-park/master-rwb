@@ -11,11 +11,11 @@ const LiveCasinoWelcomeGroup = () => {
   const { t } = useI18n();
   const desktopWidth1200 = useDesktopWidth(1200);
   const { data: categories, error: categoriesError } = useApi<any>(
-    '/railsapi/v1/casino/live_categories',
+    '/restapi/v1/casino/live_categories',
   );
   const { data: games, error: gamesError } = useApi<any>(
     !!categories
-      ? `/railsapi/v1/casino/live_categories/${categories.Data[0].id}/games`
+      ? `/restapi/v1/casino/live_categories/${categories.Data[0].id}/games`
       : '',
   );
   const featuredGames = useMemo(

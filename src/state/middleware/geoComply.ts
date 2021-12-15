@@ -24,6 +24,7 @@ import {
 import Lockr from 'lockr';
 import UserStatus from '../../types/UserStatus';
 import { setLogout, setUser } from '../reducers/user';
+import { ProdEnv } from '../../constants';
 
 const insertGeoComplyScript = async (): Promise<boolean> =>
   new Promise((resolve, reject) => {
@@ -57,17 +58,21 @@ const fetchSetLicenseKey = (
     const license = state.license || cacheLicense?.License;
     const expiresAt =
       state.licenseExpiresAt || cacheLicense?.ExpiresAtUtc || null;
-    console.log(
-      `checking geoComply license | license: ${!!license} | isExpired: ${
-        expiresAt && dayjs(expiresAt).isBefore(dayjs())
-      } | force new license:${!!data.forceGetNewLicense}`,
-    );
+    if (!ProdEnv) {
+      console.log(
+        `checking geoComply license | license: ${!!license} | isExpired: ${
+          expiresAt && dayjs(expiresAt).isBefore(dayjs())
+        } | force new license:${!!data.forceGetNewLicense}`,
+      );
+    }
     if (
       !license ||
       (expiresAt && dayjs(expiresAt).isBefore(dayjs())) ||
       data.forceGetNewLicense
     ) {
-      console.log('geoComply getting new license from server');
+      if (!ProdEnv) {
+        console.log('geoComply getting new license from server');
+      }
       getApi<RailsApiResponse<GeoComplyLicense>>(
         '/restapi/v1/geocomply/license',
       ).then(res => {
@@ -107,13 +112,17 @@ const actions: {
       const state = (storeApi.getState() as RootState).geoComply;
       const { dispatch } = storeApi;
       if (!state.isReady) {
-        console.log('geoComply insert client script');
+        if (!ProdEnv) {
+          console.log('geoComply insert client script');
+        }
         insertGeoComplyScript()
           .then(ready => {
             if (ready) {
               dispatch(setReady());
               window.GeoComply?.Client.on('connect', () => {
-                console.log('geoComply connected');
+                if (!ProdEnv) {
+                  console.log('geoComply connected');
+                }
                 dispatch(setConnected(true));
                 window.addEventListener('beforeunload', () =>
                   window.GeoComply?.Client.disconnect(),
@@ -125,23 +134,31 @@ const actions: {
                   if (state.isConnected !== currentGeoComplyConnected) {
                     dispatch(setConnected(currentGeoComplyConnected));
                   }
-                  console.log(`geoComply error code: ${code} message: ${msg}`);
+                  if (!ProdEnv) {
+                    console.log(
+                      `geoComply error code: ${code} message: ${msg}`,
+                    );
+                  }
                   if (
                     code ===
                     GeoComplyErrorCodes.CLNT_ERROR_LOCAL_SERVICE_UNAVAILABLE
                   ) {
                     window.GeoComply?.Client.disconnect();
                     dispatch(setConnected(false));
-                    console.log(
-                      'geoComply no client software on pc NOT found - disconnecting',
-                    );
+                    if (!ProdEnv) {
+                      console.log(
+                        'geoComply no client software on pc NOT found - disconnecting',
+                      );
+                    }
                   }
                   if (!licenseKeyErrorCodes.includes(code)) {
                     dispatch(setError(code));
                   }
                 })
                 .on('geolocation', geoLocation => {
-                  console.log('geoComply got geo-location hash');
+                  if (!ProdEnv) {
+                    console.log('geoComply got geo-location hash');
+                  }
                   dispatch(setGeoLocation(geoLocation));
                 });
             }
@@ -156,7 +173,9 @@ const actions: {
     before: storeApi => {
       const state = (storeApi.getState() as RootState).geoComply;
       if (state.isReady && !state.isConnecting && !state.isConnected) {
-        console.log('connect to GeoComply');
+        if (!ProdEnv) {
+          console.log('connect to GeoComply');
+        }
         const envId =
           process.env.TARGET_ENV === 'production' ? 'production' : 'staging';
         window.GeoComply?.Client.connect(window.__config__.geoComplyKey, envId);
@@ -178,11 +197,15 @@ const actions: {
             res?.Data.Success &&
             res?.Data.Code === GeoComplyValidateCodes.Ok
           ) {
-            console.log(`geoComply-.net success validation`);
+            if (!ProdEnv) {
+              console.log(`geoComply-.net success validation`);
+            }
           } else if (typeof res?.Data.Code === 'number') {
-            console.log(
-              `geoComply-.net ERROR got code: ${res.Data.Code} message: ${res.Data.Message}`,
-            );
+            if (!ProdEnv) {
+              console.log(
+                `geoComply-.net ERROR got code: ${res.Data.Code} message: ${res.Data.Message}`,
+              );
+            }
             if (state.error !== res.Data.Code) {
               dispatch(setError(res.Data.Code));
             }
@@ -203,11 +226,15 @@ const actions: {
       actionPayload: { isGeoAllowed: boolean; revalidateIn: string | null },
     ) => {
       if (actionPayload.isGeoAllowed && actionPayload.revalidateIn) {
-        console.log(`revalidation in ${actionPayload.revalidateIn}sec`);
+        if (!ProdEnv) {
+          console.log(`revalidation in ${actionPayload.revalidateIn}sec`);
+        }
         const revalidateTimeInMs = parseInt(actionPayload.revalidateIn) * 1000;
         if (!isNaN(revalidateTimeInMs)) {
           revalidateTimeout = setTimeout(() => {
-            console.log('revalidate timeout');
+            if (!ProdEnv) {
+              console.log('revalidate timeout');
+            }
             storeApi.dispatch(setValidationReason('revalidate'));
           }, revalidateTimeInMs);
         }
@@ -243,7 +270,9 @@ const actions: {
   [setLogout.toString()]: {
     before: storeApi => {
       const { dispatch } = storeApi;
-      console.log('geoComply cleanup');
+      if (!ProdEnv) {
+        console.log('geoComply cleanup');
+      }
       window.GeoComply?.Client.disconnect();
       dispatch(resetState());
     },
@@ -258,7 +287,9 @@ const actions: {
         window.GeoComply?.Client.getUserId() &&
         !data.logged_in
       ) {
-        console.log('geoComply cleanup');
+        if (!ProdEnv) {
+          console.log('geoComply cleanup');
+        }
         window.GeoComply?.Client.disconnect();
         dispatch(resetState());
       } else if (
@@ -275,7 +306,9 @@ const actions: {
         state.wasConnected &&
         !state.isConnected
       ) {
-        console.log('geoComply reconnect after user change');
+        if (!ProdEnv) {
+          console.log('geoComply reconnect after user change');
+        }
         dispatch(connectToGeo());
       }
     },
@@ -288,7 +321,9 @@ const actions: {
   [resetState.toString()]: {
     after: () => {
       if (revalidateTimeout) {
-        console.log('clearing revalidate');
+        if (!ProdEnv) {
+          console.log('clearing revalidate');
+        }
         clearTimeout(revalidateTimeout);
       }
     },

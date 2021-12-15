@@ -70,7 +70,7 @@ const useDepositResponseStatus = () => {
       queryParams.token &&
       queryParams.PayerID
     ) {
-      postApi<RailsApiResponse<null>>('/railsapi/v1/deposits/paypal', {
+      postApi<RailsApiResponse<null>>('/restapi/v1/deposits/paypal', {
         token: queryParams.token,
         payer_id: queryParams.PayerID,
       })
@@ -95,7 +95,7 @@ const useDepositResponseStatus = () => {
         })
         .catch(() => {});
     } else if (bankId && queryParams && Object.keys(queryParams).length) {
-      postApi<RailsApiResponse<null>>('/railsapi/v1/deposits/request_return', {
+      postApi<RailsApiResponse<null>>('/restapi/v1/deposits/request_return', {
         bank_id: bankId.toString(),
         data: JSON.stringify({
           ...queryParams,

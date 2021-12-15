@@ -4,8 +4,9 @@ import { removeUserData, setBalance, setUser } from '../reducers/user';
 import io from 'socket.io-client';
 import StatusMessage from '../../types/WebsocketUserStatus';
 import { enableModal } from '../reducers/modals';
-import { ComponentName } from '../../constants';
+import { ComponentName, ProdEnv } from '../../constants';
 import { mutate } from 'swr';
+import * as Sentry from '@sentry/react';
 
 let userSocketIO;
 const userWebsocketMiddleware: Middleware = storeApi => next => action => {
@@ -18,7 +19,10 @@ const userWebsocketMiddleware: Middleware = storeApi => next => action => {
           transports: ['websocket', 'polling'],
         });
         userSocketIO.on('connect_error', err => {
-          console.log(err);
+          if (!ProdEnv) {
+            console.log(err);
+          }
+          Sentry.captureEvent(new Error(err));
         });
         userSocketIO.on('message', (wsData: StatusMessage) => {
           switch (wsData.action) {

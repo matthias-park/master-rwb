@@ -156,6 +156,7 @@ const XtremePushInbox = ({ className }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [xtremePushReady, setXtremePushReady] = useState(!!window.xtremepush);
   const messagesRequested = useRef(false);
+  const xtremePushReadyTimeout = useRef<number | null>();
   const messageListProps = useRef({
     limit: 20,
     offset: 0,
@@ -175,7 +176,6 @@ const XtremePushInbox = ({ className }: Props) => {
         setMessageCount(result.badge);
         setMessageList(result.items);
         setIsLoading(false);
-        console.log(result);
       },
     );
   };
@@ -190,12 +190,10 @@ const XtremePushInbox = ({ className }: Props) => {
           'badge',
           {},
           ({ badge }: { badge: number }) => {
-            console.log(badge);
             setMessageCount(badge);
           },
           (err: any) => {
-            console.log(err);
-            Sentry.captureEvent(err);
+            Sentry.captureEvent(new Error(err));
           },
         );
         if (messagesRequested.current) getMessages();
@@ -206,6 +204,13 @@ const XtremePushInbox = ({ className }: Props) => {
         insertScript()
           .then(() => {
             window.xtremepush('ready', init);
+            xtremePushReadyTimeout.current = setTimeout(() => {
+              window.xtremepush('ready', () => {
+                if (xtremePushReadyTimeout.current)
+                  clearTimeout(xtremePushReadyTimeout.current);
+                init();
+              });
+            }, 500);
           })
           .catch(err => Sentry.captureEvent(err));
       }

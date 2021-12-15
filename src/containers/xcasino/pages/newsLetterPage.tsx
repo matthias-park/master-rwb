@@ -7,7 +7,7 @@ import SettingsForm from '../components/account-settings/SettingsForm';
 
 const NewsLetterPage = () => {
   const { data, error, mutate } = useApi<any>(
-    '/railsapi/v1/user/profile/communication_preferences',
+    '/restapi/v1/user/profile/communication_preferences',
   );
   const isDataLoading = !data && !error;
   const [apiResponse, setApiResponse] = useState<{

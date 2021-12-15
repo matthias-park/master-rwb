@@ -27,7 +27,7 @@ const CasinoCategory = () => {
   const providerId = providerFilter?.id || activeProvider?.id;
   const { data, error } = useApi<RailsApiResponse<Game[]>>(
     categoryId || providerId
-      ? `/railsapi/v1/casino/${
+      ? `/restapi/v1/casino/${
           params?.category
             ? `${casinoType === 'live-casino' ? 'live_' : ''}categories`
             : 'custom_providers'

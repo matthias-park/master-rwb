@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { CustomWindowEvents } from '../constants';
+import { CustomWindowEvents, ProdEnv } from '../constants';
 import { stringToMiliseconds } from '../utils';
 import Lockr from 'lockr';
 
@@ -17,7 +17,9 @@ const useIdleTicker = (active: boolean, timeoutCallback: () => void) => {
       clearInterval(idleTicker.current);
       idleTime.current = 0;
     }
-    console.log(`user idle timer: ${idleTime.current}min`);
+    if (!ProdEnv) {
+      console.log(`user idle timer: ${idleTime.current}min`);
+    }
   };
 
   useEffect(() => {

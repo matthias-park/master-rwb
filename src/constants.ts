@@ -1,5 +1,6 @@
 import RailsApiResponse from './types/api/RailsApiResponse';
 import { FranchiseNames } from './types/FranchiseNames';
+export const ProdEnv = process.env.TARGET_ENV === 'production';
 export const DevEnv = process.env.TARGET_ENV === 'development';
 export const TestEnv = process.env.TARGET_ENV === 'test';
 export enum ComponentName {

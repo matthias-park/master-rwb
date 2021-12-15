@@ -37,7 +37,7 @@ export const CasinoGroupSlider = ({
   const { featuredCasinoCategories } = useConfig();
   const { data, error } = useApi<RailsApiResponse<Game[]>>(
     !games && category
-      ? `/railsapi/v1/casino/${
+      ? `/restapi/v1/casino/${
           casinoType === 'live-casino' ? 'live_' : ''
         }categories/${category.id}/games`
       : '',

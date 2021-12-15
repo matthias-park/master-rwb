@@ -327,7 +327,7 @@ const DepositPage = () => {
                   };
                 }
                 postApi<RailsApiResponse<RequestReturn>>(
-                  '/railsapi/v1/deposits/request_return',
+                  '/restapi/v1/deposits/request_return',
                   {
                     bank_id: bankId.toString(),
                     data: JSON.stringify(data),
