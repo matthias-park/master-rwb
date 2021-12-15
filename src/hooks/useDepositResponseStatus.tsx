@@ -168,7 +168,7 @@ const useDepositResponseStatus = () => {
           level: Sentry.Severity.Warning,
         });
         setDepositStatus(DepositStatus.Timeout);
-      }, 60000); // 1min
+      }, 120000); // 2min
     }
     return () => {
       clearTimeout(timer);
