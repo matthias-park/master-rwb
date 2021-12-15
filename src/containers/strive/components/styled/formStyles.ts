@@ -19,11 +19,13 @@ const formStyles = css`
     .form-control:not(.form-select) {
       padding: ${props => props.theme.inputs.padding} !important;
     }
+    .form-control:not(textarea) {
+      height: ${props => props.theme.inputs.height}px !important;
+    }
     .form-control {
       border: ${props => props.theme.inputs.border};
       border-radius: ${props => props.theme.inputs.borderRadius}px !important;
       font-size: ${props => props.theme.inputs.fontSize}px !important;
-      height: ${props => props.theme.inputs.height}px !important;
       &.is-valid {
         border-color: ${props => props.theme.colors.success.main};
       }
