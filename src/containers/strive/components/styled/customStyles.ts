@@ -25,6 +25,7 @@ const customStyles = css`
     margin: auto;
     background-color: ${props => props.theme.colors.body} !important;
     color: ${props => props.theme.colors.brand.text} !important;
+    height: unset !important;
     ${mediaBreakpointDown('xl')} {
       padding: 0 ${props => props.theme.spacing.bodyPaddingMedium}px 0
         ${props => props.theme.spacing.bodyPaddingMedium}px !important;
@@ -43,6 +44,13 @@ const customStyles = css`
     &:not(.show-captcha) .grecaptcha-badge {
       visibility: hidden;
     }
+  }
+
+  .page-wrp {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
   }
 
   a {

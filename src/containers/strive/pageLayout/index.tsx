@@ -103,7 +103,7 @@ const PageLayout = ({ children }) => {
     return children;
   }
   return (
-    <>
+    <div className="page-wrp">
       <ErrorBoundary>
         <PageHeader />
       </ErrorBoundary>
@@ -131,7 +131,7 @@ const PageLayout = ({ children }) => {
       <ErrorBoundary>
         <CookieConsent />
       </ErrorBoundary>
-    </>
+    </div>
   );
 };
 
