@@ -2,6 +2,7 @@ import { css } from 'styled-components';
 import { mediaBreakpointDown, mediaBreakpointUp } from './breakpoints';
 import { textOverflow1 } from './mixins';
 import { rgba } from './mixins';
+import { Franchise } from '../../../../constants';
 
 const customStyles = css`
   *:focus {
@@ -1021,6 +1022,14 @@ const customStyles = css`
     }
     border: none;
     width: 100%;
+  }
+  ${
+    Franchise.desertDiamond &&
+    `
+    #mod-KambiBC-betslip-container.mod-KambiBC-betslip-container {
+      z-index: 999999 !important;
+    }
+  `
   }
 `;
 
