@@ -304,7 +304,7 @@
         "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js",
         "oddsFormat": "american"
       },
-      "xtremepush": "xIPqGJt6fuQgTzDOSuSTN72PPi7rRk6F",
+      "xtremepush": "https://prod.webpu.sh/xIPqGJt6fuQgTzDOSuSTN72PPi7rRk6F/sdk.js",
       "dateFormat": "MM-DD-YYYY",
       "redis": {
         "host": "192.168.109.106",
@@ -349,7 +349,7 @@
       },
       "geoComplyKey": "ShzolMaAK",
       "smartyStreets": "108064515683753034",
-      "xtremepush": "nC8ND1beMmODTqzbby-l6JgLXVd4AdH2",
+      "xtremepush": "https://prod.webpu.sh/nC8ND1beMmODTqzbby-l6JgLXVd4AdH2/sdk.js",
       "zendesk": "35d43606-f8bf-4f03-8b8b-6aa6b7690498",
       "redis": {
         "host": "192.168.109.106",
