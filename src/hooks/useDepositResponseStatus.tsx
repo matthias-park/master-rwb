@@ -1,9 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { useRoutePath } from '.';
-import { PagesName } from '../constants';
+import { Franchise, PagesName } from '../constants';
 import RailsApiResponse from '../types/api/RailsApiResponse';
-import { DepositStatus } from '../types/api/user/Deposit';
+import {
+  DepositStatus,
+  DepositStatusData,
+  UnverifiedDepositReason,
+} from '../types/api/user/Deposit';
 import { postApi } from '../utils/apiUtils';
 import useApi from './useApi';
 import { useAuth } from './useAuth';
@@ -59,9 +63,13 @@ const useDepositResponseStatus = () => {
     return null;
   }, [responseLoading, id, depositStatus, queryParams]);
 
-  const { data, error } = useApi<RailsApiResponse<{}>>(request, postApi, {
-    refreshInterval: 5000,
-  });
+  const { data, error } = useApi<RailsApiResponse<DepositStatusData>>(
+    request,
+    postApi,
+    {
+      refreshInterval: 5000,
+    },
+  );
 
   useEffect(() => {
     if (bankId && queryParams && Object.keys(queryParams).length) {
@@ -128,6 +136,14 @@ const useDepositResponseStatus = () => {
       status = DepositStatus.NotFound;
     } else if (data?.Code !== undefined) {
       status = data.Code;
+      if (
+        Franchise.xCasino &&
+        data.Code === DepositStatus.Unverified &&
+        data.Data.UnverifiedDepositReason ===
+          UnverifiedDepositReason.FirstDepositNotFromMainAccount
+      ) {
+        status = DepositStatus.FirstDepositNotFromMainAccount;
+      }
     }
     if (depositStatus === DepositStatus.Timeout) status = depositStatus;
     if (responseCanceled) status = DepositStatus.Canceled;
@@ -165,7 +181,7 @@ const useDepositResponseStatus = () => {
   }, [data, updateUser, depositStatus]);
   let message: string | JSX.Element | JSX.Element[] = '';
   if (depositStatus !== DepositStatus.None) {
-    message = state?.message || jsxT(`deposit_status_${depositStatus}`);
+    message = jsxT(`deposit_status_${depositStatus}`, true) || state?.message;
   }
   return {
     setDepositId: (id: string | number, bankId?: number) => {

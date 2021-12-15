@@ -26,6 +26,7 @@ export interface DepositResponse {
 }
 
 export enum DepositStatus {
+  FirstDepositNotFromMainAccount = -5,
   Errored = -4,
   Canceled = -3,
   Timeout = -2,
@@ -36,6 +37,23 @@ export enum DepositStatus {
   Rejected = 3,
   Return = 4,
   Unverified = 5,
+}
+
+export enum UnverifiedDepositReason {
+  Forced = 0,
+  NameMismatch = 1,
+  DepositDisallowed = 2,
+  NumberOfWalletsExceeded = 3,
+  RuleEngine = 4,
+  FirstDepositNotFromMainAccount = 5,
+  AccountAlreadyInUse = 20,
+}
+
+export interface DepositStatusData {
+  Code: number;
+  DepositStatus: number;
+  Message: string;
+  UnverifiedDepositReason: number;
 }
 
 export interface DepositRequest {
