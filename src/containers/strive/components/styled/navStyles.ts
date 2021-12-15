@@ -49,6 +49,7 @@ export const navStyles = css`
     border-radius: ${props => props.theme.settingsMenu?.borderRadius}px;
     &__item {
       position: relative;
+      display: flex;
       align-items: center;
       list-style-type: none;
       padding: 14px 14px 14px 20px;
