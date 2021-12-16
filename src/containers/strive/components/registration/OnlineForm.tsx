@@ -138,7 +138,7 @@ const blocks = (
             id: 'phone_number',
             autoComplete: 'tel',
             type: 'text',
-            required: false,
+            required: true,
             validate: value =>
               !value ||
               !value.length ||
