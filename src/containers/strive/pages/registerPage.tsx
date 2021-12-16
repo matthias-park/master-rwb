@@ -14,6 +14,7 @@ import {
   franchiseDateFormat,
   PagesName,
   REDIRECT_PROTECTED_NOT_LOGGED_IN,
+  Franchise,
 } from '../../../constants';
 import { useAuth } from '../../../hooks/useAuth';
 import RedirectNotFound from '../../../components/RedirectNotFound';
@@ -208,11 +209,13 @@ const RegisterPage = () => {
         )}
       >
         <FormProvider {...formMethods}>
-          <HelpBlock
-            title={'user_help_title'}
-            blocks={['faq', 'phone', 'email']}
-            className="default"
-          />
+          {!Franchise.desertDiamond && (
+            <HelpBlock
+              title={'user_help_title'}
+              blocks={['faq', 'phone', 'email']}
+              className="default"
+            />
+          )}
           {location?.state?.welcomeScreen && <RegWelcome />}
           {!!location?.state?.resCode && !!location.state.message && (
             <RegError

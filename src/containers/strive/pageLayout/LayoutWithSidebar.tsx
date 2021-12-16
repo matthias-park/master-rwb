@@ -4,6 +4,7 @@ import HelpBlock from '../components/HelpBlock';
 import { Sidebar as SidebarProps } from '../../../types/api/PageConfig';
 import { Franchise } from '../../../constants';
 import loadable from '@loadable/component';
+import { useAuth } from '../../../hooks/useAuth';
 
 const LoadablePageColumnFooter = loadable(() => import('./PageColumnFooter'));
 const LoadablePageFooter = loadable(() => import('./PageFooter'));
@@ -18,29 +19,40 @@ const LayoutWithSidebar = ({
   rightSidebar,
   children,
   spacingClasses,
-}: Props) => (
-  <>
-    <div
-      className={
-        rightSidebar
-          ? `account-settings pb-4 min-vh-70`
-          : `page-container ${spacingClasses}`
-      }
-    >
-      <Sidebar links={sidebar} />
-      {children}
-      {rightSidebar && (
-        <div className="right-sidebar">
-          <HelpBlock
-            title={'user_help_title'}
-            blocks={['faq', 'phone', 'email']}
-            className="default"
-          />
-        </div>
+}: Props) => {
+  const { user } = useAuth();
+
+  return (
+    <>
+      <div
+        className={
+          rightSidebar
+            ? `account-settings pb-4 min-vh-70`
+            : `page-container ${spacingClasses}`
+        }
+      >
+        {!(
+          (Franchise.desertDiamond || Franchise.gnogaz) &&
+          !user.logged_in
+        ) && <Sidebar links={sidebar} />}
+        {children}
+        {rightSidebar && !Franchise.desertDiamond && (
+          <div className="right-sidebar">
+            <HelpBlock
+              title={'user_help_title'}
+              blocks={['faq', 'phone', 'email']}
+              className="default"
+            />
+          </div>
+        )}
+      </div>
+      {Franchise.gnogaz || Franchise.desertDiamond ? (
+        <LoadablePageColumnFooter />
+      ) : (
+        <LoadablePageFooter />
       )}
-    </div>
-    {Franchise.gnogaz ? <LoadablePageColumnFooter /> : <LoadablePageFooter />}
-  </>
-);
+    </>
+  );
+};
 
 export default LayoutWithSidebar;

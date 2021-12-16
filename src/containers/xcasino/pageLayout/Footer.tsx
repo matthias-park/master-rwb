@@ -47,7 +47,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer__link-groups px-sm-2 px-md-0">
-        {footer?.links.map(group => (
+        {footer?.links?.map(group => (
           <ul className="footer__link-group">
             {group.children.map(links => (
               <>
@@ -71,7 +71,7 @@ const Footer = () => {
 
       <div className="footer__providers footer-full-bg">
         <div className="footer__providers-content">
-          {footer?.providers.map(provider => (
+          {footer?.providers?.map(provider => (
             <img
               alt=""
               src={provider.img_src}
@@ -102,7 +102,7 @@ const Footer = () => {
 
       <div className="footer__partners footer-full-bg">
         <div className="footer__partners-wrp">
-          {footer?.partners.links.map(partner => (
+          {footer?.partners?.links.map(partner => (
             <img
               alt=""
               src={partner.img_src}

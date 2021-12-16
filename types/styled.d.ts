@@ -152,6 +152,8 @@ declare module 'styled-components' {
       subFooterHeight: number;
       clockIconSize: number;
       clockIconMargin: string;
+      bgColor?: string;
+      color?: string;
     };
     pageContainer: {
       smallMaxWidth: number;
@@ -327,6 +329,7 @@ declare module 'styled-components' {
       subTextMargin: string;
       minHeight?: string;
       marginTop?: number;
+      containerMaxWidth?: number;
     };
     dateFilter: {
       padding: string;

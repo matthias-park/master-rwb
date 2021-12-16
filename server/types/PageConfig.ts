@@ -42,10 +42,10 @@ export interface AvailableLocale {
 }
 
 export interface FooterData {
-  social: Social;
-  partners: Partners;
-  links: FooterDataLink[];
-  subFooter: SubFooter;
+  social?: Social;
+  partners?: Partners;
+  links?: FooterDataLink[];
+  subFooter?: SubFooter;
   rowFooterPayments?: string[];
   rowFooterPartners?: { link: string; image: string }[];
   rowFooterLinks?: { title_symbol: string; link: string }[];

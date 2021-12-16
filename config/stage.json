@@ -421,12 +421,18 @@
           "footerMainBottomPadding": 0,
           "footerPrePadding": 0,
           "settingsBodyPadding": "30px 15px",
-          "settingsMarginTop": 15
+          "settingsMarginTop": 0
         },
         "buttons": {
           "borderRadius": 3,
           "fontSize": 16,
           "color": "#FFF",
+          "primaryBgColor": "#08A4DA",
+          "primaryBgHoverColor": "#0790bf",
+          "primaryColor": "#fff",
+          "secondaryBgColor": "#334C6C",
+          "secondaryBgHoverColor": "#2c425f",
+          "secondaryColor": "#fff",
           "transform": "uppercase",
           "disabled": {
             "backgroundColor": "#0794C5",
@@ -455,7 +461,9 @@
           "iconsBg": "#213956",
           "subFooterHeight": 60,
           "clockIconSize": 18,
-          "clockIconMargin": "0 6px"
+          "clockIconMargin": "0 6px",
+          "bgColor": "#051B35",
+          "color": "#fff"
         },
         "communicationPrefs": {
           "items": {
@@ -479,8 +487,8 @@
           "buttonFullWidth": true
         },
         "registration": {
-          "width": 480,
-          "left": "-5%",
+          "width": 520,
+          "left": "0",
           "borderRadius": 4,
           "boxShadow": "0px 4px 4px rgba(5, 27, 53, 0.1)",
           "bgImg": "/assets/images/container-bg-img.webp",
@@ -601,7 +609,8 @@
         "settingsPage": {
           "titleFontWeight": 700,
           "titleMargin": "0 0 15px 0",
-          "subTextMargin": "0 0 16px 0"
+          "subTextMargin": "0 0 16px 0",
+          "containerMaxWidth": 1150
         },
         "dateFilter": {
           "padding": "0",

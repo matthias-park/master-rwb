@@ -120,7 +120,7 @@ const PageLayout = ({ children }) => {
           {configLoaded === ConfigLoaded.Loaded && children}
           {configLoaded === ConfigLoaded.Error && <NotFoundPage />}
           <ErrorBoundary>
-            {Franchise.gnogaz ? (
+            {Franchise.gnogaz || Franchise.desertDiamond ? (
               <LoadablePageColumnFooter />
             ) : (
               <LoadablePageFooter />

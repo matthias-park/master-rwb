@@ -36,6 +36,7 @@ const QuestionItem = ({ item, index }) => {
 const QuestionsContainer = ({ items, className }: Props) => {
   const { t } = useI18n();
   const faqRoute = useRoutePath(PagesName.FaqPage);
+
   return (
     <div className={className ? className : ''}>
       <h3 className="mb-3">{t('user_questions')}</h3>

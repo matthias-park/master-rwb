@@ -34,7 +34,8 @@ const accountSettingsStyles = css`
       padding-left: ${props => props.theme.spacing.bodyPaddingSmall}px;
     }
     main {
-      max-width: 1000px;
+      max-width: ${props =>
+        props.theme.settingsPage.containerMaxWidth || 1000}px;
       margin-left: auto;
       margin-right: auto;
     }

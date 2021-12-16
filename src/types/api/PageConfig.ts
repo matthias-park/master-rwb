@@ -48,11 +48,11 @@ export interface AvailableLocale {
 }
 
 export interface FooterData {
-  social: Social;
-  partners: Partners;
-  links: FooterDataLink[];
-  subFooter: SubFooter;
-  providers: ImageLink[];
+  social?: Social;
+  partners?: Partners;
+  links?: FooterDataLink[];
+  subFooter?: SubFooter;
+  providers?: ImageLink[];
   rowFooterPayments?: string[];
   rowFooterPartners?: { link: string; image: string }[];
   rowFooterLinks?: { title_symbol: string; link: string }[];

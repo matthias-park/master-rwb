@@ -3,6 +3,7 @@ import Link from '../../../components/Link';
 import { PagesName } from '../../../constants';
 import { useRoutePath } from '../../../hooks';
 import { useI18n } from '../../../hooks/useI18n';
+import { Franchise } from '../../../constants';
 
 const HelpBlock = ({
   title,
@@ -18,6 +19,7 @@ const HelpBlock = ({
     'https://support.betsson.com/en?_gl=1*1wigboh*_ga*NjIyMzU0NjY2LjE2MjI4OTIxNDg.*_ga_BBLKWV84WH*MTYyNzUzNjM0NC43NS4xLjE2Mjc1NDUxNTAuMA';
   const contactUsPagePath = useRoutePath(PagesName.ContactUsPage);
 
+  if (Franchise.desertDiamond || Franchise.gnogaz) return null;
   return (
     <div className={`help-block ${className}`}>
       {title && <p className="help-block__title">{t(title)}</p>}
