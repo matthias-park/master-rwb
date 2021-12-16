@@ -61,8 +61,18 @@ const PageColumnFooter = () => {
         <div className="footer-info__section">
           {t('play_anywhere')}
           <div className="footer-info__section-block">
-            <img alt="android" src={'/assets/images/footer/android.png'} />
-            <img alt="ios" src={'/assets/images/footer/ios.png'} />
+            {footer?.rowFooterApps?.map(app => (
+              <a target="_blank" key={app.link} href={app.link}>
+                <img
+                  alt="android"
+                  src={
+                    app.name === 'android'
+                      ? '/assets/images/footer/android.png'
+                      : '/assets/images/footer/ios.png'
+                  }
+                />
+              </a>
+            ))}
           </div>
         </div>
         {Franchise.gnogaz && (
@@ -77,18 +87,13 @@ const PageColumnFooter = () => {
         <div className="footer-info__section">
           {t('find_us_also')}
           <div className="footer-info__section-icons">
-            <span className="icon">
-              <i className="icon-strive-facebook"></i>
-            </span>
-            <span className="icon">
-              <i className="icon-strive-twitter"></i>
-            </span>
-            <span className="icon">
-              <i className="icon-strive-youtube"></i>
-            </span>
-            <span className="icon">
-              <i className="icon-strive-nsta"></i>
-            </span>
+            {footer?.rowFooterSocials?.map(social => (
+              <Link key={social.link} to={social.link}>
+                <span className="icon">
+                  <i className={social.icon}></i>
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </div>

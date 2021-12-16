@@ -49,6 +49,8 @@ export interface FooterData {
   rowFooterPayments?: string[];
   rowFooterPartners?: { link: string; image: string }[];
   rowFooterLinks?: { title_symbol: string; link: string }[];
+  rowFooterSocials?: { icon: string; link: string }[];
+  rowFooterApps?: { name: string; link: string }[];
 }
 
 export interface FooterDataLink {

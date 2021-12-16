@@ -798,7 +798,6 @@
           "listColor": "#fff",
           "listTitleWeight": 700,
           "timerBgColor": "#213956",
-          "iconsBg": "#213956",
           "subFooterHeight": 60,
           "clockIconSize": 18,
           "clockIconMargin": "0 6px"
