@@ -19,8 +19,21 @@ export const StyledColumnFooter = styled.div`
     display: grid;
     grid-template-columns: 45% 55%;
     border-bottom: 1px solid ${props => props.theme.colors.lightSpacer};
+    .timer {
+      display: flex;
+      align-items: center;
+      border: 1px solid ${props => props.theme.colors.primary.main};
+      color: ${props => props.theme.colors.primary.main};
+      padding: 2px 5px;
+      border-radius: 4px;
+      margin-left: 15px;
+      width: 90px;
+      i {
+        font-size: 19px;
+      }
+    }
     &__section {
-      max-width: 500px;
+      max-width: 550px;
     }
     div:first-of-type {
       display: flex;

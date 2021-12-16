@@ -919,9 +919,11 @@
           "slider": {
             "width": "18px",
             "height": "18px",
-            "left": "4px",
+            "left": "2px",
             "checkedLeft": "55%",
-            "boxShadow": "none"
+            "boxShadow": "none",
+            "color": "#FFDC3E",
+            "checkedColor": "#222222"
           },
           "height": "24px",
           "minWidth": "48px",
@@ -1040,7 +1042,9 @@
           "limitInfoColor": "#999999",
           "limitInfoTitleWeight": 700,
           "limitInfoTitleTransform": "uppercase",
-          "limitInfoBorder": "1px solid rgba(119, 140, 166, 0.15)"
+          "limitInfoBorder": "1px solid rgba(119, 140, 166, 0.15)",
+          "activeHeaderColor": "#444",
+          "activeHeaderButtonBgColor": "#888"
         },
         "outerInfoBlock": {
           "bgColor": "#222"
@@ -1073,7 +1077,7 @@
             "fontSize": "24px"
           }
         },
-        "genericModalWidth": "480px",
+        "genericModalWidth": "520px",
         "backdrop": {
           "bgColor": "rgba(0, 0, 0, 0.8)"
         }

@@ -67,6 +67,13 @@ const formStyles = css`
           padding: ${props => props.theme.inputs.labelPadding}px;
         }
       }
+      &:focus {
+        border-color: ${props => props.theme.colors.primary.main};
+        box-shadow: none !important;
+        + label {
+          color: ${props => props.theme.colors.primary.main};
+        }
+      }
       &.form-control-sm {
         padding-top: 12px;
         + label {

@@ -242,6 +242,8 @@ declare module 'styled-components' {
         left: string;
         checkedLeft: string;
         boxShadow: string;
+        color?: string;
+        checkedColor?: string;
       };
       height: string;
       minWidth: string;
@@ -368,6 +370,8 @@ declare module 'styled-components' {
       limitInfoTitleTransform?: string;
       limitInfoBorder?: string;
       boldColor: string;
+      activeHeaderColor?: string;
+      activeHeaderButtonBgColor?: string;
     };
     outerInfoBlock: {
       bgColor?: string;

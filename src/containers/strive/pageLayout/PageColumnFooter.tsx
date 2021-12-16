@@ -3,6 +3,7 @@ import { StyledColumnFooter } from '../components/styled/StyledColumnFooter';
 import { useConfig } from '../../../hooks/useConfig';
 import { useI18n } from '../../../hooks/useI18n';
 import Link from '../../../components/Link';
+import SessionTimer from '../../../components/SessionTimer';
 
 const PageColumnFooter = () => {
   const { t } = useI18n();
@@ -16,8 +17,12 @@ const PageColumnFooter = () => {
     <StyledColumnFooter>
       <div className="footer-item footer-sub">
         <div className="footer-sub__section">
-          {t('time_spent')}
-          <span className="timer">00:07:06</span>
+          {t('time_spent')}{' '}
+          <span className="text-white mx-1">Golden Nugget</span>
+          <span className="timer">
+            <i className="icon-gnogaz-clock mr-1"></i>
+            <SessionTimer />
+          </span>
         </div>
         <div className="footer-sub__section">
           <img alt="21+" src={'/assets/images/footer/21plus.svg'} />

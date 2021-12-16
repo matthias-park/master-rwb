@@ -31,6 +31,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
     blocks,
   } = personalInfoData;
   const dispatch = useDispatch();
+  const [active, setActive] = useState(false);
   const { t } = useI18n();
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
@@ -38,7 +39,12 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
   } | null>(null);
 
   return (
-    <Accordion className="info-container mb-3">
+    <Accordion
+      className={clsx(
+        Franchise.gnogaz && active && 'info-container--active',
+        'info-container mb-3',
+      )}
+    >
       <div className="info-container__info pt-3">
         <div className="d-flex align-items-center">
           <p className="info-container__title">
@@ -49,6 +55,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
             <Accordion.Toggle
               as="button"
               eventKey={id}
+              onClick={() => setActive(!active)}
               className={clsx(
                 'info-container__edit btn btn-sm px-3 ml-auto',
                 window.__config__.name === 'strive'

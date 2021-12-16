@@ -1,6 +1,7 @@
 import { css } from 'styled-components';
 import { mediaBreakpointDown } from './breakpoints';
 import { rgba } from './mixins';
+import { Franchise } from '../../../../constants';
 
 const accountSettingsStyles = css`
   .account-settings {
@@ -11,6 +12,13 @@ const accountSettingsStyles = css`
     color: ${props => props.theme.colors.brand.text};
     background-color: ${props => props.theme.colors.body};
     min-height: ${props => props.theme.settingsPage?.minHeight} !important;
+    max-width: ${Franchise.desertDiamond ? 1450 : 1600}px;
+    @media only screen and (min-width: ${Franchise.desertDiamond
+        ? 1450
+        : 1600}px) {
+      margin: 0 auto;
+      width: 100%;
+    }
     ${mediaBreakpointDown('xl')} {
       padding-right: ${props => props.theme.spacing.bodyPaddingMedium}px;
       margin: 0 -${props => props.theme.spacing.bodyPaddingMedium}px;
@@ -96,7 +104,7 @@ const accountSettingsStyles = css`
     li:not(:first-of-type) {
       margin-left: 6%;
     }
-    ${mediaBreakpointDown('xxl')} {
+    ${mediaBreakpointDown(Franchise.desertDiamond ? 'lg' : 'xxl')} {
       flex-wrap: wrap;
       &__item {
         flex-basis: 50%;
@@ -206,6 +214,14 @@ const accountSettingsStyles = css`
     position: relative;
     background-color: ${props => props.theme.infoContainer.bgColor};
     border-radius: ${props => props.theme.infoContainer.borderRadius}px;
+    &--active {
+      background-color: ${props => props.theme.infoContainer.activeHeaderColor};
+      button {
+        background-color: ${props =>
+          props.theme.infoContainer.activeHeaderButtonBgColor};
+        border: ${props => props.theme.infoContainer.activeHeaderButtonBgColor};
+      }
+    }
     &__title {
       margin: ${props => props.theme.infoContainer.titleMargin};
     }

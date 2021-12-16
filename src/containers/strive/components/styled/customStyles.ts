@@ -19,7 +19,6 @@ const customStyles = css`
   }
   body {
     font-family: ${props => props.theme.fonts.family}, 'Myriad Pro', sans-serif;
-    max-width: 1920px;
     padding: 0 ${props => props.theme.spacing.bodyPadding}px 0
       ${props => props.theme.spacing.bodyPadding}px !important;
     margin: auto;
@@ -205,7 +204,8 @@ const customStyles = css`
       transform: translateY(-50%);
       width: ${props => props.theme.toggleCheck.slider.width};
       height: ${props => props.theme.toggleCheck.slider.height};
-      background-color: ${props => props.theme.colors.white.main};
+      background-color: ${props =>
+        props.theme.toggleCheck.slider.color || props.theme.colors.white.main};
       border-radius: 50%;
       box-shadow: ${props => props.theme.toggleCheck.slider.boxShadow};
       transition: left 0.2s;
@@ -220,6 +220,9 @@ const customStyles = css`
       }
       .toggle-check__slider {
         left: ${props => props.theme.toggleCheck.slider.checkedLeft};
+        background-color: ${props =>
+          props.theme.toggleCheck.slider.checkedColor ||
+          props.theme.colors.white.main};
       }
     }
     &__unchecked {
@@ -440,7 +443,6 @@ const customStyles = css`
   }
   .cookies-nav {
     width: 100vw;
-    max-width: 1920px;
     position: fixed;
     display: flex;
     left: 0;

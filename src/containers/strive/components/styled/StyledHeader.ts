@@ -705,7 +705,6 @@ const StyledHeader = styled(Navbar)`
   ${props => fullBg(props.theme.colors.brand.main)}
   &:before {
     width: 100vw;
-    max-width: 1920px;
     right: 0;
   }
   ${StyledHeaderUserMenu} {

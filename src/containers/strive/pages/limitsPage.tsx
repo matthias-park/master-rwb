@@ -12,7 +12,7 @@ import HelpBlock from '../components/HelpBlock';
 import { useAuth } from '../../../hooks/useAuth';
 import dayjs from 'dayjs';
 import { LimitData } from '../../../types/api/user/Limits';
-import { franchiseDateFormat } from '../../../constants';
+import { franchiseDateFormat, Franchise } from '../../../constants';
 import { sortAscending } from '../../../utils';
 import clsx from 'clsx';
 import utc from 'dayjs/plugin/utc';
@@ -39,6 +39,7 @@ const timeoutCards = ['disable_player_time_out', 'self_exclusion'];
 const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
   const { t, jsxT } = useI18n();
   const { user } = useAuth();
+  const [active, setActive] = useState(false);
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
     msg: string;
@@ -54,7 +55,12 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
     disabledUntilDate && disabledUntilDate?.year() - dayjs().year() > 5;
 
   return (
-    <Accordion className="info-container info-container--gray mb-3">
+    <Accordion
+      className={clsx(
+        Franchise.gnogaz && active && 'info-container--active',
+        'info-container info-container--gray mb-3',
+      )}
+    >
       <div className="info-container__info pt-3">
         <div className="d-flex align-items-center">
           <p className="info-container__title pr-3">
@@ -64,6 +70,7 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
             <Accordion.Toggle
               as="button"
               eventKey={limitData.id}
+              onClick={() => setActive(!active)}
               className={clsx(
                 'info-container__edit btn btn-sm px-3 ml-auto',
                 window.__config__.name === 'strive'
@@ -129,6 +136,7 @@ const limitTypeOrder = ['Day', 'Week', 'Month'];
 const LimitsCard = ({ limitData, mutate }: LimitProps) => {
   const { t } = useI18n();
   const { user } = useAuth();
+  const [active, setActive] = useState(false);
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
     msg: string;
@@ -140,7 +148,12 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
     });
 
   return (
-    <Accordion className="info-container mb-3">
+    <Accordion
+      className={clsx(
+        Franchise.gnogaz && active && 'info-container--active',
+        'info-container mb-3',
+      )}
+    >
       <div className="info-container__info pt-3">
         <div className="d-flex align-items-center">
           <p className="info-container__title pr-3">
@@ -150,6 +163,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
             <Accordion.Toggle
               as="button"
               eventKey={limitData.id}
+              onClick={() => setActive(!active)}
               className={clsx(
                 'info-container__edit btn btn-sm px-3 ml-auto',
                 window.__config__.name === 'strive'
