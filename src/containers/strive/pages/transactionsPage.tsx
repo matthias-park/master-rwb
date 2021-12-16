@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import DatePicker from 'react-datepicker';
 import { formatUrl } from '../../../utils/apiUtils';
 import { useI18n } from '../../../hooks/useI18n';
+import { useAuth } from '../../../hooks/useAuth';
 import dayjs, { Dayjs } from 'dayjs';
 import clsx from 'clsx';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -16,6 +17,7 @@ import useLocalStorage from '../../../hooks/useLocalStorage';
 import BalancesContainer from '../components/account-settings/BalancesContainer';
 import TablePagination from '../components/account-settings/TablePagination';
 import { Franchise } from '../../../constants';
+import NumberFormat from 'react-number-format';
 
 interface Transactions {
   pages: number;
@@ -31,6 +33,7 @@ interface Transactions {
 }
 
 const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
+  const { user } = useAuth();
   const { t, jsxT } = useI18n();
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -78,7 +81,14 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
                     <td>
                       <strong className="heading-sm">{t('amount')}</strong>
                       <span className={clsx(transaction.in && 'text-success')}>
-                        {`${transaction.in ? '+' : '-'} ${transaction.amount}`}
+                        <NumberFormat
+                          value={transaction.amount}
+                          thousandSeparator
+                          displayType={'text'}
+                          prefix={`${transaction.in ? '+' : '-'} ${
+                            user.currency
+                          }`}
+                        />
                       </span>
                     </td>
                   </tr>

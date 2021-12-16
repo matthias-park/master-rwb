@@ -19,6 +19,7 @@ import loadable from '@loadable/component';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
 import useDesktopWidth from '../../../../hooks/useDesktopWidth';
+import NumberFormat from 'react-number-format';
 
 const LoadableXtremePush = loadable(
   () => import('../../../../components/XtremePushInbox'),
@@ -131,7 +132,12 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 variant="secondary"
                 className="pr-2 pl-3"
               >
-                {user.balance} {user.currency}
+                <NumberFormat
+                  value={user.balance}
+                  thousandSeparator
+                  displayType={'text'}
+                  prefix={user.currency}
+                />
                 <i className={clsx(`icon-${Config.name}-plus`, 'ml-2')}></i>
               </Button>
               {!!window.__config__.xtremepush ? (
@@ -169,7 +175,12 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
               <div className="menu-info">
                 <Link to={depositRoute} className="menu-info-balance">
                   <span>
-                    {user.balance} {user.currency}
+                    <NumberFormat
+                      value={user.balance}
+                      thousandSeparator
+                      displayType={'text'}
+                      prefix={user.currency}
+                    />
                   </span>
                   <i className="icon-add-action-1 ml-2"></i>
                 </Link>

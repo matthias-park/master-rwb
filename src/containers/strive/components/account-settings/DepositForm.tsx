@@ -12,6 +12,7 @@ import useApi from '../../../../hooks/useApi';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
 import PaymentMethods from '../../components/account-settings/PaymentMethods';
 import { Franchise } from '../../../../constants';
+import NumberFormat from 'react-number-format';
 
 interface Props {
   depositRequest: (
@@ -222,12 +223,22 @@ const DepositForm = ({
                 customInputStyle={Franchise.desertDiamond || Franchise.gnogaz}
               />
               <small className="my-2">
-                {clsx(
-                  minDeposit != null &&
-                    `${t('min_deposit')}: ${minDeposit} ${user.currency}`,
-                  minDeposit != null && maxDeposit != null && '-',
-                  maxDeposit != null &&
-                    `${t('max_deposit')}: ${maxDeposit} ${user.currency}`,
+                {minDeposit != null && (
+                  <NumberFormat
+                    value={minDeposit}
+                    thousandSeparator
+                    displayType={'text'}
+                    prefix={`${t('min_deposit')}: ${user.currency}`}
+                  />
+                )}
+                {minDeposit != null && maxDeposit != null && ' - '}
+                {maxDeposit != null && (
+                  <NumberFormat
+                    value={maxDeposit}
+                    thousandSeparator
+                    displayType={'text'}
+                    prefix={`${t('max_deposit')}: ${user.currency}`}
+                  />
                 )}
               </small>
             </Form.Group>

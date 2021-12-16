@@ -19,6 +19,7 @@ import utc from 'dayjs/plugin/utc';
 import { formatUrl } from '../../../utils/apiUtils';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import TablePagination from '../components/account-settings/TablePagination';
+import NumberFormat from 'react-number-format';
 dayjs.extend(utc);
 
 interface LimitProps {
@@ -187,8 +188,8 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
               ),
             )
             .map((limit, i) => {
-              let formattedCurrentLimit: string | null = null;
-              let formattedFutureLimit: string | null = null;
+              let formattedCurrentLimit: string | number | null = null;
+              let formattedFutureLimit: string | number | null = null;
               switch (limit.Formatting) {
                 case 'hour': {
                   const totalMinutes =
@@ -214,29 +215,30 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                   break;
                 }
                 case 'currency': {
-                  formattedCurrentLimit = `${user.currency} ${limit.LimitAmount}`;
+                  formattedCurrentLimit = limit.LimitAmount;
                   formattedFutureLimit = limit.FutureLimitAmount
-                    ? `${user.currency} ${limit.FutureLimitAmount}`
+                    ? limit.FutureLimitAmount
                     : null;
                   break;
                 }
               }
 
-              let formattedUsedLimit: string | null = null;
+              let formattedUsedLimit: string | number | null = null;
               if (limit.Formatting === 'currency') {
                 const used =
                   !!limit.LimitAmount && !!limit.AmountLeft
                     ? Number((limit.LimitAmount - limit.AmountLeft).toFixed(2))
                     : null;
-                formattedUsedLimit = `${user.currency} ${used || '0'}`;
+                formattedUsedLimit = used || '0';
               }
-              let formattedRemainingLimit: string | null =
+              let formattedRemainingLimit: string | number | null =
                 limit.Formatting === 'currency'
-                  ? `${user.currency} ${limit.AmountLeft || limit.LimitAmount}`
+                  ? limit.AmountLeft || limit.LimitAmount
                   : null;
 
               let formattedFutureLimitFrom:
                 | string
+                | number
                 | null = limit.FutureLimitValidFrom
                 ? dayjs(limit.FutureLimitValidFrom).format(
                     `${franchiseDateFormat} HH:mm`,
@@ -260,7 +262,16 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                           window.__config__.name === 'strive' && 'text-primary',
                         )}
                       >
-                        {formattedCurrentLimit}
+                        {limit.Formatting === 'currency' ? (
+                          <NumberFormat
+                            value={formattedCurrentLimit}
+                            displayType={'text'}
+                            thousandSeparator
+                            prefix={user.currency}
+                          />
+                        ) : (
+                          formattedCurrentLimit
+                        )}
                       </p>
                     </li>
                     {formattedUsedLimit !== null && (
@@ -269,7 +280,16 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                           {t('used_limit')}
                         </p>
                         <p className="play-limits__limit-total">
-                          {formattedUsedLimit}
+                          {limit.Formatting === 'currency' ? (
+                            <NumberFormat
+                              value={formattedUsedLimit}
+                              displayType={'text'}
+                              thousandSeparator
+                              prefix={user.currency}
+                            />
+                          ) : (
+                            formattedUsedLimit
+                          )}
                         </p>
                       </li>
                     )}
@@ -279,7 +299,16 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                           {t('left_limit')}
                         </p>
                         <p className="play-limits__limit-total">
-                          {formattedRemainingLimit}
+                          {limit.Formatting === 'currency' ? (
+                            <NumberFormat
+                              value={formattedRemainingLimit}
+                              displayType={'text'}
+                              thousandSeparator
+                              prefix={user.currency}
+                            />
+                          ) : (
+                            formattedRemainingLimit
+                          )}
                         </p>
                       </li>
                     )}
@@ -296,7 +325,16 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                                 'text-primary',
                             )}
                           >
-                            {formattedFutureLimit}
+                            {limit.Formatting === 'currency' ? (
+                              <NumberFormat
+                                value={formattedFutureLimit}
+                                displayType={'text'}
+                                thousandSeparator
+                                prefix={user.currency}
+                              />
+                            ) : (
+                              formattedFutureLimit
+                            )}
                           </p>
                         </li>
                         <li className="play-limits__limit">
@@ -443,9 +481,16 @@ const LimitsHistory = ({ limitsData }) => {
                       <td>
                         <strong className="heading-sm">{t('amount')}</strong>
                         <div className="d-inline-flex align-items-center">
-                          {timeLimits.includes(limit.LimitTypeToString)
-                            ? `${limit.Amount} ${t('hours')}`
-                            : `${user.currency} ${limit.Amount}`}
+                          {timeLimits.includes(limit.LimitTypeToString) ? (
+                            `${limit.Amount} ${t('hours')}`
+                          ) : (
+                            <NumberFormat
+                              value={limit.Amount}
+                              thousandSeparator
+                              displayType={'text'}
+                              prefix={user.currency}
+                            />
+                          )}
                         </div>
                       </td>
                     </tr>

@@ -3,6 +3,7 @@ import useApi from '../../../../hooks/useApi';
 import { useI18n } from '../../../../hooks/useI18n';
 import Spinner from 'react-bootstrap/Spinner';
 import { useAuth } from '../../../../hooks/useAuth';
+import NumberFormat from 'react-number-format';
 
 const BalancesContainer = () => {
   const { t } = useI18n();
@@ -28,7 +29,12 @@ const BalancesContainer = () => {
               <div className="balances-list__content">
                 <span className="balances-list__content-title">{t(key)}</span>
                 <span className="balances-list__content-value">
-                  {user.currency} {value}
+                  <NumberFormat
+                    value={Number(value)}
+                    thousandSeparator
+                    displayType={'text'}
+                    prefix={user.currency}
+                  />
                 </span>
               </div>
               <i
