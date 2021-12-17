@@ -53,7 +53,10 @@ function LoginForm() {
       event: 'LoginSubmitted',
     });
     const response = await signin(username || email, password);
-    if (!response.success) {
+    if (response.userActivationNeeded) {
+      disableModal(ComponentName.LoginModal);
+      return enableModal(ComponentName.ActivateUserModal);
+    } else if (!response.success) {
       return setApiError(response.message || t('login_failed_to_login'));
     } else {
       disableModal(ComponentName.LoginModal);

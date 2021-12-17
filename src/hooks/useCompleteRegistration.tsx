@@ -45,17 +45,18 @@ export const CompleteRegistrationProvider = props => {
   const { pathname } = useLocation();
   const history = useHistory();
 
+  const userActivated = user.logged_in && !user.registration_id;
   const { data: limits } = useApi(
-    user.logged_in ? '/restapi/v1/user/profile/play_limits' : null,
+    userActivated ? '/restapi/v1/user/profile/play_limits' : null,
   );
   const { data: maxBalance } = useApi(
-    user.logged_in ? '/restapi/v1/user/max_balance_limit' : null,
+    userActivated ? '/restapi/v1/user/max_balance_limit' : null,
   );
   const { data: banks } = useApi<any>(
-    user.logged_in ? '/restapi/v1/user/bank' : null,
+    userActivated ? '/restapi/v1/user/bank' : null,
   );
   const { data: documents } = useApi<any>(
-    user.logged_in ? '/restapi/v1/user/profile/required_documents' : null,
+    userActivated ? '/restapi/v1/user/profile/required_documents' : null,
   );
 
   const [completedActions, setCompletedActions] = useState<CompletedActions>({

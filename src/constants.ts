@@ -32,12 +32,15 @@ export enum ComponentName {
   ResendEmailModal = 'resendEmailModal',
   MaxBalanceModal = 'maxBalanceModal',
   BettingHistory = 'bettingHistory',
+  ActivateUserModal = 'activateUserModal',
 }
 
 export const ModalPriority = {
   [ComponentName.TermsAndConditionsModal]: 1,
   [ComponentName.ValidationFailedModal]: 2,
   [ComponentName.ResponsibleGamblingModal]: 5,
+  [ComponentName.ResendEmailModal]: 1,
+  [ComponentName.ActivateUserModal]: 2,
 };
 
 export enum PagesName {

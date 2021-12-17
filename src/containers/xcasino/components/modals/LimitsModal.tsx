@@ -19,7 +19,9 @@ const LimitsModal = () => {
   const { user } = useAuth();
 
   const { data, mutate } = useApi<any>(
-    user.logged_in ? '/restapi/v1/user/profile/play_limits' : null,
+    user.logged_in && !user.registration_id
+      ? '/restapi/v1/user/profile/play_limits'
+      : null,
   );
 
   const [limitData, setLimitData] = useState(data);

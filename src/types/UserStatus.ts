@@ -9,6 +9,10 @@ export interface NET_USER {
   error?: string;
   currency?: string;
   token?: string;
+  registration_id?: number;
+  PlayerLoginRes?: {
+    RegistrationId: number;
+  };
 }
 export interface TwoFactorAuth {
   authentication_required: boolean;
@@ -52,6 +56,7 @@ export interface UserStatus {
   barcode?: string;
   tnc_required?: boolean;
   authentication_enabled?: boolean;
+  registration_id?: number | null;
 }
 
 export interface UserBankAccount {

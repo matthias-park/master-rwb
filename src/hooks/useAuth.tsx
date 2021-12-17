@@ -29,6 +29,7 @@ export interface UserAuth {
     success: boolean;
     message: string | null;
     twoFactorAuthRequired?: boolean;
+    userActivationNeeded?: boolean;
   }>;
   signout: () => Promise<void>;
   updateUser: (forceUpdate?: boolean) => void;
@@ -131,7 +132,8 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
           setTimeout(() => revalidate(options), 10000);
         }
       },
-      isPaused: () => !(user.needsSync || user.logged_in),
+      isPaused: () =>
+        !(user.needsSync || user.logged_in) || !!user.registration_id,
     },
   );
   useEffect(() => {
@@ -172,6 +174,14 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
       });
       dispatch(setLogin(data));
       mutate();
+    } else if ((res.Data as NET_USER)?.PlayerLoginRes?.RegistrationId) {
+      const data = res.Data as NET_USER;
+      dispatch(setLogin(data));
+      return {
+        success: res.Success,
+        message: res.Message,
+        userActivationNeeded: true,
+      };
     } else {
       sendDataToGTM({
         'tglab.Error': res.Message || 'request timeout',

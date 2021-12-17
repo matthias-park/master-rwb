@@ -147,7 +147,8 @@
   }
 }
 
-.forgot-password-modal {
+.forgot-password-modal,
+.activate-user-modal {
   form {
     display: flex;
     flex-direction: column;

@@ -376,6 +376,9 @@ const RegisterModal = () => {
           : 'register_page_submit_error';
       if (res?.Success && res.Data) {
         dispatch(setRegistered(res.Data));
+        if (res.Data.registration_id) {
+          enableModal(ComponentName.ActivateUserModal);
+        }
         setResponseSuccessful(true);
         updateUser(true);
         sendDataToGTM({
@@ -498,7 +501,7 @@ const RegisterModal = () => {
       {activeItem === slides.length - 1 ? (
         <Modal.Footer className="last-slide fade-in">
           <p>
-            Resend Confirmation Email:
+            {t('resend_activation_code')}
             <p
               className="modal-link"
               onClick={() => {
@@ -506,7 +509,7 @@ const RegisterModal = () => {
                 enableModal(ComponentName.ResendEmailModal);
               }}
             >
-              Click Here
+              {t('click_here')}
             </p>
           </p>
           <p
