@@ -442,7 +442,7 @@ const customStyles = css`
     }
   }
   .cookies-nav {
-    width: 100vw;
+    max-width: 1920px;
     position: fixed;
     display: flex;
     left: 0;
@@ -464,7 +464,6 @@ const customStyles = css`
     }
     ${mediaBreakpointUp('xxxl')} {
       margin: auto;
-      position: sticky;
       margin: 0 -${props => props.theme.spacing.bodyPadding}px;
     }
     &__icon {
