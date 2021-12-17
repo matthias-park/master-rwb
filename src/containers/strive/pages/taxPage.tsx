@@ -84,7 +84,7 @@ const TaxPage = () => {
                   <th>{t('bet_id')}</th>
                   <th>{t('win')}</th>
                   <th>{t('wager')}</th>
-                  <th></th>
+                  <th>{t('download')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -113,7 +113,7 @@ const TaxPage = () => {
                         <strong className="heading-sm">{t('download')}</strong>
                         <span
                           onClick={() => getTaxFile(tax.BetId, tax.DateWon)}
-                          className="d-inline-flex align-items-center justify-content-md-end cursor-pointer ml-md-2"
+                          className="d-inline-flex align-items-center justify-content-md-end cursor-pointer ml-md-3"
                         >
                           <i
                             className={`icon-${window.__config__.name}-download`}
