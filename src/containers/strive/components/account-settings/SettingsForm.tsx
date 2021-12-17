@@ -18,6 +18,7 @@ import clsx from 'clsx';
 interface SettingProps {
   id: string;
   fields?: SettingsField[];
+  fieldsFromBlocks?: SettingsField[];
   action: string;
   fixedData?: { id: string; value?: string | number | undefined }[];
   setResponse?: (
@@ -57,6 +58,7 @@ const formLimitsKeys = [
 const FormFields = ({
   id,
   fields = [],
+  fieldsFromBlocks,
   allowSubmit,
   formData,
   translatableDefaultValues,
@@ -75,8 +77,18 @@ const FormFields = ({
     trigger,
   } = useFormContext();
   const watchPassword = watch('password');
+  const watchExcludePassword = watch(
+    (fieldsFromBlocks || fields)
+      .filter(
+        field =>
+          !field.id.includes('password') &&
+          !field.id.includes('submit') &&
+          !field.disabled,
+      )
+      .map(field => field.id),
+  );
   const watchAllFields = watch(
-    fields
+    (fieldsFromBlocks || fields)
       .filter(
         item =>
           !item.disabled &&
@@ -87,6 +99,17 @@ const FormFields = ({
       )
       .map(field => field.id),
   );
+
+  const defaultValues = (fieldsFromBlocks || fields)
+    .filter(
+      field =>
+        !field.id.includes('password') &&
+        !field.id.includes('submit') &&
+        !field.disabled,
+    )
+    .map(field => {
+      return field.default;
+    });
 
   const visibilityOverrideFields = useMemo(
     () =>
@@ -148,6 +171,14 @@ const FormFields = ({
                 isDisabled = !formData.some(field => field.LimitAmount != null);
               } else if (allowSubmit) {
                 isDisabled = !allowSubmit(watch());
+              } else if (
+                formState.isDirty &&
+                !!watchPassword &&
+                !!watchExcludePassword.length
+              ) {
+                isDisabled = !watchExcludePassword.some(
+                  field => !(defaultValues.includes(field) || field === '-1'),
+                );
               } else {
                 isDisabled = Object.values(watchAllFields).some(
                   value => !value || value === 'default' || value === '-1',
@@ -417,6 +448,15 @@ const SettingsForm = (props: SettingProps) => {
     [],
   );
 
+  const fieldsFromBlocks: SettingsField[] | undefined = useMemo(
+    () =>
+      blocks?.items?.reduce<SettingsField[]>(
+        (prev, current) => [...prev, ...current.fields],
+        [],
+      ),
+    [blocks],
+  );
+
   const resetValues = fields
     ? fields
         .filter(field => !field.default && field.type !== 'submit')
@@ -498,7 +538,11 @@ const SettingsForm = (props: SettingProps) => {
                     {t(block.title)}
                   </h6>
                 )}
-                <FormFields {...props} fields={block.fields} />
+                <FormFields
+                  {...props}
+                  fields={block.fields}
+                  fieldsFromBlocks={fieldsFromBlocks}
+                />
               </div>
             ))}
         </Form>
