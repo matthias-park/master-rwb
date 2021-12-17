@@ -2,7 +2,6 @@ import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useI18n } from '../../../hooks/useI18n';
 import CustomToggleCheck from '../components/CustomToggleCheck';
 import Spinner from 'react-bootstrap/Spinner';
-import { useToasts } from 'react-toast-notifications';
 import useApi from '../../../hooks/useApi';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
 import HelpBlock from '../components/HelpBlock';
@@ -67,10 +66,9 @@ const CommunicationPrefCard = ({
 };
 
 const CommunicationPreferencesPage = () => {
-  const { addToast } = useToasts();
   const { user } = useAuth();
   const { t, jsxT } = useI18n();
-  const { data, error } = useApi<any>(
+  const { data, error, mutate } = useApi<any>(
     '/restapi/v1/user/profile/communication_preferences',
   );
   const { handleSubmit, formState, register } = useForm();
@@ -119,14 +117,11 @@ const CommunicationPreferencesPage = () => {
     const res = await postApi<RailsApiResponse<null>>(url, body, {
       formData: formBody,
     }).catch((res: RailsApiResponse<null>) => {
-      if (res.Fallback) {
-        addToast(`Failed to update user gdpr settings`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      }
       return res;
     });
+    if (res.Success) {
+      mutate();
+    }
     setApiResponse({
       success: res.Success,
       msg: res.Message || t('api_response_failed'),
