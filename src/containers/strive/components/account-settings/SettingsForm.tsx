@@ -4,7 +4,11 @@ import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import LoadingButton from '../../../../components/LoadingButton';
 import { useI18n } from '../../../../hooks/useI18n';
-import { franchiseDateFormat, VALIDATIONS } from '../../../../constants';
+import {
+  Franchise,
+  franchiseDateFormat,
+  VALIDATIONS,
+} from '../../../../constants';
 import SelectInput from '../../../../components/customFormInputs/SelectInput';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import FileInput from '../../../../components/customFormInputs/FileInput';
@@ -164,6 +168,9 @@ const FormFields = ({
               const submitWithCurrentAction =
                 field.value &&
                 getValues(field.value?.id) === field.value?.value;
+              if (isDeleteButton && Franchise.desertDiamond) {
+                return null;
+              }
               let isDisabled = false;
               if (field.disabled) {
                 isDisabled = !watchPassword;

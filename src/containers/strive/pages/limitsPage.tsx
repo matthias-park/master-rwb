@@ -192,22 +192,28 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
               let formattedFutureLimit: string | number | null = null;
               switch (limit.Formatting) {
                 case 'hour': {
-                  const totalMinutes =
-                    limit.LimitAmount * 60 - (limit.AccumulatedDuration || 0);
-                  if (totalMinutes > 0) {
-                    const hours = Math.floor(totalMinutes / 60);
-                    const minutes = totalMinutes % 60;
-                    let hoursFormatting = hours.toString();
-                    if (!!minutes) {
-                      hoursFormatting += `:${
-                        minutes < 10 ? '0' : ''
-                      }${minutes}`;
+                  if (!Franchise.desertDiamond) {
+                    const totalMinutes =
+                      limit.LimitAmount * 60 - (limit.AccumulatedDuration || 0);
+                    if (totalMinutes > 0) {
+                      const hours = Math.floor(totalMinutes / 60);
+                      const minutes = totalMinutes % 60;
+                      let hoursFormatting = hours.toString();
+                      if (!!minutes) {
+                        hoursFormatting += `:${
+                          minutes < 10 ? '0' : ''
+                        }${minutes}`;
+                      }
+                      formattedCurrentLimit = `${hoursFormatting} ${t(
+                        'limits_hours',
+                      )}`;
+                    } else {
+                      formattedCurrentLimit = `0 ${t('limits_hours')}`;
                     }
-                    formattedCurrentLimit = `${hoursFormatting} ${t(
+                  } else {
+                    formattedCurrentLimit = `${limit.LimitAmount || 0} ${t(
                       'limits_hours',
                     )}`;
-                  } else {
-                    formattedCurrentLimit = `0 ${t('limits_hours')}`;
                   }
                   formattedFutureLimit = limit.FutureLimitAmount
                     ? `${limit.FutureLimitAmount} ${t('limits_hours')}`

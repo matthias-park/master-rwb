@@ -442,7 +442,6 @@ const customStyles = css`
     }
   }
   .cookies-nav {
-    max-width: 1920px;
     position: fixed;
     display: flex;
     left: 0;
