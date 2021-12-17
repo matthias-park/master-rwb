@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-unfetch';
-import { ConfigInterface } from 'swr';
+import { ConfigInterface, mutate } from 'swr';
 import { RailsApiResponseFallback } from '../constants';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import { RegistrationPostalCodeAutofill } from '../types/api/user/Registration';
@@ -35,6 +35,8 @@ export const getApi = <T>(url: string, options?: GetApiOptions): Promise<T> => {
           `Request failed ${url} with status ${res.status}`,
           Sentry.Severity.Fatal,
         );
+      } else {
+        mutate('/restapi/v1/user/status');
       }
       return Promise.reject<RailsApiResponse<null>>({
         ...RailsApiResponseFallback,
@@ -94,6 +96,8 @@ export const postApi = <T>(
           `Request failed ${url} with status ${res.status}`,
           Sentry.Severity.Fatal,
         );
+      } else {
+        mutate('/restapi/v1/user/status');
       }
       return Promise.reject<RailsApiResponse<null>>({
         ...RailsApiResponseFallback,
