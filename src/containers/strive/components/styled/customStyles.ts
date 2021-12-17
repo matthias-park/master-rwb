@@ -33,13 +33,6 @@ const customStyles = css`
       padding: 0 ${props => props.theme.spacing.bodyPaddingSmall}px 0
         ${props => props.theme.spacing.bodyPaddingSmall}px !important;
     }
-    &.modal-open-windows {
-      transform: translateX(-8px);
-      @media only screen and (max-width: 1920px) {
-        margin: 0;
-        transform: none;
-      }
-    }
     &:not(.show-captcha) .grecaptcha-badge {
       visibility: hidden;
     }
@@ -716,6 +709,10 @@ const customStyles = css`
     &__img {
       max-width: 100%;
     }
+  }
+
+  .modal-backdrop {
+    height: 100%
   }
 
   .modal-content {
