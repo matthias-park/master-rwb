@@ -4,7 +4,6 @@ import Accordion from 'react-bootstrap/Accordion';
 import Spinner from 'react-bootstrap/Spinner';
 import useApi from '../../../hooks/useApi';
 import SettingsForm from '../components/account-settings/SettingsForm';
-import { SettingsField } from '../../../types/api/user/ProfileSettings';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
 import HelpBlock from '../components/HelpBlock';
 import clsx from 'clsx';
@@ -13,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { setValidationStatus } from '../../../state/reducers/user';
 import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 import { Franchise } from '../../../constants';
+import { useAuth } from '../../../hooks/useAuth';
 
 interface PersonalInfoProps {
   personalInfoData: any;
@@ -30,6 +30,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
     action,
     blocks,
   } = personalInfoData;
+  const { user } = useAuth();
   const dispatch = useDispatch();
   const [active, setActive] = useState(false);
   const { t } = useI18n();
@@ -37,6 +38,8 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
     success: boolean;
     msg: string;
   } | null>(null);
+
+  const kycVerified = user.validator_status === KYC_VALIDATOR_STATUS.Success;
 
   return (
     <Accordion
@@ -51,7 +54,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
             <b>{t(title)}</b>
           </p>
           {note && <p className="text-14 text-gray-700 pt-1">{t(note)}</p>}
-          {(!!fields || !!blocks) && !disabled && (
+          {(!!fields || !!blocks) && !disabled && !kycVerified && (
             <Accordion.Toggle
               as="button"
               eventKey={id}
