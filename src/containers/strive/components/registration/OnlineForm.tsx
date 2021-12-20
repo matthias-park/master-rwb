@@ -347,6 +347,14 @@ const blocks = (
             autoComplete: 'street-address',
             type: 'text',
             required: true,
+            validate: value => {
+              if (Franchise.gnogaz && value) {
+                return (
+                  VALIDATIONS.isNotPoBox(value) || t('register_pobox_invalid')
+                );
+              }
+              return true;
+            },
           },
           {
             id: 'postal_code',

@@ -444,6 +444,7 @@ export const REGEX_EXPRESSION = {
   PHONE_NUMBER_NORMALIZE: /\s|\.|\/|[(][0-9][)]?|^0+/g,
   PHONE_NUMBER: /^\+?[1-9]\d{1,14}$/,
   BANK_IBAN: /^(BE)[0-9]{2}([ ]?[0-9]{4}){3}$/g,
+  PO_BOX_ADDRESS: /\b(?:p\.?\s*o\.?|post\s+office)(\s+)?(?:box|[0-9]*)?\b/i,
 };
 
 export const VALIDATIONS = {
@@ -493,6 +494,8 @@ export const VALIDATIONS = {
     return dayjs().isAfter(age);
   },
   isAlpha: value => /^[a-zA-Z]*$/.test(value),
+  isNotPoBox: (value: string = '') =>
+    !REGEX_EXPRESSION.PO_BOX_ADDRESS.test(value),
 };
 export const PAGES_WITH_CAPTCHA_ICON = [
   PagesName.RegisterPage,
