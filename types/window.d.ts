@@ -21,6 +21,7 @@ export declare global {
         api: string;
         oddsFormat?: string;
         eventStatistics?: string;
+        enableOddsFormatSelector?: boolean;
       };
       sbTechUrl?: string;
       zendesk?: string;

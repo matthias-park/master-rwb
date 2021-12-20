@@ -303,7 +303,7 @@ const setCustomerSettings = ({
         }
       : undefined,
     hideHeader: true,
-    enableOddsFormatSelector: true,
+    enableOddsFormatSelector: Config.kambi?.enableOddsFormatSelector,
     enableMyBetsHarmonization: true,
   };
 };

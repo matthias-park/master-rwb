@@ -22,7 +22,8 @@
         "retail": "https://static.kambicdn.com/client/bnlberl/kambi-bootstrap.js",
         "online": "https://static.kambicdn.com/client/bnlbe/kambi-bootstrap.js",
         "api": "https://static.kambicdn.com/client/widget-api/kambi-widget-api.js",
-        "eventStatistics": "https://s5.sir.sportradar.com/scooorebe/{{locale}}/match/m{{eventId}}"
+        "eventStatistics": "https://s5.sir.sportradar.com/scooorebe/{{locale}}/match/m{{eventId}}",
+        "enableOddsFormatSelector": true
       },
       "googleRecaptchaKey": "6Lezp2oaAAAAADpwV6q_a2k7yVPD52Qb89Z2zFcR",
       "excludeBasicAuthFiles": [
@@ -87,7 +88,8 @@
         "currency": "USD",
         "online": "https://c3-static.kambi.com/client/fanusny/kambi-bootstrap.js",
         "api": "https://c3-static.kambi.com/client/widget-api/kambi-widget-api.js",
-        "oddsFormat": "american"
+        "oddsFormat": "american",
+        "enableOddsFormatSelector": true
       },
       "redis": {
         "host": "192.168.60.40",
