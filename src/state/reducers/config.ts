@@ -111,6 +111,11 @@ export const fetchConstants = createAsyncThunk<PageConfig, number | undefined>(
         (!detectedLocaleAvailable || urlLocale == null)
       ) {
         setUserLocale(railsLocale);
+      } else if (!constants.locale) {
+        const defaultLocale = constants.available_locales.find(
+          lang => lang.default,
+        )?.iso;
+        if (defaultLocale) setUserLocale(defaultLocale);
       }
       if (!localeError) {
         if (constants.locale) {

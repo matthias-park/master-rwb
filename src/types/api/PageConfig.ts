@@ -45,6 +45,7 @@ export interface Sidebar {
 export interface AvailableLocale {
   id: number;
   iso: string;
+  default?: boolean;
 }
 
 export interface FooterData {

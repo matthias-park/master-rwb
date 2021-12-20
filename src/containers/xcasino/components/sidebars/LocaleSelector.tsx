@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import LeftSidebarMenu from './LeftSidebarMenu';
 import { useConfig } from '../../../../hooks/useConfig';
+import { useDispatch } from 'react-redux';
+import { setLocale } from '../../../../state/reducers/config';
 
 interface LocaleSelectorProps {
   goBack: () => void;
 }
 
 const LocaleSelector = ({ goBack }: LocaleSelectorProps) => {
-  const [updatingLocale, setUpdatingLocale] = useState('');
+  const dispatch = useDispatch();
   const { locales, locale } = useConfig();
 
   const changeLocale = async (lang: string) => {
-    /*if (!!updatingLocale || lang === locale) return;
-    setUpdatingLocale(lang);
-    await setLocale(lang);
-    setUpdatingLocale('');*/
+    if (lang === locale) return;
+    dispatch(setLocale(lang));
   };
 
   return (
