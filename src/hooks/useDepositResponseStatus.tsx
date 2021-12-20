@@ -64,37 +64,7 @@ const useDepositResponseStatus = () => {
   });
 
   useEffect(() => {
-    if (
-      bankId === 123 &&
-      queryParams &&
-      queryParams.token &&
-      queryParams.PayerID
-    ) {
-      postApi<RailsApiResponse<null>>('/restapi/v1/deposits/paypal', {
-        token: queryParams.token,
-        payer_id: queryParams.PayerID,
-      })
-        .then(res => {
-          if (res.Success) {
-            history.replace({
-              search: '',
-            });
-          } else {
-            Sentry.captureMessage('Paypal execute deposit error', {
-              level: Sentry.Severity.Fatal,
-              tags: {
-                searchQuery: window.location.search,
-              },
-            });
-            setId(null);
-            setBankId(null);
-            history.replace(`${depositBaseUrl}/error`, {
-              status: DepositStatus.Errored,
-            });
-          }
-        })
-        .catch(() => {});
-    } else if (bankId && queryParams && Object.keys(queryParams).length) {
+    if (bankId && queryParams && Object.keys(queryParams).length) {
       postApi<RailsApiResponse<null>>('/restapi/v1/deposits/request_return', {
         bank_id: bankId.toString(),
         data: JSON.stringify({
