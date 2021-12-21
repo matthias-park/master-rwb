@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useI18n } from '../../../../hooks/useI18n';
-import { ComponentName } from '../../../../constants';
+import { ComponentName, PagesName } from '../../../../constants';
 import GenericModal from './GenericModal';
 import { useModal } from '../../../../hooks/useModal';
 import useGeoComply from '../../../../hooks/useGeoComply';
 import { GeoComplyErrorCodes } from '../../../../types/GeoComply';
+import { useLocation } from 'react-router';
+import isEqual from 'lodash.isequal';
+import { useConfig } from '../../../../hooks/useConfig';
+import { matchPath } from 'react-router-dom';
 
 const GeoComplyModal = () => {
   const { t, jsxT } = useI18n();
@@ -14,8 +18,23 @@ const GeoComplyModal = () => {
     enableModal,
     allActiveModals,
   } = useModal();
+  const { pathname } = useLocation();
   const { errorCode } = useGeoComply() || {};
+  const { routes } = useConfig((prev, next) =>
+    isEqual(prev.routes, next.routes),
+  );
   const hideModal = () => disableModal(ComponentName.GeoComplyModal);
+
+  const shouldModalHide = useMemo(
+    () =>
+      routes.find(route =>
+        matchPath(pathname, {
+          path: route.path,
+          exact: route.exact ?? true,
+        }),
+      )?.id === PagesName.ResetPasswordPage,
+    [routes, pathname],
+  );
 
   useEffect(() => {
     if (
@@ -40,7 +59,11 @@ const GeoComplyModal = () => {
   return (
     <GenericModal
       isCentered
-      show={activeModal === ComponentName.GeoComplyModal && errorCode != null}
+      show={
+        activeModal === ComponentName.GeoComplyModal &&
+        errorCode != null &&
+        !shouldModalHide
+      }
       hideCallback={() => hideModal()}
       className="pb-5"
     >
