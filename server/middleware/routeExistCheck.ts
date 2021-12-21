@@ -1,8 +1,8 @@
 import { Request, NextFunction, Response } from 'express';
 import { matchPath } from 'react-router-dom';
+import { LOCALE_REGEX } from '../constants';
 import { getRailsConstants } from '../utils';
 
-const LOCALE_REGEX = /^\/([a-z]{2}-[a-z]{2}|[a-z]{2})(\/|$)/i;
 const routeExistCheck = async (
   req: Request,
   res: Response,

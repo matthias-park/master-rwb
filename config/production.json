@@ -717,6 +717,14 @@
         "username": "tbtest",
         "password": "wCrXilO_iq!N"
       }
-    ]
+    ],
+    "mobileViewExcludedPages": {
+      "desertDiamond": [
+        "terms_conditions_link",
+        "privacy_policy_link",
+        "nav_link_responsible_gaming",
+        "sitemap_houseRules"
+      ]
+    }
   }
 }

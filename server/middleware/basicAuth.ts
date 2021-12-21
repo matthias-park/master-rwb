@@ -1,8 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
-import { PRERENDER_HEADER, BASIC_AUTH } from '../constants';
+import {
+  PRERENDER_HEADER,
+  BASIC_AUTH,
+  LOCALE_REGEX,
+  extensionsToIgnore,
+} from '../constants';
 import auth from 'basic-auth';
+import { getRailsConstants } from '../utils';
+import { matchPath } from 'react-router-dom';
 
-const basicAuth = (req: Request, res: Response, next: NextFunction) => {
+const basicAuth = async (req: Request, res: Response, next: NextFunction) => {
   if (
     req.franchise.domains.some(domain =>
       req
@@ -14,13 +21,40 @@ const basicAuth = (req: Request, res: Response, next: NextFunction) => {
   )
     return next();
   if (
+    BASIC_AUTH &&
+    req.query['mobile-view'] &&
+    BASIC_AUTH?.mobileViewExcludedPages
+  ) {
+    const railsConstants = await getRailsConstants(req);
+    let urlWithoutLocale = req.path.replace(LOCALE_REGEX, '');
+    if (!urlWithoutLocale.startsWith('/'))
+      urlWithoutLocale = `/${urlWithoutLocale}`;
+    if (
+      railsConstants?.navigation_routes.some(
+        route =>
+          !!matchPath(urlWithoutLocale, {
+            path: route.path,
+            exact: route.exact ?? true,
+          }) &&
+          !!BASIC_AUTH?.mobileViewExcludedPages?.[req.franchise.name].includes(
+            route.name,
+          ),
+      )
+    ) {
+      return next();
+    }
+  }
+  if (
     !req.franchise.basicAuthEnabled ||
     req.franchise.excludeBasicAuthFiles?.includes(req.url) ||
     req.header(PRERENDER_HEADER) ||
     !BASIC_AUTH ||
     !BASIC_AUTH.users ||
     !BASIC_AUTH.whitelistedIp ||
-    BASIC_AUTH.whitelistedIp.includes(req.ip)
+    BASIC_AUTH.whitelistedIp.includes(req.ip) ||
+    extensionsToIgnore.some(
+      extension => req.url.toLowerCase().indexOf(extension) !== -1,
+    )
   ) {
     return next();
   }

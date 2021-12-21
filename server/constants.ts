@@ -3,6 +3,7 @@ import path from 'path';
 import { FranchiseConfig } from './types/custom';
 interface basicAuthConfig {
   whitelistedIp: string[];
+  mobileViewExcludedPages?: { [key: string]: string[] };
   users: {
     username: string;
     password: string;
@@ -66,7 +67,7 @@ export const DOMAINS_TO_FRANCHISE: {
   return obj;
 }, {});
 export const BASIC_AUTH =
-  config.has('basicAuth') && config.get<basicAuthConfig>('basicAuth');
+  (config.has('basicAuth') && config.get<basicAuthConfig>('basicAuth')) || null;
 
 export const BUILD_FOLDER = path.join(
   __dirname,
@@ -75,3 +76,4 @@ export const BUILD_FOLDER = path.join(
 );
 export const PRERENDER_HEADER = 'x-seo-prerender';
 export const MAX_PRERENDER_PAGES = 3;
+export const LOCALE_REGEX = /^\/([a-z]{2}-[a-z]{2}|[a-z]{2})(\/|$)/i;
