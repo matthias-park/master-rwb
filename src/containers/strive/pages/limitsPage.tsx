@@ -230,14 +230,14 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
               let formattedUsedLimit: string | number | null = null;
               if (limit.Formatting === 'currency') {
                 const used =
-                  !!limit.LimitAmount && !!limit.AmountLeft
+                  limit.LimitAmount != null && limit.AmountLeft != null
                     ? Number((limit.LimitAmount - limit.AmountLeft).toFixed(2))
                     : null;
                 formattedUsedLimit = used || '0';
               }
               let formattedRemainingLimit: string | number | null =
                 limit.Formatting === 'currency'
-                  ? limit.AmountLeft || limit.LimitAmount
+                  ? limit.AmountLeft ?? limit.LimitAmount
                   : null;
 
               let formattedFutureLimitFrom:
@@ -297,7 +297,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                         </p>
                       </li>
                     )}
-                    {formattedRemainingLimit && (
+                    {formattedRemainingLimit != null && (
                       <li className="play-limits__limit">
                         <p className="play-limits__limit-title">
                           {t('left_limit')}
@@ -316,7 +316,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                         </p>
                       </li>
                     )}
-                    {!!formattedFutureLimit && (
+                    {formattedFutureLimit != null && (
                       <>
                         <li className="play-limits__limit">
                           <p className="play-limits__limit-title">
