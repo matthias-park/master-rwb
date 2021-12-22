@@ -32,7 +32,7 @@ const WelcomePage = () => {
       <Banner zone="welcome" />
       <div className="welcome-page">
         <div className="welcome-page__content page-content">
-          <BlockLinksSlider
+          {/* <BlockLinksSlider
             className="expand-right"
             cardClassName="white"
             items={[
@@ -65,7 +65,7 @@ const WelcomePage = () => {
                 img: '/assets/images/payments/trustly.svg',
               },
             ]}
-          />
+          /> */}
           {casinoCategories?.map(category => (
             <CasinoGroupSlider
               key={category.id}
