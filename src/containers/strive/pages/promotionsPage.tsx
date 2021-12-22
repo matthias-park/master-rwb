@@ -75,6 +75,28 @@ const PromoItem = ({ item, variant }: { item: PostItem; variant?: string }) => {
   );
 };
 
+const PromoCard = ({ post }: { post: PostItem }) => {
+  const { t } = useI18n();
+  return (
+    <div key={post.id} className="promo-card promo-card--big">
+      <PromoItem item={post} variant="sm" />
+      <div className="promo-card__body">
+        <h5 className="promo-card__body-title">{post.page_title}</h5>
+        <h6 className="promo-card__body-subtitle">{post.title}</h6>
+        <p className="promo-card__body-text">{post.short_description}</p>
+        <PromoLinkEl item={post} className="mt-auto">
+          <Button
+            variant="primary"
+            className="text-line-overflow d-inline-block"
+          >
+            {post.button_text || t('promotions_details')}
+          </Button>
+        </PromoLinkEl>
+      </div>
+    </div>
+  );
+};
+
 const PromotionsList = () => {
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const [imagesLoaded, setImagesLoaded] = useState(false);
@@ -117,13 +139,13 @@ const PromotionsList = () => {
     <main
       className={clsx(
         Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
-          ? 'px-sm-3'
+          ? 'container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5'
           : 'mb-5 pt-0 pt-xl-5',
-        'min-vh-70',
+        'min-vh-70 w-100',
       )}
     >
       {(Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon) && (
-        <h1 className="account-settings__title pl-1 mb-2">
+        <h1 className="account-settings__title">
           {t('promotions_page_title')}
         </h1>
       )}
@@ -144,37 +166,20 @@ const PromotionsList = () => {
               : 'mt-4 promotions-list',
           )}
         >
+          {!promotions.length && (
+            <h2 className="my-5 w-100 text-center">
+              {t('promotions_no_data')}
+            </h2>
+          )}
           {promotions.map(item => {
             if (
               Franchise.desertDiamond ||
               Franchise.gnogaz ||
               Franchise.gnogon
             ) {
-              return (
-                <div key={item.id} className="promo-card promo-card--big">
-                  <PromoItem item={item} variant="sm" />
-                  <div className="promo-card__body">
-                    <h5 className="promo-card__body-title">
-                      {item.page_title}
-                    </h5>
-                    <h6 className="promo-card__body-subtitle">{item.title}</h6>
-                    <p className="promo-card__body-text">
-                      {item.short_description}
-                    </p>
-                    <PromoLinkEl item={item} className="mt-auto">
-                      <Button
-                        variant="primary"
-                        className="text-line-overflow d-inline-block"
-                      >
-                        {item.button_text || t('promotions_details')}
-                      </Button>
-                    </PromoLinkEl>
-                  </div>
-                </div>
-              );
-            } else {
-              return <PromoItem key={item.id} item={item} />;
+              return <PromoCard key={item.id} post={item} />;
             }
+            return <PromoItem key={item.id} item={item} />;
           })}
         </div>
       )}
