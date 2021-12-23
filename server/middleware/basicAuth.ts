@@ -20,11 +20,7 @@ const basicAuth = async (req: Request, res: Response, next: NextFunction) => {
     )
   )
     return next();
-  if (
-    BASIC_AUTH &&
-    req.query['mobile-view'] &&
-    BASIC_AUTH?.mobileViewExcludedPages
-  ) {
+  if (BASIC_AUTH && BASIC_AUTH?.mobileViewExcludedPages) {
     const railsConstants = await getRailsConstants(req);
     let urlWithoutLocale = req.path.replace(LOCALE_REGEX, '');
     if (!urlWithoutLocale.startsWith('/'))
@@ -36,7 +32,7 @@ const basicAuth = async (req: Request, res: Response, next: NextFunction) => {
             path: route.path,
             exact: route.exact ?? true,
           }) &&
-          !!BASIC_AUTH?.mobileViewExcludedPages?.[req.franchise.name].includes(
+          !!BASIC_AUTH?.mobileViewExcludedPages?.[req.franchise.name]?.includes(
             route.name,
           ),
       )

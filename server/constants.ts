@@ -49,11 +49,11 @@ export const extensionsToIgnore = [
   '.iso',
   '.flv',
   '.m4v',
-  '.torrent',
   '.woff',
   '.ttf',
   '.svg',
   '.webmanifest',
+  '.webp',
 ];
 export const EXCLUDED_BOTS = ['pingdom'];
 export const BROWSER_KEEP_ALIVE = 300000; // 5min

@@ -1117,7 +1117,8 @@
         "terms_conditions_link",
         "privacy_policy_link",
         "nav_link_responsible_gaming",
-        "sitemap_houseRules"
+        "sitemap_houseRules",
+        "sitemap_resetPassword"
       ]
     }
   }
