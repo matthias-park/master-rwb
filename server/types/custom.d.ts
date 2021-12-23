@@ -25,6 +25,7 @@ declare global {
       locale?: string;
       pathExist: boolean;
       redirectTo?: string;
+      singleLoadPage?: boolean;
     }
   }
 }

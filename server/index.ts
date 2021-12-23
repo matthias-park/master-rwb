@@ -75,6 +75,15 @@ app.get('*', async (req, res) => {
   const filePath = path.join(BUILD_FOLDER, `/${hostname}.html`);
   if (fs.existsSync(filePath)) {
     res.set('Cache-Control', 'no-store');
+    if (req.singleLoadPage) {
+      const body = fs
+        .readFileSync(filePath, 'utf-8')
+        .replace(
+          '</head>',
+          '<script>window.singleLoadPage = true;</script></head>',
+        );
+      return res.send(body);
+    }
     return res.sendFile(filePath);
   }
   logger.error(`file not found ${filePath}`);

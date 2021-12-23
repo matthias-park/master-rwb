@@ -42,6 +42,7 @@ export declare global {
     xtremepush?: any;
     _wbUpdate?: boolean;
     PRERENDER_CACHE?: { [key: string]: any };
+    singleLoadPage?: boolean;
     //Webpack end
     //Kambi sportsbook
     customerSettings?: CustomerSettings;

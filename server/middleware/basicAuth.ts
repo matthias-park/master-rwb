@@ -37,6 +37,7 @@ const basicAuth = async (req: Request, res: Response, next: NextFunction) => {
           ),
       )
     ) {
+      req.singleLoadPage = true;
       return next();
     }
   }
