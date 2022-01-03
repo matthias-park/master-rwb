@@ -15,5 +15,5 @@ ENV NODE_ENV=${DOCKER_ENV}
 
 RUN echo your NODE_ENV for dev is $NODE_ENV
 RUN echo 'fs.inotify.max_user_watches=524288' >> /etc/sysctl.conf
-RUN sudo sysctl -p
+RUN sudo /bin/sh -c sysctl -p
 CMD [ "npm", "start" ]
