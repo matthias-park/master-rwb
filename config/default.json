@@ -304,7 +304,8 @@
         "online": "https://ctn-static.kambi.com/client/fanusny/kambi-bootstrap.js",
         "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js",
         "oddsFormat": "american",
-        "enableOddsFormatSelector": true
+        "enableOddsFormatSelector": true,
+        "fallbackLocale": "en_US"
       },
       "xtremepush": "https://prod.webpu.sh/xIPqGJt6fuQgTzDOSuSTN72PPi7rRk6F/sdk.js",
       "dateFormat": "MM-DD-YYYY",
@@ -347,7 +348,8 @@
         "currency": "USD",
         "online": "https://ctn-static.kambi.com/client/ddusaz/kambi-bootstrap.js",
         "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js",
-        "oddsFormat": "american"
+        "oddsFormat": "american",
+        "fallbackLocale": "en_US"
       },
       "geoComplyKey": "ShzolMaAK",
       "smartyStreets": "108064515683753034",

@@ -89,7 +89,8 @@
         "online": "https://c3-static.kambi.com/client/fanusny/kambi-bootstrap.js",
         "api": "https://c3-static.kambi.com/client/widget-api/kambi-widget-api.js",
         "oddsFormat": "american",
-        "enableOddsFormatSelector": true
+        "enableOddsFormatSelector": true,
+        "fallbackLocale": "en_US"
       },
       "redis": {
         "host": "192.168.60.40",
@@ -371,7 +372,8 @@
         "currency": "USD",
         "online": "https://static.kambicdn.com/client/ddusaz/kambi-bootstrap.js",
         "api": "https://static.kambicdn.com/client/widget-api/kambi-widget-api.js",
-        "oddsFormat": "american"
+        "oddsFormat": "american",
+        "fallbackLocale": "en_US"
       },
       "geoComplyKey": "lfhhgC74Ve",
       "smartyStreets": "108064515683753034",

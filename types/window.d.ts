@@ -22,6 +22,7 @@ export declare global {
         oddsFormat?: string;
         eventStatistics?: string;
         enableOddsFormatSelector?: boolean;
+        fallbackLocale?: string;
       };
       sbTechUrl?: string;
       zendesk?: string;

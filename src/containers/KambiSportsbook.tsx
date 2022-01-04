@@ -348,7 +348,10 @@ const getSBParams = async (
         })
       : null;
   return {
-    locale: KambiSbLocales[locale.toLocaleLowerCase()] || 'en_GB',
+    locale:
+      KambiSbLocales[locale.toLocaleLowerCase()] ||
+      Config.kambi!.fallbackLocale ||
+      'en_GB',
     playerId,
     ticket: data?.Data || '',
     currency: Config.kambi!.currency,
