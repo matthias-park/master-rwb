@@ -28,6 +28,7 @@ interface Props {
   className?: string;
   clearDefaultValueOnFocus?: boolean;
   onBlur?: () => void;
+  onChange?: () => void;
   size?: 'sm' | 'lg';
   maskedInput?: {
     format?: string | ((value: string) => string);
@@ -188,6 +189,7 @@ const TextInput = ({
   clearDefaultValueOnFocus,
   autoComplete,
   customInputStyle,
+  onChange,
 }: Props) => {
   const hasFocus = useRef<boolean>(false);
   const { field, fieldState } = useController({
@@ -256,6 +258,7 @@ const TextInput = ({
       }}
       onKeyUp={onEnterPress ? e => enterKeyPress(e, onEnterPress) : undefined}
       onChange={e => {
+        onChange?.();
         if (!maskedInput) {
           field.onChange(e);
         }
