@@ -87,7 +87,8 @@ const Sidebar = ({ links }: Props) => {
                           >
                             <div className="d-flex align-items-center">
                               {(Franchise.desertDiamond ||
-                                Franchise.gnogaz) && (
+                                Franchise.gnogaz ||
+                                Franchise.gnogon) && (
                                 <i className="sidebar-list__item-title-icon icon-tooltip invisible mr-3"></i>
                               )}
                               <div>{t(childLink.name)}</div>

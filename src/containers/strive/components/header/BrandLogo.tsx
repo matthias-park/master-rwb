@@ -7,7 +7,7 @@ import { StyledLogo } from '../styled/StyledHeader';
 interface BrandLogoProps {
   mobile: boolean;
 }
-const webpLogo = Franchise.strive || Franchise.gnogaz;
+const webpLogo = Franchise.strive || Franchise.gnogaz || Franchise.gnogon;
 const BrandLogo = ({ mobile }: BrandLogoProps) => {
   const logoSuffix = mobile ? '-small' : '';
   const homePageRoute = useRoutePath(PagesName.HomePage, true);

@@ -66,12 +66,20 @@ const CustomToggleCheck = React.forwardRef(
               readOnly
             ></input>
             <span className="toggle-check__slider"></span>
-            {!(Franchise.desertDiamond || Franchise.gnogaz) && (
+            {!(
+              Franchise.desertDiamond ||
+              Franchise.gnogaz ||
+              Franchise.gnogon
+            ) && (
               <span className="toggle-check__checked">
                 {t('custom_checkbox_checked')}
               </span>
             )}
-            {!(Franchise.desertDiamond || Franchise.gnogaz) && (
+            {!(
+              Franchise.desertDiamond ||
+              Franchise.gnogaz ||
+              Franchise.gnogon
+            ) && (
               <span className="toggle-check__unchecked">
                 {t('custom_checkbox_unchecked')}
               </span>

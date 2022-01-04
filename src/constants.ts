@@ -527,4 +527,5 @@ export const Franchise = {
   desertDiamond: Config.name === FranchiseNames.DesertDiamond,
   xCasino: Config.name === FranchiseNames.Xcasino,
   gnogaz: Config.name === FranchiseNames.Gnogaz,
+  gnogon: Config.name === FranchiseNames.Gnogon,
 };

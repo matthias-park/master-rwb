@@ -32,7 +32,7 @@ const LayoutWithSidebar = ({
         }
       >
         {!(
-          (Franchise.desertDiamond || Franchise.gnogaz) &&
+          (Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon) &&
           !user.logged_in
         ) && <Sidebar links={sidebar} />}
         {children}
@@ -46,7 +46,7 @@ const LayoutWithSidebar = ({
           </div>
         )}
       </div>
-      {Franchise.gnogaz || Franchise.desertDiamond ? (
+      {Franchise.gnogaz || Franchise.desertDiamond || Franchise.gnogon ? (
         <LoadablePageColumnFooter />
       ) : (
         <LoadablePageFooter />

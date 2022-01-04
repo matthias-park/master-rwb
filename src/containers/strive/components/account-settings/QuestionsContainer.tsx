@@ -43,7 +43,10 @@ const QuestionsContainer = ({ items, className }: Props) => {
   const { t } = useI18n();
   const faqRoute = useRoutePath(PagesName.FaqPage);
 
-  if (Franchise.gnogaz || Franchise.desertDiamond) return null;
+  if (Franchise.gnogaz || Franchise.desertDiamond || Franchise.gnogon) {
+    return null;
+  }
+
   return (
     <div className={className ? className : ''}>
       <h3 className="mb-3 questions-title">{t('user_questions')}</h3>

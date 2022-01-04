@@ -58,7 +58,9 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
   return (
     <Accordion
       className={clsx(
-        Franchise.gnogaz && active && 'info-container--active',
+        (Franchise.gnogaz || Franchise.gnogon) &&
+          active &&
+          'info-container--active',
         'info-container info-container--gray mb-3',
       )}
     >
@@ -151,7 +153,9 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
   return (
     <Accordion
       className={clsx(
-        Franchise.gnogaz && active && 'info-container--active',
+        (Franchise.gnogaz || Franchise.gnogon) &&
+          active &&
+          'info-container--active',
         'info-container mb-3',
       )}
     >

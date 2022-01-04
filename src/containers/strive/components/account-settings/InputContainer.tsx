@@ -101,7 +101,10 @@ const InputContainer = ({
         <Form.Group className="d-flex flex-column w-100">
           <div
             className={clsx(
-              (Franchise.desertDiamond || Franchise.gnogaz) && 'order-2',
+              (Franchise.desertDiamond ||
+                Franchise.gnogaz ||
+                Franchise.gnogon) &&
+                'order-2',
               'quick-amounts',
             )}
           >
@@ -147,7 +150,9 @@ const InputContainer = ({
             onEnterPress={() => handleSubmit()}
             clearDefaultValueOnFocus
             defaultValue={defaultValue.toString()}
-            customInputStyle={Franchise.desertDiamond || Franchise.gnogaz}
+            customInputStyle={
+              Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
+            }
           />
         </Form.Group>
         {subText && <small className="mb-2">{subText}</small>}

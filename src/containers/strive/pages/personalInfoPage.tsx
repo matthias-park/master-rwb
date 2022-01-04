@@ -44,7 +44,9 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
   return (
     <Accordion
       className={clsx(
-        Franchise.gnogaz && active && 'info-container--active',
+        (Franchise.gnogaz || Franchise.gnogon) &&
+          active &&
+          'info-container--active',
         'info-container mb-3',
       )}
     >
@@ -117,7 +119,9 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
                 id={id}
                 fields={Franchise.strive ? fields : null}
                 blocks={
-                  (Franchise.gnogaz || Franchise.desertDiamond) &&
+                  (Franchise.gnogaz ||
+                    Franchise.desertDiamond ||
+                    Franchise.gnogon) &&
                   blocks && {
                     items: blocks,
                     className: 'personal-info-block',

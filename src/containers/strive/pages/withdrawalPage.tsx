@@ -49,14 +49,17 @@ const WithdrawalRequests = ({
   return (
     <div
       className={clsx(
-        (Franchise.desertDiamond || Franchise.gnogaz) &&
+        (Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon) &&
           'outer-info-block mb-4',
         'd-flex flex-column',
       )}
     >
       <div
         className={clsx(
-          !Franchise.desertDiamond && !Franchise.gnogaz && 'mb-4',
+          !Franchise.desertDiamond &&
+            !Franchise.gnogaz &&
+            !Franchise.gnogon &&
+            'mb-4',
           'table-container d-flex flex-column',
         )}
       >
@@ -284,9 +287,9 @@ const WithdrawalPage = () => {
       )}
       {data && (
         <>
-          {(Franchise.desertDiamond || Franchise.gnogaz) && (
-            <BalancesContainer />
-          )}
+          {(Franchise.desertDiamond ||
+            Franchise.gnogaz ||
+            Franchise.gnogon) && <BalancesContainer />}
           <h1 className="account-settings__title mb-4">{data.Data.title}</h1>
           {window.__config__.name === 'strive' && (
             <AmountContainer
@@ -340,7 +343,7 @@ const WithdrawalPage = () => {
               disabled={!selectedBankAccount || !kycValidationOkay}
               currency={user.currency}
               quickAmounts={
-                Franchise.desertDiamond || Franchise.gnogaz
+                Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
                   ? [10, 20, 50, 100]
                   : []
               }

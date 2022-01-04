@@ -19,7 +19,10 @@ const HelpBlock = ({
     'https://support.betsson.com/en?_gl=1*1wigboh*_ga*NjIyMzU0NjY2LjE2MjI4OTIxNDg.*_ga_BBLKWV84WH*MTYyNzUzNjM0NC43NS4xLjE2Mjc1NDUxNTAuMA';
   const contactUsPagePath = useRoutePath(PagesName.ContactUsPage);
 
-  if (Franchise.desertDiamond || Franchise.gnogaz) return null;
+  if (Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon) {
+    return null;
+  }
+
   return (
     <div className={`help-block ${className}`}>
       {title && <p className="help-block__title">{t(title)}</p>}

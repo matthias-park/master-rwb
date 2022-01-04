@@ -109,7 +109,7 @@ const TemplatePage = () => {
         </Helmet>
       )}
       {!!data?.Success &&
-        (Franchise.desertDiamond || Franchise.gnogaz ? (
+        (Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon ? (
           <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
             <h1 className="account-settings__title">{pageTitle}</h1>
             <div className="outer-info-block">

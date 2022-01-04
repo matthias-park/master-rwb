@@ -114,7 +114,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
       />
     );
   }
-  if (Franchise.desertDiamond || Franchise.gnogaz) {
+  if (Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon) {
     if (user.loading) {
       return null;
     }
@@ -171,7 +171,7 @@ const PageHeader = () => {
 
   return (
     <>
-      {Franchise.desertDiamond || Franchise.gnogaz ? (
+      {Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon ? (
         <StyledRowHeader
           className={clsx(
             backdrop.ignoredComponents.includes(ComponentName.Header) &&
@@ -201,7 +201,9 @@ const PageHeader = () => {
               />
             </Link>
           )}
-          {(Franchise.gnogaz || Franchise.desertDiamond) && (
+          {(Franchise.gnogaz ||
+            Franchise.desertDiamond ||
+            Franchise.gnogon) && (
             <ul className="nav-links">
               {header
                 ?.concat()

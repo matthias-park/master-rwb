@@ -58,7 +58,7 @@ const PromoItem = ({ item, variant }: { item: PostItem; variant?: string }) => {
         className="promotion-block__img"
         src={item.image.url || '/assets/images/promo/promo-front.png'}
       />
-      {!Franchise.gnogaz && (
+      {!(Franchise.gnogaz || Franchise.gnogon) && (
         <div className="promotion-block__body">
           {item.title && (
             <h3 className="promotion-block__body-subtitle">{item.title}</h3>
@@ -116,13 +116,13 @@ const PromotionsList = () => {
   return (
     <main
       className={clsx(
-        Franchise.desertDiamond || Franchise.gnogaz
+        Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
           ? 'px-sm-3'
           : 'mb-5 pt-0 pt-xl-5',
         'min-vh-70',
       )}
     >
-      {(Franchise.desertDiamond || Franchise.gnogaz) && (
+      {(Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon) && (
         <h1 className="account-settings__title pl-1 mb-2">
           {t('promotions_page_title')}
         </h1>
@@ -139,13 +139,17 @@ const PromotionsList = () => {
       ) : (
         <div
           className={clsx(
-            Franchise.desertDiamond || Franchise.gnogaz
+            Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
               ? 'promotions-list-inner'
               : 'mt-4 promotions-list',
           )}
         >
           {promotions.map(item => {
-            if (Franchise.desertDiamond || Franchise.gnogaz) {
+            if (
+              Franchise.desertDiamond ||
+              Franchise.gnogaz ||
+              Franchise.gnogon
+            ) {
               return (
                 <div key={item.id} className="promo-card promo-card--big">
                   <PromoItem item={item} variant="sm" />
@@ -268,7 +272,9 @@ const PromotionPage = ({ slug }: { slug: string }) => {
   return (
     <main
       className={clsx(
-        Franchise.desertDiamond || Franchise.gnogaz ? 'pl-3' : 'pt-xl-5',
+        Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
+          ? 'pl-3'
+          : 'pt-xl-5',
         'min-vh-70',
       )}
     >
@@ -282,7 +288,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
           content={clsx(promoTitle && `${promoTitle} - `, t('seo_site_name'))}
         />
       </Helmet>
-      {(Franchise.desertDiamond || Franchise.gnogaz) && (
+      {(Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon) && (
         <Link to={'/promotions'}>
           <h1 className="account-settings__title d-flex align-items-center mb-3">
             <i className="icon-desertDiamond-left1 mr-2"></i>
@@ -298,7 +304,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
       {!!data && (
         <div
           className={clsx(
-            Franchise.desertDiamond || Franchise.gnogaz
+            Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
               ? 'promotion-inner promotion-inner--block'
               : 'promotion-inner',
             !promoImageLoaded && 'd-none',
@@ -312,7 +318,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
               onError={() => setPromoImageLoaded(true)}
               src={bannerImg || fallbackBannerImg}
             ></img>
-            {!Franchise.gnogaz && (
+            {!(Franchise.gnogaz || Franchise.gnogon) && (
               <div className="promo-bg-text">
                 {promoTitle && (
                   <h3 className="promo-bg-text__subtitle">{promoTitle}</h3>

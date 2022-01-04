@@ -281,7 +281,7 @@ const TransactionsPage = () => {
       </h1>
       <div
         className={clsx(
-          Franchise.desertDiamond || Franchise.gnogaz
+          Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
             ? 'outer-info-block p-4 mb-4'
             : 'd-contents',
         )}

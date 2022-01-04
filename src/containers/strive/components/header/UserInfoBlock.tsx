@@ -63,7 +63,9 @@ const UserMenuLink = ({
                     className="user-menu__list-sub-item"
                     onClick={() => setShowDropdown(false)}
                   >
-                    {(Franchise.desertDiamond || Franchise.gnogaz) && (
+                    {(Franchise.desertDiamond ||
+                      Franchise.gnogaz ||
+                      Franchise.gnogon) && (
                       <i className="user-menu__list-item-icon icon-tooltip invisible mr-3"></i>
                     )}
                     {t(childLink.name)}
@@ -124,7 +126,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
           show={showDropdown}
           onToggle={isOpen => showUserMenu(isOpen)}
         >
-          {Franchise.desertDiamond || Franchise.gnogaz ? (
+          {Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon ? (
             <>
               <Button
                 as={Link}
@@ -211,7 +213,9 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
           >
             <div className="user-menu-wrp">
               <ul className="user-menu__list">
-                {Franchise.desertDiamond || Franchise.gnogaz ? (
+                {Franchise.desertDiamond ||
+                Franchise.gnogaz ||
+                Franchise.gnogon ? (
                   <Dropdown.Item as="div" className="my-2 px-0">
                     <Link
                       to={depositRoute}
@@ -254,7 +258,9 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 onClick={onLogoutClick}
               >
                 <LoadingSpinner show={loggingOut} small className="mr-1" />
-                {(Franchise.desertDiamond || Franchise.gnogaz) && (
+                {(Franchise.desertDiamond ||
+                  Franchise.gnogaz ||
+                  Franchise.gnogon) && (
                   <i
                     className={clsx(
                       'icon-desertDiamond-logout',

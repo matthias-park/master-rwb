@@ -537,7 +537,7 @@ const FormField = ({
 
   switch (field.type) {
     case 'checkbox': {
-      return Franchise.desertDiamond || Franchise.gnogaz ? (
+      return Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon ? (
         <CustomToggleCheck
           {...registerField(field.id, {
             required: field.required,

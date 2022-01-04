@@ -36,7 +36,7 @@ const PageColumnFooter = () => {
           {t('gambling_problem_text')}
         </div>
       </div>
-      {Franchise.gnogaz && (
+      {(Franchise.gnogaz || Franchise.gnogon) && (
         <div className="footer-item footer-payments">
           {footer?.rowFooterPayments?.map(paymentImg => (
             <img
@@ -75,7 +75,7 @@ const PageColumnFooter = () => {
             ))}
           </div>
         </div>
-        {Franchise.gnogaz && (
+        {(Franchise.gnogaz || Franchise.gnogon) && (
           <div className="footer-info__section partners">
             {footer?.rowFooterPartners?.map(partner => (
               <Link key={partner.link} to={partner.link}>
