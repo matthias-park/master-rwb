@@ -606,7 +606,8 @@
         },
         "paymentMethods": {
           "inRow": 4,
-          "padding": "25px 40px",
+          "padding": "25px 20%",
+          "mobilePadding": "30px 5px",
           "textAlign": "left",
           "border": "1px solid #E6ECF1",
           "borderRadius": 4

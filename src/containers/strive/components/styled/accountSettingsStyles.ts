@@ -815,6 +815,9 @@ const accountSettingsStyles = css`
       border-radius: ${props => props.theme.paymentMethods.borderRadius}px;
       max-width: 100%;
       box-shadow: ${props => props.theme.paymentMethods.boxShadow};
+      ${mediaBreakpointDown('md')} {
+        padding: ${props => props.theme.paymentMethods.mobilePadding};
+      }
     }
     &__title {
       text-align: ${props => props.theme.paymentMethods.textAlign};

@@ -318,6 +318,7 @@ declare module 'styled-components' {
     };
     paymentMethods: {
       inRow: number;
+      mobilePadding: string;
       padding: string;
       textAlign: string;
       boxShadow?: string;
