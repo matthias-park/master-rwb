@@ -832,5 +832,14 @@ const accountSettingsStyles = css`
       }
     }
   }
+
+  .checkout {
+    margin-bottom: 20px;
+    iframe {
+      width: 100%;
+      height: 75vh;
+      border: none;
+    }
+  }
 `;
 export default accountSettingsStyles;
