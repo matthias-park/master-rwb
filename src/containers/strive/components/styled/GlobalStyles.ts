@@ -31,6 +31,23 @@ const GlobalStyles = createGlobalStyle`
       overflow-y: hidden !important;
     }
   }
+  // world pay deposit iframe styles
+  #fCheckout {
+    #eProtect-iframe {
+      height: 25vh;
+    }
+    #submitId {
+      background-color: ${props => props.theme.colors.primary.main};
+      color: ${props => props.theme.colors.brand.text};
+      border: none;
+      border-radius: 16px;
+      font-weight: 600;
+      padding: 0.7rem 1rem;
+    }
+    table {
+      width: 100%;
+    }
+  }
   .sb-hidden {
     #KambiBC {
       border: 0; 
