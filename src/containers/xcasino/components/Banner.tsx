@@ -69,7 +69,7 @@ const Banner = ({ promoSlides, onLoad, onError, zone }: BannerProps) => {
         setSlides(data.Data);
       })();
     }
-  }, [promoSlides]);
+  }, [promoSlides, user]);
 
   return (
     <div className="main-banner banner fixed-aspect">
