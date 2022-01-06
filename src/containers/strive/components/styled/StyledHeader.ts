@@ -5,7 +5,7 @@ import { fullBg } from './mixins';
 import Link from '../../../../components/Link';
 import { Dropdown } from 'react-bootstrap';
 import { rgba } from './mixins';
-import { Config } from '../../../../constants';
+import { Franchise, Config } from '../../../../constants';
 
 export const StyledNavToggler = styled(Navbar.Toggle)`
   display: flex;
@@ -565,7 +565,7 @@ export const StyledRowHeader = styled('header')`
     margin-left: -${props => props.theme.spacing.bodyPaddingSmall}px;
     margin-right: -${props => props.theme.spacing.bodyPaddingSmall}px;
   }
-  ${mediaBreakpointDown('sm')} {
+  ${mediaBreakpointDown('md')} {
     margin-bottom: calc(${props => props.theme.header.navHeightMobile}px - 1px);
   }
   .header-logo-wrp {
@@ -587,6 +587,9 @@ export const StyledRowHeader = styled('header')`
     width: ${props => props.theme.header.logoSizeMobile || 35}px;
     .header-logo-mobile {
       width: ${props => props.theme.header.logoSizeMobile || 35}px;
+      ${mediaBreakpointDown('xs')} {
+        width: ${props => Franchise.gnogaz && 75}px;
+      }
     }
   }
   .nav-links {
@@ -603,12 +606,16 @@ export const StyledRowHeader = styled('header')`
       font-size: ${props => props.theme.header.navFontSize || 14}px;
       text-transform: uppercase;
       font-weight: 700;
+      margin-right: 30px;
       a {
         color: ${props => props.theme.colors.white.main};
       }
       i {
         font-size: 24px;
         margin-right: 12px;
+        &:before {
+          transition: color 0.3s;
+        }
       }
       &:before {
         content: '';
@@ -617,7 +624,10 @@ export const StyledRowHeader = styled('header')`
         border-bottom: 3px solid transparent;
         width: 100%;
         transition: border-bottom-color 0.3s;
-        ${mediaBreakpointDown('sm')} {
+        ${mediaBreakpointDown('md')} {
+          bottom: -12px;
+        }
+        ${mediaBreakpointDown('xs')} {
           bottom: -16px;
         }
       }
@@ -626,12 +636,26 @@ export const StyledRowHeader = styled('header')`
         &:before {
           border-bottom-color: ${props => props.theme.colors.primary.main};
         }
+        i:before {
+          color: ${props => props.theme.colors.primary.main};
+        }
+      }
+      ${mediaBreakpointDown('md')} {
+        font-size: 12px;
+        margin-right: 0;
+        margin-left: 25px;
+      }
+      ${mediaBreakpointDown('xs')} {
+        margin-left: 15px;
+        i {
+          display: none;
+        }
       }
     }
     ${mediaBreakpointDown('lg')} {
       padding-left: 35px;
     }
-    ${mediaBreakpointDown('sm')} {
+    ${mediaBreakpointDown('md')} {
       display: ${props => props.theme.header.navHeightMobile === 0 && 'none'};
       position: absolute;
       left: 0;
@@ -641,6 +665,10 @@ export const StyledRowHeader = styled('header')`
       justify-content: flex-end;
       padding: 0 25px;
       border-bottom: ${props => props.theme.header.borderBottom};
+    }
+    ${mediaBreakpointDown('xs')} {
+      padding: 0px 15px;
+      padding-top: 3px;
     }
   }
   .mobile-user-menu {

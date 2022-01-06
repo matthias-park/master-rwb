@@ -143,13 +143,6 @@ const customStyles = css`
     }
   }
 
-  .icon-${window.__config__.name}-tooltip {
-    font-size: 20px;
-    color: ${props => props.theme.colors.brand.light};
-    cursor: default;
-    opacity: 0.9;
-  }
-
   .tooltip {
     .tooltip-inner {
       box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.1);
