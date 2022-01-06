@@ -139,7 +139,11 @@ export const UncontrolledTextInput = React.forwardRef(
             {props.toggleVisibility && showEye && (
               <i
                 className={clsx(
-                  `icon-${Config.name}-eye-${showPassword ? 'on' : 'off'}`,
+                  `icon${
+                    window.__config__.theme === 'strive'
+                      ? `-${Config.name}`
+                      : ''
+                  }-eye-${showPassword ? 'on' : 'off'}`,
                   'show-password',
                   showPassword && 'show',
                 )}
