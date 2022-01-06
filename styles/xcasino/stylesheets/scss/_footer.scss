@@ -173,6 +173,31 @@
       }
     }
   }
+  &__current-time-wrp {
+    max-width: 1920px;
+    margin: auto;
+  }
+  &__current-time {
+    display: inline-flex;
+    align-items: center;
+    border: 2px solid $gray-600;
+    border-radius: $border-radius-sm;
+    padding: 4px 6px;
+    font-weight: 600;
+    font-size: $text-body;
+    transform: translateY($spacing-3);
+    margin: $spacing-1 0;
+    i {
+      color: $gray-300;
+      margin-right: 6px;
+    }
+    @include media-breakpoint-down(sm) {
+      margin-left: $spacing-2;
+    }
+    @include media-breakpoint-down(xs) {
+      margin-left: $spacing-5;
+    }
+  }
 }
 
 .footer-full-bg {

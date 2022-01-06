@@ -7,6 +7,7 @@ import { useApi } from '../../../hooks/useApi';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import Link from '../../../components/Link';
 import { Game } from '../../../types/api/Casino';
+import CurrentTimeTimer from '../../../components/CurrentTimeTimer';
 
 type GameInfoPages = {
   game: Game;
@@ -46,6 +47,12 @@ const Footer = () => {
 
   return (
     <footer className="footer">
+      <div className="footer__current-time-wrp">
+        <span className="footer__current-time">
+          <i className="icon-live-sports"></i>
+          <CurrentTimeTimer timezone={'Europe/Amsterdam'} />
+        </span>
+      </div>
       <div className="footer__link-groups px-sm-2 px-md-0">
         {footer?.links?.map(group => (
           <ul className="footer__link-group">
