@@ -170,7 +170,7 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
                               validate: value => {
                                 if (isPassword)
                                   return (
-                                    VALIDATIONS.passwordMixOfThree(value) ||
+                                    VALIDATIONS.password(value) ||
                                     t('register_password_weak')
                                   );
                                 if (field.id === 'phone_number')

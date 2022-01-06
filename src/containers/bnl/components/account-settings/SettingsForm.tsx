@@ -266,7 +266,7 @@ const SettingsForm = ({
                           validate: value => {
                             if (isNewPassword)
                               return (
-                                VALIDATIONS.passwordMixOfThree(value) ||
+                                VALIDATIONS.password(value) ||
                                 t('register_password_weak')
                               );
                             if (field.id === 'phone_number')

@@ -86,8 +86,7 @@ const ResetPasswordModal = () => {
                   'reset_password_field_required',
                 )}`,
                 validate: value =>
-                  VALIDATIONS.passwordMixOfThree(value) ||
-                  t('register_password_weak'),
+                  VALIDATIONS.password(value) || t('register_password_weak'),
               }}
               onBlur={() =>
                 watch('repeat_password') && trigger('repeat_password')

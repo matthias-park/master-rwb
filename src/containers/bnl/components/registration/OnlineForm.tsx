@@ -158,7 +158,7 @@ const blocks = (
         triggerId: 'repeat_password',
         required: true,
         validate: value => {
-          const valid = VALIDATIONS.passwordMixOfThree(value);
+          const valid = VALIDATIONS.password(value);
           setValidation(
             'password',
             valid ? FormFieldValidation.Valid : FormFieldValidation.Invalid,

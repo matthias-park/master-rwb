@@ -4,7 +4,11 @@ import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import LoadingButton from '../../../../components/LoadingButton';
 import { useI18n } from '../../../../hooks/useI18n';
-import { franchiseDateFormat, VALIDATIONS } from '../../../../constants';
+import {
+  franchiseDateFormat,
+  VALIDATIONS,
+  Franchise,
+} from '../../../../constants';
 import SelectInput from '../../../../components/customFormInputs/SelectInput';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import FileInput from '../../../../components/customFormInputs/FileInput';
@@ -322,8 +326,10 @@ const FormFields = ({
                       validate: value => {
                         if (isNewPassword)
                           return (
-                            VALIDATIONS.passwordMixOfThree(value) ||
-                            t('register_password_weak')
+                            VALIDATIONS.password(
+                              value,
+                              Franchise.desertDiamond ? 4 : 3,
+                            ) || t('register_password_weak')
                           );
                         if (field.id === 'phone_number')
                           return (

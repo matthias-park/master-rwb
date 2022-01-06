@@ -228,7 +228,10 @@ const blocks = (
             triggerId: 'repeat_password',
             required: true,
             validate: value => {
-              const valid = VALIDATIONS.passwordMixOfThree(value);
+              const valid = VALIDATIONS.password(
+                value,
+                Franchise.desertDiamond ? 4 : 3,
+              );
               setValidation(
                 'password',
                 valid ? FormFieldValidation.Valid : FormFieldValidation.Invalid,
@@ -473,7 +476,10 @@ const blocks = (
             triggerId: 'repeat_password',
             required: true,
             validate: value => {
-              const valid = VALIDATIONS.passwordMixOfThree(value);
+              const valid = VALIDATIONS.password(
+                value,
+                Franchise.desertDiamond ? 4 : 3,
+              );
               setValidation(
                 'password',
                 valid ? FormFieldValidation.Valid : FormFieldValidation.Invalid,

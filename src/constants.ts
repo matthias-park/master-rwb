@@ -470,7 +470,7 @@ export const VALIDATIONS = {
   },
   bank_account: (value: string = '') =>
     REGEX_EXPRESSION.BANK_IBAN.test(value.trim()),
-  passwordMixOfThree: (value: string = '') => {
+  password: (value: string = '', validationsRequired: number = 3) => {
     if (value.includes(' ')) return false;
     const valueValid = value.length > 7;
     const hasLowerCase = /[a-z]/.test(value);
@@ -481,7 +481,7 @@ export const VALIDATIONS = {
       valueValid &&
       [hasLowerCase, hasUpperCase, hasNumbers, hasSpecialCharacters].filter(
         Boolean,
-      ).length > 2
+      ).length >= validationsRequired
     );
   },
   validDateFormat: (dayjs: any, value: string = '') => {
