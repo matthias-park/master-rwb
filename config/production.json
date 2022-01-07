@@ -707,7 +707,7 @@
       "domains": [
         {
           "hostname": "az-sports.goldennuggetsports.com",
-          "api": "https://az-api.goldennuggetsports.com/"
+          "api": "https://az-api.goldennuggetsports.com"
         }
       ],
       "themeColor": "#000541",
