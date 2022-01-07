@@ -717,7 +717,7 @@
       "redis": {
         "host": "192.168.150.40",
         "port": 6379,
-        "db": 0,
+        "db": 12,
         "prefix": "reactNodeProd-",
         "password": "Y9pxykZ69RW4t98SQxUqL"
       },
