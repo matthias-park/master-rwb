@@ -714,6 +714,7 @@
       "smartyStreets": "113676706475958507",
       "geoComplyKey": "5YZkkL4ADJ",
       "theme": "strive",
+      "sbTechUrl": "https://az-sports-live.goldennuggetsports.com",
       "redis": {
         "host": "192.168.150.40",
         "port": 6379,
