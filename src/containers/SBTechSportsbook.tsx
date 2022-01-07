@@ -6,9 +6,11 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { postApi } from '../utils/apiUtils';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Config } from '../constants';
+import { useLocation } from 'react-router';
+import { useConfig } from '../hooks/useConfig';
 
 enum SbtEventTypes {
-  SetDeviceType = 'SBT_SET_DEVIVCE_TYPE',
+  SetDeviceType = 'SBT_SET_DEVICE_TYPE',
   status = 'SBT_STATUS',
   statusCallback = 'SBT_STATUS_CALLBACK',
   refreshSession = 'SBT_REFRESH_SESSION',
@@ -37,6 +39,8 @@ interface sbState {
 const SBTechSportsbook = () => {
   const { user, signout } = useAuth();
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const { pathname, search, hash, key } = useLocation();
   const [iframeState, setIframeState] = useState<sbState>({
     loading: true,
     statusRequested: false,
@@ -213,6 +217,13 @@ const SBTechSportsbook = () => {
                 ...prev,
                 currentLocation: location,
               }));
+              const newUrl = `/${locale}/${location}`;
+              if (
+                newUrl !==
+                `${window.location.pathname}${window.location.search}${window.location.hash}`
+              ) {
+                window.history.pushState(null, '', newUrl);
+              }
             }
             break;
           }
@@ -235,13 +246,17 @@ const SBTechSportsbook = () => {
         </div>
       )}
       <iframe
+        key={key}
         title="sb"
         width="100%"
         ref={iframeRef}
         onLoad={() => setIframeState(prev => ({ ...prev, loading: false }))}
         height={iframeState.height}
-        className={clsx('sb-iframe', iframeState.loading && 'd-none')}
-        src={window.__config__.sbTechUrl}
+        className={clsx(
+          'sb-iframe min-vh-100',
+          iframeState.loading && 'd-none',
+        )}
+        src={`${Config.sbTechUrl}${pathname}${search}${hash}`}
       />
       <ul className="sb-bottom-nav">
         {[
@@ -288,6 +303,9 @@ const SBTechSportsbook = () => {
                 iframeState.currentLocation === item.path && 'active',
               )}
             />
+            {item.text === 'My bets' && !!iframeState.betCount && (
+              <span className="bet-counter">{iframeState.betCount}</span>
+            )}
             {item.text}
           </li>
         ))}

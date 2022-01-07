@@ -752,6 +752,7 @@
       "dateFormat": "MM-DD-YYYY",
       "componentSettings": {
         "userIdleTimeout": 30,
+        "v2Auth": "wss://gnogaz-ws.strivegaming.us",
         "login": {
           "loginCookiesAccept": true
         },
@@ -1473,7 +1474,9 @@
       "88.119.17.78",
       "78.60.222.254",
       "78.63.1.7",
-      "88.119.17.78"
+      "88.119.17.78",
+      "93.157.73.168",
+      "185.172.85.185"
     ],
     "users": [
       {

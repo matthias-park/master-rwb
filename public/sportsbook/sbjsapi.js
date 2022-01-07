@@ -1,8 +1,20 @@
 /* eslint-disable default-case */
 var whl = (function (window, JSON) {
   // listen for Sportsbook frame activity
-  document.body.style = 'overflow: hidden';
+  if (document.referrer.length) {
+    document.body.style = 'overflow: hidden';
+  }
   var events = ['mousedown', 'keypress', 'scroll', 'touchstart'];
+
+  var postMessage = event => {
+    var json = JSON.stringify(event);
+    if (typeof window.SBTechAndroid != 'undefined') {
+      window.SBTechAndroid.jsEvent(json);
+    } else {
+      window.parent.postMessage(json, '*');
+    }
+  };
+
   events.forEach(function (name) {
     let message = JSON.stringify({ eventType: 'SBT_ACTIVITY', eventData: '' });
     window.document.addEventListener(
@@ -15,6 +27,7 @@ var whl = (function (window, JSON) {
   });
 
   window.addEventListener('message', receiveMessage);
+  window.androidEvent = data => receiveMessage({ data });
 
   var sbtechCallbacks = {
     LOAD_BETSLIP: () => {
@@ -52,62 +65,79 @@ var whl = (function (window, JSON) {
     },
   };
   function receiveMessage(event) {
-    let json = JSON.parse(event.data);
+    let json;
+    try {
+      json = JSON.parse(event.data);
+    } catch {
+      return false;
+    }
 
     if (json === null) {
-      return;
+      return false;
     }
 
     let eventType = json.eventType;
     let eventData = json.eventData;
 
-    if (typeof eventType !== 'undefined') {
-      switch (eventType.toUpperCase()) {
-        case 'LOAD_BETSLIP_CALLBACK':
-          sbtechCallbacks['LOAD_BETSLIP']();
-        case 'TOGGLE_HAMBURGER_MENU_CALLBACK':
-        case 'GOTO_BETTING_HISTORY_EVENT_CALLBACK':
-          sbtechCallbacks[eventType.toUpperCase()]();
-          window.parent.postMessage(
-            JSON.stringify({
-              eventType: 'SCROLL_UP',
-            }),
-            '*',
-          );
-          break;
-        case 'SBT_REFRESH_SESSION_CALLBACK':
-          sbtechCallbacks['SBT_REFRESH_SESSION'](eventData);
-          break;
-        case 'SBT_STATUS_CALLBACK':
-          sbtechCallbacks['SBT_STATUS'](eventData);
-          break;
-        case 'SBT_ACTIVITY_CALLBACK':
-          sbtechCallbacks['SBT_ACTIVITY'](eventData);
-          break;
-        case 'SBT_LOGOUT_CALLBACK':
-          sbtechCallbacks['SBT_LOGOUT']();
-          break;
-        case 'SBT_LOGIN_CALLBACK':
-          sbtechCallbacks['SBT_LOGIN'](eventData);
-          break;
-        case 'SBT_NAVIGATE_CALLBACK':
-          sbtechCallbacks['SBT_NAVIGATE'](eventData);
-          break;
-        case 'SBT_NAVIGATE_HOME_CALLBACK':
-          sbtechCallbacks['SBT_NAVIGATE_HOME']();
-          break;
-      }
+    if (typeof eventType == 'undefined') {
+      return false;
+    }
+    switch (eventType.toUpperCase()) {
+      case 'LOAD_BETSLIP_CALLBACK':
+        sbtechCallbacks['LOAD_BETSLIP']();
+        return true;
+      case 'TOGGLE_HAMBURGER_MENU_CALLBACK':
+        sbtechCallbacks['TOGGLE_HAMBURGER_MENU']();
+        postMessage(
+          {
+            eventType: 'SCROLL_UP',
+          },
+          '*',
+        );
+        return true;
+      case 'GOTO_BETTING_HISTORY_EVENT_CALLBACK':
+        sbtechCallbacks['GOTO_BETTING_HISTORY_EVENT']();
+        postMessage(
+          {
+            eventType: 'SCROLL_UP',
+          },
+          '*',
+        );
+        return true;
+      case 'SBT_REFRESH_SESSION_CALLBACK':
+        sbtechCallbacks['SBT_REFRESH_SESSION'](eventData);
+        return true;
+      case 'SBT_STATUS_CALLBACK':
+        sbtechCallbacks['SBT_STATUS'](eventData);
+        return true;
+      case 'SBT_ACTIVITY_CALLBACK':
+        sbtechCallbacks['SBT_ACTIVITY'](eventData);
+        return true;
+      case 'SBT_LOGOUT_CALLBACK':
+        sbtechCallbacks['SBT_LOGOUT']();
+        return true;
+      case 'SBT_LOGIN_CALLBACK':
+        sbtechCallbacks['SBT_LOGIN'](eventData);
+        return true;
+      case 'SBT_NAVIGATE_CALLBACK':
+        sbtechCallbacks['SBT_NAVIGATE'](eventData);
+        return true;
+      case 'SBT_NAVIGATE_HOME_CALLBACK':
+        sbtechCallbacks['SBT_NAVIGATE_HOME']();
+        return true;
+      default:
+        return false;
     }
   }
 
   function activity(callback) {
     console.log('activity', callback);
     sbtechCallbacks['SBT_ACTIVITY'] = callback;
-    window.parent.postMessage(
-      JSON.stringify({
+    postMessage(
+      {
         eventType: 'SBT_ACTIVITY',
         eventData: callback,
-      }),
+      },
       '*',
     );
   }
@@ -115,11 +145,11 @@ var whl = (function (window, JSON) {
   function status(callback) {
     console.log('status', callback);
     sbtechCallbacks['SBT_STATUS'] = callback;
-    window.parent.postMessage(
-      JSON.stringify({
+    postMessage(
+      {
         eventType: 'SBT_STATUS',
         eventData: callback,
-      }),
+      },
       '*',
     );
   }
@@ -131,10 +161,10 @@ var whl = (function (window, JSON) {
   function refreshSession(callback) {
     console.log('refreshSession', callback);
     sbtechCallbacks['SBT_REFRESH_SESSION'] = callback;
-    window.parent.postMessage(
-      JSON.stringify({
+    postMessage(
+      {
         eventType: 'SBT_REFRESH_SESSION',
-      }),
+      },
       '*',
     );
   }
@@ -142,10 +172,10 @@ var whl = (function (window, JSON) {
   function scrollToTop() {
     window.scroll(0, 0);
     console.log('scrollToTop');
-    window.parent.postMessage(
-      JSON.stringify({
+    postMessage(
+      {
         eventType: 'SCROLL_UP',
-      }),
+      },
       '*',
     );
   }
@@ -154,11 +184,11 @@ var whl = (function (window, JSON) {
     console.log('setDeviceTypeAndOrientation', deviceDetails);
 
     if (deviceDetails) {
-      window.parent.postMessage(
-        JSON.stringify({
-          eventType: 'SBT_SET_DEVIVCE_TYPE',
+      postMessage(
+        {
+          eventType: 'SBT_SET_DEVICE_TYPE',
           eventData: deviceDetails,
-        }),
+        },
         '*',
       );
     }
@@ -167,22 +197,22 @@ var whl = (function (window, JSON) {
   function setBetSlipItemsCount(betslipCount) {
     console.log('setBetSlipItemsCount', betslipCount);
 
-    window.parent.postMessage(
-      JSON.stringify({
+    postMessage(
+      {
         eventType: 'SBT_SET_BETSLIP_COUNT',
         eventData: betslipCount,
-      }),
+      },
       '*',
     );
   }
 
   function setOpenBetsItemCount(openBetsCount) {
     console.log('setOpenBetsItemCount', openBetsCount);
-    window.parent.postMessage(
-      JSON.stringify({
+    postMessage(
+      {
         eventType: 'SBT_SET_OPENBET_COUNT',
         eventData: openBetsCount,
-      }),
+      },
       '*',
     );
   }
@@ -211,10 +241,10 @@ var whl = (function (window, JSON) {
   function logout() {
     console.log('--------- LOGOUT() called--------');
     window.scroll(0, 0);
-    window.parent.postMessage(
-      JSON.stringify({
+    postMessage(
+      {
         eventType: 'SBT_LOGOUT',
-      }),
+      },
       '*',
     );
   }
@@ -222,10 +252,10 @@ var whl = (function (window, JSON) {
   function registerLoginCallback(callback) {
     console.log('login callback registered');
     sbtechCallbacks['SBT_LOGIN'] = callback;
-    window.parent.postMessage(
-      JSON.stringify({
+    postMessage(
+      {
         eventType: 'SBT_LOGIN_READY',
-      }),
+      },
       '*',
     );
   }
@@ -239,11 +269,11 @@ var whl = (function (window, JSON) {
     sbtechCallbacks['SBT_NAVIGATE_HOME'] = callback;
   }
   function setCurrentLocationMobile(location) {
-    window.parent.postMessage(
-      JSON.stringify({
+    postMessage(
+      {
         eventType: 'SBT_LOCATION',
         eventData: location,
-      }),
+      },
       '*',
     );
   }

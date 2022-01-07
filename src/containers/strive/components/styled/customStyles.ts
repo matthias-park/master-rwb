@@ -969,6 +969,7 @@ const customStyles = css`
     margin-bottom: 0;
     z-index: 3;
     &__item {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -976,6 +977,22 @@ const customStyles = css`
       font-size: 12px;
       color: ${props => props.theme.colors.secondary.light};
       transition: color 0.3s;
+      .bet-counter {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: -9px;
+        right: 1px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        color: ${props => props.theme.colors.black.main};
+        background-color: ${props => props.theme.colors.primary.main};
+        font-size: 11px;
+        font-weight: 700;
+        border: 1px solid ${props => props.theme.colors.black.main};
+      }
       i {
         font-size: 24px;
         margin-bottom: 8px;

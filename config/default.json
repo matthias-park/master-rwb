@@ -1424,6 +1424,7 @@
       "casino": true,
       "componentSettings": {
         "userIdleTimeout": 30,
+        "v2Auth": "wss://gnogaz-ws.strivegaming.us",
         "login": {
           "loginCookiesAccept": true
         },
