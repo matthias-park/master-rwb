@@ -139,6 +139,8 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                   thousandSeparator
                   displayType={'text'}
                   prefix={user.currency}
+                  decimalScale={2}
+                  fixedDecimalScale={true}
                 />
                 <i className={clsx(`icon-${Config.name}-plus`, 'ml-2')}></i>
               </Button>
@@ -155,7 +157,9 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                   className="pl-3 pr-1"
                 >
                   <span className="text-capitalize">
-                    {t('hello')} {user.first_name}
+                    {Franchise.gnogaz
+                      ? t('my_account_btn')
+                      : `${t('hello')} ${user.first_name}`}
                   </span>
                   <i
                     className={clsx(

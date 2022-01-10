@@ -280,7 +280,7 @@ const customStyles = css`
               position: relative;
             }
             &:after {
-              background-color:  ${props => props.theme.helpBlock.iconBgColor};
+              background-color: ${props => props.theme.helpBlock.iconBgColor};
             }
             ${props =>
               props.theme.helpBlock.iconBgColor &&
@@ -339,8 +339,7 @@ const customStyles = css`
                 position: relative;
               }
               &:after {
-                background-color:  ${props =>
-                  props.theme.helpBlock.iconBgColor};
+                background-color: ${props => props.theme.helpBlock.iconBgColor};
               }
               ${props =>
                 props.theme.helpBlock.iconBgColor &&
@@ -705,7 +704,7 @@ const customStyles = css`
   }
 
   .modal-backdrop {
-    height: 100%
+    height: 100%;
   }
 
   .modal-content {
@@ -802,7 +801,6 @@ const customStyles = css`
     align-items: center;
     background-color: ${props =>
       props.theme.registration?.blockBgColor || props.theme.colors.gray.custom};
-    
 
     padding: 30px 40px;
     border-radius: 8px;
@@ -1014,22 +1012,31 @@ const customStyles = css`
       display: flex;
     }
   }
-  
+
+  .sb-iframe-wrp {
+    .sb-iframe {
+      width: 100% !important;
+      right: 0 !important;
+      min-height: unset !important;
+    }
   }
   .sb-iframe {
     position: relative !important;
     z-index: 2 !important;
-    width: calc(100% + ${props =>
-      props.theme.spacing.bodyPadding * 2}px) !important;
+    width: calc(
+      100% + ${props => props.theme.spacing.bodyPadding * 2}px
+    ) !important;
     right: ${props => props.theme.spacing.bodyPadding}px !important;
     ${mediaBreakpointDown('xl')} {
-      width: calc(100% + ${props =>
-        props.theme.spacing.bodyPaddingMedium * 2}px) !important;
+      width: calc(
+        100% + ${props => props.theme.spacing.bodyPaddingMedium * 2}px
+      ) !important;
       right: ${props => props.theme.spacing.bodyPaddingMedium}px !important;
     }
     ${mediaBreakpointDown('lg')} {
-      width: calc(100% + ${props =>
-        props.theme.spacing.bodyPaddingSmall * 2}px) !important;
+      width: calc(
+        100% + ${props => props.theme.spacing.bodyPaddingSmall * 2}px
+      ) !important;
       right: ${props => props.theme.spacing.bodyPaddingSmall}px !important;
     }
     &-container {
@@ -1038,14 +1045,12 @@ const customStyles = css`
     border: none;
     width: 100%;
   }
-  ${
-    Franchise.desertDiamond &&
-    `
+  ${Franchise.desertDiamond &&
+  `
     #mod-KambiBC-betslip-container.mod-KambiBC-betslip-container {
       z-index: 999999 !important;
     }
-  `
-  }
+  `}
 `;
 
 export default customStyles;

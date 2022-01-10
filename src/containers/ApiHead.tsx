@@ -10,6 +10,7 @@ import useApi from '../hooks/useApi';
 import { usePrevious } from '../hooks';
 import {
   CONTENT_PAGES,
+  Franchise,
   PagesName,
   PAGES_WITH_CAPTCHA_ICON,
 } from '../constants';
@@ -85,7 +86,7 @@ const ApiHead = () => {
       : '';
   const fallbackTitle =
     pathNameTranslation +
-    (pathNameTranslation.length ? ' - ' : '') +
+    (pathNameTranslation.length ? (Franchise.gnogaz ? ' | ' : ' - ') : '') +
     t('seo_site_name', true);
   const title = seoData?.title || (hasTranslations ? fallbackTitle : '');
   const bodyClassName = clsx(

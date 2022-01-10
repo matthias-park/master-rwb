@@ -26,7 +26,7 @@ const LayoutWithSidebar = ({
     <>
       <div
         className={
-          rightSidebar
+          sidebar
             ? `account-settings pb-4 min-vh-70`
             : `page-container ${spacingClasses}`
         }

@@ -59,7 +59,7 @@ interface UncontrolledProps extends FormControlProps {
   thousandSeparator?: boolean;
   allowNegative?: boolean;
   errorMsg?: string;
-  onBlur?: () => void;
+  onBlur?: (e) => void;
   onCopy?: (e) => void;
   onPaste?: (e) => void;
   onKeyUp?: (e) => void;
@@ -242,9 +242,10 @@ const TextInput = ({
       disableCheckMark={disableCheckMark}
       errorMsg={fieldState.error?.message}
       className={className}
-      onBlur={() => {
+      onBlur={e => {
         onBlur?.();
         field.onBlur();
+        !maskedInput && field.onChange(e);
         hasFocus.current = false;
       }}
       onFocus={() => {

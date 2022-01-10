@@ -113,7 +113,13 @@ const PageLayout = ({ children }) => {
           rightSidebar={rightSidebarLayout}
           spacingClasses={headerNav.active && 'pt-xl-4'}
         >
-          {children}
+          {window.__config__.sbTechUrl && route?.id === PagesName.SportsPage ? (
+            <div className="sb-iframe-wrp w-100 px-0 px-sm-4 pl-md-5 mb-4">
+              {children}
+            </div>
+          ) : (
+            children
+          )}
         </LayoutWithSidebar>
       ) : (
         <>

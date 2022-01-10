@@ -102,7 +102,8 @@ const formStyles = css`
       &:-webkit-autofill:hover,
       &:-webkit-autofill:focus,
       &:-webkit-autofill:active {
-        transition: background-color 5000000s ease-in-out 0s;
+        transition: background-color 5000000s ease-in-out 0s,
+          color 5000000s ease-in-out 0s;
       }
     }
     .form-control {

@@ -909,7 +909,7 @@
           "labelLeft": 20,
           "labelTop": 15,
           "labelActiveFontSize": 12,
-          "labelActiveTop": -10,
+          "labelActiveTop": -8,
           "labelActiveLeft": 10,
           "labelBackgroundColor": "#222",
           "labelPadding": 4,
@@ -920,6 +920,9 @@
             "border": "1px solid #4A4A4A",
             "backgroundColor": "#222",
             "color": "#666"
+          },
+          "active": {
+            "borderColor": "#FFDC3E"
           }
         },
         "customFileInput": {
