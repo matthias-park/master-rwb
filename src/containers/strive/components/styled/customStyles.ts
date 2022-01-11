@@ -862,6 +862,10 @@ const customStyles = css`
       }
     }
   }
+  .modal-link {
+    color: ${props => props.theme.colors.primary.main};
+    text-decoration: underline;
+  }
   .action-block {
     display: flex;
     flex-direction: column;

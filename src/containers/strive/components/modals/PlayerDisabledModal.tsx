@@ -16,8 +16,8 @@ const PlayerDisabledModal = () => {
       hideCallback={() => hideModal()}
       className="pb-5"
     >
-      <h2 className="mb-2 text-gray-800">{t('player_disable_modal_title')}</h2>
-      <p className="text-gray-700 mb-3">{jsxT(`player_disable_modal_desc`)}</p>
+      <h2 className="mb-2">{t('player_disable_modal_title')}</h2>
+      <p className="mb-3">{jsxT(`player_disable_modal_desc`)}</p>
     </GenericModal>
   );
 };
