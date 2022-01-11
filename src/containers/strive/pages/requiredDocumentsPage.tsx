@@ -75,7 +75,10 @@ const RequiredDocumentsPage = () => {
                 const idTypeSelected = fields.image_id
                   ? (fields.image_id_sub_type || '-1') !== '-1'
                   : true;
-                const passwordEntered = !!fields.password;
+                const passwordRequired = data.fields.some(
+                  field => field.id === 'password' && !field.disabled,
+                );
+                const passwordEntered = !!fields.password || !passwordRequired;
                 return fileUploaded && idTypeSelected && passwordEntered;
               }}
             />
