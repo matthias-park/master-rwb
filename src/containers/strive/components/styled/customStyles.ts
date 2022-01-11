@@ -137,9 +137,16 @@ const customStyles = css`
   }
 
   .rbt-menu {
+    background: ${props =>
+      props.theme.inputs.dropdownBg || props.theme.colors.white};
     .dropdown-item {
       overflow: hidden;
       text-overflow: ellipsis;
+      color: ${props => props.theme.colors.brand.text};
+      &:hover,
+      &:focus {
+        color: ${props => props.theme.colors.primary.main};
+      }
     }
   }
 

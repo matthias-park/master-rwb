@@ -894,7 +894,8 @@
           },
           "active": {
             "borderColor": "#FFDC3E"
-          }
+          },
+          "dropdownBg": "#444"
         },
         "customFileInput": {
           "backgroundColor": "#555555",

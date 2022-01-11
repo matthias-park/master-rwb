@@ -227,6 +227,7 @@ declare module 'styled-components' {
       invalid: {
         backgroundColor: string;
       };
+      dropdownBg?: string;
     };
     customFileInput: {
       buttonColor: string;
