@@ -42,7 +42,7 @@ const customStyles = css`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 100vh;
+    min-height: 100%;
   }
 
   a {
