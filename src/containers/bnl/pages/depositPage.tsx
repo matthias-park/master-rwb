@@ -86,6 +86,15 @@ const DepositPage = () => {
     [t],
   );
 
+  const isDepositDisabled =
+    !bankAccount.hasBankAccount ||
+    [
+      BGC_VALIDATOR_STATUS.MAJOR_ERROR,
+      BGC_VALIDATOR_STATUS.DEPOSIT_DISALLOWED,
+    ].includes(user.validator_status || 0) ||
+    depositStatus.depositStatus === DepositStatus.Pending ||
+    depositDataLoading;
+
   const handleRequestDeposit = useCallback(
     async (depositValue: number) => {
       setApiError(null);
@@ -94,6 +103,9 @@ const DepositPage = () => {
           appearance: 'error',
           autoDismiss: true,
         });
+        return;
+      }
+      if (isDepositDisabled) {
         return;
       }
       setDepositLoading(true);
@@ -123,7 +135,7 @@ const DepositPage = () => {
       setDepositLoading(false);
       return false;
     },
-    [bankAccount],
+    [bankAccount, isDepositDisabled],
   );
   useEffect(() => {
     if (!depositDataLoading && (!depositData?.Success || depositError)) {
@@ -221,12 +233,7 @@ const DepositPage = () => {
             <h2 className="ml-3 mb-0">{t('deposit_input_container_title')}</h2>
           </div>
         }
-        disabled={
-          !bankAccount.hasBankAccount ||
-          user.validator_status === BGC_VALIDATOR_STATUS.MAJOR_ERROR ||
-          depositStatus.depositStatus === DepositStatus.Pending ||
-          depositDataLoading
-        }
+        disabled={isDepositDisabled}
       />
       <div className="details-container mb-4">
         <div className="details-container__header">
