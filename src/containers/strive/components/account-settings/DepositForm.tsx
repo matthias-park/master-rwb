@@ -26,6 +26,10 @@ interface Props {
   depositError: boolean;
 }
 
+const QUICK_AMOUNTS = Franchise.desertDiamond
+  ? [10, 25, 100, 200]
+  : [10, 20, 50, 100];
+
 const DepositForm = ({
   depositRequest,
   disabled,
@@ -184,7 +188,7 @@ const DepositForm = ({
                   'quick-amounts',
                 )}
               >
-                {[10, 20, 50, 100].map(value => (
+                {QUICK_AMOUNTS.map(value => (
                   <button
                     key={value}
                     className={clsx(
