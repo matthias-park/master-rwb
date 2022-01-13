@@ -493,7 +493,7 @@ const blocks = (
             validate: value => {
               const valid = VALIDATIONS.password(
                 value,
-                Franchise.desertDiamond ? 4 : 3,
+                Franchise.gnogaz ? 4 : 3,
               );
               setValidation(
                 'password',
