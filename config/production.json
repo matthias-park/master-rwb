@@ -364,7 +364,6 @@
           "forceWWW": true
         }
       ],
-      "basicAuthEnabled": true,
       "theme": "strive",
       "dateFormat": "MM-DD-YYYY",
       "kambi": {
