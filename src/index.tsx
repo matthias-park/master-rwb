@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './containers/App';
 import * as Sentry from '@sentry/react';
-import { errorHandler } from './utils';
+import { errorHandler, getQueryAffiliates } from './utils';
 import { Config, DevEnv } from './constants';
 import createStoreAsync from './state';
 import StateProvider from './containers/StateProvider';
@@ -57,6 +57,7 @@ if (DevEnv) {
 }
 window.addEventListener('error', errorHandler);
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
+getQueryAffiliates();
 
 createStoreAsync().then(store => {
   window.addEventListener('load', () => {

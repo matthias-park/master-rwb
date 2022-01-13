@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import Config, { ConfigLoaded, Cookies } from '../types/Config';
 import { getWindowUrlLocale, Symbols } from './i18n';
 import * as Sentry from '@sentry/react';
+import StorageAffiliates from '../types/state/StorageAffiliates';
 
 export const sortAscending = (a: number, b: number) => a - b;
 export const sortDescending = (a: number, b: number) => b - a;
@@ -185,4 +186,40 @@ export const getCachedConfigAndTranslations = (): {
     translations: translationsCache,
     cacheValid: !!isCacheValid,
   };
+};
+const affiliatesStorageId = 'affiliates';
+export const getQueryAffiliates = () => {
+  const params = new URLSearchParams(window.location.search);
+  const storageAffiliates = Lockr.get<StorageAffiliates>(
+    affiliatesStorageId,
+    {},
+  );
+  if (
+    params.has('btag') &&
+    (!storageAffiliates.btag?.validUntil ||
+      dayjs().isBefore(dayjs(storageAffiliates.btag.validUntil)))
+  ) {
+    Lockr.set(affiliatesStorageId, {
+      ...storageAffiliates,
+      btag: {
+        value: params.get('btag'),
+        validUntil: dayjs().add(30, 'day').toJSON(),
+      },
+    });
+  }
+};
+export const getActiveAffiliates = (): { [key: string]: string } => {
+  const storageAffiliates = Lockr.get<StorageAffiliates>(
+    affiliatesStorageId,
+    {},
+  );
+  return Object.entries(storageAffiliates).reduce((obj, [key, value]) => {
+    if (
+      !value.validUntil ||
+      dayjs().isBefore(dayjs(storageAffiliates.btag.validUntil))
+    ) {
+      obj[key] = value.value;
+    }
+    return obj;
+  }, {});
 };

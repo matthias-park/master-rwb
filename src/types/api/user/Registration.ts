@@ -14,6 +14,7 @@ export interface PostRegistration {
   datepicker_year?: string;
   datepicker_month?: string;
   datepicker_day?: string;
+  btag?: string;
 }
 export interface ValidateRegisterInput {
   Exists: boolean;

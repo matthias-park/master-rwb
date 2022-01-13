@@ -28,6 +28,7 @@ import { NET_USER } from '../../../types/UserStatus';
 import useGeoComply from '../../../hooks/useGeoComply';
 import { useModal } from '../../../hooks/useModal';
 import clsx from 'clsx';
+import { getActiveAffiliates } from '../../../utils';
 dayjs.extend(customParseFormat);
 
 const RegistrationReturnCode = {
@@ -109,6 +110,10 @@ const RegisterPage = () => {
       form.language_id = locales.find(lang => lang.iso === locale)?.id;
       if (!form.login && form.email) {
         form['login'] = form['email'];
+      }
+      const affiliates = getActiveAffiliates();
+      if (Franchise.gnogaz && affiliates.btag) {
+        form.btag = affiliates.btag;
       }
       const captchaToken = await getToken?.('registration').catch(() => '');
       if (captchaToken) form.captcha_token = captchaToken;
