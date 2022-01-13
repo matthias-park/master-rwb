@@ -185,6 +185,7 @@ const ContactUsPage = () => {
                   })}
                 </Form>
               </FormProvider>
+              {jsxT('contact_page_address')}
             </div>
             <HelpBlock
               blocks={['faq', 'phone', 'email']}
