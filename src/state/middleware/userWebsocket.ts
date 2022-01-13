@@ -1,28 +1,34 @@
 import { Middleware } from 'redux';
 import { RootState } from '..';
-import { removeUserData, setBalance, setUser } from '../reducers/user';
+import {
+  removeUserData,
+  setBalance,
+  setLogin,
+  setUser,
+} from '../reducers/user';
 import io from 'socket.io-client';
 import StatusMessage from '../../types/WebsocketUserStatus';
 import { enableModal } from '../reducers/modals';
-import { ComponentName, ProdEnv } from '../../constants';
+import { ComponentName, Config, ProdEnv } from '../../constants';
 import { mutate } from 'swr';
 import * as Sentry from '@sentry/react';
+import { setUserIp } from '../reducers/geoComply';
 
 let userSocketIO;
 const userWebsocketMiddleware: Middleware = storeApi => next => action => {
   if (window.__config__.componentSettings?.v2Auth) {
-    if (action.type === setUser.toString()) {
+    if ([setUser.toString(), setLogin.toString()].includes(action.type)) {
       const store = storeApi.getState() as RootState;
       if (action.payload.token && action.payload.token !== store.user.token) {
         if (userSocketIO) userSocketIO.disconnect();
-        userSocketIO = io.connect(window.__config__.componentSettings.v2Auth, {
+        userSocketIO = io(window.__config__.componentSettings.v2Auth, {
           transports: ['websocket', 'polling'],
         });
-        userSocketIO.on('connect_error', err => {
+        userSocketIO.on('connect_error', () => {
           if (!ProdEnv) {
-            console.log(err);
+            console.log('websockets connection error');
           }
-          Sentry.captureEvent(new Error(err));
+          Sentry.captureMessage('websocket connect error');
         });
         userSocketIO.on('message', (wsData: StatusMessage) => {
           switch (wsData.action) {
@@ -40,6 +46,20 @@ const userWebsocketMiddleware: Middleware = storeApi => next => action => {
             }
             case 'bank_account_changed': {
               mutate('/restapi/v1/withdrawals');
+              break;
+            }
+            case 'auth_info': {
+              if (!wsData.data?.auth_success) {
+                Sentry.captureMessage('Websocket auth failed');
+              }
+              const store = storeApi.getState() as RootState;
+              if (
+                !!Config.geoComplyKey &&
+                wsData.data?.user_ip &&
+                store.geoComply.userIp !== wsData.data.user_ip
+              ) {
+                storeApi.dispatch(setUserIp(wsData.data.user_ip));
+              }
               break;
             }
           }

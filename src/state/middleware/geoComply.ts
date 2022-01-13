@@ -19,12 +19,14 @@ import {
   setLicense,
   setReady,
   setUserId,
+  setUserIp,
   setValidationReason,
 } from '../reducers/geoComply';
 import Lockr from 'lockr';
 import UserStatus from '../../types/UserStatus';
 import { setLogout, setUser } from '../reducers/user';
 import { ProdEnv } from '../../constants';
+import * as Sentry from '@sentry/react';
 
 const insertGeoComplyScript = async (): Promise<boolean> =>
   new Promise((resolve, reject) => {
@@ -75,20 +77,30 @@ const fetchSetLicenseKey = (
       }
       getApi<RailsApiResponse<GeoComplyLicense>>(
         '/restapi/v1/geocomply/license',
-      ).then(res => {
-        if (res.Success && res.Data.License) {
-          Lockr.set(cacheKey, res.Data);
-          setLicenseKey(res.Data.License, res.Data.ExpiresAtUtc);
-          if (data.forceGetNewLicense) {
-            dispatch(setValidationReason('licenseErrorRetry'));
+      )
+        .then(res => {
+          if (res.Success && res.Data.License) {
+            Lockr.set(cacheKey, res.Data);
+            setLicenseKey(res.Data.License, res.Data.ExpiresAtUtc);
+            if (data.forceGetNewLicense) {
+              dispatch(setValidationReason('licenseErrorRetry'));
+            }
           }
-        }
-      });
+        })
+        .catch(err => Sentry.captureEvent(new Error(err)));
     } else {
       setLicenseKey(license, expiresAt);
     }
   }
 };
+
+const clearGeoComplyValidation = () =>
+  postApi<RailsApiResponse<null>>('/restapi/v1/user/clear_geocomply', {})
+    .then(res => res.Success)
+    .catch(err => {
+      Sentry.captureEvent(new Error(err));
+      return false;
+    });
 
 const licenseKeyErrorCodes = [
   GeoComplyErrorCodes.CLNT_ERROR_LICENSE_EXPIRED,
@@ -217,7 +229,7 @@ const actions: {
             }),
           );
         })
-        .catch(() => {});
+        .catch(err => Sentry.captureEvent(new Error(err)));
     },
   },
   [setGeoAllowed.toString()]: {
@@ -252,6 +264,8 @@ const actions: {
             revalidateIn: state.revalidateIn,
           }),
         );
+      } else if (state.error === GeoComplyErrorCodes.UserRejected) {
+        clearGeoComplyValidation();
       }
     },
   },
@@ -325,6 +339,14 @@ const actions: {
           console.log('clearing revalidate');
         }
         clearTimeout(revalidateTimeout);
+      }
+    },
+  },
+  [setUserIp.toString()]: {
+    before: (storeApi, actionPayload: string) => {
+      const state = storeApi.getState() as RootState;
+      if (state.geoComply.userIp !== actionPayload) {
+        clearGeoComplyValidation();
       }
     },
   },

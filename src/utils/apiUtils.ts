@@ -28,7 +28,10 @@ export const getApi = <T>(url: string, options?: GetApiOptions): Promise<T> => {
     cache: options?.cache,
     headers: new Headers(),
   };
-  return fetch(`${window.__config__.apiUrl}${url}`, config).then(res => {
+  const getUrl = url.startsWith('http')
+    ? url
+    : `${window.__config__.apiUrl}${url}`;
+  return fetch(getUrl, config).then(res => {
     if (!res.ok && res.status !== 400) {
       if (![401, 403].includes(res.status)) {
         Sentry.captureMessage(

@@ -39,12 +39,13 @@ export declare global {
       componentSettings?: ComponentSettings;
       themeSettings?: DefaultTheme;
       casino?: boolean;
+      ip: string;
+      singleLoadPage?: boolean;
     };
     toast?: AddToast;
     xtremepush?: any;
     _wbUpdate?: boolean;
     PRERENDER_CACHE?: { [key: string]: any };
-    singleLoadPage?: boolean;
     //Webpack end
     //Kambi sportsbook
     customerSettings?: CustomerSettings;

@@ -14,21 +14,24 @@ const v2AuthEnabled = !!window.__config__.componentSettings?.v2Auth;
 const tgLabSbEnabled = !!window.__config__.tgLabSb;
 
 const sentryReduxEnhancer = Sentry.createReduxEnhancer({
-  actionTransformer: action => {
+  actionTransformer: () => {
     return null;
   },
   stateTransformer: (state: RootState) => {
+    const geoComply = geoComplyEnabled
+      ? {
+          ...state.geoComply,
+          license: null,
+          geoLocation: null,
+          savedState: null,
+        }
+      : null;
     const transformedState = {
       ...state,
       config: null,
       translations: null,
       user: null,
-      geoComply: {
-        ...state.geoComply,
-        license: null,
-        geoLocation: null,
-        savedState: null,
-      },
+      geoComply,
     };
     return transformedState;
   },

@@ -60,6 +60,9 @@ app.use(
   }),
 );
 app.use(middleware.routeExistCheck);
+app.get('/api/get-ip', (req, res) => {
+  return res.status(200).send(req.ip);
+});
 
 app.get('*', async (req, res) => {
   if (shouldPrerender(req)) {
@@ -75,16 +78,18 @@ app.get('*', async (req, res) => {
   const filePath = path.join(BUILD_FOLDER, `/${hostname}.html`);
   if (fs.existsSync(filePath)) {
     res.set('Cache-Control', 'no-store');
-    if (req.singleLoadPage) {
-      const body = fs
-        .readFileSync(filePath, 'utf-8')
-        .replace(
-          '</head>',
-          '<script>window.singleLoadPage = true;</script></head>',
-        );
-      return res.send(body);
-    }
-    return res.sendFile(filePath);
+    const userData = JSON.stringify({
+      singleLoadPage: req.singleLoadPage,
+      ip: req.ip,
+      device: req.useragent,
+    });
+    const body = fs
+      .readFileSync(filePath, 'utf-8')
+      .replace(
+        '<head>',
+        `<head><script id="requestData">window.requestData = JSON.parse('${userData}')</script>`,
+      );
+    return res.send(body);
   }
   logger.error(`file not found ${filePath}`);
   return res.sendStatus(404);

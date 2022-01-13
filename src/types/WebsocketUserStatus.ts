@@ -3,7 +3,8 @@ interface StatusMessage {
     | 'balance_changed'
     | 'bonus_wallet_changed'
     | 'player_disabled'
-    | 'bank_account_changed';
+    | 'bank_account_changed'
+    | 'auth_info';
   data?: {
     amount?: number;
     balance_before: number;
@@ -13,6 +14,8 @@ interface StatusMessage {
     account?: string;
     withdrawal_allowed?: boolean;
     deposit_allowed?: boolean;
+    user_ip?: string;
+    auth_success?: boolean;
   };
 }
 

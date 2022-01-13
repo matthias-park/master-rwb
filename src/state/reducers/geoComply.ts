@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import Lockr from 'lockr';
-import { ProdEnv } from '../../constants';
+import { Config, ProdEnv } from '../../constants';
 import { GeoComplyErrorCodes } from '../../types/GeoComply';
 import GeoComplyState, {
   LocalStorageState,
@@ -24,7 +24,51 @@ const initialState: GeoComplyState = {
   revalidateIn: null,
   userId: null,
   validationReason: null,
+  userIp: Config.ip,
   savedState: Lockr.get<LocalStorageState | null>(localStorageId, null),
+};
+
+const saveStateToLocalStorage = (state: GeoComplyState) => {
+  if (state.isGeoAllowed) {
+    if (state.userId && state.userIp && state.revalidateIn) {
+      state.savedState = {
+        id: state.userId,
+        ip: state.userIp,
+        nextGeoCheck: dayjs()
+          .add(Number(state.revalidateIn), 'second')
+          .toJSON(),
+      };
+      Lockr.set(localStorageId, state.savedState);
+    }
+    state.error = null;
+  } else {
+    state.savedState = null;
+    Lockr.rm(localStorageId);
+  }
+};
+const restoreStateFromLocalStorage = (state: GeoComplyState) => {
+  const { savedState } = state;
+  const savedStateCurrentUser = savedState?.id === state.userId;
+  const savedIpEqualCurrent = savedState?.ip === state.userIp;
+  if (savedState && savedStateCurrentUser) {
+    const validSavedGeoLocation = dayjs().isBefore(
+      dayjs(savedState.nextGeoCheck),
+    );
+    if (validSavedGeoLocation && savedIpEqualCurrent) {
+      state.geoInProgress = false;
+      state.geoLocation = null;
+      state.isGeoAllowed = true;
+      state.revalidateIn = dayjs(savedState.nextGeoCheck)
+        .diff(dayjs(), 'second')
+        .toString();
+    } else if (!state.validationReason) {
+      state.validationReason = !validSavedGeoLocation
+        ? 'expired cache validation'
+        : 'ip change';
+    }
+  } else if (!state.validationReason) {
+    state.error = GeoComplyErrorCodes.UserRejected;
+  }
 };
 
 export const geoComplySlice = createSlice({
@@ -78,19 +122,7 @@ export const geoComplySlice = createSlice({
       state.geoInProgress = false;
       state.validationReason = null;
       state.revalidateIn = revalidateIn || null;
-      if (isGeoAllowed) {
-        if (state.userId && revalidateIn) {
-          state.savedState = {
-            id: state.userId,
-            nextGeoCheck: dayjs().add(Number(revalidateIn), 'second').toJSON(),
-          };
-          Lockr.set(localStorageId, state.savedState);
-        }
-        state.error = null;
-      } else {
-        state.savedState = null;
-        Lockr.rm(localStorageId);
-      }
+      saveStateToLocalStorage(state);
     },
     setUserId: (state, action: PayloadAction<number>) => {
       if (state.isConnected && state.userId !== action.payload) {
@@ -99,25 +131,7 @@ export const geoComplySlice = createSlice({
           console.log('geoComply setting user id');
         }
         window.GeoComply?.Client.setUserId(action.payload);
-        const { savedState } = state;
-        const savedStateCurrentUser = savedState?.id === action.payload;
-        if (savedState && savedStateCurrentUser) {
-          const validSavedGeoLocation = dayjs().isBefore(
-            dayjs(savedState.nextGeoCheck),
-          );
-          if (validSavedGeoLocation) {
-            state.geoInProgress = false;
-            state.geoLocation = null;
-            state.isGeoAllowed = true;
-            state.revalidateIn = dayjs(savedState.nextGeoCheck)
-              .diff(dayjs(), 'second')
-              .toString();
-          } else if (!state.validationReason) {
-            state.validationReason = 'expiredCacheValidation';
-          }
-        } else if (!state.validationReason) {
-          state.error = GeoComplyErrorCodes.UserRejected;
-        }
+        restoreStateFromLocalStorage(state);
       }
     },
     setGeoInProgress: (state, action: PayloadAction<boolean>) => {
@@ -144,6 +158,12 @@ export const geoComplySlice = createSlice({
         savedState: null,
       };
     },
+    setUserIp: (state, action: PayloadAction<string>) => {
+      if (state.isGeoAllowed && state.userIp !== action.payload) {
+        state.validationReason = 'ip change';
+      }
+      state.userIp = action.payload;
+    },
     initGeo: () => {},
   },
   extraReducers: {
@@ -168,6 +188,7 @@ export const {
   setUserId,
   setValidationReason,
   connectToGeo,
+  setUserIp,
 } = geoComplySlice.actions;
 
 export default geoComplySlice.reducer;

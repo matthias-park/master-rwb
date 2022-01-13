@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { Config } from '../constants';
 
 const Link: typeof RouterLink = React.forwardRef((props, ref) => {
   if (typeof props.to !== 'string') return null;
-  if (props.to.includes('https://') || window.singleLoadPage) {
+  if (props.to.includes('https://') || Config.singleLoadPage) {
     return (
       <a
         href={props.to.toString()}

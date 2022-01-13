@@ -18,16 +18,22 @@
         href="%PUBLIC_URL%/assets/images/icons/<%= htmlWebpackPlugin.options.iconSizes[index]%>px.png">
       <% } %>
         <% } %>
-          <title></title>
-          <script>
-            window.__config__ = JSON.parse('<%= htmlWebpackPlugin.options.config %>');
-          </script>
-          <% if (htmlWebpackPlugin.files.css.find(href=> href.includes(htmlWebpackPlugin.options.franchiseTheme))) { %>
-            <link
-              href="<%= htmlWebpackPlugin.files.css.find(href => href.includes(htmlWebpackPlugin.options.franchiseTheme)) %>"
-              rel="stylesheet">
-            <% } %>
-              <%= htmlWebpackPlugin.tags.headTags.filter((tag)=> tag.tagName === 'meta').join('') %>
+  <title></title>
+  <script>
+    (function() {
+      window.__config__ = {...JSON.parse('<%= htmlWebpackPlugin.options.config %>'), ...(window.requestData || {})};
+      const requestDataScript = document.getElementById('requestData');
+      if (requestDataScript) {
+        document.head.removeChild(requestDataScript);
+      }
+    })()
+  </script>
+  <% if (htmlWebpackPlugin.files.css.find(href=> href.includes(htmlWebpackPlugin.options.franchiseTheme))) { %>
+    <link
+      href="<%= htmlWebpackPlugin.files.css.find(href => href.includes(htmlWebpackPlugin.options.franchiseTheme)) %>"
+      rel="stylesheet">
+  <% } %>
+  <%= htmlWebpackPlugin.tags.headTags.filter((tag)=> tag.tagName === 'meta').join('') %>
 </head>
 
 <body>
