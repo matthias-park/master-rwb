@@ -806,8 +806,10 @@ const customStyles = css`
       font-size: 16px;
       color: ${props => props.theme.colors.primary.main};
       &:hover {
-        background: #e6ecf1;
+        text-decoration: underline;
       }
+      .icon-gnogaz-windows8,
+      .icon-gnogaz-appleinc,
       .icon-strive-windows8,
       .icon-strive-appleinc,
       .icon-desertDiamond-windows8,
