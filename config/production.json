@@ -75,8 +75,8 @@
       "name": "strive",
       "domains": [
         {
-          "hostname": "co.betsafe.com",
-          "api": "https://feapi.co.betsafe.com"
+          "hostname": "betsafe.strivegaming.net",
+          "api": "https://feapi-betsafe.strivegaming.net"
         }
       ],
       "basicAuthEnabled": true,
@@ -101,7 +101,7 @@
       },
       "dateFormat": "MM-DD-YYYY",
       "componentSettings": {
-        "v2Auth": "wss://ws.co.betsafe.com",
+        "v2Auth": "wss://ws-betsafe.strivegaming.net",
         "userIdleTimeout": 30,
         "login": {
           "loginCookiesAccept": true
