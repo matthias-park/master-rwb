@@ -546,14 +546,12 @@ const accountSettingsStyles = css`
   .limits-history-table {
     thead tr th:last-of-type,
     tbody tr td:last-of-type {
-      display: flex;
-      justify-content: flex-end;
-      transform: translateY(-1px);
+      text-align: right;
     }
     ${mediaBreakpointDown('xs')} {
       thead tr th:last-of-type,
       tbody tr td:last-of-type {
-        display: unset;
+        text-align: left;
       }
     }
   }
