@@ -52,7 +52,7 @@ const RegistrationPage = () => {
 
         return filterSessionLimits || filterDepositLimits;
       });
-      setFilteredLimits({ limits: filtered });
+      setFilteredLimits(filtered);
     }
   }, [data]);
 

@@ -36,7 +36,7 @@ const SelectInput = ({
   const { field, fieldState } = useController({
     name: id,
     control,
-    defaultValue: defaultValue?.toString() ? defaultValue?.toString() : '-1',
+    defaultValue: !!defaultValue?.toString() ? defaultValue?.toString() : '-1',
     rules: {
       ...rules,
       validate: value => {

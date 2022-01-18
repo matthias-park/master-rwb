@@ -160,7 +160,11 @@ const FormFields = ({
                 rules={{
                   required: `${t(field.title)} ${t('settings_field_required')}`,
                 }}
-                defaultValue={field?.default?.id}
+                defaultValue={
+                  formsWithLogoutUser.includes(field.id)
+                    ? field?.default?.id
+                    : fields[0].values && fields[0].values[i].id
+                }
                 defaultTitle={field?.default?.title}
                 values={
                   field.values?.map(option => ({
@@ -353,6 +357,7 @@ const SettingsForm = (props: SettingProps) => {
     formatRequestBody,
     successCallback,
     focusInput,
+    translatableDefaultValues,
   } = props;
   const { t } = useI18n();
   const { updateUser, signout } = useAuth();
@@ -428,7 +433,6 @@ const SettingsForm = (props: SettingProps) => {
     if (formatRequestBody) {
       body = formatRequestBody(body);
     }
-    url = url.replace('https://pla-dev.tglab.dev', '');
     const res = await postApi<RailsApiResponse<null>>(url, body, {
       formData: formBody,
     }).catch((res: RailsApiResponse<null>) => {
@@ -495,6 +499,7 @@ const SettingsForm = (props: SettingProps) => {
                 {...props}
                 fields={block.fields}
                 focusInput={focusInput}
+                translatableDefaultValues={translatableDefaultValues}
               />
             </div>
           ))}
