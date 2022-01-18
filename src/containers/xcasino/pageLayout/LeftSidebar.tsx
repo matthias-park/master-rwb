@@ -40,6 +40,7 @@ interface UserSectionProps {
 const UserSection = ({ setCurrentMenu }: UserSectionProps) => {
   const { user } = useAuth();
   const { enableModal } = useModal();
+  const { t } = useI18n();
 
   if (user.logged_in) {
     return (
@@ -62,13 +63,13 @@ const UserSection = ({ setCurrentMenu }: UserSectionProps) => {
           enableModal(ComponentName.LoginModal);
         }}
       >
-        Login
+        {t('login_btn')}
       </Button>
       <Button
         variant="secondary"
         onClick={() => enableModal(ComponentName.RegisterModal)}
       >
-        Create Account
+        {t('create_account_btb')}
       </Button>
     </>
   );
@@ -84,12 +85,13 @@ const MainSidebarUserBalance = ({
   balance?: number;
 }) => {
   const { pathname } = useLocation();
+  const { t } = useI18n();
   if (!show) return null;
   return (
     <>
       <div className="sidebar-left__content-balance">
         <span>
-          Balance: {currency} {balance}
+          {t('balance')}: {currency} {balance}
         </span>
         <Button
           variant="primary"

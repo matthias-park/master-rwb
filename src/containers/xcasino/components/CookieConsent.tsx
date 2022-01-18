@@ -4,10 +4,12 @@ import Button from 'react-bootstrap/Button';
 import { useDispatch } from 'react-redux';
 import { useConfig } from '../../../hooks/useConfig';
 import useGTM from '../../../hooks/useGTM';
+import { useI18n } from '../../../hooks/useI18n';
 import { setCookies } from '../../../state/reducers/config';
 import { Cookies } from '../../../types/Config';
 
 const CookieConsent = () => {
+  const { t } = useI18n();
   const sendDataToGTM = useGTM();
   const dispatch = useDispatch();
   const { cookies } = useConfig((prev, next) =>
@@ -38,22 +40,20 @@ const CookieConsent = () => {
     <nav className="cookies-nav fade-in">
       <div className="cookies-nav__body">
         <p className="cookies-nav__body-text">
-          We are using cookies on this website. If you agree with the use of
-          cookies and want to continue with all the features of the site, agree
-          to our
+          {t('cookie_consent_open_policy')}
           <a href="/privacy" className="cookies-nav__body-link">
-            Privacy
+            {t('privacy_policy_link')}
           </a>
           &
           <a href="/cookies-policy" className="cookies-nav__body-link">
-            Cookie Policy
+            {t('cookie_policy_link')}
           </a>
         </p>
         <Button
           className="cookies-nav__button btn-sm btn btn-primary rounded-pill"
           onClick={handleAccept}
         >
-          I agree
+          {t('cookie_consent_accept')}
         </Button>
       </div>
     </nav>

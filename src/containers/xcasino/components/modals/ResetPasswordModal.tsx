@@ -3,7 +3,7 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { FormProvider, useForm } from 'react-hook-form';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import LoadingButton from '../../../../components/LoadingButton';
-import { ComponentName, VALIDATIONS } from '../../../../constants';
+import { ComponentName, PagesName, VALIDATIONS } from '../../../../constants';
 import useGTM from '../../../../hooks/useGTM';
 import { useI18n } from '../../../../hooks/useI18n';
 import { useModal } from '../../../../hooks/useModal';
@@ -13,6 +13,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import { postApi } from '../../../../utils/apiUtils';
 import ForgotPasswordResponse from '../../../../types/api/user/ForgotPassword';
 import CustomAlert from '../CustomAlert';
+import { useRoutePath } from '../../../../hooks';
+import { enableModal } from '../../../../state/reducers/modals';
 
 const ResetPasswordModal = () => {
   const { t } = useI18n();
@@ -67,7 +69,7 @@ const ResetPasswordModal = () => {
       centered
       dialogClassName="reset-password-modal"
     >
-      <GenericModalHeader title="New Password" handleClose={closeModal} />
+      <GenericModalHeader title={t('new_password')} handleClose={closeModal} />
       <Modal.Body>
         <FormProvider {...formMethods}>
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -140,16 +142,15 @@ const ResetPasswordModal = () => {
         </FormProvider>
       </Modal.Body>
       <Modal.Footer>
-        <span>Need Help?</span>
-        <a
-          href="/help"
-          className="help-link"
+        <div
+          className="text-primary"
           onClick={() => {
             closeModal();
+            enableModal(ComponentName.ResendEmailModal);
           }}
         >
-          Click Here
-        </a>
+          {t('resend_new_pwd_code')}
+        </div>
       </Modal.Footer>
     </Modal>
   );

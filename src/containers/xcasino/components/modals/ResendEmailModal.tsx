@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useModal } from '../../../../hooks/useModal';
 import GenericModalHeader from './GenericModalHeader';
-import { ComponentName, VALIDATIONS } from '../../../../constants';
+import { ComponentName, PagesName, VALIDATIONS } from '../../../../constants';
 import { Form, Modal } from 'react-bootstrap';
 import { FormProvider, useForm } from 'react-hook-form';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import LoadingButton from '../../../../components/LoadingButton';
 import { useI18n } from '../../../../hooks/useI18n';
 import CustomAlert from '../CustomAlert';
+import { useRoutePath } from '../../../../hooks';
 
 const ResendEmailModal = () => {
+  const faqPath = useRoutePath(PagesName.FaqPage);
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
     msg: string;
@@ -39,7 +41,9 @@ const ResendEmailModal = () => {
     >
       <GenericModalHeader
         title={
-          !apiResponse?.success ? 'Resend Activation Link' : 'Check your email'
+          !apiResponse?.success
+            ? t('resend_activation_title_1')
+            : t('resend_activation_title_2')
         }
         handleClose={closeModal}
       />
@@ -64,14 +68,11 @@ const ResendEmailModal = () => {
                       t('register_email_bad_format'),
                   }}
                   id="email"
-                  title="Enter your account email"
+                  title={t('resend_activation_email_field')}
                 />
               </>
             ) : (
-              <p>
-                An e-mail with further instructions has been sent to your email
-                account. Follow instructions to reset your password.
-              </p>
+              <p>{t('resend_activation_note')}</p>
             )}
             <LoadingButton
               variant="primary"
@@ -86,15 +87,15 @@ const ResendEmailModal = () => {
               data-testid="button"
               className="btn btn-primary mt-3 w-100 rounded-pill"
             >
-              {!apiResponse?.success ? 'Submit' : 'Finish'}
+              {!apiResponse?.success ? t('submit') : t('disable_button')}
             </LoadingButton>
           </Form>
         </FormProvider>
       </Modal.Body>
       <Modal.Footer>
-        <span>Need Help?</span>
-        <a href="/help" className="modal-link">
-          Click Here
+        <span>{t('need_help')}</span>
+        <a href={faqPath} className="modal-link">
+          {t('click_here')}
         </a>
       </Modal.Footer>
     </Modal>

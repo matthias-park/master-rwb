@@ -58,6 +58,7 @@ const BlockLinksSlider = ({
               >
                 {item.img && (
                   <img
+                    alt=""
                     src={item.img}
                     className="block-links-slider__card-img"
                   />

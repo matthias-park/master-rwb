@@ -25,9 +25,10 @@ import { useAuth } from '../../../../hooks/useAuth';
 import CustomAlert from '../CustomAlert';
 import CustomSelectInput from '../../../../components/customFormInputs/CustomSelectInput';
 import { useHistory } from 'react-router';
+import { replaceStringTagsReact } from '../../../../utils/reactUtils';
 
 const PersonalDetailsForm = ({ formState, apiError }) => {
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
   return (
     <>
       <CustomAlert show={formState.isSubmitted && !!apiError} variant="danger">
@@ -64,18 +65,18 @@ const PersonalDetailsForm = ({ formState, apiError }) => {
         <CheckboxInput
           id="idkYet"
           rules={{ required: false }}
-          title={t('register_compliance')}
+          title={jsxT('register_compliance')}
         />
         <CheckboxInput
           id="newsletter"
           rules={{ required: false }}
-          title="Yes! I want to receive the latest news, competitions and bonus offers by email."
+          title={jsxT('register_input_newsletter')}
         />
         <CheckboxInput
           id="terms_and_conditions"
           rules={{ required: true }}
           defaultValue={true}
-          title="Hereby I confirm that I´m older than 18 years and that I´ve read the Terms and Conditions and the Privacy Policy of Red Rhino Ltd. for the usage of Luckycasino.com and that I´ve understood and accepted them."
+          title={jsxT('register_accept_conditions')}
         />
       </div>
     </>
@@ -120,9 +121,12 @@ const AddressForm = () => {
 const CredentialsForm = ({ setValue, selectedMonth, selectedYear }) => {
   const { t } = useI18n();
   const [apiError, setApiError] = useState<string | null>(null);
-
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const months = Array.from({ length: 12 }, (item, i) => {
-    return new Date(0, i).toLocaleString('en-US', { month: 'long' });
+    const month = new Date(0, i).toLocaleString(`${locale}-US`, {
+      month: 'long',
+    });
+    return month.charAt(0).toUpperCase() + month.slice(1);
   });
   const currentYear = new Date().getFullYear();
   const back21Years = dayjs().subtract(21, 'year');
@@ -519,7 +523,7 @@ const RegisterModal = () => {
               enableModal(ComponentName.LoginModal);
             }}
           >
-            Login
+            {t('login_btn')}
           </p>
         </Modal.Footer>
       ) : (

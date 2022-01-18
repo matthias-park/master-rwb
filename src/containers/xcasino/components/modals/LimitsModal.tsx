@@ -80,10 +80,10 @@ const LimitsModal = () => {
               <Table responsive className="mb-3">
                 <thead>
                   <tr>
-                    <th>Type</th>
-                    <th>Time</th>
-                    <th>Remaining</th>
-                    <th>Valid From</th>
+                    <th>{t('limits_table_type')}</th>
+                    <th>{t('limits_table_time')}</th>
+                    <th>{t('limits_table_remaining')}</th>
+                    <th>{t('limits_table_valid_from')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -108,7 +108,7 @@ const LimitsModal = () => {
                     ))
                   ) : (
                     <tr>
-                      <td>None Set</td>
+                      <td>{t('limits_table_unset')}</td>
                     </tr>
                   )}
                 </tbody>

@@ -98,7 +98,7 @@ function LoginForm() {
           disableCheckMark
         />
         <small className="modal-body__forgot-pw">
-          Forgot your password?
+          {t('login_forgot_password')}
           <p
             className="modal-link ml-sm"
             onClick={() => {
@@ -106,7 +106,7 @@ function LoginForm() {
               enableModal(ComponentName.ForgotPasswordModal);
             }}
           >
-            Click Here
+            {t('login_forgot_password_link')}
           </p>
         </small>
         <LoadingButton

@@ -112,7 +112,6 @@ const TermsAndConditionsModal = () => {
         </FormProvider>
       </Modal.Body>
       <Modal.Footer>
-        <span>Want to read the terms and conditions?</span>
         <div
           className="modal-link"
           onClick={() => {
@@ -120,7 +119,7 @@ const TermsAndConditionsModal = () => {
             history.push('/info/tnc');
           }}
         >
-          Click Here
+          {t('terms_conditions_link')}
         </div>
       </Modal.Footer>
     </Modal>

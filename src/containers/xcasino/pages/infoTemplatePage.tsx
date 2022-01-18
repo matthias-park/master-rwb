@@ -7,6 +7,7 @@ import useApi from '../../../hooks/useApi';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import ContentPage from '../../../types/api/content/ContentPage';
 import { Spinner } from 'react-bootstrap';
+import { useI18n } from '../../../hooks/useI18n';
 
 const InfoTemplatePage = () => {
   const { slug } = useParams<{ slug?: string }>();
@@ -15,7 +16,7 @@ const InfoTemplatePage = () => {
   );
 
   const isDataLoading = !data && !error;
-
+  const { t } = useI18n();
   if (!isDataLoading && (error || !data?.Success)) {
     return <RedirectNotFound />;
   }
@@ -38,7 +39,7 @@ const InfoTemplatePage = () => {
       )}
       {!isDataLoading && !!data?.Success && (
         <Main
-          title="Information"
+          title={t('info_page_title')}
           icon="icon-circle-info"
           className="info-template-page"
         >

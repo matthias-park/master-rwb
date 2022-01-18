@@ -5,15 +5,18 @@ import ForgotPasswordResponse from '../../../../types/api/user/ForgotPassword';
 import { FormProvider, useForm } from 'react-hook-form';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import LoadingButton from '../../../../components/LoadingButton';
-import { ComponentName, VALIDATIONS } from '../../../../constants';
+import { ComponentName, PagesName, VALIDATIONS } from '../../../../constants';
 import { useI18n } from '../../../../hooks/useI18n';
 import { useModal } from '../../../../hooks/useModal';
 import GenericModalHeader from './GenericModalHeader';
 import useGTM from '../../../../hooks/useGTM';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
+import { useRoutePath } from '../../../../hooks';
+import { Link } from 'react-router-dom';
 
 const ForgotPasswordModal = () => {
   const { activeModal, disableModal, enableModal } = useModal();
+  const faqPath = useRoutePath(PagesName.FaqPage);
   const closeModal = () => disableModal(ComponentName.ForgotPasswordModal);
   const sendDataToGTM = useGTM();
 
@@ -53,7 +56,11 @@ const ForgotPasswordModal = () => {
       onShow={() => setApiResponse(null)}
     >
       <GenericModalHeader
-        title={!apiResponse?.success ? 'Forgot Password' : 'Check your email'}
+        title={
+          !apiResponse?.success
+            ? t('forgot_password_page_title')
+            : t('email_sent')
+        }
         handleClose={closeModal}
       />
       <Modal.Body>
@@ -69,14 +76,11 @@ const ForgotPasswordModal = () => {
                       t('register_email_bad_format'),
                   }}
                   id="email"
-                  title="Enter your account email"
+                  title={t('forgot_password_email_field')}
                 />
               </>
             ) : (
-              <p>
-                An e-mail with further instructions has been sent to your email
-                account. Follow instructions to reset your password.
-              </p>
+              <p>{t('forgot_password_note')}</p>
             )}
             <LoadingButton
               variant="primary"
@@ -92,22 +96,22 @@ const ForgotPasswordModal = () => {
               data-testid="button"
               className="btn btn-primary mt-3 w-100 rounded-pill"
             >
-              {!apiResponse?.success ? 'Submit' : 'Finish'}
+              {!apiResponse?.success ? t('submit') : t('disable_button')}
             </LoadingButton>
           </Form>
         </FormProvider>
       </Modal.Body>
       <Modal.Footer>
-        <span>No Account?</span>
-        <div
+        <span>{t('need_help')}</span>
+        <Link
           className="modal-link"
+          to={faqPath}
           onClick={() => {
             closeModal();
-            enableModal(ComponentName.RegisterModal);
           }}
         >
-          Register Now
-        </div>
+          {t('click_here')}
+        </Link>
       </Modal.Footer>
     </Modal>
   );

@@ -29,8 +29,7 @@ function GenericModalHeader({
       )}
       {!!handleClose && <i className="icon-close" onClick={closeModal} />}
       <h4>
-        <span>CASINO</span>
-        <span>SITE</span>
+        <span>XCASINO</span>
       </h4>
       <Modal.Title className={clsx(hideTitleMobile && 'd-none d-md-block')}>
         {title}

@@ -343,9 +343,8 @@ const LimitsPage = () => {
     type?: string;
   } | null>(null);
   const content = {
-    title: 'Limits',
-    text:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Donec ullamcorper nulla non metus auctor fringilla.',
+    title: t('limits_page_title'),
+    text: t('limits_page_sub_text'),
   };
 
   const limitData = data?.limits.filter(

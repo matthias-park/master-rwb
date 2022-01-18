@@ -118,8 +118,7 @@ const RegistrationPage = () => {
                 {!!filteredLimits && (
                   <>
                     <h4 className="register-page__content-title">
-                      To complete registration, please complete the following
-                      actions
+                      {t('register_desc')}
                     </h4>
                     {!(
                       apiBankResponse?.success || completedActions?.bankAdded
