@@ -744,6 +744,7 @@
       "smartyStreets": "113676706475958507",
       "geoComplyKey": "5YZkkL4ADJ",
       "sbTechUrl": "https://gnogaz-fe-sandbox.strivegaming.us",
+      "xtremepush": "https://us.webpu.sh/Zgwm8SC36q1F-0S5QAuaKhanJF8k7fmN/sdk.js",
       "theme": "strive",
       "redis": {
         "host": "192.168.109.106",

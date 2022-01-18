@@ -715,6 +715,7 @@
       "geoComplyKey": "5YZkkL4ADJ",
       "theme": "strive",
       "sbTechUrl": "https://az-sports-live.goldennuggetsports.com",
+      "xtremepush": "https://us.webpu.sh/6MCTOZTZCr1IsiPan9ce90gdq4Og2mvk/sdk.js",
       "redis": {
         "host": "192.168.150.40",
         "port": 6379,
