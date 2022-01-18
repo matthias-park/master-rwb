@@ -313,3 +313,19 @@
     margin-top: unset !important;
   }
 }
+
+.deposit-link-modal {
+  .modal-content {
+    min-height: unset;
+  }
+  .modal-body {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__content {
+    max-width: 340px;
+    margin-top: $spacing-4;
+    text-align: center;
+  }
+}

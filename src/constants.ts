@@ -32,6 +32,7 @@ export enum ComponentName {
   ResendEmailModal = 'resendEmailModal',
   MaxBalanceModal = 'maxBalanceModal',
   BettingHistory = 'bettingHistory',
+  DepositLinkModal = 'depositLinkModal',
   ActivateUserModal = 'activateUserModal',
 }
 

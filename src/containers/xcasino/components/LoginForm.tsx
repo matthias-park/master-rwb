@@ -61,6 +61,9 @@ function LoginForm() {
     } else {
       disableModal(ComponentName.LoginModal);
     }
+    if (response.total_deposit_count === 0) {
+      enableModal(ComponentName.DepositLinkModal);
+    }
     return;
   };
 

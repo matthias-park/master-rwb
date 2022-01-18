@@ -11,6 +11,7 @@ import LimitsModal from './components/modals/LimitsModal';
 import ResendEmailModal from './components/modals/ResendEmailModal';
 import MaxBalanceModal from './components/modals/MaxBalanceModal';
 import TermsAndConditionsModal from './components/modals/TermsAndConditionsModal';
+import DepositLinkModal from './components/modals/DepositLinkModal';
 import { ComponentName } from '../../constants';
 import loadable from '@loadable/component';
 
@@ -38,6 +39,7 @@ const Modals = () => {
   return (
     <>
       <LoginModal />
+      <DepositLinkModal />
       <RegisterModal />
       <ForgotPasswordModal />
       <ResetPasswordModal />

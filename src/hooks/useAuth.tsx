@@ -29,6 +29,7 @@ export interface UserAuth {
     success: boolean;
     message: string | null;
     twoFactorAuthRequired?: boolean;
+    total_deposit_count?: number;
     userActivationNeeded?: boolean;
   }>;
   signout: () => Promise<void>;
@@ -191,6 +192,7 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
     return {
       success: res.Success,
       message: res.Message,
+      total_deposit_count: (res.Data as NET_USER).total_deposit_count,
     };
   };
   const signout = async () => {

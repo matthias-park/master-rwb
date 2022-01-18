@@ -9,6 +9,7 @@ export interface NET_USER {
   error?: string;
   currency?: string;
   token?: string;
+  total_deposit_count?: number;
   registration_id?: number;
   PlayerLoginRes?: {
     RegistrationId: number;
@@ -56,6 +57,7 @@ export interface UserStatus {
   barcode?: string;
   tnc_required?: boolean;
   authentication_enabled?: boolean;
+  total_deposit_count?: number;
   registration_id?: number | null;
 }
 

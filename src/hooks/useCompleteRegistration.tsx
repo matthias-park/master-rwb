@@ -9,6 +9,8 @@ import useApi from './useApi';
 import { useAuth } from './useAuth';
 import { useLocation, useHistory } from 'react-router';
 import useLocalStorage from './useLocalStorage';
+import { useModal } from './useModal';
+import { ComponentName } from '../constants';
 
 type CompletedActions = {
   documentsAdded?: boolean;
@@ -44,6 +46,7 @@ export const CompleteRegistrationProvider = props => {
   const { user } = useAuth();
   const { pathname } = useLocation();
   const history = useHistory();
+  const { enableModal } = useModal();
 
   const userActivated = user.logged_in && !user.registration_id;
   const { data: limits } = useApi(
@@ -87,6 +90,9 @@ export const CompleteRegistrationProvider = props => {
         status: false,
       });
       history.push('/');
+      if (user.total_deposit_count === 0) {
+        enableModal(ComponentName.DepositLinkModal);
+      }
     }
     setIsDataLoading([limits, maxBalance, documents].every(item => !item));
   }, [completedActions]);
