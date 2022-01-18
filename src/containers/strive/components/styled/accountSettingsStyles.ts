@@ -470,10 +470,16 @@ const accountSettingsStyles = css`
     overflow: hidden;
     background-color: ${props =>
       props.theme.colors.container || props.theme.colors.white.main};
+    .page-link {
+      color: ${props => props.theme.colors.brand.text};
+      background-color: ${props =>
+        props.theme.colors.container || props.theme.colors.white.main};
+    }
     .page-item.active {
       .page-link {
         background-color: ${props => props.theme.colors.primary.main};
         border-color: ${props => props.theme.colors.primary.main};
+        color: ${props => props.theme.colors.white.main};
       }
     }
     .table {
