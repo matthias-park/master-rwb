@@ -893,6 +893,9 @@
             "backgroundColor": "#222",
             "color": "#666"
           },
+          "invalid": {
+            "backgroundColor": "#222"
+          },
           "active": {
             "borderColor": "#FFDC3E"
           },
