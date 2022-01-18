@@ -1066,7 +1066,9 @@
           "containerColor": "#fff"
         },
         "modals": {
-          "color": "#051B35",
+          "color": "#fff",
+          "bgColor": "#222",
+          "borderColor": "#333",
           "title": {
             "fontWeight": 700,
             "fontSize": "24px"
