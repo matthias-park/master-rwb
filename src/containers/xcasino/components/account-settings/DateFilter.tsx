@@ -3,6 +3,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import DatePicker from 'react-datepicker';
 import { Button } from 'react-bootstrap';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useI18n } from '../../../../hooks/useI18n';
 
 const DateFilterInput = forwardRef(
   (
@@ -35,6 +36,7 @@ const DateFilter = ({
   dateFrom: Dayjs;
   updateUrl: (dateFrom: Dayjs, dateTo: Dayjs) => void;
 }) => {
+  const { t } = useI18n();
   const [newDateFrom, setNewDateFrom] = useState<Dayjs>(dateFrom);
   const [newDateTo, setNewDateTo] = useState<Dayjs>(dateTo);
   const validDate = newDateTo.diff(newDateFrom, 'd') >= 0;
@@ -60,7 +62,7 @@ const DateFilter = ({
         <DatePicker
           customInput={
             <DateFilterInput
-              label="Date From"
+              label={t('date_picker_date_from')}
               value={dayjs(newDateFrom.toDate()).format('YYYY-MM-DD')}
             />
           }
@@ -74,7 +76,7 @@ const DateFilter = ({
         <DatePicker
           customInput={
             <DateFilterInput
-              label="Date To"
+              label={t('date_picker_date_to')}
               value={dayjs(newDateTo.toDate()).format('YYYY-MM-DD')}
             />
           }
@@ -92,7 +94,7 @@ const DateFilter = ({
             updateUrl(newDateFrom, newDateTo);
           }}
         >
-          Show Results
+          {t('date_picker_btn')}
         </Button>
       </div>
     </>

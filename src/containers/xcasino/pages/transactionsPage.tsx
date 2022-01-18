@@ -7,6 +7,7 @@ import useLocalStorage from '../../../hooks/useLocalStorage';
 import dayjs, { Dayjs } from 'dayjs';
 import { formatUrl } from '../../../utils/apiUtils';
 import TransactionOverviewTable from '../components/TransactionOverviewTable';
+import { useI18n } from '../../../hooks/useI18n';
 
 interface Transactions {
   pages: number;
@@ -22,6 +23,7 @@ interface Transactions {
 }
 
 const TransactionsPage = () => {
+  const { t } = useI18n();
   const [url, setUrl] = useState<string | null>(null);
   const { data } = useApi<Transactions>(url);
   const [dateTo, setDateTo] = useLocalStorage('transactions-date-to', dayjs(), {
@@ -45,11 +47,9 @@ const TransactionsPage = () => {
     return data?.transactions?.map(transaction => ({
       transaction_date: dayjs(new Date(transaction.date)).format('YYYY-MM-DD'),
       transaction_title: transaction.title,
-      transaction_amount:
+      transaction_account:
         transaction.account_number?.match(/.{1,4}/g)?.join(' ') || '-',
-      transaction_account: `${transaction.in ? '+' : '-'} ${
-        transaction.amount
-      }`,
+      transaction_amount: `${transaction.in ? '+' : '-'} ${transaction.amount}`,
     }));
   }, [data]);
 
@@ -72,9 +72,8 @@ const TransactionsPage = () => {
   }, [url]);
 
   const content = {
-    title: 'Transactions',
-    text:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Donec ullamcorper nulla non metus auctor fringilla.',
+    title: t('transactions_page_title'),
+    text: t('transactions_history_disclaimer'),
   };
 
   return (
@@ -84,7 +83,7 @@ const TransactionsPage = () => {
       text={content.text}
     >
       <DateFilter
-        title="Filter Transactions"
+        title={t('date_picker_title')}
         dateTo={dateTo}
         dateFrom={dateFrom}
         updateUrl={updateUrl}

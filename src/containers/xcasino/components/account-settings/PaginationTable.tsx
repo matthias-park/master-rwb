@@ -24,7 +24,7 @@ const PaginationTable = ({ data, updateUrl, dateFrom, dateTo, totalPages }) => {
         </div>
       ) : data.length ? (
         <>
-          <h6 className="mb-4">Showing Results</h6>
+          <h6 className="mb-4">{t('pagination_table_title')}</h6>
           <Table responsive hover>
             <thead>
               <tr>
@@ -35,21 +35,29 @@ const PaginationTable = ({ data, updateUrl, dateFrom, dateTo, totalPages }) => {
             <tbody>
               {data.map((item, index) => (
                 <tr key={`transaction_row_${index}`}>
-                  {Object.entries(item).map(([key, value]) => (
-                    <div className="mobile-td-wrp" key={key}>
-                      <span className="mobile-th">{t(key)}</span>
-                      {/*
+                  {Object.entries(item).map(([key, value]) => {
+                    return (
+                      <div className="mobile-td-wrp" key={key}>
+                        <span className="mobile-th">{t(key)}</span>
+                        {/*
                       // @ts-ignore: Object is of type 'unknown'.*/}
-                      <td>{value}</td>
-                    </div>
-                  ))}
+                        <td>
+                          {key === 'transaction_title'
+                            ? t(String(value))
+                            : value}
+                        </td>
+                      </div>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
           </Table>
           <div className="pagination-table__pagination">
             <Dropdown className="mr-3">
-              <Dropdown.Toggle>Rows per page: 10</Dropdown.Toggle>
+              <Dropdown.Toggle>
+                {t('pagination_table_row_counter')} 10
+              </Dropdown.Toggle>
               <Dropdown.Menu></Dropdown.Menu>
             </Dropdown>
             <div className="pagination-table__pagination-icons">
