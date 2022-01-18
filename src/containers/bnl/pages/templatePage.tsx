@@ -144,7 +144,8 @@ const TemplatePage = () => {
                       {index === 0 &&
                         data.Data.structure.content.length > 1 &&
                         data.Data.structure.content[0].standart
-                          ?.dropdown_button_translations && (
+                          ?.dropdown_button_translations &&
+                        !!links.length && (
                           <Dropdown
                             className="custom-dropdown mb-3 d-block d-md-none"
                             show={dropdownShow}
