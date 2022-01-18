@@ -34,6 +34,9 @@ const formStyles = css`
           props.theme.inputs.backgroundColor} !important;
       }
     }
+    .form-control:not(textarea) {
+      height: ${props => props.theme.inputs.height}px !important;
+    }
     .form-control {
       border: ${props => props.theme.inputs.border};
       border-radius: ${props => props.theme.inputs.borderRadius}px !important;
