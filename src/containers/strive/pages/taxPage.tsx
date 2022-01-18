@@ -39,7 +39,7 @@ const TaxPage = () => {
     if (response.Success) {
       const downloadLink = document.createElement('a');
       const file = `data:application/pdf;base64,${response.Data.files[0]}`;
-      const fileName = `${dayjs(date).format(
+      const fileName = `W2G_${user.id}_${dayjs(date).format(
         franchiseDateFormat,
       )}_${bet_id}_tax.pdf`;
       downloadLink.href = file;
