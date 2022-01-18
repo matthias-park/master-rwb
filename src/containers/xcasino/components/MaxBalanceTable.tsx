@@ -90,7 +90,7 @@ const MaxBalanceTable = ({
 
   return (
     <>
-      <h5 className={'pt-3'}>{title}</h5>
+      <h5>{title}</h5>
       <Table>
         <thead>
           <tr>

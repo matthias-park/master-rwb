@@ -13,8 +13,15 @@ import { useToasts } from 'react-toast-notifications';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useApi from '../../../hooks/useApi';
 import Spinner from 'react-bootstrap/Spinner';
+import TextInput from '../../../components/customFormInputs/TextInput';
+import clsx from 'clsx';
+import { franchiseDateFormat } from '../../../constants';
 
-export const FilePicker = () => {
+export const FilePicker = ({
+  isCompleteRegistration,
+}: {
+  isCompleteRegistration?: boolean;
+}) => {
   const { data, error, mutate } = useApi<any>(
     '/restapi/v1/user/profile/required_documents',
   );
@@ -43,7 +50,9 @@ export const FilePicker = () => {
   } = formMethods;
 
   const [subTypes, setSubTypes] = useState<{ id: string; value: number }[]>([]);
-  const watchDocumentType = watch('document_type');
+  const watchDocumentType = isCompleteRegistration
+    ? 'image_id'
+    : watch('document_type');
   const [updatedFile, setUpdatedFile] = useState<string | null>(null);
   const documentTypeValues = useMemo(() => {
     return data?.documents?.reduce((prev, curr) => {
@@ -239,9 +248,15 @@ export const FilePicker = () => {
         ? ((prev[`${document.id}[]`] = documentFiles), prev)
         : prev;
     }, {});
-    const res = await postApi<RailsApiResponse<null>>(data.action, formatBody, {
-      formData: true,
-    }).catch((res: RailsApiResponse<null>) => {
+    const res = await postApi<RailsApiResponse<null>>(
+      data.action,
+      isCompleteRegistration
+        ? { ...formatBody['image_id[]'][0], ...body }
+        : formatBody,
+      {
+        formData: true,
+      },
+    ).catch((res: RailsApiResponse<null>) => {
       if (res.Fallback) {
         addToast(`Failed to update user settings`, {
           appearance: 'error',
@@ -260,14 +275,16 @@ export const FilePicker = () => {
 
   return (
     <>
-      <CustomAlert
-        show={!!apiResponse}
-        variant={
-          (apiResponse && (apiResponse.success ? 'success' : 'danger')) || ''
-        }
-      >
-        <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />
-      </CustomAlert>
+      {!isCompleteRegistration && (
+        <CustomAlert
+          show={!!apiResponse}
+          variant={
+            (apiResponse && (apiResponse.success ? 'success' : 'danger')) || ''
+          }
+        >
+          <div dangerouslySetInnerHTML={{ __html: apiResponse?.msg || '' }} />
+        </CustomAlert>
+      )}
       {isDataLoading && (
         <div className="d-flex my-3">
           <Spinner animation="border" variant="white" />
@@ -275,37 +292,109 @@ export const FilePicker = () => {
       )}
       {!!data && (
         <>
-          <h6 className="account-page__content-title mb-sm">Upload Files</h6>
+          <h5 className="account-page__content-title mb-sm">
+            {isCompleteRegistration
+              ? t('file_picker_upload_id')
+              : t('file_picker_upload_file')}
+          </h5>
           <p className="account-page__content-text">
-            Max file size: 8.00MB, Allowed file types: .jpg, .jpeg, .png, .pdf,
-            .gif
+            {t('file_picker_sub_header')}
           </p>
           <div className="documents-container">
             <FormProvider {...formMethods}>
               <Form
                 onSubmit={handleSubmit(onSubmit)}
-                className="d-flex align-items-start flex-column flex-lg-row"
+                className={clsx(
+                  !isCompleteRegistration
+                    ? 'd-flex flex-column flex-lg-row align-items-start'
+                    : 'registration-form',
+                )}
               >
                 {documentTypeValues && fileInputRefs && (
                   <>
-                    <CustomSelectInput
-                      key={'document_type'}
-                      id={'document_type'}
-                      className="mr-lg-2 mw-300"
-                      rules={{}}
-                      values={[
-                        {
-                          text: 'select_type',
-                          value: '-1',
-                        },
-                        ...documentTypeValues.map(type => ({
-                          text: type,
-                          value: type,
-                        })),
-                      ]}
-                      title={t('document_type')}
-                      setValue={setValue}
-                    />
+                    {isCompleteRegistration ? (
+                      <div>
+                        <CustomSelectInput
+                          defaultTitle={'select_image_id_sub_type'}
+                          id={'image_id_sub_type'}
+                          rules={{
+                            required: true,
+                          }}
+                          values={[
+                            {
+                              text: 'passport',
+                              value: '1',
+                            },
+                            {
+                              text: 'identity_card',
+                              value: '3',
+                            },
+                            {
+                              text: 'drivers_license',
+                              value: '4',
+                            },
+                          ]}
+                          setValue={setValue}
+                        />
+                        <TextInput
+                          title={t('registration_date_of_issue')}
+                          id="date_of_issue"
+                          maskedInput={{
+                            mask: '_',
+                            format: franchiseDateFormat.replace(
+                              /[A-Za-z]/g,
+                              '#',
+                            ),
+                            allowEmptyFormatting: true,
+                            useFormatted: true,
+                          }}
+                          rules={{ required: true }}
+                        ></TextInput>
+                        <TextInput
+                          title={t('registration_expiration_date')}
+                          id="expiry_date"
+                          maskedInput={{
+                            format: franchiseDateFormat.replace(
+                              /[A-Za-z]/g,
+                              '#',
+                            ),
+                            mask: '_',
+                            allowEmptyFormatting: true,
+                            useFormatted: true,
+                          }}
+                          rules={{ required: true }}
+                        ></TextInput>
+                        <TextInput
+                          title={t('registration_document_number')}
+                          id="document_number"
+                          rules={{ required: true }}
+                        ></TextInput>
+                        <TextInput
+                          title={t('registration_place_of_issue')}
+                          id="place_of_issue"
+                          rules={{ required: true }}
+                        ></TextInput>
+                      </div>
+                    ) : (
+                      <CustomSelectInput
+                        key={'document_type'}
+                        id={'document_type'}
+                        className="mr-lg-2 mw-300"
+                        rules={{}}
+                        values={[
+                          {
+                            text: 'select_type',
+                            value: '-1',
+                          },
+                          ...documentTypeValues.map(type => ({
+                            text: type,
+                            value: type,
+                          })),
+                        ]}
+                        title={t('document_type')}
+                        setValue={setValue}
+                      />
+                    )}
                     {Object.entries(fileInputRefs).map(([key, value]) => (
                       <input
                         {...register(key)}
@@ -335,7 +424,7 @@ export const FilePicker = () => {
                     disabled={watchDocumentType === '-1'}
                     onClick={selectFile}
                   >
-                    Choose File
+                    {t('file_picker_choose_file')}
                   </Button>
                   <LoadingButton
                     className="rounded-pill mt-lg-3"
@@ -343,7 +432,7 @@ export const FilePicker = () => {
                     loading={!!formState.isSubmitting}
                     disabled={!addedFiles.length}
                   >
-                    Upload Files
+                    {t('file_picker_upload_file')}
                   </LoadingButton>
                 </div>
               </Form>
@@ -353,10 +442,12 @@ export const FilePicker = () => {
             <Table hover responsive className="mt-2">
               <thead>
                 <tr>
-                  <th>File Name</th>
-                  <th>Size</th>
-                  <th>Type</th>
-                  <th className="text-center text-md-right">Options</th>
+                  <th>{t('documents_table_file_name')}</th>
+                  <th>{t('documents_table_file_size')}</th>
+                  <th>{t('documents_table_file_type')}</th>
+                  <th className="text-center text-md-right">
+                    {t('documents_table_options')}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -365,19 +456,27 @@ export const FilePicker = () => {
                     file && (
                       <tr className="fade-in">
                         <div className="mobile-td-wrp">
-                          <span className="mobile-th">File Name</span>
+                          <span className="mobile-th">
+                            {t('documents_table_file_name')}
+                          </span>
                           <td>{file.name}</td>
                         </div>
                         <div className="mobile-td-wrp">
-                          <span className="mobile-th">Size</span>
+                          <span className="mobile-th">
+                            {t('documents_table_file_size')}
+                          </span>
                           <td>{file.size / 1000} KB</td>
                         </div>
                         <div className="mobile-td-wrp">
-                          <span className="mobile-th">Type</span>
+                          <span className="mobile-th">
+                            {t('documents_table_type')}
+                          </span>
                           <td>{t(file.type)}</td>
                         </div>
                         <div className="mobile-td-wrp">
-                          <span className="mobile-th">Options</span>
+                          <span className="mobile-th">
+                            {t('documents_table_options')}
+                          </span>
                           <td className="text-center text-md-right">
                             <i
                               className="icon-edit mr-2"
@@ -398,16 +497,18 @@ export const FilePicker = () => {
           {data?.documents?.some(document => document?.uploaded?.length) && (
             <>
               <hr className="divider-solid-light d-none d-xl-block" />
-              <h6 className="account-page__content-title mt-6">My Documents</h6>
+              <h6 className="account-page__content-title mt-6">
+                {t('documents_table_title')}
+              </h6>
               <Table hover responsive>
                 <thead>
                   <tr>
-                    <th>File Name</th>
-                    <th>Upload Date</th>
-                    <th>Type</th>
-                    <th>Expiry Date</th>
-                    <th>Issue Date</th>
-                    <th>Status</th>
+                    <th>{t('documents_table_file_name')}</th>
+                    <th>{t('documents_table_upload_date')}</th>
+                    <th>{t('documents_table_file_type')}</th>
+                    <th>{t('documents_table_expiry_date')}</th>
+                    <th>{t('documents_table_issue_date')}</th>
+                    <th>{t('documents_table_status')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -417,23 +518,33 @@ export const FilePicker = () => {
                       item?.uploaded?.map(item => (
                         <tr key={item.id}>
                           <div className="mobile-td-wrp">
-                            <span className="mobile-th">File Name</span>
+                            <span className="mobile-th">
+                              {t('documents_table_file_name')}
+                            </span>
                             <td> - </td>
                           </div>
                           <div className="mobile-td-wrp">
-                            <span className="mobile-th">Upload Date</span>
+                            <span className="mobile-th">
+                              {t('documents_table_upload_date')}
+                            </span>
                             <td>{item?.date}</td>
                           </div>
                           <div className="mobile-td-wrp">
-                            <span className="mobile-th">Type</span>
+                            <span className="mobile-th">
+                              {t('documents_table_file_type')}
+                            </span>
                             <td>{t(item.id)}</td>
                           </div>
                           <div className="mobile-td-wrp">
-                            <span className="mobile-th">Expiry Date</span>
+                            <span className="mobile-th">
+                              {t('documents_table_expiry_date')}
+                            </span>
                             <td> - </td>
                           </div>
                           <div className="mobile-td-wrp">
-                            <span className="mobile-th">Issue Date</span>
+                            <span className="mobile-th">
+                              {t('documents_table_issue_date')}
+                            </span>
                             <td> - </td>
                           </div>
                           <div className="mobile-td-wrp">

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import AccountPageTemplate from '../components/account-settings/AccountTemplate';
 import useApi from '../../../hooks/useApi';

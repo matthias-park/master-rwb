@@ -15,6 +15,7 @@ import { postApi } from '../../../utils/apiUtils';
 import LoadingButton from '../../../components/LoadingButton';
 import { useCompleteRegistration } from '../../../hooks/useCompleteRegistration';
 import CustomAlert from '../components/CustomAlert';
+import { VALIDATIONS } from '../../../constants';
 
 const RegistrationPage = () => {
   const {
@@ -25,8 +26,10 @@ const RegistrationPage = () => {
   const { t } = useI18n();
   const [filteredLimits, setFilteredLimits] = useState<Object | null>(null);
   const [apiBankError, setApiBankErr] = useState('');
-  const { data, mutate } = useApi<any>('/restapi/v1/user/profile/play_limits');
-
+  const { data, mutate, error } = useApi<any>(
+    '/railsapi/v1/user/profile/play_limits',
+  );
+  const isDataLoading = !data && !error;
   const [apiBankResponse, setApiBankResponse] = useState<{
     success: boolean | null;
     msg: string | null;
@@ -100,7 +103,7 @@ const RegistrationPage = () => {
 
   return (
     <>
-      {isRegDataLoading ? (
+      {isRegDataLoading || isDataLoading ? (
         <div className="d-flex register-page">
           <Spinner animation="border" variant="white" className="m-auto" />
         </div>
@@ -123,55 +126,71 @@ const RegistrationPage = () => {
                       To complete registration, please complete the following
                       actions
                     </h4>
-                    {!completedActions?.documentsAdded && <FilePicker />}
+                    {!(
+                      apiBankResponse?.success || completedActions?.bankAdded
+                    ) && (
+                      <>
+                        <h5 className="mt-4">{t('register_iban_title')}</h5>
+                        <FormProvider {...formMethods}>
+                          <Form
+                            className="registration-form"
+                            onSubmit={formMethods.handleSubmit(
+                              handleIBANSubmit,
+                            )}
+                          >
+                            <CustomAlert
+                              show={!!apiBankResponse}
+                              variant={
+                                apiBankResponse?.success ? 'success' : 'danger'
+                              }
+                            >
+                              {!!apiBankResponse && apiBankResponse.msg}
+                            </CustomAlert>
+                            <TextInput
+                              id="account_number"
+                              title={t('add_bank_modal_account_number')}
+                              rules={{
+                                required: true,
+                                validate: value =>
+                                  VALIDATIONS.bank_account(value),
+                              }}
+                            />
+                            <LoadingButton
+                              loading={formMethods.formState.isSubmitting}
+                              className="rounded-pill py-2 px-7"
+                              variant="primary"
+                              type="submit"
+                            >
+                              {t('add_bank_modal_save')}
+                            </LoadingButton>
+                          </Form>
+                        </FormProvider>
+                        <hr className="divider-solid-light" />
+                      </>
+                    )}
+                    {!completedActions?.documentsAdded && (
+                      <>
+                        <FilePicker isCompleteRegistration />
+                        <hr className="divider-solid-light" />
+                      </>
+                    )}
                     {!completedActions?.maxBalanceAdded && (
-                      <MaxBalanceTable
-                        needsOptions
-                        setShowLimit={setShowLimit}
-                        title="Set Max Balance"
-                      />
+                      <>
+                        <MaxBalanceTable
+                          needsOptions
+                          setShowLimit={setShowLimit}
+                          title={t('set_max_balance')}
+                        />
+                        <hr className="divider-solid-light" />
+                      </>
                     )}
                     {(!completedActions.depositLimitCountAdded ||
                       !completedActions.sessionLimitAdded) && (
                       <LimitTable
                         setShowLimit={setShowLimit}
                         data={filteredLimits}
-                        title="Set Limits"
+                        title={t('set_play_limits')}
                       />
-                    )}
-                    {!(
-                      apiBankResponse?.success || completedActions?.bankAdded
-                    ) && (
-                      <FormProvider {...formMethods}>
-                        <Form
-                          onSubmit={formMethods.handleSubmit(handleIBANSubmit)}
-                        >
-                          <CustomAlert
-                            show={!!apiBankResponse}
-                            variant={
-                              apiBankResponse?.success ? 'success' : 'danger'
-                            }
-                          >
-                            {!!apiBankResponse && apiBankResponse.msg}
-                          </CustomAlert>
-                          <TextInput
-                            id="account_number"
-                            title={t('add_bank_modal_account_number')}
-                            rules={{
-                              required: true,
-                              validate: (value: string) => value.length === 18,
-                            }}
-                          />
-                          <LoadingButton
-                            loading={formMethods.formState.isSubmitting}
-                            className="rounded-pill"
-                            variant="primary"
-                            type="submit"
-                          >
-                            {t('add_bank_modal_save')}
-                          </LoadingButton>
-                        </Form>
-                      </FormProvider>
                     )}
                   </>
                 )}

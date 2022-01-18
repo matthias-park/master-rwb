@@ -438,12 +438,23 @@ export const ALL_LOCALES = [
   'zu',
 ];
 
+export const Config = window.__config__;
+export const Franchise = {
+  bnl: Config.name === FranchiseNames.Bnl,
+  strive: Config.name === FranchiseNames.Strive,
+  desertDiamond: Config.name === FranchiseNames.DesertDiamond,
+  xCasino: Config.name === FranchiseNames.Xcasino,
+  gnogaz: Config.name === FranchiseNames.Gnogaz,
+};
+
 export const REGEX_EXPRESSION = {
   LETTERS_WITH_SEPERATORS: /^((?:[ '-]*)[\p{L}]+(?:[ '-]*))*$/iu,
   EMAIL: /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/i,
   PHONE_NUMBER_NORMALIZE: /\s|\.|\/|[(][0-9][)]?|^0+/g,
   PHONE_NUMBER: /^\+?[1-9]\d{1,14}$/,
-  BANK_IBAN: /^(BE)[0-9]{2}([ ]?[0-9]{4}){3}$/g,
+  BANK_IBAN: Franchise.xCasino
+    ? /^NL[0-9]{2}[A-z0-9]{4}[0-9]{10}$/g
+    : /^(BE)[0-9]{2}([ ]?[0-9]{4}){3}$/g,
   PO_BOX_ADDRESS: /\b(?:p\.?\s*o\.?|post\s+office)(\s+)?(?:box|[0-9]*)?\b/i,
 };
 
@@ -508,7 +519,7 @@ export const CONTENT_PAGES = [
   PagesName.FaqPage,
   PagesName.ResponsibleGamingPage,
 ];
-export const Config = window.__config__;
+
 export const franchiseDateFormat = Config.dateFormat || 'YYYY-MM-DD';
 export const ComponentSettings = Config.componentSettings;
 
@@ -526,6 +537,8 @@ export enum LocalStorageKeys {
   cookies = 'cookiesSettings',
   translations = 'translationsCache',
 }
+<<<<<<< HEAD
+=======
 
 export const Franchise = {
   bnl: Config.name === FranchiseNames.Bnl,
@@ -535,3 +548,4 @@ export const Franchise = {
   gnogaz: Config.name === FranchiseNames.Gnogaz,
   gnogon: Config.name === FranchiseNames.Gnogon,
 };
+>>>>>>> master

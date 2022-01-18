@@ -54,7 +54,7 @@ const LimitsModal = () => {
       setIsDataLoading(false);
     }
     data?.limits?.forEach(limit => {
-      if (!!limit.data.length) {
+      if (!!limit?.data?.length) {
         setHasLimits(true);
       }
     });

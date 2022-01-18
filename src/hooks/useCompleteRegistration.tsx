@@ -93,7 +93,7 @@ export const CompleteRegistrationProvider = props => {
 
   useEffect(() => {
     if (user.logged_in && !user.loading) {
-      setCompletedActions(() => {
+      setCompletedActions(prevState => {
         const documentsAdded = documents?.documents.some(document => {
           return document.uploaded.length > 0 && document.id === 'image_id';
         });
@@ -104,12 +104,13 @@ export const CompleteRegistrationProvider = props => {
           limit => limit.id === 'session_limit',
         )[0]?.data.length;
         return {
-          sessionLimitAdded: sessionLimitsAdded,
-          maxBalanceAdded: true,
-          // maxBalanceAdded: !!maxBalance?.Data?.data,
+          sessionLimitAdded: prevState.sessionLimitAdded || sessionLimitsAdded,
+          maxBalanceAdded:
+            prevState.maxBalanceAdded || !!maxBalance?.Data?.data,
           documentsAdded: documentsAdded,
-          bankAdded: !!banks?.Data.bank_account,
-          depositLimitCountAdded: depositLimitsAdded,
+          bankAdded: prevState.bankAdded || !!banks?.Data.bank_account,
+          depositLimitCountAdded:
+            prevState.depositLimitCountAdded || depositLimitsAdded,
         };
       });
 

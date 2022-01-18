@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import CustomSelectInput from '../../../../components/customFormInputs/CustomSelectInput';
 import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
+import { useCompleteRegistration } from '../../../../hooks/useCompleteRegistration';
 interface SettingProps {
   id: string;
   fields?: SettingsField[];
@@ -361,6 +362,11 @@ const SettingsForm = (props: SettingProps) => {
   });
   const { handleSubmit, reset } = formMethods;
 
+  const {
+    registrationIncomplete,
+    updateCompletedActions,
+  } = useCompleteRegistration();
+
   const updateSettingsSubmit = useCallback(
     data =>
       onSubmit(
@@ -432,7 +438,6 @@ const SettingsForm = (props: SettingProps) => {
           autoDismiss: true,
         });
       }
-      console.log(res);
       return res;
     });
     setResponse &&
@@ -444,6 +449,21 @@ const SettingsForm = (props: SettingProps) => {
       reset(null, { keepValues: true });
       resetValues.forEach(id => formMethods.setValue(id, ''));
       successCallback && successCallback();
+      if (registrationIncomplete) {
+        updateCompletedActions(prevState => {
+          return {
+            ...prevState,
+            sessionLimitAdded:
+              url.includes('set_session_limit') || prevState.sessionLimitAdded,
+            depositLimitCountAdded:
+              url.includes('set_deposit_count_limit') ||
+              prevState.depositLimitCountAdded,
+            maxBalanceAdded:
+              url.includes('set_max_balance_limit') ||
+              prevState.maxBalanceAdded,
+          };
+        });
+      }
     }
     mutateData && setTimeout(() => mutateData(), 1000);
     if (shouldUpdateUser || shouldLogoutUser) {
