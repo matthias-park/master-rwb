@@ -873,6 +873,9 @@
             "backgroundColor": "#222",
             "color": "#666"
           },
+          "invalid": {
+            "backgroundColor": "#222"
+          },
           "active": {
             "borderColor": "#FFDC3E"
           },
@@ -1240,6 +1243,9 @@
             "border": "1px solid #4A4A4A",
             "backgroundColor": "#222",
             "color": "#666"
+          },
+          "invalid": {
+            "backgroundColor": "#222"
           },
           "dropdownBg": "#444"
         },
