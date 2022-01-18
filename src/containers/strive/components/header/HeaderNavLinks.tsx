@@ -14,7 +14,7 @@ import { useAuth } from '../../../../hooks/useAuth';
 import useHover from '../../../../hooks/useHover';
 import {
   StyledHeaderNavItem,
-  StyledHeaderNavItemAnchor,
+  StyledHeaderNavItemLink,
 } from '../styled/StyledHeader';
 
 interface HeaderNavLinkProps {
@@ -83,14 +83,28 @@ export const HeaderNavClassicLink = ({
   };
 
   const disableDropdown = data.links.length === 1 && mobile;
+  const path = data.links[0].path;
+
+  if (disableDropdown && !!path) {
+    return (
+      <StyledHeaderNavItemLink
+        onClick={() => {
+          setNavExpanded(false);
+          backdrop.hide();
+        }}
+        to={path}
+      >
+        {t(data.name)}
+      </StyledHeaderNavItemLink>
+    );
+  }
 
   return (
     <Dropdown
       ref={dropdownRef}
-      href={disableDropdown ? data.links[0].path : ''}
-      as={disableDropdown ? StyledHeaderNavItemAnchor : StyledHeaderNavItem}
+      as={StyledHeaderNavItem}
       className="nav-item"
-      show={currentLinkActive && !disableDropdown}
+      show={currentLinkActive}
     >
       {!mobile ? (
         <Dropdown.Toggle
@@ -125,14 +139,7 @@ export const HeaderNavClassicLink = ({
             <span>{t(data.name)}</span>
             {data.externalLink && <i className="icon-redirect"></i>}
           </span>
-          {
-            <i
-              className={clsx(
-                'nav-icon ',
-                !disableDropdown && 'icon-strive-down',
-              )}
-            ></i>
-          }
+          <i className="nav-icon icon-strive-down"></i>
         </Dropdown.Toggle>
       )}
       <Dropdown.Menu>

@@ -75,7 +75,7 @@ export const StyledCollapseWrp = styled(Navbar.Collapse)`
     }
   }
 `;
-export const StyledHeaderNavItemAnchor = styled.a``;
+export const StyledHeaderNavItemLink = styled(Link)``;
 export const StyledHeaderNavItem = styled.li``;
 export const StyledHeaderNavItemDiv = styled.div``;
 export const StyledHeaderNav = styled.ul<{
@@ -86,7 +86,17 @@ export const StyledHeaderNav = styled.ul<{
     props.main &&
     css`
       z-index: 2;
-      ${StyledHeaderNavItem}, ${StyledHeaderNavItemDiv}, ${StyledHeaderNavItemAnchor} {
+      ${StyledHeaderNavItemLink} {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 65px !important;
+        color: ${props => rgba(props.theme.colors.brand.text, 0.85)} !important;
+        border-bottom: 1px solid ${props.theme.colors.gray['100']};
+        font-weight: 500;
+        cursor: pointer;
+      }
+      ${StyledHeaderNavItem}, ${StyledHeaderNavItemDiv} {
         position: relative;
         &:first-of-type {
           .nav-link {
