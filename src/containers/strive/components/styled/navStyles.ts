@@ -106,7 +106,7 @@ export const navStyles = css`
         position: relative;
         font-size: 28px;
         line-height: 18px !important;
-        color: ${props => rgba(props.theme.colors.black.custom, 0.3)};
+        color: ${props => rgba(props.theme.colors.brand.text, 0.3)};
         transition: transform 0.6s;
       }
       &.show {
