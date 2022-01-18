@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
-import { postApi } from '../../../utils/apiUtils';
+import { getApi } from '../../../utils/apiUtils';
 import { useAuth } from '../../../hooks/useAuth';
 import { ComponentName } from '../../../constants';
 import { useModal } from '../../../hooks/useModal';
 import { useHistory } from 'react-router-dom';
+import { useConfig } from '../../../hooks/useConfig';
 
 interface SlideItem {
   id?: number;
@@ -37,6 +38,7 @@ const Banner = ({ promoSlides, onLoad, onError, zone }: BannerProps) => {
   const [isDataLoading, setIsDataLoading] = useState(true);
   const { enableModal } = useModal();
   const history = useHistory();
+  const { locale } = useConfig();
   const { user } = useAuth();
 
   const loginStatusFilter = (slide: SlideItem): boolean => {
@@ -59,11 +61,8 @@ const Banner = ({ promoSlides, onLoad, onError, zone }: BannerProps) => {
       }
     } else {
       (async () => {
-        const data = await postApi<RailsApiResponse<any>>(
-          '/restapi/v1/content/banners',
-          {
-            zone: zone,
-          },
+        const data = await getApi<RailsApiResponse<any>>(
+          `/restapi/v1/content/banners/${zone}/${locale}`,
         );
         setIsDataLoading(false);
         setSlides(data.Data);
