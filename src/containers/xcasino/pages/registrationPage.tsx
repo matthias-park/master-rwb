@@ -68,11 +68,6 @@ const RegistrationPage = () => {
 
   const addBankAccountSubmit = async data => {
     removeFalsyFromObject(data);
-    data = {
-      account_number: data.account_number,
-      swift: 'swft',
-      address: '/restapi/v1/user/bank',
-    };
     const res = await postApi<RailsApiResponse<any>>(
       '/restapi/v1/user/bank',
       data,
