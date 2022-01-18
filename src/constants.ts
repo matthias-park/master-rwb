@@ -445,6 +445,7 @@ export const Franchise = {
   desertDiamond: Config.name === FranchiseNames.DesertDiamond,
   xCasino: Config.name === FranchiseNames.Xcasino,
   gnogaz: Config.name === FranchiseNames.Gnogaz,
+  gnogon: Config.name === FranchiseNames.Gnogon,
 };
 
 export const REGEX_EXPRESSION = {
@@ -537,15 +538,3 @@ export enum LocalStorageKeys {
   cookies = 'cookiesSettings',
   translations = 'translationsCache',
 }
-<<<<<<< HEAD
-=======
-
-export const Franchise = {
-  bnl: Config.name === FranchiseNames.Bnl,
-  strive: Config.name === FranchiseNames.Strive,
-  desertDiamond: Config.name === FranchiseNames.DesertDiamond,
-  xCasino: Config.name === FranchiseNames.Xcasino,
-  gnogaz: Config.name === FranchiseNames.Gnogaz,
-  gnogon: Config.name === FranchiseNames.Gnogon,
-};
->>>>>>> master
