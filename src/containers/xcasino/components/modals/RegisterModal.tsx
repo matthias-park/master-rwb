@@ -188,12 +188,12 @@ const CredentialsForm = ({ setValue, selectedMonth, selectedYear }) => {
         <CustomSelectInput
           key="datepicker_day"
           id="datepicker_day"
-          title={'Date of Birth'}
+          title={t('player_dob')}
           className={'datepicker-dropdown'}
           rules={{ required: true }}
           values={[
             {
-              text: 'Set Day',
+              text: t('player_dob_day'),
               value: '-1',
             },
           ].concat(
@@ -216,7 +216,7 @@ const CredentialsForm = ({ setValue, selectedMonth, selectedYear }) => {
           rules={{ required: true }}
           values={[
             {
-              text: 'Set Month',
+              text: t('player_dob_month'),
               value: '-1',
             },
           ].concat(
@@ -237,7 +237,7 @@ const CredentialsForm = ({ setValue, selectedMonth, selectedYear }) => {
           rules={{ required: true }}
           values={[
             {
-              text: 'Set Year',
+              text: t('player_dob_year'),
               value: '-1',
             },
           ].concat(
@@ -420,7 +420,7 @@ const RegisterModal = () => {
           setValue={setValue}
         />
       ),
-      title: 'register_title',
+      title: 'register_slide01_title',
       button_text: 'register_next_btn',
       button_type: 'button',
     },

@@ -76,7 +76,8 @@
     .modal-footer {
       margin: $spacing-2 auto;
       width: calc(100% - 80px);
-      padding: $spacing-1 0;
+      padding-top: $spacing-1;
+      padding-bottom: $spacing-1;
       font-size: $text-small;
       @media (max-height: 550px) {
         display: none; 
@@ -199,7 +200,6 @@
       min-height: 470px;
       min-width: 340px;
       padding-top: 29px;
-      position: unset;
       &__inner {
         width: 340px;
         height: 390px;
@@ -219,11 +219,14 @@
       margin: 0 auto;
       margin-bottom: $spacing-3;
       .datepicker-dropdown {
+        position: relative;
         max-width: calc(340px / 3.1);
         .custom-form-select__menu {
+          position: fixed !important;
           overflow-y: scroll;
           overflow-x: hidden;
-          max-height: 90px;
+          max-width: calc(340px / 3.1);
+          max-height: 290px;
           &-item {
             padding: $spacing-2;
           }
@@ -249,10 +252,8 @@
     color: white !important;
   }
   .modal-footer {
-    justify-content: flex-start;
-  }
-  .last-slide {
-    justify-content: space-between;
+    justify-content: flex-end;
+    padding-right: 1%;
   }
   .submission-form {
     display: flex;
