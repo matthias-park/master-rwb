@@ -404,6 +404,8 @@ declare module 'styled-components' {
     };
     modals: {
       color: string;
+      bgColor?: string;
+      borderColor?: string;
       title: {
         fontWeight: number;
         fontSize: string;

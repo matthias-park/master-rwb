@@ -1,5 +1,6 @@
 import { css } from 'styled-components';
 import { mediaBreakpointDown } from './breakpoints';
+import { Franchise } from '../../../../constants';
 
 const buttonStyles = css`
   .btn {
@@ -114,7 +115,10 @@ const buttonStyles = css`
     &:active,
     &:focus {
       background-color: ${props => props.theme.colors.white.main} !important;
-      color: ${props => props.theme.colors.brand.text} !important;
+      color: ${props =>
+        Franchise.gnogaz || Franchise.gnogon
+          ? props.theme.colors.brand.main
+          : props.theme.colors.brand.text} !important;
     }
   }
 

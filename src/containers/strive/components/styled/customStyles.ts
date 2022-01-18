@@ -399,6 +399,7 @@ const customStyles = css`
       align-items: center;
       background-color: inherit;
       border: none;
+      color: ${props => props.theme.modals.color};
     }
     &__card {
       width: 100%;
@@ -406,8 +407,12 @@ const customStyles = css`
       padding-right: 0;
       border: none;
       background: transparent;
-      border-top: 1px solid ${props => props.theme.colors.gray[100]};
-      border-bottom: 1px solid ${props => props.theme.colors.gray[100]};
+      border-top: 1px solid
+        ${props =>
+          props.theme.modals.borderColor || props.theme.colors.gray[100]};
+      border-bottom: 1px solid
+        ${props =>
+          props.theme.modals.borderColor || props.theme.colors.gray[100]};
       @media (max-width: 400px) {
         padding-left: 10px;
       }
@@ -422,7 +427,7 @@ const customStyles = css`
       }
     }
     &__body {
-      background-color: ${props => props.theme.colors.gray.custom_200};
+      background-color: ${props => props.theme.modals.bgColor};
       p {
         padding: 15px 35px;
       }
@@ -775,6 +780,10 @@ const customStyles = css`
     &-title {
       font-weight: ${props => props.theme.modals.title.fontWeight};
       font-size: ${props => props.theme.modals.title.fontSize};
+    }
+    .modal-content {
+      background-color: ${props => props.theme.modals.bgColor};
+      border-color: ${props => props.theme.modals.bgColor};
     }
   }
   .generic-modal-width {
