@@ -140,6 +140,13 @@ const customStyles = css`
     background: ${props =>
       props.theme.inputs.dropdownBg || props.theme.colors.white};
     .dropdown-item {
+      &:active {
+        color: ${props => props.theme.colors.white.main} !important;
+        background-color: ${props => props.theme.colors.primary.hover};
+      }
+      &:hover {
+        color: ${props => props.theme.colors.primary.hover};
+      }
       overflow: hidden;
       text-overflow: ellipsis;
       color: ${props => props.theme.colors.brand.text};
