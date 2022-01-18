@@ -72,7 +72,7 @@ const ChangePassword2fa = () => {
         <p className="change-pw__title mt-4">
           {jsxT('change_password_2fa_title')}
         </p>
-        <p>{jsxT('change_password_2fa_desc')}</p>
+        <p className="mb-3">{jsxT('change_password_2fa_desc')}</p>
         {showPinInput && (
           <TextInput
             rules={{

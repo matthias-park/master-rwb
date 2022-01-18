@@ -9,7 +9,8 @@ import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import Authenticate2fa from '../../../../types/api/user/Authenticate2fa';
 import CustomAlert from '../CustomAlert';
 import { replaceStringTagsReact } from '../../../../utils/reactUtils';
-import { VALIDATIONS } from '../../../../constants';
+import { Franchise, VALIDATIONS } from '../../../../constants';
+import clsx from 'clsx';
 
 interface changePostForm {
   email: string;
@@ -54,7 +55,13 @@ const ChangePasswordForm = () => {
         <p className="change-pw__title">
           {jsxT('change_password_reset_title')}
         </p>
-        <p>{jsxT('change_password_reset_desc')}</p>
+        <p
+          className={clsx(
+            (Franchise.desertDiamond || Franchise.gnogaz) && 'mb-3',
+          )}
+        >
+          {jsxT('change_password_reset_desc')}
+        </p>
         <TextInput
           rules={{
             required: t('change_password_email_required'),
