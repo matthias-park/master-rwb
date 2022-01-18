@@ -107,15 +107,16 @@ export const LimitRow = ({
   return (
     <tr>
       <div className="mobile-td-wrp">
-        <span className="mobile-th">Type</span>
+        <span className="mobile-th">{t('limits_table_type')}</span>
+        <span className="mobile-th">{t('limits_table_time')}</span>
         <td>{t(limitType)}</td>
       </div>
       <div className="mobile-td-wrp">
-        <span className="mobile-th">Time</span>
+        <span className="mobile-th">{t('limits_table_time')}</span>
         <td>{limitAmount}</td>
       </div>
       <div className="mobile-td-wrp">
-        <span className="mobile-th">Remaining</span>
+        <span className="mobile-th">{t('limits_table_remaining')}</span>
         {!!sessionAmountLeft ? (
           <td>{sessionAmountLeft}</td>
         ) : (
@@ -123,12 +124,12 @@ export const LimitRow = ({
         )}
       </div>
       <div className="mobile-td-wrp">
-        <span className="mobile-th">Valid From</span>
+        <span className="mobile-th">{t('limits_table_valid_from')}</span>
         <td>{validFrom}</td>
       </div>
       {setShowLimit && (
         <div className="mobile-td-wrp">
-          <span className="mobile-th">Options</span>
+          <span className="mobile-th">{t('limits_table_options')}</span>
           <td className="text-center text-md-right">
             <i
               className={clsx(
@@ -154,17 +155,18 @@ export const LimitTable = ({
   >;
   title?: string;
 }) => {
+  const { t } = useI18n();
   return (
     <>
       <h5>{title}</h5>
       <Table hover responsive>
         <thead>
           <tr>
-            <th>Type</th>
-            <th>Time</th>
-            <th>Remaining</th>
-            <th>Valid From</th>
-            <th>Options</th>
+            <th>{t('limits_table_type')}</th>
+            <th>{t('limits_table_time')}</th>
+            <th>{t('limits_table_remaining')}</th>
+            <th>{t('limits_table_valid_from')}</th>
+            <th>{t('limits_table_options')}</th>
           </tr>
         </thead>
         <tbody>

@@ -113,7 +113,7 @@ const LimitsModal = () => {
                   )}
                 </tbody>
               </Table>
-              <MaxBalanceTable />
+              <MaxBalanceTable currency={userCurrency} />
             </>
           ) : (
             <div className="d-flex h-100">
