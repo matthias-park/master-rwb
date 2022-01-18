@@ -16,11 +16,23 @@ const formStyles = css`
       background-color: ${props => props.theme.inputs.backgroundColor};
       color: ${props => props.theme.inputs.color};
     }
-    .form-control:not(.form-select) {
-      padding: ${props => props.theme.inputs.padding} !important;
+    .form-control:not(.form-select),
+    .form-control:not(textarea) {
+      padding: ${props => props.theme.inputs.padding};
     }
     .form-control:not(textarea) {
       height: ${props => props.theme.inputs.height}px !important;
+    }
+    textarea.form-control {
+      padding-right: 30px !important;
+      min-height: 70px;
+      & ~ .form-group__icons {
+        margin-right: 10px;
+      }
+      & + label {
+        background-color: ${props =>
+          props.theme.inputs.backgroundColor} !important;
+      }
     }
     .form-control {
       border: ${props => props.theme.inputs.border};
