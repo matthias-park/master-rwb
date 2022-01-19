@@ -841,7 +841,7 @@ const accountSettingsStyles = css`
     &.selected,
     &:active {
       .payment-method__img {
-        outline: 2px solid ${props => props.theme.colors.brand.main};
+        outline: ${props => props.theme.paymentMethods.activeOutline};
       }
     }
   }
