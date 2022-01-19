@@ -1,0 +1,208 @@
+.form-group {
+  margin-bottom: $spacing-3;
+  padding-top: $spacing-3;
+  $self: &;
+  &__error-msg {
+    font-size: $text-small;
+    color: $danger;
+  }
+  &__icons {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 8px;
+    display: flex;
+    align-items: center;
+    font-size: 25px;
+    border: 12px solid transparent;
+    border-right: 0;
+    i {
+      margin-left: $spacing-1;
+    }
+    .icon-eye-off {
+        color: $gray-100;
+        font-size: 25px;
+        cursor: pointer;
+        &.show {
+          &:before {
+            content: '\e943';
+          }
+        }
+    }
+    .icon-arrow-dropdown {
+      transform: rotate(0);
+      transition: transform $transition-main;
+      margin-left: 0;
+      &.open {
+        transform: rotate(180deg);
+      }
+    }
+    .icon-check {
+      color: $success;
+    }
+    .icon-exclamation {
+      color: $danger;
+    }
+    .icon-check,
+    .icon-exclamation {
+      width: 0;
+      opacity: 0;
+      margin-left: 0;
+      transition: none;
+    }
+  }
+  &.success {
+    #{ $self }__icons {
+        .icon-check {
+          width: auto;
+          opacity: 1;
+          margin-left: $spacing-1;
+          transition: opacity $transition-mid;
+        }
+    }
+  }
+  &.has-error {
+    .form-control-wrp {
+      label,
+      input {
+        color: $danger;
+      }
+    }
+    #{ $self }__icons {
+        .icon-exclamation {
+          width: auto;
+          opacity: 1;
+          margin-left: $spacing-1;
+          transition: opacity $transition-mid;
+        }
+    }
+  }
+  .form-control-wrp {
+    position: relative;
+    label {
+      position: absolute;
+      bottom: 100%;
+      font-size: $font-size-sm;
+      color: $white-opacity-high;
+    }
+  }
+  .form-control {
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}
+
+.custom-control {
+    margin-top: $spacing-2;
+    &-label::before {
+      border-radius: unset;
+    }
+}
+
+.form-check {
+    margin-top: $spacing-2;
+    .form-check-input {
+        filter: invert(90%) hue-rotate(112deg) brightness(1.7);
+        transform: scale(1.5);
+        margin-top: 6px;
+        margin-left: -17px;
+    }
+    label   {
+        margin-left: 10px;
+        font-size: $font-size-sm;
+    }
+}
+
+.custom-form-select {
+  width: 100%;
+  $self: &;
+  &__toggle {
+    cursor: pointer;
+    .form-control {
+      display: flex;
+      align-items: center;
+    }
+    &.active {
+      .form-control {
+        border-color: $tertiary;
+      }
+    }
+  }
+  &__menu {
+    width: 100%;
+    padding-left: 0;
+    background-color: $gray-800;
+    border-radius: $border-radius-sm;
+    margin: 5px 0;
+    box-shadow: $box-shadow;
+    opacity: 0;
+    transition: none;
+    z-index: 1;
+    &.show {
+      opacity: 1;
+      transition: opacity $transition-main;
+    }
+    &-item {
+      position: relative;
+      list-style-type: none;
+      color: $white-opacity-mid;
+      padding: $spacing-2 $spacing-3;
+      font-size: $text-body;
+      transition: color $transition-main, background-color $transition-main;
+      cursor: pointer;
+      $self: &;
+      &:before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        border-bottom: 1px solid $gray-700;
+        transition: border-bottom $transition-main;
+      }
+      &:hover,
+      &:focus {
+        color: $white-opacity-high;
+        background-color: $gray-700;
+        border-radius: $border-radius-sm;
+        transform: translateY(-1px);
+        &:before {
+          bottom: -1px;
+          border-color: $gray-800;
+        }
+        #{ $self}-text {
+          display: inline-block;
+          transform: translateY(1px);
+        }
+      }
+    }
+    li:last-of-type {
+      &:before {
+        border-bottom: none;
+      }
+    }
+  }
+  .has-error {
+    .form-control {
+      color: $danger;
+    }
+  }
+}
+
+.form-controls-group {
+  &__title {
+    font-size: $text-body;
+    margin-bottom: $spacing-sm;
+  }
+  &__content {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    grid-gap: $spacing-1;
+  }
+  .form-group {
+    padding-top: 0;
+  }
+}

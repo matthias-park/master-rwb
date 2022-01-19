@@ -447,6 +447,7 @@ export const Franchise = {
   xCasino: Config.name === FranchiseNames.Xcasino,
   gnogaz: Config.name === FranchiseNames.Gnogaz,
   gnogon: Config.name === FranchiseNames.Gnogon,
+  xCasinoCom: Config.name === FranchiseNames.XcasinoCom,
 };
 
 export const REGEX_EXPRESSION = {

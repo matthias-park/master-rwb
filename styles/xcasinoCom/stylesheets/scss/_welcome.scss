@@ -1,0 +1,263 @@
+.welcome-page {
+  &__content {
+    padding-top: $spacing-5;
+    padding-bottom: $spacing-5;
+    @include media-breakpoint-down(lg) {
+      padding-top: $spacing-5;
+      padding-bottom: $spacing-5;
+    }
+    @include media-breakpoint-down(xs) {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.livedealer-welcome {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  background-color: $gray-800;
+  overflow: hidden;
+  @include media-breakpoint-up(xxxl) {
+    border-radius: $border-radius-mid;
+  }
+  @include media-breakpoint-down(lg) {
+    flex-direction: column;
+    background-color: $gray-900;
+  }
+  &__content {
+    flex-basis: 60%;
+    padding: $spacing-7 calc(#{ $spacing-7 } * 1.2);
+    padding-bottom: $spacing-3;
+    i {
+      font-size: 40px;
+      color: $primary;
+      vertical-align: sub;
+    }
+    &-title {
+      display: inline-block;
+      margin-left: $spacing-2;
+      margin-bottom: $spacing-3;
+      color: $gray-light-700;
+    }
+    &-text {
+      color: $white-opacity-high;
+      margin-bottom: $spacing-4;
+    }
+    @include media-breakpoint-down(xl) {
+      padding: $spacing-5;
+      flex-basis: 65%;
+    }
+    @include media-breakpoint-down(xs) {
+      padding: $spacing-2;
+      text-align: center;
+      &-title {
+        margin-bottom: $spacing-5;
+      }
+      &-text {
+        padding: 0 $spacing-3;
+      }
+    }
+  }
+  &__bg {
+    position: relative;
+    min-height: 170px;
+    &-img {
+      max-width: 100%;
+      @include media-breakpoint-down(lg) {
+        display: none;
+      }
+      @include media-breakpoint-down(xs) {
+        display: block;
+      }
+    }
+    &-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      bottom: 8%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      @include media-breakpoint-down(xs) {
+        bottom: 0;
+        width: 70%;
+      }
+      &-title {
+        margin-bottom: 50px;
+      }
+    }
+  }
+}
+
+.livedealer-categorie-games {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(100px, 230px));
+  grid-gap: 15px;
+  padding-left: 0;
+  @include media-breakpoint-down(lg) {
+    grid-template-columns: repeat(4, minmax(100px, 230px));
+  }
+  &__item {
+    list-style-type: none;
+    img {
+      border-radius: $border-radius;
+      max-width: 100%;
+    }
+  }
+}
+
+.round-link-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  width: 100%;
+  @include media-breakpoint-down(lg) {
+    justify-content: space-between;
+  }
+  &__item {
+    list-style-type: none;
+    flex-basis: 25%;
+    $self: &;
+    @include media-breakpoint-down(xs) {
+      min-width: 50%;
+      margin-bottom: $spacing-6;
+    }
+    &-wrp {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    &-icon {
+      position: relative;
+      color: $white-opacity-high;
+      font-size: 50px;
+      transition: color $transition-main;
+      @include media-breakpoint-down(xl) {
+        font-size: 35px;
+      }
+      @include media-breakpoint-down(xs) {
+        font-size: 50px;
+      }
+      &:after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateY(-50%) translateX(-50%);
+        width: 95px;
+        height: 95px;
+        background-color: $primary-light;
+        border-radius: 50%;
+        z-index: -1;
+        transition: background-color $transition-main;
+        @include media-breakpoint-down(xl) {
+          width: 70px;
+          height: 70px;
+        }
+        @include media-breakpoint-down(xs) {
+          width: 90px;
+          height: 90px;
+          background-color: $secondary;
+        }
+      }
+    }
+    &-title {
+      color: $gray-light-700;
+      margin-top: 25px;
+      @include media-breakpoint-down(xl) {
+        font-size: $font-size-base;
+      }
+    }
+    &:hover,
+    &:active {
+      #{ $self }-icon {
+        color: $primary-light;
+        &:after {
+          background-color: $white-opacity-mid;
+        }
+      }
+    }
+  }
+}
+
+.welcome-jackpot {
+  padding: $spacing-7;
+  margin-top: $spacing-5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @include media-breakpoint-down(xl) {
+    padding: $spacing-5;
+  }
+  @include media-breakpoint-down(lg) {
+    margin-top: 0;
+  }
+  @include media-breakpoint-down(sm) {
+    padding: $spacing-5 $spacing-2;
+  }
+  .casino-group-slider {
+    width: calc(100% + #{ $spacing-7 });
+    align-self: flex-start;
+    @include media-breakpoint-up(xxxxl) {
+      width: 100%;
+    }
+    @include media-breakpoint-down(xl) {
+      width: calc(100% + #{ $spacing-5 });
+    }
+    @include media-breakpoint-down(sm) {
+      width: calc(100% + #{ $spacing-2 });
+    }
+  }
+  &__title {
+    color: $gray-light-700;
+    @include media-breakpoint-down(sm) {
+      font-size: calc(#{ $font-size-base } * 1.75);
+    }
+  }
+  &__sub {
+    color: #83ADB9;
+    margin-bottom: 0;
+    @include media-breakpoint-down(sm) {
+      font-size: $h5-font-size;
+    }
+  }
+  &__highlight {
+    font-size: 4.5vw;
+    color: $primary-light;
+    margin-top: $spacing-1;
+    margin-bottom: $spacing-6;
+    @include media-breakpoint-up(xxxxl) {
+      font-size: 90px;
+    }
+    @include media-breakpoint-down(sm) {
+      font-size: 7vw;
+      margin-bottom: $spacing-3;
+    }
+  }
+  &__games {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 10px;
+    @include media-breakpoint-up(xxxl) {
+      grid-template-columns: repeat(8, 1fr);
+    }
+    @include media-breakpoint-down(xxlg) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+    @include media-breakpoint-down(xl) {
+      grid-template-columns: repeat(5, 1fr);
+    }
+    @include media-breakpoint-down(lg) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    @include media-breakpoint-down(sm) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media only screen and (max-width: 414.98px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}

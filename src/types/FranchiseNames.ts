@@ -5,4 +5,5 @@ export enum FranchiseNames {
   Xcasino = 'xcasino',
   Gnogaz = 'gnogaz',
   Gnogon = 'gnogon',
+  XcasinoCom = 'xcasinoCom',
 }

@@ -1,0 +1,200 @@
+.nav-blocks-wrp {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: $spacing-1;
+}
+
+.nav-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: $border-radius-mid;
+  background-color: $gray-700;
+  padding: $spacing-2;
+  transition: background-color $transition-main;
+  cursor: pointer;
+  $self: &;
+  &__icon {
+    font-size: 40px;
+    color: $white;
+    margin-bottom: $spacing-1;
+  }
+  &__title {
+    font-size: $text-body;
+    color: $white-opacity-high;
+  }
+  &:hover,
+  &:active, 
+  &.active {
+    background-color: $gray-300;
+  }
+}
+
+.vr-nav {
+  display: flex;
+  flex-direction: column;
+  padding-left: $spacing-1;
+  $self: &;
+  &__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    transition: background-color $transition-main;
+    height: 48px;
+    margin: 1px 0;
+    cursor: pointer;
+    z-index: 1;
+    $item: &;
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: calc((#{ $spacing-1 } + #{ $spacing-2 }) * -1);
+      height: 100%;
+      width: calc(100% + #{ $spacing-1 } + ( 2 * #{ $spacing-2 }));
+      background-color: $tertiary;
+      z-index: -1;
+      opacity: 0;
+      border-radius: $border-radius-sm;
+      transition: opacity $transition-main;
+    }
+    &-icon {
+      font-size: 22px;
+      margin-right: $spacing-2;
+      color: $white;
+    }
+    &-title {
+      color: $white;
+    }
+    &:hover,
+    &:active,
+    &.active {
+      &:before {
+        opacity: 1;
+      }
+    }
+  }
+  &--dark {
+    #{ $self }__item {
+      font-size: $text-body;
+      &-icon {
+        color: $white-opacity-mid;
+        transition: color $transition-main;
+      }
+      &-title {
+        color: $white-opacity-mid;
+        transition: color $transition-main;
+      }
+      &:hover,
+      &:active,
+      &.active {
+        #{ $self }__item-icon {
+          color: $white;
+        }
+        #{ $self }__item-title {
+          color: $white;
+        }
+      }
+    }
+  }
+}
+
+.filters-nav {
+  &__dropdown {
+    padding-left: 0;
+    max-height: 30px;
+    overflow: hidden;
+    transition: max-height $transition-main;
+    cursor: pointer;
+    $self: &;
+    &-title {
+      position: relative;
+      display: flex;
+      align-items: center;
+      font-size: $text-body;
+      color: $white-opacity-mid;
+      &:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%);
+        width: calc(100% + 20px);
+        height: calc(100% + 20px);
+      }
+      i {
+        font-size: 22px;
+        transition: color $transition-main;
+      }
+      &-arrow {
+        margin-left: auto;
+      }
+      &:hover,
+      &:focus {
+        i {
+          color: $white-opacity-high;
+        }
+      }
+    }
+    &-menu {
+      position: relative;
+      padding: $spacing-2 $spacing-6;
+      margin-top: $spacing-1;
+      &:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: $spacing-2;
+        height: 90%;
+        border-left: 1px solid $white-opacity-low;
+      }
+      &-item {
+        position: relative;
+        list-style-type: none;
+        font-size: $text-body;
+        color: $white-opacity-mid;
+        padding: $spacing-2 0;
+        cursor: pointer;
+        transition: color $transition-main;
+        &:before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -$spacing-4;
+          bottom: 0;
+          border-left: 6px solid transparent;
+          transition: border $transition-main;
+        }
+        &.active,
+        &:hover,
+        &:focus {
+          color: $white-opacity-high;
+          &:before {
+            border-left: 6px solid $tertiary;
+          }
+        }
+        &:hover,
+        &:focus {
+          &:before {
+            border-left: 6px solid $primary;
+          }
+        }
+      }
+    }
+    &.show {
+      max-height: 500px;
+      #{ $self }-title {
+        color: $primary;
+        i {
+          color: $tertiary;
+        }
+        &-arrow {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+}

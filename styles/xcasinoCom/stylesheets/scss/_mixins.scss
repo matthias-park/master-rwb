@@ -1,0 +1,60 @@
+@mixin footer-full-bg($spacing) {
+  left: -$spacing;
+  width: calc(100% + #{$spacing * 2});
+  padding: $spacing-5 $spacing;
+}
+
+@mixin game-ribbon-color($color) {
+  span {
+    background-color: $color;
+    &:before {
+      border-left: 3px solid darken($color, 20%);
+      border-top: 3px solid darken($color, 20%);
+    }
+    &:after {
+      border-right: 3px solid darken($color, 20%);
+      border-top: 3px solid darken($color, 20%);
+    }
+  }
+}
+
+@mixin scrollbar-invisible {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@mixin bg-image-card($bg-color) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $bg-color;
+  padding: calc(#{ $spacing-1 } * 1.5) 0;
+  min-height: 80px;
+  border-radius: 0.35rem;
+  max-width: 195px;
+  transition: background-color $transition-main;
+  &:hover,
+  &.active {
+    background-color: darken($bg-color, 5%);
+  }
+  @include media-breakpoint-down(xs) {
+    padding: $spacing-1 0;
+  }
+  img {
+    max-width: 120px;
+    @include media-breakpoint-down(xs) {
+      max-width: 100px;
+    }
+  }
+}
+
+@mixin absolute-full {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
