@@ -70,7 +70,8 @@ export const StyledContainer = styled(Dropdown)`
     transform: translateX(-50%) !important;
     top: calc(100% + 15px) !important;
     padding: 0;
-    background-color: #fafafa;
+    background-color: ${props => props.theme.modals.bgColor};
+    color: ${props => props.theme.modals.color};
     text-align: center;
     padding-bottom: 0;
     z-index: 1100;
@@ -84,6 +85,9 @@ export const StyledContainer = styled(Dropdown)`
         overflow-y: auto;
       }
     }
+    div {
+      border-color: ${props => props.theme.modals.borderColor};
+    }
     &:after {
       content: '';
       position: absolute;
@@ -93,7 +97,8 @@ export const StyledContainer = styled(Dropdown)`
       height: 0;
       border-left: 8px solid transparent;
       border-right: 8px solid transparent;
-      border-bottom: 8px solid ${props => props.theme.colors.gray.custom_300};
+      border-bottom: 8px solid ${props => props.theme.modals.bgColor};
+      color: ${props => props.theme.modals.color};
       border-radius: 2px;
       ${mediaBreakpointDown('lg')} {
         right: 13.5%;
