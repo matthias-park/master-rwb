@@ -342,11 +342,15 @@ const WithdrawalPage = () => {
               onSubmit={requestWithdrawal}
               disabled={!selectedBankAccount || !kycValidationOkay}
               currency={user.currency}
-              quickAmounts={
-                Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
-                  ? [10, 20, 50, 100]
-                  : []
-              }
+              quickAmounts={(() => {
+                if (Franchise.desertDiamond || Franchise.gnogon) {
+                  return [10, 20, 50, 100];
+                } else if (Franchise.gnogaz) {
+                  return [15, 20, 50, 100];
+                } else {
+                  return [];
+                }
+              })()}
             />
           </div>
           {!!data.Data.requests && (
