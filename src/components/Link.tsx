@@ -8,6 +8,8 @@ const Link: typeof RouterLink = React.forwardRef((props, ref) => {
     return (
       <a
         href={props.to.toString()}
+        target={props.target}
+        rel={props.rel}
         ref={ref}
         {...props}
         onClick={e => props.onClick?.(e)}

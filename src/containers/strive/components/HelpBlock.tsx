@@ -15,8 +15,7 @@ const HelpBlock = ({
   className?: string;
 }) => {
   const { t, jsxT } = useI18n();
-  const faqPagePath =
-    'https://support.betsson.com/en?_gl=1*1wigboh*_ga*NjIyMzU0NjY2LjE2MjI4OTIxNDg.*_ga_BBLKWV84WH*MTYyNzUzNjM0NC43NS4xLjE2Mjc1NDUxNTAuMA';
+  const faqPagePath = useRoutePath(PagesName.FaqPage);
   const contactUsPagePath = useRoutePath(PagesName.ContactUsPage);
 
   if (Franchise.desertDiamond || Franchise.gnogaz) return null;
@@ -25,10 +24,10 @@ const HelpBlock = ({
       {title && <p className="help-block__title">{t(title)}</p>}
       <div className="help-block__body">
         {blocks.includes('faq') && (
-          <a
-            href={faqPagePath}
-            target="_blank"
+          <Link
+            to={faqPagePath}
             rel="noreferrer"
+            target="_blank"
             className="help-block__body-item"
           >
             <span className="help-block__body-item-icon">
@@ -37,7 +36,7 @@ const HelpBlock = ({
             <div className="help-block__body-item-text">
               <p className="title">{jsxT('help_check_faq')}</p>
             </div>
-          </a>
+          </Link>
         )}
         {blocks.includes('phone') && (
           <div className="help-block__body-item">

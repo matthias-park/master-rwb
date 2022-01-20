@@ -78,7 +78,8 @@ const TemplatePage = () => {
   }
 
   const pageTitle =
-    data?.Data?.structure?.content?.[0]?.standart?.page_title?.value;
+    data?.Data?.structure?.content?.[0]?.standart?.page_title?.value ||
+    data?.Data?.structure?.content?.[0]?.section?.page_title?.value;
 
   return (
     <>
@@ -112,7 +113,7 @@ const TemplatePage = () => {
         (Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon ? (
           <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
             <h1 className="account-settings__title">{pageTitle}</h1>
-            <div className="outer-info-block">
+            <div className="outer-info-block mb-3">
               {data.Data.structure.content.slice(1).map((el, index) => (
                 <div className="mb-3">
                   {!!el.section?.section_title?.value && (
