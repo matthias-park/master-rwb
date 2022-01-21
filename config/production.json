@@ -753,7 +753,7 @@
             "hover": "#0790bf"
           },
           "brand": {
-            "main": "#222",
+            "main": "#FFDC3E",
             "light": "#444",
             "text": "#fff",
             "hover": "#bfbfbf"
@@ -785,7 +785,7 @@
           "footerMainBottomPadding": 0,
           "footerPrePadding": 0,
           "settingsBodyPadding": "30px 15px",
-          "settingsMarginTop": 15
+          "settingsMarginTop": 0
         },
         "buttons": {
           "borderRadius": 3,
@@ -854,8 +854,8 @@
           "titleColor": "#FFDC3E"
         },
         "registration": {
-          "width": 480,
-          "left": "-5%",
+          "width": 520,
+          "left": "0",
           "borderRadius": 4,
           "boxShadow": "0px 4px 4px rgba(5, 27, 53, 0.1)",
           "bgImg": "/assets/images/container-bg-img.png",
@@ -982,10 +982,11 @@
           "quickColor": "#fff",
           "quickFontWeight": 700,
           "quickBorder": "none",
-          "quickBg": "#444444"
+          "quickBg": "#444444",
+          "quickBorderColor": "#FFDC3E"
         },
         "paymentMethods": {
-          "inRow": 4,
+          "inRow": 5,
           "padding": "25px 40px",
           "textAlign": "left",
           "border": "1px solid #E6ECF1",
@@ -996,7 +997,8 @@
           "titleMargin": "0 0 15px 0",
           "subTextMargin": "0 0 16px 0",
           "minHeight": "calc(100vh - 556px)",
-          "marginTop": -20
+          "marginTop": -20,
+          "containerMaxWidth": 1150
         },
         "dateFilter": {
           "padding": "0",

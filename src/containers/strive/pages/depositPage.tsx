@@ -71,6 +71,13 @@ const DepositPage = () => {
     [t],
   );
 
+  const validatorNotOk = [
+    KYC_VALIDATOR_STATUS.CanPlayAndShouldUpdatePersonalData,
+    KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataOnly,
+    KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataLimitedAttempts,
+    KYC_VALIDATOR_STATUS.ShouldUploadDocumentForKyc,
+  ].includes(user.validator_status || 0);
+
   const handleRequestDeposit = useCallback(
     async (depositValue: number, bankId: number) => {
       setApiError(null);
@@ -219,7 +226,13 @@ const DepositPage = () => {
         </>
       ),
     };
+  } else if (Franchise.gnogaz && validatorNotOk) {
+    alertMessage = {
+      variant: 'danger',
+      msg: t('deposit_page_unverified_message'),
+    };
   }
+
   const depositFrame = useMemo(() => {
     if (!customHtml) return null;
     if (customHtml.iframe)
@@ -283,7 +296,8 @@ const DepositPage = () => {
             user.validator_status ===
               KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataOnly ||
             depositStatus.depositStatus === DepositStatus.Pending ||
-            depositDataLoading
+            depositDataLoading ||
+            (Franchise.gnogaz && validatorNotOk)
           }
           loading={depositLoading}
           setApiError={setApiError}

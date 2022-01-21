@@ -117,7 +117,7 @@ const buttonStyles = css`
       background-color: ${props => props.theme.colors.white.main} !important;
       color: ${props =>
         Franchise.gnogaz || Franchise.gnogon
-          ? props.theme.colors.brand.main
+          ? props.theme.colors.secondary.main
           : props.theme.colors.brand.text} !important;
     }
   }

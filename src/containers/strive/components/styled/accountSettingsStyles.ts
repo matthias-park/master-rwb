@@ -12,8 +12,9 @@ const accountSettingsStyles = css`
     color: ${props => props.theme.colors.brand.text};
     background-color: ${props => props.theme.colors.body};
     min-height: ${props => props.theme.settingsPage?.minHeight} !important;
-    max-width: ${Franchise.desertDiamond ? 1450 : 1600}px;
-    @media only screen and (min-width: ${Franchise.desertDiamond
+    max-width: ${Franchise.desertDiamond || Franchise.gnogaz ? 1450 : 1600}px;
+    @media only screen and (min-width: ${Franchise.desertDiamond ||
+      Franchise.gnogaz
         ? 1450
         : 1600}px) {
       margin: 0 auto;
@@ -105,7 +106,9 @@ const accountSettingsStyles = css`
     li:not(:first-of-type) {
       margin-left: 6%;
     }
-    ${mediaBreakpointDown(Franchise.desertDiamond ? 'lg' : 'xxl')} {
+    ${mediaBreakpointDown(
+      Franchise.desertDiamond || Franchise.gnogaz ? 'lg' : 'xxl',
+    )} {
       flex-wrap: wrap;
       &__item {
         flex-basis: 50%;
@@ -663,7 +666,10 @@ const accountSettingsStyles = css`
       &.active {
         background-color: ${props => props.theme.inputContainer.quickColor};
         color: ${props => props.theme.inputContainer.quickBg};
-        outline: 2px solid ${props => props.theme.inputContainer.quickBg} !important;
+        outline: 2px solid
+          ${props =>
+            props.theme.inputContainer.quickBorderColor ||
+            props.theme.inputContainer.quickBg} !important;
       }
     }
   }

@@ -315,6 +315,7 @@ declare module 'styled-components' {
       quickFontWeight: number;
       quickBorder: string;
       quickBg?: string;
+      quickBorderColor?: string;
     };
     paymentMethods: {
       inRow: number;
