@@ -40,6 +40,7 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
   } | null>(null);
 
   const kycVerified = user.validator_status === KYC_VALIDATOR_STATUS.Success;
+  const excludeSSN = Franchise.desertDiamond && kycVerified;
 
   return (
     <Accordion
@@ -76,6 +77,10 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
       <div className="info-container__text">
         {data?.map((info, index) => {
           let text = '';
+          const id = info[0].value;
+          if (id === 'social_security_number' && excludeSSN) {
+            return null;
+          }
           if (typeof info === 'string') text = info;
           else if (Array.isArray(info))
             text = info
