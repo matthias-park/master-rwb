@@ -308,6 +308,17 @@ const blocks = (
             validate: value =>
               VALIDATIONS.name(value) || t('field_only_letters'),
           },
+          {
+            id: 'gender',
+            autoComplete: 'gender',
+            type: 'select',
+            required: true,
+            valueAs: (value: string) => value.toString(),
+            selectValues: [
+              { text: t('gender_male'), value: 'M' },
+              { text: t('gender_female'), value: 'F' },
+            ],
+          },
           !!smartyStreetsEnabled && {
             id: 'address',
             autoComplete: 'street-address',
