@@ -68,6 +68,8 @@ const useDepositResponseStatus = () => {
     postApi,
     {
       refreshInterval: 5000,
+      dedupingInterval: 1000,
+      focusThrottleInterval: 5000,
     },
   );
 
