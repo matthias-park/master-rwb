@@ -5,6 +5,8 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { RegistrationPostalCodeAutofill } from '../types/api/user/Registration';
 import { cleanPostBody } from '.';
 import * as Sentry from '@sentry/react';
+import { Status } from '@sentry/react';
+import { Transaction } from '@sentry/types';
 
 export const formatUrl = (
   url: string,
@@ -19,42 +21,60 @@ export const formatUrl = (
 interface GetApiOptions {
   responseText?: boolean;
   cache?: RequestCache;
+  sentryScope?: Transaction | null;
 }
 
-export const getApi = <T>(url: string, options?: GetApiOptions): Promise<T> => {
+export const getApi = <T>(
+  url: string,
+  options: GetApiOptions = {},
+): Promise<T> => {
   const config: RequestInit = {
     mode: 'cors',
     credentials: 'include',
-    cache: options?.cache,
+    cache: options.cache,
     headers: new Headers(),
   };
+  const currentSentryTransaction =
+    options.sentryScope || Sentry.getCurrentHub()?.getScope()?.getTransaction();
+  const httpSpan = currentSentryTransaction?.startChild({
+    op: 'http',
+    description: `GET ${url}`,
+  });
   const getUrl = url.startsWith('http')
     ? url
     : `${window.__config__.apiUrl}${url}`;
-  return fetch(getUrl, config).then(res => {
-    if (!res.ok && res.status !== 400) {
-      if (![401, 403].includes(res.status)) {
-        Sentry.captureMessage(
-          `Request failed ${url} with status ${res.status}`,
-          Sentry.Severity.Fatal,
-        );
-      } else {
-        mutate('/restapi/v1/user/status');
+  return fetch(getUrl, config)
+    .then(async res => {
+      httpSpan?.setTag('http.statusCode', res.status);
+      if (!res.ok && res.status !== 400) {
+        if (![401, 403].includes(res.status)) {
+          Sentry.captureMessage(
+            `Request failed ${url} with status ${res.status}`,
+            Sentry.Severity.Fatal,
+          );
+        } else {
+          mutate('/restapi/v1/user/status');
+        }
+        httpSpan?.setStatus(Status.Failed);
+        return Promise.reject<RailsApiResponse<null>>({
+          ...RailsApiResponseFallback,
+          Code: res.status,
+        });
       }
-      return Promise.reject<RailsApiResponse<null>>({
-        ...RailsApiResponseFallback,
-        Code: res.status,
-      });
-    }
-    if (options?.responseText) {
-      return res.text();
-    }
-    return res.json();
-  });
+      httpSpan?.setStatus(Status.Success);
+      if (options?.responseText) {
+        return res.text();
+      }
+      const json = await res.json();
+      httpSpan?.setTag('http.code', json.Code);
+      return json;
+    })
+    .finally(() => httpSpan?.finish());
 };
 
 export interface PostOptions {
   formData?: boolean;
+  sentryScope?: Transaction | null;
 }
 
 export const postApi = <T>(
@@ -89,26 +109,39 @@ export const postApi = <T>(
       (config.headers as Headers).append('Content-Type', 'application/json');
     }
   }
+  const currentSentryTransaction =
+    options.sentryScope || Sentry.getCurrentHub()?.getScope()?.getTransaction();
+  const httpSpan = currentSentryTransaction?.startChild({
+    op: 'http',
+    description: `POST ${url}`,
+  });
   const postUrl = url.startsWith('http')
     ? url
     : `${window.__config__.apiUrl}${url}`;
-  return fetch(postUrl, config).then(res => {
-    if (!res.ok && res.status !== 400) {
-      if (![401, 403].includes(res.status)) {
-        Sentry.captureMessage(
-          `Request failed ${url} with status ${res.status}`,
-          Sentry.Severity.Fatal,
-        );
-      } else {
-        mutate('/restapi/v1/user/status');
+  return fetch(postUrl, config)
+    .then(async res => {
+      httpSpan?.setTag('http.statusCode', res.status);
+      if (!res.ok && res.status !== 400) {
+        if (![401, 403].includes(res.status)) {
+          Sentry.captureMessage(
+            `Request failed ${url} with status ${res.status}`,
+            Sentry.Severity.Fatal,
+          );
+        } else {
+          mutate('/restapi/v1/user/status');
+        }
+        httpSpan?.setStatus(Status.Failed);
+        return Promise.reject<RailsApiResponse<null>>({
+          ...RailsApiResponseFallback,
+          Code: res.status,
+        });
       }
-      return Promise.reject<RailsApiResponse<null>>({
-        ...RailsApiResponseFallback,
-        Code: res.status,
-      });
-    }
-    return res.json();
-  });
+      const json = await res.json();
+      httpSpan?.setTag('http.code', json.Code);
+      httpSpan?.setStatus(Status.Success);
+      return json;
+    })
+    .finally(() => httpSpan?.finish());
 };
 
 export const SwrFetcherConfig: ConfigInterface<

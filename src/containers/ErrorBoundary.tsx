@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/react';
 
 interface Props {
   children: React.ReactNode;
-  fallback?: React.ReactNode;
+  fallback?: React.ReactElement;
 }
 
 const ErrorBoundary = ({ children, fallback }: Props) => (

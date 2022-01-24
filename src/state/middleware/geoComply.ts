@@ -15,6 +15,7 @@ import {
   setConnected,
   setError,
   setGeoAllowed,
+  setGeoInProgress,
   setGeoLocation,
   setLicense,
   setReady,
@@ -27,6 +28,7 @@ import UserStatus from '../../types/UserStatus';
 import { setLogout, setUser } from '../reducers/user';
 import { ProdEnv } from '../../constants';
 import * as Sentry from '@sentry/react';
+import { Span, Transaction, Status as SpanStatus } from '@sentry/types';
 
 const insertGeoComplyScript = async (): Promise<boolean> =>
   new Promise((resolve, reject) => {
@@ -41,6 +43,8 @@ const insertGeoComplyScript = async (): Promise<boolean> =>
     scriptElement.addEventListener('error', err => reject(err));
     document.head.appendChild(scriptElement);
   });
+
+let GeoValidationTransaction: Transaction | null = null;
 
 const fetchSetLicenseKey = (
   storeApi: MiddlewareAPI<Dispatch<AnyAction>, any>,
@@ -77,6 +81,9 @@ const fetchSetLicenseKey = (
       }
       getApi<RailsApiResponse<GeoComplyLicense>>(
         '/restapi/v1/geocomply/license',
+        {
+          sentryScope: GeoValidationTransaction,
+        },
       )
         .then(res => {
           if (res.Success && res.Data.License) {
@@ -87,20 +94,32 @@ const fetchSetLicenseKey = (
             }
           }
         })
-        .catch(err => Sentry.captureEvent(new Error(err)));
+        .catch(() => {});
     } else {
       setLicenseKey(license, expiresAt);
     }
   }
 };
 
-const clearGeoComplyValidation = () =>
-  postApi<RailsApiResponse<null>>('/restapi/v1/user/clear_geocomply', {})
-    .then(res => res.Success)
-    .catch(err => {
-      Sentry.captureEvent(new Error(err));
-      return false;
+const clearGeoComplyValidation = () => {
+  if (!GeoValidationTransaction) {
+    GeoValidationTransaction = Sentry.startTransaction({
+      name: 'geoComply validation',
     });
+    Sentry.getCurrentHub().configureScope(scope =>
+      scope.setSpan(GeoValidationTransaction!),
+    );
+  }
+  postApi<RailsApiResponse<null>>(
+    '/restapi/v1/user/clear_geocomply',
+    {},
+    {
+      sentryScope: GeoValidationTransaction,
+    },
+  )
+    .then(res => res.Success)
+    .catch(() => false);
+};
 
 const licenseKeyErrorCodes = [
   GeoComplyErrorCodes.CLNT_ERROR_LICENSE_EXPIRED,
@@ -108,11 +127,13 @@ const licenseKeyErrorCodes = [
   GeoComplyErrorCodes.CLNT_ERROR_CLIENT_LICENSE_UNAUTHORIZED,
 ];
 
+let geoComplyValidationSentrySpan: Span | null = null;
 let revalidateTimeout: number | null = null;
 type actionFunction = (
   storeApi: MiddlewareAPI<Dispatch<AnyAction>, any>,
   actionPayload: any,
 ) => void;
+
 const actions: {
   [key: string]: {
     before?: actionFunction;
@@ -163,6 +184,16 @@ const actions: {
                       );
                     }
                   }
+                  if (geoComplyValidationSentrySpan) {
+                    geoComplyValidationSentrySpan.setTag(
+                      'geoComply.code',
+                      code,
+                    );
+                    geoComplyValidationSentrySpan.finish();
+                    GeoValidationTransaction?.setStatus(SpanStatus.Failed);
+                    GeoValidationTransaction?.finish();
+                    GeoValidationTransaction = null;
+                  }
                   if (!licenseKeyErrorCodes.includes(code)) {
                     dispatch(setError(code));
                   }
@@ -170,6 +201,10 @@ const actions: {
                 .on('geolocation', geoLocation => {
                   if (!ProdEnv) {
                     console.log('geoComply got geo-location hash');
+                  }
+                  if (geoComplyValidationSentrySpan) {
+                    geoComplyValidationSentrySpan.setTag('geoComply.code', 0);
+                    geoComplyValidationSentrySpan.finish();
                   }
                   dispatch(setGeoLocation(geoLocation));
                 });
@@ -203,6 +238,9 @@ const actions: {
         {
           text: actionPayload,
         },
+        {
+          sentryScope: GeoValidationTransaction,
+        },
       )
         .then(res => {
           if (
@@ -222,6 +260,7 @@ const actions: {
               dispatch(setError(res.Data.Code));
             }
           }
+          GeoValidationTransaction?.setStatus(SpanStatus.Success);
           dispatch(
             setGeoAllowed({
               isGeoAllowed: res?.Data.Code === GeoComplyValidateCodes.Ok,
@@ -229,7 +268,13 @@ const actions: {
             }),
           );
         })
-        .catch(err => Sentry.captureEvent(new Error(err)));
+        .catch(() => {})
+        .finally(() => {
+          if (GeoValidationTransaction) {
+            GeoValidationTransaction.finish();
+            GeoValidationTransaction = null;
+          }
+        });
     },
   },
   [setGeoAllowed.toString()]: {
@@ -350,8 +395,17 @@ const actions: {
       }
     },
   },
+  [setGeoInProgress.toString()]: {
+    before: () => {
+      if (GeoValidationTransaction) {
+        geoComplyValidationSentrySpan = GeoValidationTransaction.startChild({
+          op: 'geoComply',
+          description: `get location hash`,
+        });
+      }
+    },
+  },
 };
-
 const geoComplyMiddleware: Middleware = storeApi => next => action => {
   const middlewareAction = actions[action.type];
   if (middlewareAction?.before) {
@@ -360,6 +414,32 @@ const geoComplyMiddleware: Middleware = storeApi => next => action => {
   const result = next(action);
   if (middlewareAction?.after) {
     middlewareAction.after(storeApi, action.payload);
+  }
+  const state = storeApi.getState() as RootState;
+  if (
+    !GeoValidationTransaction &&
+    state.geoComply.isConnected &&
+    state.geoComply.validationReason
+  ) {
+    GeoValidationTransaction = Sentry.startTransaction({
+      name: 'geoComply validation',
+      tags: {
+        'geoComply.reason': state.geoComply.validationReason,
+      },
+    });
+    Sentry.getCurrentHub().configureScope(scope =>
+      scope.setSpan(GeoValidationTransaction!),
+    );
+  } else if (
+    GeoValidationTransaction &&
+    state.geoComply.isConnected &&
+    !GeoValidationTransaction.tags['geoComply.reason'] &&
+    state.geoComply.validationReason
+  ) {
+    GeoValidationTransaction.setTag(
+      'geoComply.reason',
+      state.geoComply.validationReason,
+    );
   }
   return result;
 };

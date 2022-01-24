@@ -13,7 +13,6 @@ import { getApi, postApi } from '../utils/apiUtils';
 import useGTM from './useGTM';
 import { useConfig } from './useConfig';
 import { isMobile } from 'react-device-detect';
-import { setUser as sentrySetUser } from '@sentry/react';
 import { ConfigLoaded } from '../types/Config';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { setLogout, setLogin, setUser } from '../state/reducers/user';
@@ -139,9 +138,6 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
   );
   useEffect(() => {
     if (!user.loading && configLoaded === ConfigLoaded.Loaded) {
-      if (user.logged_in && user.id) {
-        sentrySetUser({ id: user.id.toString() });
-      }
       sendDataToGTM({
         'tglab.user.GUID': user.id,
         'tglab.user.LoginStatus': user.logged_in ? 'LoggedIn' : 'LoggedOut',

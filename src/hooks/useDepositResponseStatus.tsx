@@ -14,8 +14,11 @@ import { useAuth } from './useAuth';
 import { useI18n } from './useI18n';
 import useLocalStorage from './useLocalStorage';
 import * as Sentry from '@sentry/react';
+import { Transaction, Status as SpanStatus } from '@sentry/types';
+import RequestReturn from '../types/api/deposits/RequestReturn';
 
 const postUrl = '/restapi/v1/deposits/status';
+let DepositStatusTransaction: Transaction | null = null;
 
 const useDepositResponseStatus = () => {
   const { jsxT } = useI18n();
@@ -74,14 +77,32 @@ const useDepositResponseStatus = () => {
   );
 
   useEffect(() => {
+    if (!DepositStatusTransaction && bankId) {
+      DepositStatusTransaction = Sentry.startTransaction({
+        name: 'deposit status check',
+        tags: {
+          'deposit.bank': bankId,
+          'deposit.requestId': id,
+        },
+      });
+      Sentry.getCurrentHub().configureScope(scope =>
+        scope.setSpan(DepositStatusTransaction!),
+      );
+    }
     if (bankId && queryParams && Object.keys(queryParams).length) {
-      postApi<RailsApiResponse<null>>('/restapi/v1/deposits/request_return', {
-        bank_id: bankId.toString(),
-        data: JSON.stringify({
-          ...queryParams,
-          depositRequestId: id,
-        }),
-      })
+      postApi<RailsApiResponse<RequestReturn>>(
+        '/restapi/v1/deposits/request_return',
+        {
+          bank_id: bankId.toString(),
+          data: JSON.stringify({
+            ...queryParams,
+            depositRequestId: id,
+          }),
+        },
+        {
+          sentryScope: DepositStatusTransaction,
+        },
+      )
         .then(res => {
           if (res.Success) {
             history.replace({
@@ -169,6 +190,14 @@ const useDepositResponseStatus = () => {
         if (status === DepositStatus.Confirmed) newDepositPath = 'success';
         if (status === DepositStatus.Rejected) newDepositPath = 'rejected';
         if (status === DepositStatus.Canceled) newDepositPath = 'canceled';
+        if (DepositStatusTransaction) {
+          DepositStatusTransaction.setTag('deposit.status', status);
+          DepositStatusTransaction.setStatus(
+            newDepositPath === 'error' ? SpanStatus.Failed : SpanStatus.Success,
+          );
+          DepositStatusTransaction.finish();
+          DepositStatusTransaction = null;
+        }
         setId(null);
         setBankId(null);
         const newPathname = pathname.replace(bankResponse, newDepositPath);

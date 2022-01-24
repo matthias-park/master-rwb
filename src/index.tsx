@@ -7,12 +7,26 @@ import { Config, DevEnv } from './constants';
 import createStoreAsync from './state';
 import StateProvider from './containers/StateProvider';
 import { setDomLoaded } from './state/reducers/config';
+import { Integrations as TracingIntegrations } from '@sentry/tracing';
 
 if (!DevEnv && Config.sentryDsn) {
   Sentry.init({
     dsn: Config.sentryDsn,
     environment: process.env.TARGET_ENV,
     release: process.env.RELEASE ? `react@${process.env.RELEASE}` : undefined,
+    integrations: [
+      new TracingIntegrations.BrowserTracing({
+        tracingOrigins: [Config.apiUrl],
+      }),
+    ],
+    tracesSampler: samplingContext => {
+      if (samplingContext.transactionContext.op === 'navigation') {
+        return 0.05;
+      } else if (samplingContext.transactionContext) {
+        return 0.8;
+      }
+      return 0.3;
+    },
     beforeSend(event, hint) {
       if (hint?.originalException === 'Timeout') return null;
       const originalException = hint?.originalException?.toString();

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import UserStatus, { NET_USER } from '../../types/UserStatus';
 import { clearUserLocalStorage } from '../../utils';
+import * as Sentry from '@sentry/react';
 
 const initialState: UserStatus = {
   logged_in: false,
@@ -22,6 +23,14 @@ export const userSlice = createSlice({
       if (state.logged_in !== action.payload.logged_in) {
         return action.payload;
       }
+      if (action.payload.id) {
+        Sentry.setUser({
+          id: action.payload.id?.toString(),
+        });
+      } else {
+        Sentry.configureScope(scope => scope.setUser(null));
+      }
+
       return {
         ...state,
         ...action.payload,
