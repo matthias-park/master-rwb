@@ -366,9 +366,11 @@ const LeftSidebar = () => {
           <div className={clsx('sidebar-left__header')}>
             <h3 className="brand-title mb-2">
               <Link to="/welcome" className="text-white">
-                <span className="d-block">Casino</span>
-                <span className="d-block">.com</span>
-                <span className="d-block">site</span>
+                <img
+                  alt="/"
+                  src="/assets/images/logo-white.svg"
+                  className="sidebar-left__logo"
+                ></img>
               </Link>
             </h3>
             <UserSection setCurrentMenu={setCurrentMenu} />
@@ -389,8 +391,11 @@ const LeftSidebar = () => {
                   {' '}
                   <h3 className="brand-title mb-2">
                     <Link to="/welcome" className="text-white">
-                      <span className="d-block">Casino</span>
-                      <span className="d-block">site</span>
+                      <img
+                        alt="/"
+                        src="/assets/images/logo-white.svg"
+                        className="sidebar-left__logo"
+                      ></img>
                     </Link>
                   </h3>
                   <UserSection setCurrentMenu={setCurrentMenu} />

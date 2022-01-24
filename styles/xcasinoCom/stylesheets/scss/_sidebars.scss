@@ -15,6 +15,10 @@
       box-shadow: $shadow-sidebar;
     }
   }
+  &__logo {
+    height: 100px;
+    margin: 15px 0;
+  }
   &__holder {
     position: sticky;
     top: 0;
