@@ -521,21 +521,6 @@ const blocks = (
             type: 'checkbox',
             required: true,
           },
-          {
-            id: 'correct_info_confirm',
-            type: 'checkbox',
-            required: true,
-          },
-          {
-            id: 'over_21_confirm',
-            type: 'checkbox',
-            required: true,
-          },
-          {
-            id: 'not_excluded_confirm',
-            type: 'checkbox',
-            required: true,
-          },
         ],
       },
     ];

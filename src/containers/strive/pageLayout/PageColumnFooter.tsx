@@ -5,6 +5,7 @@ import { useI18n } from '../../../hooks/useI18n';
 import Link from '../../../components/Link';
 import { Franchise, Config } from '../../../constants';
 import SessionTimer from '../../../components/SessionTimer';
+import clsx from 'clsx';
 
 const PageColumnFooter = () => {
   const { t } = useI18n();
@@ -78,7 +79,11 @@ const PageColumnFooter = () => {
         {(Franchise.gnogaz || Franchise.gnogon) && (
           <div className="footer-info__section partners">
             {footer?.rowFooterPartners?.map(partner => (
-              <Link key={partner.link} to={partner.link}>
+              <Link
+                key={partner.link}
+                to={partner.link}
+                target={clsx(partner.link.includes('https://') && '_blank')}
+              >
                 <img alt="partner" src={partner.image} />
               </Link>
             ))}
@@ -88,7 +93,11 @@ const PageColumnFooter = () => {
           {t('find_us_also')}
           <div className="footer-info__section-icons">
             {footer?.rowFooterSocials?.map(social => (
-              <Link key={social.link} to={social.link}>
+              <Link
+                key={social.link}
+                to={social.link}
+                target={clsx(social.link.includes('https://') && '_blank')}
+              >
                 <span className="icon">
                   <i className={social.icon}></i>
                 </span>

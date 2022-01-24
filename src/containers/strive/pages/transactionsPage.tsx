@@ -58,7 +58,7 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
               <tr>
                 <th>{t('_date')}</th>
                 <th>{t('action')}</th>
-                <th>{t('account')}</th>
+                {!Franchise.gnogaz && <th>{t('account')}</th>}
                 <th>{t('amount')}</th>
               </tr>
             </thead>
@@ -74,10 +74,12 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
                       <strong className="heading-sm">{t('action')}</strong>
                       {t(transaction.title)}
                     </td>
-                    <td>
-                      <strong className="heading-sm">{t('account')}</strong>
-                      {transaction.account_number || '-'}
-                    </td>
+                    {!Franchise.gnogaz && (
+                      <td>
+                        <strong className="heading-sm">{t('account')}</strong>
+                        {transaction.account_number || '-'}
+                      </td>
+                    )}
                     <td>
                       <strong className="heading-sm">{t('amount')}</strong>
                       <span className={clsx(transaction.in && 'text-success')}>
