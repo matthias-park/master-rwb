@@ -8,6 +8,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { Config } from '../constants';
 import { useLocation } from 'react-router';
 import { useConfig } from '../hooks/useConfig';
+import * as Sentry from '@sentry/react';
 
 enum SbtEventTypes {
   SetDeviceType = 'SBT_SET_DEVICE_TYPE',
@@ -39,7 +40,10 @@ interface sbState {
 const SBTechSportsbook = () => {
   const { user, signout } = useAuth();
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
-  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
+  const { locale, domLoaded } = useConfig(
+    (prev, next) =>
+      prev.locale === next.locale && prev.domLoaded === next.domLoaded,
+  );
   const { pathname, search, hash, key } = useLocation();
   const [iframeState, setIframeState] = useState<sbState>({
     loading: true,
@@ -94,7 +98,13 @@ const SBTechSportsbook = () => {
         const token = new URLSearchParams(url.search).get('stoken');
         return token || '';
       })
-      .catch(() => ''),
+      .catch(() => {
+        Sentry.captureMessage(
+          'API: no token for SbTech',
+          Sentry.Severity.Critical,
+        );
+        return '';
+      }),
   );
   const tokenLoading = !!sbTokenUrl && token == null && !error;
 
@@ -245,19 +255,21 @@ const SBTechSportsbook = () => {
           </div>
         </div>
       )}
-      <iframe
-        key={key}
-        title="sb"
-        width="100%"
-        ref={iframeRef}
-        onLoad={() => setIframeState(prev => ({ ...prev, loading: false }))}
-        height={iframeState.height}
-        className={clsx(
-          'sb-iframe min-vh-100',
-          iframeState.loading && 'd-none',
-        )}
-        src={`${Config.sbTechUrl}${pathname}${search}${hash}`}
-      />
+      {!!domLoaded && (
+        <iframe
+          key={key}
+          title="sb"
+          width="100%"
+          ref={iframeRef}
+          onLoad={() => setIframeState(prev => ({ ...prev, loading: false }))}
+          height={iframeState.height}
+          className={clsx(
+            'sb-iframe min-vh-100',
+            iframeState.loading && 'd-none',
+          )}
+          src={`${Config.sbTechUrl}${pathname}${search}${hash}`}
+        />
+      )}
       <ul className="sb-bottom-nav">
         {[
           {
