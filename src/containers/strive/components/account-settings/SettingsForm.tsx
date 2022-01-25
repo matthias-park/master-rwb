@@ -298,11 +298,17 @@ const FormFields = ({
                     useFormatted: true,
                   };
                 } else if (field.id === 'social_security_number') {
-                  if (field.default?.toString().length !== 9) {
+                  let format = '###-##-####';
+                  if (
+                    field.default.includes('*') &&
+                    !watch('social_security_number')
+                  ) {
+                    format = `###-##-${field.default.substring(5)}`;
+                  } else if (field.default?.toString().length !== 9) {
                     field.default = '';
                   }
                   masketInput = {
-                    format: `###-##-####`,
+                    format: format,
                     mask: '_',
                     allowEmptyFormatting: true,
                   };
@@ -400,6 +406,8 @@ const FormFields = ({
                   defaultValue={
                     field.default && translatableDefaultValues
                       ? t(field.default.toString())
+                      : field.id === 'social_security_number'
+                      ? ''
                       : field.default
                   }
                   maskedInput={masketInput}
