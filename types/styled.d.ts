@@ -343,7 +343,7 @@ declare module 'styled-components' {
       periodBorderRadius: number;
       dateInputBg: string;
       dateInputColor?: string;
-      dateInputBoder?: string;
+      dateInputBorder?: string;
       borderColor: string;
     };
     table: {

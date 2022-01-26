@@ -261,6 +261,62 @@ const formStyles = css`
     }
   }
 
+  .react-datepicker {
+    &__tab-loop {
+      .react-datepicker {
+        &__triangle {
+          border-bottom-color: ${props =>
+            props.theme.dateFilter.dateInputBg} !important;
+        }
+        &__navigation--next {
+          border-left-color: ${props => props.theme.colors.brand.main};
+        }
+        &__navigation--previous {
+          border-right-color: ${props => props.theme.colors.brand.main};
+        }
+        &__header,
+        &__month {
+          background-color: ${props => props.theme.dateFilter.dateInputBg};
+        }
+        &__header {
+          border-bottom: ${props => props.theme.dateFilter.dateInputBorder};
+        }
+        &__month {
+          margin: 0;
+          border-bottom-right-radius: 0.3rem;
+          border-bottom-left-radius: 0.3rem;
+        }
+        &__day {
+          color: ${props => props.theme.dateFilter.dateInputColor};
+          &--disabled {
+            color: ${props => props.theme.colors.secondary.main};
+          }
+          &--selected {
+            background-color: ${props => props.theme.colors.primary.main};
+            color: ${props => props.theme.colors.brand.light};
+            &:hover {
+              color: ${props => props.theme.dateFilter.dateInputColor};
+            }
+          }
+          &:hover:not(&--disabled) {
+            background-color: ${props => props.theme.colors.secondary.light};
+          }
+        }
+        &__triangle {
+          left: 15% !important;
+        }
+        &__current-month,
+        &__day-name {
+          color: ${props => props.theme.dateFilter.dateInputColor};
+          background-color: ${props => props.theme.dateFilter.dateInputBg};
+        }
+        &-popper {
+          z-index: 3;
+        }
+      }
+    }
+  }
+
   .custom-file {
     &-label {
       background-color: ${props => props.theme.customFileInput.backgroundColor};
