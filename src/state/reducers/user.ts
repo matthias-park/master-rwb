@@ -43,6 +43,7 @@ export const userSlice = createSlice({
       return {
         id: action.payload.PlayerId,
         balance: action.payload.Balance,
+        canPlay: action.payload.CanPlay,
         logged_in: true,
         loading: false,
         name: action.payload.Login,

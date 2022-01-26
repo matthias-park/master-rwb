@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import GenericModal from './GenericModal';
 import { useI18n } from '../../../../hooks/useI18n';
@@ -10,6 +10,7 @@ import { useModal } from '../../../../hooks/useModal';
 import { useAuth } from '../../../../hooks/useAuth';
 import Link from '../../../../components/Link';
 import { useRoutePath } from '../../../../hooks/index';
+import CanPlayStatus from '../../../../types/api/user/CanPlayStatus';
 
 const ResponsibleGamblingModal = () => {
   const { user } = useAuth();
@@ -43,6 +44,26 @@ const ResponsibleGamblingModal = () => {
     PagesName.ResponsibleGamingPage,
     true,
   );
+  const titleTranslation = useMemo(() => {
+    if (user.canPlay === CanPlayStatus.RegulatoryExcluded) {
+      return t('responsible_gambling_title_regulatory_excluded');
+    }
+    return t('responsible_gambling_title');
+  }, [t, user.canPlay]);
+  const bodyTranslation = useMemo(() => {
+    if (user.canPlay === CanPlayStatus.RegulatoryExcluded) {
+      return jsxT('responsible_gambling_body_regulatory_excluded', {
+        onClick: hideModal,
+      });
+    }
+    return jsxT('responsible_gambling_body', { onClick: hideModal });
+  }, [jsxT, user.canPlay]);
+  const closeBtnTranslation = useMemo(() => {
+    if (user.canPlay === CanPlayStatus.RegulatoryExcluded) {
+      return t('responsible_gambling_close_regulatory_excluded');
+    }
+    return t('responsible_gambling_close');
+  }, [t, user.canPlay]);
 
   return (
     <GenericModal
@@ -58,10 +79,10 @@ const ResponsibleGamblingModal = () => {
           onClick: hideModal,
         })}
       </div>
-      <h2 className="mb-3 mt-4">{t('responsible_gambling_title')}</h2>
-      <p>{jsxT('responsible_gambling_body', { onClick: hideModal })}</p>
+      <h2 className="mb-3 mt-4">{titleTranslation}</h2>
+      <p>{bodyTranslation}</p>
       <Button onClick={hideModal} variant="primary" className="mx-auto mt-4">
-        {t('responsible_gambling_close')}
+        {closeBtnTranslation}
       </Button>
       <div className="custom-modal__footer">
         <div className="custom-modal__footer-bnl mx-auto">

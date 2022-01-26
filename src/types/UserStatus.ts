@@ -1,9 +1,12 @@
+import CanPlayStatus from './api/user/CanPlayStatus';
+
 export interface NET_USER {
   PlayerId: number;
   Login: string;
   Email: string;
   Balance: number;
   CurrencyId: number;
+  CanPlay: CanPlayStatus;
   Code: number;
   Message: string;
   error?: string;
@@ -49,6 +52,7 @@ export interface UserStatus {
   name?: string;
   balance?: number;
   currency?: string;
+  canPlay?: CanPlayStatus;
   email?: string;
   first_name?: string;
   last_name?: string;
