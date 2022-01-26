@@ -16,7 +16,7 @@ import useApi from '../../../hooks/useApi';
 import useLocalStorage from '../../../hooks/useLocalStorage';
 import BalancesContainer from '../components/account-settings/BalancesContainer';
 import TablePagination from '../components/account-settings/TablePagination';
-import { Franchise } from '../../../constants';
+import { Franchise, franchiseDateFormat } from '../../../constants';
 import NumberFormat from 'react-number-format';
 
 interface Transactions {
@@ -161,6 +161,18 @@ const TransactionsDateFilter = ({ dateTo, dateFrom, updateUrl }) => {
   const [newDateTo, setNewDateTo] = useState<Dayjs>(dateTo);
   const validDate = newDateTo.diff(newDateFrom) >= 0;
 
+  const adjustDateFormat = franchiseDateFormat => {
+    let formatted = '';
+    for (let i = 0; i < franchiseDateFormat.length; i++) {
+      if (franchiseDateFormat[i].toLowerCase() !== 'm') {
+        formatted = formatted + franchiseDateFormat[i].toLowerCase();
+      } else {
+        formatted = formatted + franchiseDateFormat[i];
+      }
+    }
+    return formatted;
+  };
+
   useEffect(() => {
     setNewDateFrom(dateFrom);
     setNewDateTo(dateTo);
@@ -183,7 +195,7 @@ const TransactionsDateFilter = ({ dateTo, dateFrom, updateUrl }) => {
           onChange={date => {
             setNewDateFrom(dayjs(date as Date));
           }}
-          dateFormat="yyyy-MM-dd"
+          dateFormat={adjustDateFormat(franchiseDateFormat)}
           maxDate={dateTo.toDate()}
           customInput={<DatepickerInput />}
         />
@@ -203,7 +215,7 @@ const TransactionsDateFilter = ({ dateTo, dateFrom, updateUrl }) => {
           onChange={date => {
             setNewDateTo(dayjs(date as Date));
           }}
-          dateFormat="yyyy-MM-dd"
+          dateFormat={adjustDateFormat(franchiseDateFormat)}
           maxDate={dayjs().toDate()}
           customInput={<DatepickerInput />}
         />
