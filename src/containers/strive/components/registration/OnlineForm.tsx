@@ -9,6 +9,7 @@ import {
   RailsApiResponseFallback,
   VALIDATIONS,
   Franchise,
+  usaOnlyBrand,
 } from '../../../../constants';
 import { OnlineFormBlock } from '../../../../types/RegistrationBlock';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
@@ -144,6 +145,11 @@ const blocks = (
               !value.length ||
               VALIDATIONS.phone(value) ||
               t('phone_number_invalid'),
+            inputFormatting: {
+              format: '(###) ###-####',
+              mask: '(###) ###-####'.replace(/[^1-9]/g, '').split(''),
+              useFormatted: false,
+            },
           },
         ],
       },
@@ -396,6 +402,11 @@ const blocks = (
               !value.length ||
               VALIDATIONS.phone(value) ||
               t('phone_number_invalid'),
+            inputFormatting: {
+              format: '(###) ###-####',
+              mask: '(###) ###-####'.replace(/[^1-9]/g, '').split(''),
+              useFormatted: false,
+            },
           },
         ],
       },
@@ -629,6 +640,13 @@ const blocks = (
               !value.length ||
               VALIDATIONS.phone(value) ||
               t('phone_number_invalid'),
+            inputFormatting: usaOnlyBrand
+              ? {
+                  format: '(###) ###-####',
+                  mask: '(###) ###-####'.replace(/[^1-9]/g, '').split(''),
+                  useFormatted: false,
+                }
+              : null,
           },
         ],
       },

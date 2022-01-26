@@ -450,14 +450,20 @@ export const Franchise = {
   xCasinoCom: Config.name === FranchiseNames.XcasinoCom,
 };
 
+export const usaOnlyBrand = [
+  FranchiseNames.Strive,
+  FranchiseNames.Gnogaz,
+  FranchiseNames.DesertDiamond,
+].includes(Config.name);
+
 export const REGEX_EXPRESSION = {
   LETTERS_WITH_SEPERATORS: /^((?:[ '-]*)[\p{L}]+(?:[ '-]*))*$/iu,
   EMAIL: /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/i,
   PHONE_NUMBER_NORMALIZE: /\s|\.|\/|[(][0-9][)]?|^0+/g,
-  PHONE_NUMBER: /^\+?[1-9]\d{1,14}$/,
   BANK_IBAN: Franchise.xCasino
     ? /^NL[0-9]{2}[A-z0-9]{4}[0-9]{10}$/g
     : /^(BE)[0-9]{2}([ ]?[0-9]{4}){3}$/g,
+  PHONE_NUMBER: usaOnlyBrand ? /^\+?[1-9]\d{9,10}$/ : /^\+?[1-9]\d{1,14}$/,
   PO_BOX_ADDRESS: /\b(?:p\.?\s*o\.?|post\s+office)(\s+)?(?:box|[0-9]*)?\b/i,
 };
 
@@ -522,7 +528,6 @@ export const CONTENT_PAGES = [
   PagesName.FaqPage,
   PagesName.ResponsibleGamingPage,
 ];
-
 export const franchiseDateFormat = Config.dateFormat || 'YYYY-MM-DD';
 export const ComponentSettings = Config.componentSettings;
 
