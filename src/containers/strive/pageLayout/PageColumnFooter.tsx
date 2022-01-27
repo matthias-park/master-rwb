@@ -3,13 +3,15 @@ import { StyledColumnFooter } from '../components/styled/StyledColumnFooter';
 import { useConfig } from '../../../hooks/useConfig';
 import { useI18n } from '../../../hooks/useI18n';
 import Link from '../../../components/Link';
-import { Franchise, Config } from '../../../constants';
+import { Franchise, Config, ComponentName } from '../../../constants';
 import SessionTimer from '../../../components/SessionTimer';
 import clsx from 'clsx';
+import { useModal } from '../../../hooks/useModal';
 
 const PageColumnFooter = () => {
   const { t } = useI18n();
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
+  const { enableModal } = useModal();
 
   if (!footer) {
     return null;
@@ -106,6 +108,7 @@ const PageColumnFooter = () => {
           </div>
         </div>
       </div>
+
       <div className="footer-item footer-links">
         {footer?.rowFooterLinks?.map((link, i) => (
           <span key={`${link.link}_${i}`} className="footer-links__link">
@@ -113,6 +116,7 @@ const PageColumnFooter = () => {
           </span>
         ))}
       </div>
+
       <div className="footer-item footer-note">{t('copyright_text')}</div>
     </StyledColumnFooter>
   );

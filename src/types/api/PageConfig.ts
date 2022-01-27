@@ -57,7 +57,7 @@ export interface FooterData {
   providers?: ImageLink[];
   rowFooterPayments?: string[];
   rowFooterPartners?: { link: string; image: string }[];
-  rowFooterLinks?: { title_symbol: string; link: string }[];
+  rowFooterLinks?: { title_symbol: string; link: string; modal: string }[];
   rowFooterSocials?: { icon: string; link: string }[];
   rowFooterApps?: { name: string; link: string }[];
 }
