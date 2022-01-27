@@ -6,7 +6,7 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { postApi } from '../utils/apiUtils';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Config } from '../constants';
-import { useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { useConfig } from '../hooks/useConfig';
 import * as Sentry from '@sentry/react';
 
@@ -40,11 +40,12 @@ interface sbState {
 const SBTechSportsbook = () => {
   const { user, signout } = useAuth();
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
-  const { locale, domLoaded } = useConfig(
+  const { locale, domLoaded, sidebars } = useConfig(
     (prev, next) =>
       prev.locale === next.locale && prev.domLoaded === next.domLoaded,
   );
   const { pathname, search, hash, key } = useLocation();
+  const history = useHistory();
   const [iframeState, setIframeState] = useState<sbState>({
     loading: true,
     statusRequested: false,
@@ -109,7 +110,6 @@ const SBTechSportsbook = () => {
   const tokenLoading = !!sbTokenUrl && token == null && !error;
 
   useEffect(() => {
-    console.log({ tokenLoading });
     if (!tokenLoading) {
       const balance = user.logged_in ? `${user.balance} ${user.currency}` : '';
       if (iframeState.refreshSessionRequested) {
@@ -125,7 +125,6 @@ const SBTechSportsbook = () => {
           }),
           '*',
         );
-        console.log('sbSession', response);
         setIframeState(prev => ({ ...prev, refreshSessionRequested: false }));
       } else if (iframeState.statusRequested) {
         const sbtUser = {
@@ -142,7 +141,6 @@ const SBTechSportsbook = () => {
           }),
           '*',
         );
-        console.log('sbStatus', sbtUser);
         setIframeState(prev => ({ ...prev, statusRequested: false }));
       }
     }
@@ -154,7 +152,6 @@ const SBTechSportsbook = () => {
 
   useEffect(() => {
     if (token && user.logged_in && iframeState.loginReady) {
-      console.log(token);
       iframeRef.current?.contentWindow?.postMessage(
         JSON.stringify({
           eventType: SbtEventTypes.loginCallback,
@@ -180,7 +177,6 @@ const SBTechSportsbook = () => {
       const onMessage = (e: MessageEvent<any>) => {
         const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
         if (!data.eventType || e.origin !== window.__config__.sbTechUrl) return;
-        console.log(data);
         switch (data.eventType) {
           case SbtEventTypes.SetDeviceType: {
             if (data.eventData.height)
@@ -227,12 +223,31 @@ const SBTechSportsbook = () => {
                 ...prev,
                 currentLocation: location,
               }));
-              const newUrl = `/${locale}/${location}`;
-              if (
-                newUrl !==
-                `${window.location.pathname}${window.location.search}${window.location.hash}`
-              ) {
-                window.history.pushState(null, '', newUrl);
+              const sidebarVisible = sidebars?.some(sidebar =>
+                sidebar.some(item => item.link === pathname),
+              );
+
+              if (sidebarVisible) {
+                const newUrl = `/${location}`;
+                const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`.replace(
+                  `/${locale}/`,
+                  '/',
+                );
+                if (newUrl !== currentUrl) {
+                  history.push({
+                    pathname: newUrl,
+                    search,
+                    hash,
+                  });
+                }
+              } else {
+                const newUrl = `/${locale}/${location}`;
+                if (
+                  newUrl !==
+                  `${window.location.pathname}${window.location.search}${window.location.hash}`
+                ) {
+                  window.history.pushState(null, '', newUrl);
+                }
               }
             }
             break;
@@ -325,5 +340,4 @@ const SBTechSportsbook = () => {
     </>
   );
 };
-
 export default SBTechSportsbook;

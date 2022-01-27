@@ -131,7 +131,6 @@ var whl = (function (window, JSON) {
   }
 
   function activity(callback) {
-    console.log('activity', callback);
     sbtechCallbacks['SBT_ACTIVITY'] = callback;
     postMessage(
       {
@@ -143,7 +142,6 @@ var whl = (function (window, JSON) {
   }
 
   function status(callback) {
-    console.log('status', callback);
     sbtechCallbacks['SBT_STATUS'] = callback;
     postMessage(
       {
@@ -159,7 +157,6 @@ var whl = (function (window, JSON) {
   }
 
   function refreshSession(callback) {
-    console.log('refreshSession', callback);
     sbtechCallbacks['SBT_REFRESH_SESSION'] = callback;
     postMessage(
       {
@@ -171,7 +168,6 @@ var whl = (function (window, JSON) {
 
   function scrollToTop() {
     window.scroll(0, 0);
-    console.log('scrollToTop');
     postMessage(
       {
         eventType: 'SCROLL_UP',
@@ -181,8 +177,6 @@ var whl = (function (window, JSON) {
   }
 
   function setDeviceTypeAndOrientation(deviceDetails) {
-    console.log('setDeviceTypeAndOrientation', deviceDetails);
-
     if (deviceDetails) {
       postMessage(
         {
@@ -195,8 +189,6 @@ var whl = (function (window, JSON) {
   }
 
   function setBetSlipItemsCount(betslipCount) {
-    console.log('setBetSlipItemsCount', betslipCount);
-
     postMessage(
       {
         eventType: 'SBT_SET_BETSLIP_COUNT',
@@ -207,7 +199,6 @@ var whl = (function (window, JSON) {
   }
 
   function setOpenBetsItemCount(openBetsCount) {
-    console.log('setOpenBetsItemCount', openBetsCount);
     postMessage(
       {
         eventType: 'SBT_SET_OPENBET_COUNT',
@@ -224,22 +215,14 @@ var whl = (function (window, JSON) {
   }
 
   function registerGoToHamburgerMenuCallback(toggleHamburgerMenu) {
-    // var toggleHamburgerMenu = function () {
-    //   ToggleMainNavigation.toggle();
-    // };
     sbtechCallbacks['TOGGLE_HAMBURGER_MENU'] = toggleHamburgerMenu;
   }
 
   function registerGoToBettingHistoryCallback(goToBettingHistoryCallback) {
     sbtechCallbacks['GOTO_BETTING_HISTORY_EVENT'] = goToBettingHistoryCallback;
-    console.log(
-      'registerGoToBettingHistoryCallback',
-      goToBettingHistoryCallback,
-    );
   }
 
   function logout() {
-    console.log('--------- LOGOUT() called--------');
     window.scroll(0, 0);
     postMessage(
       {
@@ -250,7 +233,6 @@ var whl = (function (window, JSON) {
   }
 
   function registerLoginCallback(callback) {
-    console.log('login callback registered');
     sbtechCallbacks['SBT_LOGIN'] = callback;
     postMessage(
       {
@@ -261,8 +243,6 @@ var whl = (function (window, JSON) {
   }
 
   function registerNavigateToCallback(callback) {
-    console.log('navigate to callback registered');
-    console.log(callback);
     sbtechCallbacks['SBT_NAVIGATE'] = callback;
   }
   function registerGoToHomeCallback(callback) {
