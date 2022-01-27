@@ -61,6 +61,9 @@ app.use(
 );
 app.use(middleware.routeExistCheck);
 app.get('/api/get-ip', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.set('Content-Type', 'text/plain');
+  res.set('Connection', 'close');
   return res.status(200).send(req.ip);
 });
 

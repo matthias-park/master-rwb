@@ -26,9 +26,10 @@ import {
 import Lockr from 'lockr';
 import UserStatus from '../../types/UserStatus';
 import { setLogout, setUser } from '../reducers/user';
-import { ProdEnv } from '../../constants';
+import { ComponentSettings, Config, ProdEnv } from '../../constants';
 import * as Sentry from '@sentry/react';
 import { Span, Transaction, Status as SpanStatus } from '@sentry/types';
+import io from 'socket.io-client';
 
 const insertGeoComplyScript = async (): Promise<boolean> =>
   new Promise((resolve, reject) => {
@@ -101,6 +102,7 @@ const fetchSetLicenseKey = (
   }
 };
 
+let clearGeoComplyValidationRetriesCount = 0;
 const clearGeoComplyValidation = () => {
   if (!GeoValidationTransaction) {
     GeoValidationTransaction = Sentry.startTransaction({
@@ -117,8 +119,18 @@ const clearGeoComplyValidation = () => {
       sentryScope: GeoValidationTransaction,
     },
   )
-    .then(res => res.Success)
-    .catch(() => false);
+    .then(res => {
+      clearGeoComplyValidationRetriesCount = 0;
+      return res.Success;
+    })
+    .catch(() => {
+      if (clearGeoComplyValidationRetriesCount < 3) {
+        clearGeoComplyValidationRetriesCount++;
+        return clearGeoComplyValidation();
+      }
+      Sentry.captureMessage('clear geocomply validation failed request');
+      return false;
+    });
 };
 
 const licenseKeyErrorCodes = [
@@ -127,8 +139,59 @@ const licenseKeyErrorCodes = [
   GeoComplyErrorCodes.CLNT_ERROR_CLIENT_LICENSE_UNAUTHORIZED,
 ];
 
+const networkConnectionApi =
+  //@ts-ignore
+  navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+const wsUrl = ComponentSettings?.v2Auth;
+let socketIO: any = null;
+const checkUserIp = async (): Promise<string | null> => {
+  if (Config.device?.isFirefox && wsUrl) {
+    return new Promise(resolve => {
+      socketIO = io(wsUrl, {
+        transports: ['websocket', 'polling'],
+        forceNew: true,
+      });
+      socketIO.on('connect_error', error =>
+        Sentry.captureMessage(`ws ip check connect error ${error}`),
+      );
+      socketIO.on('user-ip', ip => {
+        socketIO.disconnect();
+        return resolve(ip);
+      });
+      socketIO.on('connect', () => {
+        socketIO.emit('get-ip');
+      });
+    });
+  }
+  return getApi<string>(`${window.location.origin}/api/get-ip`, {
+    responseText: true,
+  }).catch(() => null);
+};
+let ipCheckLock = false;
+const networkChangeEvent = async (
+  storeApi: MiddlewareAPI<Dispatch<AnyAction>, any>,
+) => {
+  const geoComplyState = (storeApi.getState() as RootState).geoComply;
+  if (!geoComplyState.isGeoAllowed || ipCheckLock) {
+    return;
+  }
+  ipCheckLock = true;
+  const newIp = await checkUserIp();
+  ipCheckLock = false;
+  const currentIp = geoComplyState.userIp;
+  if (newIp && currentIp && newIp !== currentIp) {
+    storeApi.dispatch(setUserIp(newIp));
+  } else if (!newIp || !currentIp) {
+    Sentry.captureMessage(
+      `ip check failed: ${!newIp ? 'no new ip' : 'no current ip'}`,
+    );
+  }
+};
+
 let geoComplyValidationSentrySpan: Span | null = null;
+let validationRequestRetriesCount = 0;
 let revalidateTimeout: number | null = null;
+let ipCheckInterval: number | null = null;
 type actionFunction = (
   storeApi: MiddlewareAPI<Dispatch<AnyAction>, any>,
   actionPayload: any,
@@ -157,6 +220,11 @@ const actions: {
                   console.log('geoComply connected');
                 }
                 dispatch(setConnected(true));
+                if (networkConnectionApi) {
+                  networkConnectionApi.addEventListener('change', () =>
+                    networkChangeEvent(storeApi),
+                  );
+                }
                 window.addEventListener('beforeunload', () =>
                   window.GeoComply?.Client.disconnect(),
                 );
@@ -243,6 +311,7 @@ const actions: {
         },
       )
         .then(res => {
+          validationRequestRetriesCount = 0;
           if (
             res?.Data.Success &&
             res?.Data.Code === GeoComplyValidateCodes.Ok
@@ -268,7 +337,16 @@ const actions: {
             }),
           );
         })
-        .catch(() => {})
+        .catch(() => {
+          if (validationRequestRetriesCount < 3) {
+            validationRequestRetriesCount++;
+            return actions[setGeoLocation.toString()]!.after?.(
+              storeApi,
+              actionPayload,
+            );
+          }
+          Sentry.captureMessage('geocomply hash validation failed request');
+        })
         .finally(() => {
           if (GeoValidationTransaction) {
             GeoValidationTransaction.finish();
@@ -286,8 +364,17 @@ const actions: {
         if (!ProdEnv) {
           console.log(`revalidation in ${actionPayload.revalidateIn}sec`);
         }
+        if (!ipCheckInterval) {
+          ipCheckInterval = setInterval(
+            () => networkChangeEvent(storeApi),
+            networkConnectionApi ? 30000 : 5000,
+          );
+        }
         const revalidateTimeInMs = parseInt(actionPayload.revalidateIn) * 1000;
         if (!isNaN(revalidateTimeInMs)) {
+          if (revalidateTimeout) {
+            clearTimeout(revalidateTimeout);
+          }
           revalidateTimeout = setTimeout(() => {
             if (!ProdEnv) {
               console.log('revalidate timeout');
@@ -295,6 +382,9 @@ const actions: {
             storeApi.dispatch(setValidationReason('revalidate'));
           }, revalidateTimeInMs);
         }
+      } else if (ipCheckInterval) {
+        clearInterval(ipCheckInterval);
+        ipCheckInterval = null;
       }
     },
   },
@@ -385,12 +475,20 @@ const actions: {
         }
         clearTimeout(revalidateTimeout);
       }
+      if (ipCheckInterval) {
+        clearInterval(ipCheckInterval);
+        ipCheckInterval = null;
+      }
     },
   },
   [setUserIp.toString()]: {
     before: (storeApi, actionPayload: string) => {
       const state = storeApi.getState() as RootState;
       if (state.geoComply.userIp !== actionPayload) {
+        if (ipCheckInterval) {
+          clearInterval(ipCheckInterval);
+          ipCheckInterval = null;
+        }
         clearGeoComplyValidation();
       }
     },

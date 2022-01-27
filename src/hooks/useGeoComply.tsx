@@ -12,7 +12,6 @@ import { RootState } from '../state';
 import * as stateActions from '../state/reducers/geoComply';
 import { CustomWindowEvents } from '../constants';
 import dayjs from 'dayjs';
-import { getApi } from '../utils/apiUtils';
 type GeoComplyHookProviderProps = { children: ReactNode };
 
 interface GeoComplyContext {
@@ -31,14 +30,6 @@ export function useGeoComply(): GeoComplyContext | null {
   return instance;
 }
 
-const networkConnectionApi =
-  //@ts-ignore
-  navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-const checkUserIp = async (): Promise<string | null> =>
-  getApi<string>(`${window.location.origin}/api/get-ip`, {
-    responseText: true,
-  }).catch(() => null);
-
 export default useGeoComply;
 
 export const GeoComplyProvider = ({ ...props }: GeoComplyHookProviderProps) => {
@@ -54,29 +45,16 @@ export const GeoComplyProvider = ({ ...props }: GeoComplyHookProviderProps) => {
     }
     window.addEventListener('focus', setFocus);
     window.addEventListener(CustomWindowEvents.ResetIdleTimer, setFocus);
-    const networkChangeEvent = () =>
-      checkUserIp().then(ip => ip && dispatch(stateActions.setUserIp(ip)));
-    if (networkConnectionApi) {
-      networkConnectionApi.addEventListener('change', networkChangeEvent);
-    }
+
     return () => {
       window.removeEventListener('focus', setFocus);
       window.removeEventListener(CustomWindowEvents.ResetIdleTimer, setFocus);
-      if (networkConnectionApi) {
-        networkConnectionApi.removeEventListener('change', networkChangeEvent);
-      }
     };
   }, []);
 
   useEffect(() => {
     if (state.isReady && !state.isConnecting && !state.isConnected) {
       dispatch(stateActions.connectToGeo());
-    } else if (state.isReady && state.isGeoAllowed && !networkConnectionApi) {
-      checkUserIp().then(ip => {
-        if (ip && state.userIp !== ip) {
-          dispatch(stateActions.setUserIp(ip));
-        }
-      });
     }
   }, [state.isReady, focused]);
 

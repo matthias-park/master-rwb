@@ -1,6 +1,7 @@
 import { AddToast } from 'react-toast-notifications';
 import { DefaultTheme } from 'styled-components';
 import { ComponentSettings } from '../src/types/ComponentSettings';
+import DeviceInfo from '../src/types/DeviceInfo';
 import KambiConfig, { CustomerSettings } from '../src/types/KambiConfig';
 import TGLabSbConfig, { TGLabSbPageType } from '../src/types/TGLabSbConfig';
 
@@ -41,6 +42,7 @@ export declare global {
       casino?: boolean;
       ip: string;
       singleLoadPage?: boolean;
+      device: DeviceInfo;
     };
     toast?: AddToast;
     xtremepush?: any;
