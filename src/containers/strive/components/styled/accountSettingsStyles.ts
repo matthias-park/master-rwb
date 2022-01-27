@@ -666,7 +666,7 @@ const accountSettingsStyles = css`
       &.active {
         background-color: ${props => props.theme.inputContainer.quickColor};
         color: ${props => props.theme.inputContainer.quickBg};
-        outline: 2px solid
+        box-shadow: 0px 0px 0px 2px
           ${props =>
             props.theme.inputContainer.quickBorderColor ||
             props.theme.inputContainer.quickBg} !important;
@@ -817,7 +817,7 @@ const accountSettingsStyles = css`
     &__img {
       padding: ${props => props.theme.paymentMethods.padding};
       background-color: ${props => props.theme.colors.white.main};
-      outline: ${props => props.theme.paymentMethods.border};
+      border: ${props => props.theme.paymentMethods.border};
       border-radius: ${props => props.theme.paymentMethods.borderRadius}px;
       max-width: 100%;
       box-shadow: ${props => props.theme.paymentMethods.boxShadow};
@@ -835,13 +835,13 @@ const accountSettingsStyles = css`
     }
     &:hover {
       .payment-method__img {
-        outline: 2px solid ${props => props.theme.colors.primary.main};
+        box-shadow: 0px 0px 0px 3px ${props => props.theme.colors.primary.main};
       }
     }
     &.selected,
     &:active {
       .payment-method__img {
-        outline: ${props => props.theme.paymentMethods.activeOutline};
+        box-shadow: ${props => props.theme.paymentMethods.activeOutline};
       }
     }
   }

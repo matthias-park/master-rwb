@@ -292,7 +292,7 @@
           "textAlign": "center",
           "boxShadow": "0 2px 10px 0 rgb(0 0 0 / 20%)",
           "borderRadius": 8,
-          "activeOutline": "2px solid #000"
+          "activeOutline": "0px 0px 0px 3px #000"
         },
         "settingsPage": {
           "titleFontWeight": 500,
@@ -615,7 +615,7 @@
           "textAlign": "left",
           "border": "1px solid #E6ECF1",
           "borderRadius": 4,
-          "activeOutline": "2px solid #051B35"
+          "activeOutline": "0px 0px 0px 3px #051B35"
         },
         "settingsPage": {
           "titleFontWeight": 700,
@@ -991,11 +991,12 @@
         },
         "paymentMethods": {
           "inRow": 5,
-          "padding": "25px 40px",
+          "padding": "25px 20%",
+          "mobilePadding": "20px 10px",
           "textAlign": "left",
           "border": "1px solid #E6ECF1",
           "borderRadius": 4,
-          "activeOutline": "3px solid #FFDC3E"
+          "activeOutline": "0px 0px 0px 4px #FFDC3E"
         },
         "settingsPage": {
           "titleFontWeight": 700,
