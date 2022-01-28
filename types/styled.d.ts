@@ -123,6 +123,9 @@ declare module 'styled-components' {
         color: string;
       };
     };
+    depositIframe: {
+      height: string;
+    };
     fonts: {
       family: string;
       weight: {

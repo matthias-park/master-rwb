@@ -91,6 +91,9 @@ module.exports = {
   translationLink: {
     color: '#FFDC3E',
   },
+  depositIframe: {
+    height: '60',
+  },
   communicationPrefs: {
     bgColor: '#222',
     color: '#fff',
