@@ -1,10 +1,7 @@
 /* eslint-disable default-case */
 var whl = (function (window, JSON) {
   // listen for Sportsbook frame activity
-  if (document.referrer.length) {
-    document.body.style = 'overflow: hidden';
-  }
-  var events = ['mousedown', 'keypress', 'scroll', 'touchstart'];
+  var events = ['mousedown', 'keypress', 'scroll', 'touchstart', 'load'];
 
   var postMessage = event => {
     var json = JSON.stringify(event);
@@ -14,17 +11,6 @@ var whl = (function (window, JSON) {
       window.parent.postMessage(json, '*');
     }
   };
-
-  events.forEach(function (name) {
-    let message = JSON.stringify({ eventType: 'SBT_ACTIVITY', eventData: '' });
-    window.document.addEventListener(
-      name,
-      () => {
-        window.postMessage(message, '*');
-      },
-      true,
-    );
-  });
 
   window.addEventListener('message', receiveMessage);
   window.androidEvent = data => receiveMessage({ data });
@@ -62,6 +48,10 @@ var whl = (function (window, JSON) {
     },
     SBT_NAVIGATE_HOME: () => {
       return false;
+    },
+    NO_OVERFLOW: () => {
+      document.body.style = 'overflow: hidden';
+      return true;
     },
   };
   function receiveMessage(event) {
@@ -125,10 +115,17 @@ var whl = (function (window, JSON) {
       case 'SBT_NAVIGATE_HOME_CALLBACK':
         sbtechCallbacks['SBT_NAVIGATE_HOME']();
         return true;
+      case 'SBT_SET_NO_OVERFLOW':
+        sbtechCallbacks['NO_OVERFLOW']();
+        return true;
       default:
         return false;
     }
   }
+
+  postMessage({
+    eventType: 'SBT_READY',
+  });
 
   function activity(callback) {
     sbtechCallbacks['SBT_ACTIVITY'] = callback;

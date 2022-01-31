@@ -25,6 +25,8 @@ enum SbtEventTypes {
   navigateCallback = 'SBT_NAVIGATE_CALLBACK',
   navigateHomeCallback = 'SBT_NAVIGATE_HOME_CALLBACK',
   locationChange = 'SBT_LOCATION',
+  setNoOverflow = 'SBT_SET_NO_OVERFLOW',
+  sbReady = 'SBT_READY',
 }
 
 interface sbState {
@@ -63,6 +65,7 @@ const SBTechSportsbook = () => {
       }),
       '*',
     );
+    window.scrollTo(0, 0);
   };
   const navigateTo = (route?: string) => {
     iframeRef.current?.contentWindow?.postMessage(
@@ -250,6 +253,15 @@ const SBTechSportsbook = () => {
                 }
               }
             }
+            break;
+          }
+          case SbtEventTypes.sbReady: {
+            iframeRef.current?.contentWindow?.postMessage(
+              JSON.stringify({
+                eventType: SbtEventTypes.setNoOverflow,
+              }),
+              '*',
+            );
             break;
           }
         }
