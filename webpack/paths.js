@@ -7,12 +7,13 @@ const jsonConfig = require('config');
 // https://github.com/facebook/create-react-app/issues/637
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
-const franchiseTheme =
+const franchise =
   (process.env.NODE_APP_INSTANCE &&
     Object.values(jsonConfig.get('franchises')).find(
       fr => process.env.NODE_APP_INSTANCE === fr.name,
-    )?.theme) ||
-  '';
+    )) ||
+  {};
+const franchiseTheme = franchise.theme || '';
 
 // We use `PUBLIC_URL` environment variable or "homepage" field to infer
 // "public path" at which the app is served.
