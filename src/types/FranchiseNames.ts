@@ -7,3 +7,9 @@ export enum FranchiseNames {
   Gnogon = 'gnogon',
   XcasinoCom = 'xcasinoCom',
 }
+export enum FranchiseThemes {
+  Bnl = 'bnl',
+  Strive = 'strive',
+  Xcasino = 'xcasino',
+  XcasinoCom = 'xcasinoCom',
+}

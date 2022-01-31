@@ -2,6 +2,7 @@ import { AddToast } from 'react-toast-notifications';
 import { DefaultTheme } from 'styled-components';
 import { ComponentSettings } from '../src/types/ComponentSettings';
 import DeviceInfo from '../src/types/DeviceInfo';
+import { FranchiseNames, FranchiseThemes } from '../src/types/FranchiseNames';
 import KambiConfig, { CustomerSettings } from '../src/types/KambiConfig';
 import TGLabSbConfig, { TGLabSbPageType } from '../src/types/TGLabSbConfig';
 
@@ -13,7 +14,7 @@ export declare global {
       apiUrl: string;
       gtmId?: string;
       sentryDsn?: string;
-      theme: string;
+      theme: FranchiseThemes;
       kambi?: {
         currency: string;
         market: string;
