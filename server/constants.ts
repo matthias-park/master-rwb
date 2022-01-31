@@ -60,7 +60,9 @@ export const BROWSER_KEEP_ALIVE = 300000; // 5min
 
 export const DOMAINS_TO_FRANCHISE: {
   [key: string]: FranchiseConfig;
-} = config.get<FranchiseConfig[]>('franchises').reduce((obj, fr) => {
+} = Object.values(
+  config.get<{ [key: string]: FranchiseConfig }>('franchises'),
+).reduce((obj, fr) => {
   fr.domains.forEach(domain => {
     obj[domain.hostname] = fr;
   });

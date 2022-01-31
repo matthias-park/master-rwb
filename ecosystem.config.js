@@ -33,7 +33,6 @@ module.exports = {
       error_file: '/dev/null',
       env_production: {
         NODE_ENV: 'production',
-        NODE_APP_INSTANCE: 2,
       },
     },
   ],

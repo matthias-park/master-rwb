@@ -2,8 +2,9 @@ import React from 'react';
 import Routes from './pages';
 import PageLayout from './pageLayout';
 import Modals from './Modals';
+import indexApp from '../IndexApp';
 
-const App = () => (
+const Index = () => (
   <>
     <PageLayout>
       <Modals />
@@ -12,4 +13,4 @@ const App = () => (
   </>
 );
 
-export default App;
+indexApp(() => <Index />);
