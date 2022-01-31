@@ -34,6 +34,7 @@ export interface SettingsField {
   disabled?: boolean;
   value?: any;
   formatting?: 'currency' | 'hour' | 'date' | 'none';
+  values_endpoint?: string;
 }
 
 export enum SettingsFieldStyle {

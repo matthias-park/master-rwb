@@ -19,6 +19,7 @@ import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import { useToasts } from 'react-toast-notifications';
 import dayjs from 'dayjs';
 import clsx from 'clsx';
+import { getApi } from '../../../../utils/apiUtils';
 
 interface SettingProps {
   id: string;
@@ -258,10 +259,28 @@ const FormFields = ({
                     disabled={field.disabled}
                     defaultValue={field.default}
                     values={
-                      field.values?.map(option => ({
-                        value: option.id,
-                        text: t(option.title),
-                      })) || []
+                      field.values_endpoint
+                        ? async () => {
+                            const url = new URL(field.values_endpoint || '');
+                            const res = await getApi<RailsApiResponse<any>>(
+                              url?.pathname,
+                            );
+                            if (
+                              res.Success &&
+                              res.Data &&
+                              Array.isArray(res.Data)
+                            ) {
+                              return res.Data.map(province => ({
+                                text: province.name,
+                                value: province.id.toString(),
+                              }));
+                            }
+                            return [];
+                          }
+                        : field.values?.map(option => ({
+                            value: option.id,
+                            text: t(option.title),
+                          })) || []
                     }
                     title={t(field.title)}
                   />
