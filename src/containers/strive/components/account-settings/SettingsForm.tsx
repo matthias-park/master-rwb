@@ -8,6 +8,7 @@ import {
   franchiseDateFormat,
   VALIDATIONS,
   Franchise,
+  usaOnlyBrand,
 } from '../../../../constants';
 import SelectInput from '../../../../components/customFormInputs/SelectInput';
 import TextInput from '../../../../components/customFormInputs/TextInput';
@@ -313,6 +314,13 @@ const FormFields = ({
                     allowEmptyFormatting: true,
                   };
                 }
+              }
+              if (field.id === 'phone_number' && usaOnlyBrand) {
+                masketInput = {
+                  format: '(###) ###-####',
+                  mask: '(###) ###-####'.replace(/[^1-9]/g, '').split(''),
+                  useFormatted: false,
+                };
               }
               const isDepositLossBetLimits = [
                 'deposit_limit',
