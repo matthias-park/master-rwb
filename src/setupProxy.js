@@ -1,6 +1,6 @@
 const config = require('config');
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const franchises = Object.values(config.get('franchises'));
+const franchises = config.get('franchises');
 const port = config.get('port') || 3800;
 
 const domainToApi = franchises.reduce((obj, fr) => {

@@ -1,0 +1,1560 @@
+{
+  "franchises": [
+    {
+      "name": "bnl",
+      "domains": [
+        {
+          "hostname": "bnl-rj.tglab.dev",
+          "api": "https://bnl-dev.tglab.dev",
+          "forceWWW": false
+        }
+      ],
+      "theme": "bnl",
+      "gtmId": "GTM-PGRW8BQ",
+      "kambi": {
+        "market": "BE",
+        "currency": "EUR",
+        "retail": "https://ctn-static.kambi.com/client/bnlberl/kambi-bootstrap.js",
+        "online": "https://ctn-static.kambi.com/client/bnlbe/kambi-bootstrap.js",
+        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js",
+        "eventStatistics": "https://s5.sir.sportradar.com/scooorebe/{{locale}}/match/m{{eventId}}",
+        "enableOddsFormatSelector": true
+      },
+      "googleRecaptchaKey": "6Lezp2oaAAAAADpwV6q_a2k7yVPD52Qb89Z2zFcR",
+      "basicAuthEnabled": true,
+      "excludeBasicAuthFiles": [
+        "/assets/styles/light-theme.css",
+        "/assets/styles/dark-theme.css",
+        "/assets/images/promo/desktop/promoboost/ProfitBoost-Desktop_1@1x.png",
+        "/assets/images/promo/desktop/promoboost/ProfitBoost-Desktop_1@2x.png",
+        "/assets/images/promo/desktop/promoboost/ProfitBoost-Desktop_1@3x.png",
+        "/assets/images/promo/mobile/promoboost/ProfitBoost-Mobile_1@1x.png",
+        "/assets/images/promo/mobile/promoboost/ProfitBoost-Mobile_1@2x.png",
+        "/assets/images/promo/mobile/promoboost/ProfitBoost-Mobile_1@3x.png",
+        "/assets/images/promo/desktop/promowelcome/Welcome-Desktop_1@1x.png",
+        "/assets/images/promo/desktop/promowelcome/Welcome-Desktop_1@2x.png",
+        "/assets/images/promo/desktop/promowelcome/Welcome-Desktop_1@3x.png",
+        "/assets/images/promo/mobile/promowelcome/Welcome-Mobile_1@1x.png",
+        "/assets/images/promo/mobile/promowelcome/Welcome-Mobile_1@2x.png",
+        "/assets/images/promo/mobile/promowelcome/Welcome-Mobile_1@3x.png",
+        "/assets/images/promo/desktop/profitboost/LIVEProfitBoost-Desktop_1@1x.png",
+        "/assets/images/promo/desktop/profitboost/LIVEProfitBoost-Desktop_1@2x.png",
+        "/assets/images/promo/desktop/profitboost/LIVEProfitBoost-Desktop_1@3x.png",
+        "/assets/images/promo/mobile/profitboost/LIVEProfitBoost-Mobile_1@1x.png",
+        "/assets/images/promo/mobile/profitboost/LIVEProfitBoost-Mobile_1@2x.png",
+        "/assets/images/promo/mobile/profitboost/LIVEProfitBoost-Mobile_1@3x.png"
+      ],
+      "themeColor": "#000541",
+      "iconSizes": ["128", "192", "512"],
+      "redis": {
+        "host": "192.168.109.106",
+        "port": 6379,
+        "db": 0,
+        "prefix": "reactNodeStage-",
+        "password": "yAw6H44cHUtvnjC"
+      },
+      "dateFormat": "YYYY-MM-DD",
+      "componentSettings": {
+        "login": {
+          "emailLogin": true
+        },
+        "modals": {
+          "TnC": true,
+          "ResponsibleGambling": true,
+          "ValidationFailed": true,
+          "CookiePolicy": true,
+          "AddBankAccount": true
+        }
+      }
+    },
+    {
+      "name": "strive",
+      "basicAuthEnabled": true,
+      "domains": [
+        {
+          "hostname": "strive-rj.tglab.dev",
+          "api": "https://strive-dev.tglab.dev"
+        }
+      ],
+      "themeColor": "#000541",
+      "theme": "strive",
+      "geoComplyKey": "ShzolMaAK",
+      "smartyStreets": "108064519358658502",
+      "kambi": {
+        "market": "US",
+        "currency": "USD",
+        "online": "https://ctn-static.kambi.com/client/fanusny/kambi-bootstrap.js",
+        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js",
+        "oddsFormat": "american",
+        "enableOddsFormatSelector": true,
+        "fallbackLocale": "en_US"
+      },
+      "redis": {
+        "host": "192.168.109.106",
+        "port": 6379,
+        "db": 0,
+        "prefix": "reactNodeStage-",
+        "password": "yAw6H44cHUtvnjC"
+      },
+      "dateFormat": "MM-DD-YYYY",
+      "componentSettings": {
+        "v2Auth": "wss://strive-ws.tglab.dev",
+        "userIdleTimeout": 30,
+        "login": {
+          "loginCookiesAccept": true
+        },
+        "modals": {
+          "TnC": true,
+          "ResponsibleGambling": false,
+          "ValidationFailed": true,
+          "CookiePolicy": true,
+          "AddBankAccount": true,
+          "GeoComply": true,
+          "PlayerDisabled": true
+        }
+      },
+      "themeSettings": {
+        "boxShadow": {
+          "generic": "rgb(0 0 0 / 12%) 0px 0px 5px 0px"
+        },
+        "borderRadius": {
+          "sm": "8px"
+        },
+        "colors": {
+          "primary": {
+            "main": "#44d9e6",
+            "light": "#5eed53",
+            "hover": "#1ab6c3"
+          },
+          "brand": {
+            "main": "#000",
+            "light": "#000",
+            "text": "#031442"
+          },
+          "secondary": {
+            "main": "#666666"
+          },
+          "footer": {
+            "bottomText": "rgba(255,255,255,0.75)"
+          },
+          "body": "#fafafa"
+        },
+        "spacing": {
+          "bodyPadding": 80,
+          "bodyPaddingMedium": 45,
+          "bodyPaddingSmall": 20,
+          "footerMainTopPadding": 3,
+          "footerMainBottomPadding": 1.5,
+          "settingsBodyPadding": "0 25px 0 0",
+          "settingsMarginTop": 50
+        },
+        "buttons": {
+          "borderRadius": 16,
+          "fontSize": 13,
+          "primaryBgColor": "#44d9e6",
+          "primaryBgHoverColor": "#1dcfdf",
+          "primaryColor": "#031442"
+        },
+        "fonts": {
+          "family": "Dax offc",
+          "weight": {
+            "bold": 500
+          },
+          "size": {
+            "lg": "16px"
+          }
+        },
+        "footer": {
+          "listColor": "rgba(255, 255, 255, 0.75)",
+          "listTitleWeight": 500,
+          "subFooterHeight": 80,
+          "clockIconSize": 35,
+          "clockIzonMargin": "0"
+        },
+        "communicationPrefs": {
+          "items": {
+            "backgroundColor": "#f9f9f9",
+            "border": "1px solid rgb(229, 229, 229)"
+          }
+        },
+        "pageContainer": {
+          "backgroundColor": "#ECF0F3"
+        },
+        "pageInnerContainer": {
+          "titleWeight": 400
+        },
+        "login": {
+          "formBorderBottom": "1px solid #e5e5e5"
+        },
+        "registration": {
+          "width": 630,
+          "borderRadius": 10,
+          "boxShadow": "0 0 5px 0 rgb(0 0 0 / 12%)",
+          "blockTitleWeight": 500,
+          "blockTitleFontSize": 16,
+          "titleWeight": 400
+        },
+        "inputs": {
+          "border": "1px solid #cccccc",
+          "borderRadius": 4,
+          "padding": "17px 0.75rem 0.375rem 0.75rem",
+          "fontSize": 15,
+          "height": 38,
+          "backgroundColor": "#f9f9f9",
+          "color": "#4c4c4c",
+          "labelLeft": 12,
+          "labelTop": 12,
+          "labelActiveFontSize": 9,
+          "labelActiveTop": 4,
+          "labelActiveLeft": 12,
+          "labelBackgroundColor": "transparent",
+          "labelPadding": 0,
+          "marginBottom": 8,
+          "selectPadding": "0 5px",
+          "disabled": {
+            "backgroundColor": "#e5e5e5",
+            "border": "1px solid #cccccc",
+            "color": "#4c4c4c"
+          },
+          "invalid": {
+            "backgroundColor": "#fef5f5"
+          }
+        },
+        "customFileInput": {
+          "backgroundColor": "#f9f9f9",
+          "labelColor": "#4c4c4c",
+          "buttonFontColor": "#4c4c4c",
+          "buttonFontWeight": 400,
+          "buttonFontSize": "16px",
+          "buttonColor": "#ccc",
+          "border": "1px solid #cccccc"
+        },
+        "toggleCheck": {
+          "slider": {
+            "width": "20px",
+            "height": "20px",
+            "left": "5px",
+            "checkedLeft": "60%",
+            "boxShadow": "rgb(0 0 0 / 30%) 0px 2px 4px 0px"
+          },
+          "height": "32px",
+          "minWidth": "62px",
+          "backgroundColor": "rgb(229, 229, 229)",
+          "checkedBgColor": "rgb(68, 217, 230)"
+        },
+        "helpBlock": {
+          "titleWeight": 500,
+          "titleColor": "#202020",
+          "padding": "12px 16px 0 16px",
+          "border": "1px solid #dfdfdf",
+          "color": "#202020",
+          "blockTitleWeight": 500,
+          "iconSize": 36
+        },
+        "userMenu": {
+          "boxShadow": "0 -2px 20px 0 rgb(0 0 0 / 30%)",
+          "borderRadius": 8,
+          "itemBorder": "1px solid #e5e5e5",
+          "itemWeight": 400,
+          "itemHeight": 64,
+          "itemFontSize": 16,
+          "width": 330,
+          "backgroundColor": "#fafafa",
+          "subItemBgColor": "#efeff4"
+        },
+        "settingsMenu": {
+          "fontSize": 16,
+          "color": "rgba(3, 20, 66, 0.7)",
+          "fullHeight": true,
+          "subItemBorder": "1px solid #e5e5e5",
+          "subBackgroundColor": "rgb(239, 239, 244)"
+        },
+        "inputContainer": {
+          "backgroundColor": "#efeff4",
+          "padding": 15,
+          "iconButton": true,
+          "borderRadius": 8,
+          "inputHeight": 38,
+          "quickBoxShadow": "0 2px 10px 0 rgb(0 0 0 / 20%)",
+          "quickBorderRadius": 8,
+          "quickPadding": "23px 0",
+          "quickColor": "#051B35",
+          "quickFontWeight": 500,
+          "quickBorder": "none",
+          "quickBg": "#fff"
+        },
+        "paymentMethods": {
+          "inRow": 6,
+          "padding": "15px",
+          "textAlign": "center",
+          "boxShadow": "0 2px 10px 0 rgb(0 0 0 / 20%)",
+          "borderRadius": 8,
+          "activeOutline": "0px 0px 0px 3px #000"
+        },
+        "settingsPage": {
+          "titleFontWeight": 500,
+          "titleMargin": "0",
+          "subTextMargin": "0 0 24px 0"
+        },
+        "dateFilter": {
+          "padding": "20px 22px",
+          "margin": "0 0 1.5rem 0",
+          "periodBgColor": "#fff",
+          "periodColor": "rgba(0,0,0,0.8)",
+          "periodActiveColor": "rgba(0,0,0,0.8)",
+          "periodBorderRadius": 8,
+          "dateInputBg": "#fff",
+          "borderColor": "#44d9e6"
+        },
+        "table": {
+          "headerFontSize": 12,
+          "headerColor": "#202020",
+          "itemColor": "#202020",
+          "itemFontSize": 11,
+          "itemBorder": "1px solid #cccccc"
+        },
+        "questionsContainer": {
+          "borderRadius": 8,
+          "titleFontWeight": 500,
+          "border": "1px solid #cccccc",
+          "itemBorder": "1px solid #cccccc"
+        },
+        "infoContainer": {
+          "bgColor": "#cff3e1",
+          "color": "#999999",
+          "boldColor": "#000000",
+          "borderRadius": 8,
+          "border": "1px solid #cccccc",
+          "titleMargin": "0 0 8px 0",
+          "limitNumberColor": "#44d9e6",
+          "limitNumberFontSize": 14,
+          "limitNumberFontWeight": 500,
+          "limitInfoColor": "#051B35",
+          "limitInfoTitleWeight": 500
+        },
+        "alert": {
+          "color": "#4c4c4c",
+          "padding": "20px 15px",
+          "iconColor": "#fff",
+          "fontSize": 14,
+          "iconSize": 24,
+          "iconBgSize": 32,
+          "transparentBg": true
+        },
+        "promotions": {},
+        "modals": {
+          "color": "#323232",
+          "title": {
+            "fontWeight": 500,
+            "fontSize": "1.375rem"
+          }
+        },
+        "genericModalWidth": "680px"
+      }
+    },
+
+    {
+      "name": "desertDiamond",
+      "basicAuthEnabled": true,
+      "domains": [
+        {
+          "hostname": "ddm-fe.strivegaming.us",
+          "api": "https://ddmapi-dev.strivegaming.us"
+        }
+      ],
+      "theme": "strive",
+      "dateFormat": "MM-DD-YYYY",
+      "kambi": {
+        "market": "US",
+        "currency": "USD",
+        "online": "https://ctn-static.kambi.com/client/ddusaz/kambi-bootstrap.js",
+        "api": "https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js",
+        "oddsFormat": "american",
+        "fallbackLocale": "en_US"
+      },
+      "geoComplyKey": "ShzolMaAK",
+      "smartyStreets": "108064515683753034",
+      "xtremepush": "https://us.webpu.sh/8UCYTGU9kjyxCCgQtCqROPz24HI_2FvA/sdk.js",
+      "zendesk": "35d43606-f8bf-4f03-8b8b-6aa6b7690498",
+      "redis": {
+        "host": "192.168.109.106",
+        "port": 6379,
+        "db": 0,
+        "prefix": "reactNodeStage-",
+        "password": "yAw6H44cHUtvnjC"
+      },
+      "themeSettings": {
+        "boxShadow": {
+          "generic": "none"
+        },
+        "borderRadius": {
+          "sm": "4px"
+        },
+        "colors": {
+          "primary": {
+            "main": "#08A4DA",
+            "light": "#5eed53",
+            "hover": "#0790bf"
+          },
+          "brand": {
+            "main": "#051B35",
+            "light": "#051B35",
+            "text": "#051B35"
+          },
+          "secondary": {
+            "main": "#334C6C",
+            "hover": "#2c425f",
+            "light": "#778CA6"
+          },
+          "danger": {
+            "main": "#F44336"
+          },
+          "success": {
+            "main": "#5CB660"
+          },
+          "info": "#52ADF5",
+          "footer": {
+            "bottomText": "#778CA6"
+          },
+          "body": "#ECF0F3",
+          "lightSpacer": "rgba(119,140,166,0.15)"
+        },
+        "spacing": {
+          "bodyPadding": 25,
+          "bodyPaddingMedium": 20,
+          "bodyPaddingSmall": 20,
+          "footerMainTopPadding": 1.5,
+          "footerMainBottomPadding": 0,
+          "footerPrePadding": 0,
+          "settingsBodyPadding": "30px 15px",
+          "settingsMarginTop": 0
+        },
+        "buttons": {
+          "borderRadius": 3,
+          "fontSize": 16,
+          "color": "#FFF",
+          "primaryBgColor": "#08A4DA",
+          "primaryBgHoverColor": "#0790bf",
+          "primaryColor": "#fff",
+          "secondaryBgColor": "#334C6C",
+          "secondaryBgHoverColor": "#2c425f",
+          "secondaryColor": "#fff",
+          "transform": "uppercase",
+          "disabled": {
+            "backgroundColor": "#0794C5",
+            "color": "rgba(255,255,255, 0.5)"
+          }
+        },
+        "fonts": {
+          "family": "Roboto",
+          "weight": {
+            "bold": 700
+          },
+          "size": {
+            "lg": "18px",
+            "md": "16"
+          }
+        },
+        "header": {
+          "backgroundMobile": "linear-gradient(180deg,#051b35 0%,#053451 100%)",
+          "navHeightMobile": 0,
+          "navFontSize": 16
+        },
+        "footer": {
+          "listColor": "#fff",
+          "listTitleWeight": 700,
+          "timerBgColor": "#213956",
+          "iconsBg": "#213956",
+          "subFooterHeight": 60,
+          "clockIconSize": 18,
+          "clockIconMargin": "0 6px",
+          "bgColor": "#051B35",
+          "color": "#fff"
+        },
+        "communicationPrefs": {
+          "items": {
+            "backgroundColor": "#ffffff",
+            "border": "1px solid rgba(119,140,166,0.15)"
+          }
+        },
+        "pageContainer": {
+          "smallMaxWidth": 480,
+          "backgroundColor": "#ECF0F3"
+        },
+        "pageInnerContainer": {
+          "boxShadow": "0px 2px 4px rgba(5, 27, 53, 0.1)",
+          "titleWeight": 700
+        },
+        "login": {
+          "bgImgTop": "/assets/images/container-bg-img.webp",
+          "linkDecoration": "none",
+          "linkColor": "#08A4DA",
+          "linkFontSize": 16,
+          "buttonFullWidth": true
+        },
+        "registration": {
+          "width": 520,
+          "left": "0",
+          "borderRadius": 4,
+          "boxShadow": "0px 4px 4px rgba(5, 27, 53, 0.1)",
+          "bgImg": "/assets/images/container-bg-img.webp",
+          "titleWeight": 700,
+          "blockTitleWeight": 700,
+          "blockTitleTransform": "uppercase",
+          "blockTitleBorder": "1px solid #E6ECF1",
+          "blockTitleColor": "#778CA6",
+          "blockTitleFontSize": 12,
+          "blockTitlePaddingBottom": 8
+        },
+        "inputs": {
+          "border": "1px solid #9DB4C8",
+          "borderRadius": 4,
+          "padding": "10px 13px",
+          "fontSize": 16,
+          "height": 48,
+          "backgroundColor": "#ffff",
+          "color": "#051B35",
+          "labelLeft": 20,
+          "labelTop": 15,
+          "labelActiveFontSize": 12,
+          "labelActiveTop": -8,
+          "labelActiveLeft": 10,
+          "labelBackgroundColor": "#fff",
+          "labelPadding": 4,
+          "marginBottom": 18,
+          "selectPadding": "10px 13px",
+          "disabled": {
+            "border": "none",
+            "backgroundColor": "#E6ECF1",
+            "color": "#778CA6"
+          },
+          "active": {
+            "borderColor": "#08A4DA"
+          }
+        },
+        "customFileInput": {
+          "backgroundColor": "#E6ECF1",
+          "labelColor": "#051B35",
+          "buttonFontColor": "#FFF",
+          "buttonFontWeight": 700,
+          "buttonFontSize": "15px",
+          "buttonColor": "#334C6C",
+          "border": "none"
+        },
+        "toggleCheck": {
+          "slider": {
+            "width": "18px",
+            "height": "18px",
+            "left": "4px",
+            "checkedLeft": "55%",
+            "boxShadow": "none"
+          },
+          "height": "24px",
+          "minWidth": "48px",
+          "backgroundColor": "#778CA6",
+          "checkedBgColor": "#08A4DA"
+        },
+        "helpBlock": {
+          "titleWeight": 700,
+          "titleColor": "#778CA6",
+          "padding": "0",
+          "color": "#051B35",
+          "blockTitleWeight": 700,
+          "blockTitleColor": "#051B35",
+          "iconSize": 20
+        },
+        "userMenu": {
+          "boxShadow": "0px 4px 4px rgba(5, 27, 53, 0.1)",
+          "borderRadius": 4,
+          "itemBorder": "1px solid rgba(119, 140, 166, 0.15)",
+          "itemWeight": 700,
+          "itemTransform": "uppercase",
+          "itemFontSize": 14,
+          "itemHeight": 48,
+          "width": 330,
+          "backgroundColor": "#fff",
+          "subItemBgColor": "#fff",
+          "itemIconColor": "#778CA6"
+        },
+        "settingsMenu": {
+          "fontSize": 14,
+          "color": "#051B35",
+          "borderRadius": 4,
+          "activeBgColor": "#E6ECF1",
+          "fontWeight": 700,
+          "fontTransform": "uppercase",
+          "subBackgroundColor": "#fff",
+          "iconColor": "#778CA6"
+        },
+        "inputContainer": {
+          "backgroundColor": "#fff",
+          "borderRadius": 0,
+          "padding": 25,
+          "fullWidthButton": true,
+          "iconButton": false,
+          "customInput": true,
+          "inputHeight": 68,
+          "inputBgColor": "#E6ECF1",
+          "inputFontSize": 24,
+          "inputFontWeight": 700,
+          "inputAlign": "center",
+          "quickBorderRadius": 4,
+          "quickPadding": "10px 0",
+          "quickColor": "#fff",
+          "quickFontWeight": 700,
+          "quickBorder": "none",
+          "quickBg": "#334C6C"
+        },
+        "paymentMethods": {
+          "inRow": 4,
+          "padding": "25px 20%",
+          "mobilePadding": "30px 5px",
+          "textAlign": "left",
+          "border": "1px solid #E6ECF1",
+          "borderRadius": 4,
+          "activeOutline": "0px 0px 0px 3px #051B35"
+        },
+        "settingsPage": {
+          "titleFontWeight": 700,
+          "titleMargin": "0 0 15px 0",
+          "subTextMargin": "0 0 16px 0",
+          "containerMaxWidth": 1150
+        },
+        "dateFilter": {
+          "padding": "0",
+          "margin": "0",
+          "periodBgColor": "#E6ECF1",
+          "periodColor": "#051B35",
+          "periodActiveColor": "#fff",
+          "periodBorderRadius": 4,
+          "dateInputBg": "#E6ECF1",
+          "dateInputBorder": "#E6ECF1",
+          "borderColor": "none"
+        },
+        "table": {
+          "headerFontSize": 12,
+          "headerColor": "#778CA6",
+          "itemColor": "#051B35",
+          "itemFontSize": 14,
+          "itemBorder": "1px solid #E6ECF1"
+        },
+        "questionsContainer": {
+          "borderRadius": 4,
+          "bgColor": "#fff",
+          "titleFontWeight": 700,
+          "itemBorder": "1px solid #E6ECF1"
+        },
+        "infoContainer": {
+          "bgColor": "#fff",
+          "color": "#051B35",
+          "boldColor": "#051B35",
+          "borderRadius": 4,
+          "borderTop": "1px solid rgba(119, 140, 166, 0.15)",
+          "titleMargin": "0",
+          "limitNumberColor": "#051B35",
+          "limitNumberFontSize": 18,
+          "limitNumberFontWeight": 700,
+          "limitInfoColor": "#778CA6",
+          "limitInfoTitleWeight": 700,
+          "limitInfoTitleTransform": "uppercase",
+          "limitInfoBorder": "1px solid rgba(119, 140, 166, 0.15)"
+        },
+        "alert": {
+          "color": "#051B35",
+          "padding": "16px 16px",
+          "iconColor": "#FFF",
+          "fontSize": 16,
+          "iconSize": 16,
+          "iconBgSize": 20,
+          "margin": "15px 0 !important",
+          "invertedIconBg": false,
+          "transparentBg": true
+        },
+        "promotions": {
+          "cardPadding": "24px"
+        },
+        "modals": {
+          "color": "#051B35",
+          "title": {
+            "fontWeight": 700,
+            "fontSize": "24px"
+          }
+        },
+        "genericModalWidth": "505px"
+      },
+      "componentSettings": {
+        "userIdleTimeout": 30,
+        "v2Auth": "wss://ddm-wsdev.strivegaming.us",
+        "login": {
+          "loginCookiesAccept": true,
+          "emailLogin": true
+        },
+        "modals": {
+          "TnC": true,
+          "ResponsibleGambling": false,
+          "ValidationFailed": true,
+          "CookiePolicy": true,
+          "AddBankAccount": true,
+          "GeoComply": true,
+          "PlayerDisabled": true
+        }
+      }
+    },
+    {
+      "name": "xcasino",
+      "basicAuthEnabled": true,
+      "domains": [
+        {
+          "hostname": "xcasino-rj.tglab.dev",
+          "api": "https://pla-dev.tglab.dev"
+        }
+      ],
+      "themeColor": "#000541",
+      "theme": "xcasino",
+      "redis": {
+        "host": "192.168.109.106",
+        "port": 6379,
+        "db": 0,
+        "prefix": "reactNodeStage-",
+        "password": "yAw6H44cHUtvnjC"
+      },
+      "tgLabSb": {
+        "id": 56,
+        "bundle": "https://nstest.tonybet.com/js/sbwrp.js",
+        "format": "eu"
+      },
+      "componentSettings": {
+        "v2Auth": "wss://xcasino-ws.tglab.dev",
+        "limitsOnAction": ["login", "logout", "playCasino"],
+        "modals": {
+          "limits": true
+        }
+      },
+      "casino": true,
+      "dateFormat": "YYYY-MM-DD"
+    },
+    {
+      "name": "gnogaz",
+      "basicAuthEnabled": true,
+      "domains": [
+        {
+          "hostname": "gnogaz-fe.strivegaming.us",
+          "api": "https://gnogazapi-dev.strivegaming.us"
+        }
+      ],
+      "themeColor": "#000541",
+      "smartyStreets": "113676706475958507",
+      "geoComplyKey": "5YZkkL4ADJ",
+      "zendesk": "6cc945cb-97c4-4c68-b189-b302de7e4868",
+      "sbTechUrl": "https://gnogaz-fe-sandbox.strivegaming.us",
+      "xtremepush": "https://us.webpu.sh/Zgwm8SC36q1F-0S5QAuaKhanJF8k7fmN/sdk.js",
+      "theme": "strive",
+      "redis": {
+        "host": "192.168.109.106",
+        "port": 6379,
+        "db": 0,
+        "prefix": "reactNodeStage-",
+        "password": "yAw6H44cHUtvnjC"
+      },
+      "dateFormat": "MM-DD-YYYY",
+      "componentSettings": {
+        "userIdleTimeout": 30,
+        "v2Auth": "wss://gnogaz-ws.strivegaming.us",
+        "login": {
+          "loginCookiesAccept": true
+        },
+        "modals": {
+          "TnC": true,
+          "ResponsibleGambling": false,
+          "ValidationFailed": true,
+          "CookiePolicy": true,
+          "AddBankAccount": true,
+          "GeoComply": true,
+          "PlayerDisabled": true
+        }
+      },
+      "themeSettings": {
+        "boxShadow": {
+          "generic": "none"
+        },
+        "borderRadius": {
+          "sm": "4px"
+        },
+        "colors": {
+          "primary": {
+            "main": "#FFDC3E",
+            "light": "#5eed53",
+            "hover": "#0790bf"
+          },
+          "brand": {
+            "main": "#FFDC3E",
+            "light": "#444",
+            "text": "#fff",
+            "hover": "#bfbfbf"
+          },
+          "secondary": {
+            "main": "#555555",
+            "hover": "#2c425f",
+            "light": "#999"
+          },
+          "danger": {
+            "main": "#F44336"
+          },
+          "success": {
+            "main": "#5CB660"
+          },
+          "info": "#52ADF5",
+          "footer": {
+            "bottomText": "#778CA6"
+          },
+          "body": "#000",
+          "lightSpacer": "#171717",
+          "container": "#222"
+        },
+        "spacing": {
+          "bodyPadding": 25,
+          "bodyPaddingMedium": 20,
+          "bodyPaddingSmall": 20,
+          "footerMainTopPadding": 1.5,
+          "footerMainBottomPadding": 0,
+          "footerPrePadding": 0,
+          "settingsBodyPadding": "30px 15px",
+          "settingsMarginTop": 0
+        },
+        "buttons": {
+          "borderRadius": 3,
+          "fontSize": 16,
+          "color": "#FFF",
+          "transform": "uppercase",
+          "primaryBgColor": "#FFDC3E",
+          "primaryBgHoverColor": "#edc200",
+          "primaryColor": "#000",
+          "secondaryBgColor": "#444444",
+          "secondaryBgHoverColor": "#333333",
+          "secondaryColor": "#fff",
+          "paddingY": 10,
+          "maxHeight": 40
+        },
+        "fonts": {
+          "family": "Proxima Nova",
+          "weight": {
+            "bold": 700
+          },
+          "size": {
+            "lg": "18px",
+            "md": "16"
+          }
+        },
+        "header": {
+          "logoSize": 125,
+          "logoSizeMobile": 88,
+          "logoPosition": "left",
+          "borderBottom": "1px solid #333",
+          "topOffset": 15,
+          "marginBottom": 40,
+          "navHeightMobile": 50
+        },
+        "footer": {
+          "listColor": "#fff",
+          "listTitleWeight": 700,
+          "timerBgColor": "#213956",
+          "subFooterHeight": 60,
+          "clockIconSize": 18,
+          "clockIconMargin": "0 6px"
+        },
+        "communicationPrefs": {
+          "bgColor": "#222",
+          "color": "#fff",
+          "items": {
+            "backgroundColor": "#222",
+            "border": "1px solid #000"
+          }
+        },
+        "pageContainer": {
+          "smallMaxWidth": 480,
+          "backgroundColor": "#000"
+        },
+        "pageInnerContainer": {
+          "boxShadow": "0px 2px 4px rgba(5, 27, 53, 0.1)",
+          "titleWeight": 700,
+          "bgColor": "#222222"
+        },
+        "login": {
+          "bgImgTop": "/assets/images/container-bg-img.png",
+          "linkDecoration": "none",
+          "linkColor": "#FFDC3E",
+          "linkFontSize": 16,
+          "buttonFullWidth": true,
+          "titleColor": "#FFDC3E"
+        },
+        "registration": {
+          "width": 520,
+          "left": "0",
+          "borderRadius": 4,
+          "boxShadow": "0px 4px 4px rgba(5, 27, 53, 0.1)",
+          "bgImg": "/assets/images/container-bg-img.png",
+          "titleWeight": 700,
+          "titleColor": "#FFDC3E",
+          "blockTitleWeight": 700,
+          "blockTitleTransform": "uppercase",
+          "blockTitleBorder": "1px solid #444",
+          "blockTitleColor": "#999999",
+          "blockTitleFontSize": 12,
+          "blockTitlePaddingBottom": 8,
+          "bgColor": "#222",
+          "blockBgColor": "#555555"
+        },
+        "inputs": {
+          "border": "1px solid #4A4A4A",
+          "borderRadius": 4,
+          "padding": "10px 30px 10px 13px",
+          "fontSize": 16,
+          "height": 48,
+          "backgroundColor": "#222",
+          "color": "#fff",
+          "labelLeft": 20,
+          "labelTop": 15,
+          "labelActiveFontSize": 12,
+          "labelActiveTop": -8,
+          "labelActiveLeft": 10,
+          "labelBackgroundColor": "#222",
+          "labelPadding": 4,
+          "marginBottom": 18,
+          "selectPadding": "10px 13px",
+          "iconColor": "#555555",
+          "disabled": {
+            "border": "1px solid #4A4A4A",
+            "backgroundColor": "#222",
+            "color": "#666"
+          },
+          "invalid": {
+            "backgroundColor": "#222"
+          },
+          "active": {
+            "borderColor": "#FFDC3E"
+          },
+          "dropdownBg": "#444"
+        },
+        "customFileInput": {
+          "backgroundColor": "#555555",
+          "labelColor": "#fff",
+          "buttonFontColor": "#FFF",
+          "buttonFontWeight": 700,
+          "buttonFontSize": "15px",
+          "buttonColor": "#444444",
+          "border": "none"
+        },
+        "toggleCheck": {
+          "slider": {
+            "width": "18px",
+            "height": "18px",
+            "left": "2px",
+            "checkedLeft": "55%",
+            "boxShadow": "none",
+            "color": "#FFDC3E",
+            "checkedColor": "#222222"
+          },
+          "height": "24px",
+          "minWidth": "48px",
+          "backgroundColor": "#222",
+          "checkedBgColor": "#FFDC3E",
+          "border": "1px solid #FFDC3E"
+        },
+        "helpBlock": {
+          "titleWeight": 700,
+          "titleColor": "#999999",
+          "padding": "0",
+          "color": "#888888",
+          "blockTitleWeight": 700,
+          "blockTitleColor": "#fff",
+          "iconSize": 24,
+          "iconColor": "#fff",
+          "iconBgColor": "#222222",
+          "bgColor": "transparent"
+        },
+        "userMenu": {
+          "boxShadow": "0px 4px 4px rgba(5, 27, 53, 0.1)",
+          "borderRadius": 4,
+          "itemBorder": "1px solid #000",
+          "itemWeight": 700,
+          "itemTransform": "uppercase",
+          "itemFontSize": 14,
+          "itemHeight": 48,
+          "width": 330,
+          "backgroundColor": "#222",
+          "subItemBgColor": "#222",
+          "itemIconColor": "#888"
+        },
+        "settingsMenu": {
+          "fontSize": 14,
+          "color": "#fff",
+          "borderRadius": 4,
+          "bgColor": "#222222",
+          "activeBgColor": "#222222",
+          "fontWeight": 700,
+          "fontTransform": "uppercase",
+          "subBackgroundColor": "#222222",
+          "iconColor": "#888888",
+          "iconSize": 24,
+          "bottomBorderColor": "#000"
+        },
+        "inputContainer": {
+          "backgroundColor": "#222222",
+          "borderRadius": 4,
+          "padding": 25,
+          "fullWidthButton": true,
+          "iconButton": false,
+          "customInput": true,
+          "inputHeight": 68,
+          "inputBgColor": "#555",
+          "inputFontSize": 24,
+          "inputFontWeight": 700,
+          "inputAlign": "center",
+          "inputColor": "#fff",
+          "quickBorderRadius": 4,
+          "quickPadding": "10px 0",
+          "quickColor": "#fff",
+          "quickFontWeight": 700,
+          "quickBorder": "none",
+          "quickBg": "#444444",
+          "quickBorderColor": "#FFDC3E"
+        },
+        "paymentMethods": {
+          "inRow": 5,
+          "padding": "25px 20%",
+          "mobilePadding": "20px 10px",
+          "textAlign": "left",
+          "border": "1px solid #E6ECF1",
+          "borderRadius": 4,
+          "activeOutline": "0px 0px 0px 4px #FFDC3E"
+        },
+        "settingsPage": {
+          "titleFontWeight": 700,
+          "titleMargin": "0 0 15px 0",
+          "subTextMargin": "0 0 16px 0",
+          "minHeight": "calc(100vh - 556px)",
+          "marginTop": -20,
+          "containerMaxWidth": 1150
+        },
+        "dateFilter": {
+          "padding": "0",
+          "margin": "0",
+          "periodBgColor": "#444444",
+          "periodColor": "#fff",
+          "periodActiveColor": "#000",
+          "periodBorderRadius": 4,
+          "borderColor": "none",
+          "dateInputBg": "#444444",
+          "dateInputColor": "#fff",
+          "dateInputBorder": "1px solid #444"
+        },
+        "table": {
+          "headerFontSize": 12,
+          "headerColor": "#999999",
+          "itemColor": "#fff",
+          "itemFontSize": 14,
+          "itemBorder": "1px solid #444"
+        },
+        "questionsContainer": {
+          "borderRadius": 4,
+          "bgColor": "#222222",
+          "titleFontWeight": 700,
+          "itemBorder": "1px solid #E6ECF1"
+        },
+        "infoContainer": {
+          "bgColor": "#222",
+          "textBgColor": "#222",
+          "color": "#fff",
+          "boldColor": "#999",
+          "borderRadius": 4,
+          "borderTop": "1px solid rgba(119, 140, 166, 0.15)",
+          "titleMargin": "0",
+          "limitNumberColor": "#fff",
+          "limitNumberFontSize": 18,
+          "limitNumberFontWeight": 700,
+          "limitInfoColor": "#999999",
+          "limitInfoTitleWeight": 700,
+          "limitInfoTitleTransform": "uppercase",
+          "limitInfoBorder": "1px solid rgba(119, 140, 166, 0.15)",
+          "activeHeaderColor": "#444",
+          "activeHeaderButtonBgColor": "#888"
+        },
+        "outerInfoBlock": {
+          "bgColor": "#222"
+        },
+        "balancesList": {
+          "titleColor": "#fff"
+        },
+        "alert": {
+          "color": "#fff",
+          "padding": "16px 16px",
+          "iconColor": "#FFF",
+          "fontSize": 14,
+          "fontWeight": 700,
+          "iconSize": 16,
+          "iconBgSize": 20,
+          "margin": "15px 0 !important",
+          "invertedIconBg": true,
+          "transparentBg": false
+        },
+        "promotions": {
+          "cardPadding": "24px",
+          "containerBgColor": "#222",
+          "containerTitleColor": "#FFDC3E",
+          "containerColor": "#fff"
+        },
+        "modals": {
+          "color": "#fff",
+          "bgColor": "#222",
+          "borderColor": "#333",
+          "title": {
+            "fontWeight": 700,
+            "fontSize": "24px"
+          }
+        },
+        "genericModalWidth": "520px",
+        "backdrop": {
+          "bgColor": "rgba(0, 0, 0, 0.8)"
+        }
+      }
+    },
+    {
+      "name": "gnogon",
+      "domains": [
+        {
+          "hostname": "gnogon-fe.strivegaming.us",
+          "api": "https://gnogazapi-dev.strivegaming.us"
+        }
+      ],
+      "theme": "strive",
+      "themeSettings": {
+        "boxShadow": {
+          "generic": "none"
+        },
+        "borderRadius": {
+          "sm": "4px"
+        },
+        "colors": {
+          "primary": {
+            "main": "#FFDC3E",
+            "light": "#5eed53",
+            "hover": "#0790bf"
+          },
+          "brand": {
+            "main": "#222",
+            "light": "#444",
+            "text": "#fff",
+            "hover": "#bfbfbf"
+          },
+          "secondary": {
+            "main": "#555555",
+            "hover": "#2c425f",
+            "light": "#999"
+          },
+          "danger": {
+            "main": "#F44336"
+          },
+          "success": {
+            "main": "#5CB660"
+          },
+          "info": "#52ADF5",
+          "footer": {
+            "bottomText": "#778CA6"
+          },
+          "body": "#000",
+          "lightSpacer": "#171717",
+          "container": "#222"
+        },
+        "spacing": {
+          "bodyPadding": 25,
+          "bodyPaddingMedium": 20,
+          "bodyPaddingSmall": 20,
+          "footerMainTopPadding": 1.5,
+          "footerMainBottomPadding": 0,
+          "footerPrePadding": 0,
+          "settingsBodyPadding": "30px 15px",
+          "settingsMarginTop": 15
+        },
+        "buttons": {
+          "borderRadius": 3,
+          "fontSize": 16,
+          "color": "#FFF",
+          "transform": "uppercase",
+          "primaryBgColor": "#FFDC3E",
+          "primaryBgHoverColor": "#edc200",
+          "primaryColor": "#000",
+          "secondaryBgColor": "#444444",
+          "secondaryBgHoverColor": "#333333",
+          "secondaryColor": "#fff",
+          "paddingY": 10,
+          "maxHeight": 40
+        },
+        "fonts": {
+          "family": "Proxima Nova",
+          "weight": {
+            "bold": 700
+          },
+          "size": {
+            "lg": "18px",
+            "md": "16"
+          }
+        },
+        "header": {
+          "logoSize": 125,
+          "logoSizeMobile": 88,
+          "logoPosition": "left",
+          "borderBottom": "1px solid #333",
+          "topOffset": 15,
+          "marginBottom": 40,
+          "navHeightMobile": 50
+        },
+        "footer": {
+          "listColor": "#fff",
+          "listTitleWeight": 700,
+          "timerBgColor": "#213956",
+          "subFooterHeight": 60,
+          "clockIconSize": 18,
+          "clockIconMargin": "0 6px"
+        },
+        "communicationPrefs": {
+          "bgColor": "#222",
+          "color": "#fff",
+          "items": {
+            "backgroundColor": "#222",
+            "border": "1px solid #000"
+          }
+        },
+        "pageContainer": {
+          "smallMaxWidth": 480,
+          "backgroundColor": "#000"
+        },
+        "pageInnerContainer": {
+          "boxShadow": "0px 2px 4px rgba(5, 27, 53, 0.1)",
+          "titleWeight": 700,
+          "bgColor": "#222222"
+        },
+        "login": {
+          "bgImgTop": "/assets/images/container-bg-img.png",
+          "linkDecoration": "none",
+          "linkColor": "#FFDC3E",
+          "linkFontSize": 16,
+          "buttonFullWidth": true,
+          "titleColor": "#FFDC3E"
+        },
+        "registration": {
+          "width": 480,
+          "left": "-5%",
+          "borderRadius": 4,
+          "boxShadow": "0px 4px 4px rgba(5, 27, 53, 0.1)",
+          "bgImg": "/assets/images/container-bg-img.png",
+          "titleWeight": 700,
+          "titleColor": "#FFDC3E",
+          "blockTitleWeight": 700,
+          "blockTitleTransform": "uppercase",
+          "blockTitleBorder": "1px solid #444",
+          "blockTitleColor": "#999999",
+          "blockTitleFontSize": 12,
+          "blockTitlePaddingBottom": 8,
+          "bgColor": "#222",
+          "blockBgColor": "#555555"
+        },
+        "inputs": {
+          "border": "1px solid #4A4A4A",
+          "borderRadius": 4,
+          "padding": "10px 13px",
+          "fontSize": 16,
+          "height": 48,
+          "backgroundColor": "#222",
+          "color": "#fff",
+          "labelLeft": 20,
+          "labelTop": 15,
+          "labelActiveFontSize": 12,
+          "labelActiveTop": -10,
+          "labelActiveLeft": 10,
+          "labelBackgroundColor": "#222",
+          "labelPadding": 4,
+          "marginBottom": 18,
+          "selectPadding": "10px 13px",
+          "iconColor": "#555555",
+          "disabled": {
+            "border": "1px solid #4A4A4A",
+            "backgroundColor": "#222",
+            "color": "#666"
+          },
+          "invalid": {
+            "backgroundColor": "#222"
+          },
+          "dropdownBg": "#444"
+        },
+        "customFileInput": {
+          "backgroundColor": "#555555",
+          "labelColor": "#fff",
+          "buttonFontColor": "#FFF",
+          "buttonFontWeight": 700,
+          "buttonFontSize": "15px",
+          "buttonColor": "#444444",
+          "border": "none"
+        },
+        "toggleCheck": {
+          "slider": {
+            "width": "18px",
+            "height": "18px",
+            "left": "2px",
+            "checkedLeft": "55%",
+            "boxShadow": "none",
+            "color": "#FFDC3E",
+            "checkedColor": "#222222"
+          },
+          "height": "24px",
+          "minWidth": "48px",
+          "backgroundColor": "#222",
+          "checkedBgColor": "#FFDC3E",
+          "border": "1px solid #FFDC3E"
+        },
+        "helpBlock": {
+          "titleWeight": 700,
+          "titleColor": "#999999",
+          "padding": "0",
+          "color": "#888888",
+          "blockTitleWeight": 700,
+          "blockTitleColor": "#fff",
+          "iconSize": 24,
+          "iconColor": "#fff",
+          "iconBgColor": "#222222",
+          "bgColor": "transparent"
+        },
+        "userMenu": {
+          "boxShadow": "0px 4px 4px rgba(5, 27, 53, 0.1)",
+          "borderRadius": 4,
+          "itemBorder": "1px solid #000",
+          "itemWeight": 700,
+          "itemTransform": "uppercase",
+          "itemFontSize": 14,
+          "itemHeight": 48,
+          "width": 330,
+          "backgroundColor": "#222",
+          "subItemBgColor": "#222",
+          "itemIconColor": "#888"
+        },
+        "settingsMenu": {
+          "fontSize": 14,
+          "color": "#fff",
+          "borderRadius": 4,
+          "bgColor": "#222222",
+          "activeBgColor": "#222222",
+          "fontWeight": 700,
+          "fontTransform": "uppercase",
+          "subBackgroundColor": "#222222",
+          "iconColor": "#888888",
+          "iconSize": 24,
+          "bottomBorderColor": "#000"
+        },
+        "inputContainer": {
+          "backgroundColor": "#222222",
+          "borderRadius": 4,
+          "padding": 25,
+          "fullWidthButton": true,
+          "iconButton": false,
+          "customInput": true,
+          "inputHeight": 68,
+          "inputBgColor": "#555",
+          "inputFontSize": 24,
+          "inputFontWeight": 700,
+          "inputAlign": "center",
+          "inputColor": "#fff",
+          "quickBorderRadius": 4,
+          "quickPadding": "10px 0",
+          "quickColor": "#fff",
+          "quickFontWeight": 700,
+          "quickBorder": "none",
+          "quickBg": "#444444"
+        },
+        "paymentMethods": {
+          "inRow": 4,
+          "padding": "25px 40px",
+          "textAlign": "left",
+          "border": "1px solid #E6ECF1",
+          "borderRadius": 4,
+          "activeOutline": "0px 0px 0px 3px #222"
+        },
+        "settingsPage": {
+          "titleFontWeight": 700,
+          "titleMargin": "0 0 15px 0",
+          "subTextMargin": "0 0 16px 0",
+          "minHeight": "calc(100vh - 556px)",
+          "marginTop": -20
+        },
+        "dateFilter": {
+          "padding": "0",
+          "margin": "0",
+          "periodBgColor": "#444444",
+          "periodColor": "#fff",
+          "periodActiveColor": "#000",
+          "periodBorderRadius": 4,
+          "borderColor": "none",
+          "dateInputBg": "#444444",
+          "dateInputColor": "#fff",
+          "dateInputBorder": "1px solid #444"
+        },
+        "table": {
+          "headerFontSize": 12,
+          "headerColor": "#999999",
+          "itemColor": "#fff",
+          "itemFontSize": 14,
+          "itemBorder": "1px solid #444"
+        },
+        "questionsContainer": {
+          "borderRadius": 4,
+          "bgColor": "#222222",
+          "titleFontWeight": 700,
+          "itemBorder": "1px solid #E6ECF1"
+        },
+        "infoContainer": {
+          "bgColor": "#222",
+          "textBgColor": "#222",
+          "color": "#fff",
+          "boldColor": "#999",
+          "borderRadius": 4,
+          "borderTop": "1px solid rgba(119, 140, 166, 0.15)",
+          "titleMargin": "0",
+          "limitNumberColor": "#fff",
+          "limitNumberFontSize": 18,
+          "limitNumberFontWeight": 700,
+          "limitInfoColor": "#999999",
+          "limitInfoTitleWeight": 700,
+          "limitInfoTitleTransform": "uppercase",
+          "limitInfoBorder": "1px solid rgba(119, 140, 166, 0.15)",
+          "activeHeaderColor": "#444",
+          "activeHeaderButtonBgColor": "#888"
+        },
+        "outerInfoBlock": {
+          "bgColor": "#222"
+        },
+        "balancesList": {
+          "titleColor": "#fff"
+        },
+        "alert": {
+          "color": "#fff",
+          "padding": "16px 16px",
+          "iconColor": "#FFF",
+          "fontSize": 14,
+          "fontWeight": 700,
+          "iconSize": 16,
+          "iconBgSize": 20,
+          "margin": "15px 0 !important",
+          "invertedIconBg": true,
+          "transparentBg": false
+        },
+        "promotions": {
+          "cardPadding": "24px",
+          "containerBgColor": "#222",
+          "containerTitleColor": "#FFDC3E",
+          "containerColor": "#fff"
+        },
+        "modals": {
+          "color": "#fff",
+          "bgColor": "#222",
+          "borderColor": "#333",
+          "title": {
+            "fontWeight": 700,
+            "fontSize": "24px"
+          }
+        },
+        "genericModalWidth": "520px",
+        "backdrop": {
+          "bgColor": "rgba(0, 0, 0, 0.8)"
+        }
+      },
+      "dateFormat": "MM-DD-YYYY",
+      "redis": {
+        "host": "192.168.109.106",
+        "port": 6379,
+        "db": 0,
+        "prefix": "reactNodeStage-",
+        "password": "yAw6H44cHUtvnjC"
+      },
+      "casino": true,
+      "componentSettings": {
+        "v2Auth": "wss://gnogon-ws.strivegaming.us",
+        "userIdleTimeout": 30,
+        "login": {
+          "loginCookiesAccept": true
+        },
+        "modals": {
+          "TnC": true,
+          "ResponsibleGambling": false,
+          "ValidationFailed": true,
+          "CookiePolicy": true,
+          "AddBankAccount": true,
+          "GeoComply": true,
+          "PlayerDisabled": true
+        }
+      }
+    },
+    {
+      "name": "xcasinoCom",
+      "basicAuthEnabled": true,
+      "domains": [
+        {
+          "hostname": "xcasinocom-rj.tglab.dev",
+          "api": "https://pla-dev.tglab.dev"
+        }
+      ],
+      "themeColor": "#000541",
+      "theme": "xcasinoCom",
+      "redis": {
+        "host": "192.168.109.106",
+        "port": 6379,
+        "db": 0,
+        "prefix": "reactNodeStage-",
+        "password": "yAw6H44cHUtvnjC"
+      },
+      "tgLabSb": {
+        "id": 56,
+        "bundle": "https://nstest.tonybet.com/js/sbwrp.js",
+        "format": "eu"
+      },
+      "componentSettings": {
+        "v2Auth": "wss://xcasino-ws.tglab.dev",
+        "limitsOnAction": ["login", "logout", "playCasino"],
+        "modals": {
+          "limits": true
+        }
+      },
+      "casino": true,
+      "dateFormat": "YYYY-MM-DD"
+    }
+  ],
+  "sentryDsn": "https://bc58950e0bc549ceab635a17b85e928b@sentry.tglab.dev/9",
+  "port": 3800,
+  "basicAuth": {
+    "whitelistedIp": [
+      "88.119.158.27",
+      "88.119.17.78",
+      "78.60.222.254",
+      "78.63.1.7",
+      "88.119.17.78",
+      "93.157.73.168",
+      "185.172.85.185"
+    ],
+    "users": [
+      {
+        "username": "tbtest",
+        "password": "B3st.P4ssword"
+      },
+      {
+        "username": "tbtest",
+        "password": "wCrXilO_iq!N"
+      }
+    ],
+    "mobileViewExcludedPages": {
+      "desertDiamond": [
+        "terms_conditions_link",
+        "privacy_policy_link",
+        "nav_link_responsible_gaming",
+        "sitemap_houseRules",
+        "sitemap_resetPassword"
+      ]
+    }
+  }
+}

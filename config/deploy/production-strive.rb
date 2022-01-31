@@ -13,6 +13,6 @@ set :build_env, 'production'
 
 set :default_env, {
   NODE_ENV: :production,
-  NODE_APP_INSTANCE: 'strive'
+  NODE_FRANCHISE: 'strive'
 }
 

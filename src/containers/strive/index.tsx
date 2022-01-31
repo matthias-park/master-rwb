@@ -7,9 +7,8 @@ import theme from './theme';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state';
 import GlobalStyles from './components/styled/GlobalStyles';
-import indexApp from '../IndexApp';
 
-const Index = () => {
+const App = () => {
   const mobileView = useSelector((state: RootState) => state.config.mobileView);
   if (mobileView) {
     return (
@@ -29,4 +28,5 @@ const Index = () => {
     </ThemeProvider>
   );
 };
-indexApp(() => <Index />);
+
+export default App;

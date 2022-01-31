@@ -1,8 +1,7 @@
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
-const argv = process.argv.slice(2);
-process.env.NODE_APP_INSTANCE = argv[0] || '';
+
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
@@ -29,7 +28,10 @@ const semver = require('semver');
 const paths = require('../webpack/paths');
 const configFactory = require('../webpack/webpack.config');
 const createDevServerConfig = require('../webpack/webpackDevServer.config');
+const getClientEnvironment = require('../webpack/env');
 const react = require(require.resolve('react', { paths: [paths.appPath] }));
+
+const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
 const isInteractive = process.stdout.isTTY;
 
 // Warn and crash if required files are missing
@@ -58,7 +60,7 @@ if (process.env.HOST) {
   console.log();
 }
 
-const allFranchises = Object.values(config.get('franchises'));
+const allFranchises = config.get('franchises');
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
@@ -74,11 +76,8 @@ checkBrowsers(paths.appPath, isInteractive)
       // We have not found a port.
       return;
     }
-    const franchisesToCompile = process.env.NODE_APP_INSTANCE
-      ? [allFranchises.find(fr => process.env.NODE_APP_INSTANCE === fr.name)]
-      : allFranchises;
 
-    const webpackConfig = configFactory('development', franchisesToCompile);
+    const webpackConfig = configFactory('development', allFranchises);
     const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
     const appName = require(paths.appPackageJson).name;
 

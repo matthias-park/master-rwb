@@ -1,18 +1,11 @@
 const path = require('path');
 const fs = require('fs');
 const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
-const jsonConfig = require('config');
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebook/create-react-app/issues/637
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
-const franchiseTheme =
-  (process.env.NODE_APP_INSTANCE &&
-    Object.values(jsonConfig.get('franchises')).find(
-      fr => process.env.NODE_APP_INSTANCE === fr.name,
-    )?.theme) ||
-  '';
 
 // We use `PUBLIC_URL` environment variable or "homepage" field to infer
 // "public path" at which the app is served.
@@ -53,21 +46,10 @@ const resolveModule = (resolveFn, filePath) => {
   return resolveFn(`${filePath}.js`);
 };
 
-const resolveFranchiseEntry = resolveFn => {
-  if (franchiseTheme) {
-    return resolveFn(`src/containers/${franchiseTheme}/index.tsx`);
-  }
-  return resolveFn(`src/index.tsx`);
-};
-const resolveFranchiseStyles = resolveFn => {
+const resolveAllStyles = (resolveFn, filePath) => {
+  const franchises = fs.readdirSync(filePath);
   const formatFranchiseStylePath = fr =>
-    resolveFn(`styles/${fr}/stylesheets/main.scss`);
-  if (franchiseTheme) {
-    return {
-      [`theme-${franchiseTheme}`]: formatFranchiseStylePath(franchiseTheme),
-    };
-  }
-  const franchises = fs.readdirSync('styles');
+    resolveFn(`${filePath}/${fr}/stylesheets/main.scss`);
   return franchises
     .filter(fr => fs.existsSync(formatFranchiseStylePath(fr)))
     .reduce((obj, fr) => {
@@ -84,8 +66,8 @@ module.exports = {
   appPublic: resolveApp('public'),
   appDevHtml: resolveApp('public/indexDev.html'),
   appBuildHtml: resolveApp('public/index.html'),
-  appIndexJs: resolveFranchiseEntry(resolveApp),
-  appStyles: resolveFranchiseStyles(resolveApp),
+  appIndexJs: resolveModule(resolveApp, 'src/index'),
+  appStyles: resolveAllStyles(resolveApp, 'styles'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
   appTsConfig: resolveApp('tsconfig.json'),

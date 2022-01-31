@@ -43,11 +43,12 @@ if (!checkRequiredFiles([paths.appBuildHtml, paths.appIndexJs])) {
 
 const argv = process.argv.slice(2);
 const writeStatsJson = argv.indexOf('--stats') !== -1;
-const franchiseName = process.env.NODE_APP_INSTANCE || '';
-const allFranchises = Object.values(config.get('franchises'));
-const franchisesToCompile = franchiseName
-  ? [allFranchises.find(fr => franchiseName === fr.name)]
-  : allFranchises;
+const franchiseName = process.env.NODE_FRANCHISE || 'all';
+const allFranchises = config.get('franchises');
+const franchisesToCompile =
+  franchiseName !== 'all'
+    ? allFranchises.filter(fr => franchiseName.split(',').includes(fr.name))
+    : allFranchises;
 // Generate configuration
 const webpackConfig = configFactory('production', franchisesToCompile);
 
