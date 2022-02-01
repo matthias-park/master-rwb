@@ -1,5 +1,5 @@
-import React from 'react';
-import { ComponentName } from '../../../constants';
+import React, { useEffect } from 'react';
+import { ComponentName, Franchise } from '../../../constants';
 import { useI18n } from '../../../hooks/useI18n';
 import { useModal } from '../../../hooks/useModal';
 import Button from 'react-bootstrap/Button';
@@ -19,9 +19,6 @@ const CookieConsent = () => {
     isEqual(prev.cookies, next.cookies),
   );
 
-  if (cookies.accepted) {
-    return null;
-  }
   const handleAccept = () => {
     dispatch(
       setCookies(
@@ -39,6 +36,12 @@ const CookieConsent = () => {
       'tglab.cookies.personalization': true,
     });
   };
+
+  useEffect(() => {
+    Franchise.gnogaz && handleAccept();
+  }, [cookies]);
+
+  if (Franchise.gnogaz || cookies.accepted) return null;
   return (
     <nav className="cookies-nav">
       <i className="icon-cookies cookies-nav__icon"></i>

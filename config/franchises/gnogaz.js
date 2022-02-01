@@ -25,9 +25,6 @@ module.exports = {
   componentSettings: {
     userIdleTimeout: 30,
     v2Auth: 'wss://gnogaz-ws.strivegaming.us',
-    login: {
-      loginCookiesAccept: true,
-    },
     modals: {
       TnC: true,
       ResponsibleGambling: false,
