@@ -157,6 +157,9 @@ module.exports = {
     },
     dropdownBg: '#444',
   },
+  translationLink: {
+    color: '#FFDC3E',
+  },
   customFileInput: {
     backgroundColor: '#555555',
     labelColor: '#fff',

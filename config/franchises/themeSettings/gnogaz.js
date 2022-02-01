@@ -87,6 +87,9 @@ module.exports = {
     clockIconSize: 18,
     clockIconMargin: '0 6px',
   },
+  translationLink: {
+    color: '#FFDC3E',
+  },
   communicationPrefs: {
     bgColor: '#222',
     color: '#fff',

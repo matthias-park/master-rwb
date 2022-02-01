@@ -38,6 +38,13 @@ const customStyles = css`
     }
   }
 
+  .translation-link {
+    text-decoration: underline;
+    color: ${props =>
+      (props.theme.translationLink && props.theme.translationLink.color) ||
+      'inherit'};
+  }
+
   .page-wrp {
     display: flex;
     flex-direction: column;

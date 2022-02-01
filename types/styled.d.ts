@@ -155,6 +155,10 @@ declare module 'styled-components' {
       bgColor?: string;
       color?: string;
     };
+    translationLink: {
+      textDecoration: string;
+      color: string;
+    };
     pageContainer: {
       smallMaxWidth: number;
       backgroundColor: string;

@@ -45,6 +45,7 @@ export const replaceStringTagsReact = (text: string, props: any = {}) => {
         return (
           <Link
             to={href}
+            className="translation-link"
             style={stylesObject ? stylesObject : undefined}
             {...attribs}
             {...props}
