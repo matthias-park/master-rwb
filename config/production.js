@@ -77,6 +77,7 @@ module.exports = {
       },
     },
     gnogaz: {
+      basicAuthEnabled: true,
       domains: [
         {
           hostname: 'az-sports.goldennuggetsports.com',
