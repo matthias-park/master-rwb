@@ -214,7 +214,7 @@ export const blocks = (
           triggerId: 'repeat_password',
           required: true,
           validate: value => {
-            const valid = VALIDATIONS.password(value, Franchise.gnogaz ? 4 : 3);
+            const valid = VALIDATIONS.password(value, Franchise.gnogon ? 4 : 3);
             setValidation(
               'password',
               valid ? FormFieldValidation.Valid : FormFieldValidation.Invalid,

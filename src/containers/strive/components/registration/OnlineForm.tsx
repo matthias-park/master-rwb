@@ -36,8 +36,12 @@ const FormField = ({
   registerField,
 }) => {
   const { t, jsxT } = useI18n();
-  const { watch } = useFormContext();
-  const [checked, setChecked] = useState(watch(field.id));
+  const { watch, setValue } = useFormContext();
+  const [checked, setChecked] = useState(field.checked || watch(field.id));
+
+  useEffect(() => {
+    if (field.type === 'checkbox' && field.checked) setValue(field.id, true);
+  }, []);
 
   switch (field.type) {
     case 'checkbox': {
@@ -167,7 +171,8 @@ const OnlineForm = (props: Props) => {
     register,
   } = useFormContext();
 
-  const setValidation = (id: string, status: FormFieldValidation) => setValidationForms(prev => ({ ...prev, [id]: status }));
+  const setValidation = (id: string, status: FormFieldValidation) =>
+    setValidationForms(prev => ({ ...prev, [id]: status }));
   const validateRepeat = (id: string, value: string) => {
     const isEqual =
       id === 'email'
