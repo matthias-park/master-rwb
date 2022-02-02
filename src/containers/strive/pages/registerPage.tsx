@@ -9,6 +9,7 @@ import { PostRegistration } from '../../../types/api/user/Registration';
 import dayjs from 'dayjs';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
+import { FranchiseNames } from '../../../types/FranchiseNames';
 import {
   ComponentName,
   franchiseDateFormat,
@@ -16,6 +17,7 @@ import {
   REDIRECT_PROTECTED_NOT_LOGGED_IN,
   Franchise,
   usaOnlyBrand,
+  Config,
 } from '../../../constants';
 import { useAuth } from '../../../hooks/useAuth';
 import RedirectNotFound from '../../../components/RedirectNotFound';
@@ -116,7 +118,12 @@ const RegisterPage = () => {
         form.phone_number = `+1${form.phone_number}`;
       }
       const affiliates = getActiveAffiliates();
-      if (Franchise.gnogaz && affiliates.btag) {
+      const btagFranchise = [
+        FranchiseNames.Gnogaz,
+        FranchiseNames.Gnogon,
+        FranchiseNames.DesertDiamond,
+      ].includes(Config.name);
+      if (btagFranchise && affiliates.btag) {
         form.btag = affiliates.btag;
       }
       const captchaToken = await getToken?.('registration').catch(() => '');
