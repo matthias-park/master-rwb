@@ -1,12 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import {
-  PRERENDER_HEADER,
-  BASIC_AUTH,
-  LOCALE_REGEX,
-  extensionsToIgnore,
-} from '../constants';
+import { PRERENDER_HEADER, BASIC_AUTH, LOCALE_REGEX } from '../constants';
 import auth from 'basic-auth';
-import { getRailsConstants } from '../utils';
+import { getRailsConstants, isReqResourceFile } from '../utils';
 import { matchPath } from 'react-router-dom';
 
 const basicAuth = async (req: Request, res: Response, next: NextFunction) => {
@@ -20,7 +15,11 @@ const basicAuth = async (req: Request, res: Response, next: NextFunction) => {
     )
   )
     return next();
-  if (BASIC_AUTH && BASIC_AUTH?.mobileViewExcludedPages) {
+  if (
+    BASIC_AUTH &&
+    BASIC_AUTH?.mobileViewExcludedPages &&
+    !isReqResourceFile(req)
+  ) {
     const railsConstants = await getRailsConstants(req);
     let urlWithoutLocale = req.path.replace(LOCALE_REGEX, '');
     if (!urlWithoutLocale.startsWith('/'))
@@ -49,9 +48,7 @@ const basicAuth = async (req: Request, res: Response, next: NextFunction) => {
     !BASIC_AUTH.users ||
     !BASIC_AUTH.whitelistedIp ||
     BASIC_AUTH.whitelistedIp.includes(req.ip) ||
-    extensionsToIgnore.some(
-      extension => req.url.toLowerCase().indexOf(extension) !== -1,
-    )
+    isReqResourceFile(req)
   ) {
     return next();
   }

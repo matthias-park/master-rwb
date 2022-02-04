@@ -8,6 +8,7 @@ import fetch from 'isomorphic-unfetch';
 import { PageConfig } from './types/PageConfig';
 import redisCache from './redisCache';
 import logger from './logger';
+import { extname } from 'path';
 
 export const shouldPrerender = (req: Request) => {
   const prerenderHeader = req.headers[PRERENDER_HEADER];
@@ -15,9 +16,7 @@ export const shouldPrerender = (req: Request) => {
   const isBot: boolean | string = req.useragent.isBot;
   // Don't prerender static files or excluded bots
   if (
-    extensionsToIgnore.some(
-      extension => req.url.toLowerCase().indexOf(extension) !== -1,
-    ) ||
+    isReqResourceFile ||
     (typeof isBot === 'string' && EXCLUDED_BOTS.includes(isBot))
   )
     return false;
@@ -87,3 +86,9 @@ export const cacheKeys = (hostname: string) => ({
   prerender: `${hostname}-prerender-`,
   sitemap: `${hostname}-sitemap`,
 });
+
+export const isReqResourceFile = (req: Request) => {
+  const urlExt = extname(req.path);
+  const hasExtension = !!urlExt.length && extensionsToIgnore.includes(urlExt);
+  return hasExtension;
+};

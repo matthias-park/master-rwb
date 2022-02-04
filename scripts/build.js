@@ -24,6 +24,7 @@ const printHostingInstructions = require('react-dev-utils/printHostingInstructio
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 const printBuildError = require('react-dev-utils/printBuildError');
 const config = require('config');
+const zlib = require('zlib');
 
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
@@ -205,23 +206,74 @@ function build(previousFileSizes) {
   });
 }
 
-function copyPublicFolder() {
-  const franchises = franchiseName
-    .split(',')
-    .map(fr => path.join(paths.appPublic, `/${fr}`));
-  fs.copySync(paths.appPublic, paths.appBuild, {
-    dereference: true,
-    filter: file => {
-      if ([paths.appBuildHtml, paths.appDevHtml].includes(file)) return false;
-      return (
-        file === paths.appPublic ||
-        franchiseName === 'all' ||
-        franchises.some(fr => file.startsWith(fr)) ||
-        ['scripts', 'polyfills', 'sportsbook'].some(folder => {
-          const folderPath = path.join(paths.appPublic, `/${folder}`);
-          return file.startsWith(folderPath);
-        })
-      );
+const ignoreJunkList = [
+  '^npm-debug\\.log$',
+  '^\\..*\\.swp$',
+  '^\\.DS_Store$',
+  '^\\.AppleDouble$',
+  '^\\.LSOverride$',
+  '^Icon\\r$',
+  '^\\._.*',
+  '^\\.Spotlight-V100(?:$|\\/)',
+  '\\.Trashes',
+  '^__MACOSX$',
+  '~$',
+  '^Thumbs\\.db$',
+  '^ehthumbs\\.db$',
+  '^Desktop\\.ini$',
+  '@eaDir$',
+];
+const junkRegex = new RegExp(ignoreJunkList.join('|'));
+function* walkSync(dir) {
+  const files = fs.readdirSync(dir, { withFileTypes: true });
+  for (const file of files) {
+    if (junkRegex.test(file.name)) continue;
+    if (file.isDirectory()) {
+      yield* walkSync(path.join(dir, file.name));
+    } else {
+      yield path.join(dir, file.name);
+    }
+  }
+}
+
+const compressFile = (source, dest) => {
+  const zip = zlib.createGzip();
+  const brotli = zlib.createBrotliCompress({
+    params: {
+      [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
     },
   });
+  const read = fs.createReadStream(source);
+  const writeGzip = fs.createWriteStream(`${dest}.gz`);
+  const writeBr = fs.createWriteStream(`${dest}.br`);
+  read.pipe(brotli).pipe(writeBr);
+  read.pipe(zip).pipe(writeGzip);
+};
+
+function copyPublicFolder() {
+  const franchises = franchisesToCompile.map(fr =>
+    path.join(paths.appPublic, `/${fr.name}`),
+  );
+  const filter = file => {
+    if ([paths.appBuildHtml, paths.appDevHtml].includes(file)) return false;
+    return (
+      file === paths.appPublic ||
+      franchises.some(fr => file.startsWith(fr)) ||
+      ['scripts', 'polyfills', 'sportsbook'].some(folder => {
+        const folderPath = path.join(paths.appPublic, `/${folder}`);
+        return file.startsWith(folderPath);
+      })
+    );
+  };
+  for (const filePath of walkSync(paths.appPublic)) {
+    if (!filter(filePath)) continue;
+    const destPath = `${paths.appBuild}${filePath.replace(
+      paths.appPublic,
+      '',
+    )}`;
+    fs.copySync(filePath, destPath);
+    if (fs.statSync(filePath).size > 10240) {
+      compressFile(filePath, destPath);
+    }
+  }
 }

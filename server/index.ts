@@ -3,13 +3,14 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import helmet from 'helmet';
-import { shouldPrerender } from './utils';
+import { isReqResourceFile, shouldPrerender } from './utils';
 import { getRenderedPage } from './ssr';
 import { BUILD_FOLDER, DEVELOPMENT } from './constants';
 import logger from './logger';
 import middleware from './middleware';
 import getRobots from './routes/robots';
 import getSitemap from './routes/sitemap';
+import expressStaticGzip from 'express-static-gzip';
 
 const app = express();
 
@@ -43,8 +44,19 @@ app.use((req, res, next) => {
     next();
   }
 });
-app.use(middleware.basicAuth);
+
 app.use(middleware.assetsToFranchise);
+app.use(
+  expressStaticGzip(BUILD_FOLDER, {
+    enableBrotli: true,
+    index: false,
+    orderPreference: ['br'],
+    serveStatic: {
+      maxAge: '30 days',
+    },
+  }),
+);
+app.use(middleware.basicAuth);
 
 app.use('/server/*', (_, res) => {
   return res.sendStatus(404);
@@ -54,11 +66,6 @@ app.get('/robots.txt', getRobots);
 
 app.get('/sitemap.xml', getSitemap);
 
-app.use(
-  express.static(BUILD_FOLDER, {
-    maxAge: '30 days',
-  }),
-);
 app.use(middleware.routeExistCheck);
 app.get('/api/get-ip', (req, res) => {
   res.set('Cache-Control', 'no-store');

@@ -26,6 +26,8 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const postcssNormalize = require('postcss-normalize');
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const jsonConfig = require('config');
+const CompressionPlugin = require('compression-webpack-plugin');
+const zlib = require('zlib');
 
 const appPackageJson = require(paths.appPackageJson);
 
@@ -747,6 +749,25 @@ module.exports = function (webpackEnv, buildFranchises) {
         'process.env': {
           RELEASE: BuildDate,
         },
+      }),
+      new CompressionPlugin({
+        filename: '[path][base].gz',
+        algorithm: 'gzip',
+        test: /\.(js|css|svg)$/,
+        threshold: 10240,
+        minRatio: 0.8,
+      }),
+      new CompressionPlugin({
+        filename: '[path][base].br',
+        algorithm: 'brotliCompress',
+        test: /\.(js|css|svg)$/,
+        compressionOptions: {
+          params: {
+            [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+          },
+        },
+        threshold: 10240,
+        minRatio: 0.8,
       }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
