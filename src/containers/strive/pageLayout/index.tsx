@@ -13,11 +13,34 @@ import { ConfigLoaded } from '../../../types/Config';
 import NotFoundPage from '../pages/notFoundPage';
 import { useAuth } from '../../../hooks/useAuth';
 import loadable from '@loadable/component';
+import useGeoComply from '../../../hooks/useGeoComply';
+import CustomAlert from '../components/CustomAlert';
 
 const LoadablePageColumnFooter = loadable(() => import('./PageColumnFooter'));
 const LoadablePageFooter = loadable(() => import('./PageFooter'));
 
 let prevPathname: string | null = null;
+
+const GeocomplyAlert = () => {
+  const { t } = useI18n();
+  const { isGeoInProgress, errorCode } = useGeoComply() || {};
+
+  return (
+    <>
+      {(isGeoInProgress || !!errorCode) && (
+        <CustomAlert
+          show={true}
+          variant={isGeoInProgress ? 'warning' : 'danger'}
+          fullScreen
+        >
+          {isGeoInProgress
+            ? t('geo_comply_in_progress')
+            : t(`geo_comply_failed`)}
+        </CustomAlert>
+      )}
+    </>
+  );
+};
 
 const PageLayout = ({ children }) => {
   const sendDataToGTM = useGTM();
@@ -107,6 +130,9 @@ const PageLayout = ({ children }) => {
       <ErrorBoundary>
         <PageHeader />
       </ErrorBoundary>
+      {user.logged_in && (Franchise.gnogaz || Franchise.desertDiamond) && (
+        <GeocomplyAlert />
+      )}
       {sidebar ? (
         <LayoutWithSidebar
           sidebar={sidebar}

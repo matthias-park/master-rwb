@@ -944,6 +944,32 @@ const customStyles = css`
         }
       }
     }
+    &--warning {
+      background-color: ${props =>
+        props.theme.alert.transparentBg
+          ? rgba(props.theme.colors.warning, 0.2)
+          : props.theme.colors.warning};
+      .custom-alert__icon {
+        background-color: ${props =>
+          props.theme.alert.invertedIconBg
+            ? props.theme.alert.color
+            : props => props.theme.colors.warning};
+        i {
+          color: ${props =>
+            props.theme.alert.invertedIconBg && props.theme.colors.warning};
+        }
+      }
+    }
+    &.full-screen {
+      margin: 0 -${props => props.theme.spacing.bodyPadding}px !important;
+      border-radius: 0;
+      ${mediaBreakpointDown('xl')} {
+        margin: 0 -${props => props.theme.spacing.bodyPaddingMedium}px !important;
+      }
+      ${mediaBreakpointDown('lg')} {
+        margin: 0 -${props => props.theme.spacing.bodyPaddingSmall}px !important;
+      }
+    }
   }
 
   .triangle-success {

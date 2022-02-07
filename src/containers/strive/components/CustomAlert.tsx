@@ -2,11 +2,26 @@ import React from 'react';
 import Alert, { AlertProps } from 'react-bootstrap/Alert';
 import clsx from 'clsx';
 
-const CustomAlert = ({ variant, show, children, className }: AlertProps) => {
+interface CustomAlertProps extends AlertProps {
+  fullScreen?: boolean;
+}
+
+const CustomAlert = ({
+  variant,
+  show,
+  children,
+  className,
+  fullScreen,
+}: CustomAlertProps) => {
   return (
     <Alert
       show={show}
-      className={clsx('custom-alert', `custom-alert--${variant}`, className)}
+      className={clsx(
+        'custom-alert',
+        `custom-alert--${variant}`,
+        className,
+        fullScreen && 'full-screen',
+      )}
     >
       <div className="custom-alert__icon">
         <i className={`icon-${variant}`}></i>

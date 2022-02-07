@@ -29,6 +29,7 @@ module.exports = {
       main: '#5CB660',
     },
     info: '#52ADF5',
+    warning: '#EF9A1D',
     footer: {
       bottomText: '#778CA6',
     },
