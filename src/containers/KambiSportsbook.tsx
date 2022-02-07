@@ -473,7 +473,9 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
     <>
       <div
         ref={containerRef}
-        className={clsx(desktopWidth && Franchise.strive && 'mt-5')}
+        className={clsx(
+          desktopWidth && (Franchise.strive || Franchise.bnl) && 'mt-5',
+        )}
       />
       {!context.showKambi && (
         <div className="position-relative mt-5 min-vh-70">
