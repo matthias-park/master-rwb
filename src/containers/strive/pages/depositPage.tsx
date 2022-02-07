@@ -226,7 +226,7 @@ const DepositPage = () => {
         </>
       ),
     };
-  } else if (Franchise.gnogaz && validatorNotOk) {
+  } else if ((Franchise.gnogaz || Franchise.desertDiamond) && validatorNotOk) {
     alertMessage = {
       variant: 'danger',
       msg: t('deposit_page_unverified_message'),
@@ -297,7 +297,7 @@ const DepositPage = () => {
               KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataOnly ||
             depositStatus.depositStatus === DepositStatus.Pending ||
             depositDataLoading ||
-            (Franchise.gnogaz && validatorNotOk)
+            ((Franchise.gnogaz || Franchise.desertDiamond) && validatorNotOk)
           }
           loading={depositLoading}
           setApiError={setApiError}
