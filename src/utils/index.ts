@@ -78,7 +78,11 @@ export const formatNavigationRoutes = (constants: PageConfig) => {
 };
 
 export const clearUserLocalStorage = () => {
-  const keys = ['transactions-date-to', 'transactions-date-from'];
+  const keys = [
+    'transactions-date-to',
+    'transactions-date-from',
+    'geocomplyRetryCount',
+  ];
   for (const key of keys) {
     localStorage.removeItem(key);
   }

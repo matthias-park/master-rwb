@@ -26,6 +26,7 @@ const initialState: GeoComplyState = {
   validationReason: null,
   userIp: Config.ip,
   savedState: Lockr.get<LocalStorageState | null>(localStorageId, null),
+  geoValidationInProgress: false,
 };
 
 const saveStateToLocalStorage = (state: GeoComplyState) => {
@@ -96,6 +97,7 @@ export const geoComplySlice = createSlice({
     },
     setGeoLocation: (state, action: PayloadAction<string | null>) => {
       state.geoLocation = action.payload;
+      state.geoValidationInProgress = true;
     },
     setLicense: (
       state,
@@ -122,6 +124,7 @@ export const geoComplySlice = createSlice({
       state.geoInProgress = false;
       state.validationReason = null;
       state.revalidateIn = revalidateIn || null;
+      state.geoValidationInProgress = false;
       saveStateToLocalStorage(state);
     },
     setUserId: (state, action: PayloadAction<number>) => {
@@ -156,6 +159,7 @@ export const geoComplySlice = createSlice({
         revalidateIn: null,
         validationReason: null,
         savedState: null,
+        geoValidationInProgress: false,
       };
     },
     setUserIp: (state, action: PayloadAction<string>) => {

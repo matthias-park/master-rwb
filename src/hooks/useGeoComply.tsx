@@ -18,6 +18,7 @@ interface GeoComplyContext {
   isGeoValid: boolean;
   isGeoInProgress: boolean;
   errorCode: number | null;
+  geoValidationInProgress: boolean;
   trigger: (reason: string) => void;
 }
 const geoComplyHookContext = createContext<GeoComplyContext | null>(null);
@@ -109,6 +110,7 @@ export const GeoComplyProvider = ({ ...props }: GeoComplyHookProviderProps) => {
     isGeoValid: state.isGeoAllowed && !state.error,
     isGeoInProgress: state.geoInProgress,
     errorCode: state.error,
+    geoValidationInProgress: state.geoValidationInProgress,
     trigger,
   };
   return <geoComplyHookContext.Provider value={value} {...props} />;

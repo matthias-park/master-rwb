@@ -20,5 +20,6 @@ interface GeoComplyState {
   validationReason: string | null;
   userIp: string | null;
   savedState: LocalStorageState | null;
+  geoValidationInProgress: boolean;
 }
 export default GeoComplyState;
