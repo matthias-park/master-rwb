@@ -430,13 +430,19 @@ const FormFields = ({
                       },
                     }
                   }
-                  defaultValue={
-                    field.default && translatableDefaultValues
+                  defaultValue={(() => {
+                    if (
+                      field.id === 'phone_number' &&
+                      field.default.includes('+1')
+                    ) {
+                      field.default = field.default.replace('+1', '');
+                    }
+                    return field.default && translatableDefaultValues
                       ? t(field.default.toString())
                       : field.id === 'social_security_number'
                       ? ''
-                      : field.default
-                  }
+                      : field.default;
+                  })()}
                   maskedInput={masketInput}
                   disabled={field.disabled}
                   title={t(field.title)}
