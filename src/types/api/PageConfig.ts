@@ -12,6 +12,7 @@ export interface PageConfig {
   cached?: boolean;
   welcome_casino_categories?: string[];
   featured_casino_categories?: string[];
+  custom_content_pages?: string[];
 }
 
 export interface Sidebar {

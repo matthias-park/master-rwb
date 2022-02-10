@@ -22,7 +22,7 @@ import { Franchise } from '../../../constants';
 
 const TemplatePage = () => {
   const { slug } = useParams<{ slug?: string }>();
-  const { locale, mobileView } = useConfig(
+  const { locale, mobileView, customContentPages } = useConfig(
     (prev, next) => prev.locale === next.locale,
   );
   const { pathname } = useLocation();
@@ -38,6 +38,7 @@ const TemplatePage = () => {
   const isDataLoading = !data && !error;
   const [links, setLinks] = useState<{ link: string; name: string }[]>([]);
   const { header } = useConfig();
+  const isCustomContentPage = customContentPages?.includes(page);
   const questionItems = useMemo(
     () => [
       {
@@ -111,9 +112,19 @@ const TemplatePage = () => {
       )}
       {!!data?.Success &&
         (Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon ? (
-          <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
-            <h1 className="account-settings__title">{pageTitle}</h1>
-            <div className="outer-info-block mb-3">
+          <main
+            className={clsx(
+              isCustomContentPage
+                ? 'custom-content-page'
+                : 'container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5',
+            )}
+          >
+            {pageTitle && (
+              <h1 className="account-settings__title">{pageTitle}</h1>
+            )}
+            <div
+              className={clsx(!isCustomContentPage && 'outer-info-block mb-3')}
+            >
               {data.Data.structure.content.slice(1).map((el, index) => (
                 <div className="mb-3">
                   {!!el.section?.section_title?.value && (

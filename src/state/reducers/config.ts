@@ -182,6 +182,7 @@ export const configSlice = createSlice({
             sidebars,
             welcome_casino_categories,
             featured_casino_categories,
+            custom_content_pages,
           } = action.payload;
           state.configLoaded = ConfigLoaded.Loaded;
           state.locales = available_locales;
@@ -193,6 +194,7 @@ export const configSlice = createSlice({
           state.welcomeCasinoCategories = welcome_casino_categories;
           state.featuredCasinoCategories = featured_casino_categories;
           state.locale = locale;
+          state.customContentPages = custom_content_pages;
           Lockr.set(LocalStorageKeys.config, state);
           if (!locale && state.domLoaded) {
             setPageLoader(state, false);

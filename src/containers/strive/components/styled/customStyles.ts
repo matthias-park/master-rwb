@@ -1071,6 +1071,30 @@ const customStyles = css`
     }
   }
 
+  .custom-content-page {
+    position: relative !important;
+    width: calc(
+      100% + ${props => props.theme.spacing.bodyPadding * 2}px
+    ) !important;
+    left: -${props => props.theme.spacing.bodyPadding}px !important;
+    top: -${props => (props.theme.header?.marginBottom || 0) + 5}px;
+    ${mediaBreakpointDown('xl')} {
+      width: calc(
+        100% + ${props => props.theme.spacing.bodyPaddingMedium * 2}px
+      ) !important;
+      left: -${props => props.theme.spacing.bodyPaddingMedium}px !important;
+    }
+    ${mediaBreakpointDown('lg')} {
+      width: calc(
+        100% + ${props => props.theme.spacing.bodyPaddingSmall * 2}px
+      ) !important;
+      left: -${props => props.theme.spacing.bodyPaddingSmall}px !important;
+    }
+    ${mediaBreakpointDown('md')} {
+      top: -5px;
+    }
+  }
+
   .sb-iframe-wrp {
     .sb-iframe {
       width: 100% !important;

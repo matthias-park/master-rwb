@@ -34,6 +34,7 @@ type Config = {
   helpBlock?: PagesName[];
   welcomeCasinoCategories?: string[];
   featuredCasinoCategories?: string[];
+  customContentPages?: string[];
   configLoaded: ConfigLoaded;
   cookies: Cookies;
   showPageLoader: boolean;
