@@ -421,5 +421,14 @@ declare module 'styled-components' {
     backdrop: {
       bgColor?: string;
     };
+    bonuses: {
+      containerBgColor?: string;
+      subTextColor?: string;
+      boxShadow?: string;
+      barColor?: string;
+      barBgColor?: string;
+      editHoverBgColor?: string;
+      labelBgColor?: string;
+    };
   }
 }

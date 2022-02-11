@@ -62,7 +62,7 @@ module.exports = {
     maxHeight: 40,
   },
   fonts: {
-    family: 'Proxima Nova',
+    family: 'Roboto',
     weight: {
       bold: 700,
     },
@@ -344,5 +344,14 @@ module.exports = {
   genericModalWidth: '520px',
   backdrop: {
     bgColor: 'rgba(0, 0, 0, 0.8)',
+  },
+  bonuses: {
+    containerBgColor: '#222',
+    subTextColor: '#888888',
+    boxShadow: '0px 0px 4px rgb(255 255 255 / 12%)',
+    barColor: '#FFDC3E',
+    barBgColor: '#444',
+    editHoverBgColor: '#444',
+    labelBgColor: '#444',
   },
 };

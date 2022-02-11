@@ -56,6 +56,7 @@ const COMPONENT_PAGES = {
   [PagesName.LoginPage]: AsyncPage('loginPage'),
   [PagesName.RequiredDocuments]: AsyncPage('requiredDocumentsPage'),
   [PagesName.TaxPage]: AsyncPage('taxPage'),
+  [PagesName.BonusesPage]: AsyncPage('bonusesPage'),
 };
 
 const Routes = () => {

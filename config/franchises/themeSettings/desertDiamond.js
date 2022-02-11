@@ -297,4 +297,13 @@ module.exports = {
     },
   },
   genericModalWidth: '505px',
+  bonuses: {
+    containerBgColor: '#fff',
+    subTextColor: '#476387',
+    boxShadow: '0px 0px 4px rgb(5 27 53 / 18%)',
+    barColor: '#778CA6',
+    barBgColor: '#ECF0F3',
+    editHoverBgColor: '#ECF0F3',
+    labelBgColor: '#E6ECF1',
+  },
 };

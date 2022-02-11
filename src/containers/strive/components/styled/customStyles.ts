@@ -970,6 +970,9 @@ const customStyles = css`
         margin: 0 -${props => props.theme.spacing.bodyPaddingSmall}px !important;
       }
     }
+    &.top-spacing-0 {
+      margin-top: 0 !important;
+    }
   }
 
   .triangle-success {

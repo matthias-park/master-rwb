@@ -89,6 +89,7 @@ export enum PagesName {
   LiveCasinoPage = 42,
   TaxPage = 43,
   CasinoGameInfoPage = 44,
+  BonusesPage = 45,
 }
 
 export enum FormFieldValidation {

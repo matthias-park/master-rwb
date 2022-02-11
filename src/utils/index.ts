@@ -2,7 +2,7 @@ import { LocalStorageKeys, PagesName } from '../constants';
 import { PageConfig } from '../types/api/PageConfig';
 import Lockr from 'lockr';
 import { PostItem } from '../types/api/Posts';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import Config, { ConfigLoaded, Cookies } from '../types/Config';
 import { getWindowUrlLocale, Symbols } from './i18n';
 import * as Sentry from '@sentry/react';
@@ -226,4 +226,7 @@ export const getActiveAffiliates = (): { [key: string]: string } => {
     }
     return obj;
   }, {});
+};
+export const setDateTime = (date: Dayjs, hours, minutes, seconds) => {
+  return date.set('hour', hours).set('minute', minutes).set('second', seconds);
 };
