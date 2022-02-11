@@ -29,6 +29,7 @@ import useGeoComply from '../../../hooks/useGeoComply';
 import { useModal } from '../../../hooks/useModal';
 import clsx from 'clsx';
 import { getActiveAffiliates } from '../../../utils';
+import { injectTrackerScript } from '../../../utils/uiUtils';
 dayjs.extend(customParseFormat);
 
 const RegistrationReturnCode = {
@@ -187,6 +188,7 @@ const RegisterPage = () => {
     ) {
       enableModal(ComponentName.CookiesModal);
     }
+    injectTrackerScript('regstart');
   }, []);
 
   if (user.logged_in && !location?.state?.welcomeScreen) {

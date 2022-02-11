@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import UserStatus, { NET_USER } from '../../types/UserStatus';
 import { clearUserLocalStorage } from '../../utils';
 import * as Sentry from '@sentry/react';
+import { injectTrackerScript } from '../../utils/uiUtils';
 
 const initialState: UserStatus = {
   logged_in: false,
@@ -40,6 +41,7 @@ export const userSlice = createSlice({
       state.balance = action.payload;
     },
     setLogin: (_, action: PayloadAction<NET_USER>) => {
+      injectTrackerScript('loggedin', action.payload.PlayerId);
       return {
         id: action.payload.PlayerId,
         balance: action.payload.Balance,
@@ -53,6 +55,7 @@ export const userSlice = createSlice({
       };
     },
     setRegistered: (_, action: PayloadAction<NET_USER>) => {
+      injectTrackerScript('regconfirm', action.payload.PlayerId);
       return {
         id: action.payload.PlayerId,
         balance: 0,

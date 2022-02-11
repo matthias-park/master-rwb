@@ -11,6 +11,7 @@ import Lockr from 'lockr';
 import { LocalStorageKeys, RailsApiResponseFallback } from '../../constants';
 import { getWindowUrlLocale, setLocalePathname } from '../../utils/i18n';
 import {
+  injectTrackerScript,
   removePageLoadingSpinner,
   setPageLoadingSpinner,
 } from '../../utils/uiUtils';
@@ -152,6 +153,9 @@ export const configSlice = createSlice({
     setShowPageLoader: (state, action: PayloadAction<boolean>) =>
       setPageLoader(state, action.payload),
     setCookies: (state, action: PayloadAction<Cookies>) => {
+      if (action.payload.accepted && !action.payload.marketing) {
+        injectTrackerScript('cookies_consent');
+      }
       Lockr.set(LocalStorageKeys.cookies, action.payload);
       state.cookies = action.payload;
     },

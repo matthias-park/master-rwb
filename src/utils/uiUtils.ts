@@ -3,10 +3,11 @@ import {
   UIBackdrop,
   UIBackdropState,
 } from '../types/UIConfig';
-import { ComponentName } from '../constants';
+import { ComponentName, Franchise } from '../constants';
 import { HeaderRoute } from '../types/api/PageConfig';
 import { isWindows } from 'react-device-detect';
 import * as Sentry from '@sentry/react';
+import { formatUrl } from './apiUtils';
 
 export const changeBackdropVisibility = (visibility: boolean) => {
   const SHOW_CLASS = 'show';
@@ -172,5 +173,39 @@ export const injectZendeskScript = () => {
   scriptTag.onerror = e => {
     Sentry.captureEvent(e);
   };
+  document.body.appendChild(scriptTag);
+};
+
+export const injectTrackerScript = (
+  url: string,
+  id?: number | string,
+  currency?: string,
+  stake?: number | string,
+) => {
+  if (!Franchise.desertDiamond) return;
+  const oldScript = document.getElementById(`betradar-${url}`);
+  if (oldScript) {
+    oldScript.remove();
+  }
+
+  const currencies = {
+    '$': 'USD',
+    '€': 'EUR',
+  };
+
+  const formattedUrl = formatUrl(
+    `https://zz.connextra.com/dcs/tagController/tag/81344f961868/${url}`,
+    {
+      AccountID: id,
+      Currency: !!currency && currencies[currency],
+      Stake: stake,
+    },
+  );
+
+  const scriptTag = document.createElement('script');
+  scriptTag.src = formattedUrl;
+  scriptTag.id = `betradar-${url}`;
+  scriptTag.async = true;
+  scriptTag.defer = true;
   document.body.appendChild(scriptTag);
 };

@@ -14,7 +14,11 @@ import { WidgetAPI } from '../types/KambiConfig';
 import Spinner from 'react-bootstrap/Spinner';
 import { Config, Franchise, KambiSbLocales, PagesName } from '../constants';
 import { useHistory, useLocation } from 'react-router-dom';
-import { hideKambiSportsbook, showKambiSportsbook } from '../utils/uiUtils';
+import {
+  hideKambiSportsbook,
+  injectTrackerScript,
+  showKambiSportsbook,
+} from '../utils/uiUtils';
 import { useAuth } from '../hooks/useAuth';
 import { usePrevious, useRoutePath } from '../hooks';
 import { useDispatch } from 'react-redux';
@@ -399,6 +403,10 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
       context.setRendered(false);
     };
   }, [locale]);
+
+  useEffect(() => {
+    injectTrackerScript('homepage');
+  }, []);
 
   useEffect(() => {
     if (!user.loading && containerRef.current && locale && domLoaded) {

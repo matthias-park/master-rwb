@@ -20,6 +20,7 @@ import { useToasts } from 'react-toast-notifications';
 import dayjs from 'dayjs';
 import clsx from 'clsx';
 import { getApi } from '../../../../utils/apiUtils';
+import { injectTrackerScript } from '../../../../utils/uiUtils';
 
 interface SettingProps {
   id: string;
@@ -555,6 +556,9 @@ const SettingsForm = (props: SettingProps) => {
         msg: res.Message || t('api_response_failed'),
       });
     if (res.Success) {
+      if ('disable_player_until' === url.split('/').reverse()[0]) {
+        injectTrackerScript('exclusion');
+      }
       reset(null, { keepValues: true });
       resetValues.forEach(id => formMethods.setValue(id, ''));
     }

@@ -13,6 +13,7 @@ import { ComponentName, Config, ProdEnv } from '../../constants';
 import { mutate } from 'swr';
 import * as Sentry from '@sentry/react';
 import { setUserIp } from '../reducers/geoComply';
+import { injectTrackerScript } from '../../utils/uiUtils';
 
 let userSocketIO;
 const userWebsocketMiddleware: Middleware = storeApi => next => action => {
@@ -39,6 +40,15 @@ const userWebsocketMiddleware: Middleware = storeApi => next => action => {
             }
             case 'bonus_wallet_changed':
             case 'balance_changed': {
+              if (wsData.data?.balance_type?.includes('Kambi')) {
+                const user = (storeApi.getState() as RootState).user;
+                injectTrackerScript(
+                  'betconfirm',
+                  user.id,
+                  user.currency,
+                  wsData.data.amount,
+                );
+              }
               if (wsData.data) {
                 storeApi.dispatch(setBalance(wsData.data.balance_after));
               }

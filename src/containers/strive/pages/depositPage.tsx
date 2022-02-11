@@ -32,6 +32,8 @@ import BalancesContainer from '../components/account-settings/BalancesContainer'
 import clsx from 'clsx';
 import { replaceStringTagsReact } from '../../../utils/reactUtils';
 import RequestReturn from '../../../types/api/deposits/RequestReturn';
+import { injectTrackerScript } from '../../../utils/uiUtils';
+import useLocalStorage from '../../../hooks/useLocalStorage';
 
 const DepositPage = () => {
   const { user } = useAuth();
@@ -42,6 +44,10 @@ const DepositPage = () => {
   const depositDataLoading = !depositData && !depositError;
   const [depositLoading, setDepositLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [depositAmount, setDepositAmount] = useLocalStorage<number | null>(
+    'deposit_amount',
+    null,
+  );
   const [customHtml, setCustomHtml] = useState<{
     html: string;
     iframe: boolean;
@@ -60,6 +66,20 @@ const DepositPage = () => {
         'tglab.deposit.success':
           depositStatus.depositStatus === DepositStatus.Confirmed,
       });
+    }
+    if (
+      depositStatus.depositStatus === DepositStatus.Confirmed &&
+      !!depositAmount
+    ) {
+      injectTrackerScript(
+        user.total_deposit_count === 0
+          ? 'firstdepositconfirm'
+          : 'depositconfirm',
+        user.id,
+        user.currency,
+        depositAmount,
+      );
+      setDepositAmount(null);
     }
   }, [depositStatus.depositStatus]);
 
@@ -82,6 +102,7 @@ const DepositPage = () => {
     async (depositValue: number, bankId: number) => {
       setApiError(null);
       setDepositLoading(true);
+      setDepositAmount(depositValue);
       const depositParams: DepositRequest = {
         BankId: bankId,
         Amount: depositValue,
