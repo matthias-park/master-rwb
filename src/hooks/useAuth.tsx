@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useRef,
 } from 'react';
-import { TestEnv } from '../constants';
+import { Franchise, TestEnv } from '../constants';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import useApi from './useApi';
 import UserStatus, { NET_USER, TwoFactorAuth } from '../types/UserStatus';
@@ -15,7 +15,12 @@ import { useConfig } from './useConfig';
 import { isMobile } from 'react-device-detect';
 import { ConfigLoaded } from '../types/Config';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { setLogout, setLogin, setUser } from '../state/reducers/user';
+import {
+  setLogout,
+  setLogin,
+  setUser,
+  fetchUserBalance,
+} from '../state/reducers/user';
 import { RootState } from '../state';
 import useIdleTicker from './useIdleTicker';
 export interface UserAuth {
@@ -145,6 +150,9 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
         'tglab.user.Language': locale || '',
         event: 'userStatusChange',
       });
+      if (Franchise.desertDiamond) {
+        dispatch(fetchUserBalance());
+      }
     }
   }, [user.logged_in, user.loading, configLoaded]);
 

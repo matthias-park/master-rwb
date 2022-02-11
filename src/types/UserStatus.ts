@@ -1,3 +1,4 @@
+import UserBalances from './api/user/Balances';
 import CanPlayStatus from './api/user/CanPlayStatus';
 
 export interface NET_USER {
@@ -51,6 +52,7 @@ export interface UserStatus {
   id?: number;
   name?: string;
   balance?: number;
+  balances?: UserBalances;
   currency?: string;
   canPlay?: CanPlayStatus;
   email?: string;

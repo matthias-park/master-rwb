@@ -113,7 +113,9 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
     backdrop.hide();
     SWRCache.clear();
   };
-
+  const userBalance = Franchise.desertDiamond
+    ? user.balances?.playable_balance
+    : user.balance;
   return (
     <>
       <div className="d-flex justify-content-end flex-grow-1">
@@ -134,14 +136,23 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 variant="secondary"
                 className="pr-2 pl-3"
               >
-                <NumberFormat
-                  value={user.balance}
-                  thousandSeparator
-                  displayType={'text'}
-                  prefix={user.currency}
-                  decimalScale={2}
-                  fixedDecimalScale={true}
-                />
+                {userBalance ? (
+                  <NumberFormat
+                    value={userBalance}
+                    thousandSeparator
+                    displayType={'text'}
+                    prefix={user.currency}
+                    decimalScale={2}
+                    fixedDecimalScale={true}
+                  />
+                ) : (
+                  <LoadingSpinner
+                    wrapperClassName="d-inline-flex"
+                    show
+                    small
+                    className="mr-1"
+                  />
+                )}
                 <i className={clsx(`icon-${Config.name}-plus`, 'ml-2')}></i>
               </Button>
               {!!window.__config__.xtremepush ? (

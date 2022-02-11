@@ -3,13 +3,14 @@ import { RootState } from '..';
 import {
   removeUserData,
   setBalance,
+  setBalances,
   setLogin,
   setUser,
 } from '../reducers/user';
 import io from 'socket.io-client';
 import StatusMessage from '../../types/WebsocketUserStatus';
 import { enableModal } from '../reducers/modals';
-import { ComponentName, Config, ProdEnv } from '../../constants';
+import { ComponentName, Config, Franchise, ProdEnv } from '../../constants';
 import { mutate } from 'swr';
 import * as Sentry from '@sentry/react';
 import { setUserIp } from '../reducers/geoComply';
@@ -50,7 +51,19 @@ const userWebsocketMiddleware: Middleware = storeApi => next => action => {
                 );
               }
               if (wsData.data) {
-                storeApi.dispatch(setBalance(wsData.data.balance_after));
+                if (Franchise.desertDiamond) {
+                  const balanceParam =
+                    wsData.action === 'bonus_wallet_changed'
+                      ? 'bonus_balance'
+                      : 'withdrawable_balance';
+                  storeApi.dispatch(
+                    setBalances({
+                      [balanceParam]: wsData.data.balance_after,
+                    }) as any,
+                  );
+                } else {
+                  storeApi.dispatch(setBalance(wsData.data.balance_after));
+                }
               }
               break;
             }

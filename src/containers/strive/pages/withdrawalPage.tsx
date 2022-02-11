@@ -333,10 +333,10 @@ const WithdrawalPage = () => {
               max={
                 selectedBankAccount?.max_withdraw_amount &&
                 (selectedBankAccount.max_withdraw_amount <
-                  Number(user.balance) ||
-                  isNaN(Number(user.balance)))
+                  Number(user.balances?.withdrawable_balance) ||
+                  isNaN(Number(user.balances?.withdrawable_balance)))
                   ? selectedBankAccount.max_withdraw_amount
-                  : user.balance
+                  : user.balances?.withdrawable_balance
               }
               loading={!withdrawalConfirmData && withdrawalLoading}
               onSubmit={requestWithdrawal}

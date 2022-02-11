@@ -1,8 +1,32 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import UserStatus, { NET_USER } from '../../types/UserStatus';
 import { clearUserLocalStorage } from '../../utils';
 import * as Sentry from '@sentry/react';
 import { injectTrackerScript } from '../../utils/uiUtils';
+import UserBalances, {
+  NullableUserBalances,
+} from '../../types/api/user/Balances';
+import RailsApiResponse from '../../types/api/RailsApiResponse';
+import { getApi } from '../../utils/apiUtils';
+
+export const fetchUserBalance = createAsyncThunk<
+  UserBalances,
+  number | undefined
+>('user/fetchBalances', async (retryCount: number = 0, thunkAPI: any) => {
+  const response = await getApi<RailsApiResponse<UserBalances>>(
+    '/restapi/v1/user/balances',
+    { cache: 'no-cache' },
+  ).catch((res: RailsApiResponse<null>) => res);
+
+  if (response.Success && response.Data?.playable_balance != null) {
+    return response.Data;
+  }
+  const canRetry = retryCount < 10;
+  if (canRetry) {
+    setTimeout(() => thunkAPI.dispatch(fetchUserBalance(++retryCount)), 1000);
+  }
+  return thunkAPI.rejectWithValue(canRetry);
+});
 
 const initialState: UserStatus = {
   logged_in: false,
@@ -39,6 +63,16 @@ export const userSlice = createSlice({
     },
     setBalance: (state, action: PayloadAction<number>) => {
       state.balance = action.payload;
+    },
+    setBalances: (state, action: PayloadAction<NullableUserBalances>) => {
+      if (state.balances) {
+        state.balances = {
+          ...state.balances,
+          ...action.payload,
+        };
+        state.balances.playable_balance =
+          state.balances.withdrawable_balance + state.balances.bonus_balance;
+      }
     },
     setLogin: (_, action: PayloadAction<NET_USER>) => {
       injectTrackerScript('loggedin', action.payload.PlayerId);
@@ -89,12 +123,21 @@ export const userSlice = createSlice({
       state.registration_id = null;
     },
   },
+  extraReducers: builder => {
+    builder.addCase(
+      fetchUserBalance.fulfilled,
+      (state, action: PayloadAction<UserBalances>) => {
+        state.balances = action.payload;
+      },
+    );
+  },
 });
 
 export const {
   setUser,
   removeUserData,
   setBalance,
+  setBalances,
   setLogout,
   setLogin,
   setTwoFactoAuth,
