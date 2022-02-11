@@ -21,7 +21,7 @@ if (!DevEnv && Config.sentryDsn) {
     ],
     tracesSampler: samplingContext => {
       if (samplingContext.transactionContext.op === 'navigation') {
-        return 0.05;
+        return 0.01;
       } else if (samplingContext.transactionContext) {
         return 0.8;
       }
