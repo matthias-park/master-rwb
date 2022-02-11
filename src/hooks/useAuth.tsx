@@ -150,7 +150,7 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
         'tglab.user.Language': locale || '',
         event: 'userStatusChange',
       });
-      if (Franchise.desertDiamond) {
+      if (Franchise.desertDiamond && user.logged_in) {
         dispatch(fetchUserBalance());
       }
     }
