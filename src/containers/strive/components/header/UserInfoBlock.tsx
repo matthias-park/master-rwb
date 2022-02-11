@@ -136,7 +136,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 variant="secondary"
                 className="pr-2 pl-3"
               >
-                {userBalance ? (
+                {userBalance != null ? (
                   <NumberFormat
                     value={userBalance}
                     thousandSeparator
