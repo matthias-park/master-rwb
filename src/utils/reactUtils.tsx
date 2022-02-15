@@ -34,17 +34,18 @@ export const convertStylesStringToObject = stringStyles =>
 export const replaceStringTagsReact = (text: string, props: any = {}) => {
   const htmlParseOptions: HTMLReactParserOptions = {
     replace: (domNode: any) => {
-      if (
-        domNode.type === 'tag' &&
-        domNode.name === 'a' &&
-        domNode.attribs?.href &&
-        domNode.attribs.href.startsWith('/')
-      ) {
+      const isAnchorTag =
+        (domNode.type === 'tag' && domNode.name === 'a') ||
+        (domNode.type === 'text' && domNode.parent?.name === 'a');
+      if (isAnchorTag && domNode.attribs?.href) {
         const { href, style, ...attribs } = domNode.attribs;
         const stylesObject = style && convertStylesStringToObject(style);
+        const to = href.includes('https')
+          ? href
+          : href.replace('http', 'https');
         return (
           <Link
-            to={href}
+            to={to}
             className="translation-link"
             style={stylesObject ? stylesObject : undefined}
             {...attribs}
