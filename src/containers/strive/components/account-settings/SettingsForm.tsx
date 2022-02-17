@@ -433,10 +433,14 @@ const FormFields = ({
                   }
                   defaultValue={(() => {
                     if (
+                      usaOnlyBrand &&
                       field.id === 'phone_number' &&
-                      field.default.includes('+1')
+                      ['+', '1'].includes(field.default?.charAt(0) || '')
                     ) {
-                      field.default = field.default.replace('+1', '');
+                      field.default =
+                        field.default?.charAt(0) === '+'
+                          ? field.default.substring(2)
+                          : field.default.substring(1);
                     }
                     return field.default && translatableDefaultValues
                       ? t(field.default.toString())
@@ -538,6 +542,13 @@ const SettingsForm = (props: SettingProps) => {
         if (!body[field.id] && field.default)
           body[field.id] = field.default.toString();
       }
+    }
+    if (
+      body.phone_number &&
+      usaOnlyBrand &&
+      (body.phone_number as string).length === 10
+    ) {
+      body.phone_number = `+1${body.phone_number}`;
     }
     const res = await postApi<RailsApiResponse<null>>(url, body, {
       formData: formBody,
