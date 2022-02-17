@@ -67,6 +67,7 @@ const customStyles = css`
     color: ${props =>
       (props.theme.translationLink && props.theme.translationLink.color) ||
       'inherit'};
+    word-break: break-all;
   }
 
   .page-wrp {
