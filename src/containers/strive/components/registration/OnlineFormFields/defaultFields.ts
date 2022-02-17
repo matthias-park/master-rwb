@@ -73,6 +73,8 @@ export const defaultBlocks = (
           autoComplete: 'address-level2',
           type: 'text',
           required: true,
+          validate: value =>
+            VALIDATIONS.city(value) || t('register_city_invalid'),
         },
         !smartyStreetsEnabled && {
           id: 'address',
@@ -91,6 +93,8 @@ export const defaultBlocks = (
         {
           id: 'postal_code',
           required: true,
+          validate: value =>
+            VALIDATIONS.usa_post_code(value) || t('post_code_invalid'),
           type: 'text',
         },
         {

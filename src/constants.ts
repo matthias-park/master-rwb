@@ -468,9 +468,13 @@ export const REGEX_EXPRESSION = {
     : /^(BE)[0-9]{2}([ ]?[0-9]{4}){3}$/g,
   PHONE_NUMBER: usaOnlyBrand ? /^\+?[1-9]\d{9,10}$/ : /^\+?[1-9]\d{1,14}$/,
   PO_BOX_ADDRESS: /\b(?:p\.?\s*o\.?|post\s+office)(\s+)?(?:box|[0-9]*)?\b/i,
+  CITY: /^[0-z\u0080-\u024F '.-]{2,}$/,
+  USA_POST_CODE: /^\d{5}/,
 };
 
 export const VALIDATIONS = {
+  usa_post_code: value => REGEX_EXPRESSION.USA_POST_CODE.test(value),
+  city: value => REGEX_EXPRESSION.CITY.test(value.trim()),
   name: (value: string = '') =>
     (!!value.trim().length &&
       REGEX_EXPRESSION.LETTERS_WITH_SEPERATORS.test(value.trim())) ||
