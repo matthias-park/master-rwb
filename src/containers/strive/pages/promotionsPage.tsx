@@ -377,7 +377,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
     <main
       className={clsx(
         Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
-          ? 'pl-3'
+          ? 'pl-3 w-100'
           : 'pt-xl-5',
         'min-vh-70',
       )}
