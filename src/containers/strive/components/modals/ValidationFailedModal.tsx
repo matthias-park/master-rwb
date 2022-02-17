@@ -12,7 +12,7 @@ import useApi from '../../../../hooks/useApi';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import KycAttempts from '../../../../types/api/user/KycAttempts';
 import clsx from 'clsx';
-import Spinner from 'react-bootstrap/Spinner';
+import LoadingSpinner from '../../../../components/LoadingSpinner';
 
 const ValidationFailedModal = () => {
   const { user } = useAuth();
@@ -88,13 +88,7 @@ const ValidationFailedModal = () => {
             {data?.Data?.attempts != null ? (
               `${attempts}/${max_attempts}`
             ) : (
-              <Spinner
-                as="span"
-                size="sm"
-                role="status"
-                animation="border"
-                className="spinner-custom ml-1"
-              />
+              <LoadingSpinner small show className="ml-2" />
             )}
           </Link>
           <Link
