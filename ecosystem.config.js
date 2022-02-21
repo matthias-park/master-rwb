@@ -35,5 +35,19 @@ module.exports = {
         NODE_ENV: 'production',
       },
     },
+    {
+      name: 'next-web-fork-deploy',
+      script: 'build/server/index.js',
+      cwd: '/home/deploy/next-web/current',
+      pid_file: '/home/deploy/next-web/current/pids/web.pid',
+      out_file: '/dev/null',
+      error_file: '/dev/null',
+      env_production: {
+        NODE_ENV: 'production',
+      },
+      env_testing: {
+        NODE_ENV: 'testing',
+      },
+    },
   ],
 };
