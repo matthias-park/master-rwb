@@ -82,7 +82,7 @@ const ForgotPasswordPage = () => {
                 validate: value =>
                   VALIDATIONS.password(
                     value,
-                    Franchise.desertDiamond ? 4 : 3,
+                    Franchise.desertDiamond || Franchise.gnogaz ? 4 : 3,
                   ) || t('register_password_weak'),
               }}
               onBlur={() =>
@@ -102,7 +102,11 @@ const ForgotPasswordPage = () => {
                   'reset_password_field_required',
                 )}`,
                 validate: value =>
-                  value === watch('password') ||
+                  (value === watch('password') &&
+                    VALIDATIONS.password(
+                      value,
+                      Franchise.desertDiamond || Franchise.gnogaz ? 4 : 3,
+                    )) ||
                   t('reset_password_need_match_password'),
               }}
               id="repeat_password"
