@@ -161,29 +161,24 @@ const ContactUsForm = ({
   );
 };
 
+const questionItems = [
+  {
+    title: 'contact_us_question_1',
+    body: 'contact_us_answer_1',
+  },
+  {
+    title: 'contact_us_question_2',
+    body: 'contact_us_answer_2',
+  },
+];
+
 const ContactUsPage = () => {
-  const { t, jsxT } = useI18n();
+  const { jsxT } = useI18n();
   const { user } = useAuth();
   const { data, error, isValidating } = useApi<JSONFormPage>(
     user.loading ? null : [`/restapi/v1/contact_us/form`, user.logged_in],
   );
   const isDataLoading = (!data && !error) || isValidating;
-  const questionItems = useMemo(
-    () =>
-      Franchise.desertDiamond
-        ? [
-            {
-              title: t('contact_us_question_1'),
-              body: t('contact_us_answer_1'),
-            },
-            {
-              title: t('contact_us_question_2'),
-              body: t('contact_us_answer_2'),
-            },
-          ]
-        : null,
-    [t],
-  );
 
   if (Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon) {
     return (
@@ -207,7 +202,7 @@ const ContactUsPage = () => {
         <div className="outer-info-block">
           {!!data && <ContactUsForm data={data} />}
         </div>
-        <QuestionsContainer items={questionItems!} className="mt-5" />
+        <QuestionsContainer items={questionItems} className="mt-5" />
       </main>
     );
   }

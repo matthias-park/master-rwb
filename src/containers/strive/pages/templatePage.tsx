@@ -20,6 +20,17 @@ import { getApi } from '../../../utils/apiUtils';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
 import { Franchise } from '../../../constants';
 
+const questionItems = [
+  {
+    title: 'content_page_question_1',
+    body: 'content_page_answer_1',
+  },
+  {
+    title: 'content_page_question_2',
+    body: 'content_page_answer_2',
+  },
+];
+
 const TemplatePage = () => {
   const { slug } = useParams<{ slug?: string }>();
   const { locale, mobileView, customContentPages } = useConfig(
@@ -39,19 +50,6 @@ const TemplatePage = () => {
   const [links, setLinks] = useState<{ link: string; name: string }[]>([]);
   const { header } = useConfig();
   const isCustomContentPage = customContentPages?.includes(page);
-  const questionItems = useMemo(
-    () => [
-      {
-        title: t('content_page_question_1'),
-        body: t('content_page_answer_1'),
-      },
-      {
-        title: t('content_page_question_2'),
-        body: t('content_page_answer_2'),
-      },
-    ],
-    [t],
-  );
 
   useEffect(() => {
     makeCollapsible('card', 'collapse', 'card-header');

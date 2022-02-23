@@ -74,23 +74,21 @@ const CloseAccountCard = ({ closeAccountData }: CloseAccountProps) => {
   );
 };
 
+const questionItems = [
+  {
+    title: 'close_account_question_1',
+    body: 'close_account_answer_1',
+  },
+  {
+    title: 'close_account_question_2',
+    body: 'close_account_answer_2',
+  },
+];
+
 const CloseAccountPage = () => {
-  const { t, jsxT } = useI18n();
+  const { jsxT } = useI18n();
   const { data, error } = useApi<any>('/restapi/v1/user/profile/close_account');
   const isDataLoading = !data && !error;
-  const questionItems = useMemo(
-    () => [
-      {
-        title: t('close_account_question_1'),
-        body: t('close_account_answer_1'),
-      },
-      {
-        title: t('close_account_question_2'),
-        body: t('close_account_answer_2'),
-      },
-    ],
-    [t],
-  );
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">

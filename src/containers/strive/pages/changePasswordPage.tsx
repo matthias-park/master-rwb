@@ -5,21 +5,19 @@ import HelpBlock from '../components/HelpBlock';
 import ChangePassword2fa from '../components/account-settings/ChangePassword2fa';
 import ChangePasswordForm from '../components/account-settings/ChangePasswordForm';
 
+const questionItems = [
+  {
+    title: 'change_password_question_1',
+    body: 'change_password_answer_1',
+  },
+  {
+    title: 'change_password_question_2',
+    body: 'change_password_answer_2',
+  },
+];
+
 const ChangePasswordPage = () => {
   const { t, jsxT } = useI18n();
-  const questionItems = useMemo(
-    () => [
-      {
-        title: t('change_password_question_1'),
-        body: t('change_password_answer_1'),
-      },
-      {
-        title: t('change_password_question_2'),
-        body: t('change_password_answer_2'),
-      },
-    ],
-    [t],
-  );
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">

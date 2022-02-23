@@ -126,6 +126,11 @@ const WithdrawalRequests = ({
   );
 };
 
+const questionItems = [
+  { title: 'withdrawal_question_1', body: 'withdrawal_answer_1' },
+  { title: 'withdrawal_question_2', body: 'withdrawal_answer_2' },
+];
+
 const WithdrawalPage = () => {
   const { t } = useI18n();
   const { user } = useAuth();
@@ -250,13 +255,6 @@ const WithdrawalPage = () => {
       });
     },
     [selectedBankAccount, user],
-  );
-  const questionItems = useMemo(
-    () => [
-      { title: t('withdrawal_question_1'), body: t('withdrawal_answer_1') },
-      { title: t('withdrawal_question_2'), body: t('withdrawal_answer_2') },
-    ],
-    [t],
   );
   let alertMessage: { variant: string; msg: string } | undefined;
   if (withdrawalError) {

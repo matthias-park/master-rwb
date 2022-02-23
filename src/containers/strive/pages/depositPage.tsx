@@ -35,6 +35,11 @@ import RequestReturn from '../../../types/api/deposits/RequestReturn';
 import { injectTrackerScript } from '../../../utils/uiUtils';
 import useLocalStorage from '../../../hooks/useLocalStorage';
 
+const questionItems = [
+  { title: 'deposit_question_1', body: 'deposit_answer_1' },
+  { title: 'deposit_question_2', body: 'deposit_answer_2' },
+];
+
 const DepositPage = () => {
   const { user } = useAuth();
   const { t, jsxT } = useI18n();
@@ -82,14 +87,6 @@ const DepositPage = () => {
       setDepositAmount(null);
     }
   }, [depositStatus.depositStatus]);
-
-  const questionItems = useMemo(
-    () => [
-      { title: t('deposit_question_1'), body: t('deposit_answer_1') },
-      { title: t('deposit_question_2'), body: t('deposit_answer_2') },
-    ],
-    [t],
-  );
 
   const validatorNotOk = [
     KYC_VALIDATOR_STATUS.CanPlayAndShouldUpdatePersonalData,

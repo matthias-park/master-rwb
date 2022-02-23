@@ -15,19 +15,20 @@ interface Props {
 }
 
 const QuestionItem = ({ item, index }) => {
+  const { t } = useI18n();
   return (
     <div className="questions-acr__item">
       <Accordion.Toggle
         className="questions-acr__item-toggle pl-3 pr-5 py-3"
         eventKey={`${index}`}
       >
-        {item.title}
+        {t(item.title)}
       </Accordion.Toggle>
       <Accordion.Collapse
         className="questions-acr__item-body"
         eventKey={`${index}`}
       >
-        <p className="px-3 py-2 mb-0">{item.body}</p>
+        <p className="px-3 py-2 mb-0">{t(item.body)}</p>
       </Accordion.Collapse>
       <i
         className={clsx(
