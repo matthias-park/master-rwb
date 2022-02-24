@@ -48,6 +48,9 @@ export const defaultBlocks = (
           autoComplete: 'street-address',
           type: 'smartyStreets',
           required: true,
+          validate: value => {
+            return VALIDATIONS.isNotPoBox(value) || t('register_pobox_invalid');
+          },
         },
         {
           id: 'province_id',
@@ -81,14 +84,8 @@ export const defaultBlocks = (
           autoComplete: 'street-address',
           type: 'text',
           required: true,
-          validate: value => {
-            if (Franchise.gnogaz && value) {
-              return (
-                VALIDATIONS.isNotPoBox(value) || t('register_pobox_invalid')
-              );
-            }
-            return true;
-          },
+          validate: value =>
+            VALIDATIONS.isNotPoBox(value) || t('register_pobox_invalid'),
         },
         {
           id: 'postal_code',

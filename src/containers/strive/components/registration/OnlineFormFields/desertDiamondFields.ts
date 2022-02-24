@@ -43,6 +43,8 @@ export const blocks = (
           autoComplete: 'street-address',
           type: 'smartyStreets',
           required: true,
+          validate: value =>
+            VALIDATIONS.isNotPoBox(value) || t('register_pobox_invalid'),
         },
         {
           id: 'province_id',

@@ -88,6 +88,7 @@ interface Props {
   translationPrefix?: string;
   required?: boolean;
   defaultValue?: string;
+  validate?: () => boolean;
 }
 
 const fakeFieldId = 'temp_field_autocomplete_address';
@@ -96,6 +97,7 @@ const AutocompleteSmartyStreets = ({
   translationPrefix = '',
   required,
   defaultValue,
+  validate,
 }: Props) => {
   const { setValue } = useFormContext();
   const { t } = useI18n();
@@ -232,6 +234,7 @@ const AutocompleteSmartyStreets = ({
             `${t(`${translationPrefix}${id}`)} ${t(
               `${translationPrefix}required`,
             )}`,
+          validate: validate,
         }}
         title={t(`${translationPrefix}${id}`)}
         defaultValue={defaultValue}
