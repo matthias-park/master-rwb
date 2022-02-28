@@ -10,7 +10,12 @@ import {
 import io from 'socket.io-client';
 import StatusMessage from '../../types/WebsocketUserStatus';
 import { enableModal } from '../reducers/modals';
-import { ComponentName, Config, Franchise, ProdEnv } from '../../constants';
+import {
+  ComponentName,
+  ComponentSettings,
+  Config,
+  ProdEnv,
+} from '../../constants';
 import { mutate } from 'swr';
 import * as Sentry from '@sentry/react';
 import { setUserIp } from '../reducers/geoComply';
@@ -51,7 +56,7 @@ const userWebsocketMiddleware: Middleware = storeApi => next => action => {
                 );
               }
               if (wsData.data) {
-                if (Franchise.desertDiamond) {
+                if (ComponentSettings?.useBalancesEndpoint) {
                   const balanceParam =
                     wsData.action === 'bonus_wallet_changed'
                       ? 'bonus_balance'
