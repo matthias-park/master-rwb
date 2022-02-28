@@ -36,6 +36,7 @@ interface Props {
     thousandSeparator?: boolean;
     prefix?: string;
     allowNegative?: boolean;
+    allowedDecimalSeparators?: string[];
     useFormatted?: boolean;
     decimalScale?: number;
   };
@@ -58,6 +59,7 @@ interface UncontrolledProps extends FormControlProps {
   prefix?: string;
   thousandSeparator?: boolean;
   allowNegative?: boolean;
+  allowedDecimalSeparators?: string[];
   errorMsg?: string;
   onBlur?: (e) => void;
   onCopy?: (e) => void;
@@ -284,6 +286,9 @@ const TextInput = ({
       prefix={maskedInput?.prefix}
       thousandSeparator={maskedInput?.thousandSeparator}
       allowNegative={maskedInput?.allowNegative}
+      allowedDecimalSeparators={
+        maskedInput?.allowedDecimalSeparators || ['.', ',']
+      }
       mask={maskedInput?.mask}
       decimalScale={maskedInput?.decimalScale}
       autoComplete={autoComplete}
