@@ -128,8 +128,11 @@ const InputContainer = ({
             maskedInput={{
               allowEmptyFormatting: true,
               prefix: `${currency} `,
-              thousandSeparator: true,
+              thousandSeparator: ' ',
+              decimalSeparator: ',',
               allowNegative: false,
+              isNumericString: true,
+              decimalScale: 2,
             }}
             rules={{
               validate: validateAmount,
