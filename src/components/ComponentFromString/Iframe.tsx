@@ -8,16 +8,17 @@ import React, {
 import LoadingSpinner from '../LoadingSpinner';
 import clsx from 'clsx';
 import { convertStylesStringToObject } from '../../utils/reactUtils';
+import { Franchise } from '../../constants';
 
 const IframeObject = (props: IframeHTMLAttributes<HTMLIFrameElement>) => {
   const ref = useRef<HTMLIFrameElement | null>(null);
   const isPdf = props.src?.endsWith('.pdf');
   const iframeTimeoutId = useRef(0);
   const [iframeLoaded, setIframeLoaded] = useState(false);
-  const src =
-    isPdf && props.src
-      ? `https://docs.google.com/gview?url=${props.src}&embedded=true`
-      : props.src;
+  const showPdfViewer = !Franchise.bnl && isPdf && props.src;
+  const src = showPdfViewer
+    ? `https://docs.google.com/gview?url=${props.src}&embedded=true`
+    : props.src;
 
   const updateIframeSrc = () => {
     if (ref.current && src) {
@@ -26,7 +27,7 @@ const IframeObject = (props: IframeHTMLAttributes<HTMLIFrameElement>) => {
   };
 
   useEffect(() => {
-    if (isPdf) {
+    if (showPdfViewer) {
       iframeTimeoutId.current = setInterval(updateIframeSrc, 1000 * 3);
     }
   }, []);
