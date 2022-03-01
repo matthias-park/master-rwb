@@ -179,7 +179,7 @@ const PromotionsList = () => {
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
-    ['/restapi/v1/content/promotions', locale],
+    ['/restapi/v1/content/promotions?show_for=1', locale],
     url => getApi(url, { cache: 'no-store' }),
   );
   const { t } = useI18n();
@@ -270,7 +270,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
   const { user } = useAuth();
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
-    ['/restapi/v1/content/promotions', locale],
+    ['/restapi/v1/content/promotions?show_for=1', locale],
     url => getApi(url, { cache: 'no-store' }),
   );
   const promotions = filterPromotionsList(data?.Data || []);
@@ -338,7 +338,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
 const PromotionPage = ({ slug }: { slug: string }) => {
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { data, error } = useApi<RailsApiResponse<PostItem>>(
-    [`/restapi/v1/content/promotion/${slug}`, locale],
+    [`/restapi/v1/content/promotion/${slug}?show_for=1`, locale],
     url => getApi(url, { cache: 'no-store' }),
   );
   const { t } = useI18n();

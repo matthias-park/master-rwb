@@ -124,7 +124,7 @@ const SitemapPage = () => {
     return routesEqual && localeEqual;
   });
   const { data: promotions } = useApi<RailsApiResponse<PostItem[]>>([
-    '/restapi/v1/content/promotions',
+    '/restapi/v1/content/promotions?show_for=1',
     locale,
   ]);
   const { user } = useAuth();
