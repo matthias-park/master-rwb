@@ -506,8 +506,11 @@ export const VALIDATIONS = {
     );
   },
   validDateFormat: (dayjs: any, value: string = '') => {
-    if (!value) return false;
-    return dayjs(value, franchiseDateFormat, true).isValid();
+    if (!value || !dayjs) return false;
+    const dayJsObj = dayjs(value, franchiseDateFormat, true);
+    if (!dayJsObj.isValid()) return false;
+    if (dayjs().diff(dayJsObj, 'year') > 150) return false;
+    return true;
   },
   over_21: (dayjs: any, value: string = '') => {
     if (!value) return false;
