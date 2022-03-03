@@ -321,7 +321,7 @@ const FormFields = ({
                 } else if (field.id === 'social_security_number') {
                   let format = '###-##-####';
                   if (
-                    field.default.includes('*') &&
+                    field.default?.includes('*') &&
                     !watch('social_security_number')
                   ) {
                     format = `###-##-${field.default.substring(5)}`;
@@ -348,6 +348,7 @@ const FormFields = ({
                 'bet_limit',
                 'session_limit',
               ].includes(id);
+              const isSSN = field.id === 'social_security_number';
               return (
                 <TextInput
                   id={field.id}
@@ -356,78 +357,84 @@ const FormFields = ({
                     !field.disabled && {
                       required:
                         !isDepositLossBetLimits &&
+                        !(isSSN && Franchise.desertDiamond) &&
                         `${t(field.title)} ${t('settings_field_required')}`,
                       validate: value => {
-                        if (isNewPassword)
-                          return (
-                            VALIDATIONS.password(
-                              value,
-                              Franchise.desertDiamond ? 4 : 3,
-                            ) || t('register_password_weak')
-                          );
-                        if (field.id === 'phone_number')
-                          return (
-                            VALIDATIONS.phone(value) ||
-                            t('phone_number_invalid')
-                          );
-                        if (
-                          id === 'session_limit' &&
-                          field.id.includes('amount') &&
-                          value &&
-                          !isNaN(value)
-                        ) {
-                          const weekValue = watch('limit_amount_week');
-                          const monthValue = watch('limit_amount_month');
-                          if (field.id.includes('day')) {
-                            const numberValue = Number(value);
-                            if (weekValue && Number(weekValue) < numberValue) {
-                              return t('limit_day_over_week');
-                            } else if (numberValue > 24) {
-                              return t('limit_day_over_24');
-                            }
-                          } else if (field.id.includes('week')) {
-                            trigger('limit_amount_day');
-                            const numberValue = Number(value);
-                            if (
-                              monthValue &&
-                              Number(monthValue) < numberValue
-                            ) {
-                              return t('limit_week_over_month');
-                            } else if (numberValue > 168) {
-                              return t('limit_week_over_week');
-                            }
-                          } else if (field.id.includes('month')) {
-                            trigger('limit_amount_week');
-                            const numberValue = Number(value);
-                            if (numberValue > 744) {
-                              return t('limit_month_over_month');
-                            }
-                          }
-                        }
-                        if (['first_name', 'last_name'].includes(field.id)) {
-                          return (
-                            VALIDATIONS.name(value) || t('field_only_letters')
-                          );
-                        }
-                        if (field.id === 'date_of_birth') {
+                        if (value) {
+                          if (isNewPassword)
+                            return (
+                              VALIDATIONS.password(
+                                value,
+                                Franchise.desertDiamond ? 4 : 3,
+                              ) || t('register_password_weak')
+                            );
+                          if (field.id === 'phone_number')
+                            return (
+                              VALIDATIONS.phone(value) ||
+                              t('phone_number_invalid')
+                            );
                           if (
-                            !value ||
-                            !VALIDATIONS.validDateFormat(dayjs, value)
+                            id === 'session_limit' &&
+                            field.id.includes('amount') &&
+                            value &&
+                            !isNaN(value)
                           ) {
-                            return t('date_of_birth_invalid');
+                            const weekValue = watch('limit_amount_week');
+                            const monthValue = watch('limit_amount_month');
+                            if (field.id.includes('day')) {
+                              const numberValue = Number(value);
+                              if (
+                                weekValue &&
+                                Number(weekValue) < numberValue
+                              ) {
+                                return t('limit_day_over_week');
+                              } else if (numberValue > 24) {
+                                return t('limit_day_over_24');
+                              }
+                            } else if (field.id.includes('week')) {
+                              trigger('limit_amount_day');
+                              const numberValue = Number(value);
+                              if (
+                                monthValue &&
+                                Number(monthValue) < numberValue
+                              ) {
+                                return t('limit_week_over_month');
+                              } else if (numberValue > 168) {
+                                return t('limit_week_over_week');
+                              }
+                            } else if (field.id.includes('month')) {
+                              trigger('limit_amount_week');
+                              const numberValue = Number(value);
+                              if (numberValue > 744) {
+                                return t('limit_month_over_month');
+                              }
+                            }
                           }
-                          return (
-                            VALIDATIONS.over_21(dayjs, value) ||
-                            t('date_of_birth_below_21')
-                          );
+                          if (['first_name', 'last_name'].includes(field.id)) {
+                            return (
+                              VALIDATIONS.name(value) || t('field_only_letters')
+                            );
+                          }
+                          if (field.id === 'date_of_birth') {
+                            if (
+                              !value ||
+                              !VALIDATIONS.validDateFormat(dayjs, value)
+                            ) {
+                              return t('date_of_birth_invalid');
+                            }
+                            return (
+                              VALIDATIONS.over_21(dayjs, value) ||
+                              t('date_of_birth_below_21')
+                            );
+                          }
+                          if (field.id === 'social_security_number') {
+                            return (
+                              (value.length === 9 && !isNaN(parseInt(value))) ||
+                              t('full_social_security_invalid')
+                            );
+                          }
+                          return true;
                         }
-                        if (field.id === 'social_security_number') {
-                          return (
-                            (value.length === 9 && !isNaN(parseInt(value))) ||
-                            t('full_social_security_invalid')
-                          );
-                        }
-                        return true;
                       },
                     }
                   }
@@ -509,8 +516,9 @@ const SettingsForm = (props: SettingProps) => {
     [blocks],
   );
 
-  const resetValues = fields
-    ? fields
+  const allFields = fieldsFromBlocks || fields;
+  const resetValues = allFields
+    ? allFields
         .filter(field => !field.default && field.type !== 'submit')
         .map(field => field.id)
     : [];
@@ -570,7 +578,7 @@ const SettingsForm = (props: SettingProps) => {
       if ('disable_player_until' === url.split('/').reverse()[0]) {
         injectTrackerScript('exclusion');
       }
-      reset(null, { keepValues: true });
+      reset(null, { keepValues: true, keepIsValid: true });
       resetValues.forEach(id => formMethods.setValue(id, ''));
     }
     mutateData && setTimeout(() => mutateData(), 1000);
