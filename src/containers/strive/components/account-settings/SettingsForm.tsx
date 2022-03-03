@@ -320,13 +320,13 @@ const FormFields = ({
                   };
                 } else if (field.id === 'social_security_number') {
                   let format = '###-##-####';
+                  if (field.default && field.default?.toString().length !== 9)
+                    field.default = field.default?.toString().padStart(9, '*');
                   if (
                     field.default?.includes('*') &&
                     !watch('social_security_number')
                   ) {
                     format = `###-##-${field.default.substring(5)}`;
-                  } else if (field.default?.toString().length !== 9) {
-                    field.default = '';
                   }
                   masketInput = {
                     format: format,
