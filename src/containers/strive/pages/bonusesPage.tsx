@@ -150,7 +150,9 @@ const BonusHistoryTable = ({ bonuses }) => {
                             </strong>
                             <strong>
                               <NumberFormat
-                                value={bonus.Amount}
+                                value={
+                                  bonus.Amount ?? bonus.BonusCampaignAwardAmount
+                                }
                                 thousandSeparator
                                 displayType={'text'}
                                 prefix={user.currency}
@@ -352,7 +354,7 @@ const BonusCardList = ({ title, items, mutate }: BonusCardListProps) => {
             bonusData={{
               title: bonus.Name,
               validTo: bonus.ValidTo,
-              amount: bonus.BonusCampaignAwardAmount || bonus.Amount,
+              amount: bonus.Amount ?? bonus.BonusCampaignAwardAmount,
               rolloverUsed: bonus.TotalRollover - bonus.RolloverAmountLeft,
               rolloverAmount: bonus.TotalRollover,
               engine: bonus.Engine,
