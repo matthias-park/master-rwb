@@ -24,6 +24,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-android:before {
+  content: "\eac0";
+}
 .icon-strive-check:before,
 .icon-strive-success:before,
 .icon-check:before,
@@ -304,6 +307,7 @@
 .icon-desertDiamond-windows8:before {
   content: "\e935";
 }
+.icon-appleinc:before,
 .icon-strive-appleinc:before,
 .icon-gnogaz-appleinc:before,
 .icon-desertDiamond-appleinc:before {
