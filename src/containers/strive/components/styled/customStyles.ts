@@ -801,6 +801,23 @@ const customStyles = css`
       margin: auto;
     }
   }
+  .geocomply-app-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: ${props => props.theme.colors.primary.main};
+    &:hover {
+      color: ${props => props.theme.colors.primary.main};
+    }
+    &:active {
+      text-decoration: underline;
+    }
+    .icon-appleinc,
+    .icon-android {
+      margin-right: 0.5rem;
+      margin-bottom: 0.1rem;
+    }
+  }
   .geocomply-links {
     display: flex;
     justify-content: space-around;
