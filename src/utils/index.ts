@@ -119,7 +119,8 @@ export const filterPromotionsList = (promotions: PostItem[]): PostItem[] =>
     const isPublished =
       promotion.publish_date && dayjs(promotion.publish_date).isBefore(dayjs());
     const isVisible = promotion.visible;
-    return isNotExpired && isPublished && isVisible;
+    const isForWeb = promotion.show_for !== 2;
+    return isNotExpired && isPublished && isVisible && isForWeb;
   });
 
 export const mergeDeep = (target, ...sources) => {

@@ -194,9 +194,11 @@ const PromotionsListBlock = ({ currentSlug }) => {
     ['/restapi/v1/content/promotions', locale],
     url => getApi(url, { cache: 'no-store' }),
   );
-  const numberOfPromotions = data?.Data.slice(0, 4).find(
-    promo => promo.slug === currentSlug,
-  )
+  const promotions = filterPromotionsList(data?.Data || []);
+
+  const numberOfPromotions = promotions
+    .slice(0, 4)
+    .find(promo => promo.slug === currentSlug)
     ? 5
     : 4;
   const isDataLoading = !data && !error;
@@ -209,7 +211,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
         </div>
       )}
       <div className="promo-cards">
-        {data?.Data?.slice(0, numberOfPromotions).map(
+        {promotions.slice(0, numberOfPromotions).map(
           item =>
             item.slug !== currentSlug && (
               <div key={item.id} className="promo-card">
