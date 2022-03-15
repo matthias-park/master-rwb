@@ -81,13 +81,11 @@ const CasinoFilters = () => {
     setParams,
     activeCategory,
     activeProvider,
-    setCategoryFilter,
-    setProviderFilter,
-    categoryFilter,
-    providerFilter,
     casinoType,
     orderBy,
     setOrderBy,
+    filters,
+    setFilters,
   } = useCasinoConfig();
   const location = useLocation();
   const history = useHistory();
@@ -117,8 +115,11 @@ const CasinoFilters = () => {
   };
 
   const resetFilters = () => {
-    setCategoryFilter(null);
-    setProviderFilter(null);
+    setFilters(prev => ({
+      ...prev,
+      categoryFilter: null,
+      providerFilterGroup: [],
+    }));
     setOrderBy(null);
     toggleSidebar();
   };
@@ -166,8 +167,8 @@ const CasinoFilters = () => {
                           className={clsx(
                             'casino-filters__categories-item',
                             category.slug ===
-                              (categoryFilter?.slug || activeCategory?.slug) &&
-                              'active',
+                              (filters.categoryFilter?.slug ||
+                                activeCategory?.slug) && 'active',
                           )}
                         >
                           <i className={clsx(`icon-${category.icon}`)} />
@@ -198,8 +199,8 @@ const CasinoFilters = () => {
                       className={clsx(
                         'casino-filters__categories-item',
                         category.slug ===
-                          (categoryFilter?.slug || activeCategory?.slug) &&
-                          'active',
+                          (filters.categoryFilter?.slug ||
+                            activeCategory?.slug) && 'active',
                       )}
                     >
                       <i className={clsx(`icon-${category.icon}`)} />
@@ -237,8 +238,8 @@ const CasinoFilters = () => {
             <div className="filters-nav">
               <FilterDropdown
                 title={
-                  categoryFilter
-                    ? categoryFilter.name
+                  filters.categoryFilter
+                    ? filters.categoryFilter.name
                     : activeCategory
                     ? activeCategory.name
                     : t('category_filter_title')
@@ -252,9 +253,13 @@ const CasinoFilters = () => {
                       : Filters.Categories,
                   )
                 }
-                activeItemId={categoryFilter?.id || activeCategory?.slug}
+                activeItemId={
+                  filters.categoryFilter?.id || activeCategory?.slug
+                }
                 items={categories?.map(category => ({
-                  activeId: categoryFilter ? category.id : category.slug,
+                  activeId: filters.categoryFilter
+                    ? category.id
+                    : category.slug,
                   name: category.name,
                   onClick: () =>
                     !activeCategory && !activeProvider
@@ -263,14 +268,19 @@ const CasinoFilters = () => {
                             casinoType === 'casino' ? 'casino' : 'live-casino'
                           }/${category.slug}`,
                         )
-                      : setCategoryFilter(category),
+                      : setFilters(prev => ({
+                          ...prev,
+                          categoryFilter: category,
+                        })),
                 }))}
               />
               {casinoType === 'casino' && (
                 <FilterDropdown
                   title={
-                    providerFilter
-                      ? t(`provider_name_${providerFilter.slug}`)
+                    filters.providerFilterGroup[0]
+                      ? t(
+                          `provider_name_${filters.providerFilterGroup[0].slug}`,
+                        )
                       : activeProvider
                       ? t(`provider_name_${activeProvider.slug}`)
                       : t('provider_filter_title')
@@ -285,21 +295,32 @@ const CasinoFilters = () => {
                     )
                   }
                   activeItemId={
-                    providerFilter?.id || activeProvider?.slug || 'all'
+                    filters.providerFilterGroup[0]?.id ||
+                    activeProvider?.slug ||
+                    'all'
                   }
                   items={[
                     activeCategory && {
                       activeId: 'all',
                       name: t('all_providers'),
-                      onClick: () => setProviderFilter(null),
+                      onClick: () =>
+                        setFilters(prev => ({
+                          ...prev,
+                          providerFilterGroup: [],
+                        })),
                     },
                     ...(providers?.map(provider => ({
-                      activeId: providerFilter ? provider.id : provider.slug,
+                      activeId: filters.providerFilterGroup[0]
+                        ? provider.id
+                        : provider.slug,
                       name: t(`provider_name_${provider.slug}`),
                       onClick: () =>
                         !activeCategory && !activeProvider
                           ? history.push(`/casino/providers/${provider.slug}`)
-                          : setProviderFilter(provider),
+                          : setFilters(prev => ({
+                              ...prev,
+                              providerFilterGroup: [provider],
+                            })),
                     })) || []),
                   ].filter(Boolean)}
                 />

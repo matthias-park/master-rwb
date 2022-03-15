@@ -1,14 +1,28 @@
-import React, { useState, createContext, useContext, useEffect } from 'react';
+import React, {
+  useState,
+  createContext,
+  useContext,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import { useLocation } from 'react-router-dom';
 import useApi from './useApi';
-import { Category, Provider, Game } from '../types/api/Casino';
+import {
+  Category,
+  Provider,
+  Game,
+  Filters,
+  SearchData,
+} from '../types/api/Casino';
 import { postApi } from '../utils/apiUtils';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import useEffectSkipInitial from './useEffectSkipInitial';
 import { useAuth } from './useAuth';
 import { useHistory } from 'react-router-dom';
 import { useModal } from './useModal';
-import { ComponentName } from '../constants';
+import { ComponentName, Franchise, PagesName } from '../constants';
+import { useRoutePath } from './index';
 
 type CasinoConfig = {
   categories: Category[];
@@ -20,27 +34,17 @@ type CasinoConfig = {
   setGames: (games: Game[] | null) => void;
   filteredGames: Game[] | null;
   setFilteredGames: (games: Game[] | null) => void;
-  categoryFilter: Category | null;
-  setCategoryFilter: (category: Category | null) => void;
-  providerFilter: Provider | null;
-  setProviderFilter: (provider: Provider | null) => void;
+  filters: Filters;
+  setFilters: Dispatch<SetStateAction<Filters>>;
   casinoType: CasinoType;
   orderBy: { attr: string; type: string } | null;
   setOrderBy: (value: { attr: string; type: string } | null) => void;
-  searchData: {
-    showSearch: boolean;
-    searchValue: string;
-    games: Game[] | null;
-    loading: boolean;
-  };
-  setSearchData: (value: {
-    showSearch: boolean;
-    searchValue: string;
-    games: Game[] | null;
-    loading: boolean;
-  }) => void;
+  searchData: SearchData;
+  setSearchData: Dispatch<SetStateAction<SearchData>>;
   favouriteGames: Game[];
   setFavouriteGame: (games: { add?: number[]; remove?: number[] }) => void;
+  recentGames: Game[];
+  recentGamesDataMutate: () => void;
   selectedGame: Game | null;
   setSelectedGame: (game: Game | null) => void;
   loadGame: (game: Game) => void;
@@ -67,6 +71,7 @@ export const CasinoConfigProvider = props => {
   const { user } = useAuth();
   const { enableModal } = useModal();
   const history = useHistory();
+  const loginPath = useRoutePath(PagesName.LoginPage, true);
   const { data: categoriesData, error: categoriesError } = useApi<any>(
     '/restapi/v1/casino/categories',
   );
@@ -81,6 +86,13 @@ export const CasinoConfigProvider = props => {
     error: favouriteGamesDataError,
     mutate: favouriteGamesDataMutate,
   } = useApi<any>(user.logged_in ? '/restapi/v1/casino/favourite_games' : '');
+  const {
+    data: recentGamesData,
+    error: recentGamesDataError,
+    mutate: recentGamesDataMutate,
+  } = useApi<any>(
+    user.logged_in ? '/restapi/v1/casino/recent_casino_games' : '',
+  );
   const [params, setParams] = useState<{
     category?: string;
     provider?: string;
@@ -89,20 +101,19 @@ export const CasinoConfigProvider = props => {
   const [activeProvider, setActiveProvider] = useState<Provider | null>(null);
   const [currentGames, setCurrentGames] = useState<Game[] | null>(null);
   const [filteredGames, setFilteredGames] = useState<Game[] | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState<Category | null>(null);
-  const [providerFilter, setProviderFilter] = useState<Provider | null>(null);
   const [casinoType, setCasinoType] = useState<CasinoType>(CasinoType.Casino);
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
-  const [searchData, setSearchData] = useState<{
-    showSearch: boolean;
-    searchValue: string;
-    games: Game[] | null;
-    loading: boolean;
-  }>({
+  const [searchData, setSearchData] = useState<SearchData>({
     showSearch: false,
     searchValue: '',
     games: [],
     loading: false,
+  });
+  const [filters, setFilters] = useState<Filters>({
+    categoryFilter: null,
+    providerFilterGroup: [],
+    genreFilterGroup: [],
+    themeFilterGroup: [],
   });
   const [orderBy, setOrderBy] = useState<{ attr: string; type: string } | null>(
     null,
@@ -155,7 +166,9 @@ export const CasinoConfigProvider = props => {
         'playCasino',
       ) && enableModal(ComponentName.LimitsModal);
     } else {
-      enableModal(ComponentName.LoginModal);
+      Franchise.xCasino
+        ? enableModal(ComponentName.LoginModal)
+        : history.push(loginPath);
     }
   };
 
@@ -177,25 +190,53 @@ export const CasinoConfigProvider = props => {
         : currentGames;
       const filteredGames = sortedGames
         .filter(
-          game => game.provider.id === providerFilter?.id || !providerFilter,
+          game =>
+            filters.providerFilterGroup?.some(
+              providerFilter => providerFilter.id === game.provider.id,
+            ) || !filters.providerFilterGroup.length,
         )
         .filter(
           game =>
-            (categoryFilter && game.categories.includes(categoryFilter.id)) ||
-            !categoryFilter,
+            (filters.categoryFilter &&
+              game.categories.includes(filters.categoryFilter.id)) ||
+            !filters.categoryFilter,
+        )
+        .filter(
+          game =>
+            filters.genreFilterGroup?.some(
+              genreFilter => genreFilter === game.genre,
+            ) || !filters.genreFilterGroup.length,
+        )
+        .filter(
+          game =>
+            filters.themeFilterGroup?.some(
+              themeFilter => themeFilter === game.theme,
+            ) || !filters.themeFilterGroup.length,
         );
       setFilteredGames(filteredGames);
     }
-  }, [categoryFilter, providerFilter, orderBy, currentGames]);
+  }, [filters, orderBy, currentGames]);
 
   useEffect(() => {
     setSelectedGame(null);
     setSearchData(prev => ({ ...prev, showSearch: false }));
-    setCategoryFilter(null);
-    setProviderFilter(null);
+    setFilters(prev => ({
+      ...prev,
+      categoryFilter: null,
+      providerFilterGroup: [],
+    }));
     location.pathname.includes('live-casino')
       ? setCasinoType(CasinoType.LiveCasino)
       : setCasinoType(CasinoType.Casino);
+
+    if (Franchise.gnogon && !location.pathname.includes('casino')) {
+      setFilters(prev => ({
+        ...prev,
+        genreFilterGroup: [],
+        themeFilterGroup: [],
+      }));
+      setOrderBy(null);
+    }
   }, [location]);
 
   useEffect(() => {
@@ -224,10 +265,11 @@ export const CasinoConfigProvider = props => {
   }, [params, providersData, categoriesData]);
 
   useEffect(() => {
-    setSearchData(prev => ({
-      ...prev,
-      showSearch: !!searchData.searchValue.length,
-    }));
+    Franchise.xCasino &&
+      setSearchData(prev => ({
+        ...prev,
+        showSearch: !!searchData.searchValue.length,
+      }));
   }, [searchData.searchValue]);
 
   const value: CasinoConfig = {
@@ -245,15 +287,15 @@ export const CasinoConfigProvider = props => {
     setGames: setCurrentGames,
     filteredGames,
     setFilteredGames,
-    categoryFilter,
-    setCategoryFilter,
-    providerFilter,
-    setProviderFilter,
+    filters,
+    setFilters,
     casinoType,
     orderBy,
     setOrderBy,
     favouriteGames: favouriteGamesData?.Data || [],
     setFavouriteGame,
+    recentGames: recentGamesData?.Data || [],
+    recentGamesDataMutate,
     selectedGame,
     setSelectedGame,
     loadGame,

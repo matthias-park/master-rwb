@@ -6,6 +6,7 @@ import ValidationFailedModal from './components/modals/ValidationFailedModal';
 import { useI18n } from '../../hooks/useI18n';
 import { ComponentName, ComponentSettings } from '../../constants';
 import PlayerDisabledModal from './components/modals/PlayerDisabledModal';
+import QuickDepositModal from './components/modals/QuickDepositModal';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state';
 import loadable from '@loadable/component';
@@ -25,6 +26,10 @@ const LoadableCookiePolicyModal = loadable(
 );
 const LoadableAddBankAccountModal = loadable(
   () => import('./components/modals/AddBankAccountModal'),
+);
+
+const LoadableCasinoGameInfoModal = loadable(
+  () => import('./components/modals/CasinoGameInfoModal'),
 );
 
 const addBankAccountSubmit = async data => {
@@ -65,8 +70,12 @@ const Modals = () => {
       {activeModal === ComponentName.CookiesModal && (
         <LoadableCookiePolicyModal />
       )}
+      <QuickDepositModal />
       {activeModal === ComponentName.AddBankAccountModal && (
         <LoadableAddBankAccountModal onSubmit={addBankAccountSubmit} />
+      )}
+      {activeModal === ComponentName.CasinoGameInfoModal && (
+        <LoadableCasinoGameInfoModal />
       )}
     </>
   );

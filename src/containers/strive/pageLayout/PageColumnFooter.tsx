@@ -39,9 +39,9 @@ const PageColumnFooter = () => {
       </div>
       {(Franchise.gnogaz || Franchise.gnogon) && (
         <div className="footer-item footer-payments">
-          {footer?.rowFooterPayments?.map(paymentImg => (
+          {footer?.rowFooterPayments?.map((paymentImg, i) => (
             <img
-              key={paymentImg}
+              key={`${paymentImg}_${i}`}
               alt="payment"
               className="footer-payments__img"
               src={paymentImg}
@@ -62,8 +62,8 @@ const PageColumnFooter = () => {
         <div className="footer-info__section">
           {t('play_anywhere')}
           <div className="footer-info__section-block">
-            {footer?.rowFooterApps?.map(app => (
-              <a target="_blank" key={app.link} href={app.link}>
+            {footer?.rowFooterApps?.map((app, i) => (
+              <a target="_blank" key={`${app.link}_${i}`} href={app.link}>
                 <img
                   alt="android"
                   src={
@@ -78,9 +78,9 @@ const PageColumnFooter = () => {
         </div>
         {(Franchise.gnogaz || Franchise.gnogon) && (
           <div className="footer-info__section partners">
-            {footer?.rowFooterPartners?.map(partner => (
+            {footer?.rowFooterPartners?.map((partner, i) => (
               <Link
-                key={partner.link}
+                key={`${partner.link}_${i}`}
                 to={partner.link}
                 target={clsx(partner.link.includes('https://') && '_blank')}
               >
@@ -92,9 +92,9 @@ const PageColumnFooter = () => {
         <div className="footer-info__section">
           {t('find_us_also')}
           <div className="footer-info__section-icons">
-            {footer?.rowFooterSocials?.map(social => (
+            {footer?.rowFooterSocials?.map((social, i) => (
               <Link
-                key={social.link}
+                key={`${social.link}_${i}`}
                 to={social.link}
                 target={clsx(social.link.includes('https://') && '_blank')}
               >
@@ -107,8 +107,8 @@ const PageColumnFooter = () => {
         </div>
       </div>
       <div className="footer-item footer-links">
-        {footer?.rowFooterLinks?.map(link => (
-          <span className="footer-links__link">
+        {footer?.rowFooterLinks?.map((link, i) => (
+          <span key={`${link.link}_${i}`} className="footer-links__link">
             <Link to={link.link}>{t(link.title_symbol)}</Link>
           </span>
         ))}

@@ -38,6 +38,20 @@ const customStyles = css`
     }
   }
 
+  .fade-in {
+    animation-name: fadeIn;
+    animation-duration: 0.6s;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   .translation-link {
     text-decoration: underline;
     color: ${props =>
@@ -99,6 +113,10 @@ const customStyles = css`
 
   .min-vh-70 {
     min-height: 70vh;
+  }
+
+  .mx-650 {
+    max-width: 650px;
   }
 
   .d-sm-table-cell {
@@ -776,7 +794,7 @@ const customStyles = css`
         font-weight: 600;
       }
     }
-    button {
+    .btn {
       min-width: 200px;
       white-space: nowrap;
     }
@@ -1030,7 +1048,8 @@ const customStyles = css`
       text-align: center;
     }
   }
-  .sb-bottom-nav {
+  .sb-bottom-nav,
+  .bottom-nav {
     display: none;
     position: fixed;
     justify-content: space-around;
@@ -1077,6 +1096,10 @@ const customStyles = css`
         &.icon-gnogaz-all,
         &.icon-gnogaz-in-play {
           font-size: 27px;
+        }
+        &.icon-gnogon-home,
+        &.icon-gnogon-new {
+          font-size: 20px;
         }
       }
       &.active {

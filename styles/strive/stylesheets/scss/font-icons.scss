@@ -319,96 +319,237 @@
 .icon-desertDiamond-sports:before {
   content: "\e93c";
 }
-.icon-gnogaz-youtube:before {
+.icon-gnogaz-youtube:before,
+.icon-gnogon-youtube:before {
   content: "\e91e";
 }
-.icon-gnogaz-account:before {
+.icon-gnogaz-account:before,
+.icon-gnogon-account:before {
   content: "\e91f";
 }
-.icon-gnogaz-responsible:before {
+.icon-gnogaz-responsible:before,
+.icon-gnogon-responsible:before {
   content: "\e920";
 }
-.icon-gnogaz-tooltip:before {
+.icon-gnogaz-tooltip:before,
+.icon-gnogon-tooltip:before {
   content: "\e921";
 }
-.icon-gnogaz-star:before {
+.icon-gnogaz-star:before,
+.icon-gnogon-star:before {
   content: "\e922";
 }
-.icon-gnogaz-twitter:before {
+.icon-gnogaz-twitter:before,
+.icon-gnogon-twitter:before {
   content: "\e923";
 }
-.icon-gnogaz-eye-on:before {
+.icon-gnogaz-eye-on:before,
+.icon-gnogon-eye-on:before {
   content: "\e924";
 }
-.icon-gnogaz-deposit:before {
+.icon-gnogaz-deposit:before,
+.icon-gnogon-deposit:before {
   content: "\e925";
 }
-.icon-gnogaz-mail2:before {
+.icon-gnogaz-mail2:before,
+.icon-gnogon-mail2:before {
   content: "\e926";
 }
-.icon-gnogaz-phone:before {
+.icon-gnogaz-phone:before,
+.icon-gnogon-phone:before {
   content: "\e927";
 }
-.icon-gnogaz-logout:before {
+.icon-gnogaz-logout:before,
+.icon-gnogon-logout:before {
   content: "\e928";
 }
-.icon-gnogaz-nsta:before {
+.icon-gnogaz-nsta:before,
+.icon-gnogon-nsta:before {
   content: "\e929";
 }
-.icon-gnogaz-bell:before {
+.icon-gnogaz-bell:before,
+.icon-gnogon-bell:before {
   content: "\e92a";
 }
-.icon-gnogaz-questions:before {
+.icon-gnogaz-questions:before,
+.icon-gnogon-questions:before {
   content: "\e92b";
 }
-.icon-gnogaz-clock:before {
+.icon-gnogaz-clock:before,
+.icon-gnogon-clock:before {
   content: "\e92c";
 }
-.icon-gnogaz-documents:before {
+.icon-gnogaz-documents:before,
+.icon-gnogon-documents:before {
   content: "\e92d";
 }
-.icon-gnogaz-facebook:before {
+.icon-gnogaz-facebook:before,
+.icon-gnogon-facebook:before {
   content: "\e92e";
 }
-.icon-gnogaz-eye-off:before {
+.icon-gnogaz-eye-off:before,
+.icon-gnogon-eye-off-before {
   content: "\e92f";
 }
-.icon-gnogaz-promo:before {
+.icon-gnogaz-promo:before,
+.icon-gnogon-promo:before {
   content: "\e930";
 }
 .icon-gnogaz-withdraw:before,
-.icon-gnogaz-withdrawable_balance:before {
+.icon-gnogaz-withdrawable_balance:before,
+.icon-gnogon-withdraw:before,
+.icon-gnogon-withdrawable_balance:before {
   content: "\e931";
 }
-.icon-gnogaz-bonus_balance:before {
+.icon-gnogaz-bonus_balance:before,
+.icon-gnogon-bonus_balance:before {
   content: "\e932";
 }
 .icon-gnogaz-lock:before,
-.icon-gnogaz-locked_balance:before {
+.icon-gnogaz-locked_balance:before,
+.icon-gnogon-lock:before,
+.icon-gnogon-locked_balance:before {
   content: "\e933";
 }
 .icon-gnogaz-balance:before,
-.icon-gnogaz-playable_balance:before {
+.icon-gnogaz-playable_balance:before,
+.icon-gnogon-balance:before,
+.icon-gnogon-playabale_balance:before {
   content: "\e934";
 }
-.icon-gnogaz-home:before {
+.icon-gnogaz-home:before,
+.icon-gnogon-home:before {
   content: "\e937";
 }
-.icon-gnogaz-soon:before {
+.icon-gnogaz-soon:before,
+.icon-gnogon-soon:before {
   content: "\e938";
 }
-.icon-gnogaz-bets:before {
+.icon-gnogaz-bets:before,
+.icon-gnogon-bets:before {
   content: "\e939";
 }
-.icon-gnogaz-in-play:before {
+.icon-gnogaz-in-play:before,
+.icon-gnogon-in-play:before {
   content: "\e93a";
 }
-.icon-gnogaz-all:before {
+.icon-gnogaz-all:before,
+.icon-gnogon-all:before {
   content: "\e93b";
 }
-.icon-gnogaz-sports:before {
+.icon-gnogaz-sports:before,
+.icon-gnogon-sports:before {
   content: "\e93d";
 }
-.icon-gnogaz-plus:before {
+.icon-gnogaz-plus:before,
+.icon-gnogon-plus:before {
   content: "\e93f";
 }
+.icon-gnogaz-jackpot:before,
+.icon-gnogon-jackpot:before {
+  content: "\e94b";
+}
+.icon-gnogaz-table-games:before,
+.icon-gnogon-table-games:before {
+  content: "\e94a";
+}
+.icon-gnogaz-livedealer:before,
+.icon-gnogon-livedealer:before {
+  content: "\e949";
+}
+.icon-gnogaz-megaways:before,
+.icon-gnogon-megaways:before {
+  content: "\e948";
+}
+.icon-gnogaz-slots:before,
+.icon-gnogon-slots:before {
+  content: "\e947";
+}
+.icon-gnogaz-top:before,
+.icon-gnogon-top:before {
+  content: "\e946";
+}
+.icon-gnogaz-new:before,
+.icon-gnogon-new:before {
+  content: "\e945";
+}
+.icon-gnogaz-featured:before,
+.icon-gnogon-featured:before {
+  content: "\e944";
+}
+.icon-gnogaz-lobby:before,
+.icon-gnogon-lobby:before {
+  content: "\e943";
+}
+.icon-gnogaz-casino:before,
+.icon-gnogon-casino:before {
+  content: "\e942";
+}
+.icon-gnogaz-search:before,
+.icon-gnogon-search:before {
+  content: "\e941";
+}
+.icon-gnogaz-full-screen:before,
+.icon-gnogon-full-screen:before {
+  content: "\e940";
+}
+.icon-gnogaz-favourite-on:before,
+.icon-gnogon-favourite-on:before {
+  color: #DE3163;
+  content: "\e94c";
+}
+.icon-gnogaz-favourite-off:before,
+.icon-gnogon-favourite-off:before {
+  content: "\e94d";
+}
+.icon-gnogaz-filter:before,
+.icon-gnogon-filter:before {
+  content: "\e94e";
+}
+.icon-gnogaz-right:before,
+.icon-gnogon-right:before {
+  content: "\e94f";
+}
+.icon-gnogaz-left:before,
+.icon-gnogon-left:before {
+  content: "\e950";
+}
+.icon-gnogaz-menu:before,
+.icon-gnogon-menu:before {
+  content: "\e951";
+}
+.icon-gnogaz-game-info .path1:before,
+.icon-gnogon-game-info .path1:before {
+  content: "\e955";
+  color: rgb(51, 51, 51);
+}
+.icon-gnogaz-game-info .path2:before,
+.icon-gnogon-game-info .path2:before {
+  content: "\e958";
+  margin-left: -1.03125em;
+  color: rgb(255, 255, 255);
+}
+.icon-gnogaz-home1:before,
+.icon-gnogon-home1:before {
+  content: "\e95d";
+}
+.icon-gnogaz-down:before,
+.icon-gnogon-down:before {
+  content: "\e95e";
+}
+.icon-gnogaz-up:before,
+.icon-gnogon-up:before {
+  content: "\e96c";
+}
+.icon-gnogaz-close:before,
+.icon-gnogon-close:before {
+  content: "\e98a";
+}
+.icon-gnogaz-recent:before,
+.icon-gnogon-recent:before {
+  content: "\e98b";
+}
+.icon-android:before {
+  content: "\e98c";
+}
+

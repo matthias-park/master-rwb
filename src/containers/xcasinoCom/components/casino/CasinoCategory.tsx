@@ -18,13 +18,12 @@ const CasinoCategory = () => {
     games,
     filteredGames,
     setGames,
-    categoryFilter,
-    providerFilter,
     casinoType,
+    filters,
   } = useCasinoConfig();
   const params = useParams<{ category?: string; providers?: string }>();
-  const categoryId = categoryFilter?.id || activeCategory?.id;
-  const providerId = providerFilter?.id || activeProvider?.id;
+  const categoryId = filters.categoryFilter?.id || activeCategory?.id;
+  const providerId = filters.providerFilterGroup?.[0]?.id || activeProvider?.id;
   const { data, error } = useApi<RailsApiResponse<Game[]>>(
     categoryId || providerId
       ? `/restapi/v1/casino/${

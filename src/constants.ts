@@ -31,9 +31,11 @@ export enum ComponentName {
   LimitsModal = 'limitsModal',
   ResendEmailModal = 'resendEmailModal',
   MaxBalanceModal = 'maxBalanceModal',
+  QuickDepositModal = 'quickDepositModal',
   BettingHistory = 'bettingHistory',
   DepositLinkModal = 'depositLinkModal',
   ActivateUserModal = 'activateUserModal',
+  CasinoGameInfoModal = 'casinoGameInfoModal',
 }
 
 export const ModalPriority = {

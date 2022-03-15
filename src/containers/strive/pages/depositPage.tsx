@@ -15,7 +15,12 @@ import {
   DepositStatus,
 } from '../../../types/api/user/Deposit';
 import { useI18n } from '../../../hooks/useI18n';
-import { CustomWindowEvents, PagesName, Franchise } from '../../../constants';
+import {
+  CustomWindowEvents,
+  PagesName,
+  Franchise,
+  ComponentName,
+} from '../../../constants';
 import CustomAlert from '../components/CustomAlert';
 import { useRoutePath } from '../../../hooks';
 import { useAuth } from '../../../hooks/useAuth';
@@ -23,6 +28,7 @@ import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 import useDepositResponseStatus from '../../../hooks/useDepositResponseStatus';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
+import { useModal } from '../../../hooks/useModal';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import DepositForm from '../components/account-settings/DepositForm';
 import useApi from '../../../hooks/useApi';
@@ -40,7 +46,7 @@ const questionItems = [
   { title: 'deposit_question_2', body: 'deposit_answer_2' },
 ];
 
-const DepositPage = () => {
+const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
   const { user } = useAuth();
   const { t, jsxT } = useI18n();
   const { data: depositData, error: depositError } = useApi<
@@ -60,6 +66,7 @@ const DepositPage = () => {
   const depositBaseUrl = useRoutePath(PagesName.DepositPage, true);
   const depositStatus = useDepositResponseStatus();
   const sendDataToGTM = useGTM();
+  const { disableModal } = useModal();
   useEffect(() => {
     if (
       [DepositStatus.Confirmed, DepositStatus.Rejected].includes(
@@ -157,8 +164,17 @@ const DepositPage = () => {
                   .then(res => {
                     if (res.Data.OK) {
                       if (res.Data.AdditionalData?.redirectUrl) {
-                        return (window.location.href =
-                          res.Data.AdditionalData.redirectUrl);
+                        if (depositForm) {
+                          window.open(
+                            res.Data.AdditionalData.redirectUrl,
+                            '_blank',
+                          );
+                          disableModal(ComponentName.QuickDepositModal);
+                        } else {
+                          window.location.href =
+                            res.Data.AdditionalData.redirectUrl;
+                        }
+                        return;
                       }
                       if (res.Data.AdditionalData?.verifyPaymentData) {
                         return window.dispatchEvent(
@@ -206,7 +222,13 @@ const DepositPage = () => {
           (response.Data?.DepositRequestId ||
             response.Data?.DepositRequestId === 0)
         ) {
-          return !!(window.location.href = response.Data.RedirectUrl);
+          if (depositForm) {
+            window.open(response.Data.RedirectUrl, '_blank');
+            disableModal(ComponentName.QuickDepositModal);
+          } else {
+            window.location.href = response.Data.RedirectUrl;
+          }
+          return;
         }
       }
       if (!response || !response.Success || response.Message) {
@@ -282,9 +304,17 @@ const DepositPage = () => {
   }, [customHtml]);
 
   return (
-    <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
-      <BalancesContainer />
-      <h1 className="account-settings__title">{jsxT('deposit_page_title')}</h1>
+    <main
+      className={clsx(
+        !depositForm && 'container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5',
+      )}
+    >
+      {!depositForm && <BalancesContainer />}
+      {!depositForm && (
+        <h1 className="account-settings__title">
+          {jsxT('deposit_page_title')}
+        </h1>
+      )}
       {Franchise.strive && (
         <>
           <p className="mb-4">{jsxT('deposit_page_sub_text')}</p>
@@ -294,17 +324,21 @@ const DepositPage = () => {
           </div>
         </>
       )}
-      <CustomAlert show={!!alertMessage} variant={alertMessage?.variant}>
-        {alertMessage?.msg}
-      </CustomAlert>
-      <LoadingSpinner
-        show={
-          depositStatus.depositStatus === DepositStatus.Pending ||
-          depositDataLoading ||
-          depositLoading
-        }
-        className="d-block mx-auto my-4"
-      />
+      {!depositForm && (
+        <>
+          <CustomAlert show={!!alertMessage} variant={alertMessage?.variant}>
+            {alertMessage?.msg}
+          </CustomAlert>
+          <LoadingSpinner
+            show={
+              depositStatus.depositStatus === DepositStatus.Pending ||
+              depositDataLoading ||
+              depositLoading
+            }
+            className="d-block mx-auto my-4"
+          />
+        </>
+      )}
       {customHtml ? (
         depositFrame
       ) : (
@@ -314,21 +348,25 @@ const DepositPage = () => {
             user.validator_status ===
               KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataOnly ||
             depositStatus.depositStatus === DepositStatus.Pending ||
-            depositDataLoading ||
+            (depositDataLoading && !depositForm) ||
             ((Franchise.gnogaz || Franchise.desertDiamond) && validatorNotOk)
           }
-          loading={depositLoading}
+          loading={depositLoading && !depositForm}
           setApiError={setApiError}
           depositData={depositData}
           depositError={!!depositError}
         />
       )}
-      <QuestionsContainer items={questionItems} />
-      <HelpBlock
-        title={'user_help_title'}
-        blocks={['faq', 'phone', 'email']}
-        className="d-block d-xl-none"
-      />
+      {!depositForm && (
+        <>
+          <QuestionsContainer items={questionItems} />
+          <HelpBlock
+            title={'user_help_title'}
+            blocks={['faq', 'phone', 'email']}
+            className="d-block d-xl-none"
+          />
+        </>
+      )}
     </main>
   );
 };

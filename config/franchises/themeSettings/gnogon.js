@@ -39,7 +39,7 @@ module.exports = {
   spacing: {
     bodyPadding: 25,
     bodyPaddingMedium: 20,
-    bodyPaddingSmall: 20,
+    bodyPaddingSmall: 15,
     footerMainTopPadding: 1.5,
     footerMainBottomPadding: 0,
     footerPrePadding: 0,
@@ -61,7 +61,7 @@ module.exports = {
     maxHeight: 40,
   },
   fonts: {
-    family: 'Proxima Nova',
+    family: 'Roboto',
     weight: {
       bold: 700,
     },

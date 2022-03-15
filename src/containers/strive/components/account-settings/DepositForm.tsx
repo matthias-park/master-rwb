@@ -24,6 +24,7 @@ interface Props {
   setApiError: (msg: string) => void;
   depositData: RailsApiResponse<DepositLimits[] | null> | undefined;
   depositError: boolean;
+  className?: string;
 }
 
 const QUICK_AMOUNTS = Franchise.desertDiamond
@@ -37,6 +38,7 @@ const DepositForm = ({
   setApiError,
   depositData,
   depositError,
+  className,
 }: Props) => {
   const { user } = useAuth();
   const { t } = useI18n();
@@ -125,7 +127,7 @@ const DepositForm = ({
   }, [depositData, depositError, banksData, banksError]);
 
   return (
-    <div className="input-container mb-4">
+    <div className={clsx('input-container mb-4', className)}>
       {Franchise.strive && (
         <div className="input-container__header d-flex align-items-center">
           <h2 className="ml-3 mb-0">{t('deposit_input_container_title')}</h2>

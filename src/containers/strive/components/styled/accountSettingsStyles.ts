@@ -808,6 +808,9 @@ const accountSettingsStyles = css`
       list-style-type: none;
     }
   }
+  .custom-modal .payment-methods {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
 
   .payment-method {
     display: flex;
