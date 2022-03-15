@@ -21,6 +21,7 @@ interface Props {
   subText?: string;
   inputTitle?: string;
   validationErrorPrefix: string;
+  amountButtonsUsed?: (used: boolean) => void;
 }
 
 const InputContainer = ({
@@ -39,6 +40,7 @@ const InputContainer = ({
   subText,
   header,
   inputTitle,
+  amountButtonsUsed,
 }: Props) => {
   const { t } = useI18n();
   const formMethods = useForm<{
@@ -106,12 +108,13 @@ const InputContainer = ({
                   'quick-amounts__btn',
                   watch('amount') === value.toString() && 'active',
                 )}
-                onClick={() =>
+                onClick={() => {
                   setValue('amount', value.toString(), {
                     shouldValidate: true,
                     shouldDirty: true,
-                  })
-                }
+                  });
+                  amountButtonsUsed?.(true);
+                }}
                 disabled={disabled}
               >
                 {`${currency} ${value}`}
@@ -125,8 +128,11 @@ const InputContainer = ({
             maskedInput={{
               allowEmptyFormatting: true,
               prefix: `${currency} `,
-              thousandSeparator: true,
+              thousandSeparator: ' ',
+              decimalSeparator: ',',
               allowNegative: false,
+              isNumericString: true,
+              decimalScale: 2,
             }}
             rules={{
               validate: validateAmount,
@@ -136,6 +142,9 @@ const InputContainer = ({
               if (!amount.length) {
                 resetAmount();
               }
+            }}
+            onChange={() => {
+              amountButtonsUsed?.(false);
             }}
             disabled={disabled}
             onEnterPress={() => handleSubmit()}

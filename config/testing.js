@@ -17,6 +17,13 @@ module.exports = {
       redis: {
         prefix: 'reactNodeTest-',
       },
+      kambi: {
+        retail:
+          'https://cts-static.kambi.com/client/bnlberl/kambi-bootstrap.js',
+        online: 'https://cts-static.kambi.com/client/bnlbe/kambi-bootstrap.js',
+        api:
+          'https://cts-static.kambi.com/client/widget-api/kambi-widget-api.js',
+      },
     },
   },
   port: 3805,

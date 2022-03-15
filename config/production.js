@@ -4,7 +4,7 @@ module.exports = {
       domains: [
         {
           hostname: 'preprod.scooore.be',
-          api: 'https://rapi.scooore.be',
+          api: 'https://preprod-rapi.scooore.be',
           forceWWW: false,
         },
         {

@@ -9,6 +9,7 @@ import { Config } from '../constants';
 import { useHistory, useLocation } from 'react-router';
 import { useConfig } from '../hooks/useConfig';
 import * as Sentry from '@sentry/react';
+import useGeoComply from '../hooks/useGeoComply';
 
 enum SbtEventTypes {
   SetDeviceType = 'SBT_SET_DEVICE_TYPE',
@@ -27,6 +28,7 @@ enum SbtEventTypes {
   locationChange = 'SBT_LOCATION',
   setNoOverflow = 'SBT_SET_NO_OVERFLOW',
   sbReady = 'SBT_READY',
+  geoComplyValidChanged = 'UPDATE_GEOLOCATION_STATUS_CALLBACK',
 }
 
 interface sbState {
@@ -42,6 +44,7 @@ interface sbState {
 const SBTechSportsbook = () => {
   const { user, signout } = useAuth();
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const { isGeoValid } = useGeoComply() || {};
   const { locale, domLoaded, sidebars } = useConfig(
     (prev, next) =>
       prev.locale === next.locale && prev.domLoaded === next.domLoaded,
@@ -152,6 +155,20 @@ const SBTechSportsbook = () => {
     iframeState.refreshSessionRequested,
     iframeState.statusRequested,
   ]);
+
+  useEffect(() => {
+    if (iframeState.loginReady) {
+      iframeRef.current?.contentWindow?.postMessage(
+        JSON.stringify({
+          eventType: SbtEventTypes.geoComplyValidChanged,
+          eventData: {
+            isValid: isGeoValid,
+          },
+        }),
+        '*',
+      );
+    }
+  }, [isGeoValid, iframeState.loginReady]);
 
   useEffect(() => {
     if (token && user.logged_in && iframeState.loginReady) {

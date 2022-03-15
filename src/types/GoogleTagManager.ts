@@ -58,5 +58,5 @@ export type ISendToGTM = {
 };
 
 export type IDataGTM = {
-  [key: string]: string | number | boolean | undefined;
+  [key: string]: string | number | boolean | undefined | Object;
 };

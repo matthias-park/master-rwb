@@ -52,35 +52,39 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
         </div>
       </div>
       <div className="info-container__text">
-        {data.map((info, index) => {
-          let text = '';
-          if (typeof info === 'string') text = info;
-          else if (Array.isArray(info))
-            text = info
-              .map(value => (value.symbol ? t(value.value) : value.value))
-              .join(': ');
-          if (id === 'bank_account')
-            text = text.match(/.{1,4}/g)?.join(' ') || text;
+        {data.length === 1 && !data[0] ? (
+          <span className="text-gray-500">{t('personal_info_no_data')}</span>
+        ) : (
+          data.map((info, index) => {
+            let text = '';
+            if (typeof info === 'string') text = info;
+            else if (Array.isArray(info))
+              text = info
+                .map(value => (value.symbol ? t(value.value) : value.value))
+                .join(': ');
+            if (id === 'bank_account')
+              text = text.match(/.{1,4}/g)?.join(' ') || text;
 
-          return (
-            <ul key={index} className="list-unstyled mb-0">
-              {!index ? (
-                <li className={clsx(index + 1 !== data.length && 'mb-1')}>
-                  <b>{text}</b>
-                </li>
-              ) : (
-                <li
-                  className={clsx(
-                    'text-gray-400',
-                    index + 1 !== data.length && 'mb-1',
-                  )}
-                >
-                  {text}
-                </li>
-              )}
-            </ul>
-          );
-        })}
+            return (
+              <ul key={index} className="list-unstyled mb-0">
+                {!index ? (
+                  <li className={clsx(index + 1 !== data.length && 'mb-1')}>
+                    <b>{text}</b>
+                  </li>
+                ) : (
+                  <li
+                    className={clsx(
+                      'text-gray-400',
+                      index + 1 !== data.length && 'mb-1',
+                    )}
+                  >
+                    {text}
+                  </li>
+                )}
+              </ul>
+            );
+          })
+        )}
         {!!fields && !disabled && (
           <Accordion.Collapse eventKey={id}>
             <>

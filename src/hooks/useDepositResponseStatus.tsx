@@ -77,55 +77,57 @@ const useDepositResponseStatus = () => {
   );
 
   useEffect(() => {
-    if (!DepositStatusTransaction && bankId) {
-      DepositStatusTransaction = Sentry.startTransaction({
-        name: 'deposit status check',
-        tags: {
-          'deposit.bank': bankId,
-          'deposit.requestId': id,
-        },
-      });
-      Sentry.getCurrentHub().configureScope(scope =>
-        scope.setSpan(DepositStatusTransaction!),
-      );
-    }
-    if (bankId && queryParams && Object.keys(queryParams).length) {
-      postApi<RailsApiResponse<RequestReturn>>(
-        '/restapi/v1/deposits/request_return',
-        {
-          bank_id: bankId.toString(),
-          data: JSON.stringify({
-            ...queryParams,
-            depositRequestId: id,
-          }),
-        },
-        {
-          sentryScope: DepositStatusTransaction,
-        },
-      )
-        .then(res => {
-          if (res.Success) {
-            history.replace({
-              search: '',
-            });
-          } else {
-            Sentry.captureMessage(
-              `Request return deposit error bankId: ${bankId}`,
-              {
-                level: Sentry.Severity.Fatal,
-                tags: {
-                  searchQuery: window.location.search,
+    if (responseLoading) {
+      if (!DepositStatusTransaction && bankId) {
+        DepositStatusTransaction = Sentry.startTransaction({
+          name: 'deposit status check',
+          tags: {
+            'deposit.bank': bankId,
+            'deposit.requestId': id,
+          },
+        });
+        Sentry.getCurrentHub().configureScope(scope =>
+          scope.setSpan(DepositStatusTransaction!),
+        );
+      }
+      if (bankId && queryParams && Object.keys(queryParams).length) {
+        postApi<RailsApiResponse<RequestReturn>>(
+          '/restapi/v1/deposits/request_return',
+          {
+            bank_id: bankId.toString(),
+            data: JSON.stringify({
+              ...queryParams,
+              depositRequestId: id,
+            }),
+          },
+          {
+            sentryScope: DepositStatusTransaction,
+          },
+        )
+          .then(res => {
+            if (res.Success) {
+              history.replace({
+                search: '',
+              });
+            } else {
+              Sentry.captureMessage(
+                `Request return deposit error bankId: ${bankId}`,
+                {
+                  level: Sentry.Severity.Fatal,
+                  tags: {
+                    searchQuery: window.location.search,
+                  },
                 },
-              },
-            );
-            setId(null);
-            setBankId(null);
-            history.replace(`${depositBaseUrl}/error`, {
-              status: DepositStatus.Errored,
-            });
-          }
-        })
-        .catch(() => {});
+              );
+              setId(null);
+              setBankId(null);
+              history.replace(`${depositBaseUrl}/error`, {
+                status: DepositStatus.Errored,
+              });
+            }
+          })
+          .catch(() => {});
+      }
     }
   }, [queryParams]);
 

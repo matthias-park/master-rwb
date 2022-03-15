@@ -48,6 +48,8 @@ export const promotionsStyles = css`
     margin: 10px;
     font-family: 'Anton', sans-serif;
     text-transform: uppercase;
+    height: 225px;
+    overflow: hidden;
     ${mediaBreakpointDown('xs')} {
       margin: 8px 0;
     }
@@ -73,7 +75,11 @@ export const promotionsStyles = css`
       }
     }
     &__img {
+      position: absolute;
+      bottom: 0;
+      min-height: 225px;
       max-width: 100%;
+      object-fit: cover;
     }
     &__body {
       position: absolute;
@@ -131,12 +137,6 @@ export const promotionsStyles = css`
       flex-basis: unset;
       &:after {
         display: none;
-      }
-      .promotion-block__img {
-        ${mediaBreakpointDown('sm')} {
-          max-width: 115% !important;
-          transform: translateX(-15px);
-        }
       }
       .promotion-block__body {
         ${mediaBreakpointDown('sm')} {

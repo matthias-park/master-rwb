@@ -53,6 +53,9 @@ var whl = (function (window, JSON) {
       document.body.style = 'overflow: hidden';
       return true;
     },
+    UPDATE_GEOLOCATON_STATUS: () => {
+      return false;
+    },
   };
   function receiveMessage(event) {
     let json;
@@ -117,6 +120,9 @@ var whl = (function (window, JSON) {
         return true;
       case 'SBT_SET_NO_OVERFLOW':
         sbtechCallbacks['NO_OVERFLOW']();
+        return true;
+      case 'UPDATE_GEOLOCATION_STATUS_CALLBACK':
+        sbtechCallbacks['UPDATE_GEOLOCATON_STATUS'](eventData);
         return true;
       default:
         return false;
@@ -254,6 +260,9 @@ var whl = (function (window, JSON) {
       '*',
     );
   }
+  function registerUpdateGeolocationStatusCallback(callback) {
+    sbtechCallbacks['UPDATE_GEOLOCATON_STATUS'] = callback;
+  }
 
   return {
     activity: activity,
@@ -272,5 +281,6 @@ var whl = (function (window, JSON) {
     registerNavigateToCallback,
     registerGoToHomeCallback,
     setCurrentLocationMobile,
+    registerUpdateGeolocationStatusCallback: registerUpdateGeolocationStatusCallback,
   };
 })(window, JSON);

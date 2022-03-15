@@ -9,6 +9,7 @@ import { useConfig } from '../../../../hooks/useConfig';
 import { useRoutePath } from '../../../../hooks/index';
 import Accordion from 'react-bootstrap/Accordion';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
+import NumberFormat from 'react-number-format';
 
 const UserMenuLink = ({ link, name, setShowDropdown, children }) => {
   const { t } = useI18n();
@@ -82,7 +83,16 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
         <div className="header__user-menu-info">
           <Link to={depositRoute} className="header__user-menu-info-balance">
             <span>
-              {user.balance} {user.currency}
+              <NumberFormat
+                value={user.balance}
+                displayType={'text'}
+                thousandSeparator=" "
+                decimalSeparator=","
+                prefix={user.currency}
+                isNumericString
+                decimalScale={2}
+                fixedDecimalScale
+              />
             </span>
             <i className="icon-add-action-1 ml-2"></i>
           </Link>

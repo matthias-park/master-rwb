@@ -28,14 +28,18 @@ interface Props {
   className?: string;
   clearDefaultValueOnFocus?: boolean;
   onBlur?: () => void;
+  onChange?: () => void;
   size?: 'sm' | 'lg';
   maskedInput?: {
     format?: string | ((value: string) => string);
     allowEmptyFormatting?: boolean;
     mask?: string | string[];
-    thousandSeparator?: boolean;
+    thousandSeparator?: boolean | string;
+    decimalSeparator?: string;
+    isNumericString?: boolean;
     prefix?: string;
     allowNegative?: boolean;
+    allowedDecimalSeparators?: string[];
     useFormatted?: boolean;
     decimalScale?: number;
   };
@@ -56,8 +60,11 @@ interface UncontrolledProps extends FormControlProps {
   tooltip?: string;
   toggleVisibility?: boolean;
   prefix?: string;
-  thousandSeparator?: boolean;
+  thousandSeparator?: boolean | string;
+  decimalSeparator?: string;
+  isNumericString?: boolean;
   allowNegative?: boolean;
+  allowedDecimalSeparators?: string[];
   errorMsg?: string;
   onBlur?: (e) => void;
   onCopy?: (e) => void;
@@ -186,6 +193,7 @@ const TextInput = ({
   clearDefaultValueOnFocus,
   autoComplete,
   customInputStyle,
+  onChange,
 }: Props) => {
   const hasFocus = useRef<boolean>(false);
   const { field, fieldState } = useController({
@@ -254,6 +262,7 @@ const TextInput = ({
       }}
       onKeyUp={onEnterPress ? e => enterKeyPress(e, onEnterPress) : undefined}
       onChange={e => {
+        onChange?.();
         if (!maskedInput) {
           field.onChange(e);
         }
@@ -283,7 +292,12 @@ const TextInput = ({
       allowEmptyFormatting={maskedInput?.allowEmptyFormatting}
       prefix={maskedInput?.prefix}
       thousandSeparator={maskedInput?.thousandSeparator}
+      decimalSeparator={maskedInput?.decimalSeparator}
+      isNumericString={maskedInput?.isNumericString}
       allowNegative={maskedInput?.allowNegative}
+      allowedDecimalSeparators={
+        maskedInput?.allowedDecimalSeparators || ['.', ',']
+      }
       mask={maskedInput?.mask}
       decimalScale={maskedInput?.decimalScale}
       autoComplete={autoComplete}

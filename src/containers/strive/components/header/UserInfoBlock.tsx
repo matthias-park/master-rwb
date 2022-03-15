@@ -6,6 +6,7 @@ import {
   Franchise,
   PagesName,
   Config,
+  ComponentSettings,
 } from '../../../../constants';
 import { useI18n } from '../../../../hooks/useI18n';
 import Link from '../../../../components/Link';
@@ -113,7 +114,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
     backdrop.hide();
     SWRCache.clear();
   };
-  const userBalance = Franchise.desertDiamond
+  const userBalance = ComponentSettings?.useBalancesEndpoint
     ? user.balances?.playable_balance
     : user.balance;
   return (

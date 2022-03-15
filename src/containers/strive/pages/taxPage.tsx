@@ -11,23 +11,21 @@ import BalancesContainer from '../components/account-settings/BalancesContainer'
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
 import HelpBlock from '../components/HelpBlock';
 
+const questionItems = [
+  {
+    title: 'tax_question_1',
+    body: 'tax_answer_1',
+  },
+  {
+    title: 'tax_question_2',
+    body: 'tax_answer_2',
+  },
+];
+
 const TaxPage = () => {
   const { t, jsxT } = useI18n();
   const [data, setData] = useState<any>(null);
   const { user } = useAuth();
-  const questionItems = useMemo(
-    () => [
-      {
-        title: t('tax_question_1'),
-        body: t('tax_answer_1'),
-      },
-      {
-        title: t('tax_question_2'),
-        body: t('tax_answer_2'),
-      },
-    ],
-    [t],
-  );
 
   const getTaxFile = async (bet_id, date) => {
     const response = await postApi<RailsApiResponse<any>>(

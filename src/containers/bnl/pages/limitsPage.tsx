@@ -10,6 +10,7 @@ import QuestionsContainer from '../components/account-settings/QuestionsContaine
 import HelpBlock from '../components/HelpBlock';
 import { useAuth } from '../../../hooks/useAuth';
 import dayjs from 'dayjs';
+import NumberFormat from 'react-number-format';
 
 interface LimitProps {
   limitData: {
@@ -153,27 +154,46 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
             <li className="play-limits__limit">
               <p className="play-limits__limit-title">{t('current_limit')}</p>
               <p className="play-limits__limit-total text-primary">
-                {user.currency} {limitData.limit_amount}
+                <NumberFormat
+                  value={limitData.limit_amount}
+                  displayType={'text'}
+                  thousandSeparator=" "
+                  decimalSeparator=","
+                  prefix={user.currency}
+                />
               </p>
             </li>
             <li className="play-limits__limit">
               <p className="play-limits__limit-title">{t('used_limit')}</p>
               <p className="play-limits__limit-total">
-                {user.currency}{' '}
-                {limitData.limit_amount != null && limitData.amount_left != null
-                  ? Number(
+                {limitData.limit_amount != null &&
+                limitData.amount_left != null ? (
+                  <NumberFormat
+                    value={Number(
                       (limitData.limit_amount - limitData.amount_left).toFixed(
                         2,
                       ),
-                    )
-                  : '0'}
+                    )}
+                    displayType={'text'}
+                    thousandSeparator=" "
+                    decimalSeparator=","
+                    prefix={user.currency}
+                  />
+                ) : (
+                  '0'
+                )}
               </p>
             </li>
             <li className="play-limits__limit">
               <p className="play-limits__limit-title">{t('left_limit')}</p>
               <p className="play-limits__limit-total">
-                {user.currency}{' '}
-                {limitData?.amount_left ?? limitData.limit_amount}
+                <NumberFormat
+                  value={limitData?.amount_left ?? limitData.limit_amount}
+                  displayType={'text'}
+                  thousandSeparator=" "
+                  decimalSeparator=","
+                  prefix={user.currency}
+                />
               </p>
             </li>
           </ul>
@@ -190,7 +210,13 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
               <p className="text-14 text-gray-400 mb-2">
                 {t('future_limit_amount')}:&nbsp;
                 <b className="text-gray-800">
-                  {user.currency} {limitData.future_limit_amount}
+                  <NumberFormat
+                    value={limitData.future_limit_amount}
+                    displayType={'text'}
+                    thousandSeparator=" "
+                    decimalSeparator=","
+                    prefix={user.currency}
+                  />
                 </b>
               </p>
               <p className="text-14 text-gray-400 mb-0">

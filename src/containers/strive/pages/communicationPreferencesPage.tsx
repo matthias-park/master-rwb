@@ -65,6 +65,17 @@ const CommunicationPrefCard = ({
   );
 };
 
+const questionItems = [
+  {
+    title: 'communication_question_1',
+    body: 'communication_answer_1',
+  },
+  {
+    title: 'communication_question_2',
+    body: 'communication_answer_2',
+  },
+];
+
 const CommunicationPreferencesPage = () => {
   const { user } = useAuth();
   const { t, jsxT } = useI18n();
@@ -78,19 +89,6 @@ const CommunicationPreferencesPage = () => {
     msg: string;
   } | null>(null);
   const isDataLoading = !data && !error;
-  const questionItems = useMemo(
-    () => [
-      {
-        title: t('communication_question_1'),
-        body: t('communication_answer_1'),
-      },
-      {
-        title: t('communication_question_2'),
-        body: t('communication_answer_2'),
-      },
-    ],
-    [t],
-  );
 
   useEffect(() => {
     data?.blocks &&

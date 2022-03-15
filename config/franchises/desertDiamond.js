@@ -31,6 +31,7 @@ module.exports = {
   componentSettings: {
     userIdleTimeout: 30,
     v2Auth: 'wss://ddm-wsdev.strivegaming.us',
+    useBalancesEndpoint: true,
     login: {
       loginCookiesAccept: true,
       emailLogin: true,

@@ -4,7 +4,7 @@ namespace :pm2 do
     if ENV['NORESTART']
       puts 'Skipping restarting (NORESTART set)'
     else
-      ['next-web', 'next-web-test', 'next-web-stage'].each do |role|
+      ['next-web', 'next-web-test', 'next-web-stage', 'next-web-fork-deploy'].each do |role|
         on roles(role) do
           within current_path do
             execute :pm2, :reload, 'ecosystem.config.js', '--only', role, '--env', fetch(:build_env)

@@ -118,6 +118,17 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
   );
 };
 
+const questionItems = [
+  {
+    title: 'transactions_question_1',
+    body: 'transactions_answer_1',
+  },
+  {
+    title: 'transactions_question_2',
+    body: 'transactions_answer_2',
+  },
+];
+
 const TransactionsPage = () => {
   const { t } = useI18n();
   const [url, setUrl] = useState<string | null>(null);
@@ -131,20 +142,6 @@ const TransactionsPage = () => {
     {
       valueAs: value => dayjs(value),
     },
-  );
-
-  const questionItems = useMemo(
-    () => [
-      {
-        title: t('transactions_question_1'),
-        body: t('transactions_answer_1'),
-      },
-      {
-        title: t('transactions_question_2'),
-        body: t('transactions_answer_2'),
-      },
-    ],
-    [t],
   );
 
   const updateUrl = (from?: Dayjs, to?: Dayjs, page?: string) => {

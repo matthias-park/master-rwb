@@ -82,7 +82,8 @@ const RegisterPage = () => {
   };
   if (formMethods.formState.isDirty) {
     const { password, repeat_password, ...fields } = watchAllFields;
-    sessionStorage.setItem(localStorageSaveKey, JSON.stringify(fields));
+    !user.logged_in &&
+      sessionStorage.setItem(localStorageSaveKey, JSON.stringify(fields));
   }
 
   const registrationResponseRoutes = useMemo(

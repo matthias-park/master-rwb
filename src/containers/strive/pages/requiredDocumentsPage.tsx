@@ -7,6 +7,11 @@ import Spinner from 'react-bootstrap/Spinner';
 import SettingsForm from '../components/account-settings/SettingsForm';
 import CustomAlert from '../components/CustomAlert';
 
+const questionItems = [
+  { title: 'documents_question_1', body: 'documents_answer_1' },
+  { title: 'documents_question_2', body: 'documents_answer_2' },
+];
+
 const RequiredDocumentsPage = () => {
   const { t, jsxT } = useI18n();
   const { data, error, mutate } = useApi<any>(
@@ -17,14 +22,6 @@ const RequiredDocumentsPage = () => {
     msg: string;
   } | null>(null);
   const isDataLoading = !data && !error;
-
-  const questionItems = useMemo(
-    () => [
-      { title: t('documents_question_1'), body: t('documents_answer_1') },
-      { title: t('documents_question_2'), body: t('documents_answer_2') },
-    ],
-    [t],
-  );
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">

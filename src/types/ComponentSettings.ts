@@ -6,6 +6,7 @@ export interface ComponentSettings {
     emailLogin?: boolean;
   };
   limitsOnAction?: string[];
+  useBalancesEndpoint?: boolean;
   modals: {
     TnC: boolean;
     ResponsibleGambling: boolean;

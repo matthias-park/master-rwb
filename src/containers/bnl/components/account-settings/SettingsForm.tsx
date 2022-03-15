@@ -250,8 +250,11 @@ const SettingsForm = ({
                   if (field.id.includes('amount')) {
                     masketInput = {
                       prefix: `${user.currency} `,
-                      thousandSeparator: true,
                       allowNegative: false,
+                      thousandSeparator: ' ',
+                      decimalSeparator: ',',
+                      isNumericString: true,
+                      decimalScale: 2,
                     };
                   }
                   return (

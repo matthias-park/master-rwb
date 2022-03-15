@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useRef,
 } from 'react';
-import { Franchise, TestEnv } from '../constants';
+import { ComponentSettings, TestEnv } from '../constants';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import useApi from './useApi';
 import UserStatus, { NET_USER, TwoFactorAuth } from '../types/UserStatus';
@@ -150,7 +150,7 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
         'tglab.user.Language': locale || '',
         event: 'userStatusChange',
       });
-      if (Franchise.desertDiamond && user.logged_in) {
+      if (ComponentSettings?.useBalancesEndpoint && user.logged_in) {
         dispatch(fetchUserBalance());
       }
     }

@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React, {
+  useCallback,
+  useMemo,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 import InputContainer from '../components/account-settings/InputContainer';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
 import HelpBlock from '../components/HelpBlock';
@@ -25,6 +31,12 @@ import useGTM from '../../../hooks/useGTM';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import useApi from '../../../hooks/useApi';
 import clsx from 'clsx';
+import useLocalStorage from '../../../hooks/useLocalStorage';
+
+type DepositTransaction = {
+  amount: number;
+  amountButtonsUsed: boolean;
+} | null;
 
 const DepositPage = () => {
   const { addToast } = useToasts();
@@ -39,6 +51,9 @@ const DepositPage = () => {
   const [depositLoading, setDepositLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const depositBaseUrl = useRoutePath(PagesName.DepositPage, true);
+  const [transactionData, setTransactionData] = useLocalStorage<
+    DepositTransaction
+  >('deposit_transaction', null);
   const depositStatus = useDepositResponseStatus();
   const addBankAccountModalActivePrevious = usePrevious(
     allActiveModals.includes(ComponentName.AddBankAccountModal),
@@ -66,15 +81,29 @@ const DepositPage = () => {
   }, [allActiveModals]);
   useEffect(() => {
     if (
-      [DepositStatus.Confirmed, DepositStatus.Rejected].includes(
+      ![DepositStatus.None, DepositStatus.Pending].includes(
         depositStatus.depositStatus,
       )
     ) {
-      sendDataToGTM({
+      let gtmObj: any = {
         event: 'depositStatusChange',
         'tglab.deposit.success':
           depositStatus.depositStatus === DepositStatus.Confirmed,
-      });
+      };
+      if (transactionData) {
+        gtmObj = {
+          ...gtmObj,
+          'paymentTransactionCompleted.amount': transactionData.amount,
+          'paymentTransactionCompleted.cashier': 'Bancontact',
+          'paymentTransactionCompleted.reason': 'Deposit',
+          'paymentTransactionCompleted.status':
+            DepositStatus[depositStatus.depositStatus],
+          'paymentTransactionCompleted.amountButtonsUsed':
+            transactionData.amountButtonsUsed,
+        };
+        setTransactionData(null);
+      }
+      sendDataToGTM(gtmObj);
     }
   }, [depositStatus.depositStatus]);
 
@@ -86,6 +115,15 @@ const DepositPage = () => {
     [t],
   );
 
+  const isDepositDisabled =
+    !bankAccount.hasBankAccount ||
+    [
+      BGC_VALIDATOR_STATUS.MAJOR_ERROR,
+      BGC_VALIDATOR_STATUS.DEPOSIT_DISALLOWED,
+    ].includes(user.validator_status || 0) ||
+    depositStatus.depositStatus === DepositStatus.Pending ||
+    depositDataLoading;
+
   const handleRequestDeposit = useCallback(
     async (depositValue: number) => {
       setApiError(null);
@@ -94,6 +132,9 @@ const DepositPage = () => {
           appearance: 'error',
           autoDismiss: true,
         });
+        return;
+      }
+      if (isDepositDisabled) {
         return;
       }
       setDepositLoading(true);
@@ -114,6 +155,10 @@ const DepositPage = () => {
         response.Data?.RedirectUrl &&
         response.Data?.DepositRequestId
       ) {
+        setTransactionData({
+          amount: depositValue,
+          amountButtonsUsed: !!transactionData?.amountButtonsUsed,
+        });
         depositStatus.setDepositId(response.Data.DepositRequestId);
         return !!(window.location.href = response.Data.RedirectUrl);
       }
@@ -123,7 +168,7 @@ const DepositPage = () => {
       setDepositLoading(false);
       return false;
     },
-    [bankAccount],
+    [bankAccount, isDepositDisabled],
   );
   useEffect(() => {
     if (!depositDataLoading && (!depositData?.Success || depositError)) {
@@ -202,6 +247,12 @@ const DepositPage = () => {
         max={maxDeposit}
         loading={depositLoading}
         onSubmit={handleRequestDeposit}
+        amountButtonsUsed={used =>
+          setTransactionData({
+            amount: 0,
+            amountButtonsUsed: used,
+          })
+        }
         quickAmounts={[10, 20, 50, 100]}
         currency={user.currency}
         subText={clsx(
@@ -221,12 +272,7 @@ const DepositPage = () => {
             <h2 className="ml-3 mb-0">{t('deposit_input_container_title')}</h2>
           </div>
         }
-        disabled={
-          !bankAccount.hasBankAccount ||
-          user.validator_status === BGC_VALIDATOR_STATUS.MAJOR_ERROR ||
-          depositStatus.depositStatus === DepositStatus.Pending ||
-          depositDataLoading
-        }
+        disabled={isDepositDisabled}
       />
       <div className="details-container mb-4">
         <div className="details-container__header">

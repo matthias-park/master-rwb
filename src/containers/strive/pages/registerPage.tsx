@@ -15,6 +15,7 @@ import {
   PagesName,
   REDIRECT_PROTECTED_NOT_LOGGED_IN,
   Franchise,
+  usaOnlyBrand,
 } from '../../../constants';
 import { useAuth } from '../../../hooks/useAuth';
 import RedirectNotFound from '../../../components/RedirectNotFound';
@@ -93,7 +94,8 @@ const RegisterPage = () => {
   };
   if (formMethods.formState.isDirty) {
     const { password, repeat_password, ...fields } = watchAllFields;
-    sessionStorage.setItem(localStorageSaveKey, JSON.stringify(fields));
+    !user.logged_in &&
+      sessionStorage.setItem(localStorageSaveKey, JSON.stringify(fields));
   }
 
   const registrationResponseRoutes = useMemo(
@@ -111,6 +113,9 @@ const RegisterPage = () => {
       form.language_id = locales.find(lang => lang.iso === locale)?.id;
       if (!form.login && form.email) {
         form['login'] = form['email'];
+      }
+      if (form.phone_number && usaOnlyBrand) {
+        form.phone_number = `+1${form.phone_number}`;
       }
       const affiliates = getActiveAffiliates();
       if (Franchise.gnogaz && affiliates.btag) {

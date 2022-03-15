@@ -519,20 +519,17 @@ const LimitsHistory = ({ limitsData }) => {
   );
 };
 
+const questionItems = [
+  { title: 'limits_question_1', body: 'limits_answer_1' },
+  { title: 'limits_question_2', body: 'limits_answer_2' },
+];
+
 const LimitsPage = () => {
   const { t, jsxT } = useI18n();
   const { data, error, mutate } = useApi<any>(
     '/restapi/v1/user/profile/play_limits',
   );
   const isDataLoading = !data && !error;
-
-  const questionItems = useMemo(
-    () => [
-      { title: t('limits_question_1'), body: t('limits_answer_1') },
-      { title: t('limits_question_2'), body: t('limits_answer_2') },
-    ],
-    [t],
-  );
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
