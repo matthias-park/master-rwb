@@ -184,7 +184,7 @@ const XtremePushInbox = ({ className }: Props) => {
     if (user.logged_in && xtremePushUrl && domLoaded) {
       const init = () => {
         setXtremePushReady(true);
-        window.xtremepush('set', 'external_id', user.id);
+        window.xtremepush('set', 'email', user.email);
         window.xtremepush(
           'inbox',
           'badge',
