@@ -38,6 +38,7 @@ export enum ComponentName {
   CasinoGameInfoModal = 'casinoGameInfoModal',
   W9WinningsModal = 'w9WinningsModal',
   PageBackdrop = 'pageBackdrop',
+  PromoClaimModal = 'promoClaimModal',
 }
 
 export const ModalPriority = {

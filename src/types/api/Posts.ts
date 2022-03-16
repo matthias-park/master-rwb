@@ -35,6 +35,8 @@ export interface PostItem {
   bg_image_link: null | string;
   subcategory: number | null;
   inner_page_button_link: null | string;
+  campaign_id: number | null;
+  segment: string | null;
 }
 
 export interface BgImage {

@@ -32,6 +32,9 @@ const LoadableCookiePolicyModal = loadable(
 const LoadableAddBankAccountModal = loadable(
   () => import('./components/modals/AddBankAccountModal'),
 );
+const LoadablePromoClaimModal = loadable(
+  () => import('./components/modals/PromoClaimModal'),
+);
 
 const LoadableCasinoGameInfoModal = loadable(
   () => import('./components/modals/CasinoGameInfoModal'),
@@ -65,6 +68,7 @@ const Modals = () => {
   }
   return (
     <>
+      <LoadablePromoClaimModal />
       <LoadableTermsAndConditionsModal />
       {ComponentSettings?.modals.ResponsibleGambling && (
         <LoadableResponsibleGamblingModal />
