@@ -1,0 +1,41 @@
+stages:
+  - build
+  - deploy
+
+build-nnw:
+  stage: build
+  tags:
+    - docker-ci
+  script:
+    - docker build -t ${CI_REGISTRY}/root/nodejs.next.web/nnw:${CI_COMMIT_SHA} .
+    - docker login ${CI_REGISTRY} -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
+    - docker push ${CI_REGISTRY}/root/nodejs.next.web/nnw:${CI_COMMIT_SHA}
+    - docker rmi -f ${CI_REGISTRY}/root/nodejs.next.web/nnw:${CI_COMMIT_SHA}
+    - docker system prune -f
+  only:
+    - master
+
+deploy:
+  stage: deploy
+  tags:
+    - docker-ci
+  script:
+    - rm -rf tgbet-charts/
+    - git clone "https://oauth2:${chart-git}@ci.tglab.dev/root/tgbet-charts.git"
+    - cd tgbet-charts/
+    - 'sed -i s/"tagnnw:.*"/"tagnnw: ${CI_COMMIT_SHA}"/g values.yaml'
+    - git add -A
+    - |-
+      # Check if we have modifications to commit
+      CHANGES=$(git status --porcelain | wc -l)
+
+      if [ "$CHANGES" -gt "0" ]; then
+        git commit -m "new version ${CI_COMMIT_SHA}"
+        # Update the repository and make sure to skip the pipeline create for this commit
+        git push "https://root:Yw21GvFwBpzEdsNopfYS@ci.tglab.dev/root/tgbet-charts.git"
+      fi
+    - cd ..
+    - helm upgrade -i motherhood tgbet-charts --kubeconfig /root/.kube/config
+    - rm -rf tgbet-charts/
+  only:
+    - master
