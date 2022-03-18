@@ -331,18 +331,24 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                   className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
                   onClick={onLogoutClick}
                 >
-                  <LoadingSpinner show={loggingOut} small className="mr-1" />
+                  <LoadingSpinner
+                    show={loggingOut}
+                    small
+                    className="mr-n2 ml-4"
+                  />
                   {(Franchise.desertDiamond ||
                     Franchise.gnogaz ||
                     Franchise.gnogon) && (
                     <i
                       className={clsx(
                         'icon-desertDiamond-logout',
-                        'user-menu__list-item-icon mr-3',
+                        'user-menu__list-item-icon ml-4 mr-3',
                       )}
                     ></i>
                   )}
-                  {t('logout')}
+                  <div className={clsx(Franchise.strive && 'ml-4')}>
+                    {t('logout')}
+                  </div>
                 </div>
               )}
             </div>

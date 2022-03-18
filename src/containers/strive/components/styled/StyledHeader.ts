@@ -462,7 +462,7 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
         width: 100%;
         height: 100%;
         height: ${props => props.theme.userMenu.itemHeight}px;
-        padding: 0 20px;
+        padding: 0 1.5rem;
         color: ${props => props.theme.colors.brand.text};
         font-weight: ${props => props.theme.userMenu.itemWeight};
         text-transform: ${props => props.theme.userMenu.itemTransform};
@@ -484,13 +484,14 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
           background-color: ${props => props.theme.settingsMenu?.activeBgColor};
         }
         &--no-divider {
+          left: -20px;
+          width: calc(100% + 40px);
           &:before {
             display: none;
           }
           &:hover,
           &:active,
           &:focus {
-            background-color: transparent;
             color: ${props => props.theme.colors.brand.text};
             font-weight: 700;
             i {
