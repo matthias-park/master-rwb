@@ -437,7 +437,7 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
   }
 
   .user-menu-wrp {
-    padding: 10px 20px 0 20px;
+    padding: 0 20px;
     max-height: calc(100vh - 180px);
     overflow-y: auto;
     -ms-overflow-style: none;
@@ -579,6 +579,19 @@ export const StyledRowHeader = styled('header')`
   ${mediaBreakpointDown('md')} {
     margin-bottom: calc(${props => props.theme.header.navHeightMobile}px - 1px);
   }
+  ${mediaBreakpointDown('xs')} {
+    height: 64px;
+    padding: 14px ${props => props.theme.spacing.bodyPaddingSmall}px;
+  }
+  .login-actions-wrp {
+    display: flex;
+    align-items: center;
+    ${mediaBreakpointDown('xs')} {
+      .btn {
+        padding: 6px 12px;
+      }
+    }
+  }
   .header-logo-wrp {
     display: flex;
     width: ${props =>
@@ -599,7 +612,9 @@ export const StyledRowHeader = styled('header')`
     .header-logo-mobile {
       width: ${props => props.theme.header.logoSizeMobile || 35}px;
       ${mediaBreakpointDown('xs')} {
-        width: ${props => Franchise.gnogaz && 75}px;
+        position: relative;
+        width: ${(Franchise.gnogaz || Franchise.gnogon) && 75}px;
+        top: ${(Franchise.gnogaz || Franchise.gnogon) && -14}px;
       }
     }
   }

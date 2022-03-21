@@ -21,6 +21,7 @@ import clsx from 'clsx';
 import Button from 'react-bootstrap/Button';
 import useDesktopWidth from '../../../../hooks/useDesktopWidth';
 import NumberFormat from 'react-number-format';
+import { sortAscending } from '../../../../utils/index';
 
 const LoadableXtremePush = loadable(
   () => import('../../../../components/XtremePushInbox'),
@@ -99,9 +100,11 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const [loggingOut, setLoggingOut] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const { backdrop } = useUIConfig();
-  const { sidebars } = useConfig();
+  const { sidebars, header } = useConfig();
   const depositRoute = useRoutePath(PagesName.DepositPage, true);
+  const homeRoute = useRoutePath(PagesName.HomePage, true);
   const desktopWidth = useDesktopWidth(1199);
+  const tabletWidth = useDesktopWidth(991);
 
   const showUserMenu = isOpen => {
     setShowDropdown(isOpen);
@@ -131,61 +134,77 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
         >
           {Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon ? (
             <>
-              <Button
-                as={Link}
-                to={depositRoute}
-                variant="secondary"
-                className="pr-2 pl-3"
-              >
-                {userBalance != null ? (
-                  <NumberFormat
-                    value={userBalance}
-                    thousandSeparator
-                    displayType={'text'}
-                    prefix={user.currency}
-                    decimalScale={2}
-                    fixedDecimalScale={true}
-                  />
-                ) : (
-                  <LoadingSpinner
-                    wrapperClassName="d-inline-flex"
-                    show
-                    small
-                    className="mr-1"
-                  />
-                )}
-                <i className={clsx(`icon-${Config.name}-plus`, 'ml-2')}></i>
-              </Button>
-              {!!window.__config__.xtremepush ? (
-                <LoadableXtremePush className="mx-4" />
-              ) : (
-                <div className="px-2"></div>
-              )}
-              {desktopWidth ? (
-                <Dropdown.Toggle
-                  as={Button}
-                  variant="secondary"
-                  bsPrefix="menu-toggle"
-                  className="pl-3 pr-1"
-                >
-                  <span className="text-capitalize">
-                    {Franchise.gnogaz
-                      ? t('my_account_btn')
-                      : `${t('hello')} ${user.first_name}`}
-                  </span>
-                  <i
-                    className={clsx(
-                      `icon-${window.__config__.name}-down1`,
-                      'mx-1',
+              {user.logged_in && (
+                <>
+                  <Button
+                    as={Link}
+                    to={depositRoute}
+                    variant="secondary"
+                    className="pr-2 pl-3"
+                  >
+                    {userBalance != null ? (
+                      <NumberFormat
+                        value={userBalance}
+                        thousandSeparator
+                        displayType={'text'}
+                        prefix={user.currency}
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+                      />
+                    ) : (
+                      <LoadingSpinner
+                        wrapperClassName="d-inline-flex"
+                        show
+                        small
+                        className="mr-1"
+                      />
                     )}
-                  ></i>
-                </Dropdown.Toggle>
+                    <i className={clsx(`icon-${Config.name}-plus`, 'ml-2')}></i>
+                  </Button>
+                  {!!window.__config__.xtremepush ? (
+                    <LoadableXtremePush className="mx-4" />
+                  ) : (
+                    <div className="px-2"></div>
+                  )}
+                </>
+              )}
+              {tabletWidth ? (
+                <>
+                  {user.logged_in && (
+                    <Dropdown.Toggle
+                      as={Button}
+                      variant="secondary"
+                      bsPrefix="menu-toggle"
+                      className="pl-3 pr-1"
+                    >
+                      <span className="text-capitalize">
+                        {Franchise.gnogaz
+                          ? t('my_account_btn')
+                          : `${t('hello')} ${user.first_name}`}
+                      </span>
+                      <i
+                        className={clsx(
+                          `icon-${window.__config__.name}-down1`,
+                          'mx-1',
+                        )}
+                      ></i>
+                    </Dropdown.Toggle>
+                  )}
+                </>
               ) : (
-                <Dropdown.Toggle as="span" className="mobile-user-menu">
-                  <i
-                    className={clsx(`icon-${window.__config__.name}-account`)}
-                  />
-                </Dropdown.Toggle>
+                <>
+                  {(user.logged_in || Franchise.gnogon) && (
+                    <Dropdown.Toggle as="span" className="mobile-user-menu">
+                      <i
+                        className={clsx(
+                          `icon-${window.__config__.name}-${
+                            Franchise.gnogon ? 'menu' : 'account'
+                          }`,
+                        )}
+                      />
+                    </Dropdown.Toggle>
+                  )}
+                </>
               )}
             </>
           ) : (
@@ -229,34 +248,70 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
           >
             <div className="user-menu-wrp">
               <ul className="user-menu__list">
-                {Franchise.desertDiamond ||
-                Franchise.gnogaz ||
-                Franchise.gnogon ? (
-                  <Dropdown.Item as="div" className="my-2 px-0">
-                    <Link
-                      to={depositRoute}
-                      className={clsx('btn btn-primary text-14 w-100')}
-                    >
-                      {t('deposit_link')}
-                    </Link>
-                  </Dropdown.Item>
-                ) : (
-                  <Dropdown.Item as="div" className="mt-3">
-                    <Link
-                      to={depositRoute}
-                      className={clsx(
-                        'btn btn-outline-brand btn-lg text-14 px-3',
-                      )}
-                    >
-                      <i
-                        className={clsx(`icon-${window.__config__.name}-card`)}
-                      ></i>
-                      {t('deposit_link')}
-                    </Link>
-                  </Dropdown.Item>
+                {user.logged_in && (
+                  <div className="pt-2">
+                    {Franchise.desertDiamond ||
+                    Franchise.gnogaz ||
+                    Franchise.gnogon ? (
+                      <Dropdown.Item as="div" className="my-2 px-0">
+                        <Link
+                          to={depositRoute}
+                          className={clsx('btn btn-primary text-14 w-100')}
+                        >
+                          {t('deposit_link')}
+                        </Link>
+                      </Dropdown.Item>
+                    ) : (
+                      <Dropdown.Item as="div" className="mt-3">
+                        <Link
+                          to={depositRoute}
+                          className={clsx(
+                            'btn btn-outline-brand btn-lg text-14 px-3',
+                          )}
+                        >
+                          <i
+                            className={clsx(
+                              `icon-${window.__config__.name}-card`,
+                            )}
+                          ></i>
+                          {t('deposit_link')}
+                        </Link>
+                      </Dropdown.Item>
+                    )}
+                  </div>
                 )}
                 <Accordion>
+                  {!tabletWidth &&
+                    Franchise.gnogon &&
+                    header
+                      ?.concat()
+                      .sort((a, b) => sortAscending(a.order || 0, b.order || 0))
+                      .map(link => {
+                        const linkPath =
+                          link?.path?.[0] === '/' ? link.path : `/${link.path}`;
+                        const isDublicate = sidebars?.[0].some(
+                          sidebarLink => sidebarLink.link === linkPath,
+                        );
+                        if (
+                          !link.path ||
+                          linkPath === homeRoute ||
+                          (user.logged_in &&
+                            (isDublicate || linkPath === depositRoute))
+                        )
+                          return null;
+                        return (
+                          <UserMenuLink
+                            key={link.path}
+                            icon={`icon-${Config.name}-${link.icon}`}
+                            link={link.path}
+                            name={t(link.name)}
+                            children={null}
+                            setShowDropdown={showUserMenu}
+                          />
+                        );
+                      })}
                   {sidebars &&
+                    user.logged_in &&
                     sidebars[0].map(link => (
                       <UserMenuLink
                         key={`${link.link}-${link.name}`}
@@ -269,23 +324,25 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                     ))}
                 </Accordion>
               </ul>
-              <div
-                className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
-                onClick={onLogoutClick}
-              >
-                <LoadingSpinner show={loggingOut} small className="mr-1" />
-                {(Franchise.desertDiamond ||
-                  Franchise.gnogaz ||
-                  Franchise.gnogon) && (
-                  <i
-                    className={clsx(
-                      'icon-desertDiamond-logout',
-                      'user-menu__list-item-icon mr-3',
-                    )}
-                  ></i>
-                )}
-                {t('logout')}
-              </div>
+              {user.logged_in && (
+                <div
+                  className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
+                  onClick={onLogoutClick}
+                >
+                  <LoadingSpinner show={loggingOut} small className="mr-1" />
+                  {(Franchise.desertDiamond ||
+                    Franchise.gnogaz ||
+                    Franchise.gnogon) && (
+                    <i
+                      className={clsx(
+                        'icon-desertDiamond-logout',
+                        'user-menu__list-item-icon mr-3',
+                      )}
+                    ></i>
+                  )}
+                  {t('logout')}
+                </div>
+              )}
             </div>
           </Dropdown.Menu>
         </StyledHeaderUserMenu>

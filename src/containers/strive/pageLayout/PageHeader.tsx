@@ -97,6 +97,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
   const { user, signout } = useAuth();
   const { backdrop } = useUIConfig();
   const prevUser = usePrevious(user.logged_in);
+  const tabletWidth = useDesktopWidth(991);
   const loginPagePath = useRoutePath(PagesName.LoginPage, true);
   const registerPagePath = useRoutePath(PagesName.RegisterPage, true);
   useEffect(() => {
@@ -119,7 +120,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
       return null;
     }
     return (
-      <>
+      <div className="login-actions-wrp">
         <Button
           as={Link}
           to={loginPagePath}
@@ -131,7 +132,15 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
         <Button as={Link} to={registerPagePath} variant="primary">
           {t('register_btn')}
         </Button>
-      </>
+        <div className={clsx(Franchise.gnogon && !tabletWidth && 'ml-3')}>
+          <UserInfoBlock
+            dropdownClasses={clsx('d-flex', !mobile && 'mr-1')}
+            isMobile={mobile}
+            user={user}
+            handleLogout={signout}
+          />
+        </div>
+      </div>
     );
   }
   return (
@@ -149,6 +158,7 @@ const PageHeader = () => {
   const { backdrop, headerNav } = useUIConfig();
   const sendDataToGTM = useGTM();
   const desktopWidth = useDesktopWidth(1199);
+  const tabletWidth = useDesktopWidth(991);
   const [navExpanded, setNavExpanded] = useState(false);
   const navbarLinksRef = useRef(null);
   const navbarContainerRef = useRef(null);
@@ -211,34 +221,40 @@ const PageHeader = () => {
           {(Franchise.gnogaz ||
             Franchise.desertDiamond ||
             Franchise.gnogon) && (
-            <ul className="nav-links">
-              {header
-                ?.concat()
-                .sort((a, b) => sortAscending(a.order || 0, b.order || 0))
-                .map(link => {
-                  if (!link.path) return null;
-                  return (
-                    <li
-                      key={link.path}
-                      className={clsx(
-                        'nav-links__link',
-                        location.pathname.startsWith(link.path) && 'active',
-                      )}
-                    >
-                      <Link
-                        className="d-flex align-items-center"
-                        to={link.path}
-                        onClick={() => onGtmLinkClick(link.name)}
-                      >
-                        {link.icon && (
-                          <i className={`icon-${Config.name}-${link.icon}`} />
-                        )}
-                        {t(link.name)}
-                      </Link>
-                    </li>
-                  );
-                })}
-            </ul>
+            <>
+              {!(Franchise.gnogon && !tabletWidth) && (
+                <ul className="nav-links">
+                  {header
+                    ?.concat()
+                    .sort((a, b) => sortAscending(a.order || 0, b.order || 0))
+                    .map(link => {
+                      if (!link.path) return null;
+                      return (
+                        <li
+                          key={link.path}
+                          className={clsx(
+                            'nav-links__link',
+                            location.pathname.startsWith(link.path) && 'active',
+                          )}
+                        >
+                          <Link
+                            className="d-flex align-items-center"
+                            to={link.path}
+                            onClick={() => onGtmLinkClick(link.name)}
+                          >
+                            {link.icon && (
+                              <i
+                                className={`icon-${Config.name}-${link.icon}`}
+                              />
+                            )}
+                            {t(link.name)}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                </ul>
+              )}
+            </>
           )}
           <div className="ml-auto">
             <UserBlock mobile={true} />

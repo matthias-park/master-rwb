@@ -189,7 +189,7 @@ export const injectTrackerScript = (
   }
 
   const currencies = {
-    '$': 'USD',
+    $: 'USD',
     '€': 'EUR',
   };
 
