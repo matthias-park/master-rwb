@@ -82,6 +82,7 @@ export const clearUserLocalStorage = () => {
     'transactions-date-to',
     'transactions-date-from',
     'geocomplyRetryCount',
+    'winnings-refresh-tracker',
   ];
   for (const key of keys) {
     localStorage.removeItem(key);

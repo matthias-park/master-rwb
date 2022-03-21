@@ -36,10 +36,12 @@ export enum ComponentName {
   DepositLinkModal = 'depositLinkModal',
   ActivateUserModal = 'activateUserModal',
   CasinoGameInfoModal = 'casinoGameInfoModal',
+  W9WinningsModal = 'w9WinningsModal',
 }
 
 export const ModalPriority = {
   [ComponentName.TermsAndConditionsModal]: 1,
+  [ComponentName.W9WinningsModal]: 3,
   [ComponentName.ValidationFailedModal]: 2,
   [ComponentName.ResponsibleGamblingModal]: 5,
   [ComponentName.ResendEmailModal]: 1,

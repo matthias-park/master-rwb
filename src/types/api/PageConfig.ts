@@ -137,4 +137,5 @@ export interface NavigationRoute {
   redirectTo?: string;
   order?: number;
   externalLinkTranslation?: string;
+  hideModals?: string[];
 }

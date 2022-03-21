@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import UserStatus, { NET_USER } from '../../types/UserStatus';
 import { clearUserLocalStorage } from '../../utils';
+import { cache as SWRCache } from 'swr';
 import * as Sentry from '@sentry/react';
 import { injectTrackerScript } from '../../utils/uiUtils';
 import UserBalances, {
@@ -40,6 +41,7 @@ export const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<UserStatus>) => {
       if (!action.payload.logged_in) {
+        SWRCache.clear();
         clearUserLocalStorage();
       }
       if (state.registration_id) {
