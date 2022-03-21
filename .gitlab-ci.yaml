@@ -13,7 +13,7 @@ build-nnw:
     - docker rmi -f ${CI_REGISTRY}/root/nodejs.next.web/nnw:${CI_COMMIT_SHA}
     - docker system prune -f
   only:
-    - master
+    - develop
 
 deploy:
   stage: deploy
@@ -38,4 +38,4 @@ deploy:
     - helm upgrade -i motherhood tgbet-charts --kubeconfig /root/.kube/config
     - rm -rf tgbet-charts/
   only:
-    - master
+    - develop
