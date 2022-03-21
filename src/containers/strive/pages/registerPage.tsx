@@ -22,7 +22,6 @@ import RedirectNotFound from '../../../components/RedirectNotFound';
 import { FormProvider, useForm } from 'react-hook-form';
 import RegError from '../components/registration/RegError';
 import { useCaptcha } from '../../../hooks/useGoogleRecaptcha';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useDispatch } from 'react-redux';
 import { setRegistered } from '../../../state/reducers/user';
 import { NET_USER } from '../../../types/UserStatus';
@@ -31,7 +30,6 @@ import { useModal } from '../../../hooks/useModal';
 import clsx from 'clsx';
 import { getActiveAffiliates } from '../../../utils';
 import { injectTrackerScript } from '../../../utils/uiUtils';
-dayjs.extend(customParseFormat);
 
 const RegistrationReturnCode = {
   '0': 'sitemap_registerWelcome',

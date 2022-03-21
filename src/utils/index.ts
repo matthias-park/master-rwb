@@ -7,6 +7,8 @@ import Config, { ConfigLoaded, Cookies } from '../types/Config';
 import { getWindowUrlLocale, Symbols } from './i18n';
 import * as Sentry from '@sentry/react';
 import StorageAffiliates from '../types/state/StorageAffiliates';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 export const sortAscending = (a: number, b: number) => a - b;
 export const sortDescending = (a: number, b: number) => b - a;
