@@ -1006,6 +1006,7 @@ const customStyles = css`
     &.full-screen {
       margin: 0 -${props => props.theme.spacing.bodyPadding}px !important;
       border-radius: 0;
+      z-index: 999;
       ${mediaBreakpointDown('xl')} {
         margin: 0 -${props => props.theme.spacing.bodyPaddingMedium}px !important;
       }
