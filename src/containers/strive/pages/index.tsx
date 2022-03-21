@@ -23,7 +23,7 @@ const AsyncPage = (pageName: string) =>
     {
       fallback: (
         <div className="w-100 d-flex justify-content-center pt-5 min-vh-70">
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       ),
     },

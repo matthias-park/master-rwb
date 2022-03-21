@@ -19,7 +19,7 @@ const BalancesContainer = () => {
     <div className="outer-info-block balances-container">
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       )}
       <ul className="balances-list">

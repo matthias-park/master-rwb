@@ -50,7 +50,7 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
     <div className="d-flex flex-column">
       {!data ? (
         <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="brand" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       ) : data.transactions?.length ? (
         <div className="table-container d-flex flex-column mb-4">

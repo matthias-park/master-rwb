@@ -424,6 +424,7 @@ declare module 'styled-components' {
     backdrop: {
       bgColor?: string;
     };
+    spinnerVariant?: string;
     bonuses: {
       containerBgColor?: string;
       subTextColor?: string;

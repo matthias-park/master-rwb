@@ -156,7 +156,7 @@ const PromotionsList = () => {
       )}
       {isDataLoading || !imagesLoaded ? (
         <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       ) : (
         <div
@@ -207,7 +207,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
     <>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3 min-vh-70">
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       )}
       <div className="promo-cards">
@@ -305,7 +305,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
       )}
       {(isDataLoading || !promoImageLoaded) && (
         <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       )}
       {!!data && (

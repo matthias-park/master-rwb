@@ -93,8 +93,7 @@ const ValidationFailedModal = () => {
                 size="sm"
                 role="status"
                 animation="border"
-                variant="black"
-                className="ml-1"
+                className="spinner-custom ml-1"
               />
             )}
           </Link>

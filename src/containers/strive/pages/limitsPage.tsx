@@ -454,7 +454,7 @@ const LimitsHistory = ({ limitsData }) => {
       <div className="info-container__text">
         {!data ? (
           <div className="d-flex justify-content-center pt-4 pb-3">
-            <Spinner animation="border" variant="brand" className="mx-auto" />
+            <Spinner animation="border" className="spinner-custom mx-auto" />
           </div>
         ) : !!data && data?.Data.LimitsHistory?.length ? (
           <div className="table-container d-flex flex-column mb-2">
@@ -545,7 +545,7 @@ const LimitsPage = () => {
       )}
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       )}
       {!!error && (

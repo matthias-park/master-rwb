@@ -125,6 +125,10 @@ const customStyles = css`
     }
   }
 
+  .spinner-custom {
+    color: ${props => props.theme.spinnerVariant || '#000'};
+  }
+
   .bg-overlay {
     display: none;
     position: fixed;
