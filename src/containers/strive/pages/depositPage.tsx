@@ -206,24 +206,87 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
               }
             },
           );
-          let html = atob(response.Data.InnerText);
+          let htmlString = atob(response.Data.InnerText);
           const iframeHtml = [180, 181, 182, 183].includes(bankId);
           if (!iframeHtml) {
-            html = html.replace(
-              /<(\/?|!?)(DOCTYPE html|html|head|body|meta)([^>]*)>/gm,
-              '',
-            );
-            const translationMatches = html.match(/\{{(.*?)\}}/gm);
-            translationMatches?.forEach(match => {
-              const symbol = /\{{(.*?)\}}/gm.exec(match)?.[1];
-              if (symbol) {
-                const translation = t(symbol);
-                html = html.replace(match, translation);
-              }
-            });
+            const htmlParser = new DOMParser();
+            const html = htmlParser.parseFromString(htmlString, 'text/html');
+            const headEl = html.getElementsByTagName('head')[0];
+            const headScripts = [
+              ...Array.from(headEl.getElementsByTagName('script')),
+              ...Array.from(headEl.getElementsByTagName('link')),
+              ...Array.from(headEl.getElementsByTagName('style')),
+            ];
+            const alreadyLoadedScriptsLinks = [
+              ...Array.from(document.head.getElementsByTagName('script')),
+              ...Array.from(document.head.getElementsByTagName('link')),
+            ];
+            const insertScriptLinkToHead = (
+              newTagEl: HTMLScriptElement | HTMLLinkElement | HTMLStyleElement,
+            ): Promise<boolean> =>
+              new Promise(resolve => {
+                if (
+                  alreadyLoadedScriptsLinks.some(tag => {
+                    if (tag.tagName !== newTagEl.tagName) return false;
+                    const tagUrl =
+                      (tag as HTMLScriptElement).src ||
+                      (tag as HTMLLinkElement).href;
+                    const newTagUrl =
+                      (newTagEl as HTMLScriptElement).src ||
+                      (newTagEl as HTMLLinkElement).href;
+                    if (
+                      ['SCRIPT', 'STYLE'].includes(newTagEl.tagName) &&
+                      !newTagUrl
+                    ) {
+                      return tag.innerHTML === newTagEl.innerHTML;
+                    }
+                    return tagUrl && newTagUrl && tagUrl === newTagUrl;
+                  })
+                ) {
+                  return resolve(true);
+                }
+                const el = document.createElement(newTagEl.tagName);
+                Object.values(newTagEl.attributes).forEach(attr => {
+                  const attrName =
+                    attr.name === 'crossorigin' ? 'crossOrigin' : attr.name;
+                  el[attrName] = attr.value;
+                });
+                el.innerHTML = newTagEl.innerHTML;
+                el.onload = () => resolve(true);
+                el.onerror = () => {
+                  Sentry.captureMessage(
+                    `Failed loading deposit tag ${
+                      (newTagEl as HTMLScriptElement).src ||
+                      (newTagEl as HTMLLinkElement).href
+                    }`,
+                  );
+                  resolve(false);
+                };
+                document.head.appendChild(el);
+                if (el.innerHTML) {
+                  return resolve(true);
+                }
+              });
+            const scriptLoaded = await Promise.all(
+              Array.from(headScripts).map(insertScriptLinkToHead),
+            ).then(loaded => loaded.every(Boolean));
+            if (scriptLoaded) {
+              htmlString = html.getElementsByTagName('body')[0].innerHTML;
+              const translationMatches = htmlString.match(/\{{(.*?)\}}/gm);
+              translationMatches?.forEach(match => {
+                const symbol = /\{{(.*?)\}}/gm.exec(match)?.[1];
+                if (symbol) {
+                  const translation = t(symbol);
+                  htmlString = htmlString.replace(match, translation);
+                }
+              });
+            } else {
+              setCustomHtml(null);
+              setApiError(t('api_response_failed'));
+            }
             setDepositLoading(false);
           }
-          return setCustomHtml({ html, iframe: iframeHtml });
+          return setCustomHtml({ html: htmlString, iframe: iframeHtml });
         } else if (
           response?.Success &&
           response.Data?.RedirectUrl &&

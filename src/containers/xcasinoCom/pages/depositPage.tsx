@@ -369,12 +369,69 @@ const DepositPage = () => {
             },
           );
           setCurrentStep(prev => prev + 1);
-          let html = atob(response.Data.InnerText);
-          html = html.replace(
-            /<(\/?|!?)(DOCTYPE html|html|head|body|meta)([^>]*)>/gm,
-            '',
-          );
-          return setCustomHtml(html);
+          let htmlString = atob(response.Data.InnerText);
+          const htmlParser = new DOMParser();
+          const html = htmlParser.parseFromString(htmlString, 'text/html');
+          const headEl = html.getElementsByTagName('head')[0];
+          const headScripts = [
+            ...Array.from(headEl.getElementsByTagName('script')),
+            ...Array.from(headEl.getElementsByTagName('link')),
+          ];
+          const alreadyLoadedScriptsLinks = [
+            ...Array.from(document.head.getElementsByTagName('script')),
+            ...Array.from(document.head.getElementsByTagName('link')),
+          ];
+          const insertScriptLinkToHead = (
+            newTagEl: HTMLScriptElement | HTMLLinkElement,
+          ): Promise<boolean> =>
+            new Promise(resolve => {
+              if (
+                alreadyLoadedScriptsLinks.some(tag => {
+                  if (tag.tagName !== newTagEl.tagName) return false;
+                  const tagUrl =
+                    (tag as HTMLScriptElement).src ||
+                    (tag as HTMLLinkElement).href;
+                  const newTagUrl =
+                    (newTagEl as HTMLScriptElement).src ||
+                    (newTagEl as HTMLLinkElement).href;
+                  if (newTagEl.tagName === 'SCRIPT' && !newTagUrl) {
+                    return tag.innerHTML === newTagEl.innerHTML;
+                  }
+                  return tagUrl && newTagUrl && tagUrl === newTagUrl;
+                })
+              ) {
+                return resolve(true);
+              }
+              const el = document.createElement(newTagEl.tagName);
+              Object.values(newTagEl.attributes).forEach(attr => {
+                const attrName =
+                  attr.name === 'crossorigin' ? 'crossOrigin' : attr.name;
+                el[attrName] = attr.value;
+              });
+              el.innerHTML = newTagEl.innerHTML;
+              el.onload = () => resolve(true);
+              el.onerror = () => {
+                Sentry.captureMessage(
+                  `Failed loading deposit tag ${
+                    (newTagEl as HTMLScriptElement).src ||
+                    (newTagEl as HTMLLinkElement).href
+                  }`,
+                );
+                resolve(false);
+              };
+              document.head.appendChild(el);
+              if (el.innerHTML) {
+                return resolve(true);
+              }
+            });
+          const scriptLoaded = await Promise.all(
+            Array.from(headScripts).map(insertScriptLinkToHead),
+          ).then(loaded => loaded.every(Boolean));
+          if (!scriptLoaded) {
+            setCustomHtml(null);
+            return setApiError(t('api_response_failed'));
+          }
+          return setCustomHtml(html.getElementsByTagName('body')[0].innerHTML);
         } else if (
           response?.Success &&
           response.Data?.RedirectUrl &&
@@ -389,7 +446,7 @@ const DepositPage = () => {
       setDepositLoading(false);
       return false;
     },
-    [],
+    [t],
   );
 
   const resetDeposits = () => {
