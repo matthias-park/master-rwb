@@ -9,7 +9,6 @@ import TextInput from '../../../../components/customFormInputs/TextInput';
 import { useAuth } from '../../../../hooks/useAuth';
 import { postApi } from '../../../../utils/apiUtils';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
-import { useToasts } from 'react-toast-notifications';
 import dayjs from 'dayjs';
 import CustomSelectInput from '../../../../components/customFormInputs/CustomSelectInput';
 import clsx from 'clsx';
@@ -361,7 +360,6 @@ const SettingsForm = (props: SettingProps) => {
   } = props;
   const { t } = useI18n();
   const { updateUser, signout } = useAuth();
-  const { addToast } = useToasts();
   const formMethods = useForm<any, any>({
     mode: 'onBlur',
   });
@@ -435,15 +433,7 @@ const SettingsForm = (props: SettingProps) => {
     }
     const res = await postApi<RailsApiResponse<null>>(url, body, {
       formData: formBody,
-    }).catch((res: RailsApiResponse<null>) => {
-      if (res.Fallback) {
-        addToast(`Failed to update user settings`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      }
-      return res;
-    });
+    }).catch((res: RailsApiResponse<null>) => res);
     setResponse &&
       setResponse({
         success: res.Success,

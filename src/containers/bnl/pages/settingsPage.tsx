@@ -7,7 +7,6 @@ import HelpBlock from '../components/HelpBlock';
 import { postApi } from '../../../utils/apiUtils';
 import DynamicSettingsAccordion from '../components/account-settings/DynamicSettingsAccordion';
 import { useI18n } from '../../../hooks/useI18n';
-import { useToasts } from 'react-toast-notifications';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useApi from '../../../hooks/useApi';
 import CustomAlert from '../components/CustomAlert';
@@ -32,7 +31,6 @@ const SettingsPage = () => {
     success: boolean;
     msg: string;
   } | null>(null);
-  const { addToast } = useToasts();
   const { data, error, mutate } = useApi<ProfileSettings>(
     '/restapi/v1/user/profile',
   );
@@ -47,15 +45,7 @@ const SettingsPage = () => {
     body.authenticity_token = user.token!;
     const res = await postApi<RailsApiResponse<null>>(url, body, {
       formData: formBody,
-    }).catch((res: RailsApiResponse<null>) => {
-      if (res.Fallback) {
-        addToast(`Failed to update user settings`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      }
-      return res;
-    });
+    }).catch((res: RailsApiResponse<null>) => res);
     setApiResponse({
       success: res.Success,
       msg: res.Message || t('api_response_failed'),

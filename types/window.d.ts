@@ -1,4 +1,3 @@
-import { AddToast } from 'react-toast-notifications';
 import { DefaultTheme } from 'styled-components';
 import { ComponentSettings } from '../src/types/ComponentSettings';
 import DeviceInfo from '../src/types/DeviceInfo';
@@ -45,7 +44,6 @@ export declare global {
       singleLoadPage?: boolean;
       device: DeviceInfo;
     };
-    toast?: AddToast;
     xtremepush?: any;
     _wbUpdate?: boolean;
     PRERENDER_CACHE?: { [key: string]: any };

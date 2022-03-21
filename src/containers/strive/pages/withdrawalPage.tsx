@@ -14,7 +14,6 @@ import {
 import Table from 'react-bootstrap/Table';
 import { useCallback } from 'react';
 import { postApi } from '../../../utils/apiUtils';
-import { useToasts } from 'react-toast-notifications';
 import CustomAlert from '../components/CustomAlert';
 import WithdrawalConfirmModal from '../components/modals/WithdrawalConfirmModal';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
@@ -134,7 +133,6 @@ const questionItems = [
 const WithdrawalPage = () => {
   const { t } = useI18n();
   const { user } = useAuth();
-  const { addToast } = useToasts();
   const [submitResponse, setSubmitResponse] = useState<{
     success: boolean;
     msg: string | null;
@@ -193,10 +191,7 @@ const WithdrawalPage = () => {
   const requestWithdrawal = useCallback(
     async (amount: number) => {
       if (!selectedBankAccount) {
-        return addToast('account not found for withdrawal', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
+        return;
       }
       setWithdrawalLoading(true);
       const response = await postApi<RailsApiResponse<WithdrawalConfirmation>>(

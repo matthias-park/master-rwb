@@ -3,7 +3,6 @@ import React, { ComponentType } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { useSelector } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { ToastProvider } from 'react-toast-notifications';
 import { SWRConfig } from 'swr';
 import { Config } from '../constants';
 import { AuthProvider } from '../hooks/useAuth';
@@ -87,7 +86,6 @@ const LoadableRegisterContext = loadable(
 const ContextProviders = ({ children }: Props) => {
   const providers: Provider[] = [
     [SWRConfig, { value: SwrFetcherConfig }],
-    ToastProvider,
     !!Config.gtmId && LoadableGtmProvider,
     AuthProvider,
     HelmetProvider,
