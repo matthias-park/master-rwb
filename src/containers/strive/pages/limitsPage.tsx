@@ -272,6 +272,8 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                             displayType={'text'}
                             thousandSeparator
                             prefix={user.currency}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
                           />
                         ) : (
                           formattedCurrentLimit
@@ -290,6 +292,8 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                               displayType={'text'}
                               thousandSeparator
                               prefix={user.currency}
+                              decimalScale={2}
+                              fixedDecimalScale={true}
                             />
                           ) : (
                             formattedUsedLimit
@@ -309,6 +313,8 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                               displayType={'text'}
                               thousandSeparator
                               prefix={user.currency}
+                              decimalScale={2}
+                              fixedDecimalScale={true}
                             />
                           ) : (
                             formattedRemainingLimit
@@ -335,6 +341,8 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
                                 displayType={'text'}
                                 thousandSeparator
                                 prefix={user.currency}
+                                decimalScale={2}
+                                fixedDecimalScale={true}
                               />
                             ) : (
                               formattedFutureLimit
@@ -493,6 +501,8 @@ const LimitsHistory = ({ limitsData }) => {
                               thousandSeparator
                               displayType={'text'}
                               prefix={user.currency}
+                              decimalScale={2}
+                              fixedDecimalScale={true}
                             />
                           )}
                         </div>

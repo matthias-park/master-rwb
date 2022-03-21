@@ -10,6 +10,7 @@ import { franchiseDateFormat } from '../../../constants';
 import BalancesContainer from '../components/account-settings/BalancesContainer';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
 import HelpBlock from '../components/HelpBlock';
+import NumberFormat from 'react-number-format';
 
 const questionItems = [
   {
@@ -100,12 +101,26 @@ const TaxPage = () => {
                       <td>
                         <strong className="heading-sm">{t('win')}</strong>
                         <span className="text-success">
-                          {user.currency} {tax.WinAmount}
+                          <NumberFormat
+                            value={tax.WinAmount}
+                            thousandSeparator
+                            displayType={'text'}
+                            prefix={user.currency}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                          />
                         </span>
                       </td>
                       <td>
                         <strong className="heading-sm">{t('wager')}</strong>
-                        {user.currency} {tax.BetAmount}
+                        <NumberFormat
+                          value={tax.BetAmount}
+                          thousandSeparator
+                          displayType={'text'}
+                          prefix={user.currency}
+                          decimalScale={2}
+                          fixedDecimalScale={true}
+                        />
                       </td>
                       <td className="d-flex d-sm-table-cell align-items-center">
                         <strong className="heading-sm">{t('download')}</strong>

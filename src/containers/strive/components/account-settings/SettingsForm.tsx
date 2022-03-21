@@ -308,6 +308,8 @@ const FormFields = ({
                     prefix: `${user.currency} `,
                     thousandSeparator: true,
                     allowNegative: false,
+                    decimalScale: 2,
+                    fixedDecimalScale: true,
                   };
                 } else if (field.formatting === 'date') {
                   masketInput = {

@@ -42,6 +42,7 @@ interface Props {
     allowedDecimalSeparators?: string[];
     useFormatted?: boolean;
     decimalScale?: number;
+    fixedDecimalScale?: boolean;
   };
   onEnterPress?: () => void;
   autoComplete?: string;
@@ -57,6 +58,7 @@ interface UncontrolledProps extends FormControlProps {
   allowEmptyFormatting?: boolean;
   mask?: string | string[];
   decimalScale?: number;
+  fixedDecimalScale?: boolean;
   tooltip?: string;
   toggleVisibility?: boolean;
   prefix?: string;
@@ -300,6 +302,7 @@ const TextInput = ({
       }
       mask={maskedInput?.mask}
       decimalScale={maskedInput?.decimalScale}
+      fixedDecimalScale={maskedInput?.fixedDecimalScale}
       autoComplete={autoComplete}
       customInputStyle={customInputStyle}
     />

@@ -34,6 +34,8 @@ const BalancesContainer = () => {
                     thousandSeparator
                     displayType={'text'}
                     prefix={user.currency}
+                    decimalScale={2}
+                    fixedDecimalScale={true}
                   />
                 </span>
               </div>

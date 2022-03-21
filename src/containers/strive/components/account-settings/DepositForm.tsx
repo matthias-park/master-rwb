@@ -42,7 +42,7 @@ const DepositForm = ({
 }: Props) => {
   const { user } = useAuth();
   const { t } = useI18n();
-  const defaultValue = 0;
+  const defaultValue = '0.00';
   const formMethods = useForm<{
     amount: string;
     bank_id: string | number | undefined;
@@ -195,7 +195,7 @@ const DepositForm = ({
                     key={value}
                     className={clsx(
                       'quick-amounts__btn',
-                      watch('amount') === value.toString() && 'active',
+                      Number(watch('amount')) === Number(value) && 'active',
                     )}
                     onClick={() =>
                       setValue('amount', value.toString(), {
@@ -205,7 +205,14 @@ const DepositForm = ({
                     }
                     disabled={disabled}
                   >
-                    {`${user.currency} ${value}`}
+                    <NumberFormat
+                      value={value}
+                      thousandSeparator
+                      displayType={'text'}
+                      prefix={user.currency}
+                      decimalScale={2}
+                      fixedDecimalScale={true}
+                    />
                   </button>
                 ))}
               </div>
@@ -214,10 +221,11 @@ const DepositForm = ({
                 className="input-container__input"
                 title={t('deposit_input_amount')}
                 maskedInput={{
-                  allowEmptyFormatting: true,
                   prefix: `${user.currency} `,
                   thousandSeparator: true,
                   allowNegative: false,
+                  decimalScale: 2,
+                  fixedDecimalScale: true,
                 }}
                 rules={{
                   validate: validateAmount,
@@ -245,6 +253,8 @@ const DepositForm = ({
                     thousandSeparator
                     displayType={'text'}
                     prefix={`${t('min_deposit')}: ${user.currency}`}
+                    decimalScale={2}
+                    fixedDecimalScale={true}
                   />
                 )}
                 {minDeposit != null && maxDeposit != null && ' - '}
@@ -254,6 +264,8 @@ const DepositForm = ({
                     thousandSeparator
                     displayType={'text'}
                     prefix={`${t('max_deposit')}: ${user.currency}`}
+                    decimalScale={2}
+                    fixedDecimalScale={true}
                   />
                 )}
               </small>

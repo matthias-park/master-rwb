@@ -217,6 +217,8 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                       thousandSeparator
                       displayType={'text'}
                       prefix={user.currency}
+                      decimalScale={2}
+                      fixedDecimalScale={true}
                     />
                   </span>
                   <i className="icon-add-action-1 ml-2"></i>

@@ -91,6 +91,8 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
                           prefix={`${transaction.in ? '+' : '-'} ${
                             user.currency
                           }`}
+                          decimalScale={2}
+                          fixedDecimalScale={true}
                         />
                       </span>
                     </td>
