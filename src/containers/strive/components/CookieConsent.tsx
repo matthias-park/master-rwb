@@ -9,9 +9,10 @@ import { useConfig } from '../../../hooks/useConfig';
 import { Cookies } from '../../../types/Config';
 import { useDispatch } from 'react-redux';
 import { setCookies } from '../../../state/reducers/config';
+import clsx from 'clsx';
 
 const CookieConsent = () => {
-  const { enableModal } = useModal();
+  const { enableModal, activeModal } = useModal();
   const { jsxT, t } = useI18n();
   const sendDataToGTM = useGTM();
   const dispatch = useDispatch();
@@ -43,7 +44,12 @@ const CookieConsent = () => {
 
   if (Franchise.gnogaz || cookies.accepted) return null;
   return (
-    <nav className="cookies-nav">
+    <nav
+      className={clsx(
+        'cookies-nav',
+        activeModal === ComponentName.CookiesModal && 'd-none',
+      )}
+    >
       <i className="icon-cookies cookies-nav__icon"></i>
       <div className="cookies-nav__body">
         <h3 className="cookies-nav__body-title">{t('cookies_nav_title')}</h3>

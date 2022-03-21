@@ -476,7 +476,7 @@ const customStyles = css`
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 1100;
+    z-index: 9999999;
     background-color: ${props => props.theme.colors.brand.light};
     color: ${props => props.theme.colors.gray.custom_200};
     padding: 20px 115px 14px 115px;
