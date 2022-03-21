@@ -31,13 +31,14 @@ import { useModal } from '../../../hooks/useModal';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import DepositForm from '../components/account-settings/DepositForm';
 import StyledIframe from '../components/styled/StyledDepositIframe';
-import * as Sentry from '@sentry/react';
 import BalancesContainer from '../components/account-settings/BalancesContainer';
 import clsx from 'clsx';
 import { replaceStringTagsReact } from '../../../utils/reactUtils';
-import RequestReturn from '../../../types/api/deposits/RequestReturn';
 import { injectTrackerScript } from '../../../utils/uiUtils';
 import useLocalStorage from '../../../hooks/useLocalStorage';
+import { useConfig } from '../../../hooks/useConfig';
+import depositEventHandler from '../../../utils/depositEventHandler';
+import * as Sentry from '@sentry/react';
 
 const questionItems = [
   { title: 'deposit_question_1', body: 'deposit_answer_1' },
@@ -47,8 +48,12 @@ const questionItems = [
 const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
   const { user } = useAuth();
   const { t, jsxT } = useI18n();
+  const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const [depositLoading, setDepositLoading] = useState(false);
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<{
+    message: string;
+    variant: 'danger' | 'warning';
+  } | null>(null);
   const [depositAmount, setDepositAmount] = useLocalStorage<number | null>(
     'deposit_amount',
     null,
@@ -130,85 +135,55 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
         ) {
           depositStatus.setDepositId(response.Data.DepositRequestId, bankId);
         }
-        if (response.Data?.InnerText) {
+        if (response.Data?.InnerText && response.Data?.DepositRequestId) {
+          let html = atob(response.Data.InnerText);
+          const iframeHtml = html.includes('window.onload');
+          const handlePaymentEvent = (
+            eventType: CustomWindowEvents,
+            eventData?: string | object,
+          ) =>
+            depositEventHandler({
+              eventType,
+              eventData,
+              bankId,
+              depositRequestId: response.Data!.DepositRequestId,
+              depositStatus,
+              setApiError,
+              setCustomHtml: html =>
+                setCustomHtml(html ? { html, iframe: iframeHtml } : null),
+              setDepositLoading,
+              t,
+              locale,
+              disableModal,
+              depositForm,
+            });
           window.addEventListener(
             CustomWindowEvents.DepositPaymentSuccess,
-            () => {
-              setCustomHtml(null);
-              depositStatus.startCheckingStatus();
-            },
+            () => handlePaymentEvent(CustomWindowEvents.DepositPaymentSuccess),
           );
-          window.addEventListener(
-            CustomWindowEvents.DepositPaymentError,
-            err => {
-              Sentry.captureEvent(err);
-              setCustomHtml(null);
-              setDepositLoading(false);
-              setApiError(t('api_response_failed'));
-            },
+          window.addEventListener(CustomWindowEvents.DepositPaymentError, () =>
+            handlePaymentEvent(CustomWindowEvents.DepositPaymentError),
           );
           window.addEventListener(
             CustomWindowEvents.DepositRequestReturn,
-            event => {
-              if (event.detail) {
-                const data = {
-                  ...event.detail,
-                  depositRequestId: response.Data?.DepositRequestId,
-                };
-                postApi<RailsApiResponse<RequestReturn>>(
-                  '/restapi/v1/deposits/request_return',
-                  {
-                    bank_id: bankId.toString(),
-                    data: JSON.stringify(data),
-                  },
-                )
-                  .then(res => {
-                    if (res.Data.OK) {
-                      if (res.Data.AdditionalData?.redirectUrl) {
-                        if (depositForm) {
-                          window.open(
-                            res.Data.AdditionalData.redirectUrl,
-                            '_blank',
-                          );
-                          disableModal(ComponentName.QuickDepositModal);
-                        } else {
-                          window.location.href =
-                            res.Data.AdditionalData.redirectUrl;
-                        }
-                        return;
-                      }
-                      if (res.Data.AdditionalData?.verifyPaymentData) {
-                        return window.dispatchEvent(
-                          new CustomEvent(
-                            CustomWindowEvents.DepositVerifyPayment,
-                            {
-                              detail:
-                                res.Data.AdditionalData?.verifyPaymentData,
-                            },
-                          ),
-                        );
-                      }
-                      setCustomHtml(null);
-                      depositStatus.startCheckingStatus();
-                    } else if (res.Data.Error) {
-                      setApiError(t('api_response_failed'));
-                      Sentry.captureMessage(
-                        `Got DepositRequestReturn error: ${res.Data.Error}`,
-                        Sentry.Severity.Info,
-                      );
-                    }
-                  })
-                  .catch(() => null);
-              } else {
-                Sentry.captureMessage(
-                  'Got DepositRequestReturn without data',
-                  Sentry.Severity.Fatal,
-                );
-              }
-            },
+            event =>
+              handlePaymentEvent(
+                CustomWindowEvents.DepositRequestReturn,
+                event.detail,
+              ),
           );
+          window.addEventListener('message', (e: MessageEvent<any>) => {
+            try {
+              const data =
+                typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+              if (!data.eventType || e.origin !== window.location.origin)
+                return;
+              handlePaymentEvent(data.eventType, data.eventData);
+            } catch {
+              return;
+            }
+          });
           let htmlString = atob(response.Data.InnerText);
-          const iframeHtml = [180, 181, 182, 183].includes(bankId);
           if (!iframeHtml) {
             const htmlParser = new DOMParser();
             const html = htmlParser.parseFromString(htmlString, 'text/html');
@@ -283,7 +258,10 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
               });
             } else {
               setCustomHtml(null);
-              setApiError(t('api_response_failed'));
+              setApiError({
+                message: t('api_response_failed'),
+                variant: 'danger',
+              });
             }
             setDepositLoading(false);
           }
@@ -307,7 +285,10 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
         }
       }
       if (!response || !response.Success || response.Message) {
-        setApiError(response?.Message || t('api_response_failed'));
+        setApiError({
+          message: response?.Message || t('api_response_failed'),
+          variant: 'danger',
+        });
       }
       setDepositLoading(false);
       return false;
@@ -317,7 +298,10 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
 
   let alertMessage: { variant: string; msg: string | ReactElement } | undefined;
   if (apiError) {
-    alertMessage = { variant: 'danger', msg: apiError };
+    alertMessage = {
+      variant: apiError.variant,
+      msg: apiError.message,
+    };
   } else if (
     ![DepositStatus.Pending, DepositStatus.None].includes(
       depositStatus.depositStatus,
@@ -375,7 +359,7 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
           }}
         />
       );
-    return replaceStringTagsReact(customHtml.html);
+    return <div>{replaceStringTagsReact(customHtml.html)}</div>;
   }, [customHtml]);
 
   return (
@@ -426,7 +410,9 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
             ((Franchise.gnogaz || Franchise.desertDiamond) && validatorNotOk)
           }
           loading={depositLoading && !depositForm}
-          setApiError={setApiError}
+          setApiError={(message: string | null) =>
+            setApiError(message ? { message, variant: 'danger' } : null)
+          }
         />
       )}
       {!depositForm && (

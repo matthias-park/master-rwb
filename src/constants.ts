@@ -549,6 +549,7 @@ export enum CustomWindowEvents {
   DepositPaymentError = 'payment_error',
   DepositRequestReturn = 'deposit_request_return',
   DepositVerifyPayment = 'verify_payment_action',
+  DepositPaymentWarning = 'payment_warning',
 }
 
 export enum LocalStorageKeys {

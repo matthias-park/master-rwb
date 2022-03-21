@@ -14,7 +14,7 @@ import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 import useDepositResponseStatus from '../../../hooks/useDepositResponseStatus';
 import useGTM from '../../../hooks/useGTM';
 import { useRoutePath } from '../../../hooks';
-import { CustomWindowEvents, PagesName } from '../../../constants';
+import { PagesName } from '../../../constants';
 import {
   DepositRequest,
   DepositResponse,
@@ -25,11 +25,11 @@ import CustomAlert from '../components/CustomAlert';
 import Spinner from 'react-bootstrap/Spinner';
 import Link from '../../../components/Link';
 import useLocalStorage from '../../../hooks/useLocalStorage';
-import * as Sentry from '@sentry/react';
 import { useConfig } from '../../../hooks/useConfig';
-import RequestReturn from '../../../types/api/deposits/RequestReturn';
 import { replaceStringTagsReact } from '../../../utils/reactUtils';
 import NumberFormat from 'react-number-format';
+import depositEventHandler from '../../../utils/depositEventHandler';
+import * as Sentry from '@sentry/react';
 
 const AmountContainer = ({
   handleRequestDeposit,
@@ -222,7 +222,10 @@ const DepositPage = () => {
   });
   const { watch, setValue, register } = formMethods;
   const watchBankId = watch('bank_id');
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<{
+    message: string;
+    variant: 'danger' | 'warning';
+  } | null>(null);
   const [customHtml, setCustomHtml] = useState<string | null>(null);
   const depositBaseUrl = useRoutePath(PagesName.DepositPage, true);
   const depositStatus = useDepositResponseStatus();
@@ -288,86 +291,30 @@ const DepositPage = () => {
         if (response.Data?.DepositRequestId) {
           depositStatus.setDepositId(response.Data.DepositRequestId, bankId);
         }
-        if (response.Data?.InnerText) {
-          window.addEventListener(
-            CustomWindowEvents.DepositPaymentSuccess,
-            () => {
-              setCustomHtml(null);
-              depositStatus.startCheckingStatus();
-            },
-          );
-          window.addEventListener(
-            CustomWindowEvents.DepositPaymentError,
-            () => {
-              setCustomHtml(null);
-              setDepositLoading(false);
-              setApiError(t('api_response_failed'));
-            },
-          );
-          window.addEventListener(
-            CustomWindowEvents.DepositRequestReturn,
-            event => {
-              if (event.detail) {
-                const data = {
-                  ...event.detail,
-                  depositRequestId: response.Data?.DepositRequestId,
-                };
-                if (bankId === 189) {
-                  data.browserInfo = {
-                    acceptHeader: '*',
-                    colorDepth: window.screen.colorDepth,
-                    javaEnabled: false,
-                    language: locale,
-                    screenHeight: window.innerHeight,
-                    screenWidth: window.innerWidth,
-                    timeZoneOffset: new Date().getTimezoneOffset(),
-                    userAgent: window.navigator.userAgent,
-                  };
-                }
-                postApi<RailsApiResponse<RequestReturn>>(
-                  '/restapi/v1/deposits/request_return',
-                  {
-                    bank_id: bankId.toString(),
-                    data: JSON.stringify(data),
-                  },
-                )
-                  .then(res => {
-                    if (res.Data.OK) {
-                      if (res.Data.AdditionalData?.redirectUrl) {
-                        return (window.location.href =
-                          res.Data.AdditionalData.redirectUrl);
-                      }
-                      if (res.Data.AdditionalData?.verifyPaymentData) {
-                        return window.dispatchEvent(
-                          new CustomEvent(
-                            CustomWindowEvents.DepositVerifyPayment,
-                            {
-                              detail:
-                                res.Data.AdditionalData?.verifyPaymentData,
-                            },
-                          ),
-                        );
-                      }
-                      setCustomHtml(null);
-                      depositStatus.startCheckingStatus();
-                    } else if (res.Data.Error) {
-                      setCurrentStep(1);
-                      setApiError(t('api_response_failed'));
-                      Sentry.captureMessage(
-                        `Got DepositRequestReturn error: ${res.Data.Error}`,
-                        Sentry.Severity.Info,
-                      );
-                    }
-                  })
-                  .catch(() => null);
-              } else {
-                Sentry.captureMessage(
-                  'Got DepositRequestReturn without data',
-                  Sentry.Severity.Fatal,
-                );
-              }
-            },
-          );
+        if (response.Data?.InnerText && response.Data?.DepositRequestId) {
+          window.addEventListener('message', (e: MessageEvent<any>) => {
+            try {
+              const data =
+                typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+              if (!data.eventType || e.origin !== window.location.origin)
+                return;
+              depositEventHandler({
+                eventType: data.eventType,
+                eventData: data.eventData,
+                bankId,
+                depositRequestId: response.Data!.DepositRequestId,
+                depositStatus,
+                setApiError,
+                setCustomHtml,
+                setDepositLoading,
+                locale,
+                setCurrentStep,
+                t,
+              });
+            } catch {
+              return;
+            }
+          });
           setCurrentStep(prev => prev + 1);
           let htmlString = atob(response.Data.InnerText);
           const htmlParser = new DOMParser();
@@ -450,7 +397,10 @@ const DepositPage = () => {
         }
       }
       if (!response || !response.Success || response.Message) {
-        setApiError(response?.Message || t('api_response_failed'));
+        setApiError({
+          message: response?.Message || t('api_response_failed'),
+          variant: 'danger',
+        });
       }
       setDepositLoading(false);
       return false;
@@ -467,7 +417,10 @@ const DepositPage = () => {
 
   useEffect(() => {
     if (!banksDataLoading && (!banksData?.Data || banksError)) {
-      setApiError(t('api_deposit_request_error'));
+      setApiError({
+        message: t('api_deposit_request_error'),
+        variant: 'danger',
+      });
     }
   }, [banksData, banksError]);
 
@@ -486,8 +439,8 @@ const DepositPage = () => {
       };
     } else if (apiError) {
       return {
-        variant: 'danger',
-        msg: apiError,
+        variant: apiError.variant,
+        msg: apiError.message,
       };
     }
     return null;
