@@ -213,6 +213,14 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
               /<(\/?|!?)(DOCTYPE html|html|head|body|meta)([^>]*)>/gm,
               '',
             );
+            const translationMatches = html.match(/\{{(.*?)\}}/gm);
+            translationMatches?.forEach(match => {
+              const symbol = /\{{(.*?)\}}/gm.exec(match)?.[1];
+              if (symbol) {
+                const translation = t(symbol);
+                html = html.replace(match, translation);
+              }
+            });
             setDepositLoading(false);
           }
           return setCustomHtml({ html, iframe: iframeHtml });
@@ -237,7 +245,7 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
       setDepositLoading(false);
       return false;
     },
-    [],
+    [t],
   );
 
   let alertMessage: { variant: string; msg: string | ReactElement } | undefined;

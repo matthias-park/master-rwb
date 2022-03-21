@@ -376,6 +376,14 @@ const DepositPage = () => {
             /<(\/?|!?)(DOCTYPE html|html|head|body|meta)([^>]*)>/gm,
             '',
           );
+          const translationMatches = html.match(/\{{(.*?)\}}/gm);
+          translationMatches?.forEach(match => {
+            const symbol = /\{{(.*?)\}}/gm.exec(match)?.[1];
+            if (symbol) {
+              const translation = t(symbol);
+              html = html.replace(match, translation);
+            }
+          });
           return setCustomHtml(html);
         } else if (
           response?.Success &&
