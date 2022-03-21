@@ -526,7 +526,7 @@ const accountSettingsStyles = css`
       font-weight: 500;
     }
     i {
-      color: #778ca6;
+      color: ${Franchise.gnogaz ? '#fff' : '#778ca6'};
       font-size: 30px;
     }
     ${mediaBreakpointDown('xs')} {
