@@ -12,7 +12,6 @@ import { formatUrl } from './apiUtils';
 export const changeBackdropVisibility = (visibility: boolean) => {
   const SHOW_CLASS = 'show';
   const classList = document.getElementById('backdrop')?.classList;
-  changeBodyScroll(!visibility);
   if (visibility) {
     return classList?.add(SHOW_CLASS);
   }

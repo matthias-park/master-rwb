@@ -27,6 +27,9 @@ const GenericModal = ({
       backdrop={isStatic && 'static'}
       centered={isCentered}
       dialogClassName="generic-modal-width"
+      onExit={() => {
+        document.body.setAttribute('style', '');
+      }}
     >
       {!withoutClose && (
         <i className="icon-close custom-modal__close" onClick={hideCallback} />

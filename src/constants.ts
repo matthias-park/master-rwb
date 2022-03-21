@@ -37,6 +37,7 @@ export enum ComponentName {
   ActivateUserModal = 'activateUserModal',
   CasinoGameInfoModal = 'casinoGameInfoModal',
   W9WinningsModal = 'w9WinningsModal',
+  PageBackdrop = 'pageBackdrop',
 }
 
 export const ModalPriority = {
@@ -46,6 +47,7 @@ export const ModalPriority = {
   [ComponentName.ResponsibleGamblingModal]: 5,
   [ComponentName.ResendEmailModal]: 1,
   [ComponentName.ActivateUserModal]: 2,
+  [ComponentName.PageBackdrop]: -100,
 };
 
 export enum PagesName {

@@ -3,6 +3,7 @@ import { mediaBreakpointDown, mediaBreakpointUp } from './breakpoints';
 import { textOverflow1 } from './mixins';
 import { rgba } from './mixins';
 import { Franchise } from '../../../../constants';
+import { scrollbarWidth } from './helpers';
 
 const customStyles = css`
   *:focus {
@@ -13,14 +14,15 @@ const customStyles = css`
     -webkit-overflow-scrolling: touch;
   }
 
-  html,
   body {
     overflow-x: hidden;
-  }
-  body {
     font-family: ${props => props.theme.fonts.family}, 'Myriad Pro', sans-serif;
     padding: 0 ${props => props.theme.spacing.bodyPadding}px 0
       ${props => props.theme.spacing.bodyPadding}px !important;
+    &.modal-open {
+      padding-right: ${props =>
+        props.theme.spacing.bodyPadding + scrollbarWidth}px !important;
+    }
     margin: auto;
     background-color: ${props => props.theme.colors.body} !important;
     color: ${props => props.theme.colors.brand.text} !important;
@@ -28,10 +30,18 @@ const customStyles = css`
     ${mediaBreakpointDown('xl')} {
       padding: 0 ${props => props.theme.spacing.bodyPaddingMedium}px 0
         ${props => props.theme.spacing.bodyPaddingMedium}px !important;
+      &.modal-open {
+        padding-right: ${props =>
+          props.theme.spacing.bodyPaddingMedium + scrollbarWidth}px !important;
+      }
     }
     ${mediaBreakpointDown('lg')} {
       padding: 0 ${props => props.theme.spacing.bodyPaddingSmall}px 0
         ${props => props.theme.spacing.bodyPaddingSmall}px !important;
+      &.modal-open {
+        padding-right: ${props =>
+          props.theme.spacing.bodyPaddingSmall + scrollbarWidth}px !important;
+      }
     }
     &:not(.show-captcha) .grecaptcha-badge {
       visibility: hidden;
