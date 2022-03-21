@@ -11,7 +11,9 @@ import Button from 'react-bootstrap/Button';
 import StepsAccordion from '../components/account-settings/StepsAccordion';
 import Main from '../pageLayout/Main';
 import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
-import useDepositResponseStatus from '../../../hooks/useDepositResponseStatus';
+import useDepositResponseStatus, {
+  isDepositStatusSuccess,
+} from '../../../hooks/useDepositResponseStatus';
 import useGTM from '../../../hooks/useGTM';
 import { useRoutePath } from '../../../hooks';
 import { CustomWindowEvents, PagesName } from '../../../constants';
@@ -166,8 +168,7 @@ const DetailsContainer = ({ depositStatus, depositDetails, resetDeposits }) => {
 
   return (
     <>
-      {depositStatus.depositStatus === DepositStatus.Confirmed &&
-      depositDetails ? (
+      {isDepositStatusSuccess(depositStatus.depositStatus) && depositDetails ? (
         <div className="cashier-page__payment-info">
           <div className="cashier-page__payment-info-item">
             <p>{t('deposit_amount')}</p>
@@ -255,7 +256,7 @@ const DepositPage = () => {
       });
     }
 
-    if (depositStatus.depositStatus === DepositStatus.Confirmed) {
+    if (isDepositStatusSuccess(depositStatus.depositStatus)) {
       setCurrentStep(4);
     }
   }, [depositStatus.depositStatus]);
@@ -469,10 +470,9 @@ const DepositPage = () => {
       )
     ) {
       return {
-        variant:
-          depositStatus.depositStatus === DepositStatus.Confirmed
-            ? 'success'
-            : 'danger',
+        variant: isDepositStatusSuccess(depositStatus.depositStatus)
+          ? 'success'
+          : 'danger',
         msg: depositStatus.message,
       };
     } else if (apiError) {

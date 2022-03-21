@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useMemo,
-  useState,
-  useEffect,
-  useRef,
-} from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import InputContainer from '../components/account-settings/InputContainer';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
 import HelpBlock from '../components/HelpBlock';
@@ -24,7 +18,9 @@ import { useModal } from '../../../hooks/useModal';
 import { useAuth } from '../../../hooks/useAuth';
 import { BGC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 import { structuredBankCommunications } from '../../../utils/index';
-import useDepositResponseStatus from '../../../hooks/useDepositResponseStatus';
+import useDepositResponseStatus, {
+  isDepositStatusSuccess,
+} from '../../../hooks/useDepositResponseStatus';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
 import LoadingSpinner from '../../../components/LoadingSpinner';
@@ -85,8 +81,9 @@ const DepositPage = () => {
     ) {
       let gtmObj: any = {
         event: 'depositStatusChange',
-        'tglab.deposit.success':
-          depositStatus.depositStatus === DepositStatus.Confirmed,
+        'tglab.deposit.success': isDepositStatusSuccess(
+          depositStatus.depositStatus,
+        ),
       };
       if (transactionData) {
         gtmObj = {
@@ -211,7 +208,7 @@ const DepositPage = () => {
           )
         }
         variant={
-          depositStatus.depositStatus === DepositStatus.Confirmed
+          isDepositStatusSuccess(depositStatus.depositStatus)
             ? 'success'
             : 'danger'
         }
@@ -219,7 +216,7 @@ const DepositPage = () => {
         {depositStatus.message}
         <div>
           <u>
-            {depositStatus.depositStatus === DepositStatus.Confirmed
+            {isDepositStatusSuccess(depositStatus.depositStatus)
               ? jsxT('cta_bet_now')
               : jsxT('cta_deposit')}
           </u>

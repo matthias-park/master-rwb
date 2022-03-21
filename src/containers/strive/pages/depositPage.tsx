@@ -24,7 +24,9 @@ import CustomAlert from '../components/CustomAlert';
 import { useRoutePath } from '../../../hooks';
 import { useAuth } from '../../../hooks/useAuth';
 import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
-import useDepositResponseStatus from '../../../hooks/useDepositResponseStatus';
+import useDepositResponseStatus, {
+  isDepositStatusSuccess,
+} from '../../../hooks/useDepositResponseStatus';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
 import { useModal } from '../../../hooks/useModal';
@@ -79,7 +81,7 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
       });
     }
     if (
-      depositStatus.depositStatus === DepositStatus.Confirmed &&
+      isDepositStatusSuccess(depositStatus.depositStatus) &&
       !!depositAmount
     ) {
       injectTrackerScript(
@@ -307,20 +309,14 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
       depositStatus.depositStatus,
     )
   ) {
+    const depositSuccess = isDepositStatusSuccess(depositStatus.depositStatus);
     alertMessage = {
-      variant:
-        depositStatus.depositStatus === DepositStatus.Confirmed
-          ? 'success'
-          : 'danger',
+      variant: depositSuccess ? 'success' : 'danger',
       msg: (
         <>
           {depositStatus.message}
           <div>
-            <u>
-              {depositStatus.depositStatus === DepositStatus.Confirmed
-                ? jsxT('cta_bet_now')
-                : jsxT('cta_deposit')}
-            </u>
+            <u>{depositSuccess ? jsxT('cta_bet_now') : jsxT('cta_deposit')}</u>
           </div>
         </>
       ),

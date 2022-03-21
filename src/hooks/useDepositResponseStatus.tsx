@@ -17,6 +17,13 @@ import * as Sentry from '@sentry/react';
 import { Transaction } from '@sentry/types';
 import RequestReturn from '../types/api/deposits/RequestReturn';
 
+export const isDepositStatusSuccess = (status: DepositStatus) =>
+  [
+    DepositStatus.Confirmed,
+    DepositStatus.ConfirmedMismatch,
+    DepositStatus.ConfirmedAndReconciled,
+  ].includes(status);
+
 const postUrl = '/restapi/v1/deposits/status';
 let DepositStatusTransaction: Transaction | null = null;
 
@@ -197,14 +204,14 @@ const useDepositResponseStatus = () => {
       (status !== depositStatus || status === DepositStatus.Timeout)
     ) {
       setDepositStatus(status);
-      if (DepositStatus.Confirmed === status) updateUser();
+      if (isDepositStatusSuccess(status)) updateUser();
       if (
         ![DepositStatus.None, DepositStatus.Pending].includes(status) &&
         bankResponse &&
         !queryParams
       ) {
         let newDepositPath = 'error';
-        if (status === DepositStatus.Confirmed) newDepositPath = 'success';
+        if (isDepositStatusSuccess(status)) newDepositPath = 'success';
         if (status === DepositStatus.Rejected) newDepositPath = 'rejected';
         if (status === DepositStatus.Canceled) newDepositPath = 'canceled';
         if (DepositStatusTransaction) {
