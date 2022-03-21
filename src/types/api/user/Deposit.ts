@@ -57,10 +57,12 @@ export interface DepositStatusData {
 }
 
 export interface DepositRequest {
-  [key: string]: number | string;
+  [key: string]: number | string | boolean | null | undefined;
   BankId: number;
   Amount: number;
   ReturnSuccessUrl: string;
+  AccountId?: number | null;
+  Prefill?: boolean;
 }
 
 export default DepositResponse;

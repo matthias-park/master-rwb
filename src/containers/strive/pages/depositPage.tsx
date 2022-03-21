@@ -9,7 +9,6 @@ import QuestionsContainer from '../components/account-settings/QuestionsContaine
 import HelpBlock from '../components/HelpBlock';
 import { postApi } from '../../../utils/apiUtils';
 import {
-  DepositLimits,
   DepositRequest,
   DepositResponse,
   DepositStatus,
@@ -31,7 +30,6 @@ import useGTM from '../../../hooks/useGTM';
 import { useModal } from '../../../hooks/useModal';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import DepositForm from '../components/account-settings/DepositForm';
-import useApi from '../../../hooks/useApi';
 import StyledIframe from '../components/styled/StyledDepositIframe';
 import * as Sentry from '@sentry/react';
 import BalancesContainer from '../components/account-settings/BalancesContainer';
@@ -49,10 +47,6 @@ const questionItems = [
 const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
   const { user } = useAuth();
   const { t, jsxT } = useI18n();
-  const { data: depositData, error: depositError } = useApi<
-    RailsApiResponse<DepositLimits[] | null>
-  >('/restapi/v1/user/max_deposit');
-  const depositDataLoading = !depositData && !depositError;
   const [depositLoading, setDepositLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [depositAmount, setDepositAmount] = useLocalStorage<number | null>(
@@ -103,7 +97,12 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
   ].includes(user.validator_status || 0);
 
   const handleRequestDeposit = useCallback(
-    async (depositValue: number, bankId: number) => {
+    async (
+      depositValue: number,
+      bankId: number,
+      AccountId: number | null = null,
+      AccountPrefillRequested: boolean = false,
+    ) => {
       setApiError(null);
       setDepositLoading(true);
       setDepositAmount(depositValue);
@@ -114,6 +113,8 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
         ReturnCancelUrl: `${window.location.origin}${depositBaseUrl}/cancel`,
         ReturnErrorUrl: `${window.location.origin}${depositBaseUrl}/error`,
         locale: 'en_US',
+        AccountId: AccountId || null,
+        AccountPrefillRequested: !!AccountId || AccountPrefillRequested,
       };
       const response: RailsApiResponse<DepositResponse | null> = await postApi<
         RailsApiResponse<DepositResponse>
@@ -300,6 +301,9 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
             window.location.href = response.Data.RedirectUrl;
           }
           return;
+        } else if (response.Data?.PaymentResult) {
+          setApiError(null);
+          depositStatus.startCheckingStatus();
         }
       }
       if (!response || !response.Success || response.Message) {
@@ -403,7 +407,6 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
           <LoadingSpinner
             show={
               depositStatus.depositStatus === DepositStatus.Pending ||
-              depositDataLoading ||
               depositLoading
             }
             className="d-block mx-auto my-4"
@@ -419,13 +422,11 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
             user.validator_status ===
               KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataOnly ||
             depositStatus.depositStatus === DepositStatus.Pending ||
-            (depositDataLoading && !depositForm) ||
+            !depositForm ||
             ((Franchise.gnogaz || Franchise.desertDiamond) && validatorNotOk)
           }
           loading={depositLoading && !depositForm}
           setApiError={setApiError}
-          depositData={depositData}
-          depositError={!!depositError}
         />
       )}
       {!depositForm && (
