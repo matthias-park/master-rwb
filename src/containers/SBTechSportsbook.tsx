@@ -10,6 +10,7 @@ import { useHistory, useLocation } from 'react-router';
 import { useConfig } from '../hooks/useConfig';
 import * as Sentry from '@sentry/react';
 import useGeoComply from '../hooks/useGeoComply';
+import { Severity } from '@sentry/react';
 
 enum SbtEventTypes {
   SetDeviceType = 'SBT_SET_DEVICE_TYPE',
@@ -98,14 +99,32 @@ const SBTechSportsbook = () => {
     [user.logged_in],
   );
   const { data: token, error } = useApi<string>(sbTokenUrl, (url, body) =>
-    postApi<RailsApiResponse<{ url }>>(url, body)
+    postApi<
+      RailsApiResponse<{
+        url: string;
+        parameters: {
+          Token: string;
+        };
+      }>
+    >(url, body)
       .then(res => {
-        if (!res.Data?.url) return '';
-        const url = new URL(res.Data.url);
-        const token = new URLSearchParams(url.search).get('stoken');
-        return token || '';
+        const token = res.Data?.parameters?.Token;
+        if (!token) {
+          Sentry.captureMessage(
+            'API: no token for SbTech',
+            Sentry.Severity.Critical,
+          );
+          return '';
+        }
+        Sentry.addBreadcrumb({
+          category: 'SbTech',
+          message: `got user token`,
+          level: Sentry.Severity.Log,
+        });
+        return token;
       })
-      .catch(() => {
+      .catch((res: RailsApiResponse<null>) => {
+        if (res.Unauthorized) return '';
         Sentry.captureMessage(
           'API: no token for SbTech',
           Sentry.Severity.Critical,
@@ -172,6 +191,11 @@ const SBTechSportsbook = () => {
 
   useEffect(() => {
     if (token && user.logged_in && iframeState.loginReady) {
+      Sentry.addBreadcrumb({
+        category: 'SbTech',
+        message: `Login message sent`,
+        level: Sentry.Severity.Log,
+      });
       iframeRef.current?.contentWindow?.postMessage(
         JSON.stringify({
           eventType: SbtEventTypes.loginCallback,
@@ -183,6 +207,11 @@ const SBTechSportsbook = () => {
         '*',
       );
     } else if (!user.logged_in) {
+      Sentry.addBreadcrumb({
+        category: 'SbTech',
+        message: `Logout message sent`,
+        level: Sentry.Severity.Log,
+      });
       iframeRef.current?.contentWindow?.postMessage(
         JSON.stringify({
           eventType: SbtEventTypes.logoutCallback,
@@ -207,10 +236,20 @@ const SBTechSportsbook = () => {
             break;
           }
           case SbtEventTypes.status: {
+            Sentry.addBreadcrumb({
+              category: 'SbTech',
+              message: `Status requested`,
+              level: Sentry.Severity.Log,
+            });
             setIframeState(prev => ({ ...prev, statusRequested: true }));
             break;
           }
           case SbtEventTypes.refreshSession: {
+            Sentry.addBreadcrumb({
+              category: 'SbTech',
+              message: `Refresh session requested`,
+              level: Sentry.Severity.Log,
+            });
             setIframeState(prev => ({
               ...prev,
               refreshSessionRequested: true,
@@ -225,6 +264,9 @@ const SBTechSportsbook = () => {
             break;
           }
           case SbtEventTypes.logout: {
+            Sentry.captureMessage('SbTech: Session force end', {
+              level: Severity.Log,
+            });
             signout();
             break;
           }

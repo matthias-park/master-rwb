@@ -4,6 +4,7 @@ interface RailsApiResponse<T> {
   Message: string | null;
   Data: T;
   Fallback?: true;
+  Unauthorized?: boolean;
 }
 
 export default RailsApiResponse;

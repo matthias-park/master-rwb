@@ -175,15 +175,7 @@ const WithdrawalPage = () => {
         {
           request_id: id,
         },
-      ).catch((res: RailsApiResponse<null>) => {
-        if (res.Fallback) {
-          addToast('failed to cancel withdraw', {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        }
-        return res;
-      });
+      ).catch((res: RailsApiResponse<null>) => res);
 
       sendDataToGTM({
         event: 'withdrawalCancelRequested',
@@ -232,15 +224,7 @@ const WithdrawalPage = () => {
         {
           formData: true,
         },
-      ).catch((res: RailsApiResponse<null>) => {
-        if (res.Fallback) {
-          addToast('failed to withdraw amount', {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        }
-        return res;
-      });
+      ).catch((res: RailsApiResponse<null>) => res);
       sendDataToGTM({
         event: 'withdrawalRequested',
         'tglab.withdrawal.amount': data.amount,

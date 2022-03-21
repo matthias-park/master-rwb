@@ -7,6 +7,7 @@ import GeoComplyState, {
   LocalStorageState,
 } from '../../types/state/GeoComplyState';
 import { setLogin } from './user';
+import * as Sentry from '@sentry/react';
 
 const localStorageId = 'geoComplyValidation';
 
@@ -62,12 +63,30 @@ const restoreStateFromLocalStorage = (state: GeoComplyState) => {
       state.revalidateIn = dayjs(savedState.nextGeoCheck)
         .diff(dayjs(), 'second')
         .toString();
+      Sentry.addBreadcrumb({
+        category: 'geocomply',
+        type: 'navigation',
+        message: `validation restored from cache, valid ${state.revalidateIn} seconds`,
+        level: Sentry.Severity.Log,
+      });
     } else if (!state.validationReason) {
+      Sentry.addBreadcrumb({
+        category: 'geocomply',
+        type: 'navigation',
+        message: `cached validation expired, revalidating`,
+        level: Sentry.Severity.Log,
+      });
       state.validationReason = !validSavedGeoLocation
         ? 'expired cache validation'
         : 'ip change';
     }
   } else if (!state.validationReason) {
+    Sentry.addBreadcrumb({
+      category: 'geocomply',
+      type: 'navigation',
+      message: `cached validation exist - ${!!savedState}, userId match - ${!!savedStateCurrentUser}`,
+      level: Sentry.Severity.Warning,
+    });
     state.error = GeoComplyErrorCodes.UserRejected;
   }
 };

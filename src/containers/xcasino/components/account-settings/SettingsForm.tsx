@@ -435,15 +435,7 @@ const SettingsForm = (props: SettingProps) => {
     }
     const res = await postApi<RailsApiResponse<null>>(url, body, {
       formData: formBody,
-    }).catch((res: RailsApiResponse<null>) => {
-      if (res.Fallback) {
-        addToast(`Failed to update user settings`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      }
-      return res;
-    });
+    }).catch((res: RailsApiResponse<null>) => res);
     setResponse &&
       setResponse({
         success: res.Success,

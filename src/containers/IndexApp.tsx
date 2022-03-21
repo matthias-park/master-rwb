@@ -23,9 +23,23 @@ if (!DevEnv && Config.sentryDsn) {
       if (samplingContext.transactionContext.op === 'navigation') {
         return 0.01;
       } else if (samplingContext.transactionContext) {
-        return 0.8;
+        return 1;
       }
       return 0.3;
+    },
+    beforeBreadcrumb(breadcrumb) {
+      if (
+        breadcrumb.category === 'console' &&
+        (!breadcrumb.level ||
+          [
+            Sentry.Severity.Info,
+            Sentry.Severity.Log,
+            Sentry.Severity.Debug,
+          ].includes(breadcrumb.level))
+      ) {
+        return null;
+      }
+      return breadcrumb;
     },
     beforeSend(event, hint) {
       if (hint?.originalException === 'Timeout') return null;

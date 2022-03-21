@@ -34,7 +34,7 @@ const TaxPage = () => {
       {
         bet_id,
       },
-    );
+    ).catch(err => err);
     if (response.Success) {
       const downloadLink = document.createElement('a');
       const file = `data:application/pdf;base64,${response.Data.files[0]}`;
@@ -54,7 +54,7 @@ const TaxPage = () => {
         page_number: page,
         page_size: 25,
       },
-    );
+    ).catch(err => err);
     response.Success && setData(response.Data);
   };
 

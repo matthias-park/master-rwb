@@ -256,6 +256,18 @@ const setCustomerSettings = ({
         });
     },
     notification: function (event) {
+      if (
+        !['dataLayerPushed', 'performanceMeasurementsCreated'].includes(
+          event.name,
+        )
+      ) {
+        Sentry.addBreadcrumb({
+          category: 'Kambi',
+          message: `notification: ${event.name}`,
+          level: Sentry.Severity.Log,
+          data: event.data,
+        });
+      }
       switch (event.name) {
         case 'KambiMaintenance': {
           setKambiMaintenance();
@@ -351,6 +363,9 @@ const getSBParams = async (
           return res;
         })
       : null;
+  if (!data?.Data && playerId && !retail) {
+    Sentry.captureMessage('API: no token for Kambi', Sentry.Severity.Critical);
+  }
   return {
     locale:
       KambiSbLocales[locale.toLocaleLowerCase()] ||

@@ -18,7 +18,7 @@ export const fetchTranslations = createAsyncThunk<
     const response = await getApi<RailsApiResponse<Symbols>>(
       '/restapi/v1/translations',
       { cache: 'no-cache' },
-    ).catch(() => null);
+    ).catch(err => err);
     if (response?.Success) {
       const responseLocale = response.Data?._locale_;
       if (responseLocale === locale) {

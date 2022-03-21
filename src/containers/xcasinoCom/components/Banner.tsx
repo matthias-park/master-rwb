@@ -63,9 +63,9 @@ const Banner = ({ promoSlides, onLoad, onError, zone }: BannerProps) => {
       (async () => {
         const data = await getApi<RailsApiResponse<any>>(
           `/restapi/v1/content/banners/${zone}/${locale}`,
-        );
+        ).catch(err => err);
         setIsDataLoading(false);
-        setSlides(data.Data);
+        setSlides(data.Data || []);
       })();
     }
   }, [promoSlides, user]);

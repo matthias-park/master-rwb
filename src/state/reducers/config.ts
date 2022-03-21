@@ -76,7 +76,7 @@ export const fetchConstants = createAsyncThunk<PageConfig, number | undefined>(
     const response = await getApi<RailsApiResponse<PageConfig>>(
       '/restapi/v1/content/constants',
       { cache: 'no-cache' },
-    ).catch(() => RailsApiResponseFallback);
+    ).catch(err => err);
 
     if (response.Success && response?.Data) {
       const constants = response?.Data;

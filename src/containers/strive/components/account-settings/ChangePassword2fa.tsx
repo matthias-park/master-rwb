@@ -40,7 +40,7 @@ const ChangePassword2fa = () => {
         enable: !user.authentication_enabled,
         pin,
       },
-    );
+    ).catch(err => err);
     if ((showPinInput || user.authentication_enabled) && result.Success) {
       setShowPinInput(false);
       updateUser();

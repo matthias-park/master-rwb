@@ -58,7 +58,7 @@ export const defaultBlocks = (
           selectValues: async () => {
             const res = await getApi<RailsApiResponse<Province | null>>(
               '/restapi/v1/provinces',
-            );
+            ).catch(err => err);
             if (res.Success && res.Data && Array.isArray(res.Data)) {
               return res.Data.map(province => ({
                 text: province.name,

@@ -28,7 +28,7 @@ import UserStatus from '../../types/UserStatus';
 import { setLogout, setUser } from '../reducers/user';
 import { ComponentSettings, Config, ProdEnv } from '../../constants';
 import * as Sentry from '@sentry/react';
-import { Span, Transaction, Status as SpanStatus } from '@sentry/types';
+import { Span, Transaction } from '@sentry/types';
 import io from 'socket.io-client';
 
 const insertGeoComplyScript = async (): Promise<boolean> =>
@@ -46,7 +46,7 @@ const insertGeoComplyScript = async (): Promise<boolean> =>
   });
 
 let GeoValidationTransaction: Transaction | null = null;
-
+let clearGeoComplyLicenseRetriesCount = 0;
 const fetchSetLicenseKey = (
   storeApi: MiddlewareAPI<Dispatch<AnyAction>, any>,
   data: any = {},
@@ -77,6 +77,12 @@ const fetchSetLicenseKey = (
       (expiresAt && dayjs(expiresAt).isBefore(dayjs())) ||
       data.forceGetNewLicense
     ) {
+      Sentry.addBreadcrumb({
+        category: 'geocomply',
+        type: 'navigation',
+        message: 'get geoComply license',
+        level: Sentry.Severity.Log,
+      });
       if (!ProdEnv) {
         console.log('geoComply getting new license from server');
       }
@@ -93,9 +99,20 @@ const fetchSetLicenseKey = (
             if (data.forceGetNewLicense) {
               dispatch(setValidationReason('licenseErrorRetry'));
             }
+          } else {
+            GeoValidationTransaction?.finish();
           }
         })
-        .catch(() => {});
+        .catch((err: RailsApiResponse<null>) => {
+          GeoValidationTransaction?.finish();
+          if (err.Unauthorized) return null;
+          if (clearGeoComplyLicenseRetriesCount < 3) {
+            clearGeoComplyLicenseRetriesCount++;
+            return fetchSetLicenseKey(storeApi, data);
+          }
+          Sentry.captureMessage('geocomply license failed request');
+          return false;
+        });
     } else {
       setLicenseKey(license, expiresAt);
     }
@@ -103,14 +120,20 @@ const fetchSetLicenseKey = (
 };
 
 let clearGeoComplyValidationRetriesCount = 0;
-const clearGeoComplyValidation = () => {
+const clearGeoComplyValidation = (user: UserStatus) => {
   if (!GeoValidationTransaction) {
-    GeoValidationTransaction = Sentry.startTransaction({
-      name: 'geoComply validation',
+    Sentry.withScope(scope => {
+      scope.setUser({
+        id: user.id?.toString(),
+        email: user.email,
+      });
+      GeoValidationTransaction = Sentry.startTransaction({
+        name: 'geoComply validation',
+      });
+      Sentry.getCurrentHub().configureScope(scope =>
+        scope.setSpan(GeoValidationTransaction!),
+      );
     });
-    Sentry.getCurrentHub().configureScope(scope =>
-      scope.setSpan(GeoValidationTransaction!),
-    );
   }
   postApi<RailsApiResponse<null>>(
     '/restapi/v1/user/clear_geocomply',
@@ -123,10 +146,12 @@ const clearGeoComplyValidation = () => {
       clearGeoComplyValidationRetriesCount = 0;
       return res.Success;
     })
-    .catch(() => {
+    .catch((err: RailsApiResponse<null>) => {
+      GeoValidationTransaction?.finish();
+      if (err.Unauthorized) return null;
       if (clearGeoComplyValidationRetriesCount < 3) {
         clearGeoComplyValidationRetriesCount++;
-        return clearGeoComplyValidation();
+        return clearGeoComplyValidation(user);
       }
       Sentry.captureMessage('clear geocomply validation failed request');
       return false;
@@ -145,17 +170,26 @@ const networkConnectionApi =
 const wsUrl = ComponentSettings?.v2Auth;
 let socketIO: any = null;
 const checkUserIp = async (): Promise<string | null> => {
+  const span = GeoValidationTransaction?.startChild({
+    op: 'ipCheck',
+    description: `get user ip`,
+  });
   if (Config.device?.isFirefox && wsUrl) {
     return new Promise(resolve => {
+      span?.setTag('type', 'ws');
       socketIO = io(wsUrl, {
         transports: ['websocket', 'polling'],
         forceNew: true,
       });
-      socketIO.on('connect_error', error =>
-        Sentry.captureMessage(`ws ip check connect error ${error}`),
-      );
+      socketIO.on('connect_error', error => {
+        Sentry.captureMessage(`ws ip check connect error ${error}`);
+        if (error) span?.setData('error', error);
+        span?.finish();
+        return resolve(null);
+      });
       socketIO.on('user-ip', ip => {
         socketIO.disconnect();
+        span?.finish();
         return resolve(ip);
       });
       socketIO.on('connect', () => {
@@ -163,16 +197,23 @@ const checkUserIp = async (): Promise<string | null> => {
       });
     });
   }
+  span?.setTag('type', 'get');
   return getApi<string>(`${window.location.origin}/api/get-ip`, {
     responseText: true,
-  }).catch(() => null);
+  })
+    .catch(() => null)
+    .finally(() => span?.finish());
 };
 let ipCheckLock = false;
 const networkChangeEvent = async (
   storeApi: MiddlewareAPI<Dispatch<AnyAction>, any>,
 ) => {
   const geoComplyState = (storeApi.getState() as RootState).geoComply;
-  if (!geoComplyState.isGeoAllowed || ipCheckLock) {
+  if (
+    !geoComplyState.isGeoAllowed ||
+    geoComplyState.geoInProgress ||
+    ipCheckLock
+  ) {
     return;
   }
   ipCheckLock = true;
@@ -180,6 +221,12 @@ const networkChangeEvent = async (
   ipCheckLock = false;
   const currentIp = geoComplyState.userIp;
   if (newIp && currentIp && newIp !== currentIp) {
+    Sentry.addBreadcrumb({
+      category: 'geocomply',
+      type: 'navigation',
+      message: 'ip change, clearing validation ',
+      level: Sentry.Severity.Log,
+    });
     storeApi.dispatch(setUserIp(newIp));
   } else if (!newIp || !currentIp) {
     Sentry.captureMessage(
@@ -214,8 +261,20 @@ const actions: {
         insertGeoComplyScript()
           .then(ready => {
             if (ready) {
+              Sentry.addBreadcrumb({
+                category: 'geocomply',
+                type: 'navigation',
+                message: 'geocomply ready',
+                level: Sentry.Severity.Log,
+              });
               dispatch(setReady());
               window.GeoComply?.Client.on('connect', () => {
+                Sentry.addBreadcrumb({
+                  category: 'geocomply',
+                  type: 'navigation',
+                  message: 'geocomply connected',
+                  level: Sentry.Severity.Log,
+                });
                 if (!ProdEnv) {
                   console.log('geoComply connected');
                 }
@@ -235,6 +294,12 @@ const actions: {
                   if (state.isConnected !== currentGeoComplyConnected) {
                     dispatch(setConnected(currentGeoComplyConnected));
                   }
+                  Sentry.addBreadcrumb({
+                    category: 'geocomply',
+                    type: 'navigation',
+                    message: `geocomply error code: ${code} message: ${msg}`,
+                    level: Sentry.Severity.Warning,
+                  });
                   if (!ProdEnv) {
                     console.log(
                       `geoComply error code: ${code} message: ${msg}`,
@@ -246,41 +311,77 @@ const actions: {
                   ) {
                     window.GeoComply?.Client.disconnect();
                     dispatch(setConnected(false));
+                    Sentry.addBreadcrumb({
+                      category: 'geocomply',
+                      type: 'navigation',
+                      message: `geocomply client not found`,
+                      level: Sentry.Severity.Warning,
+                    });
                     if (!ProdEnv) {
                       console.log(
                         'geoComply no client software on pc NOT found - disconnecting',
                       );
                     }
                   }
-                  if (geoComplyValidationSentrySpan) {
-                    geoComplyValidationSentrySpan.setTag(
-                      'geoComply.code',
-                      code,
-                    );
-                    geoComplyValidationSentrySpan.finish();
-                    GeoValidationTransaction?.setStatus(SpanStatus.Failed);
-                    GeoValidationTransaction?.finish();
-                    GeoValidationTransaction = null;
+                  if (
+                    ![
+                      GeoComplyErrorCodes.CLNT_ERROR_LOCAL_SERVICE_UNAVAILABLE,
+                      GeoComplyErrorCodes.UserRejected,
+                    ].includes(code)
+                  ) {
+                    Sentry.captureMessage('GeoComply: got error', {
+                      level: Sentry.Severity.Fatal,
+                      tags: {
+                        code,
+                      },
+                    });
                   }
+                  if (geoComplyValidationSentrySpan) {
+                    geoComplyValidationSentrySpan.setData('code', code);
+                    geoComplyValidationSentrySpan.finish();
+                  }
+                  GeoValidationTransaction?.setTag('geoComply.code', code);
+                  GeoValidationTransaction?.finish();
+                  GeoValidationTransaction = null;
                   if (!licenseKeyErrorCodes.includes(code)) {
                     dispatch(setError(code));
                   }
                 })
                 .on('geolocation', geoLocation => {
+                  Sentry.addBreadcrumb({
+                    category: 'geocomply',
+                    type: 'navigation',
+                    message: `geocomply got hash`,
+                    level: Sentry.Severity.Log,
+                  });
                   if (!ProdEnv) {
                     console.log('geoComply got geo-location hash');
                   }
                   if (geoComplyValidationSentrySpan) {
-                    geoComplyValidationSentrySpan.setTag('geoComply.code', 0);
+                    geoComplyValidationSentrySpan.setData('code', 0);
                     geoComplyValidationSentrySpan.finish();
                   }
+                  GeoValidationTransaction?.setTag('geoComply.code', 0);
                   dispatch(setGeoLocation(geoLocation));
+                })
+                .on('log', (message: string) => {
+                  if (!message.includes('Posting data to socket :')) {
+                    Sentry.addBreadcrumb({
+                      category: 'geocomply',
+                      type: 'navigation',
+                      message,
+                      level: Sentry.Severity.Log,
+                    });
+                  }
                 });
             }
           })
-          .catch(() =>
-            dispatch(setError(GeoComplyErrorCodes.FAILED_TO_LOAD_CLIENT)),
-          );
+          .catch(() => {
+            Sentry.captureMessage('GeoComply: failed to load js script', {
+              level: Sentry.Severity.Fatal,
+            });
+            dispatch(setError(GeoComplyErrorCodes.FAILED_TO_LOAD_CLIENT));
+          });
       }
     },
   },
@@ -316,10 +417,22 @@ const actions: {
             res?.Data.Success &&
             res?.Data.Code === GeoComplyValidateCodes.Ok
           ) {
+            Sentry.addBreadcrumb({
+              category: 'geocomply',
+              type: 'navigation',
+              message: `geocomply success validation`,
+              level: Sentry.Severity.Log,
+            });
             if (!ProdEnv) {
               console.log(`geoComply-.net success validation`);
             }
           } else if (typeof res?.Data.Code === 'number') {
+            Sentry.addBreadcrumb({
+              category: 'geocomply',
+              type: 'navigation',
+              message: `geocomply validation error: ${res.Data.Code}`,
+              level: Sentry.Severity.Log,
+            });
             if (!ProdEnv) {
               console.log(
                 `geoComply-.net ERROR got code: ${res.Data.Code} message: ${res.Data.Message}`,
@@ -329,7 +442,7 @@ const actions: {
               dispatch(setError(res.Data.Code));
             }
           }
-          GeoValidationTransaction?.setStatus(SpanStatus.Success);
+          GeoValidationTransaction?.setTag('validation.code', res?.Data.Code);
           dispatch(
             setGeoAllowed({
               isGeoAllowed: res?.Data.Code === GeoComplyValidateCodes.Ok,
@@ -337,7 +450,8 @@ const actions: {
             }),
           );
         })
-        .catch(() => {
+        .catch(err => {
+          if (err.Unauthorized) return null;
           if (validationRequestRetriesCount < 3) {
             validationRequestRetriesCount++;
             return actions[setGeoLocation.toString()]!.after?.(
@@ -360,7 +474,16 @@ const actions: {
       storeApi,
       actionPayload: { isGeoAllowed: boolean; revalidateIn: string | null },
     ) => {
+      if (revalidateTimeout) {
+        clearTimeout(revalidateTimeout);
+      }
       if (actionPayload.isGeoAllowed && actionPayload.revalidateIn) {
+        Sentry.addBreadcrumb({
+          category: 'geocomply',
+          type: 'navigation',
+          message: `revalidation in ${actionPayload.revalidateIn}sec`,
+          level: Sentry.Severity.Log,
+        });
         if (!ProdEnv) {
           console.log(`revalidation in ${actionPayload.revalidateIn}sec`);
         }
@@ -372,9 +495,6 @@ const actions: {
         }
         const revalidateTimeInMs = parseInt(actionPayload.revalidateIn) * 1000;
         if (!isNaN(revalidateTimeInMs)) {
-          if (revalidateTimeout) {
-            clearTimeout(revalidateTimeout);
-          }
           revalidateTimeout = setTimeout(() => {
             if (!ProdEnv) {
               console.log('revalidate timeout');
@@ -399,8 +519,6 @@ const actions: {
             revalidateIn: state.revalidateIn,
           }),
         );
-      } else if (state.error === GeoComplyErrorCodes.UserRejected) {
-        clearGeoComplyValidation();
       }
     },
   },
@@ -419,6 +537,12 @@ const actions: {
   [setLogout.toString()]: {
     before: storeApi => {
       const { dispatch } = storeApi;
+      Sentry.addBreadcrumb({
+        category: 'geocomply',
+        type: 'navigation',
+        message: `geoComply cleanup`,
+        level: Sentry.Severity.Log,
+      });
       if (!ProdEnv) {
         console.log('geoComply cleanup');
       }
@@ -455,6 +579,12 @@ const actions: {
         state.wasConnected &&
         !state.isConnected
       ) {
+        Sentry.addBreadcrumb({
+          category: 'geocomply',
+          type: 'navigation',
+          message: `reconnect after user change`,
+          level: Sentry.Severity.Log,
+        });
         if (!ProdEnv) {
           console.log('geoComply reconnect after user change');
         }
@@ -479,6 +609,7 @@ const actions: {
         clearInterval(ipCheckInterval);
         ipCheckInterval = null;
       }
+      GeoValidationTransaction?.finish();
     },
   },
   [setUserIp.toString()]: {
@@ -489,7 +620,7 @@ const actions: {
           clearInterval(ipCheckInterval);
           ipCheckInterval = null;
         }
-        clearGeoComplyValidation();
+        clearGeoComplyValidation(state.user);
       }
     },
   },
@@ -519,11 +650,17 @@ const geoComplyMiddleware: Middleware = storeApi => next => action => {
     state.geoComply.isConnected &&
     state.geoComply.validationReason
   ) {
-    GeoValidationTransaction = Sentry.startTransaction({
-      name: 'geoComply validation',
-      tags: {
-        'geoComply.reason': state.geoComply.validationReason,
-      },
+    Sentry.withScope(scope => {
+      scope.setUser({
+        id: state.user.id?.toString(),
+        email: state.user.email,
+      });
+      GeoValidationTransaction = Sentry.startTransaction({
+        name: 'geoComply validation',
+        tags: {
+          'geoComply.reason': state.geoComply.validationReason,
+        },
+      });
     });
     Sentry.getCurrentHub().configureScope(scope =>
       scope.setSpan(GeoValidationTransaction!),

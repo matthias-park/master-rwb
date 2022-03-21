@@ -79,13 +79,7 @@ export const blocks = (
             const url = '/restapi/v1/provinces';
             const res = await getApi<RailsApiResponse<Province | null>>(
               url,
-            ).catch(res => {
-              Sentry.captureMessage(
-                `Request failed ${url} with status ${res.status}`,
-                Sentry.Severity.Fatal,
-              );
-              return RailsApiResponseFallback;
-            });
+            ).catch(err => err);
             if (res.Success && res.Data && Array.isArray(res.Data)) {
               return res.Data.map(province => ({
                 text: province.name,
