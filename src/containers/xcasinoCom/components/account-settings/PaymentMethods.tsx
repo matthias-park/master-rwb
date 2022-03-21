@@ -1,12 +1,16 @@
 import React, { useRef } from 'react';
 import clsx from 'clsx';
 import { BankAccount } from '../../../../types/api/user/Withdrawal';
+import { useAuth } from '../../../../hooks/useAuth';
+import { useI18n } from '../../../../hooks/useI18n';
 
 interface PaymentMethodObj {
   id: string;
   value: string;
   icon?: string;
   title: string;
+  minDeposit?: number;
+  maxDeposit?: number;
   toSelect?: BankAccount;
   onChange?: () => void;
 }
@@ -28,6 +32,8 @@ const PaymentMethod = ({
   register,
 }: PaymentMethodsProps) => {
   const paymentContainer = useRef<HTMLLabelElement>(null);
+  const { user } = useAuth();
+  const { t } = useI18n();
 
   return (
     <li
@@ -58,10 +64,16 @@ const PaymentMethod = ({
             </div>
           )}
           <div className="payments-select__item-info-line">
-            Min <span className="ml-auto">10,00 €</span>
+            {t('min_deposit')}
+            <span className="ml-auto">
+              {acc?.minDeposit} ${user.currency}
+            </span>
           </div>
           <div className="payments-select__item-info-line">
-            Max <span className="ml-auto">5000,00 €</span>
+            {t('max_deposit')}
+            <span className="ml-auto">
+              {acc?.maxDeposit} ${user.currency}
+            </span>
           </div>
         </div>
       </label>
