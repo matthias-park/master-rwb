@@ -44,7 +44,13 @@ const AutocompleteTextInputV2 = ({
     name: id,
     control,
     defaultValue,
-    rules,
+    rules: {
+      ...rules,
+      validate: (value: string) => {
+        if ((!value || !value.trim()) && rules.required) return rules.required;
+        return rules.validate?.(value);
+      },
+    },
   });
   const [hasFocus, setHasFocus] = useState(false);
 
