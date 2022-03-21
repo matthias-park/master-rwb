@@ -3,7 +3,7 @@ module.exports = {
   domains: [
     {
       hostname: 'xcasinocom.local',
-      api: 'https://pla-dev.tglab.dev',
+      api: 'https://casinofiveapi-dev.tglab.dev',
     },
   ],
   theme: 'xcasinoCom',
@@ -22,7 +22,7 @@ module.exports = {
     format: 'eu',
   },
   componentSettings: {
-    v2Auth: 'wss://xcasino-ws.tglab.dev',
+    v2Auth: 'wss://casinofive-ws.tglab.dev',
     limitsOnAction: ['login', 'logout', 'playCasino'],
     modals: {
       limits: true,

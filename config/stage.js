@@ -60,8 +60,8 @@ module.exports = {
       basicAuthEnabled: true,
       domains: [
         {
-          hostname: 'xcasinocom-rj.tglab.dev',
-          api: 'https://pla-dev.tglab.dev',
+          hostname: 'casinofive-rj.tglab.dev',
+          api: 'https://casinofiveapi-dev.tglab.dev',
         },
       ],
     },
