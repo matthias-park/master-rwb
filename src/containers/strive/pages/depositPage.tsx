@@ -402,7 +402,6 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
             user.validator_status ===
               KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataOnly ||
             depositStatus.depositStatus === DepositStatus.Pending ||
-            !depositForm ||
             ((Franchise.gnogaz || Franchise.desertDiamond) && validatorNotOk)
           }
           loading={depositLoading && !depositForm}
