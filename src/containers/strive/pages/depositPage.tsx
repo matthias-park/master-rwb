@@ -138,8 +138,8 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
           depositStatus.setDepositId(response.Data.DepositRequestId, bankId);
         }
         if (response.Data?.InnerText && response.Data?.DepositRequestId) {
-          let html = atob(response.Data.InnerText);
-          const iframeHtml = html.includes('window.onload');
+          let htmlString = atob(response.Data.InnerText);
+          const iframeHtml = htmlString.includes('window.onload');
           const handlePaymentEvent = (
             eventType: CustomWindowEvents,
             eventData?: string | object,
@@ -185,7 +185,6 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
               return;
             }
           });
-          let htmlString = atob(response.Data.InnerText);
           if (!iframeHtml) {
             const htmlParser = new DOMParser();
             const html = htmlParser.parseFromString(htmlString, 'text/html');
