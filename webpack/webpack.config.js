@@ -343,7 +343,12 @@ module.exports = function (webpackEnv, buildFranchises) {
         cacheGroups: {
           vendor: {
             chunks: 'all',
-            test: /[\\/]node_modules[\\/]/,
+            test: module => {
+              return (
+                /[\\/]node_modules[\\/]/.test(module.context) &&
+                module.type === 'javascript/auto'
+              );
+            },
             name(module) {
               const packageName = module.context.match(
                 /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
