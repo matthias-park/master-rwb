@@ -12,6 +12,7 @@ import { Config } from '../../../../constants';
 import { Link } from 'react-router-dom';
 import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
 import SwiperCore, { Navigation } from 'swiper';
+import 'swiper/swiper.scss';
 SwiperCore.use([Navigation]);
 
 interface CasinoGroupSliderProps {

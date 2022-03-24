@@ -20,6 +20,8 @@ export const StyledCasinoPage = styled.main`
 `;
 
 export const StyledCasinoGame = styled.div`
+  border-radius: 16px;
+  overflow: hidden;
   .img-wrp {
     position: relative;
     height: 100%;
@@ -34,6 +36,7 @@ export const StyledCasinoGame = styled.div`
       display: flex;
       top: 0;
       left: -1px;
+      z-index: 1;
       .game-label {
         display: inline-block;
         box-shadow: 0px 2px 3px 0px #00000066;
@@ -186,27 +189,30 @@ export const StyledCasinoFilters = styled.div`
       top: 0;
       right: 0;
       height: 100%;
-      width: 30px;
+      width: 85px;
       background: linear-gradient(
         270deg,
         rgba(0, 0, 0, 1) 10%,
         rgba(0, 0, 0, 0) 85%
       );
+      ${mediaBreakpointDown('sm')} {
+        width: 30px;
+      }
     }
     .scroll-more {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      right: -15px;
+      right: 0;
       font-size: 26px;
       z-index: 1;
-      display: none;
     }
     ${mediaBreakpointDown('sm')} {
+      overflow: unset;
       justify-content: flex-start;
       order: 2;
       .scroll-more {
-        display: block;
+        right: -15px;
       }
     }
   }

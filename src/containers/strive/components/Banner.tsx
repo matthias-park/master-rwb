@@ -5,6 +5,7 @@ import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import { useConfig } from '../../../hooks/useConfig';
 import { FullBanner } from './styled/Banner';
 import useApi from '../../../hooks/useApi';
+import 'swiper/swiper.scss';
 
 interface BannerProps {
   zone?: string;
@@ -19,7 +20,7 @@ const Banner = ({ zone, images }: BannerProps) => {
   const isDataLoading = !data && !error && !images;
 
   return (
-    <FullBanner>
+    <FullBanner className="fade-in">
       {isDataLoading && (
         <div className="d-flex justify-content-center my-5 py-5">
           <Spinner animation="border" variant="white" className="mx-auto" />

@@ -50,7 +50,7 @@ const customStyles = css`
 
   .fade-in {
     animation-name: fadeIn;
-    animation-duration: 0.6s;
+    animation-duration: 0.5s;
   }
 
   @keyframes fadeIn {

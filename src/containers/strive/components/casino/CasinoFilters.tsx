@@ -16,6 +16,7 @@ import { Config } from '../../../../constants';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
 import { Provider } from '../../../../types/api/Casino';
+import throttle from 'lodash.throttle';
 
 interface FilterDropdownProps {
   title: string;
@@ -239,16 +240,19 @@ const CasinoFilters = () => {
   }, []);
 
   useEffect(() => {
-    checkCategoriesOverflow(categoriesContainerRef.current);
-  }, [categoriesContainerRef]);
+    checkCategoriesOverflow();
+  }, [categories]);
 
-  const checkCategoriesOverflow = el => {
-    if (el.offsetWidth + el.scrollLeft >= el.scrollWidth) {
+  const checkCategoriesOverflow = () => {
+    const el = categoriesContainerRef.current;
+    if (el && el.offsetWidth + el.scrollLeft >= el.scrollWidth) {
       setCategoriesOverflow(false);
     } else {
       setCategoriesOverflow(true);
     }
   };
+
+  const throttleOverflowHandler = throttle(checkCategoriesOverflow, 200);
 
   const linkToCategory = categoryData => {
     history.push(
@@ -264,7 +268,7 @@ const CasinoFilters = () => {
           <ul
             className="categories"
             ref={categoriesContainerRef}
-            onScroll={e => checkCategoriesOverflow(e.target)}
+            onScroll={throttleOverflowHandler}
           >
             <li
               className={clsx(

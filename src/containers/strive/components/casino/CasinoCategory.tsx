@@ -10,6 +10,7 @@ import { Game } from '../../../../types/api/Casino';
 import { StyledCasinoCategory } from '../styled/casinoStyles';
 import clsx from 'clsx';
 import { Config } from '../../../../constants';
+import { forceCheck } from 'react-lazyload';
 
 const CasinoCategory = () => {
   const { t, jsxT } = useI18n();
@@ -34,6 +35,10 @@ const CasinoCategory = () => {
   useEffect(() => {
     setParams(params);
   }, []);
+
+  useEffect(() => {
+    forceCheck();
+  }, [games, filteredGames]);
 
   useEffect(() => {
     if (!!data) {
