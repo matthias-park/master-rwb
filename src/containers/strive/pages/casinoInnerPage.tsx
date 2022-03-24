@@ -26,7 +26,7 @@ const CasinoInnerPage = () => {
   const { user } = useAuth();
   const location: any = useLocation();
   const history = useHistory();
-  const { id, gameId, name, provider } = location.state;
+  const { id, gameId, name, provider, demo } = location.state;
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const tablet = useDesktopWidth(768);
@@ -90,7 +90,7 @@ const CasinoInnerPage = () => {
       game_provider: provider,
       game_id: gameId,
       source: 1,
-      demo: 0,
+      demo: demo ? 1 : 0,
     }).catch((res: RailsApiResponse<null>) => {
       return res;
     });
@@ -138,19 +138,21 @@ const CasinoInnerPage = () => {
             </div>
           )}
           <div className="game-buttons">
-            <Button
-              onClick={() => enableModal(ComponentName.QuickDepositModal)}
-              variant="secondary"
-              className="pr-2 pl-3 mr-3"
-            >
-              <NumberFormat
-                value={user.balance}
-                thousandSeparator
-                displayType={'text'}
-                prefix={user.currency}
-              />
-              <i className={clsx(`icon-${Config.name}-plus`, 'ml-2')}></i>
-            </Button>
+            {user.logged_in && (
+              <Button
+                onClick={() => enableModal(ComponentName.QuickDepositModal)}
+                variant="secondary"
+                className="pr-2 pl-3 mr-3"
+              >
+                <NumberFormat
+                  value={user.balance}
+                  thousandSeparator
+                  displayType={'text'}
+                  prefix={user.currency}
+                />
+                <i className={clsx(`icon-${Config.name}-plus`, 'ml-2')}></i>
+              </Button>
+            )}
             <label className="game-button">
               <input
                 type="checkbox"

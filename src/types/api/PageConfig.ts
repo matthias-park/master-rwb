@@ -13,6 +13,7 @@ export interface PageConfig {
   welcome_casino_categories?: string[];
   featured_casino_categories?: string[];
   custom_content_pages?: string[];
+  hardcoded_categories_banners?: { slug: string; image: string }[];
 }
 
 export interface Sidebar {

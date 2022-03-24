@@ -40,6 +40,7 @@ type Config = {
   showPageLoader: boolean;
   domLoaded: boolean;
   mobileView: boolean;
+  hardcodedCategoriesBanners?: { slug: string; image: string }[];
 };
 
 export default Config;

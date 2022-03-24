@@ -9,6 +9,7 @@ import { StyledCasinoGame } from '../styled/casinoStyles';
 import { Config, ComponentName } from '../../../../constants';
 import { useI18n } from '../../../../hooks/useI18n';
 import { useModal } from '../../../../hooks/useModal';
+import useDesktopWidth from '../../../../hooks/useDesktopWidth';
 
 interface CasinoGameProps {
   featured?: boolean;
@@ -20,14 +21,16 @@ const CasinoGame = ({ gameData }: CasinoGameProps) => {
   const { loadGame, setSelectedGame } = useCasinoConfig();
   const labels = gameData?.features?.filter(feature => feature !== 'big_image');
   const { enableModal } = useModal();
+  const tablet = useDesktopWidth(992);
 
-  const showGameInfo = () => {
+  const showGameInfo = e => {
+    e.stopPropagation();
     gameData && setSelectedGame(gameData);
     enableModal(ComponentName.CasinoGameInfoModal);
   };
 
   return (
-    <StyledCasinoGame>
+    <StyledCasinoGame onClick={e => !tablet && showGameInfo(e)}>
       <div className="img-wrp">
         <LazyLoad
           height={'100%'}
@@ -61,24 +64,31 @@ const CasinoGame = ({ gameData }: CasinoGameProps) => {
         {gameData?.bottom_ribbon && (
           <span className="bottom-label">{gameData.bottom_ribbon}</span>
         )}
-        <div className="hover">
-          <span className="game-info-btn" onClick={showGameInfo}>
-            <i className={clsx(`icon-${Config.name}-game-info`)}>
-              <span className="path1"></span>
-              <span className="path2"></span>
-            </i>
-          </span>
-          <div className="buttons-wrp">
-            <Button
-              variant="primary"
-              className="mb-1"
-              onClick={() => gameData && loadGame(gameData)}
-            >
-              {t('play')}
-            </Button>
-            <Button variant="secondary">{t('try')}</Button>
+        {tablet && (
+          <div className="hover">
+            <span className="game-info-btn" onClick={showGameInfo}>
+              <i className={clsx(`icon-${Config.name}-game-info`)}>
+                <span className="path1"></span>
+                <span className="path2"></span>
+              </i>
+            </span>
+            <div className="buttons-wrp">
+              <Button
+                variant="primary"
+                className="mb-1"
+                onClick={() => gameData && loadGame(gameData)}
+              >
+                {t('play')}
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => gameData && loadGame(gameData, true)}
+              >
+                {t('try')}
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </StyledCasinoGame>
   );

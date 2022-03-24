@@ -2,26 +2,19 @@ import React from 'react';
 import Link from '../../../../components/Link';
 import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
 import { useAuth } from '../../../../hooks/useAuth';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useI18n } from '../../../../hooks/useI18n';
 import clsx from 'clsx';
+import { useRoutePath } from '../../../../hooks';
+import { PagesName } from '../../../../constants';
 
 const CasinoBottomNav = () => {
   const { t } = useI18n();
+  const location = useLocation();
   const { user } = useAuth();
-  const {
-    categories,
-    casinoType,
-    activeCategory,
-    activeProvider,
-  } = useCasinoConfig();
-  const categoryNew = categories?.find(category => category.name === 'New');
-  const categoryFeatured = categories?.find(
-    category => category.name === 'Featured',
-  );
+  const { casinoType } = useCasinoConfig();
   const params = useParams<{ category?: string; provider?: string }>();
-  const isFavouriteCategory = params.category === 'favourite';
-  const isLobby = !activeCategory && !activeProvider && !isFavouriteCategory;
+  const isLobby = location.pathname === useRoutePath(PagesName.CasinoPage);
 
   return (
     <ul className="bottom-nav">
@@ -32,44 +25,53 @@ const CasinoBottomNav = () => {
         </li>
       </Link>
       {user.logged_in && (
-        <Link to={`/${casinoType}/favourite`}>
-          <li
-            className={clsx(
-              'bottom-nav__item',
-              isFavouriteCategory && 'active',
-            )}
-          >
-            <i className="icon-gnogon-favourite-off"></i>
-            {t('bottom_casino_favourites')}
-          </li>
-        </Link>
+        <>
+          <Link to={`/${casinoType}/recent`}>
+            <li
+              className={clsx(
+                'bottom-nav__item',
+                params.category === 'recent' && 'active',
+              )}
+            >
+              <i className="icon-gnogon-recent"></i>
+              {t('bottom_casino_recent')}
+            </li>
+          </Link>
+          <Link to={`/${casinoType}/favourite`}>
+            <li
+              className={clsx(
+                'bottom-nav__item',
+                params.category === 'favourite' && 'active',
+              )}
+            >
+              <i className="icon-gnogon-favourite-off"></i>
+              {t('bottom_casino_favourites')}
+            </li>
+          </Link>
+        </>
       )}
-      {categoryNew && (
-        <Link to={`/${casinoType}/${categoryNew.slug}`}>
-          <li
-            className={clsx(
-              'bottom-nav__item',
-              activeCategory?.slug === categoryNew.slug && 'active',
-            )}
-          >
-            <i className="icon-gnogon-new"></i>
-            {t('bottom_casino_new')}
-          </li>
-        </Link>
-      )}
-      {categoryFeatured && (
-        <Link to={`/${casinoType}/${categoryFeatured.slug}`}>
-          <li
-            className={clsx(
-              'bottom-nav__item',
-              activeCategory?.slug === categoryFeatured.slug && 'active',
-            )}
-          >
-            <i className="icon-gnogon-featured"></i>
-            {t('bottom_casino_featured')}
-          </li>
-        </Link>
-      )}
+      <Link to={`/${casinoType}/new`}>
+        <li
+          className={clsx(
+            'bottom-nav__item',
+            params.category === 'new' && 'active',
+          )}
+        >
+          <i className="icon-gnogon-new"></i>
+          {t('bottom_casino_new')}
+        </li>
+      </Link>
+      <Link to={`/${casinoType}/featured`}>
+        <li
+          className={clsx(
+            'bottom-nav__item',
+            params.category === 'featured' && 'active',
+          )}
+        >
+          <i className="icon-gnogon-featured"></i>
+          {t('bottom_casino_featured')}
+        </li>
+      </Link>
     </ul>
   );
 };

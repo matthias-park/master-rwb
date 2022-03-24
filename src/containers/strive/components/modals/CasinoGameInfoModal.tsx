@@ -8,6 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import { StyledCasinoGameInfoModal } from '../styled/casinoStyles';
 import Button from 'react-bootstrap/Button';
 import NumberFormat from 'react-number-format';
+import { replaceStringTagsReact } from '../../../../utils/reactUtils';
 
 const CasinoGameInfoModal = () => {
   const { t } = useI18n();
@@ -31,8 +32,8 @@ const CasinoGameInfoModal = () => {
     setSelectedGame(null);
   };
 
-  const playGame = () => {
-    selectedGame && loadGame(selectedGame);
+  const playGame = (e, demo: boolean = false) => {
+    selectedGame && loadGame(selectedGame, demo);
     disableModal(ComponentName.CasinoGameInfoModal);
   };
 
@@ -139,13 +140,15 @@ const CasinoGameInfoModal = () => {
             </div>
             <div className="info-body__buttons">
               <Button variant="primary" onClick={playGame}>
-                {t('play')}
+                {user.logged_in ? t('play') : t('play_logged_out')}
               </Button>
-              <Button variant="secondary">{t('try')}</Button>
+              <Button variant="secondary" onClick={e => playGame(e, true)}>
+                {t('try')}
+              </Button>
             </div>
             {selectedGame?.short_description && (
               <p className="info-body__description">
-                {selectedGame?.short_description}
+                {replaceStringTagsReact(selectedGame?.short_description)}
               </p>
             )}
           </div>

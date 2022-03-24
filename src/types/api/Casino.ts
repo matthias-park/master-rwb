@@ -44,6 +44,7 @@ export type Filters = {
   providerFilterGroup: Provider[];
   genreFilterGroup: string[];
   themeFilterGroup: string[];
+  featureFilterGroup: string[];
 };
 
 export type SearchData = {

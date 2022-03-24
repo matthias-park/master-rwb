@@ -2,8 +2,10 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { snakeCase } from '../../../../utils/reactUtils';
 import clsx from 'clsx';
 import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
+import { useRoutePath } from '../../../../hooks';
+import { PagesName } from '../../../../constants';
 import Button from 'react-bootstrap/Button';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { useI18n } from '../../../../hooks/useI18n';
 import { useAuth } from '../../../../hooks/useAuth';
 import {
@@ -106,6 +108,10 @@ const MultiFilterDropdown = ({
   const { t } = useI18n();
   const [show, setShow] = useState(false);
 
+  useEffect(() => {
+    !filtersSelected && resetFilter();
+  }, [filtersSelected]);
+
   const removeFilter = e => {
     e.stopPropagation();
     resetFilter();
@@ -178,10 +184,8 @@ const CasinoFilters = () => {
     categories,
     setParams,
     activeCategory,
-    activeProvider,
     orderBy,
     setOrderBy,
-    searchData,
     setSearchData,
     games,
     providers,
@@ -192,8 +196,8 @@ const CasinoFilters = () => {
   const [categoriesOverflow, setCategoriesOverflow] = useState(false);
   const params = useParams<{ category?: string; provider?: string }>();
   const history = useHistory();
-  const isFavouriteCategory = params.category === 'favourite';
-  const isRecentCategory = params.category === 'recent';
+  const location = useLocation();
+  const lobbyPath = useRoutePath(PagesName.CasinoPage);
   const usedProviders = useMemo<Provider[]>(
     () =>
       games?.reduce((prev: any[], curr: any) => {
@@ -265,11 +269,7 @@ const CasinoFilters = () => {
             <li
               className={clsx(
                 'categories-item',
-                !activeCategory &&
-                  !activeProvider &&
-                  !isFavouriteCategory &&
-                  !isRecentCategory &&
-                  'active',
+                location.pathname === lobbyPath && 'active',
               )}
               onClick={() => linkToCategory(null)}
             >
@@ -289,13 +289,26 @@ const CasinoFilters = () => {
                 {category.name}
               </li>
             ))}
+            {[{ slug: 'new' }, { slug: 'featured' }].map(category => (
+              <li
+                key={category.slug}
+                className={clsx(
+                  'categories-item',
+                  params.category === category.slug && 'active',
+                )}
+                onClick={() => linkToCategory(category)}
+              >
+                <i className={clsx(`icon-${Config.name}-${category.slug}`)} />
+                {t(`${category.slug}_category`)}
+              </li>
+            ))}
             {user.logged_in && (
               <>
                 <span className="categories-seperator"></span>
                 <li
                   className={clsx(
                     'categories-item',
-                    isRecentCategory && 'active',
+                    params.category === 'recent' && 'active',
                   )}
                   onClick={() => linkToCategory({ slug: 'recent' })}
                 >
@@ -305,7 +318,7 @@ const CasinoFilters = () => {
                 <li
                   className={clsx(
                     'categories-item',
-                    isFavouriteCategory && 'active',
+                    params.category === 'favourite' && 'active',
                   )}
                   onClick={() => linkToCategory({ slug: 'favourite' })}
                 >
@@ -323,12 +336,14 @@ const CasinoFilters = () => {
           <Button
             variant="secondary"
             className="search-btn"
-            onClick={() => setSearchData({ ...searchData, showSearch: true })}
+            onClick={() =>
+              setSearchData(prev => ({ ...prev, showSearch: true }))
+            }
           >
             <i className={clsx(`icon-${Config.name}-search`)}></i>
             <span className="title">{t('search_title')}</span>
           </Button>
-          {activeCategory && (
+          {location.pathname !== lobbyPath && (
             <Button
               variant={showFilters ? 'primary' : 'secondary'}
               className={clsx('filter-btn', showFilters && 'open')}
@@ -347,7 +362,11 @@ const CasinoFilters = () => {
       <StyledCasinoFiltersMenu className={clsx(showFilters && 'show')}>
         <MultiFilterDropdown
           title={t('provider_filter_title')}
-          filtersSelected={filters.providerFilterGroup.length}
+          filtersSelected={
+            usedProviders.filter(provider =>
+              filters.providerFilterGroup.includes(provider),
+            ).length
+          }
           resetFilter={() =>
             setFilters(prev => ({ ...prev, providerFilterGroup: [] }))
           }
@@ -380,7 +399,10 @@ const CasinoFilters = () => {
         />
         <MultiFilterDropdown
           title={t('genre_filter_title')}
-          filtersSelected={filters.genreFilterGroup.length}
+          filtersSelected={
+            usedGenres.filter(genre => filters.genreFilterGroup.includes(genre))
+              .length
+          }
           resetFilter={() =>
             setFilters(prev => ({ ...prev, genreFilterGroup: [] }))
           }
@@ -410,7 +432,10 @@ const CasinoFilters = () => {
         />
         <MultiFilterDropdown
           title={t('theme_filter_title')}
-          filtersSelected={filters.themeFilterGroup.length}
+          filtersSelected={
+            usedThemes.filter(theme => filters.themeFilterGroup.includes(theme))
+              .length
+          }
           resetFilter={() =>
             setFilters(prev => ({ ...prev, themeFilterGroup: [] }))
           }

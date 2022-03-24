@@ -293,6 +293,9 @@ export const StyledCasinoFilters = styled.div`
       margin-left: unset;
       margin-bottom: 15px;
       width: 100%;
+      .filter-btn {
+        margin-left: 10px;
+      }
       .btn {
         height: 40px;
         i {
@@ -305,7 +308,6 @@ export const StyledCasinoFilters = styled.div`
         justify-content: flex-start;
         width: unset;
         padding: 0 15px;
-        margin-right: 10px;
         flex-grow: 1;
         .title {
           margin-top: unset;
@@ -631,7 +633,7 @@ export const StyledCasinoInnerPage = styled.div`
     right: 0;
     bottom: 0;
     background-color: ${props => props.theme.colors.black.main};
-    z-index: 999;
+    z-index: 9999;
     .game-nav {
       position: relative;
       display: flex;
@@ -754,6 +756,15 @@ export const StyledCasinoGameInfoModal = styled.div`
           span {
             font-size: 14px;
           }
+          ${mediaBreakpointDown('xs')} {
+            min-width: 60px;
+            small {
+              font-size: 11px;
+            }
+            span {
+              font-size: 12px;
+            }
+          }
         }
       }
       &__line:first-of-type {
@@ -766,11 +777,20 @@ export const StyledCasinoGameInfoModal = styled.div`
       max-width: 65px;
       margin-left: 40px;
       margin-right: 24px;
+      ${mediaBreakpointDown('xs')} {
+        max-width: 55px;
+        margin-right: 0;
+        margin-left: 15px;
+      }
     }
     &__buttons {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       grid-gap: 10px;
+      ${mediaBreakpointDown('xs')} {
+        grid-template-columns: unset;
+        grid-template-rows: repeat(2, 1fr);
+      }
     }
     &__description {
       margin-top: 24px;

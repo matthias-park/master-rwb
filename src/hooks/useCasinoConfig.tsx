@@ -47,7 +47,7 @@ type CasinoConfig = {
   recentGamesDataMutate: () => void;
   selectedGame: Game | null;
   setSelectedGame: (game: Game | null) => void;
-  loadGame: (game: Game) => void;
+  loadGame: (game: Game, demo?: boolean) => void;
 };
 
 enum CasinoType {
@@ -114,6 +114,7 @@ export const CasinoConfigProvider = props => {
     providerFilterGroup: [],
     genreFilterGroup: [],
     themeFilterGroup: [],
+    featureFilterGroup: [],
   });
   const [orderBy, setOrderBy] = useState<{ attr: string; type: string } | null>(
     null,
@@ -154,13 +155,14 @@ export const CasinoConfigProvider = props => {
     }
   };
 
-  const loadGame = gameData => {
-    if (user.logged_in) {
+  const loadGame = (gameData, demo = false) => {
+    if (user.logged_in || demo) {
       history.push(`/casino/game/${gameData?.slug}`, {
         id: gameData?.id,
         gameId: gameData?.game_id,
         name: gameData?.name,
         provider: gameData?.provider.name,
+        demo: demo,
       });
       window.__config__.componentSettings?.limitsOnAction?.includes(
         'playCasino',
@@ -212,6 +214,12 @@ export const CasinoConfigProvider = props => {
             filters.themeFilterGroup?.some(
               themeFilter => themeFilter === game.theme,
             ) || !filters.themeFilterGroup.length,
+        )
+        .filter(
+          game =>
+            filters.featureFilterGroup?.some(featureFilter =>
+              game?.features?.includes(featureFilter),
+            ) || !filters.featureFilterGroup.length,
         );
       setFilteredGames(filteredGames);
     }
@@ -220,18 +228,22 @@ export const CasinoConfigProvider = props => {
   useEffect(() => {
     setSelectedGame(null);
     setSearchData(prev => ({ ...prev, showSearch: false }));
-    setFilters(prev => ({
-      ...prev,
-      categoryFilter: null,
-      providerFilterGroup: [],
-    }));
     location.pathname.includes('live-casino')
       ? setCasinoType(CasinoType.LiveCasino)
       : setCasinoType(CasinoType.Casino);
 
+    if (Franchise.xCasino || Franchise.xCasinoCom) {
+      setFilters(prev => ({
+        ...prev,
+        categoryFilter: null,
+        providerFilterGroup: [],
+      }));
+    }
+
     if (Franchise.gnogon && !location.pathname.includes('casino')) {
       setFilters(prev => ({
         ...prev,
+        providerFilterGroup: [],
         genreFilterGroup: [],
         themeFilterGroup: [],
       }));
