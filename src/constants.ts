@@ -455,6 +455,7 @@ export const Franchise = {
   gnogaz: Config.name === FranchiseNames.Gnogaz,
   gnogon: Config.name === FranchiseNames.Gnogon,
   xCasinoCom: Config.name === FranchiseNames.XcasinoCom,
+  mothership: Config.name === FranchiseNames.Mothership,
 };
 
 export const usaOnlyBrand = [

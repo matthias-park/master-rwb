@@ -187,7 +187,7 @@ const DepositForm = ({
     (!!bankAccountDataLoading && !!selectedBank?.prefill);
   return (
     <div className={clsx('input-container mb-4', className)}>
-      {Franchise.strive && (
+      {(Franchise.strive || Franchise.mothership) && (
         <div className="input-container__header d-flex align-items-center">
           <h2 className="ml-3 mb-0">{t('deposit_input_container_title')}</h2>
         </div>

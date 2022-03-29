@@ -489,7 +489,9 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
       <div
         ref={containerRef}
         className={clsx(
-          desktopWidth && (Franchise.strive || Franchise.bnl) && 'mt-5',
+          desktopWidth &&
+            (Franchise.strive || Franchise.bnl || Franchise.mothership) &&
+            'mt-5',
         )}
       />
       {!context.showKambi && (

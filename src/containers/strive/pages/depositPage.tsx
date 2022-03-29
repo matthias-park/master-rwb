@@ -369,7 +369,7 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
           {jsxT('deposit_page_title')}
         </h1>
       )}
-      {Franchise.strive && (
+      {(Franchise.strive || Franchise.mothership) && (
         <>
           <p className="mb-4">{jsxT('deposit_page_sub_text')}</p>
           <div className="play-responsible-block mb-3 px-2">

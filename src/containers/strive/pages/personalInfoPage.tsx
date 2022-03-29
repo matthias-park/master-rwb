@@ -122,7 +122,9 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
               </CustomAlert>
               <SettingsForm
                 id={id}
-                fields={Franchise.strive ? fields : null}
+                fields={
+                  Franchise.strive || Franchise.mothership ? fields : null
+                }
                 blocks={
                   (Franchise.gnogaz ||
                     Franchise.desertDiamond ||
