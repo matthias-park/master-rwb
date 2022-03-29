@@ -119,6 +119,7 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
         ReturnSuccessUrl: `${window.location.origin}${depositBaseUrl}/loading`,
         ReturnCancelUrl: `${window.location.origin}${depositBaseUrl}/cancel`,
         ReturnErrorUrl: `${window.location.origin}${depositBaseUrl}/error`,
+        ReturnPendingUrl: `${window.location.origin}${depositBaseUrl}/loading`,
         locale: 'en_US',
         AccountId: AccountId || null,
         AccountPrefillRequested: !!AccountId || AccountPrefillRequested,

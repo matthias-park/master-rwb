@@ -66,6 +66,7 @@ export interface DepositRequest {
   BankId: number;
   Amount: number;
   ReturnSuccessUrl: string;
+  ReturnPendingUrl?: string;
   AccountId?: number | null;
   Prefill?: boolean;
 }
