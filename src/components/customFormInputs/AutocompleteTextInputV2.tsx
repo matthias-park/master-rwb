@@ -69,7 +69,14 @@ const AutocompleteTextInputV2 = ({
         field.onChange(formatInputValue(item));
       }}
       inputValue={field.value}
-      onInputValueChange={value => {
+      onInputValueChange={(value, state: any) => {
+        if (
+          ![
+            Downshift.stateChangeTypes.changeInput,
+            Downshift.stateChangeTypes.clickItem,
+          ].includes(state.type)
+        )
+          return;
         onInput?.(value);
       }}
       itemToString={formatInputValue}
