@@ -37,11 +37,11 @@ const Banner = ({ zone, images }: BannerProps) => {
           grabCursor
           effect="slide"
         >
-          <SwiperSlide>
-            {(data?.Data || images)?.map((banner, i) => (
+          {(data?.Data || images)?.map((banner, i) => (
+            <SwiperSlide>
               <img key={`${banner.image}_${i}`} src={banner.image} />
-            ))}
-          </SwiperSlide>
+            </SwiperSlide>
+          ))}
         </Swiper>
       )}
     </FullBanner>
