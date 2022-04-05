@@ -19,6 +19,7 @@
       <% } %>
         <% } %>
   <title></title>
+  <%= htmlWebpackPlugin.tags.headTags.filter((tag)=> tag.tagName === 'link') %>
   <script>
     (function() {
       window.__config__ = {...JSON.parse('<%= htmlWebpackPlugin.options.config %>'), ...(window.requestData || {})};
@@ -28,11 +29,6 @@
       }
     })()
   </script>
-  <% if (htmlWebpackPlugin.files.css.find(href=> href.includes(htmlWebpackPlugin.options.franchiseTheme))) { %>
-    <link
-      href="<%= htmlWebpackPlugin.files.css.find(href => href.includes(htmlWebpackPlugin.options.franchiseTheme)) %>"
-      rel="stylesheet">
-  <% } %>
   <%= htmlWebpackPlugin.tags.headTags.filter((tag)=> tag.tagName === 'meta').join('') %>
 </head>
 
