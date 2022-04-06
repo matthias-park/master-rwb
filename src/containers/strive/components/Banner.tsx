@@ -5,6 +5,7 @@ import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import { useConfig } from '../../../hooks/useConfig';
 import { FullBanner } from './styled/Banner';
 import useApi from '../../../hooks/useApi';
+import Link from '../../../components/Link';
 import 'swiper/swiper.scss';
 
 interface BannerProps {
@@ -39,7 +40,9 @@ const Banner = ({ zone, images }: BannerProps) => {
         >
           {(data?.Data || images)?.map((banner, i) => (
             <SwiperSlide>
-              <img key={`${banner.image}_${i}`} src={banner.image} />
+              <Link to={banner?.link || '#'}>
+                <img key={`${banner.image}_${i}`} src={banner.image} />
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>
