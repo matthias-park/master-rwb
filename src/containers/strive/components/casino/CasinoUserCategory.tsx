@@ -3,6 +3,7 @@ import CasinoGame from './CasinoGame';
 import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
 import { useI18n } from '../../../../hooks/useI18n';
 import { useParams } from 'react-router-dom';
+import Spinner from 'react-bootstrap/Spinner';
 import { StyledCasinoCategory } from '../styled/casinoStyles';
 import clsx from 'clsx';
 import { Config } from '../../../../constants';
@@ -16,11 +17,13 @@ const CasinoUserCategory = () => {
     setGames,
     favouriteGames,
     recentGames,
+    filters,
   } = useCasinoConfig();
   const params = useParams<{ category?: string; providers?: string }>();
   const foundGames = filteredGames || games;
   const isFavouriteCategory = params.category === 'favourite';
   const isRecentCategory = params.category === 'recent';
+  const isDataLoading = filters.loading;
 
   useEffect(() => {
     setParams(params);
@@ -52,6 +55,11 @@ const CasinoUserCategory = () => {
           </>
         )}
       </div>
+      {isDataLoading && (
+        <div className="d-flex my-3">
+          <Spinner animation="border" variant="white" className="mx-auto" />
+        </div>
+      )}
       <div className="games-wrp">
         {foundGames?.map(gameData => (
           <CasinoGame key={gameData.id} gameData={gameData} />

@@ -4,19 +4,23 @@ import debounce from 'lodash.debounce';
 import clsx from 'clsx';
 import { StyledCasinoSearch } from '../styled/casinoStyles';
 import { Config } from '../../../../constants';
+import { SearchActions } from '../../../../types/api/Casino';
 
 const CasinoSearch = () => {
   const { searchData, setSearchData } = useCasinoConfig();
 
   useEffect(() => {
-    setSearchData({ ...searchData, searchValue: '' });
+    setSearchData({ type: SearchActions.SetValue, payload: '' });
   }, []);
 
   const setSearchQuery = event => {
-    setSearchData({ ...searchData, searchValue: event.target.value });
+    setSearchData({
+      type: SearchActions.SetValue,
+      payload: event.target.value,
+    });
   };
 
-  const debouncedChangeHandler = debounce(setSearchQuery, 400);
+  const debouncedChangeHandler = debounce(setSearchQuery, 700);
 
   return (
     <StyledCasinoSearch>
@@ -24,7 +28,7 @@ const CasinoSearch = () => {
       <input placeholder="Search Games" onChange={debouncedChangeHandler} />
       <i
         className={clsx(`icon-${Config.name}-close`, 'close-btn')}
-        onClick={() => setSearchData({ ...searchData, showSearch: false })}
+        onClick={() => setSearchData({ type: SearchActions.Hide })}
       />
     </StyledCasinoSearch>
   );

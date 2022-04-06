@@ -15,7 +15,11 @@ import {
 import { Config } from '../../../../constants';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
-import { Provider } from '../../../../types/api/Casino';
+import {
+  Provider,
+  FilterActions,
+  SearchActions,
+} from '../../../../types/api/Casino';
 import throttle from 'lodash.throttle';
 
 interface FilterDropdownProps {
@@ -351,9 +355,7 @@ const CasinoFilters = () => {
           <Button
             variant="secondary"
             className="search-btn"
-            onClick={() =>
-              setSearchData(prev => ({ ...prev, showSearch: true }))
-            }
+            onClick={() => setSearchData({ type: SearchActions.Show })}
           >
             <i className={clsx(`icon-${Config.name}-search`)}></i>
             <span className="title">{t('search_title')}</span>
@@ -382,9 +384,7 @@ const CasinoFilters = () => {
               filters.providerFilterGroup.includes(provider),
             ).length
           }
-          resetFilter={() =>
-            setFilters(prev => ({ ...prev, providerFilterGroup: [] }))
-          }
+          resetFilter={() => setFilters({ type: FilterActions.ResetProvider })}
           items={
             usedProviders?.map(provider => ({
               name: t(`provider_name_${provider.slug}`),
@@ -395,19 +395,14 @@ const CasinoFilters = () => {
                 filters.providerFilterGroup.some(
                   providerFilter => providerFilter.id === provider.id,
                 )
-                  ? setFilters(prev => ({
-                      ...prev,
-                      providerFilterGroup: prev.providerFilterGroup.filter(
-                        providerFilter => providerFilter.id !== provider.id,
-                      ),
-                    }))
-                  : setFilters(prev => ({
-                      ...prev,
-                      providerFilterGroup: [
-                        ...prev.providerFilterGroup,
-                        provider,
-                      ],
-                    }));
+                  ? setFilters({
+                      type: FilterActions.RemoveProvider,
+                      payload: provider,
+                    })
+                  : setFilters({
+                      type: FilterActions.AddProvider,
+                      payload: provider,
+                    });
               },
             })) || []
           }
@@ -418,9 +413,7 @@ const CasinoFilters = () => {
             usedGenres.filter(genre => filters.genreFilterGroup.includes(genre))
               .length
           }
-          resetFilter={() =>
-            setFilters(prev => ({ ...prev, genreFilterGroup: [] }))
-          }
+          resetFilter={() => setFilters({ type: FilterActions.ResetGenre })}
           items={
             usedGenres?.map(genre => ({
               name: t(`genre_name_${snakeCase(genre)}`),
@@ -431,16 +424,14 @@ const CasinoFilters = () => {
                 filters.genreFilterGroup.some(
                   genreFilter => genreFilter === genre,
                 )
-                  ? setFilters(prev => ({
-                      ...prev,
-                      genreFilterGroup: prev.genreFilterGroup.filter(
-                        genreFilter => genreFilter !== genre,
-                      ),
-                    }))
-                  : setFilters(prev => ({
-                      ...prev,
-                      genreFilterGroup: [...prev.genreFilterGroup, genre],
-                    }));
+                  ? setFilters({
+                      type: FilterActions.RemoveGenre,
+                      payload: genre,
+                    })
+                  : setFilters({
+                      type: FilterActions.AddGenre,
+                      payload: genre,
+                    });
               },
             })) || []
           }
@@ -451,9 +442,7 @@ const CasinoFilters = () => {
             usedThemes.filter(theme => filters.themeFilterGroup.includes(theme))
               .length
           }
-          resetFilter={() =>
-            setFilters(prev => ({ ...prev, themeFilterGroup: [] }))
-          }
+          resetFilter={() => setFilters({ type: FilterActions.ResetTheme })}
           items={
             usedThemes?.map(theme => ({
               name: t(`theme_name_${snakeCase(theme)}`),
@@ -464,16 +453,14 @@ const CasinoFilters = () => {
                 filters.themeFilterGroup.some(
                   themeFilter => themeFilter === theme,
                 )
-                  ? setFilters(prev => ({
-                      ...prev,
-                      themeFilterGroup: prev.themeFilterGroup.filter(
-                        themeFilter => themeFilter !== theme,
-                      ),
-                    }))
-                  : setFilters(prev => ({
-                      ...prev,
-                      themeFilterGroup: [...prev.themeFilterGroup, theme],
-                    }));
+                  ? setFilters({
+                      type: FilterActions.RemoveTheme,
+                      payload: theme,
+                    })
+                  : setFilters({
+                      type: FilterActions.AddTheme,
+                      payload: theme,
+                    });
               },
             })) || []
           }

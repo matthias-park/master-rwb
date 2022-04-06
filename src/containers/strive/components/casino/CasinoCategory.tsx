@@ -21,6 +21,7 @@ const CasinoCategory = () => {
     games,
     filteredGames,
     setGames,
+    filters,
   } = useCasinoConfig();
   const params = useParams<{ category?: string; providers?: string }>();
   const categoryId = activeCategory?.id;
@@ -30,7 +31,7 @@ const CasinoCategory = () => {
       : '',
   );
   const foundGames = filteredGames || games;
-  const isDataLoading = !data && !error;
+  const isDataLoading = (!data && !error) || filters.loading;
 
   useEffect(() => {
     setParams(params);
@@ -64,7 +65,7 @@ const CasinoCategory = () => {
           <Spinner animation="border" variant="white" className="mx-auto" />
         </div>
       )}
-      {!!data && (
+      {!!data && !filters.loading && (
         <>
           <div className="games-wrp">
             {foundGames?.map(gameData => (

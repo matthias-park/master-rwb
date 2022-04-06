@@ -28,6 +28,7 @@ const CasinoFilteredCategory = ({
     categories,
     games,
     filteredGames,
+    filters,
   } = useCasinoConfig();
   const params = useParams<{ category?: string; providers?: string }>();
   const allCategory = useMemo(
@@ -44,7 +45,7 @@ const CasinoFilteredCategory = ({
     return filter ? data?.Data.filter(filter) : [];
   }, [data]);
   const foundGames = filteredGames || games;
-  const isDataLoading = !data && !error;
+  const isDataLoading = (!data && !error) || filters.loading;
 
   useEffect(() => {
     setParams(params);
@@ -69,7 +70,7 @@ const CasinoFilteredCategory = ({
           <Spinner animation="border" variant="white" className="mx-auto" />
         </div>
       )}
-      {!!data && (
+      {!!data && !filters.loading && (
         <>
           <div className="games-wrp">
             {foundGames?.map(gameData => (

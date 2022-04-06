@@ -40,7 +40,8 @@ export type Game = {
 };
 
 export type Filters = {
-  categoryFilter: Category | null;
+  loading: boolean;
+  categoryFilterGroup: Category[];
   providerFilterGroup: Provider[];
   genreFilterGroup: string[];
   themeFilterGroup: string[];
@@ -53,3 +54,38 @@ export type SearchData = {
   games: Game[] | null;
   loading: boolean;
 };
+
+export enum CasinoType {
+  Casino = 'casino',
+  LiveCasino = 'live-casino',
+  Unset = 'unset',
+}
+
+export enum SearchActions {
+  Show = 1,
+  Hide = 2,
+  SetValue = 3,
+  SetGames = 4,
+  StartLoading = 5,
+  FinishLoading = 6,
+}
+
+export enum FilterActions {
+  StartLoading = 'loading-start',
+  FinishLoading = 'loading-finish',
+  AddCategory = 'category-add',
+  AddProvider = 'provider-add',
+  AddGenre = 'genre-add',
+  AddTheme = 'theme-add',
+  AddFeature = 'feature-add',
+  RemoveCategory = 'category-remove',
+  RemoveProvider = 'provider-remove',
+  RemoveGenre = 'genre-remove',
+  RemoveTheme = 'theme-remove',
+  RemoveFeature = 'feature-remove',
+  ResetCategory = 'category-reset',
+  ResetProvider = 'provider-reset',
+  ResetGenre = 'genre-reset',
+  ResetTheme = 'theme-reset',
+  ResetFeature = 'feature-reset',
+}
