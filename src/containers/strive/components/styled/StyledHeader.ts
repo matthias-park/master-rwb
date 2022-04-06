@@ -549,7 +549,7 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
     }
 
     ${mediaBreakpointDown('xs')} {
-      right: 22px;
+      right: 16px;
     }
   }
 `;
@@ -732,7 +732,7 @@ export const StyledRowHeader = styled('header')`
       right: -11px !important;
     }
     ${mediaBreakpointDown('xs')} {
-      right: -16px !important;
+      right: -10px !important;
     }
   }
 `;

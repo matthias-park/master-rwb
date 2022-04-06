@@ -22,12 +22,11 @@ const Banner = ({ zone, images }: BannerProps) => {
 
   return (
     <FullBanner className="fade-in">
-      {isDataLoading && (
-        <div className="d-flex justify-content-center my-5 py-5">
+      {isDataLoading ? (
+        <div className="m-auto">
           <Spinner animation="border" variant="white" className="mx-auto" />
         </div>
-      )}
-      {images?.length === 1 ? (
+      ) : images?.length === 1 ? (
         <img src={images[0].image} />
       ) : (
         <Swiper

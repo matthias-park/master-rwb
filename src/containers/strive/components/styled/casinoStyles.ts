@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { mediaBreakpointDown } from './breakpoints';
 import { Config } from '../../../../constants';
 import { FullBanner } from './Banner';
@@ -14,8 +14,20 @@ export const StyledCasinoPage = styled.main`
     padding: 0;
   }
   ${FullBanner} {
+    display: flex;
+    align-items: center;
     aspect-ratio: 16 / 3.7;
     height: 100%;
+    margin-top: 0;
+  }
+`;
+
+const load = keyframes`
+  from {
+      left: -100%;
+  }
+  to   {
+      left: 100%;
   }
 `;
 
@@ -26,10 +38,36 @@ export const StyledCasinoGame = styled.div`
     position: relative;
     height: 100%;
     border-radius: 16px;
+    aspect-ratio: 1 / 1;
     overflow: hidden;
+    .fade-appear {
+      opacity: 0;
+    }
+    .fade-appear.fade-appear-active {
+      opacity: 1;
+      transition: opacity 1000ms;
+    }
     .img {
       max-width: 100%;
       transition: filter 0.3s;
+    }
+    .load {
+      &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: -100%;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(200, 200, 200, 0.15) 50%,
+          transparent 100%
+        );
+        animation: ${load} 2s cubic-bezier(0.4, 0, 0.2, 1) 0.5s infinite;
+      }
     }
     .labels-wrp {
       position: absolute;
@@ -256,7 +294,8 @@ export const StyledCasinoFilters = styled.div`
       }
     }
     &-seperator {
-      border-left: 1px solid #444;
+      background: radial-gradient(circle, #444 40%, rgba(0, 0, 0, 0) 130%);
+      width: 1px;
       ${mediaBreakpointDown('sm')} {
         padding-left: 15px;
       }
@@ -534,7 +573,7 @@ export const StyledCasinoSearchContainer = styled.div`
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.9);
-  z-index: 9999;
+  z-index: 1100;
   .search-container-wrp {
     margin: 80px auto;
     width: 80%;
@@ -639,7 +678,7 @@ export const StyledCasinoInnerPage = styled.div`
     right: 0;
     bottom: 0;
     background-color: ${props => props.theme.colors.black.main};
-    z-index: 9999;
+    z-index: 1100;
     .game-nav {
       position: relative;
       display: flex;

@@ -153,19 +153,21 @@ const CasinoInnerPage = () => {
                 <i className={clsx(`icon-${Config.name}-plus`, 'ml-2')}></i>
               </Button>
             )}
-            <label className="game-button">
-              <input
-                type="checkbox"
-                className="d-none"
-                onChange={setFavouriteCallback}
-              />
-              <i
-                className={`icon-${Config.name}-favourite-${
-                  isFavouriteIconState ? 'on' : 'off'
-                }`}
-                onClick={() => setIsFavouriteIconState(!isFavouriteIconState)}
-              />
-            </label>
+            {user.logged_in && (
+              <label className="game-button">
+                <input
+                  type="checkbox"
+                  className="d-none"
+                  onChange={setFavouriteCallback}
+                />
+                <i
+                  className={`icon-${Config.name}-favourite-${
+                    isFavouriteIconState ? 'on' : 'off'
+                  }`}
+                  onClick={() => setIsFavouriteIconState(!isFavouriteIconState)}
+                />
+              </label>
+            )}
             <span className="game-button" onClick={fullscreen}>
               <i className={`icon-${Config.name}-full-screen`} />
             </span>

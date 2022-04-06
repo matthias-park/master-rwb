@@ -77,7 +77,7 @@ module.exports = {
     logoPosition: 'left',
     borderBottom: '1px solid #333',
     topOffset: 15,
-    marginBottom: 40,
+    marginBottom: 45,
     navHeightMobile: 50,
   },
   footer: {

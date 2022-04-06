@@ -203,7 +203,7 @@ const CasinoFilters = () => {
     () =>
       games?.reduce((prev: any[], curr: any) => {
         const isIncluded = prev.some(
-          provider => provider.id === curr.provider.id,
+          provider => provider?.id === curr.provider?.id,
         );
         const providerItem = providers.find(
           provider => provider.id === curr.provider.id,

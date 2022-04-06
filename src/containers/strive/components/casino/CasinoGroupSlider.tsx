@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import CasinoGame from './CasinoGame';
 import clsx from 'clsx';
@@ -12,6 +12,7 @@ import { Config } from '../../../../constants';
 import { Link } from 'react-router-dom';
 import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
 import SwiperCore, { Navigation } from 'swiper';
+import { forceCheck } from 'react-lazyload';
 import 'swiper/swiper.scss';
 SwiperCore.use([Navigation]);
 
@@ -57,106 +58,108 @@ export const CasinoGroupSlider = ({
     return groupedGames;
   }, [currentGames]);
 
+  useEffect(() => {
+    forceCheck();
+  }, [currentGames]);
+
   return (
-    <>
+    <StyledGroupSlider>
+      {name && (
+        <div className="title-wrp">
+          <i
+            className={clsx(
+              `icon-${Config.name}-${category?.icon}`,
+              'title-icon',
+            )}
+          />
+          <h5 className="title">{name}</h5>
+          <div className="navigation">
+            <i
+              className={clsx(
+                `icon-${Config.name}-left`,
+                `swiper-button-prev-${id}`,
+              )}
+            />
+            <i
+              className={clsx(
+                `icon-${Config.name}-right`,
+                `swiper-button-next-${id}`,
+              )}
+            />
+          </div>
+          <Link
+            to={`/${casinoType}/${category?.slug}`}
+            className="all-games-link"
+          >
+            {t('casino_see_all')}
+          </Link>
+        </div>
+      )}
       {isDataLoading && (
-        <div className="d-flex my-5">
+        <div className="d-flex py-5 mb-3">
           <Spinner animation="border" variant="white" />
         </div>
       )}
       {currentGames && (
-        <StyledGroupSlider>
-          {name && (
-            <div className="title-wrp">
-              <i
-                className={clsx(
-                  `icon-${Config.name}-${category?.icon}`,
-                  'title-icon',
+        <div className="wrp">
+          <Swiper
+            key={`${id}-${name}`}
+            slidesOffsetAfter={0}
+            spaceBetween={16}
+            slidesPerView={2}
+            slidesPerGroup={2}
+            grabCursor
+            effect="slide"
+            lazy={true}
+            navigation={{
+              nextEl: `.swiper-button-next-${id}`,
+              prevEl: `.swiper-button-prev-${id}`,
+              disabledClass: 'disabled',
+            }}
+            breakpoints={{
+              '1920.98': {
+                slidesPerView: 7,
+              },
+              '1600.98': {
+                slidesPerView: 6,
+              },
+              '1366.98': {
+                slidesPerView: 5,
+              },
+              '1200.98': {
+                slidesPerView: 5,
+              },
+              '768.98': {
+                slidesPerView: 3,
+              },
+            }}
+          >
+            {gamesInGroups.map((gamesGroup, index) => (
+              <div key={`casino-group-${index}`}>
+                {gamesGroup.length === 1 &&
+                gamesGroup[0].features?.includes('big_image') ? (
+                  <SwiperSlide key={gamesGroup[0]?.id}>
+                    <CasinoGame
+                      key={gamesGroup[0].id}
+                      gameData={gamesGroup[0]}
+                      featured
+                    />
+                  </SwiperSlide>
+                ) : (
+                  <SwiperSlide key={gamesGroup[0]?.id}>
+                    <div className="games-group">
+                      {gamesGroup.map(gameData => (
+                        <CasinoGame key={gameData.id} gameData={gameData} />
+                      ))}
+                    </div>
+                  </SwiperSlide>
                 )}
-              />
-              <h5 className="title">{name}</h5>
-              <div className="navigation">
-                <i
-                  className={clsx(
-                    `icon-${Config.name}-left`,
-                    `swiper-button-prev-${id}`,
-                  )}
-                />
-                <i
-                  className={clsx(
-                    `icon-${Config.name}-right`,
-                    `swiper-button-next-${id}`,
-                  )}
-                />
               </div>
-              <Link
-                to={`/${casinoType}/${category?.slug}`}
-                className="all-games-link"
-              >
-                {t('casino_see_all')}
-              </Link>
-            </div>
-          )}
-          <div className="wrp">
-            <Swiper
-              key={`${id}-${name}`}
-              slidesOffsetAfter={0}
-              spaceBetween={16}
-              slidesPerView={2}
-              slidesPerGroup={2}
-              grabCursor
-              effect="slide"
-              lazy={true}
-              navigation={{
-                nextEl: `.swiper-button-next-${id}`,
-                prevEl: `.swiper-button-prev-${id}`,
-                disabledClass: 'disabled',
-              }}
-              breakpoints={{
-                '1920.98': {
-                  slidesPerView: 7,
-                },
-                '1600.98': {
-                  slidesPerView: 6,
-                },
-                '1366.98': {
-                  slidesPerView: 5,
-                },
-                '1200.98': {
-                  slidesPerView: 5,
-                },
-                '768.98': {
-                  slidesPerView: 3,
-                },
-              }}
-            >
-              {gamesInGroups.map((gamesGroup, index) => (
-                <div key={`casino-group-${index}`}>
-                  {gamesGroup.length === 1 &&
-                  gamesGroup[0].features?.includes('big_image') ? (
-                    <SwiperSlide key={gamesGroup[0]?.id}>
-                      <CasinoGame
-                        key={gamesGroup[0].id}
-                        gameData={gamesGroup[0]}
-                        featured
-                      />
-                    </SwiperSlide>
-                  ) : (
-                    <SwiperSlide key={gamesGroup[0]?.id}>
-                      <div className="games-group">
-                        {gamesGroup.map(gameData => (
-                          <CasinoGame key={gameData.id} gameData={gameData} />
-                        ))}
-                      </div>
-                    </SwiperSlide>
-                  )}
-                </div>
-              ))}
-            </Swiper>
-          </div>
-        </StyledGroupSlider>
+            ))}
+          </Swiper>
+        </div>
       )}
-    </>
+    </StyledGroupSlider>
   );
 };
 
