@@ -108,6 +108,19 @@ const MultiFilterDropdown = ({
 }: MultiFilterDropdownProps) => {
   const { t } = useI18n();
   const [show, setShow] = useState(false);
+  const selectedItems = useMemo(
+    () => (items ? items.filter(item => item.isChecked) : []),
+    [items],
+  );
+  const toggleTitle = useMemo(() => {
+    if (selectedItems.length === 1) {
+      return selectedItems[0].name;
+    } else if (selectedItems.length) {
+      return `${t('filters_selected')} ${filtersSelected}`;
+    } else {
+      return t('filter_nothing_selected');
+    }
+  }, [selectedItems]);
 
   useEffect(() => {
     !filtersSelected && resetFilter();
@@ -137,9 +150,7 @@ const MultiFilterDropdown = ({
           bsPrefix="filter-toggle"
           className={clsx(!show && filtersSelected && 'active')}
         >
-          {filtersSelected
-            ? `${t('filters_selected')} ${filtersSelected}`
-            : t('filter_nothing_selected')}
+          {toggleTitle}
           <span className="icon-wrp">
             <i className={clsx(`icon-${Config.name}-down`)} />
           </span>
