@@ -98,5 +98,5 @@ module.exports = {
       },
     },
   },
-  sentryDsn: 'https://2ce4d154378f4d2aabdca01008967062@sentry.tglab.com/8',
+  sentryDsn: 'https://0b31505de86342f49519e9c69599ae28@sentry.tglab.com/9',
 };
