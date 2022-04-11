@@ -102,27 +102,24 @@ export const makeCollapsible = (
   collapseElClass: string,
   headerElClass: string,
 ) => {
-  Array.from(document.getElementsByClassName(mainElClass)).forEach(el => {
-    el.addEventListener('click', e => {
-      const currentEl = e.currentTarget as HTMLElement;
-      const collapseEl = currentEl.getElementsByClassName(
-        collapseElClass,
-      )[0] as HTMLElement;
-      const collapseHeader = currentEl.getElementsByClassName(
-        headerElClass,
-      )[0] as HTMLElement;
-      if (collapseEl) {
-        if (collapseEl.classList.contains('show')) {
-          collapseEl.classList.remove('show');
-          currentEl.classList.remove('active');
-          collapseHeader.classList.remove('active');
-        } else {
-          collapseEl.classList.add('show');
-          currentEl.classList.add('active');
-          collapseHeader.classList.add('active');
+  Array.from(document.getElementsByClassName(headerElClass)).forEach(el => {
+    if (el.parentElement?.className === mainElClass) {
+      el.addEventListener('click', e => {
+        const currentEl = e.currentTarget as HTMLElement;
+        const collapseEl = currentEl?.parentElement?.getElementsByClassName(
+          collapseElClass,
+        )[0] as HTMLElement;
+        if (collapseEl) {
+          if (collapseEl.classList.contains('show')) {
+            collapseEl.classList.remove('show');
+            currentEl.classList.remove('active');
+          } else {
+            collapseEl.classList.add('show');
+            currentEl.classList.add('active');
+          }
         }
-      }
-    });
+      });
+    }
   });
 };
 
