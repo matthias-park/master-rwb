@@ -166,6 +166,7 @@ module.exports = {
       borderColor: '#FFDC3E',
     },
     dropdownBg: '#444',
+    circleIcons: true,
   },
   customFileInput: {
     backgroundColor: '#555555',

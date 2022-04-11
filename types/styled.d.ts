@@ -221,6 +221,7 @@ declare module 'styled-components' {
       labelActiveLeft: number;
       labelBackgroundColor: string;
       labelPadding: number;
+      placeholderColor?: string;
       selectPadding: string;
       marginBottom: number;
       iconColor: string;
@@ -236,6 +237,7 @@ declare module 'styled-components' {
         backgroundColor: string;
       };
       dropdownBg?: string;
+      circleIcons?: boolean;
     };
     customFileInput: {
       buttonColor: string;

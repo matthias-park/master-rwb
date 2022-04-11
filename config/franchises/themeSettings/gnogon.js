@@ -156,6 +156,7 @@ module.exports = {
       backgroundColor: '#222',
     },
     dropdownBg: '#444',
+    circleIcons: true,
   },
   translationLink: {
     color: '#FFDC3E',

@@ -54,7 +54,8 @@ const formStyles = css`
         top: ${props => props.theme.inputs.labelTop}px;
         left: ${props => props.theme.inputs.labelLeft}px;
         font-size: ${props => props.theme.inputs.fontSize}px !important;
-        color: ${props => props.theme.inputs.color};
+        color: ${props =>
+          props.theme.inputs.placeholderColor || props.theme.inputs.color};
         pointer-events: none;
         transition: all 0.3s;
       }
@@ -70,23 +71,11 @@ const formStyles = css`
           color: ${props => props.theme.inputs.disabled.color};
         }
       }
-      &:focus,
-      &:active,
-      &:not(:placeholder-shown) {
-        + label {
-          font-size: ${props =>
-            props.theme.inputs.labelActiveFontSize}px !important;
-          top: ${props => props.theme.inputs.labelActiveTop}px;
-          left: ${props => props.theme.inputs.labelActiveLeft}px;
-          background-color: ${props => props.theme.inputs.labelBackgroundColor};
-          padding: ${props => props.theme.inputs.labelPadding}px;
-        }
-      }
       &:focus {
-        border-color: ${props => props.theme.colors.primary.main};
+        border-color: ${props => props.theme.inputs.active.borderColor};
         box-shadow: none !important;
         + label {
-          color: ${props => props.theme.colors.primary.main};
+          color: ${props => props.theme.inputs.color} !important;
         }
       }
       &.form-control-sm {
@@ -101,12 +90,14 @@ const formStyles = css`
       &:not(:placeholder-shown),
       &:-webkit-autofill {
         + label {
-          font-size: ${props => props.theme.inputs.labelActiveFontSize}px;
+          font-size: ${props =>
+            props.theme.inputs.labelActiveFontSize}px !important;
           top: ${props => props.theme.inputs.labelActiveTop}px;
           left: ${props => props.theme.inputs.labelActiveLeft}px;
           background-color: ${props => props.theme.inputs.labelBackgroundColor};
           padding: ${props => props.theme.inputs.labelPadding - 3}px
             ${props => props.theme.inputs.labelPadding}px;
+          color: ${props => props.theme.inputs.color};
           border-radius: 4px;
         }
       }
@@ -150,11 +141,35 @@ const formStyles = css`
       }
       .icon-check {
         display: none;
-        color: ${props => props.theme.colors.success.main};
+        color: ${props =>
+          props.theme.inputs.circleIcons
+            ? props.theme.colors.container || props.theme.colors.white.main
+            : props.theme.colors.success.main};
+        background-color: ${props =>
+          props.theme.inputs.circleIcons && props.theme.colors.success.main};
       }
       .icon-exclamation {
         display: none;
-        color: ${props => props.theme.colors.danger.main};
+        color: ${props =>
+          props.theme.inputs.circleIcons
+            ? props.theme.colors.container || props.theme.colors.white.main
+            : props.theme.colors.danger.main};
+        background-color: ${props =>
+          props.theme.inputs.circleIcons && props.theme.colors.danger.main};
+      }
+      .icon-check,
+      .icon-exclamation {
+        ${props =>
+          props.theme.inputs.circleIcons &&
+          `
+          width: 20px;
+          height: 20px;
+          margin: 0 10px;
+          border-radius: 50%;
+          font-size: 16px;
+          justify-content: center;
+          align-items: center;
+        `}
       }
       .tooltip-custom {
         margin-right: 4px;
@@ -186,7 +201,7 @@ const formStyles = css`
       .form-group__icons {
         right: 0;
         .icon-check {
-          display: inline-block;
+          display: inline-flex;
         }
       }
     }
@@ -197,15 +212,14 @@ const formStyles = css`
         border: 1px solid ${props => props.theme.colors.danger.main};
         background-image: none;
         background-color: ${props => props.theme.colors.danger.bg};
-        color: ${props => props.theme.colors.danger.main};
         + label {
-          color: ${props => props.theme.colors.danger.main};
+          color: ${props => props.theme.colors.danger.main} !important;
         }
       }
       .form-group__icons {
         right: 0;
         .icon-exclamation {
-          display: inline-block;
+          display: inline-flex;
         }
         .icon-eye-off,
         .icon-eye-on {

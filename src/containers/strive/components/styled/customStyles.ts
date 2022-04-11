@@ -447,9 +447,6 @@ const customStyles = css`
       padding-right: 0;
       border: none;
       background: transparent;
-      border-top: 1px solid
-        ${props =>
-          props.theme.modals.borderColor || props.theme.colors.gray[100]};
       border-bottom: 1px solid
         ${props =>
           props.theme.modals.borderColor || props.theme.colors.gray[100]};
@@ -464,6 +461,13 @@ const customStyles = css`
           border-radius: 50%;
           background-color: ${props => props.theme.colors.primary.main};
         }
+      }
+    }
+    div:first-of-type {
+      .cookies-accordion__card {
+        border-top: 1px solid
+          ${props =>
+            props.theme.modals.borderColor || props.theme.colors.gray[100]};
       }
     }
     &__body {

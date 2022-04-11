@@ -76,23 +76,19 @@ export const navStyles = css`
         position: absolute;
         left: 0;
         bottom: 0;
-        width: 95%;
+        width: 100%;
         border-bottom: 1px solid
           ${props =>
             props.theme.settingsMenu.bottomBorderColor ||
             props.theme.colors.gray[100]};
       }
       &-link {
+        display: flex;
         align-items: center;
         height: 100%;
         color: ${props => props.theme.settingsMenu.color};
         font-size: ${props => props.theme.settingsMenu.fontSize}px;
         max-height: 65px;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
       }
       &-title-icon {
         transform: none !important;
@@ -131,7 +127,7 @@ export const navStyles = css`
           position: absolute;
           left: 0;
           bottom: 0;
-          width: 95%;
+          width: 100%;
           border-bottom: ${props =>
             props.theme.settingsMenu.subItemBorder ||
             `1px solid ${
