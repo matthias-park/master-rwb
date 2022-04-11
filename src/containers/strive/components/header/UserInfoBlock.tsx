@@ -179,9 +179,13 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                       className="pl-3 pr-1"
                     >
                       <span className="text-capitalize">
-                        {Franchise.gnogaz
-                          ? t('my_account_btn')
-                          : `${t('hello')} ${user.first_name}`}
+                        {Franchise.gnogaz ? (
+                          t('my_account_btn')
+                        ) : user.first_name ? (
+                          `${t('hello')} ${user.first_name}`
+                        ) : (
+                          <LoadingSpinner show={true} small className="mr-0" />
+                        )}
                       </span>
                       <i
                         className={clsx(
