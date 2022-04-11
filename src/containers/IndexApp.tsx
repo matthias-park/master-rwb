@@ -4,7 +4,7 @@ import App from './App';
 import * as Sentry from '@sentry/react';
 import { errorHandler, getQueryAffiliates } from '../utils';
 import { Config, DevEnv } from '../constants';
-import createStoreAsync from '../state';
+import createStoreAsync, { RootState } from '../state';
 import StateProvider from './StateProvider';
 import { setDomLoaded } from '../state/reducers/config';
 
@@ -84,7 +84,10 @@ const indexApp = getChildren => {
   createStoreAsync().then(store => {
     window.addEventListener('load', () => {
       store.dispatch(setDomLoaded());
-      if (Config.zendesk) {
+      if (
+        Config.zendesk &&
+        !(store.getState() as RootState).config.mobileView
+      ) {
         import('../utils/uiUtils')
           .then(({ injectZendeskScript }) => {
             injectZendeskScript();

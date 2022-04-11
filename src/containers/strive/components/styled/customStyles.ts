@@ -1144,7 +1144,7 @@ const customStyles = css`
       100% + ${props => props.theme.spacing.bodyPadding * 2}px
     ) !important;
     left: -${props => props.theme.spacing.bodyPadding}px !important;
-    top: -${props => (props.theme.header?.marginBottom || 0) + 5}px;
+    top: -${props => (props.theme.header?.marginBottom ? props.theme.header?.marginBottom + 5 : 0)}px;
     ${mediaBreakpointDown('xl')} {
       width: calc(
         100% + ${props => props.theme.spacing.bodyPaddingMedium * 2}px
