@@ -32,5 +32,8 @@ module.exports = {
       GeoComply: true,
       PlayerDisabled: true,
     },
+    header: {
+      needsBurger: true,
+    },
   },
 };

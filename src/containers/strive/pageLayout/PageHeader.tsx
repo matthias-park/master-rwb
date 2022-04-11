@@ -28,7 +28,7 @@ import { useDispatch } from 'react-redux';
 import { setLocale } from '../../../state/reducers/config';
 import Button from 'react-bootstrap/Button';
 import { useRoutePath } from '../../../hooks';
-import { PagesName, Franchise } from '../../../constants';
+import { PagesName, Franchise, ComponentSettings } from '../../../constants';
 import { useLocation } from 'react-router-dom';
 
 const SubNavLinks = ({
@@ -91,8 +91,9 @@ const SubNavLinks = ({
 };
 interface UserBlockProps {
   mobile: boolean;
+  needsBurger?: boolean;
 }
-const UserBlock = ({ mobile }: UserBlockProps) => {
+const UserBlock = ({ mobile, needsBurger }: UserBlockProps) => {
   const { t } = useI18n();
   const { user, signout } = useAuth();
   const { backdrop } = useUIConfig();
@@ -100,6 +101,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
   const tabletWidth = useDesktopWidth(991);
   const loginPagePath = useRoutePath(PagesName.LoginPage, true);
   const registerPagePath = useRoutePath(PagesName.RegisterPage, true);
+
   useEffect(() => {
     if (user.logged_in && !prevUser) {
       backdrop.hide();
@@ -132,7 +134,7 @@ const UserBlock = ({ mobile }: UserBlockProps) => {
         <Button as={Link} to={registerPagePath} variant="primary">
           {t('register_btn')}
         </Button>
-        <div className={clsx(Franchise.gnogon && !tabletWidth && 'ml-3')}>
+        <div className={clsx(needsBurger && !tabletWidth && 'ml-3')}>
           <UserInfoBlock
             dropdownClasses={clsx('d-flex', !mobile && 'mr-1')}
             isMobile={mobile}
@@ -185,6 +187,7 @@ const PageHeader = () => {
   };
   const subLinks = header?.find(link => link.subLinks);
   const homePageRoute = useRoutePath(PagesName.HomePage, true);
+  const needsBurger = ComponentSettings?.header?.needsBurger;
 
   return (
     <>
@@ -222,7 +225,7 @@ const PageHeader = () => {
             Franchise.desertDiamond ||
             Franchise.gnogon) && (
             <>
-              {!(Franchise.gnogon && !tabletWidth) && (
+              {!(needsBurger && !tabletWidth) && (
                 <ul className="nav-links">
                   {header
                     ?.concat()
@@ -257,7 +260,7 @@ const PageHeader = () => {
             </>
           )}
           <div className="ml-auto">
-            <UserBlock mobile={true} />
+            <UserBlock mobile={true} needsBurger={needsBurger} />
           </div>
         </StyledRowHeader>
       ) : (

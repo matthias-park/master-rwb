@@ -146,6 +146,7 @@ declare module 'styled-components' {
       marginBottom?: number;
       navHeightMobile?: number;
       navFontSize?: number;
+      needsHamburger?: boolean;
     };
     footer: {
       listColor: string;

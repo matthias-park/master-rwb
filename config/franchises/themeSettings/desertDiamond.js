@@ -75,6 +75,7 @@ module.exports = {
     backgroundMobile: 'linear-gradient(180deg,#051b35 0%,#053451 100%)',
     navHeightMobile: 0,
     navFontSize: 16,
+    needsHamburger: true,
   },
   footer: {
     listColor: '#fff',

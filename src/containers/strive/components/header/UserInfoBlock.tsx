@@ -120,6 +120,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const userBalance = ComponentSettings?.useBalancesEndpoint
     ? user.balances?.playable_balance
     : user.balance;
+  const needsBurger = ComponentSettings?.header?.needsBurger;
   return (
     <>
       <div className="d-flex justify-content-end flex-grow-1">
@@ -193,12 +194,12 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 </>
               ) : (
                 <>
-                  {(user.logged_in || Franchise.gnogon) && (
+                  {(user.logged_in || needsBurger) && (
                     <Dropdown.Toggle as="span" className="mobile-user-menu">
                       <i
                         className={clsx(
                           `icon-${window.__config__.name}-${
-                            Franchise.gnogon ? 'menu' : 'account'
+                            needsBurger ? 'menu' : 'account'
                           }`,
                         )}
                       />
@@ -284,7 +285,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 )}
                 <Accordion>
                   {!tabletWidth &&
-                    Franchise.gnogon &&
+                    needsBurger &&
                     header
                       ?.concat()
                       .sort((a, b) => sortAscending(a.order || 0, b.order || 0))
@@ -294,9 +295,11 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                         const isDublicate = sidebars?.[0].some(
                           sidebarLink => sidebarLink.link === linkPath,
                         );
+                        const excludeSports =
+                          Franchise.gnogon && linkPath === homeRoute;
                         if (
                           !link.path ||
-                          linkPath === homeRoute ||
+                          excludeSports ||
                           (user.logged_in &&
                             (isDublicate || linkPath === depositRoute))
                         )

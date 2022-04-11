@@ -392,8 +392,9 @@
 .icon-gnogon-eye-off-before {
   content: "\e92f";
 }
-.icon-gnogaz-promo:before,
-.icon-gnogon-promo:before {
+.icon-gnogon-promo:before,
+.icon-desertDiamond-promo:before,
+.icon-gnogaz-promo:before {
   content: "\e930";
 }
 .icon-gnogaz-withdraw:before,
@@ -553,4 +554,8 @@
 .icon-android:before {
   content: "\e98c";
 }
-
+.icon-desertDiamond-menu:before,
+.icon-gnogaz-menu:before,
+.icon-gnogon-menu:before {
+  content: "\e940";
+}
