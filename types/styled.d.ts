@@ -123,6 +123,9 @@ declare module 'styled-components' {
         color: string;
       };
     };
+    depositIframe: {
+      height: string;
+    };
     fonts: {
       family: string;
       weight: {
@@ -143,6 +146,7 @@ declare module 'styled-components' {
       marginBottom?: number;
       navHeightMobile?: number;
       navFontSize?: number;
+      needsHamburger?: boolean;
     };
     footer: {
       listColor: string;
@@ -217,6 +221,7 @@ declare module 'styled-components' {
       labelActiveLeft: number;
       labelBackgroundColor: string;
       labelPadding: number;
+      placeholderColor?: string;
       selectPadding: string;
       marginBottom: number;
       iconColor: string;
@@ -232,6 +237,7 @@ declare module 'styled-components' {
         backgroundColor: string;
       };
       dropdownBg?: string;
+      circleIcons?: boolean;
     };
     customFileInput: {
       buttonColor: string;
@@ -421,6 +427,7 @@ declare module 'styled-components' {
     backdrop: {
       bgColor?: string;
     };
+    spinnerVariant?: string;
     bonuses: {
       containerBgColor?: string;
       subTextColor?: string;

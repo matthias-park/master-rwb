@@ -100,7 +100,7 @@ export const CompleteRegistrationProvider = props => {
   useEffect(() => {
     if (user.logged_in && !user.loading) {
       setCompletedActions(prevState => {
-        const documentsAdded = documents?.documents.some(document => {
+        const documentsAdded = documents?.documents?.some(document => {
           return document.uploaded.length > 0 && document.id === 'image_id';
         });
         const depositLimitsAdded = !!limits?.limits.filter(

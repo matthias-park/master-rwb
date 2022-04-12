@@ -12,12 +12,81 @@ import { makeCollapsible } from '../../../utils/uiUtils';
 import clsx from 'clsx';
 import RedirectNotFound from '../../../components/RedirectNotFound';
 import { useRoutePath } from '../../../hooks';
-import { PagesName, Franchise } from '../../../constants';
+import { PagesName, Franchise, ComponentName } from '../../../constants';
 import { filterPromotionsList } from '../../../utils';
 import { Helmet } from 'react-helmet-async';
 import * as Sentry from '@sentry/react';
 import { useConfig } from '../../../hooks/useConfig';
 import { getApi } from '../../../utils/apiUtils';
+import { useModal } from '../../../hooks/useModal';
+import { postApi } from '../../../utils/apiUtils';
+import { useAuth } from '../../../hooks/useAuth';
+import LoadingButton from '../../../components/LoadingButton';
+import CustomAlert from '../components/CustomAlert';
+
+const ClaimButton = ({
+  campaignID,
+  segment,
+  className,
+}: {
+  campaignID: number | null;
+  segment: string | null;
+  className?: string;
+}) => {
+  const { enableModal } = useModal();
+  const { t } = useI18n();
+  const { user } = useAuth();
+
+  const [claimRes, setClaimRes] = useState<{
+    msg: string | null;
+    success: boolean;
+  }>({
+    msg: '',
+    success: true,
+  });
+  const [claiming, setClaming] = useState(false);
+  const claim = async data => {
+    setClaming(true);
+    const res = await postApi<RailsApiResponse<null>>(
+      '/restapi/v1/user/claim',
+      data,
+    ).catch((err: RailsApiResponse<null>) => err);
+    if (res.Success) {
+      enableModal(ComponentName.PromoClaimModal);
+    } else {
+      setClaimRes({
+        msg: res.Message,
+        success: res.Success,
+      });
+    }
+    setClaming(false);
+  };
+
+  if (!user.logged_in) return null;
+  return (
+    <>
+      <CustomAlert
+        show={!claimRes?.success}
+        variant="danger"
+        className="w-100 d-flex flex-nowrap"
+      >
+        {claimRes.msg}
+      </CustomAlert>
+      <LoadingButton
+        className={clsx('text-nowrap', 'px-0', !!className && className)}
+        loading={claiming}
+        onClick={() => {
+          claim({
+            campaign_id: campaignID,
+            segment: segment,
+          });
+        }}
+      >
+        {t('promo_claim_btn')}
+      </LoadingButton>
+    </>
+  );
+};
 
 const PromoLinkEl = ({
   item,
@@ -77,6 +146,8 @@ const PromoItem = ({ item, variant }: { item: PostItem; variant?: string }) => {
 
 const PromoCard = ({ post }: { post: PostItem }) => {
   const { t } = useI18n();
+  const { user } = useAuth();
+  const canClaim = !!post.campaign_id && !!post.segment && user.logged_in;
   return (
     <div key={post.id} className="promo-card promo-card--big">
       <PromoItem item={post} variant="sm" />
@@ -84,14 +155,21 @@ const PromoCard = ({ post }: { post: PostItem }) => {
         <h5 className="promo-card__body-title">{post.page_title}</h5>
         <h6 className="promo-card__body-subtitle">{post.title}</h6>
         <p className="promo-card__body-text">{post.short_description}</p>
-        <PromoLinkEl item={post} className="mt-auto">
-          <Button
-            variant="primary"
-            className="text-line-overflow d-inline-block"
-          >
-            {post.button_text || t('promotions_details')}
-          </Button>
-        </PromoLinkEl>
+        <div
+          className={clsx('promo-card__body-buttons', canClaim && 'can-claim')}
+        >
+          {canClaim && (
+            <ClaimButton campaignID={post.campaign_id} segment={post.segment} />
+          )}
+          <PromoLinkEl item={post} className="mt-auto promo-link">
+            <Button
+              variant="secondary"
+              className="text-line-overflow d-inline-block"
+            >
+              {post.button_text || t('promotions_details')}
+            </Button>
+          </PromoLinkEl>
+        </div>
       </div>
     </div>
   );
@@ -101,7 +179,7 @@ const PromotionsList = () => {
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
-    ['/restapi/v1/content/promotions', locale],
+    ['/restapi/v1/content/promotions?show_for=1', locale],
     url => getApi(url, { cache: 'no-store' }),
   );
   const { t } = useI18n();
@@ -156,7 +234,7 @@ const PromotionsList = () => {
       )}
       {isDataLoading || !imagesLoaded ? (
         <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       ) : (
         <div
@@ -189,9 +267,10 @@ const PromotionsList = () => {
 
 const PromotionsListBlock = ({ currentSlug }) => {
   const { t } = useI18n();
+  const { user } = useAuth();
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
-    ['/restapi/v1/content/promotions', locale],
+    ['/restapi/v1/content/promotions?show_for=1', locale],
     url => getApi(url, { cache: 'no-store' }),
   );
   const promotions = filterPromotionsList(data?.Data || []);
@@ -207,12 +286,15 @@ const PromotionsListBlock = ({ currentSlug }) => {
     <>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3 min-vh-70">
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       )}
       <div className="promo-cards">
-        {promotions.slice(0, numberOfPromotions).map(
-          item =>
+        {promotions.slice(0, numberOfPromotions).map(item => {
+          const canClaim =
+            !!item.campaign_id && !!item.segment && user.logged_in;
+
+          return (
             item.slug !== currentSlug && (
               <div key={item.id} className="promo-card">
                 <PromoItem item={item} variant="sm" />
@@ -222,18 +304,32 @@ const PromotionsListBlock = ({ currentSlug }) => {
                   <p className="promo-card__body-text">
                     {item.short_description}
                   </p>
-                  <PromoLinkEl item={item} className="mt-auto">
-                    <Button
-                      variant="primary"
-                      className="text-line-overflow d-inline-block"
-                    >
-                      {item.button_text || t('promotions_details')}
-                    </Button>
-                  </PromoLinkEl>
+                  <div
+                    className={clsx(
+                      'promo-card__body-buttons',
+                      canClaim && 'can-claim',
+                    )}
+                  >
+                    {canClaim && (
+                      <ClaimButton
+                        campaignID={item.campaign_id}
+                        segment={item.segment}
+                      />
+                    )}
+                    <PromoLinkEl item={item} className="mt-auto promo-link">
+                      <Button
+                        variant="secondary"
+                        className="text-line-overflow d-inline-block"
+                      >
+                        {item.button_text || t('promotions_details')}
+                      </Button>
+                    </PromoLinkEl>
+                  </div>
                 </div>
               </div>
-            ),
-        )}
+            )
+          );
+        })}
       </div>
     </>
   );
@@ -242,7 +338,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
 const PromotionPage = ({ slug }: { slug: string }) => {
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { data, error } = useApi<RailsApiResponse<PostItem>>(
-    [`/restapi/v1/content/promotion/${slug}`, locale],
+    [`/restapi/v1/content/promotion/${slug}?show_for=1`, locale],
     url => getApi(url, { cache: 'no-store' }),
   );
   const { t } = useI18n();
@@ -250,6 +346,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
   const desktopWidth = useDesktopWidth(568);
   const [promoImageLoaded, setPromoImageLoaded] = useState(false);
   const isDataLoading = !data && !error;
+  const canClaim = !!data?.Data.campaign_id && !!data.Data.segment;
 
   useEffect(() => {
     makeCollapsible('terms', 'terms-body', 'terms-toggle');
@@ -280,7 +377,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
     <main
       className={clsx(
         Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
-          ? 'pl-3'
+          ? 'pl-3 w-100'
           : 'pt-xl-5',
         'min-vh-70',
       )}
@@ -305,7 +402,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
       )}
       {(isDataLoading || !promoImageLoaded) && (
         <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       )}
       {!!data && (
@@ -353,6 +450,13 @@ const PromotionPage = ({ slug }: { slug: string }) => {
               dangerouslySetInnerHTML={{ __html: data?.Data.body || '' }}
               onClick={event => jsxRedirect(event)}
             />
+            {canClaim && (
+              <ClaimButton
+                campaignID={data.Data.campaign_id}
+                segment={data.Data.segment}
+                className="promo-inner__claim-btn mt-3"
+              />
+            )}
           </div>
           <PromotionsListBlock currentSlug={data?.Data.slug} />
         </div>

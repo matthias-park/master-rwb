@@ -1,6 +1,7 @@
 import { Middleware } from 'redux';
 import { RootState } from '..';
 import {
+  fetchUserBalance,
   removeUserData,
   setBalance,
   setBalances,
@@ -46,29 +47,19 @@ const userWebsocketMiddleware: Middleware = storeApi => next => action => {
             }
             case 'bonus_wallet_changed':
             case 'balance_changed': {
-              if (wsData.data?.balance_type?.includes('Kambi')) {
-                const user = (storeApi.getState() as RootState).user;
-                injectTrackerScript(
-                  'betconfirm',
-                  user.id,
-                  user.currency,
-                  wsData.data.amount,
-                );
-              }
-              if (wsData.data) {
-                if (ComponentSettings?.useBalancesEndpoint) {
-                  const balanceParam =
-                    wsData.action === 'bonus_wallet_changed'
-                      ? 'bonus_balance'
-                      : 'withdrawable_balance';
-                  storeApi.dispatch(
-                    setBalances({
-                      [balanceParam]: wsData.data.balance_after,
-                    }) as any,
+              if (ComponentSettings?.useBalancesEndpoint) {
+                storeApi.dispatch(fetchUserBalance() as any);
+              } else if (wsData.data) {
+                if (wsData.data?.balance_type?.includes('Kambi')) {
+                  const user = (storeApi.getState() as RootState).user;
+                  injectTrackerScript(
+                    'betconfirm',
+                    user.id,
+                    user.currency,
+                    wsData.data.amount,
                   );
-                } else {
-                  storeApi.dispatch(setBalance(wsData.data.balance_after));
                 }
+                storeApi.dispatch(setBalance(wsData.data.balance_after));
               }
               break;
             }

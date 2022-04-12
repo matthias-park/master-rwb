@@ -9,22 +9,24 @@ interface Props {
   id: string;
   control?: Control<FieldValues>;
   defaultValue?: unknown;
-  rules: any;
+  rules?: any;
   disabled?: boolean;
   size?: 'sm' | 'lg';
   values: SelectValue[] | (() => Promise<SelectValue[]>);
   title?: string;
+  className?: string;
 }
 
 const SelectInput = ({
   id,
   control,
   defaultValue,
-  rules,
+  rules = {},
   disabled,
   size,
   values,
   title,
+  className,
 }: Props) => {
   const { field, fieldState } = useController({
     name: id,
@@ -66,6 +68,7 @@ const SelectInput = ({
       className={clsx(
         fieldState.error && 'has-error',
         fieldState.error?.message && 'with-message',
+        className,
       )}
     >
       <div className="form-control-wrp">

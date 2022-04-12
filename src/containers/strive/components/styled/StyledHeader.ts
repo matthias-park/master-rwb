@@ -437,7 +437,7 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
   }
 
   .user-menu-wrp {
-    padding: 10px 20px 0 20px;
+    padding: 0 20px;
     max-height: calc(100vh - 180px);
     overflow-y: auto;
     -ms-overflow-style: none;
@@ -462,7 +462,7 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
         width: 100%;
         height: 100%;
         height: ${props => props.theme.userMenu.itemHeight}px;
-        padding: 0 20px;
+        padding: 0 1.5rem;
         color: ${props => props.theme.colors.brand.text};
         font-weight: ${props => props.theme.userMenu.itemWeight};
         text-transform: ${props => props.theme.userMenu.itemTransform};
@@ -484,13 +484,14 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
           background-color: ${props => props.theme.settingsMenu?.activeBgColor};
         }
         &--no-divider {
+          left: -20px;
+          width: calc(100% + 40px);
           &:before {
             display: none;
           }
           &:hover,
           &:active,
           &:focus {
-            background-color: transparent;
             color: ${props => props.theme.colors.brand.text};
             font-weight: 700;
             i {
@@ -549,7 +550,7 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
     }
 
     ${mediaBreakpointDown('xs')} {
-      right: 22px;
+      right: 16px;
     }
   }
 `;
@@ -579,6 +580,19 @@ export const StyledRowHeader = styled('header')`
   ${mediaBreakpointDown('md')} {
     margin-bottom: calc(${props => props.theme.header.navHeightMobile}px - 1px);
   }
+  ${mediaBreakpointDown('xs')} {
+    height: 64px;
+    padding: 14px ${props => props.theme.spacing.bodyPaddingSmall}px;
+  }
+  .login-actions-wrp {
+    display: flex;
+    align-items: center;
+    ${mediaBreakpointDown('xs')} {
+      .btn {
+        padding: 6px 12px;
+      }
+    }
+  }
   .header-logo-wrp {
     display: flex;
     width: ${props =>
@@ -599,7 +613,9 @@ export const StyledRowHeader = styled('header')`
     .header-logo-mobile {
       width: ${props => props.theme.header.logoSizeMobile || 35}px;
       ${mediaBreakpointDown('xs')} {
-        width: ${props => Franchise.gnogaz && 75}px;
+        position: relative;
+        width: ${(Franchise.gnogaz || Franchise.gnogon) && 75}px;
+        top: ${(Franchise.gnogaz || Franchise.gnogon) && -14}px;
       }
     }
   }
@@ -717,7 +733,7 @@ export const StyledRowHeader = styled('header')`
       right: -11px !important;
     }
     ${mediaBreakpointDown('xs')} {
-      right: -16px !important;
+      right: -10px !important;
     }
   }
 `;

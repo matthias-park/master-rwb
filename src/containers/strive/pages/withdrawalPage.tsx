@@ -14,7 +14,6 @@ import {
 import Table from 'react-bootstrap/Table';
 import { useCallback } from 'react';
 import { postApi } from '../../../utils/apiUtils';
-import { useToasts } from 'react-toast-notifications';
 import CustomAlert from '../components/CustomAlert';
 import WithdrawalConfirmModal from '../components/modals/WithdrawalConfirmModal';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
@@ -134,7 +133,6 @@ const questionItems = [
 const WithdrawalPage = () => {
   const { t } = useI18n();
   const { user } = useAuth();
-  const { addToast } = useToasts();
   const [submitResponse, setSubmitResponse] = useState<{
     success: boolean;
     msg: string | null;
@@ -175,15 +173,7 @@ const WithdrawalPage = () => {
         {
           request_id: id,
         },
-      ).catch((res: RailsApiResponse<null>) => {
-        if (res.Fallback) {
-          addToast('failed to cancel withdraw', {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        }
-        return res;
-      });
+      ).catch((res: RailsApiResponse<null>) => res);
 
       sendDataToGTM({
         event: 'withdrawalCancelRequested',
@@ -201,10 +191,7 @@ const WithdrawalPage = () => {
   const requestWithdrawal = useCallback(
     async (amount: number) => {
       if (!selectedBankAccount) {
-        return addToast('account not found for withdrawal', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
+        return;
       }
       setWithdrawalLoading(true);
       const response = await postApi<RailsApiResponse<WithdrawalConfirmation>>(
@@ -232,15 +219,7 @@ const WithdrawalPage = () => {
         {
           formData: true,
         },
-      ).catch((res: RailsApiResponse<null>) => {
-        if (res.Fallback) {
-          addToast('failed to withdraw amount', {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        }
-        return res;
-      });
+      ).catch((res: RailsApiResponse<null>) => res);
       sendDataToGTM({
         event: 'withdrawalRequested',
         'tglab.withdrawal.amount': data.amount,
@@ -277,7 +256,7 @@ const WithdrawalPage = () => {
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       )}
       {error && (

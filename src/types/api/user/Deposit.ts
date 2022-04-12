@@ -37,6 +37,11 @@ export enum DepositStatus {
   Rejected = 3,
   Return = 4,
   Unverified = 5,
+  ConfirmedMismatch = 6,
+  PendingMismatch = 7,
+  RejectedMismatch = 8,
+  ConfirmedAndReconciled = 9,
+  RejectedAndReconciled = 10,
 }
 
 export enum UnverifiedDepositReason {
@@ -57,10 +62,13 @@ export interface DepositStatusData {
 }
 
 export interface DepositRequest {
-  [key: string]: number | string;
+  [key: string]: number | string | boolean | null | undefined;
   BankId: number;
   Amount: number;
   ReturnSuccessUrl: string;
+  ReturnPendingUrl?: string;
+  AccountId?: number | null;
+  Prefill?: boolean;
 }
 
 export default DepositResponse;

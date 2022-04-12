@@ -9,6 +9,7 @@ import { PostRegistration } from '../../../types/api/user/Registration';
 import dayjs from 'dayjs';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
+import { FranchiseNames } from '../../../types/FranchiseNames';
 import {
   ComponentName,
   franchiseDateFormat,
@@ -16,13 +17,13 @@ import {
   REDIRECT_PROTECTED_NOT_LOGGED_IN,
   Franchise,
   usaOnlyBrand,
+  Config,
 } from '../../../constants';
 import { useAuth } from '../../../hooks/useAuth';
 import RedirectNotFound from '../../../components/RedirectNotFound';
 import { FormProvider, useForm } from 'react-hook-form';
 import RegError from '../components/registration/RegError';
 import { useCaptcha } from '../../../hooks/useGoogleRecaptcha';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useDispatch } from 'react-redux';
 import { setRegistered } from '../../../state/reducers/user';
 import { NET_USER } from '../../../types/UserStatus';
@@ -31,7 +32,6 @@ import { useModal } from '../../../hooks/useModal';
 import clsx from 'clsx';
 import { getActiveAffiliates } from '../../../utils';
 import { injectTrackerScript } from '../../../utils/uiUtils';
-dayjs.extend(customParseFormat);
 
 const RegistrationReturnCode = {
   '0': 'sitemap_registerWelcome',
@@ -118,7 +118,12 @@ const RegisterPage = () => {
         form.phone_number = `+1${form.phone_number}`;
       }
       const affiliates = getActiveAffiliates();
-      if (Franchise.gnogaz && affiliates.btag) {
+      const btagFranchise = [
+        FranchiseNames.Gnogaz,
+        FranchiseNames.Gnogon,
+        FranchiseNames.DesertDiamond,
+      ].includes(Config.name);
+      if (btagFranchise && affiliates.btag) {
         form.btag = affiliates.btag;
       }
       const captchaToken = await getToken?.('registration').catch(() => '');

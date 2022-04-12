@@ -56,7 +56,7 @@ const DefaultInnerPage = () => {
 const NotFoundPage = () => {
   const { headerNav } = useUIConfig();
   let InnerPage = DefaultInnerPage;
-  if (Franchise.desertDiamond) {
+  if (Franchise.desertDiamond || Franchise.gnogaz) {
     InnerPage = DesertDiamondInnerPage;
   }
   return (

@@ -14,8 +14,15 @@ import { useAuth } from './useAuth';
 import { useI18n } from './useI18n';
 import useLocalStorage from './useLocalStorage';
 import * as Sentry from '@sentry/react';
-import { Transaction, Status as SpanStatus } from '@sentry/types';
+import { Transaction } from '@sentry/types';
 import RequestReturn from '../types/api/deposits/RequestReturn';
+
+export const isDepositStatusSuccess = (status: DepositStatus) =>
+  [
+    DepositStatus.Confirmed,
+    DepositStatus.ConfirmedMismatch,
+    DepositStatus.ConfirmedAndReconciled,
+  ].includes(status);
 
 const postUrl = '/restapi/v1/deposits/status';
 let DepositStatusTransaction: Transaction | null = null;
@@ -68,7 +75,10 @@ const useDepositResponseStatus = () => {
 
   const { data, error } = useApi<RailsApiResponse<DepositStatusData>>(
     request,
-    postApi,
+    (url, body) =>
+      postApi(url, body, {
+        sentryScope: DepositStatusTransaction,
+      }),
     {
       refreshInterval: 5000,
       dedupingInterval: 1000,
@@ -82,13 +92,10 @@ const useDepositResponseStatus = () => {
         DepositStatusTransaction = Sentry.startTransaction({
           name: 'deposit status check',
           tags: {
-            'deposit.bank': bankId,
-            'deposit.requestId': id,
+            'deposit.bank.id': bankId,
+            'deposit.id': id,
           },
         });
-        Sentry.getCurrentHub().configureScope(scope =>
-          scope.setSpan(DepositStatusTransaction!),
-        );
       }
       if (bankId && queryParams && Object.keys(queryParams).length) {
         postApi<RailsApiResponse<RequestReturn>>(
@@ -106,19 +113,27 @@ const useDepositResponseStatus = () => {
         )
           .then(res => {
             if (res.Success) {
+              Sentry.addBreadcrumb({
+                category: 'Deposit',
+                message: `Request return success`,
+                level: Sentry.Severity.Log,
+              });
               history.replace({
                 search: '',
               });
             } else {
-              Sentry.captureMessage(
-                `Request return deposit error bankId: ${bankId}`,
-                {
-                  level: Sentry.Severity.Fatal,
-                  tags: {
-                    searchQuery: window.location.search,
-                  },
+              Sentry.addBreadcrumb({
+                category: 'Deposit',
+                message: `Request return error`,
+                level: Sentry.Severity.Error,
+                data: res.Data,
+              });
+              Sentry.captureMessage('Request return deposit failed', {
+                level: Sentry.Severity.Fatal,
+                tags: {
+                  searchQuery: window.location.search,
                 },
-              );
+              });
               setId(null);
               setBankId(null);
               history.replace(`${depositBaseUrl}/error`, {
@@ -146,7 +161,14 @@ const useDepositResponseStatus = () => {
   useEffect(() => {
     let timer: number | undefined;
     if (request) {
-      timer = setTimeout(() => setDepositStatus(DepositStatus.Timeout), 60000); // 1min
+      timer = setTimeout(() => {
+        Sentry.addBreadcrumb({
+          category: 'Deposit',
+          message: `status checking timeout`,
+          level: Sentry.Severity.Warning,
+        });
+        setDepositStatus(DepositStatus.Timeout);
+      }, 120000); // 2min
     }
     return () => {
       clearTimeout(timer);
@@ -182,21 +204,18 @@ const useDepositResponseStatus = () => {
       (status !== depositStatus || status === DepositStatus.Timeout)
     ) {
       setDepositStatus(status);
-      if (DepositStatus.Confirmed === status) updateUser();
+      if (isDepositStatusSuccess(status)) updateUser();
       if (
         ![DepositStatus.None, DepositStatus.Pending].includes(status) &&
         bankResponse &&
         !queryParams
       ) {
         let newDepositPath = 'error';
-        if (status === DepositStatus.Confirmed) newDepositPath = 'success';
+        if (isDepositStatusSuccess(status)) newDepositPath = 'success';
         if (status === DepositStatus.Rejected) newDepositPath = 'rejected';
         if (status === DepositStatus.Canceled) newDepositPath = 'canceled';
         if (DepositStatusTransaction) {
           DepositStatusTransaction.setTag('deposit.status', status);
-          DepositStatusTransaction.setStatus(
-            newDepositPath === 'error' ? SpanStatus.Failed : SpanStatus.Success,
-          );
           DepositStatusTransaction.finish();
           DepositStatusTransaction = null;
         }

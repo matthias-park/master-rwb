@@ -6,15 +6,7 @@
 -webkit-overflow-scrolling: touch;
 }
 
-html {
-@media(min-width: 1960px) {
-  margin-left: calc(100vw - 100%);
-  margin-right: 0;
-}
-}
-
 body {
-  max-width: 1920px;
   padding: 0 80px;
   margin: auto;
   overflow-x: hidden;

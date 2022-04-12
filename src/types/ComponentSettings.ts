@@ -17,4 +17,7 @@ export interface ComponentSettings {
     PlayerDisabled: boolean;
     limits: boolean;
   };
+  header?: {
+    needsBurger?: boolean;
+  };
 }

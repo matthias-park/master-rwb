@@ -11,7 +11,7 @@ export const fetchUserSbToken = createAsyncThunk<string, number, any>(
   async (_, thunkAPI: any) => {
     const response = await getApi<RailsApiResponse<string>>(
       '/restapi/v1/user/sb_auth_token',
-    ).catch(() => RailsApiResponseFallback);
+    ).catch(err => err);
     if (response.Data) {
       return response.Data;
     }

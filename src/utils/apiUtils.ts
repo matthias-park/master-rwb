@@ -5,8 +5,8 @@ import RailsApiResponse from '../types/api/RailsApiResponse';
 import { RegistrationPostalCodeAutofill } from '../types/api/user/Registration';
 import { cleanPostBody } from '.';
 import * as Sentry from '@sentry/react';
-import { Status } from '@sentry/react';
 import { Transaction } from '@sentry/types';
+import { spanStatusfromHttpCode } from '@sentry/tracing';
 
 export const formatUrl = (
   url: string,
@@ -46,27 +46,40 @@ export const getApi = <T>(
   return fetch(getUrl, config)
     .then(async res => {
       httpSpan?.setTag('http.statusCode', res.status);
+      httpSpan?.setStatus(spanStatusfromHttpCode(res.status));
       if (!res.ok && res.status !== 400) {
+        const unauthorized = [401, 403].includes(res.status);
         if (![401, 403].includes(res.status)) {
-          Sentry.captureMessage(
-            `Request failed ${url} with status ${res.status}`,
-            Sentry.Severity.Fatal,
-          );
+          Sentry.captureMessage(`Api request failed`, {
+            level: Sentry.Severity.Fatal,
+            tags: {
+              url,
+              'http.status': res.status,
+            },
+          });
         } else {
           mutate('/restapi/v1/user/status');
         }
-        httpSpan?.setStatus(Status.Failed);
         return Promise.reject<RailsApiResponse<null>>({
           ...RailsApiResponseFallback,
           Code: res.status,
+          Unauthorized: unauthorized,
         });
       }
-      httpSpan?.setStatus(Status.Success);
       if (options?.responseText) {
         return res.text();
       }
       const json = await res.json();
-      httpSpan?.setTag('http.code', json.Code);
+      Sentry.addBreadcrumb({
+        category: 'api',
+        type: 'http',
+        data: {
+          method: 'GET',
+          url: getUrl,
+          status_code: res.status,
+        },
+      });
+      httpSpan?.setData('Code', json.Code);
       return json;
     })
     .finally(() => httpSpan?.finish());
@@ -121,24 +134,37 @@ export const postApi = <T>(
   return fetch(postUrl, config)
     .then(async res => {
       httpSpan?.setTag('http.statusCode', res.status);
+      httpSpan?.setStatus(spanStatusfromHttpCode(res.status));
       if (!res.ok && res.status !== 400) {
-        if (![401, 403].includes(res.status)) {
-          Sentry.captureMessage(
-            `Request failed ${url} with status ${res.status}`,
-            Sentry.Severity.Fatal,
-          );
+        const unauthorized = [401, 403].includes(res.status);
+        if (!unauthorized) {
+          Sentry.captureMessage(`Api request failed`, {
+            level: Sentry.Severity.Fatal,
+            tags: {
+              url,
+              'http.status': res.status,
+            },
+          });
         } else {
           mutate('/restapi/v1/user/status');
         }
-        httpSpan?.setStatus(Status.Failed);
         return Promise.reject<RailsApiResponse<null>>({
           ...RailsApiResponseFallback,
           Code: res.status,
+          Unauthorized: unauthorized,
         });
       }
       const json = await res.json();
-      httpSpan?.setTag('http.code', json.Code);
-      httpSpan?.setStatus(Status.Success);
+      httpSpan?.setData('Code', json.Code);
+      Sentry.addBreadcrumb({
+        category: 'api',
+        type: 'http',
+        data: {
+          method: 'POST',
+          url: postUrl,
+          status_code: res.status,
+        },
+      });
       return json;
     })
     .finally(() => httpSpan?.finish());

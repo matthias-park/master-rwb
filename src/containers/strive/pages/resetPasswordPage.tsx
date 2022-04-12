@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useI18n } from '../../../hooks/useI18n';
 import { postApi } from '../../../utils/apiUtils';
-import { useToasts } from 'react-toast-notifications';
 import CustomAlert from '../components/CustomAlert';
 import Form from 'react-bootstrap/Form';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -25,7 +24,6 @@ const ForgotPasswordPage = () => {
     msg: string;
   } | null>(null);
   const { t } = useI18n();
-  const { addToast } = useToasts();
   const sendDataToGTM = useGTM();
 
   const onSubmit = async ({ password }) => {
@@ -36,15 +34,7 @@ const ForgotPasswordPage = () => {
         new_password: password,
         reset_code: code!,
       },
-    ).catch((res: RailsApiResponse<null>) => {
-      if (res.Fallback) {
-        addToast('failed to set new password', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      }
-      return res;
-    });
+    ).catch((res: RailsApiResponse<null>) => res);
     if (result.Success) {
       sendDataToGTM({
         event: 'LoginPasswordChange',
@@ -82,7 +72,7 @@ const ForgotPasswordPage = () => {
                 validate: value =>
                   VALIDATIONS.password(
                     value,
-                    Franchise.desertDiamond ? 4 : 3,
+                    Franchise.desertDiamond || Franchise.gnogaz ? 4 : 3,
                   ) || t('register_password_weak'),
               }}
               onBlur={() =>
@@ -102,7 +92,11 @@ const ForgotPasswordPage = () => {
                   'reset_password_field_required',
                 )}`,
                 validate: value =>
-                  value === watch('password') ||
+                  (value === watch('password') &&
+                    VALIDATIONS.password(
+                      value,
+                      Franchise.desertDiamond || Franchise.gnogaz ? 4 : 3,
+                    )) ||
                   t('reset_password_need_match_password'),
               }}
               id="repeat_password"

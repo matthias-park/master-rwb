@@ -44,7 +44,13 @@ const AutocompleteTextInputV2 = ({
     name: id,
     control,
     defaultValue,
-    rules,
+    rules: {
+      ...rules,
+      validate: (value: string) => {
+        if ((!value || !value.trim()) && rules.required) return rules.required;
+        return rules.validate?.(value);
+      },
+    },
   });
   const [hasFocus, setHasFocus] = useState(false);
 
@@ -63,7 +69,14 @@ const AutocompleteTextInputV2 = ({
         field.onChange(formatInputValue(item));
       }}
       inputValue={field.value}
-      onInputValueChange={value => {
+      onInputValueChange={(value, state: any) => {
+        if (
+          ![
+            Downshift.stateChangeTypes.changeInput,
+            Downshift.stateChangeTypes.clickItem,
+          ].includes(state.type)
+        )
+          return;
         onInput?.(value);
       }}
       itemToString={formatInputValue}

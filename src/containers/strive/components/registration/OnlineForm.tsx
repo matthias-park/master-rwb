@@ -108,6 +108,7 @@ const FormField = ({
           translationPrefix="register_input_"
           required={field.required}
           fallback={<TextInput id={field.id} rules={{}} />}
+          validate={field.validate}
         />
       );
     }

@@ -11,7 +11,7 @@ const CustomToggleCheck = React.forwardRef(
       checked: boolean;
       name?: string;
       onChange?: (e: any) => void;
-      onClick: (e: any) => void;
+      onClick?: (e: any) => void;
       className?: string;
       label?: string;
       errMsg?: string;

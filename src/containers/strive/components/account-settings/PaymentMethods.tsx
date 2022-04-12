@@ -5,8 +5,8 @@ import Overlay from 'react-bootstrap/Overlay';
 import Tooltip from 'react-bootstrap/Tooltip';
 
 interface PaymentMethodObj {
-  id: string;
-  value: string;
+  id: string | number;
+  value: string | number;
   icon?: string;
   title: string;
   toSelect?: BankAccount;
@@ -37,45 +37,46 @@ const PaymentMethod = ({
     if (titleRef?.current) {
       const width = titleRef.current.offsetWidth;
       const scrollWidth = titleRef.current.scrollWidth;
-      acc && scrollWidth > width && setShowTooltip(acc.id);
+      acc && scrollWidth > width && setShowTooltip(acc.id.toString());
     }
   };
+  if (!acc) return null;
 
   return (
-    <li key={acc?.id}>
+    <li key={acc.id}>
       <input
         {...(register && register(registerName || '', registerOptions))}
         className="d-none"
         type="radio"
         name="payment_method_id"
-        id={acc?.id}
-        value={acc?.value}
-        checked={acc?.id === selected}
-        onChange={() => acc?.onChange && acc?.onChange()}
+        id={acc.id.toString()}
+        value={acc.value}
+        checked={acc.id === selected}
+        onChange={() => acc.onChange && acc.onChange()}
       />
       <label
         ref={paymentContainer}
-        htmlFor={acc?.id}
-        className={clsx('payment-method', acc?.id === selected && 'selected')}
+        htmlFor={acc.id.toString()}
+        className={clsx('payment-method', acc.id === selected && 'selected')}
         onMouseOver={e => checkOverflow()}
         onMouseLeave={() => setShowTooltip(null)}
       >
-        <img alt="" src={acc?.icon} className="payment-method__img" />
+        <img alt="" src={acc.icon} className="payment-method__img" />
         <span ref={titleRef} className="payment-method__title">
-          {acc?.title}
+          {acc.title}
         </span>
         <Overlay
           placement="bottom"
           target={titleRef.current}
-          show={!!showTooltip && showTooltip === acc?.id}
+          show={!!showTooltip && showTooltip === acc.id}
         >
           {({ placement, arrowProps, show: _show, popper, ...props }) => (
             <Tooltip
               {...props}
-              id={`tooltip-${acc?.id}`}
+              id={`tooltip-${acc.id}`}
               className="tooltip--no-arrow"
             >
-              {acc?.title}
+              {acc.title}
             </Tooltip>
           )}
         </Overlay>

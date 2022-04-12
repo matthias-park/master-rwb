@@ -526,7 +526,7 @@ const accountSettingsStyles = css`
       font-weight: 500;
     }
     i {
-      color: #778ca6;
+      color: ${Franchise.gnogaz ? '#fff' : '#778ca6'};
       font-size: 30px;
     }
     ${mediaBreakpointDown('xs')} {
@@ -807,6 +807,9 @@ const accountSettingsStyles = css`
     li {
       list-style-type: none;
     }
+  }
+  .custom-modal .payment-methods {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
 
   .payment-method {

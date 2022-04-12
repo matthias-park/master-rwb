@@ -4,28 +4,35 @@ import App from './App';
 import * as Sentry from '@sentry/react';
 import { errorHandler, getQueryAffiliates } from '../utils';
 import { Config, DevEnv } from '../constants';
-import createStoreAsync from '../state';
+import createStoreAsync, { RootState } from '../state';
 import StateProvider from './StateProvider';
 import { setDomLoaded } from '../state/reducers/config';
-import { Integrations as TracingIntegrations } from '@sentry/tracing';
 
 if (!DevEnv && Config.sentryDsn) {
   Sentry.init({
     dsn: Config.sentryDsn,
     environment: process.env.TARGET_ENV,
     release: process.env.RELEASE ? `react@${process.env.RELEASE}` : undefined,
-    integrations: [
-      new TracingIntegrations.BrowserTracing({
-        tracingOrigins: [Config.apiUrl],
-      }),
-    ],
+    integrations: [],
     tracesSampler: samplingContext => {
-      if (samplingContext.transactionContext.op === 'navigation') {
-        return 0.01;
-      } else if (samplingContext.transactionContext) {
-        return 0.8;
+      if (samplingContext.transactionContext) {
+        return 1;
       }
-      return 0.3;
+      return 0;
+    },
+    beforeBreadcrumb(breadcrumb) {
+      if (
+        breadcrumb.category === 'console' &&
+        (!breadcrumb.level ||
+          [
+            Sentry.Severity.Info,
+            Sentry.Severity.Log,
+            Sentry.Severity.Debug,
+          ].includes(breadcrumb.level))
+      ) {
+        return null;
+      }
+      return breadcrumb;
     },
     beforeSend(event, hint) {
       if (hint?.originalException === 'Timeout') return null;
@@ -77,7 +84,10 @@ const indexApp = getChildren => {
   createStoreAsync().then(store => {
     window.addEventListener('load', () => {
       store.dispatch(setDomLoaded());
-      if (Config.zendesk) {
+      if (
+        Config.zendesk &&
+        !(store.getState() as RootState).config.mobileView
+      ) {
         import('../utils/uiUtils')
           .then(({ injectZendeskScript }) => {
             injectZendeskScript();

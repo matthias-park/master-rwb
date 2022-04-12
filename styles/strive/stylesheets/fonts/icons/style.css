@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?3m6oai');
-  src:  url('fonts/icomoon.eot?3m6oai#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?3m6oai') format('truetype'),
-    url('fonts/icomoon.woff?3m6oai') format('woff'),
-    url('fonts/icomoon.svg?3m6oai#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?d2tsjj');
+  src:  url('fonts/icomoon.eot?d2tsjj#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?d2tsjj') format('truetype'),
+    url('fonts/icomoon.woff?d2tsjj') format('woff'),
+    url('fonts/icomoon.svg?d2tsjj#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,9 +25,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-android:before {
-  content: "\eac0";
-}
 .icon-strive-check:before {
   content: "\e952";
 }
@@ -377,4 +374,85 @@
 }
 .icon-gnogaz-plus:before {
   content: "\e93f";
+}
+.icon-gnogaz-jackpot:before {
+  content: "\e94b";
+}
+.icon-gnogaz-table-games:before {
+  content: "\e94a";
+}
+.icon-gnogaz-livedealer:before {
+  content: "\e949";
+}
+.icon-gnogaz-megaways:before {
+  content: "\e948";
+}
+.icon-gnogaz-slots:before {
+  content: "\e947";
+}
+.icon-gnogaz-top:before {
+  content: "\e946";
+}
+.icon-gnogaz-new:before {
+  content: "\e945";
+}
+.icon-gnogaz-featured:before {
+  content: "\e944";
+}
+.icon-gnogaz-lobby:before {
+  content: "\e943";
+}
+.icon-gnogaz-casino:before {
+  content: "\e942";
+}
+.icon-gnogaz-search:before {
+  content: "\e941";
+}
+.icon-gnogaz-full-screen:before {
+  content: "\e940";
+}
+.icon-gnogaz-favourite-on:before {
+  content: "\e94c";
+}
+.icon-gnogaz-favourite-off:before {
+  content: "\e94d";
+}
+.icon-gnogaz-filter:before {
+  content: "\e94e";
+}
+.icon-gnogaz-right:before {
+  content: "\e94f";
+}
+.icon-gnogaz-left:before {
+  content: "\e950";
+}
+.icon-gnogaz-menu:before {
+  content: "\e951";
+}
+.icon-gnogaz-game-info .path1:before {
+  content: "\e955";
+  color: rgb(51, 51, 51);
+}
+.icon-gnogaz-game-info .path2:before {
+  content: "\e958";
+  margin-left: -1.03125em;
+  color: rgb(255, 255, 255);
+}
+.icon-gnogaz-home1:before {
+  content: "\e95d";
+}
+.icon-gnogaz-down:before {
+  content: "\e95e";
+}
+.icon-gnogaz-up:before {
+  content: "\e96c";
+}
+.icon-gnogaz-close:before {
+  content: "\e98a";
+}
+.icon-gnogaz-recent:before {
+  content: "\e98b";
+}
+.icon-android:before {
+  content: "\eac0";
 }

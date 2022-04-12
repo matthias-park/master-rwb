@@ -6,6 +6,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import { useI18n } from '../../../../hooks/useI18n';
 import { Franchise } from '../../../../constants';
+import NumberFormat from 'react-number-format';
 interface Props {
   title: string;
   defaultValue?: number | string;
@@ -26,7 +27,7 @@ interface Props {
 
 const InputContainer = ({
   title,
-  defaultValue = '',
+  defaultValue = '0.00',
   validationErrorPrefix,
   buttonText,
   buttonClassName,
@@ -113,7 +114,7 @@ const InputContainer = ({
                 key={value}
                 className={clsx(
                   'quick-amounts__btn',
-                  watch('amount') === value.toString() && 'active',
+                  Number(watch('amount')) === Number(value) && 'active',
                 )}
                 onClick={() =>
                   setValue('amount', value.toString(), {
@@ -123,7 +124,14 @@ const InputContainer = ({
                 }
                 disabled={disabled}
               >
-                {`${currency} ${value}`}
+                <NumberFormat
+                  value={value}
+                  thousandSeparator
+                  displayType={'text'}
+                  prefix={currency}
+                  decimalScale={2}
+                  fixedDecimalScale={true}
+                />
               </button>
             ))}
           </div>
@@ -136,6 +144,8 @@ const InputContainer = ({
               prefix: `${currency} `,
               thousandSeparator: true,
               allowNegative: false,
+              decimalScale: 2,
+              fixedDecimalScale: true,
             }}
             rules={{
               validate: validateAmount,

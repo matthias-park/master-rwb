@@ -10,7 +10,7 @@ interface Props {
   id: string;
   control?: Control<FieldValues>;
   defaultValue?: unknown;
-  rules: any;
+  rules?: any;
   disabled?: boolean;
   title?: string | React.ReactNode;
   className?: string;
@@ -20,7 +20,7 @@ const CheckboxInput = ({
   id,
   control,
   defaultValue,
-  rules,
+  rules = {},
   disabled,
   title,
   className,

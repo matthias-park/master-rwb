@@ -32,13 +32,29 @@ export const registrationStyles = css`
     background-color: ${props =>
       props.theme.registration.bgColor || props.theme.colors.white.main};
     box-shadow: ${props => props.theme.registration.boxShadow};
-    background-image: url(${props => props.theme.registration.bgImg});
     background-position: 200% -2%;
-    background-size: 75%;
-    background-repeat: no-repeat;
     padding: 30px 40px 40px 40px;
     &__small {
-      background-position: 200% -12%;
+      z-index: 1;
+    }
+    &:not(.reg-block__small),
+    &__small:after {
+      background-image: url(${props => props.theme.registration.bgImg});
+      background-size: 75%;
+      background-repeat: no-repeat;
+    }
+    &__small:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1000px;
+      background-position: 200% -5.7%;
+      z-index: -1;
+      ${mediaBreakpointDown('sm')} {
+        opacity: 0.4;
+      }
     }
     .help-block {
       position: absolute;

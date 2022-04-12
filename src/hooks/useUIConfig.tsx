@@ -8,6 +8,9 @@ import { UIBackdropState } from '../types/UIConfig';
 import { useConfig } from './useConfig';
 import { useLocation } from 'react-router';
 import { createHeaderNavProviderValues } from '../utils/uiUtils';
+import { useDispatch } from 'react-redux';
+import { disableModal, enableModal } from '../state/reducers/modals';
+import { ComponentName } from '../constants';
 
 export const uiConfig = createContext<UIConfig | null>(null);
 
@@ -28,6 +31,7 @@ export const UIConfigProvider = props => {
     return headerEqual && pageLoaderEqual;
   });
   const location = useLocation();
+  const dispatch = useDispatch();
   const [activeHeaderNav, setActiveHeaderNav] = useState<string | null>(null);
   const [backdrop, setBackdrop] = useState<UIBackdropState>({
     active: false,
@@ -40,7 +44,13 @@ export const UIConfigProvider = props => {
     header,
   );
   useEffect(() => {
-    changeBackdropVisibility(showPageLoader || backdrop.active);
+    const active = showPageLoader || backdrop.active;
+    dispatch(
+      active
+        ? enableModal(ComponentName.PageBackdrop)
+        : disableModal(ComponentName.PageBackdrop),
+    );
+    changeBackdropVisibility(active);
   }, [backdrop, showPageLoader]);
 
   useEffect(() => {

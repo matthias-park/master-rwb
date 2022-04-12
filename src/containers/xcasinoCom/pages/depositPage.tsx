@@ -11,17 +11,17 @@ import Button from 'react-bootstrap/Button';
 import StepsAccordion from '../components/account-settings/StepsAccordion';
 import Main from '../pageLayout/Main';
 import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
-import useDepositResponseStatus from '../../../hooks/useDepositResponseStatus';
+import useDepositResponseStatus, {
+  isDepositStatusSuccess,
+} from '../../../hooks/useDepositResponseStatus';
 import useGTM from '../../../hooks/useGTM';
 import { useRoutePath } from '../../../hooks';
 import { CustomWindowEvents, PagesName } from '../../../constants';
 import {
-  DepositLimits,
   DepositRequest,
   DepositResponse,
   DepositStatus,
 } from '../../../types/api/user/Deposit';
-import styled from 'styled-components';
 import { postApi } from '../../../utils/apiUtils';
 import CustomAlert from '../components/CustomAlert';
 import Spinner from 'react-bootstrap/Spinner';
@@ -31,14 +31,14 @@ import * as Sentry from '@sentry/react';
 import { useConfig } from '../../../hooks/useConfig';
 import RequestReturn from '../../../types/api/deposits/RequestReturn';
 import { replaceStringTagsReact } from '../../../utils/reactUtils';
+import NumberFormat from 'react-number-format';
 
 const AmountContainer = ({
   handleRequestDeposit,
   depositStatus,
-  depositDataLoading,
-  depositData,
   depositLoading,
   step,
+  selectedBank,
 }) => {
   const { user } = useAuth();
   const { t } = useI18n();
@@ -47,27 +47,12 @@ const AmountContainer = ({
   const disabled =
     user.validator_status ===
       KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataOnly ||
-    depositStatus.depositStatus === DepositStatus.Pending ||
-    depositDataLoading;
+    depositStatus.depositStatus === DepositStatus.Pending;
 
   const loading = !!formState.isSubmitting || depositLoading;
 
-  const minDeposit = t('bancontact_min_deposit', true);
-  const maxDeposit = useMemo(() => {
-    if (depositData?.Data?.length) {
-      const getDepositLimit = (type: string) =>
-        depositData.Data!.find(limit => limit.MaxDepositLimitType === type)
-          ?.MaxDepositAmountLeft;
-      const dayLimit = getDepositLimit('Day');
-      const weekLimit = getDepositLimit('Week');
-      const monthLimit = getDepositLimit('Month');
-      const depositLimit = dayLimit ?? weekLimit ?? monthLimit;
-      if (depositLimit != null) {
-        return depositLimit;
-      }
-    }
-    return null;
-  }, [depositData?.Data, t]);
+  const minDeposit = selectedBank?.min_deposit;
+  const maxDeposit = selectedBank?.max_deposit;
 
   useEffect(() => {
     step === 1 && resetAmount();
@@ -140,9 +125,24 @@ const AmountContainer = ({
         defaultValue={'0'}
       />
       <small className="cashier-page__inputs-info">
-        {`${t('min')}: ${minDeposit} ${user.currency} ${
-          maxDeposit ? '/ ' + maxDeposit + ' ' + user.currency : ''
-        }`}
+        {minDeposit != null && (
+          <NumberFormat
+            value={selectedBank.min_deposit}
+            displayType="text"
+            prefix={`${t('min_deposit')}: `}
+            suffix={` ${user.currency}`}
+          />
+        )}
+        {minDeposit != null && maxDeposit != null && ' - '}
+        {maxDeposit != null && (
+          <NumberFormat
+            value={maxDeposit}
+            thousandSeparator
+            displayType={'text'}
+            prefix={`${t('max_deposit')}: `}
+            suffix={` ${user.currency}`}
+          />
+        )}
       </small>
       <LoadingButton
         variant="primary"
@@ -168,8 +168,7 @@ const DetailsContainer = ({ depositStatus, depositDetails, resetDeposits }) => {
 
   return (
     <>
-      {depositStatus.depositStatus === DepositStatus.Confirmed &&
-      depositDetails ? (
+      {isDepositStatusSuccess(depositStatus.depositStatus) && depositDetails ? (
         <div className="cashier-page__payment-info">
           <div className="cashier-page__payment-info-item">
             <p>{t('deposit_amount')}</p>
@@ -224,9 +223,6 @@ const DepositPage = () => {
   });
   const { watch, setValue, register } = formMethods;
   const watchBankId = watch('bank_id');
-  const { data: depositData, error: depositError } = useApi<
-    RailsApiResponse<DepositLimits[] | null>
-  >('/restapi/v1/user/max_deposit');
   const [apiError, setApiError] = useState<string | null>(null);
   const [customHtml, setCustomHtml] = useState<string | null>(null);
   const depositBaseUrl = useRoutePath(PagesName.DepositPage, true);
@@ -237,13 +233,16 @@ const DepositPage = () => {
   const { data: banksData, error: banksError } = useApi<any>(
     '/restapi/v1/user/available_banks',
   );
-  const depositDataLoading = !depositData && !depositError;
   const banksDataLoading = !banksData && !banksError;
   const [depositDetails, setDepositDetails] = useLocalStorage<{
     amount: number;
     total: number;
   } | null>('deposit_details', null);
-
+  const selectedBankId = watch('bank_id');
+  const selectedBank = useMemo(
+    () => banksData?.Data.find(bank => bank.bank_id === selectedBankId),
+    [banksData, selectedBankId],
+  );
   useEffect(() => {
     if (
       [DepositStatus.Confirmed, DepositStatus.Rejected].includes(
@@ -257,7 +256,7 @@ const DepositPage = () => {
       });
     }
 
-    if (depositStatus.depositStatus === DepositStatus.Confirmed) {
+    if (isDepositStatusSuccess(depositStatus.depositStatus)) {
       setCurrentStep(4);
     }
   }, [depositStatus.depositStatus]);
@@ -371,12 +370,69 @@ const DepositPage = () => {
             },
           );
           setCurrentStep(prev => prev + 1);
-          let html = atob(response.Data.InnerText);
-          html = html.replace(
-            /<(\/?|!?)(DOCTYPE html|html|head|body|meta)([^>]*)>/gm,
-            '',
-          );
-          return setCustomHtml(html);
+          let htmlString = atob(response.Data.InnerText);
+          const htmlParser = new DOMParser();
+          const html = htmlParser.parseFromString(htmlString, 'text/html');
+          const headEl = html.getElementsByTagName('head')[0];
+          const headScripts = [
+            ...Array.from(headEl.getElementsByTagName('script')),
+            ...Array.from(headEl.getElementsByTagName('link')),
+          ];
+          const alreadyLoadedScriptsLinks = [
+            ...Array.from(document.head.getElementsByTagName('script')),
+            ...Array.from(document.head.getElementsByTagName('link')),
+          ];
+          const insertScriptLinkToHead = (
+            newTagEl: HTMLScriptElement | HTMLLinkElement,
+          ): Promise<boolean> =>
+            new Promise(resolve => {
+              if (
+                alreadyLoadedScriptsLinks.some(tag => {
+                  if (tag.tagName !== newTagEl.tagName) return false;
+                  const tagUrl =
+                    (tag as HTMLScriptElement).src ||
+                    (tag as HTMLLinkElement).href;
+                  const newTagUrl =
+                    (newTagEl as HTMLScriptElement).src ||
+                    (newTagEl as HTMLLinkElement).href;
+                  if (newTagEl.tagName === 'SCRIPT' && !newTagUrl) {
+                    return tag.innerHTML === newTagEl.innerHTML;
+                  }
+                  return tagUrl && newTagUrl && tagUrl === newTagUrl;
+                })
+              ) {
+                return resolve(true);
+              }
+              const el = document.createElement(newTagEl.tagName);
+              Object.values(newTagEl.attributes).forEach(attr => {
+                const attrName =
+                  attr.name === 'crossorigin' ? 'crossOrigin' : attr.name;
+                el[attrName] = attr.value;
+              });
+              el.innerHTML = newTagEl.innerHTML;
+              el.onload = () => resolve(true);
+              el.onerror = () => {
+                Sentry.captureMessage(
+                  `Failed loading deposit tag ${
+                    (newTagEl as HTMLScriptElement).src ||
+                    (newTagEl as HTMLLinkElement).href
+                  }`,
+                );
+                resolve(false);
+              };
+              document.head.appendChild(el);
+              if (el.innerHTML) {
+                return resolve(true);
+              }
+            });
+          const scriptLoaded = await Promise.all(
+            Array.from(headScripts).map(insertScriptLinkToHead),
+          ).then(loaded => loaded.every(Boolean));
+          if (!scriptLoaded) {
+            setCustomHtml(null);
+            return setApiError(t('api_response_failed'));
+          }
+          return setCustomHtml(html.getElementsByTagName('body')[0].innerHTML);
         } else if (
           response?.Success &&
           response.Data?.RedirectUrl &&
@@ -391,7 +447,7 @@ const DepositPage = () => {
       setDepositLoading(false);
       return false;
     },
-    [],
+    [t],
   );
 
   const resetDeposits = () => {
@@ -402,13 +458,10 @@ const DepositPage = () => {
   };
 
   useEffect(() => {
-    if (
-      (!depositDataLoading && (!depositData?.Success || depositError)) ||
-      (!banksDataLoading && (!banksData?.Data || banksError))
-    ) {
+    if (!banksDataLoading && (!banksData?.Data || banksError)) {
       setApiError(t('api_deposit_request_error'));
     }
-  }, [depositData, depositError, banksData, banksError]);
+  }, [banksData, banksError]);
 
   const alertData = useMemo(() => {
     if (
@@ -417,10 +470,9 @@ const DepositPage = () => {
       )
     ) {
       return {
-        variant:
-          depositStatus.depositStatus === DepositStatus.Confirmed
-            ? 'success'
-            : 'danger',
+        variant: isDepositStatusSuccess(depositStatus.depositStatus)
+          ? 'success'
+          : 'danger',
         msg: depositStatus.message,
       };
     } else if (apiError) {
@@ -430,7 +482,7 @@ const DepositPage = () => {
       };
     }
     return null;
-  }, [banksData, depositData, apiError]);
+  }, [banksData, apiError]);
 
   const depositFrame = useMemo(() => {
     if (!customHtml) return null;
@@ -439,13 +491,12 @@ const DepositPage = () => {
   return (
     <Main title="Cashier" icon="icon-deposit">
       <div className="cashier-page">
-        {(depositStatus.depositStatus === DepositStatus.Pending ||
-          depositDataLoading) && (
+        {depositStatus.depositStatus === DepositStatus.Pending && (
           <div className="d-flex justify-content-center pt-4 pb-3">
             <Spinner animation="border" variant="black" className="mx-auto" />
           </div>
         )}
-        {banksData && depositData && (
+        {banksData && (
           <>
             <CustomAlert show={!!alertData} variant={alertData?.variant}>
               {alertData?.msg}
@@ -470,11 +521,13 @@ const DepositPage = () => {
                                   value: acc.bank_id,
                                   icon: acc?.icon,
                                   title: acc.name,
+                                  minDeposit: acc.min_deposit,
+                                  maxDeposit: acc.max_deposit,
                                   onChange: () =>
                                     setValue('bank_id', acc.bank_id),
                                 };
                               })}
-                              selected={watch('bank_id')}
+                              selected={selectedBankId}
                               registerName={'bank_id'}
                               registerOptions={{
                                 required: t('bank_id_required'),
@@ -499,10 +552,9 @@ const DepositPage = () => {
                             <AmountContainer
                               handleRequestDeposit={handleRequestDeposit}
                               depositStatus={depositStatus}
-                              depositDataLoading={depositDataLoading}
-                              depositData={depositData}
                               depositLoading={depositLoading}
                               step={currentStep}
+                              selectedBank={selectedBank}
                             />
                           </div>
                         ),

@@ -18,13 +18,12 @@ const CasinoCategory = () => {
     games,
     filteredGames,
     setGames,
-    categoryFilter,
-    providerFilter,
     casinoType,
+    filters,
   } = useCasinoConfig();
   const params = useParams<{ category?: string; providers?: string }>();
-  const categoryId = categoryFilter?.id || activeCategory?.id;
-  const providerId = providerFilter?.id || activeProvider?.id;
+  const categoryId = filters.categoryFilterGroup?.[0]?.id || activeCategory?.id;
+  const providerId = filters.providerFilterGroup?.[0]?.id || activeProvider?.id;
   const { data, error } = useApi<RailsApiResponse<Game[]>>(
     categoryId || providerId
       ? `/restapi/v1/casino/${
@@ -34,7 +33,7 @@ const CasinoCategory = () => {
         }/${params?.category ? categoryId : providerId}/games`
       : '',
   );
-  const isDataLoading = !data && !error;
+  const isDataLoading = (!data && !error) || filters.loading;
   const foundGames = filteredGames || games;
   const featuredGames = foundGames?.filter(game =>
     game.features?.includes('front_page'),
@@ -63,7 +62,7 @@ const CasinoCategory = () => {
       {!isDataLoading && !foundGames?.length && (
         <h4 className="mt-2">{t('no_games_found')}</h4>
       )}
-      {!!data && (
+      {!!data && !filters.loading && (
         <>
           <CasinoGroupSlider
             games={featuredGames}

@@ -96,7 +96,7 @@ const CloseAccountPage = () => {
       <p className="mb-4">{jsxT('close_account_sub_text')}</p>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       )}
       {!!error && (

@@ -122,7 +122,9 @@ const PersonalInfoCard = ({ personalInfoData, mutate }: PersonalInfoProps) => {
               </CustomAlert>
               <SettingsForm
                 id={id}
-                fields={Franchise.strive ? fields : null}
+                fields={
+                  Franchise.strive || Franchise.mothership ? fields : null
+                }
                 blocks={
                   (Franchise.gnogaz ||
                     Franchise.desertDiamond ||
@@ -173,7 +175,7 @@ const PersonalInfoPage = () => {
       </p>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       )}
       {!!error && (

@@ -21,7 +21,7 @@ import Banner from '../components/Banner';
 
 const PromotionPage = ({ slug }: { slug: string }) => {
   const { data, error } = useApi<RailsApiResponse<PostItem>>(
-    `/restapi/v1/content/promotion/${slug}`,
+    `/restapi/v1/content/promotion/${slug}?show_for=1`,
   );
   const { t } = useI18n();
   const history = useHistory();
@@ -98,7 +98,7 @@ const PromoItem = ({ item }: { item: PostItem }) => {
 
 const PromotionsList = () => {
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
-    '/restapi/v1/content/promotions',
+    '/restapi/v1/content/promotions?show_for=1',
   );
   const { t } = useI18n();
   const [imagesLoaded, setImagesLoaded] = useState(false);

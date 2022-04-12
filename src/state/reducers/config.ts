@@ -76,7 +76,7 @@ export const fetchConstants = createAsyncThunk<PageConfig, number | undefined>(
     const response = await getApi<RailsApiResponse<PageConfig>>(
       '/restapi/v1/content/constants',
       { cache: 'no-cache' },
-    ).catch(() => RailsApiResponseFallback);
+    ).catch(err => err);
 
     if (response.Success && response?.Data) {
       const constants = response?.Data;
@@ -187,6 +187,7 @@ export const configSlice = createSlice({
             welcome_casino_categories,
             featured_casino_categories,
             custom_content_pages,
+            hardcoded_categories_banners,
           } = action.payload;
           state.configLoaded = ConfigLoaded.Loaded;
           state.locales = available_locales;
@@ -199,6 +200,7 @@ export const configSlice = createSlice({
           state.featuredCasinoCategories = featured_casino_categories;
           state.locale = locale;
           state.customContentPages = custom_content_pages;
+          state.hardcodedCategoriesBanners = hardcoded_categories_banners;
           Lockr.set(LocalStorageKeys.config, state);
           if (!locale && state.domLoaded) {
             setPageLoader(state, false);

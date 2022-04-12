@@ -244,7 +244,9 @@ const OnlineForm = (props: Props) => {
               {!!block.title && jsxT(`register_${block.title}`)}
             </p>
             {!!block.description && (
-              <p className="mb-3">{jsxT(`register_${block.description}`)}</p>
+              <p className="mb-3 text-14">
+                {jsxT(`register_${block.description}`)}
+              </p>
             )}
             {block.fields.map(field => {
               if (!field) return null;

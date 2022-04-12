@@ -23,13 +23,13 @@ const AsyncPage = (pageName: string) =>
     {
       fallback: (
         <div className="w-100 d-flex justify-content-center pt-5 min-vh-70">
-          <Spinner animation="border" variant="black" className="mx-auto" />
+          <Spinner animation="border" className="spinner-custom mx-auto" />
         </div>
       ),
     },
   );
 
-const COMPONENT_PAGES = {
+export const COMPONENT_PAGES = {
   [PagesName.DepositPage]: AsyncPage('depositPage'),
   [PagesName.HomePage]: AsyncPage('homePage'),
   [PagesName.LimitsPage]: AsyncPage('limitsPage'),
@@ -56,6 +56,9 @@ const COMPONENT_PAGES = {
   [PagesName.LoginPage]: AsyncPage('loginPage'),
   [PagesName.RequiredDocuments]: AsyncPage('requiredDocumentsPage'),
   [PagesName.TaxPage]: AsyncPage('taxPage'),
+  [PagesName.CasinoPage]: AsyncPage('casinoPage'),
+  [PagesName.CasinoCategoryPage]: AsyncPage('casinoCategoryPage'),
+  [PagesName.CasinoInnerPage]: AsyncPage('casinoInnerPage'),
   [PagesName.BonusesPage]: AsyncPage('bonusesPage'),
 };
 

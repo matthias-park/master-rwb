@@ -3,7 +3,6 @@ import { useI18n } from '../../../../hooks/useI18n';
 import { useAuth } from '../../../../hooks/useAuth';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import LoadingButton from '../../../../components/LoadingButton';
-import { DepositLimits } from '../../../../types/api/user/Deposit';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import { useForm, FormProvider } from 'react-hook-form';
 import clsx from 'clsx';
@@ -13,17 +12,22 @@ import LoadingSpinner from '../../../../components/LoadingSpinner';
 import PaymentMethods from '../../components/account-settings/PaymentMethods';
 import { Franchise } from '../../../../constants';
 import NumberFormat from 'react-number-format';
-
+import { postApi } from '../../../../utils/apiUtils';
+import PaymentAccountList from './PaymentAccount';
+import BankDepositAccount from '../../../../types/api/deposits/account';
+import AvailableBanks from '../../../../types/api/user/AvailableBanks';
+import CheckboxInput from '../../../../components/customFormInputs/CheckboxInput';
 interface Props {
   depositRequest: (
     inputValue: number,
     bank_id: number,
+    AccountId: number | null,
+    Prefill: boolean,
   ) => Promise<boolean | void>;
   disabled: boolean;
   loading: boolean;
-  setApiError: (msg: string) => void;
-  depositData: RailsApiResponse<DepositLimits[] | null> | undefined;
-  depositError: boolean;
+  setApiError: (msg: string | null) => void;
+  className?: string;
 }
 
 const QUICK_AMOUNTS = Franchise.desertDiamond
@@ -35,55 +39,71 @@ const DepositForm = ({
   disabled,
   loading,
   setApiError,
-  depositData,
-  depositError,
+  className,
 }: Props) => {
   const { user } = useAuth();
-  const { t } = useI18n();
-  const defaultValue = 0;
+  const { t, jsxT } = useI18n();
+  const defaultValue = '0.00';
   const formMethods = useForm<{
     amount: string;
-    bank_id: string | number | undefined;
+    bank_id?: string | number;
+    AccountId?: number;
+    AccountPrefillRequested?: boolean;
   }>({
     mode: 'onBlur',
     defaultValues: {
       amount: defaultValue.toString(),
       bank_id: undefined,
+      AccountPrefillRequested: false,
     },
   });
-  const { data: banksData, error: banksError } = useApi<any>(
-    '/restapi/v1/user/available_banks',
-  );
-  const depositDataLoading = !depositData && !depositError;
+  const { data: banksData, error: banksError } = useApi<
+    RailsApiResponse<AvailableBanks[]>
+  >('/restapi/v1/user/available_banks');
   const banksDataLoading = !banksData && !banksError;
-  const { formState, watch, setValue, reset, register } = formMethods;
-
-  const minDeposit = t('bancontact_min_deposit', true);
-  const maxDeposit = useMemo(() => {
-    if (depositData?.Data?.length) {
-      const getDepositLimit = (type: string) =>
-        depositData.Data!.find(limit => limit.MaxDepositLimitType === type)
-          ?.MaxDepositAmountLeft;
-      const dayLimit = getDepositLimit('Day');
-      const weekLimit = getDepositLimit('Week');
-      const monthLimit = getDepositLimit('Month');
-      const depositLimit = dayLimit ?? weekLimit ?? monthLimit;
-      if (depositLimit != null) {
-        return depositLimit;
-      }
-    }
-    return null;
-  }, [depositData?.Data, t]);
+  const { formState, watch, setValue, reset, register, trigger } = formMethods;
+  const selectedBankId = watch('bank_id');
+  const selectedBankAccountId = watch('AccountId');
+  const selectedBank = useMemo(
+    () => banksData?.Data.find(bank => bank.bank_id === selectedBankId),
+    [banksData, selectedBankId],
+  );
+  const bankAccountReq = useMemo(() => {
+    if (!selectedBank?.prefill) return null;
+    return ['/restapi/v1/deposits/accounts', { BankId: selectedBankId }];
+  }, [selectedBankId]);
+  const {
+    data: bankAccountData,
+    error: bankAccountError,
+    mutate: bankAccountMutate,
+  } = useApi<RailsApiResponse<BankDepositAccount[]>>(
+    bankAccountReq,
+    (url, body) =>
+      postApi<RailsApiResponse<BankDepositAccount[]>>(url, body).then(res => {
+        const isDataArray = Array.isArray(res.Data);
+        return { ...res, Data: isDataArray ? res.Data : [] };
+      }),
+    {
+      onSuccess: res => {
+        if (res.Data.length) setValue('AccountId', res.Data[0].id);
+      },
+    },
+  );
+  const bankAccountDataLoading = !bankAccountData && !bankAccountError;
 
   const validateAmount = (value: string) => {
     if (!value) return true;
     let inputAmount = Number(value);
-    const minNumber = Number(minDeposit);
-    const maxNumber = Number(maxDeposit);
-    if (minDeposit != null && !isNaN(minNumber) && inputAmount < minNumber) {
+    const minNumber = Number(selectedBank?.min_deposit);
+    const maxNumber = Number(selectedBank?.max_deposit);
+    if (
+      selectedBank?.min_deposit != null &&
+      !isNaN(minNumber) &&
+      inputAmount < minNumber
+    ) {
       return t(`deposit_amount_below_minimum`);
     } else if (
-      maxDeposit != null &&
+      selectedBank?.max_deposit != null &&
       !isNaN(maxNumber) &&
       inputAmount > maxNumber
     ) {
@@ -108,25 +128,66 @@ const DepositForm = ({
         keepValues: false,
       },
     );
-
-  const handleSubmit = () => {
-    formMethods.handleSubmit(async ({ amount, bank_id }) =>
-      depositRequest(Number(amount), Number(bank_id)),
-    )();
+  const deleteSelectedBankAccount = async () => {
+    if (!selectedBankAccountId) return;
+    setApiError(null);
+    const result = await postApi<RailsApiResponse<null>>(
+      '/restapi/v1/deposits/prefill',
+      {
+        AccountId: Number(selectedBankAccountId),
+        Prefill: false,
+      },
+    ).catch((res: RailsApiResponse<null>) => res);
+    if (result.Success) {
+      const newBankAccountData = bankAccountData
+        ? {
+            ...bankAccountData,
+            Data: bankAccountData.Data.filter(
+              acc => acc.id !== selectedBankAccountId,
+            ),
+          }
+        : undefined;
+      bankAccountMutate(newBankAccountData);
+      setValue('AccountId', newBankAccountData?.Data[0]?.id);
+    } else {
+      setApiError(result.Message || t('api_response_failed'));
+    }
+    return result.Success;
   };
 
+  const handleSubmit = () => {
+    formMethods.handleSubmit(
+      async ({ amount, bank_id, AccountId, AccountPrefillRequested }) =>
+        depositRequest(
+          Number(amount),
+          Number(bank_id),
+          Number(AccountId),
+          !!AccountPrefillRequested,
+        ),
+    )();
+  };
   useEffect(() => {
-    if (
-      (!depositDataLoading && (!depositData?.Success || depositError)) ||
-      (!banksDataLoading && (!banksData?.Data || banksError))
-    ) {
+    if (Number(watch('amount')) > 0) trigger('amount');
+    setValue('AccountId', undefined);
+  }, [selectedBankId]);
+  useEffect(() => {
+    if (!banksDataLoading && (!banksData?.Data || banksError)) {
       setApiError(t('api_deposit_request_error'));
     }
-  }, [depositData, depositError, banksData, banksError]);
-
+  }, [banksData, banksError]);
+  const showBankAccountSelector =
+    (!!selectedBank?.prefill && bankAccountDataLoading) ||
+    !!bankAccountData?.Data.length;
+  const showBankAccountPrefillCheckbox =
+    selectedBank?.prefill && !selectedBankAccountId && !bankAccountDataLoading;
+  const disableDepositButton =
+    !formState.isDirty ||
+    !watch('amount', '') ||
+    validateAmount(watch('amount', '')) !== true ||
+    (!!bankAccountDataLoading && !!selectedBank?.prefill);
   return (
-    <div className="input-container mb-4">
-      {Franchise.strive && (
+    <div className={clsx('input-container mb-4', className)}>
+      {(Franchise.strive || Franchise.mothership) && (
         <div className="input-container__header d-flex align-items-center">
           <h2 className="ml-3 mb-0">{t('deposit_input_container_title')}</h2>
         </div>
@@ -140,7 +201,7 @@ const DepositForm = ({
           className="my-2"
         />
       </div>
-      {banksData && depositData && (
+      {banksData && (
         <FormProvider {...formMethods}>
           <div className="d-flex flex-column w-100">
             <div
@@ -166,7 +227,7 @@ const DepositForm = ({
                     onChange: () => setValue('bank_id', acc.bank_id),
                   };
                 })}
-                selected={watch('bank_id')}
+                selected={selectedBankId}
                 registerName={'bank_id'}
                 registerOptions={{ required: t('bank_id_required') }}
                 register={register}
@@ -177,6 +238,36 @@ const DepositForm = ({
               >
                 {formState && formState?.errors['bank_id']?.message}
               </small>
+              {showBankAccountSelector && (
+                <>
+                  <p
+                    data-testid="title"
+                    className="input-container__title text-14 mt-3 mb-2"
+                  >
+                    {t('available_bank_accounts')}
+                  </p>
+                  <LoadingSpinner
+                    show={!!selectedBankId && bankAccountDataLoading}
+                    className="d-block mx-auto mb-2"
+                  />
+                  <PaymentAccountList
+                    accounts={
+                      (bankAccountData?.Success && bankAccountData.Data) || []
+                    }
+                    registerName="AccountId"
+                    deleteSelectedAccount={deleteSelectedBankAccount}
+                    selectedBankAccount={selectedBankAccountId}
+                  />
+                </>
+              )}
+              {showBankAccountPrefillCheckbox && (
+                <CheckboxInput
+                  id="AccountPrefillRequested"
+                  className="py-2"
+                  title={jsxT('payment_prefill_checkbox')}
+                  defaultValue={false}
+                />
+              )}
             </div>
             <Form.Group className="d-flex flex-column w-100">
               <div
@@ -193,7 +284,7 @@ const DepositForm = ({
                     key={value}
                     className={clsx(
                       'quick-amounts__btn',
-                      watch('amount') === value.toString() && 'active',
+                      Number(watch('amount')) === Number(value) && 'active',
                     )}
                     onClick={() =>
                       setValue('amount', value.toString(), {
@@ -203,7 +294,14 @@ const DepositForm = ({
                     }
                     disabled={disabled}
                   >
-                    {`${user.currency} ${value}`}
+                    <NumberFormat
+                      value={value}
+                      thousandSeparator
+                      displayType={'text'}
+                      prefix={user.currency}
+                      decimalScale={2}
+                      fixedDecimalScale={true}
+                    />
                   </button>
                 ))}
               </div>
@@ -212,10 +310,11 @@ const DepositForm = ({
                 className="input-container__input"
                 title={t('deposit_input_amount')}
                 maskedInput={{
-                  allowEmptyFormatting: true,
                   prefix: `${user.currency} `,
                   thousandSeparator: true,
                   allowNegative: false,
+                  decimalScale: 2,
+                  fixedDecimalScale: true,
                 }}
                 rules={{
                   validate: validateAmount,
@@ -237,21 +336,27 @@ const DepositForm = ({
                 }
               />
               <small className="my-2">
-                {minDeposit != null && (
+                {selectedBank?.min_deposit != null && (
                   <NumberFormat
-                    value={minDeposit}
+                    value={selectedBank.min_deposit}
                     thousandSeparator
                     displayType={'text'}
                     prefix={`${t('min_deposit')}: ${user.currency}`}
+                    decimalScale={2}
+                    fixedDecimalScale={true}
                   />
                 )}
-                {minDeposit != null && maxDeposit != null && ' - '}
-                {maxDeposit != null && (
+                {selectedBank?.min_deposit != null &&
+                  selectedBank.max_deposit != null &&
+                  ' - '}
+                {selectedBank?.max_deposit != null && (
                   <NumberFormat
-                    value={maxDeposit}
+                    value={selectedBank.max_deposit}
                     thousandSeparator
                     displayType={'text'}
                     prefix={`${t('max_deposit')}: ${user.currency}`}
+                    decimalScale={2}
+                    fixedDecimalScale={true}
                   />
                 )}
               </small>
@@ -259,11 +364,7 @@ const DepositForm = ({
           </div>
           <LoadingButton
             variant="primary"
-            disabled={
-              !formState.isDirty ||
-              !watch('amount', '') ||
-              validateAmount(watch('amount', '')) !== true
-            }
+            disabled={disableDepositButton}
             className={clsx(
               Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
                 ? 'mt-3'

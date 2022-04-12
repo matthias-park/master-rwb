@@ -12,6 +12,7 @@ import { useI18n } from '../../../../hooks/useI18n';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Navigation } from 'swiper';
 import useDesktopWidth from '../../../../hooks/useDesktopWidth';
+import { FilterActions } from '../../../../types/api/Casino';
 SwiperCore.use([Navigation]);
 
 enum Filters {
@@ -81,13 +82,11 @@ const CasinoFilters = () => {
     setParams,
     activeCategory,
     activeProvider,
-    setCategoryFilter,
-    setProviderFilter,
-    categoryFilter,
-    providerFilter,
     casinoType,
     orderBy,
     setOrderBy,
+    filters,
+    setFilters,
   } = useCasinoConfig();
   const location = useLocation();
   const history = useHistory();
@@ -117,8 +116,8 @@ const CasinoFilters = () => {
   };
 
   const resetFilters = () => {
-    setCategoryFilter(null);
-    setProviderFilter(null);
+    setFilters({ type: FilterActions.ResetCategory });
+    setFilters({ type: FilterActions.ResetProvider });
     setOrderBy(null);
     toggleSidebar();
   };
@@ -166,8 +165,8 @@ const CasinoFilters = () => {
                           className={clsx(
                             'casino-filters__categories-item',
                             category.slug ===
-                              (categoryFilter?.slug || activeCategory?.slug) &&
-                              'active',
+                              (filters.categoryFilterGroup?.[0]?.slug ||
+                                activeCategory?.slug) && 'active',
                           )}
                         >
                           <i className={clsx(`icon-${category.icon}`)} />
@@ -198,8 +197,8 @@ const CasinoFilters = () => {
                       className={clsx(
                         'casino-filters__categories-item',
                         category.slug ===
-                          (categoryFilter?.slug || activeCategory?.slug) &&
-                          'active',
+                          (filters.categoryFilterGroup?.[0]?.slug ||
+                            activeCategory?.slug) && 'active',
                       )}
                     >
                       <i className={clsx(`icon-${category.icon}`)} />
@@ -237,8 +236,8 @@ const CasinoFilters = () => {
             <div className="filters-nav">
               <FilterDropdown
                 title={
-                  categoryFilter
-                    ? categoryFilter.name
+                  filters.categoryFilterGroup.length
+                    ? filters.categoryFilterGroup[0]?.name
                     : activeCategory
                     ? activeCategory.name
                     : t('category_filter_title')
@@ -252,25 +251,41 @@ const CasinoFilters = () => {
                       : Filters.Categories,
                   )
                 }
-                activeItemId={categoryFilter?.id || activeCategory?.slug}
+                activeItemId={
+                  filters.categoryFilterGroup?.[0]?.id || activeCategory?.slug
+                }
                 items={categories?.map(category => ({
-                  activeId: categoryFilter ? category.id : category.slug,
+                  activeId: filters.categoryFilterGroup
+                    ? category.id
+                    : category.slug,
                   name: category.name,
-                  onClick: () =>
-                    !activeCategory && !activeProvider
-                      ? history.push(
-                          `/${
-                            casinoType === 'casino' ? 'casino' : 'live-casino'
-                          }/${category.slug}`,
-                        )
-                      : setCategoryFilter(category),
+                  onClick: () => {
+                    if (!activeCategory && !activeProvider) {
+                      history.push(
+                        `/${
+                          casinoType === 'casino' ? 'casino' : 'live-casino'
+                        }/${category.slug}`,
+                      );
+                    } else {
+                      setFilters({
+                        type: FilterActions.ResetCategory,
+                        payload: category,
+                      });
+                      setFilters({
+                        type: FilterActions.AddCategory,
+                        payload: category,
+                      });
+                    }
+                  },
                 }))}
               />
               {casinoType === 'casino' && (
                 <FilterDropdown
                   title={
-                    providerFilter
-                      ? t(`provider_name_${providerFilter.slug}`)
+                    filters.providerFilterGroup[0]
+                      ? t(
+                          `provider_name_${filters.providerFilterGroup[0].slug}`,
+                        )
                       : activeProvider
                       ? t(`provider_name_${activeProvider.slug}`)
                       : t('provider_filter_title')
@@ -285,21 +300,36 @@ const CasinoFilters = () => {
                     )
                   }
                   activeItemId={
-                    providerFilter?.id || activeProvider?.slug || 'all'
+                    filters.providerFilterGroup[0]?.id ||
+                    activeProvider?.slug ||
+                    'all'
                   }
                   items={[
                     activeCategory && {
                       activeId: 'all',
                       name: t('all_providers'),
-                      onClick: () => setProviderFilter(null),
+                      onClick: () =>
+                        setFilters({ type: FilterActions.ResetProvider }),
                     },
                     ...(providers?.map(provider => ({
-                      activeId: providerFilter ? provider.id : provider.slug,
+                      activeId: filters.providerFilterGroup[0]
+                        ? provider.id
+                        : provider.slug,
                       name: t(`provider_name_${provider.slug}`),
-                      onClick: () =>
-                        !activeCategory && !activeProvider
-                          ? history.push(`/casino/providers/${provider.slug}`)
-                          : setProviderFilter(provider),
+                      onClick: () => {
+                        if (!activeCategory && !activeProvider) {
+                          history.push(`/casino/providers/${provider.slug}`);
+                        } else {
+                          setFilters({
+                            type: FilterActions.ResetProvider,
+                            payload: provider,
+                          });
+                          setFilters({
+                            type: FilterActions.AddProvider,
+                            payload: provider,
+                          });
+                        }
+                      },
                     })) || []),
                   ].filter(Boolean)}
                 />

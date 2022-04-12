@@ -31,17 +31,24 @@ export enum ComponentName {
   LimitsModal = 'limitsModal',
   ResendEmailModal = 'resendEmailModal',
   MaxBalanceModal = 'maxBalanceModal',
+  QuickDepositModal = 'quickDepositModal',
   BettingHistory = 'bettingHistory',
   DepositLinkModal = 'depositLinkModal',
   ActivateUserModal = 'activateUserModal',
+  CasinoGameInfoModal = 'casinoGameInfoModal',
+  W9WinningsModal = 'w9WinningsModal',
+  PageBackdrop = 'pageBackdrop',
+  PromoClaimModal = 'promoClaimModal',
 }
 
 export const ModalPriority = {
   [ComponentName.TermsAndConditionsModal]: 1,
+  [ComponentName.W9WinningsModal]: 3,
   [ComponentName.ValidationFailedModal]: 2,
   [ComponentName.ResponsibleGamblingModal]: 5,
   [ComponentName.ResendEmailModal]: 1,
   [ComponentName.ActivateUserModal]: 2,
+  [ComponentName.PageBackdrop]: -100,
 };
 
 export enum PagesName {
@@ -449,6 +456,7 @@ export const Franchise = {
   gnogaz: Config.name === FranchiseNames.Gnogaz,
   gnogon: Config.name === FranchiseNames.Gnogon,
   xCasinoCom: Config.name === FranchiseNames.XcasinoCom,
+  mothership: Config.name === FranchiseNames.Mothership,
 };
 
 export const usaOnlyBrand = [
@@ -466,9 +474,13 @@ export const REGEX_EXPRESSION = {
     : /^(BE)[0-9]{2}([ ]?[0-9]{4}){3}$/g,
   PHONE_NUMBER: usaOnlyBrand ? /^\+?[1-9]\d{9,10}$/ : /^\+?[1-9]\d{1,14}$/,
   PO_BOX_ADDRESS: /\b(?:p\.?\s*o\.?|post\s+office)(\s+)?(?:box|[0-9]*)?\b/i,
+  CITY: /^[0-z\u0080-\u024F '.-]{2,}$/,
+  USA_POST_CODE: /^\d{5}/,
 };
 
 export const VALIDATIONS = {
+  usa_post_code: value => REGEX_EXPRESSION.USA_POST_CODE.test(value),
+  city: value => REGEX_EXPRESSION.CITY.test(value.trim()),
   name: (value: string = '') =>
     (!!value.trim().length &&
       REGEX_EXPRESSION.LETTERS_WITH_SEPERATORS.test(value.trim())) ||
@@ -541,6 +553,7 @@ export enum CustomWindowEvents {
   DepositPaymentError = 'payment_error',
   DepositRequestReturn = 'deposit_request_return',
   DepositVerifyPayment = 'verify_payment_action',
+  DepositPaymentWarning = 'payment_warning',
 }
 
 export enum LocalStorageKeys {

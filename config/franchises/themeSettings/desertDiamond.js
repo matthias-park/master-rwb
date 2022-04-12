@@ -57,7 +57,7 @@ module.exports = {
     secondaryColor: '#fff',
     transform: 'uppercase',
     disabled: {
-      backgroundColor: '#0794C5',
+      backgroundColor: '#067BA3',
       color: 'rgba(255,255,255, 0.5)',
     },
   },
@@ -75,6 +75,7 @@ module.exports = {
     backgroundMobile: 'linear-gradient(180deg,#051b35 0%,#053451 100%)',
     navHeightMobile: 0,
     navFontSize: 16,
+    needsHamburger: true,
   },
   footer: {
     listColor: '#fff',
@@ -137,6 +138,7 @@ module.exports = {
     labelActiveLeft: 10,
     labelBackgroundColor: '#fff',
     labelPadding: 4,
+    placeholderColor: '#778CA6',
     marginBottom: 18,
     selectPadding: '10px 13px',
     disabled: {
@@ -147,6 +149,7 @@ module.exports = {
     active: {
       borderColor: '#08A4DA',
     },
+    circleIcons: true,
   },
   customFileInput: {
     backgroundColor: '#E6ECF1',
@@ -201,6 +204,7 @@ module.exports = {
     fontTransform: 'uppercase',
     subBackgroundColor: '#fff',
     iconColor: '#778CA6',
+    bottomBorderColor: '#ECF0F3',
   },
   inputContainer: {
     backgroundColor: '#fff',
@@ -222,7 +226,7 @@ module.exports = {
     quickBg: '#334C6C',
   },
   paymentMethods: {
-    inRow: 4,
+    inRow: 5,
     padding: '25px 20%',
     mobilePadding: '30px 5px',
     textAlign: 'left',

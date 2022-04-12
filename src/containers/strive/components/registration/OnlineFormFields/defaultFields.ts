@@ -48,6 +48,9 @@ export const defaultBlocks = (
           autoComplete: 'street-address',
           type: 'smartyStreets',
           required: true,
+          validate: value => {
+            return VALIDATIONS.isNotPoBox(value) || t('register_pobox_invalid');
+          },
         },
         {
           id: 'province_id',
@@ -58,7 +61,7 @@ export const defaultBlocks = (
           selectValues: async () => {
             const res = await getApi<RailsApiResponse<Province | null>>(
               '/restapi/v1/provinces',
-            );
+            ).catch(err => err);
             if (res.Success && res.Data && Array.isArray(res.Data)) {
               return res.Data.map(province => ({
                 text: province.name,
@@ -73,24 +76,22 @@ export const defaultBlocks = (
           autoComplete: 'address-level2',
           type: 'text',
           required: true,
+          validate: value =>
+            VALIDATIONS.city(value) || t('register_city_invalid'),
         },
         !smartyStreetsEnabled && {
           id: 'address',
           autoComplete: 'street-address',
           type: 'text',
           required: true,
-          validate: value => {
-            if (Franchise.gnogaz && value) {
-              return (
-                VALIDATIONS.isNotPoBox(value) || t('register_pobox_invalid')
-              );
-            }
-            return true;
-          },
+          validate: value =>
+            VALIDATIONS.isNotPoBox(value) || t('register_pobox_invalid'),
         },
         {
           id: 'postal_code',
           required: true,
+          validate: value =>
+            VALIDATIONS.usa_post_code(value) || t('post_code_invalid'),
           type: 'text',
         },
         {

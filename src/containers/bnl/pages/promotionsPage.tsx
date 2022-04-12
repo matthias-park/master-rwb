@@ -77,7 +77,7 @@ const PromotionsList = () => {
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
-    ['/restapi/v1/content/promotions', locale],
+    ['/restapi/v1/content/promotions?show_for=1', locale],
     url => getApi(url, { cache: 'no-store' }),
   );
   const { t } = useI18n();
@@ -137,7 +137,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
   const { t } = useI18n();
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { data, error } = useApi<RailsApiResponse<PostItem[]>>(
-    ['/restapi/v1/content/promotions', locale],
+    ['/restapi/v1/content/promotions?show_for=1', locale],
     url => getApi(url, { cache: 'no-store' }),
   );
   const numberOfPromotions = data?.Data.slice(0, 4).find(
@@ -186,7 +186,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
 const PromotionPage = ({ slug }: { slug: string }) => {
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { data, error } = useApi<RailsApiResponse<PostItem>>(
-    [`/restapi/v1/content/promotion/${slug}`, locale],
+    [`/restapi/v1/content/promotion/${slug}?show_for=1`, locale],
     url => getApi(url, { cache: 'no-store' }),
   );
   const { t } = useI18n();

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import UserStatus, { NET_USER } from '../../types/UserStatus';
 import { clearUserLocalStorage } from '../../utils';
+import { cache as SWRCache } from 'swr';
 import * as Sentry from '@sentry/react';
 import { injectTrackerScript } from '../../utils/uiUtils';
 import UserBalances, {
@@ -40,17 +41,24 @@ export const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<UserStatus>) => {
       if (!action.payload.logged_in) {
+        SWRCache.clear();
         clearUserLocalStorage();
       }
       if (state.registration_id) {
         return state;
       }
       if (state.logged_in !== action.payload.logged_in) {
+        Sentry.addBreadcrumb({
+          category: 'user',
+          message: `api status different state: ${state.logged_in} api: ${action.payload.logged_in}`,
+          level: Sentry.Severity.Log,
+        });
         return action.payload;
       }
       if (action.payload.id) {
         Sentry.setUser({
           id: action.payload.id?.toString(),
+          email: action.payload.email,
         });
       } else {
         Sentry.configureScope(scope => scope.setUser(null));
@@ -76,6 +84,15 @@ export const userSlice = createSlice({
     },
     setLogin: (_, action: PayloadAction<NET_USER>) => {
       injectTrackerScript('loggedin', action.payload.PlayerId);
+      Sentry.addBreadcrumb({
+        category: 'user',
+        message: `logged in id: ${action.payload.PlayerId}`,
+        level: Sentry.Severity.Log,
+      });
+      Sentry.setUser({
+        id: action.payload.PlayerId.toString(),
+        email: action.payload.Email,
+      });
       return {
         id: action.payload.PlayerId,
         balance: action.payload.Balance,
@@ -90,6 +107,11 @@ export const userSlice = createSlice({
     },
     setRegistered: (_, action: PayloadAction<NET_USER>) => {
       injectTrackerScript('regconfirm', action.payload.PlayerId);
+      Sentry.addBreadcrumb({
+        category: 'user',
+        message: `registered id: ${action.payload.PlayerId}`,
+        level: Sentry.Severity.Log,
+      });
       return {
         id: action.payload.PlayerId,
         balance: 0,
@@ -101,6 +123,12 @@ export const userSlice = createSlice({
       };
     },
     setLogout: () => {
+      Sentry.addBreadcrumb({
+        category: 'user',
+        message: `logged out`,
+        level: Sentry.Severity.Log,
+      });
+      Sentry.configureScope(scope => scope.setUser(null));
       clearUserLocalStorage();
       return {
         ...initialState,

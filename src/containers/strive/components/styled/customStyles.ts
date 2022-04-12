@@ -3,6 +3,7 @@ import { mediaBreakpointDown, mediaBreakpointUp } from './breakpoints';
 import { textOverflow1 } from './mixins';
 import { rgba } from './mixins';
 import { Franchise } from '../../../../constants';
+import { scrollbarWidth } from './helpers';
 
 const customStyles = css`
   *:focus {
@@ -13,14 +14,15 @@ const customStyles = css`
     -webkit-overflow-scrolling: touch;
   }
 
-  html,
   body {
     overflow-x: hidden;
-  }
-  body {
     font-family: ${props => props.theme.fonts.family}, 'Myriad Pro', sans-serif;
     padding: 0 ${props => props.theme.spacing.bodyPadding}px 0
       ${props => props.theme.spacing.bodyPadding}px !important;
+    &.modal-open {
+      padding-right: ${props =>
+        props.theme.spacing.bodyPadding + scrollbarWidth}px !important;
+    }
     margin: auto;
     background-color: ${props => props.theme.colors.body} !important;
     color: ${props => props.theme.colors.brand.text} !important;
@@ -28,13 +30,35 @@ const customStyles = css`
     ${mediaBreakpointDown('xl')} {
       padding: 0 ${props => props.theme.spacing.bodyPaddingMedium}px 0
         ${props => props.theme.spacing.bodyPaddingMedium}px !important;
+      &.modal-open {
+        padding-right: ${props =>
+          props.theme.spacing.bodyPaddingMedium + scrollbarWidth}px !important;
+      }
     }
     ${mediaBreakpointDown('lg')} {
       padding: 0 ${props => props.theme.spacing.bodyPaddingSmall}px 0
         ${props => props.theme.spacing.bodyPaddingSmall}px !important;
+      &.modal-open {
+        padding-right: ${props =>
+          props.theme.spacing.bodyPaddingSmall + scrollbarWidth}px !important;
+      }
     }
     &:not(.show-captcha) .grecaptcha-badge {
       visibility: hidden;
+    }
+  }
+
+  .fade-in {
+    animation-name: fadeIn;
+    animation-duration: 0.8s;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
     }
   }
 
@@ -43,6 +67,7 @@ const customStyles = css`
     color: ${props =>
       (props.theme.translationLink && props.theme.translationLink.color) ||
       'inherit'};
+    word-break: break-all;
   }
 
   .page-wrp {
@@ -101,10 +126,18 @@ const customStyles = css`
     min-height: 70vh;
   }
 
+  .mx-650 {
+    max-width: 650px;
+  }
+
   .d-sm-table-cell {
     ${mediaBreakpointUp('sm')} {
       display: table-cell !important;
     }
+  }
+
+  .spinner-custom {
+    color: ${props => props.theme.spinnerVariant || '#000'};
   }
 
   .bg-overlay {
@@ -414,9 +447,6 @@ const customStyles = css`
       padding-right: 0;
       border: none;
       background: transparent;
-      border-top: 1px solid
-        ${props =>
-          props.theme.modals.borderColor || props.theme.colors.gray[100]};
       border-bottom: 1px solid
         ${props =>
           props.theme.modals.borderColor || props.theme.colors.gray[100]};
@@ -431,6 +461,13 @@ const customStyles = css`
           border-radius: 50%;
           background-color: ${props => props.theme.colors.primary.main};
         }
+      }
+    }
+    div:first-of-type {
+      .cookies-accordion__card {
+        border-top: 1px solid
+          ${props =>
+            props.theme.modals.borderColor || props.theme.colors.gray[100]};
       }
     }
     &__body {
@@ -458,7 +495,7 @@ const customStyles = css`
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 1100;
+    z-index: 9999999;
     background-color: ${props => props.theme.colors.brand.light};
     color: ${props => props.theme.colors.gray.custom_200};
     padding: 20px 115px 14px 115px;
@@ -776,7 +813,7 @@ const customStyles = css`
         font-weight: 600;
       }
     }
-    button {
+    .btn {
       min-width: 200px;
       white-space: nowrap;
     }
@@ -843,6 +880,10 @@ const customStyles = css`
         font-size: 16px;
       }
     }
+  }
+  .modal-link {
+    color: ${props => props.theme.colors.primary.main};
+    text-decoration: underline;
   }
   .action-block {
     display: flex;
@@ -980,6 +1021,7 @@ const customStyles = css`
     &.full-screen {
       margin: 0 -${props => props.theme.spacing.bodyPadding}px !important;
       border-radius: 0;
+      z-index: 999;
       ${mediaBreakpointDown('xl')} {
         margin: 0 -${props => props.theme.spacing.bodyPaddingMedium}px !important;
       }
@@ -1030,7 +1072,8 @@ const customStyles = css`
       text-align: center;
     }
   }
-  .sb-bottom-nav {
+  .sb-bottom-nav,
+  .bottom-nav {
     display: none;
     position: fixed;
     justify-content: space-around;
@@ -1078,6 +1121,10 @@ const customStyles = css`
         &.icon-gnogaz-in-play {
           font-size: 27px;
         }
+        &.icon-gnogon-home,
+        &.icon-gnogon-new {
+          font-size: 20px;
+        }
       }
       &.active {
         color: ${props => props.theme.colors.primary.main};
@@ -1097,7 +1144,7 @@ const customStyles = css`
       100% + ${props => props.theme.spacing.bodyPadding * 2}px
     ) !important;
     left: -${props => props.theme.spacing.bodyPadding}px !important;
-    top: -${props => (props.theme.header?.marginBottom || 0) + 5}px;
+    top: -${props => (props.theme.header?.marginBottom ? props.theme.header?.marginBottom + 5 : 0)}px;
     ${mediaBreakpointDown('xl')} {
       width: calc(
         100% + ${props => props.theme.spacing.bodyPaddingMedium * 2}px

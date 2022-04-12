@@ -16,6 +16,7 @@ module.exports = {
     oddsFormat: 'american',
     fallbackLocale: 'en_US',
   },
+  gtmId: 'GTM-KBCKVS5',
   geoComplyKey: 'ShzolMaAK',
   smartyStreets: '108064515683753034',
   xtremepush: 'https://us.webpu.sh/8UCYTGU9kjyxCCgQtCqROPz24HI_2FvA/sdk.js',
@@ -44,6 +45,9 @@ module.exports = {
       AddBankAccount: true,
       GeoComply: true,
       PlayerDisabled: true,
+    },
+    header: {
+      needsBurger: true,
     },
   },
 };

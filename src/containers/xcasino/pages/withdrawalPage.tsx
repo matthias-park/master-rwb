@@ -11,7 +11,6 @@ import {
 } from '../../../types/api/user/Withdrawal';
 import { useCallback } from 'react';
 import { postApi } from '../../../utils/apiUtils';
-import { useToasts } from 'react-toast-notifications';
 import CustomAlert from '../components/CustomAlert';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useApi from '../../../hooks/useApi';
@@ -246,7 +245,6 @@ const DetailsContainer = ({ withdrawalDetails, resetWithdrawals }) => {
 const WithdrawalPage = () => {
   const { t } = useI18n();
   const { user } = useAuth();
-  const { addToast } = useToasts();
   const [currentStep, setCurrentStep] = useState(1);
   const [withdrawalDetails, setWithdrawalDetails] = useState<{
     amount: number;
@@ -288,10 +286,7 @@ const WithdrawalPage = () => {
   const requestWithdrawal = useCallback(
     async (amount: number) => {
       if (!selectedBankAccount) {
-        return addToast('account not found for withdrawal', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
+        return;
       }
       setWithdrawalLoading(true);
       const response = await postApi<RailsApiResponse<WithdrawalConfirmation>>(
@@ -300,13 +295,7 @@ const WithdrawalPage = () => {
           amount: amount.toString(),
           id: selectedBankAccount.uniq_id,
         },
-      ).catch(() => {
-        addToast('failed to withdraw amount', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-        return null;
-      });
+      ).catch(() => null);
       setWithdrawalLoading(false);
       setCurrentStep(prev => prev + 1);
       setWithdrawalConfirmData(response?.Data || null);
@@ -324,15 +313,7 @@ const WithdrawalPage = () => {
         {
           formData: true,
         },
-      ).catch((res: RailsApiResponse<null>) => {
-        if (res.Fallback) {
-          addToast('failed to withdraw amount', {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        }
-        return res;
-      });
+      ).catch((res: RailsApiResponse<null>) => res);
       sendDataToGTM({
         event: 'withdrawalRequested',
         'tglab.withdrawal.amount': data.amount,

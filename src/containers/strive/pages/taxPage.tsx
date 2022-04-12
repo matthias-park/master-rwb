@@ -10,6 +10,7 @@ import { franchiseDateFormat } from '../../../constants';
 import BalancesContainer from '../components/account-settings/BalancesContainer';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
 import HelpBlock from '../components/HelpBlock';
+import NumberFormat from 'react-number-format';
 
 const questionItems = [
   {
@@ -33,7 +34,7 @@ const TaxPage = () => {
       {
         bet_id,
       },
-    );
+    ).catch(err => err);
     if (response.Success) {
       const downloadLink = document.createElement('a');
       const file = `data:application/pdf;base64,${response.Data.files[0]}`;
@@ -53,7 +54,7 @@ const TaxPage = () => {
         page_number: page,
         page_size: 25,
       },
-    );
+    ).catch(err => err);
     response.Success && setData(response.Data);
   };
 
@@ -71,7 +72,7 @@ const TaxPage = () => {
         </h3>
         {!data ? (
           <div className="d-flex justify-content-center pt-4 pb-3">
-            <Spinner animation="border" variant="brand" className="mx-auto" />
+            <Spinner animation="border" className="spinner-custom mx-auto" />
           </div>
         ) : !!data && data.length ? (
           <div className="table-container d-flex flex-column mb-4">
@@ -100,12 +101,26 @@ const TaxPage = () => {
                       <td>
                         <strong className="heading-sm">{t('win')}</strong>
                         <span className="text-success">
-                          {user.currency} {tax.WinAmount}
+                          <NumberFormat
+                            value={tax.WinAmount}
+                            thousandSeparator
+                            displayType={'text'}
+                            prefix={user.currency}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                          />
                         </span>
                       </td>
                       <td>
                         <strong className="heading-sm">{t('wager')}</strong>
-                        {user.currency} {tax.BetAmount}
+                        <NumberFormat
+                          value={tax.BetAmount}
+                          thousandSeparator
+                          displayType={'text'}
+                          prefix={user.currency}
+                          decimalScale={2}
+                          fixedDecimalScale={true}
+                        />
                       </td>
                       <td className="d-flex d-sm-table-cell align-items-center">
                         <strong className="heading-sm">{t('download')}</strong>

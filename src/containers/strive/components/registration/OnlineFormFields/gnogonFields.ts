@@ -66,6 +66,8 @@ export const blocks = (
           autoComplete: 'address-level2',
           type: 'text',
           required: true,
+          validate: value =>
+            VALIDATIONS.city(value) || t('register_city_invalid'),
         },
         {
           id: 'province_id',
@@ -77,13 +79,7 @@ export const blocks = (
             const url = '/restapi/v1/provinces';
             const res = await getApi<RailsApiResponse<Province | null>>(
               url,
-            ).catch(res => {
-              Sentry.captureMessage(
-                `Request failed ${url} with status ${res.status}`,
-                Sentry.Severity.Fatal,
-              );
-              return RailsApiResponseFallback;
-            });
+            ).catch(err => err);
             if (res.Success && res.Data && Array.isArray(res.Data)) {
               return res.Data.map(province => ({
                 text: province.name,
@@ -96,6 +92,8 @@ export const blocks = (
         {
           id: 'postal_code',
           required: true,
+          validate: value =>
+            VALIDATIONS.usa_post_code(value) || t('post_code_invalid'),
           type: 'text',
         },
         {

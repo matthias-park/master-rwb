@@ -64,6 +64,8 @@ const buttonStyles = css`
       background-color: ${props =>
         props.theme.buttons.disabled?.backgroundColor};
       border-color: ${props => props.theme.buttons.disabled?.backgroundColor};
+      opacity: ${props => props.theme.buttons.disabled?.backgroundColor && '1'};
+      pointer-events: none;
     }
     &:active,
     &:focus {

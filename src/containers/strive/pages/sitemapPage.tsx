@@ -124,7 +124,7 @@ const SitemapPage = () => {
     return routesEqual && localeEqual;
   });
   const { data: promotions } = useApi<RailsApiResponse<PostItem[]>>([
-    '/restapi/v1/content/promotions',
+    '/restapi/v1/content/promotions?show_for=1',
     locale,
   ]);
   const { user } = useAuth();
@@ -188,7 +188,7 @@ const SitemapPage = () => {
           <h1 className="mb-4">{t('sitemap_page_title')}</h1>
           {user.loading && (
             <div className="d-flex justify-content-center pt-4 pb-3">
-              <Spinner animation="border" variant="black" className="mx-auto" />
+              <Spinner animation="border" className="spinner-custom mx-auto" />
             </div>
           )}
           {sitemapList

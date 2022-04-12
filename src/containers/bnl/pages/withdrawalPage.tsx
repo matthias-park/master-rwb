@@ -13,7 +13,6 @@ import {
 import Table from 'react-bootstrap/Table';
 import { useCallback } from 'react';
 import { postApi } from '../../../utils/apiUtils';
-import { useToasts } from 'react-toast-notifications';
 import CustomAlert from '../components/CustomAlert';
 import WithdrawalConfirmModal from '../components/modals/WithdrawalConfirmModal';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
@@ -114,7 +113,6 @@ const WithdrawalRequests = ({
 const WithdrawalPage = () => {
   const { t } = useI18n();
   const { user, updateUser } = useAuth();
-  const { addToast } = useToasts();
   const { enableModal, allActiveModals } = useModal();
   const bankAccount = useUserBankAccountModal();
   const dispatch = useDispatch();
@@ -174,15 +172,7 @@ const WithdrawalPage = () => {
         {
           request_id: id,
         },
-      ).catch((res: RailsApiResponse<null>) => {
-        if (res.Fallback) {
-          addToast('failed to cancel withdraw', {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        }
-        return res;
-      });
+      ).catch((res: RailsApiResponse<null>) => res);
 
       sendDataToGTM({
         event: 'withdrawalCancelRequested',
@@ -201,10 +191,7 @@ const WithdrawalPage = () => {
   const requestWithdrawal = useCallback(
     async (amount: number) => {
       if (!data?.Data.default_account) {
-        return addToast('account not found for withdrawal', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
+        return;
       }
       setWithdrawalLoading(true);
       const response = await postApi<RailsApiResponse<WithdrawalConfirmation>>(
@@ -214,20 +201,11 @@ const WithdrawalPage = () => {
           id: data?.Data.default_account.uniq_id,
         },
       ).catch(() => {
-        addToast('failed to withdraw amount', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
         return null;
       });
       setWithdrawalLoading(false);
-      // if (response && (response as Withdrawal)?.error) {
-      //   return mutate(response as Withdrawal, false);
-      // } else if (response) {
-      // const { error, ...withoutErrorData } = data!;
       mutate(data, false);
       return setWithdrawalConfirmData(response?.Data || null);
-      // }
     },
     [data?.Data.default_account, user],
   );
@@ -240,15 +218,7 @@ const WithdrawalPage = () => {
         {
           formData: true,
         },
-      ).catch((res: RailsApiResponse<null>) => {
-        if (res.Fallback) {
-          addToast('failed to withdraw amount', {
-            appearance: 'error',
-            autoDismiss: true,
-          });
-        }
-        return res;
-      });
+      ).catch((res: RailsApiResponse<null>) => res);
       sendDataToGTM({
         event: 'withdrawalRequested',
         'tglab.withdrawal.amount': data.amount,

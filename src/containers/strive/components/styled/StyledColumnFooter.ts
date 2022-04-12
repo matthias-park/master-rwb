@@ -202,7 +202,9 @@ export const StyledColumnFooter = styled.div`
   }
   .footer-links {
     &__link {
-      a {
+      a,
+      span {
+        cursor: pointer;
         color: ${props => props.theme.colors.white.main};
       }
     }

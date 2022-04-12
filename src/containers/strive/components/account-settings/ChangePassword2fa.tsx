@@ -40,7 +40,7 @@ const ChangePassword2fa = () => {
         enable: !user.authentication_enabled,
         pin,
       },
-    );
+    ).catch(err => err);
     if ((showPinInput || user.authentication_enabled) && result.Success) {
       setShowPinInput(false);
       updateUser();
@@ -72,7 +72,7 @@ const ChangePassword2fa = () => {
         <p className="change-pw__title mt-4">
           {jsxT('change_password_2fa_title')}
         </p>
-        <p>{jsxT('change_password_2fa_desc')}</p>
+        <p className="mb-3">{jsxT('change_password_2fa_desc')}</p>
         {showPinInput && (
           <TextInput
             rules={{

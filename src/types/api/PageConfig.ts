@@ -13,6 +13,7 @@ export interface PageConfig {
   welcome_casino_categories?: string[];
   featured_casino_categories?: string[];
   custom_content_pages?: string[];
+  hardcoded_categories_banners?: { slug: string; image: string }[];
 }
 
 export interface Sidebar {
@@ -57,7 +58,7 @@ export interface FooterData {
   providers?: ImageLink[];
   rowFooterPayments?: string[];
   rowFooterPartners?: { link: string; image: string }[];
-  rowFooterLinks?: { title_symbol: string; link: string }[];
+  rowFooterLinks?: { title_symbol: string; link: string; modal: string }[];
   rowFooterSocials?: { icon: string; link: string }[];
   rowFooterApps?: { name: string; link: string }[];
 }
@@ -137,4 +138,5 @@ export interface NavigationRoute {
   redirectTo?: string;
   order?: number;
   externalLinkTranslation?: string;
+  hideModals?: string[];
 }

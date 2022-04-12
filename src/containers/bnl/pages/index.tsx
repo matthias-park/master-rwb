@@ -85,7 +85,7 @@ const Routes = () => {
       <Switch key={pathname}>
         {routes.map(route => {
           if (locale && route.id === PagesName.LocaleSelectPage) {
-            return null;
+            return <Redirect to="/" key="homepage" path={route.path} />;
           }
           if (!!locale && route.redirectTo) {
             return (

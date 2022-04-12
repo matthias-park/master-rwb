@@ -3,20 +3,24 @@ import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
 import debounce from 'lodash.debounce';
 import clsx from 'clsx';
 import { useI18n } from '../../../../hooks/useI18n';
+import { SearchActions } from '../../../../types/api/Casino';
 
 const CasinoSearch = () => {
   const { searchData, setSearchData } = useCasinoConfig();
   const { t } = useI18n();
 
   useEffect(() => {
-    setSearchData({ ...searchData, searchValue: '' });
+    setSearchData({ type: SearchActions.SetValue, payload: '' });
   }, []);
 
   const setSearchQuery = event => {
-    setSearchData({ ...searchData, searchValue: event.target.value });
+    setSearchData({
+      type: SearchActions.SetValue,
+      payload: event.target.value,
+    });
   };
 
-  const debouncedChangeHandler = debounce(setSearchQuery, 400);
+  const debouncedChangeHandler = debounce(setSearchQuery, 700);
 
   return (
     <div className="casino-search-input">

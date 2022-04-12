@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { render } from '@testing-library/react';
 import { SWRConfig } from 'swr';
 import { SwrFetcherConfig } from './apiUtils';
-import { ToastProvider } from 'react-toast-notifications';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 import createStoreAsync from '../state';
@@ -16,9 +15,7 @@ const AllTheProviders = ({ children }) => {
   return (
     <Provider store={state}>
       <SWRConfig value={SwrFetcherConfig}>
-        <ToastProvider>
-          <HelmetProvider>{children}</HelmetProvider>
-        </ToastProvider>
+        <HelmetProvider>{children}</HelmetProvider>
       </SWRConfig>
     </Provider>
   );

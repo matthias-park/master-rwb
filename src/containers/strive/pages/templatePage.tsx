@@ -89,11 +89,7 @@ const TemplatePage = () => {
             headerNav.active && 'pt-xl-4',
           )}
         >
-          <Spinner
-            animation="border"
-            variant="black"
-            className="mx-auto mt-5"
-          />
+          <Spinner animation="border" className="spinner-custom mx-auto mt-5" />
         </div>
       )}
       {!!pageTitle && (
@@ -112,17 +108,15 @@ const TemplatePage = () => {
         (Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon ? (
           <main
             className={clsx(
-              isCustomContentPage
+              isCustomContentPage || mobileView
                 ? 'custom-content-page'
                 : 'container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5',
             )}
           >
-            {pageTitle && (
+            {pageTitle && !mobileView && (
               <h1 className="account-settings__title">{pageTitle}</h1>
             )}
-            <div
-              className={clsx(!isCustomContentPage && 'outer-info-block mb-3')}
-            >
+            <div className={clsx(!isCustomContentPage && 'outer-info-block')}>
               {data.Data.structure.content.slice(1).map((el, index) => (
                 <div className="mb-3">
                   {!!el.section?.section_title?.value && (
@@ -150,16 +144,30 @@ const TemplatePage = () => {
               header
                 ?.slice(1)
                 .some(item => item?.prefix?.includes(pathname.split('/')[1])) &&
+                !mobileView &&
                 'pt-xl-4',
             )}
           >
-            <ScrollSidebar
-              links={links}
-              setActive={setActive}
-              active={active}
-            />
-            <div className="w-100 ml-0 ml-md-5 ml-xl-0 d-flex flex-column flex-xl-row mx-auto">
-              <main className="container px-0 px-4 pl-xxl-150 mb-4 pt-4 pt-sm-5">
+            {!mobileView && (
+              <ScrollSidebar
+                links={links}
+                setActive={setActive}
+                active={active}
+              />
+            )}
+            <div
+              className={clsx(
+                mobileView
+                  ? 'p-4'
+                  : 'w-100 ml-0 ml-md-5 ml-xl-0 d-flex flex-column flex-xl-row mx-auto',
+              )}
+            >
+              <main
+                className={clsx(
+                  !mobileView &&
+                    'container px-0 px-4 pl-xxl-150 mb-4 pt-4 pt-sm-5',
+                )}
+              >
                 {!!data.Data.structure.content && (
                   <>
                     <h1 className="mb-3 text-brand-text mt-xl-2">

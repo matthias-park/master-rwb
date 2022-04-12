@@ -10,8 +10,10 @@ import { useAuth } from './useAuth';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../state';
 import * as stateActions from '../state/reducers/geoComply';
-import { CustomWindowEvents } from '../constants';
+import { CustomWindowEvents, ProdEnv } from '../constants';
 import dayjs from 'dayjs';
+import * as Sentry from '@sentry/react';
+
 type GeoComplyHookProviderProps = { children: ReactNode };
 
 interface GeoComplyContext {
@@ -67,35 +69,38 @@ export const GeoComplyProvider = ({ ...props }: GeoComplyHookProviderProps) => {
 
   useEffect(() => {
     if (state.validationReason) {
-      console.log(
-        `trigger geo location | connected ${
-          state.isConnected
-        } | geo In progress ${
-          state.geoInProgress
-        } | user logged in ${!!state.userId} | license set ${!!state.license} | reason ${
-          state.validationReason
-        }| license valid by date ${dayjs(state.licenseExpiresAt).isAfter(
-          dayjs(),
-        )} (${state.licenseExpiresAt}) | continue : ${!!(
-          !!state.isConnected &&
-          !!state.license &&
-          !state.geoInProgress &&
-          !!state.userId &&
-          !!state.validationReason &&
-          !!dayjs(state.licenseExpiresAt).isAfter(dayjs())
-        )}`,
-      );
-      if (
+      const allowTrigger =
         state.isConnected &&
         !!state.license &&
         !state.geoInProgress &&
         !!state.userId &&
         state.validationReason &&
-        dayjs(state.licenseExpiresAt).isAfter(dayjs())
-      ) {
+        dayjs(state.licenseExpiresAt).isAfter(dayjs());
+      if (!ProdEnv) {
         console.log(
-          `geoComply location-check reason: ${state.validationReason}`,
+          `trigger geo location | connected ${
+            state.isConnected
+          } | geo In progress ${
+            state.geoInProgress
+          } | user logged in ${!!state.userId} | license set ${!!state.license} | reason ${
+            state.validationReason
+          }| license valid by date ${dayjs(state.licenseExpiresAt).isAfter(
+            dayjs(),
+          )} (${state.licenseExpiresAt}) | continue : ${allowTrigger}`,
         );
+      }
+      if (allowTrigger) {
+        Sentry.addBreadcrumb({
+          category: 'geocomply',
+          type: 'navigation',
+          message: `validation reason: ${state.validationReason}`,
+          level: Sentry.Severity.Log,
+        });
+        if (!ProdEnv) {
+          console.log(
+            `geoComply location-check reason: ${state.validationReason}`,
+          );
+        }
         dispatch(stateActions.setGeoInProgress(true));
         window.GeoComply?.Client.setGeolocationReason(state.validationReason);
         window.GeoComply?.Client.requestGeolocation();

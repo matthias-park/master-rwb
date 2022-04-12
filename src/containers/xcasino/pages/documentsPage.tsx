@@ -9,7 +9,6 @@ import { useI18n } from '../../../hooks/useI18n';
 import LoadingButton from '../../../components/LoadingButton';
 import CustomAlert from '../components/CustomAlert';
 import { postApi } from '../../../utils/apiUtils';
-import { useToasts } from 'react-toast-notifications';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useApi from '../../../hooks/useApi';
 import Spinner from 'react-bootstrap/Spinner';
@@ -26,7 +25,6 @@ export const FilePicker = ({
     '/restapi/v1/user/profile/required_documents',
   );
   const isDataLoading = !data && !error;
-  const { addToast } = useToasts();
   const { t } = useI18n();
 
   const [addedFiles, setAddedFiles] = useState<
@@ -256,15 +254,7 @@ export const FilePicker = ({
       {
         formData: true,
       },
-    ).catch((res: RailsApiResponse<null>) => {
-      if (res.Fallback) {
-        addToast(`Failed to update user settings`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      }
-      return res;
-    });
+    ).catch((res: RailsApiResponse<null>) => res);
     if (res?.Success) resetUpload();
     mutate();
     setApiResponse({

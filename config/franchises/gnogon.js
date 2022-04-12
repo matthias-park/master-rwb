@@ -3,7 +3,7 @@ module.exports = {
   domains: [
     {
       hostname: 'gnogon.local',
-      api: 'https://gnogazapi-dev.strivegaming.us',
+      api: 'https://gnogonapi-dev.strivegaming.us',
     },
   ],
   theme: 'strive',
@@ -31,6 +31,9 @@ module.exports = {
       AddBankAccount: true,
       GeoComply: true,
       PlayerDisabled: true,
+    },
+    header: {
+      needsBurger: true,
     },
   },
 };

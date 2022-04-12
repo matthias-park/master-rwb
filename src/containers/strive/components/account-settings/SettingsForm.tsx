@@ -16,7 +16,6 @@ import FileInput from '../../../../components/customFormInputs/FileInput';
 import { useAuth } from '../../../../hooks/useAuth';
 import { postApi } from '../../../../utils/apiUtils';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
-import { useToasts } from 'react-toast-notifications';
 import dayjs from 'dayjs';
 import clsx from 'clsx';
 import { getApi } from '../../../../utils/apiUtils';
@@ -265,7 +264,7 @@ const FormFields = ({
                             const url = new URL(field.values_endpoint || '');
                             const res = await getApi<RailsApiResponse<any>>(
                               url?.pathname,
-                            );
+                            ).catch(err => err);
                             if (
                               res.Success &&
                               res.Data &&
@@ -308,6 +307,8 @@ const FormFields = ({
                     prefix: `${user.currency} `,
                     thousandSeparator: true,
                     allowNegative: false,
+                    decimalScale: 2,
+                    fixedDecimalScale: true,
                   };
                 } else if (field.formatting === 'date') {
                   masketInput = {
@@ -489,7 +490,6 @@ const SettingsForm = (props: SettingProps) => {
   } = props;
   const { t } = useI18n();
   const { updateUser, signout } = useAuth();
-  const { addToast } = useToasts();
   const formMethods = useForm<any, any>({
     mode: 'onBlur',
   });
@@ -560,15 +560,7 @@ const SettingsForm = (props: SettingProps) => {
     }
     const res = await postApi<RailsApiResponse<null>>(url, body, {
       formData: formBody,
-    }).catch((res: RailsApiResponse<null>) => {
-      if (res.Fallback) {
-        addToast(`Failed to update user settings`, {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      }
-      return res;
-    });
+    }).catch((res: RailsApiResponse<null>) => res);
     setResponse &&
       setResponse({
         success: res.Success,

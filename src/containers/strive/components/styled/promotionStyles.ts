@@ -223,6 +223,20 @@ export const promotionsStyles = css`
         margin-bottom: 15px;
       }
     }
+    .can-claim {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      & .btn,
+      & .promo-link {
+        display: grid;
+        flex-basis: 45%;
+        ${mediaBreakpointDown('lg')} {
+          min-width: 100%;
+          margin-bottom: 10px;
+        }
+      }
+    }
     &.promo-card--big {
       .promotion-block__body {
         &-subtitle {
@@ -413,6 +427,12 @@ export const promotionsStyles = css`
       .promo-container {
         width: 100%;
         max-width: unset;
+      }
+      .promo-inner__claim-btn {
+        display: block;
+        margin: 0 auto;
+        width: 30%;
+        min-width: 125px;
       }
       .promo-bg-text {
         &__subtitle {

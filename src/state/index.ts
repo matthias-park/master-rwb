@@ -21,9 +21,9 @@ const sentryReduxEnhancer = Sentry.createReduxEnhancer({
     const geoComply = geoComplyEnabled
       ? {
           ...state.geoComply,
-          license: null,
-          geoLocation: null,
-          savedState: null,
+          license: !!state.geoComply.license,
+          geoLocation: !!state.geoComply.geoLocation,
+          savedState: !!state.geoComply.savedState,
         }
       : null;
     const transformedState = {

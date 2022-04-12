@@ -77,7 +77,7 @@ module.exports = {
     logoPosition: 'left',
     borderBottom: '1px solid #333',
     topOffset: 15,
-    marginBottom: 40,
+    marginBottom: 45,
     navHeightMobile: 50,
   },
   footer: {
@@ -90,6 +90,9 @@ module.exports = {
   },
   translationLink: {
     color: '#FFDC3E',
+  },
+  depositIframe: {
+    height: '60',
   },
   communicationPrefs: {
     bgColor: '#222',
@@ -163,6 +166,7 @@ module.exports = {
       borderColor: '#FFDC3E',
     },
     dropdownBg: '#444',
+    circleIcons: true,
   },
   customFileInput: {
     backgroundColor: '#555555',

@@ -100,6 +100,7 @@ const GeoComplyModal = () => {
     }
   }, [errorCode]);
 
+  const errorMessage = !!errorCode && jsxT(`geo_comply_error_${errorCode}`);
   return (
     <GenericModal
       isCentered
@@ -119,11 +120,9 @@ const GeoComplyModal = () => {
         )}
       </h2>
       <p className="mb-3">
-        {jsxT(
-          isDesktop || !franchiseHasApp
-            ? `geo_comply_error_${errorCode}`
-            : 'geo_comply_app_text',
-        )}
+        {isDesktop || !franchiseHasApp
+          ? errorMessage
+          : jsxT('geo_comply_app_text')}
       </p>
       <DownloadLinks errorCode={errorCode} />
     </GenericModal>
