@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?epzn5p');
-  src:  url('fonts/icomoon.eot?epzn5p#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?epzn5p') format('truetype'),
-    url('fonts/icomoon.woff?epzn5p') format('woff'),
-    url('fonts/icomoon.svg?epzn5p#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?d2tsjj');
+  src:  url('fonts/icomoon.eot?d2tsjj#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?d2tsjj') format('truetype'),
+    url('fonts/icomoon.woff?d2tsjj') format('woff'),
+    url('fonts/icomoon.svg?d2tsjj#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -454,5 +454,5 @@
   content: "\e98b";
 }
 .icon-android:before {
-  content: "\e98c";
+  content: "\eac0";
 }
