@@ -182,6 +182,7 @@ module.exports = function (webpackEnv, buildFranchises) {
               iconSizes: franchise.iconSizes,
               meta: {
                 'theme-color': franchise.themeColor,
+                'facebook-domain-verification': franchise.fbDomainVerification,
               },
               config: JSON.stringify({
                 name: franchise.name,
