@@ -15,6 +15,7 @@ module.exports = {
     api: 'https://ctn-static.kambi.com/client/widget-api/kambi-widget-api.js',
     oddsFormat: 'american',
     fallbackLocale: 'en_US',
+    vaixScript: 'https://staging-desertdiamond-widgets.vaix.ai/bundle.js',
   },
   gtmId: 'GTM-KBCKVS5',
   geoComplyKey: 'ShzolMaAK',

@@ -328,6 +328,13 @@ const insertKambiBootstrap = async (retail?: boolean): Promise<void> => {
   return new Promise(resolve => {
     if (!Config.kambi) return resolve();
     document.body.classList.add('body-background');
+    if (Config.kambi.vaixScript) {
+      const scriptElement = document.createElement('script');
+      scriptElement.setAttribute('type', 'text/javascript');
+      scriptElement.async = true;
+      scriptElement.setAttribute('src', Config.kambi.vaixScript);
+      document.head.appendChild(scriptElement);
+    }
     const scriptElement = document.createElement('script');
     scriptElement.setAttribute('type', 'text/javascript');
     scriptElement.async = true;

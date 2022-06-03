@@ -14,7 +14,7 @@ const customStyles = css`
     -webkit-overflow-scrolling: touch;
   }
 
-  body {
+  html body {
     overflow-x: hidden;
     font-family: ${props => props.theme.fonts.family}, 'Myriad Pro', sans-serif;
     padding: 0 ${props => props.theme.spacing.bodyPadding}px 0
@@ -46,6 +46,7 @@ const customStyles = css`
     &:not(.show-captcha) .grecaptcha-badge {
       visibility: hidden;
     }
+    -webkit-font-smoothing: auto;
   }
 
   .fade-in {

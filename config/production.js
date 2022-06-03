@@ -62,6 +62,7 @@ module.exports = {
         online: 'https://static.kambicdn.com/client/ddusaz/kambi-bootstrap.js',
         api:
           'https://static.kambicdn.com/client/widget-api/kambi-widget-api.js',
+        vaixScript: 'https://desertdiamond-widgets.vaix.ai/bundle.js',
       },
       geoComplyKey: 'lfhhgC74Ve',
       xtremepush: 'https://us.webpu.sh/JM6hjk2KDf4ZBptsyWyjzMox0tiG3CY9/sdk.js',

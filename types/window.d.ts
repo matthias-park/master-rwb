@@ -24,6 +24,7 @@ export declare global {
         eventStatistics?: string;
         enableOddsFormatSelector?: boolean;
         fallbackLocale?: string;
+        vaixScript?: string;
       };
       sbTechUrl?: string;
       zendesk?: string;
