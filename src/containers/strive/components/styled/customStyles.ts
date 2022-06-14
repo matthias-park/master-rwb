@@ -1020,14 +1020,27 @@ const customStyles = css`
       }
     }
     &.full-screen {
-      margin: 0 -${props => props.theme.spacing.bodyPadding}px !important;
+      margin-left: -${props => props.theme.spacing.bodyPadding}px !important;
+      margin-right: -${props => props.theme.spacing.bodyPadding}px !important;
+      margin-top: -${props => (Franchise.gnogaz || Franchise.gnogon ? props.theme.header.marginBottom : 0)}px !important;
+      margin-bottom: 0px !important;
+      padding-left: ${(Franchise.gnogaz || Franchise.gnogon) && '170px'};
       border-radius: 0;
       z-index: 999;
       ${mediaBreakpointDown('xl')} {
-        margin: 0 -${props => props.theme.spacing.bodyPaddingMedium}px !important;
+        margin-left: -${props => props.theme.spacing.bodyPaddingMedium}px !important;
+        margin-right: -${props => props.theme.spacing.bodyPaddingMedium}px !important;
       }
       ${mediaBreakpointDown('lg')} {
-        margin: 0 -${props => props.theme.spacing.bodyPaddingSmall}px !important;
+        margin-left: -${props => props.theme.spacing.bodyPaddingSmall}px !important;
+        margin-right: -${props => props.theme.spacing.bodyPaddingSmall}px !important;
+        padding-left: ${(Franchise.gnogaz || Franchise.gnogon) && '16px'};
+        padding-top: ${(Franchise.gnogaz || Franchise.gnogon) && '25px'};
+      }
+      ${mediaBreakpointDown('md')} {
+        padding-left: ${(Franchise.gnogaz || Franchise.gnogon) && '16px'};
+        padding-top: ${(Franchise.gnogaz || Franchise.gnogon) && '16px'};
+        margin-top: 0 !important;
       }
     }
     &.top-spacing-0 {

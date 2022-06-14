@@ -567,7 +567,7 @@ export const StyledRowHeader = styled('header')`
   background: url('/assets/images/header/BG.webp');
   background-size: cover;
   border-bottom: ${props => props.theme.header.borderBottom};
-  z-index: 2;
+  z-index: 1100;
   ${mediaBreakpointDown('xl')} {
     margin-left: -${props => props.theme.spacing.bodyPaddingMedium}px;
     margin-right: -${props => props.theme.spacing.bodyPaddingMedium}px;
