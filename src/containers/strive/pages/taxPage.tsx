@@ -31,9 +31,7 @@ const TaxPage = () => {
   const getTaxFile = async (bet_id, date) => {
     const response = await postApi<RailsApiResponse<any>>(
       '/restapi/v1/user/w9_file',
-      {
-        bet_id,
-      },
+      {},
     ).catch(err => err);
     if (response.Success) {
       const downloadLink = document.createElement('a');
