@@ -2,7 +2,7 @@
 lock '3.8.2'
 
 set :application, 'next-web'
-set :repo_url, 'ssh://tonybet@ph.tonybet.com/diffusion/NNW/nodejs-next-web.git'
+set :repo_url, 'git@gitlab.com:strive-gaming/infrastructure/nnw.git'
 
 # Default branch is :master
 set :branch, ENV['branch'] || ask('Branch name to deploy?', :master)
