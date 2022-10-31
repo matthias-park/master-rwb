@@ -9,6 +9,7 @@ set :nvm_type, :user
 set :nvm_node, 'v12.22.6'
 set :nvm_map_bins, %w{node npm pm2}
 set :build_env, 'production'
+set :app_instance, 'desertDiamond'
 
 set :default_env, {
   NODE_ENV: fetch(:build_env),
