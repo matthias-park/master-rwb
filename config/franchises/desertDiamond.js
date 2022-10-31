@@ -16,6 +16,7 @@ module.exports = {
     oddsFormat: 'american',
     fallbackLocale: 'en_US',
     vaixScript: 'https://staging-desertdiamond-widgets.vaix.ai/bundle.js',
+    historyRouting: true,
   },
   gtmId: 'GTM-KBCKVS5',
   geoComplyKey: 'ShzolMaAK',
