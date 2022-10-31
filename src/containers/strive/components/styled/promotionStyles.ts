@@ -48,7 +48,6 @@ export const promotionsStyles = css`
     margin: 10px;
     font-family: 'Anton', sans-serif;
     text-transform: uppercase;
-    height: 225px;
     overflow: hidden;
     ${mediaBreakpointDown('xs')} {
       margin: 8px 0;
@@ -75,11 +74,9 @@ export const promotionsStyles = css`
       }
     }
     &__img {
-      position: absolute;
-      bottom: 0;
-      min-height: 225px;
+      max-height: 100%;
       max-width: 100%;
-      object-fit: cover;
+      object-fit: contain;
     }
     &__body {
       position: absolute;
@@ -135,6 +132,8 @@ export const promotionsStyles = css`
     &--sm {
       margin: 0;
       flex-basis: unset;
+      display: flex;
+      justify-content: center;
       &:after {
         display: none;
       }
