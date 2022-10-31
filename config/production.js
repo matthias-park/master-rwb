@@ -66,13 +66,6 @@ module.exports = {
       },
       geoComplyKey: 'lfhhgC74Ve',
       xtremepush: 'https://us.webpu.sh/JM6hjk2KDf4ZBptsyWyjzMox0tiG3CY9/sdk.js',
-      redis: {
-        host: '192.168.90.40',
-        port: 6379,
-        db: 12,
-        prefix: 'reactNodeProd-',
-        password: 'CDVXfY90e4XqO6ZztwH9',
-      },
       componentSettings: {
         v2Auth: 'wss://ws.playdesertdiamond.com',
       },
