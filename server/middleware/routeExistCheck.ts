@@ -11,12 +11,7 @@ const routeExistCheck = async (
   if (isReqResourceFile(req)) return next();
   const railsContants = await getRailsConstants(req);
   if (!railsContants) return next();
-  const localeUrlMatch = req.url.match(LOCALE_REGEX);
-  req.locale = localeUrlMatch?.[1];
-  if (!req.locale && railsContants.available_locales.length === 1) {
-    req.locale = railsContants.available_locales[0].iso;
-  }
-  let urlWithoutLocale = req.url.replace(LOCALE_REGEX, '');
+  let urlWithoutLocale = req.path.replace(LOCALE_REGEX, '');
   if (!urlWithoutLocale.startsWith('/'))
     urlWithoutLocale = `/${urlWithoutLocale}`;
   const pathInfo = railsContants.navigation_routes.find(route =>
@@ -29,10 +24,13 @@ const routeExistCheck = async (
   if (pathInfo?.id === 20 && req.locale) {
     req.pathExist = false;
   }
-  req.redirectTo = pathInfo?.redirectTo;
+  if (req.locale && pathInfo?.redirectTo) {
+    req.redirectTo = `/${req.locale}${pathInfo.redirectTo}`;
+  }
   if (!req.pathExist) {
     res.status(404);
   }
+  req.routeData = pathInfo;
   return next();
 };
 

@@ -11,7 +11,8 @@ set :nvm_map_bins, %w{node npm pm2}
 set :build_env, 'production'
 
 set :default_env, {
-  NODE_ENV: :production,
-  NODE_APP_INSTANCE: 'desertDiamond'
+  NODE_ENV: fetch(:build_env),
+  NODE_APP_INSTANCE: fetch(:app_instance),
+  NODE_PATH: fetch(:deploy_to),
 }
 

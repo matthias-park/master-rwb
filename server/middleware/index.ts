@@ -1,15 +1,15 @@
 import useragent from 'express-useragent';
 import basicAuth from './basicAuth';
-import franchiseIdentify from './franchiseIdentify';
 import assetsToFranchise from './assetsToFranchise';
 import routeExistCheck from './routeExistCheck';
+import localeDetect from './localeDetect';
 
 const middleware = {
   useragent: useragent.express(),
-  franchiseIdentify,
   basicAuth,
   assetsToFranchise,
   routeExistCheck,
+  localeDetect,
 };
 
 export default middleware;

@@ -1,11 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import { getApi } from '../../utils/apiUtils';
-import Lockr from 'lockr';
-import * as Sentry from '@sentry/react';
-import { LocalStorageKeys } from '../../constants';
-import { getCachedConfigAndTranslations } from '../../utils';
-import { setLocale } from './config';
+import { Config } from '../../constants';
 
 export type Symbols = { [key: string]: string };
 
@@ -20,25 +16,7 @@ export const fetchTranslations = createAsyncThunk<
       { cache: 'no-cache' },
     ).catch(err => err);
     if (response?.Success) {
-      const responseLocale = response.Data?._locale_;
-      if (responseLocale === locale) {
-        Lockr.set(
-          `${LocalStorageKeys.translations}-${responseLocale || locale}`,
-          {
-            ...response.Data,
-            _cached_: true,
-          },
-        );
-        return response.Data;
-      } else {
-        if (!responseLocale) {
-          Sentry.captureMessage('fetch translations: no locale parameter');
-        } else if (responseLocale !== locale) {
-          Sentry.captureMessage('fetch translations: locale mismatch');
-        }
-        dispatch(setLocale(locale));
-        return rejectWithValue(true);
-      }
+      return response.Data;
     }
     const canRetry = retryCount < 10;
     if (canRetry) {
@@ -51,13 +29,13 @@ export const fetchTranslations = createAsyncThunk<
   },
 );
 
-const initialState: Symbols | null = getCachedConfigAndTranslations()
-  .translations;
+const initialState: Symbols | null = Config?.translations || null;
 
 export const translationsSlice = createSlice({
   name: 'translations',
   initialState,
   reducers: {
+    //@ts-ignore
     addSymbols: (state, action: PayloadAction<Symbols>) => {
       if (!state) return action.payload;
       Object.entries(action.payload).forEach(([key, value]) => {

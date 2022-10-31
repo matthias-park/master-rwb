@@ -23,7 +23,6 @@ const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 const printBuildError = require('react-dev-utils/printBuildError');
-const config = require('config');
 const zlib = require('zlib');
 
 const measureFileSizesBeforeBuild =
@@ -38,19 +37,16 @@ const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 const isInteractive = process.stdout.isTTY;
 
 // Warn and crash if required files are missing
-if (!checkRequiredFiles([paths.appBuildHtml, paths.appIndexJs])) {
+if (!checkRequiredFiles([paths.appBuildHtml])) {
   process.exit(1);
 }
 
 const argv = process.argv.slice(2);
 const writeStatsJson = argv.indexOf('--stats') !== -1;
 const franchiseName = process.env.NODE_APP_INSTANCE || '';
-const allFranchises = Object.values(config.get('franchises'));
-const franchisesToCompile = franchiseName
-  ? [allFranchises.find(fr => franchiseName === fr.name)]
-  : allFranchises;
+const BUILD_ALL_APPS = process.env.BUILD_ALL_APPS === 'true';
 // Generate configuration
-const webpackConfig = configFactory('production', franchisesToCompile);
+const webpackConfig = configFactory('production');
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
@@ -179,13 +175,19 @@ function build(previousFileSizes) {
           process.env.CI.toLowerCase() !== 'false') &&
         messages.warnings.length
       ) {
-        console.log(
-          chalk.yellow(
-            '\nTreating warnings as errors because process.env.CI = true.\n' +
-              'Most CI servers set it automatically.\n',
-          ),
+        // Ignore sourcemap warnings in CI builds. See #8227 for more info.
+        const filteredWarnings = messages.warnings.filter(
+          w => !/Failed to parse source map/.test(w),
         );
-        return reject(new Error(messages.warnings.join('\n\n')));
+        if (filteredWarnings.length) {
+          console.log(
+            chalk.yellow(
+              '\nTreating warnings as errors because process.env.CI = true.\n' +
+                'Most CI servers set it automatically.\n',
+            ),
+          );
+          return reject(new Error(filteredWarnings.join('\n\n')));
+        }
       }
 
       const resolveArgs = {
@@ -251,14 +253,13 @@ const compressFile = (source, dest) => {
 };
 
 function copyPublicFolder() {
-  const franchises = franchisesToCompile.map(fr =>
-    path.join(paths.appPublic, `/${fr.name}`),
-  );
   const filter = file => {
     if ([paths.appBuildHtml, paths.appDevHtml].includes(file)) return false;
+    if (BUILD_ALL_APPS) return true;
     return (
       file === paths.appPublic ||
-      franchises.some(fr => file.startsWith(fr)) ||
+      (franchiseName &&
+        file.startsWith(path.join(paths.appPublic, `/${franchiseName}`))) ||
       ['scripts', 'polyfills', 'sportsbook'].some(folder => {
         const folderPath = path.join(paths.appPublic, `/${folder}`);
         return file.startsWith(folderPath);

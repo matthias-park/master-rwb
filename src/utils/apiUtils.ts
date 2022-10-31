@@ -34,6 +34,9 @@ export const getApi = <T>(
     cache: options.cache,
     headers: new Headers(),
   };
+  if (window.user_locale) {
+    (config.headers as Headers).append('content-language', window.user_locale);
+  }
   const currentSentryTransaction =
     options.sentryScope || Sentry.getCurrentHub()?.getScope()?.getTransaction();
   const httpSpan = currentSentryTransaction?.startChild({
@@ -103,6 +106,9 @@ export const postApi = <T>(
     credentials: 'include',
     headers: new Headers(),
   };
+  if (window.user_locale) {
+    (config.headers as Headers).append('content-language', window.user_locale);
+  }
   if (body) {
     if (options.formData) {
       const formData = new FormData();

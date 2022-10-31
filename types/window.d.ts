@@ -1,4 +1,7 @@
 import { DefaultTheme } from 'styled-components';
+import { Symbols } from '../src/state/reducers/translations';
+import ContentPage from '../src/types/api/content/ContentPage';
+import { PageConfig } from '../src/types/api/PageConfig';
 import { ComponentSettings } from '../src/types/ComponentSettings';
 import DeviceInfo from '../src/types/DeviceInfo';
 import { FranchiseNames, FranchiseThemes } from '../src/types/FranchiseNames';
@@ -44,10 +47,16 @@ export declare global {
       ip: string;
       singleLoadPage?: boolean;
       device: DeviceInfo;
+      countryNotAllowed?: boolean;
+      initPath: string;
+      constants: PageConfig;
+      translations: Symbols;
+      contentPage?: ContentPage;
+      seoTitleSeperator: string;
     };
+    user_locale: string;
     xtremepush?: any;
-    _wbUpdate?: boolean;
-    PRERENDER_CACHE?: { [key: string]: any };
+    _wbUpdate?: (pathname?: string) => void;
     //Webpack end
     //Kambi sportsbook
     customerSettings?: CustomerSettings;

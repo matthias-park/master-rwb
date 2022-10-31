@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useConfig } from '../../../hooks/useConfig';
 import { postApi } from '../../../utils/apiUtils';
 import LoadingButton from '../../../components/LoadingButton';
-import { Helmet } from 'react-helmet-async';
+import { DevEnv } from '../../../constants';
 
 const LANGUAGE = {
   nl: {
@@ -33,8 +33,17 @@ const LocaleSelectPage = () => {
 
   const changeLocale = async (lang: string, link?: string) => {
     setButtonLoading(lang);
-    return postApi('/restapi/v1/locale', {
-      locale: lang,
+    return new Promise(async resolve => {
+      if (DevEnv) {
+        await postApi('/restapi/v1/locale', {
+          locale: lang,
+        }).catch(() => null);
+      } else {
+        await postApi(`${window.location.origin}/api/set-locale`, {
+          locale: lang,
+        }).catch(() => null);
+      }
+      resolve(true);
     }).then(() =>
       link
         ? (window.location.pathname = `/${lang}/${link}`)
@@ -44,10 +53,6 @@ const LocaleSelectPage = () => {
 
   return (
     <>
-      <Helmet>
-        <meta property="og:site_name" content="Strive" />
-        <meta property="og:url" content={`${window.location.origin}/`} />
-      </Helmet>
       <div className="lang-select-container">
         <img
           alt="figure-1"

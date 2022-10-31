@@ -1,19 +1,17 @@
 const path = require('path');
 const fs = require('fs');
 const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
-const jsonConfig = require('config');
-
+const config = require('config');
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebook/create-react-app/issues/637
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
-const franchise =
+
+const franchiseTheme =
   (process.env.NODE_APP_INSTANCE &&
-    Object.values(jsonConfig.get('franchises')).find(
-      fr => process.env.NODE_APP_INSTANCE === fr.name,
-    )) ||
-  {};
-const franchiseTheme = franchise.theme || '';
+    config.has('franchises') &&
+    config.get('franchises')[process.env.NODE_APP_INSTANCE].theme) ||
+  '';
 
 // We use `PUBLIC_URL` environment variable or "homepage" field to infer
 // "public path" at which the app is served.
@@ -60,6 +58,23 @@ const resolveFranchiseEntry = resolveFn => {
   }
   return resolveFn(`src/index.tsx`);
 };
+
+const resolveFranchiseEntries = resolveFn => {
+  const formatFranchisePath = fr => resolveFn(`src/containers/${fr}/index.tsx`);
+  if (franchiseTheme) {
+    return {
+      [`bundle-${franchiseTheme}`]: formatFranchisePath(franchiseTheme),
+    };
+  }
+  const franchises = fs.readdirSync('src/containers/');
+  return franchises
+    .filter(fr => fs.existsSync(formatFranchisePath(fr)))
+    .reduce((obj, fr) => {
+      obj[`bundle-${fr}`] = formatFranchisePath(fr);
+      return obj;
+    }, {});
+};
+
 const resolveFranchiseStyles = resolveFn => {
   const formatFranchiseStylePath = fr =>
     resolveFn(`styles/${fr}/stylesheets/main.scss`);
@@ -86,6 +101,7 @@ module.exports = {
   appDevHtml: resolveApp('public/indexDev.html'),
   appBuildHtml: resolveApp('public/index.html'),
   appIndexJs: resolveFranchiseEntry(resolveApp),
+  appIndexEntries: resolveFranchiseEntries(resolveApp),
   appStyles: resolveFranchiseStyles(resolveApp),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),

@@ -1,26 +1,35 @@
-import { Request } from 'express';
 import redis from 'redis';
 import logger from './logger';
+import config from 'config';
+import { RedisCache } from './types/custom';
+import { FRANCHISE_CONFIG } from './constants';
 
 class cache {
   private fallbackCache: { [key: string]: string | null } = {};
-  private redisClients: { [key: string]: redis.RedisClient } = {};
+  private redisClient: redis.RedisClient | null = null;
+  private redisConfig =
+    (config.has('redis') && config.get<RedisCache>('redis')) ||
+    FRANCHISE_CONFIG.redis;
 
-  private getClient(req: Request): redis.RedisClient | null {
-    const { name, redis: redisConfig } = req.franchise;
-    if (name && !this.redisClients[name] && redisConfig) {
-      this.redisClients[name] = redis.createClient({
-        host: redisConfig.host,
-        port: redisConfig.port,
-        db: redisConfig.db,
-        prefix: redisConfig.prefix,
-        password: redisConfig.password,
-      });
+  private getClient(): redis.RedisClient | null {
+    if (!this.redisClient && this.redisConfig) {
+      try {
+        this.redisClient = redis.createClient({
+          host: this.redisConfig.host,
+          port: this.redisConfig.port,
+          db: this.redisConfig.db,
+          prefix: this.redisConfig.prefix,
+          password: this.redisConfig.password,
+          connect_timeout: 10 * 1000, // 10 seconds
+        });
+      } catch (err) {
+        logger.error(err);
+      }
     }
-    return this.redisClients[name] || null;
+    return this.redisClient || null;
   }
 
-  async get<T>(req: Request, key: string): Promise<T | null> {
+  async get<T>(key: string): Promise<T | null> {
     return new Promise(resolve => {
       const resolveData = (data: string | null) => {
         if (!data) return resolve(null);
@@ -32,7 +41,7 @@ class cache {
           return resolve(null);
         }
       };
-      const redisClient = this.getClient(req);
+      const redisClient = this.getClient();
       if (redisClient) {
         redisClient.get(key, (err, data) => {
           if (err) {
@@ -46,10 +55,10 @@ class cache {
     });
   }
 
-  async set(req: Request, key: string, value: unknown): Promise<boolean> {
+  async set(key: string, value: unknown): Promise<boolean> {
     return new Promise(resolve => {
       const jsonValue = JSON.stringify(value);
-      const redisClient = this.getClient(req);
+      const redisClient = this.getClient();
       if (redisClient) {
         redisClient.set(key, jsonValue, (err, success) => {
           if (err || !success) {
@@ -66,9 +75,9 @@ class cache {
       }
     });
   }
-  async del(req: Request, keys: string | string[]): Promise<void> {
+  async del(keys: string | string[]): Promise<void> {
     return new Promise(resolve => {
-      const redisClient = this.getClient(req);
+      const redisClient = this.getClient();
       if (redisClient) {
         redisClient.del(keys, () => resolve());
       } else {
@@ -79,9 +88,9 @@ class cache {
       }
     });
   }
-  async keys(req: Request, pattern: string): Promise<string[]> {
+  async keys(pattern: string): Promise<string[]> {
     return new Promise(resolve => {
-      const redisClient = this.getClient(req);
+      const redisClient = this.getClient();
       if (redisClient) {
         redisClient.keys(pattern, (err, reply) => {
           if (err) {

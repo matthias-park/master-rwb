@@ -2,13 +2,15 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PageConfig } from '../../types/api/PageConfig';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import Config, { ConfigLoaded, Cookies } from '../../types/Config';
-import {
-  formatNavigationRoutes,
-  getCachedConfigAndTranslations,
-} from '../../utils';
+import { formatNavigationRoutes, getCachedConfig } from '../../utils';
 import { getApi, postApi } from '../../utils/apiUtils';
 import Lockr from 'lockr';
-import { LocalStorageKeys, RailsApiResponseFallback } from '../../constants';
+import {
+  Config as WindowConfig,
+  DevEnv,
+  LocalStorageKeys,
+  RailsApiResponseFallback,
+} from '../../constants';
 import { getWindowUrlLocale, setLocalePathname } from '../../utils/i18n';
 import {
   injectTrackerScript,
@@ -18,20 +20,29 @@ import {
 import { WritableDraft } from '@reduxjs/toolkit/node_modules/immer/dist/internal';
 import { fetchTranslations } from './translations';
 import { RootState } from '..';
-import { cache } from 'swr';
 
 const setUserLocale = async (
   locale: string,
   updateRails = false,
 ): Promise<boolean> => {
-  if (updateRails && !window.PRERENDER_CACHE) {
-    const res = await postApi<RailsApiResponse<null>>('/restapi/v1/locale', {
-      locale: locale,
-    }).catch(() => RailsApiResponseFallback);
-    if (!res.Success) return false;
+  if (updateRails) {
+    if (DevEnv) {
+      const res = await postApi<RailsApiResponse<null>>('/restapi/v1/locale', {
+        locale: locale,
+      }).catch(() => RailsApiResponseFallback);
+      if (!res.Success) return false;
+    } else {
+      const res = await postApi<{ success: boolean }>(
+        `${window.location.origin}/api/set-locale`,
+        {
+          locale: locale,
+        },
+      ).catch(() => ({ success: false }));
+      if (!res.success) return false;
+    }
   }
+  window.user_locale = locale;
   setLocalePathname(locale);
-  cache.clear();
   Lockr.set(LocalStorageKeys.locale, locale);
   return true;
 };
@@ -73,67 +84,75 @@ export const checkLocale = createAsyncThunk(
 export const fetchConstants = createAsyncThunk<PageConfig, number | undefined>(
   'config/fetchConfig',
   async (retryCount: number = 0, thunkAPI: any) => {
-    const response = await getApi<RailsApiResponse<PageConfig>>(
-      '/restapi/v1/content/constants',
-      { cache: 'no-cache' },
-    ).catch(err => err);
+    if (WindowConfig?.constants) {
+      if (!WindowConfig.translations && WindowConfig.constants.locale) {
+        thunkAPI.dispatch(
+          fetchTranslations({ locale: WindowConfig.constants.locale }),
+        );
+      }
+      return {
+        ...WindowConfig.constants,
+        navigation_routes: formatNavigationRoutes(WindowConfig.constants),
+      };
+    } else {
+      const response = await getApi<RailsApiResponse<PageConfig>>(
+        '/restapi/v1/content/constants',
+        { cache: 'no-cache' },
+      ).catch(err => err);
 
-    if (response.Success && response?.Data) {
-      const constants = response?.Data;
-      if (constants?.navigation_routes) {
-        constants.navigation_routes = formatNavigationRoutes(constants);
-      }
-      const railsLocale = constants.locale;
-      let localeError = false;
-      const savedUserLocale = Lockr.get(LocalStorageKeys.locale, null);
-      let detectedLocale = urlLocale || savedUserLocale;
-      const detectedLocaleAvailable =
-        detectedLocale === 'en' ||
-        (detectedLocale &&
-          constants.available_locales.some(
-            lang => lang.iso === detectedLocale,
-          ));
-      let forceSetLocale = false;
-      if (window.__config__.name === 'bnl' && detectedLocale === 'de') {
-        detectedLocale = savedUserLocale || 'fr';
-        forceSetLocale = true;
-      }
-      if (
-        detectedLocale &&
-        ((railsLocale !== detectedLocale && detectedLocaleAvailable) ||
-          forceSetLocale)
-      ) {
-        localeError = !(await setUserLocale(detectedLocale, true));
+      if (response.Success && response?.Data) {
+        const constants = response?.Data;
+        if (constants?.navigation_routes) {
+          constants.navigation_routes = formatNavigationRoutes(constants);
+        }
+        const railsLocale = constants.locale;
+        let localeError = false;
+        const savedUserLocale = Lockr.get(LocalStorageKeys.locale, null);
+        let detectedLocale = urlLocale || savedUserLocale;
+        const detectedLocaleAvailable =
+          detectedLocale === 'en' ||
+          (detectedLocale &&
+            constants.available_locales.some(
+              lang => lang.iso === detectedLocale,
+            ));
+        let forceSetLocale = false;
+        if (
+          detectedLocale &&
+          ((railsLocale !== detectedLocale && detectedLocaleAvailable) ||
+            forceSetLocale)
+        ) {
+          localeError = !(await setUserLocale(detectedLocale, true));
+          if (!localeError) {
+            constants.locale = detectedLocale;
+          }
+        } else if (
+          railsLocale &&
+          (!detectedLocaleAvailable || urlLocale == null)
+        ) {
+          setUserLocale(railsLocale);
+        } else if (!constants.locale) {
+          const defaultLocale = constants.available_locales.find(
+            lang => lang.default,
+          )?.iso;
+          if (defaultLocale) setUserLocale(defaultLocale);
+        }
         if (!localeError) {
-          constants.locale = detectedLocale;
+          if (constants.locale) {
+            thunkAPI.dispatch(fetchTranslations({ locale: constants.locale }));
+          }
+          return constants;
         }
-      } else if (
-        railsLocale &&
-        (!detectedLocaleAvailable || urlLocale == null)
-      ) {
-        setUserLocale(railsLocale);
-      } else if (!constants.locale) {
-        const defaultLocale = constants.available_locales.find(
-          lang => lang.default,
-        )?.iso;
-        if (defaultLocale) setUserLocale(defaultLocale);
       }
-      if (!localeError) {
-        if (constants.locale) {
-          thunkAPI.dispatch(fetchTranslations({ locale: constants.locale }));
-        }
-        return constants;
+      const canRetry = retryCount < 10;
+      if (canRetry) {
+        setTimeout(() => thunkAPI.dispatch(fetchConstants(++retryCount)), 1000);
       }
+      return thunkAPI.rejectWithValue(canRetry);
     }
-    const canRetry = retryCount < 10;
-    if (canRetry) {
-      setTimeout(() => thunkAPI.dispatch(fetchConstants(++retryCount)), 1000);
-    }
-    return thunkAPI.rejectWithValue(canRetry);
   },
 );
 
-export const getInitialState = () => getCachedConfigAndTranslations().config;
+export const getInitialState = () => getCachedConfig();
 
 const initialState: Config | null = getInitialState();
 
@@ -199,9 +218,11 @@ export const configSlice = createSlice({
           state.welcomeCasinoCategories = welcome_casino_categories;
           state.featuredCasinoCategories = featured_casino_categories;
           state.locale = locale;
+          if (locale) {
+            window.user_locale = locale;
+          }
           state.customContentPages = custom_content_pages;
           state.hardcodedCategoriesBanners = hardcoded_categories_banners;
-          Lockr.set(LocalStorageKeys.config, state);
           if (!locale && state.domLoaded) {
             setPageLoader(state, false);
           }

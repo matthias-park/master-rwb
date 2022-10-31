@@ -557,8 +557,6 @@ export enum CustomWindowEvents {
 }
 
 export enum LocalStorageKeys {
-  config = 'constantsCache',
   locale = 'userLocale',
   cookies = 'cookiesSettings',
-  translations = 'translationsCache',
 }

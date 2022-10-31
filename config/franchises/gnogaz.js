@@ -16,13 +16,6 @@ module.exports = {
   gtmId: 'GTM-5W6F66G',
   themeSettings: require('./themeSettings/gnogaz'),
   dateFormat: 'MM-DD-YYYY',
-  redis: {
-    host: '192.168.109.106',
-    port: 6379,
-    db: 0,
-    prefix: 'reactNodeStage-',
-    password: 'yAw6H44cHUtvnjC',
-  },
   componentSettings: {
     userIdleTimeout: 30,
     v2Auth: 'wss://gnogaz-ws.strivegaming.us',
@@ -37,4 +30,5 @@ module.exports = {
       PlayerDisabled: true,
     },
   },
+  seoTitleSeparator: ' | ',
 };

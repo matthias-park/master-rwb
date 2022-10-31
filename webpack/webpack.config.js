@@ -25,9 +25,9 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const postcssNormalize = require('postcss-normalize');
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
-const jsonConfig = require('config');
 const CompressionPlugin = require('compression-webpack-plugin');
 const zlib = require('zlib');
+const AssetsPlugin = require('assets-webpack-plugin');
 
 const appPackageJson = require(paths.appPackageJson);
 
@@ -74,6 +74,8 @@ const hasJsxRuntime = (() => {
     return false;
   }
 })();
+
+const BUILD_ALL_APPS = process.env.BUILD_ALL_APPS === 'true';
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -157,74 +159,15 @@ module.exports = function (webpackEnv, buildFranchises) {
     return loaders;
   };
 
-  const getEntryFiles = () => {
-    return {
-      main:
-        isEnvDevelopment && !shouldUseReactRefresh
-          ? [webpackDevClientEntry, paths.appIndexJs]
-          : paths.appIndexJs,
-      ...paths.appStyles,
-    };
-  };
-
-  const generateHtmlPlugin = franchise =>
-    franchise.domains.map(
-      domain =>
-        new HtmlWebpackPlugin(
-          Object.assign(
-            {},
-            {
-              inject: false,
-              template: paths.appBuildHtml,
-              chunks: getEntryFiles(),
-              filename: `${domain.hostname}.html`,
-              franchiseTheme: `theme-${franchise.theme}`,
-              iconSizes: franchise.iconSizes,
-              meta: {
-                'theme-color': franchise.themeColor,
-                'facebook-domain-verification': franchise.fbDomainVerification,
-              },
-              config: JSON.stringify({
-                name: franchise.name,
-                theme: franchise.theme,
-                apiUrl: domain.api,
-                gtmId: franchise.gtmId,
-                sentryDsn: jsonConfig.has('sentryDsn')
-                  ? jsonConfig.get('sentryDsn')
-                  : null,
-                kambi: franchise.kambi,
-                sbTechUrl: franchise.sbTechUrl,
-                smartyStreets: franchise.smartyStreets,
-                zendesk: franchise.zendesk,
-                googleRecaptchaKey: franchise.googleRecaptchaKey,
-                geoComplyKey: franchise.geoComplyKey,
-                xtremepush: franchise.xtremepush,
-                dateFormat: franchise.dateFormat,
-                componentSettings: franchise.componentSettings,
-                themeSettings: franchise.themeSettings,
-                tgLabSb: franchise.tgLabSb,
-                casino: franchise.casino,
-              }),
-            },
-            isEnvProduction
-              ? {
-                  minify: {
-                    removeComments: true,
-                    collapseWhitespace: true,
-                    removeRedundantAttributes: true,
-                    useShortDoctype: true,
-                    removeEmptyAttributes: true,
-                    removeStyleLinkTypeAttributes: true,
-                    keepClosingSlash: true,
-                    minifyJS: true,
-                    minifyCSS: true,
-                    minifyURLs: true,
-                  },
-                }
-              : undefined,
-          ),
-        ),
-    );
+  const entryFiles = BUILD_ALL_APPS
+    ? {
+        ...paths.appIndexEntries,
+        ...paths.appStyles,
+      }
+    : {
+        main: paths.appIndexJs,
+        ...paths.appStyles,
+      };
 
   return {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
@@ -235,7 +178,7 @@ module.exports = function (webpackEnv, buildFranchises) {
         ? 'source-map'
         : false
       : isEnvDevelopment && 'cheap-module-source-map',
-    entry: getEntryFiles(),
+    entry: entryFiles,
     output: {
       // The build folder.
       path: isEnvProduction ? paths.appBuild : undefined,
@@ -584,10 +527,34 @@ module.exports = function (webpackEnv, buildFranchises) {
       ],
     },
     plugins: [
-      // Generates an `index.html` file with the <script> injected.
-      ...(isEnvProduction
-        ? buildFranchises.map(generateHtmlPlugin).flat()
-        : []),
+      isEnvProduction &&
+        new HtmlWebpackPlugin(
+          Object.assign(
+            {},
+            {
+              inject: false,
+              template: paths.appBuildHtml,
+              chunks: [],
+              filename: `index.html`,
+            },
+            isEnvProduction
+              ? {
+                  minify: {
+                    removeComments: true,
+                    collapseWhitespace: true,
+                    removeRedundantAttributes: true,
+                    useShortDoctype: true,
+                    removeEmptyAttributes: true,
+                    removeStyleLinkTypeAttributes: true,
+                    keepClosingSlash: true,
+                    minifyJS: true,
+                    minifyCSS: true,
+                    minifyURLs: true,
+                  },
+                }
+              : undefined,
+          ),
+        ),
       isEnvDevelopment &&
         new HtmlWebpackPlugin({
           inject: true,
@@ -665,10 +632,13 @@ module.exports = function (webpackEnv, buildFranchises) {
             manifest[file.name] = file.path;
             return manifest;
           }, seed);
-          const entrypointFiles = entrypoints.main.filter(
-            fileName => !fileName.endsWith('.map'),
-          );
-
+          const entrypointFiles = Object.entries(entrypoints)
+            .filter(([key]) => key.includes('bundle-'))
+            .reduce((arr, [_, entries]) => {
+              return arr.concat(
+                entries.filter(fileName => !fileName.endsWith('.map')),
+              );
+            }, []);
           return {
             files: manifestFiles,
             entrypoints: entrypointFiles,
@@ -774,6 +744,12 @@ module.exports = function (webpackEnv, buildFranchises) {
         },
         threshold: 10240,
         minRatio: 0.8,
+      }),
+      new AssetsPlugin({
+        filename: 'assets.json',
+        useCompilerPath: true,
+        entrypoints: true,
+        keepInMemory: isEnvDevelopment,
       }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.

@@ -12,7 +12,12 @@ import { makeCollapsible } from '../../../utils/uiUtils';
 import clsx from 'clsx';
 import RedirectNotFound from '../../../components/RedirectNotFound';
 import { useRoutePath } from '../../../hooks';
-import { PagesName, Franchise, ComponentName } from '../../../constants';
+import {
+  PagesName,
+  Franchise,
+  ComponentName,
+  Config,
+} from '../../../constants';
 import { filterPromotionsList } from '../../../utils';
 import { Helmet } from 'react-helmet-async';
 import * as Sentry from '@sentry/react';
@@ -383,15 +388,13 @@ const PromotionPage = ({ slug }: { slug: string }) => {
       )}
     >
       <Helmet
-        title={clsx(promoTitle && `${promoTitle} - `, t('seo_site_name'))}
+        title={clsx(
+          promoTitle && `${promoTitle}${Config.seoTitleSeperator}`,
+          t('seo_site_name'),
+        )}
         defer={false}
         async
-      >
-        <meta
-          property="og:title"
-          content={clsx(promoTitle && `${promoTitle} - `, t('seo_site_name'))}
-        />
-      </Helmet>
+      />
       {(Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon) && (
         <Link to={'/promotions'}>
           <h1 className="account-settings__title d-flex align-items-center mb-3">

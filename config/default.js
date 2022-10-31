@@ -10,6 +10,13 @@ const franchises = fs.readdirSync('config/franchises').reduce((obj, value) => {
 module.exports = {
   franchises,
   port: 3800,
+  redis: {
+    host: '192.168.109.223',
+    port: 6379,
+    db: 0,
+    prefix: 'v5:reactNodeStage-',
+    password: '48d250eb47f22dc33ada',
+  },
   basicAuth: {
     whitelistedIp: [
       '88.119.158.27',

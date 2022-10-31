@@ -11,7 +11,9 @@ set :build_env, 'stage'
 append :linked_dirs, 'node_modules'
 
 set :default_env, {
-  NODE_ENV: :env,
+  NODE_ENV: fetch(:build_env),
+  NODE_APP_INSTANCE: fetch(:app_instance),
+  NODE_PATH: fetch(:deploy_to),
 }
 
 set :branch, ENV['branch'] || ask('Branch name to deploy?', :develop)

@@ -9,13 +9,6 @@ module.exports = {
   theme: 'strive',
   themeSettings: require('./themeSettings/gnogon'),
   dateFormat: 'MM-DD-YYYY',
-  redis: {
-    host: '192.168.109.106',
-    port: 6379,
-    db: 0,
-    prefix: 'reactNodeStage-',
-    password: 'yAw6H44cHUtvnjC',
-  },
   casino: true,
   componentSettings: {
     userIdleTimeout: 30,

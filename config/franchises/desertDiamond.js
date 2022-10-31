@@ -23,13 +23,6 @@ module.exports = {
   xtremepush: 'https://us.webpu.sh/8UCYTGU9kjyxCCgQtCqROPz24HI_2FvA/sdk.js',
   zendesk: '35d43606-f8bf-4f03-8b8b-6aa6b7690498',
   fbDomainVerification: 'o66579dq5m385gvckustltakqw3xp5',
-  redis: {
-    host: '192.168.109.106',
-    port: 6379,
-    db: 0,
-    prefix: 'reactNodeStage-',
-    password: 'yAw6H44cHUtvnjC',
-  },
   themeSettings: require('./themeSettings/desertDiamond'),
   componentSettings: {
     userIdleTimeout: 30,

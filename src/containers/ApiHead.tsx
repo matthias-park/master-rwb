@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useConfig } from '../hooks/useConfig';
 import { useLocation, matchPath } from 'react-router-dom';
@@ -16,26 +16,19 @@ import {
 } from '../constants';
 import clsx from 'clsx';
 import { ConfigLoaded } from '../types/Config';
-import { isIOS } from 'react-device-detect';
 
 const ApiHead = () => {
-  const { locales, locale, routes, configLoaded, domLoaded } = useConfig(
+  const { locale, routes, configLoaded, domLoaded } = useConfig(
     (prev, next) => {
       const localeEqual = prev.locale === next.locale;
-      const localesEqual = prev.locales.length === next.locales.length;
       const routesEqual = prev.routes.length === next.routes.length;
       const configLoadedEqual = prev.configLoaded === next.configLoaded;
       const domLoadedEqual = prev.domLoaded === next.domLoaded;
-      return (
-        localeEqual &&
-        localesEqual &&
-        routesEqual &&
-        configLoadedEqual &&
-        domLoadedEqual
-      );
+      return localeEqual && routesEqual && configLoadedEqual && domLoadedEqual;
     },
   );
   const { t, hasTranslations } = useI18n();
+  const [initRoute, setInitRoute] = useState(true);
   const { pathname, hash } = useLocation();
   const pathInfo = useMemo(() => {
     let pathRoute = routes.find(route => {
@@ -52,15 +45,19 @@ const ApiHead = () => {
     return pathRoute;
   }, [routes, pathname, hash]);
   const prevPathInfo = usePrevious(pathInfo);
-
   const params = useMemo(
     () => ({
       slug: pathname,
     }),
     [pathname, locale],
   );
+  useEffect(() => {
+    if (pathInfo && prevPathInfo && prevPathInfo.path !== pathInfo.path) {
+      setInitRoute(false);
+    }
+  }, [pathname]);
   const { data } = useApi<RailsApiResponse<SeoPages>>(
-    configLoaded === ConfigLoaded.Loaded && domLoaded
+    configLoaded === ConfigLoaded.Loaded && domLoaded && !initRoute
       ? ['/restapi/v1/content/seo_pages', params]
       : null,
     postApi,
@@ -94,6 +91,9 @@ const ApiHead = () => {
       pathInfo?.id || prevPathInfo?.id || PagesName.Null,
     ) && 'show-captcha',
   );
+  if (initRoute) {
+    return null;
+  }
 
   return (
     <>
@@ -108,35 +108,12 @@ const ApiHead = () => {
           name="description"
           content={seoData?.description || t('seo_description', true)}
         />
-
-        {isIOS && (
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-          />
-        )}
-
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={window.location.href} />
-        <meta property="og:site_name" content={t('seo_site_name', true)} />
-        <meta property="og:image" content="/assets/images/logo/logo.png" />
         {!!seoData?.keywords && (
           <meta name="keywords" content={seoData.keywords} />
         )}
         {!!seoData?.canonical_tag && (
           <link rel="canonical" href={seoData.canonical_tag} />
         )}
-        {locales.map(lang => {
-          if (lang.iso === locale) return null;
-          return (
-            <link
-              key={lang.id}
-              rel="alternate"
-              hrefLang={lang.iso}
-              href={`${window.location.origin}/${lang.iso}`}
-            />
-          );
-        })}
         <body className={bodyClassName} translate="no" />
       </Helmet>
       {!!seoData?.hidden_h1 && (

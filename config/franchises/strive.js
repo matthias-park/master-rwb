@@ -22,13 +22,6 @@ module.exports = {
   },
   xtremepush: 'https://prod.webpu.sh/xIPqGJt6fuQgTzDOSuSTN72PPi7rRk6F/sdk.js',
   dateFormat: 'MM-DD-YYYY',
-  redis: {
-    host: '192.168.109.106',
-    port: 6379,
-    db: 0,
-    prefix: 'reactNodeStage-',
-    password: 'yAw6H44cHUtvnjC',
-  },
   componentSettings: {
     v2Auth: 'wss://strive-ws.tglab.dev',
     userIdleTimeout: 30,

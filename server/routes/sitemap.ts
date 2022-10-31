@@ -5,6 +5,7 @@ import { cacheKeys, getRailsConstants } from '../utils';
 import { Request, Response } from 'express';
 import fetch from 'isomorphic-unfetch';
 import redisCache from '../redisCache';
+import { FRANCHISE_API_DOMAIN } from '../constants';
 
 interface SitemapLink {
   url: string;
@@ -12,7 +13,7 @@ interface SitemapLink {
 }
 const getSitemap = async (req: Request, res: Response) => {
   const reqCacheKeys = cacheKeys(req.hostname);
-  let sitemap = await redisCache.get<SitemapLink[]>(req, reqCacheKeys.sitemap);
+  let sitemap = await redisCache.get<SitemapLink[]>(reqCacheKeys.sitemap);
   if (!sitemap) {
     logger.info(`${req.hostname} - generating sitemap.xml`);
     const railsContants = await getRailsConstants(req);
@@ -31,10 +32,10 @@ const getSitemap = async (req: Request, res: Response) => {
     if (promotionRoute) {
       for (const locale of locales) {
         const localePromotions: { slug: string }[] = await fetch(
-          `${req.franchise.domains[0].api}/restapi/v1/content/promotions`,
+          `${FRANCHISE_API_DOMAIN}/restapi/v1/content/promotions`,
           {
             headers: {
-              cookie: `user_locale=${locale.lang}`,
+              'content-language': locale.lang,
             },
           },
         ).then(async res => {
@@ -85,7 +86,7 @@ const getSitemap = async (req: Request, res: Response) => {
       }
     }
     if (sitemap) {
-      await redisCache.set(req, reqCacheKeys.sitemap, sitemap);
+      await redisCache.set(reqCacheKeys.sitemap, sitemap);
     }
   }
   if (!sitemap) {

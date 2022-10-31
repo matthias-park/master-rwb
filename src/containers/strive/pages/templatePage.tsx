@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { makeCollapsible } from '../../../utils/uiUtils';
@@ -18,7 +18,7 @@ import { Helmet } from 'react-helmet-async';
 import { replaceStringTagsReact } from '../../../utils/reactUtils';
 import { getApi } from '../../../utils/apiUtils';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
-import { Franchise } from '../../../constants';
+import { Franchise, Config } from '../../../constants';
 
 const questionItems = [
   {
@@ -94,15 +94,10 @@ const TemplatePage = () => {
       )}
       {!!pageTitle && (
         <Helmet
-          title={`${pageTitle} - ${t('seo_site_name')}`}
+          title={`${pageTitle}${Config.seoTitleSeperator}${t('seo_site_name')}`}
           defer={false}
           async
-        >
-          <meta
-            property="og:title"
-            content={`${pageTitle} - ${t('seo_site_name')}`}
-          />
-        </Helmet>
+        />
       )}
       {!!data?.Success &&
         (Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon ? (

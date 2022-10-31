@@ -54,20 +54,9 @@ export const extensionsToIgnore = [
   '.svg',
   '.webmanifest',
   '.webp',
+  '.map',
 ];
-export const EXCLUDED_BOTS = ['pingdom'];
-export const BROWSER_KEEP_ALIVE = 300000; // 5min
 
-export const DOMAINS_TO_FRANCHISE: {
-  [key: string]: FranchiseConfig;
-} = Object.values(
-  config.get<{ [key: string]: FranchiseConfig }>('franchises'),
-).reduce((obj, fr) => {
-  fr.domains.forEach(domain => {
-    obj[domain.hostname] = fr;
-  });
-  return obj;
-}, {});
 export const BASIC_AUTH =
   (config.has('basicAuth') && config.get<basicAuthConfig>('basicAuth')) || null;
 
@@ -76,6 +65,12 @@ export const BUILD_FOLDER = path.join(
   '../',
   DEVELOPMENT ? 'build/' : '',
 );
-export const PRERENDER_HEADER = 'x-seo-prerender';
-export const MAX_PRERENDER_PAGES = 3;
 export const LOCALE_REGEX = /^\/([a-z]{2}-[a-z]{2}|[a-z]{2})(\/|$)/i;
+
+export const FRANCHISE_CONFIG = config.get<{
+  [key: string]: FranchiseConfig;
+}>('franchises')[process.env.NODE_APP_INSTANCE!];
+
+export const INDEX_HTML_PATH = path.join(BUILD_FOLDER, `/index.html`);
+export const ASSETS_PATH = path.join(BUILD_FOLDER, `/assets.json`);
+export const FRANCHISE_API_DOMAIN = FRANCHISE_CONFIG.domains[0].api;

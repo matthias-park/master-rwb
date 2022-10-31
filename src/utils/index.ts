@@ -4,7 +4,6 @@ import Lockr from 'lockr';
 import { PostItem } from '../types/api/Posts';
 import dayjs, { Dayjs } from 'dayjs';
 import Config, { ConfigLoaded, Cookies } from '../types/Config';
-import { getWindowUrlLocale, Symbols } from './i18n';
 import * as Sentry from '@sentry/react';
 import StorageAffiliates from '../types/state/StorageAffiliates';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -85,6 +84,9 @@ export const clearUserLocalStorage = () => {
     'transactions-date-from',
     'geocomplyRetryCount',
     'winnings-refresh-tracker',
+    'userCompanyId',
+    'constantsCache',
+    'translationsCache',
   ];
   for (const key of keys) {
     localStorage.removeItem(key);
@@ -148,11 +150,7 @@ export const mergeDeep = (target, ...sources) => {
   return mergeDeep(target, ...sources);
 };
 
-export const getCachedConfigAndTranslations = (): {
-  config: Config;
-  translations: Symbols | null;
-  cacheValid: boolean;
-} => {
+export const getCachedConfig = (): Config => {
   const defaultCookies: Cookies = {
     accepted: false,
     functional: true,
@@ -160,39 +158,23 @@ export const getCachedConfigAndTranslations = (): {
     marketing: false,
     personalization: false,
   };
-  const cachedConstants = Lockr.get(LocalStorageKeys.config, null);
   const savedCookieSettings = Lockr.get(
     LocalStorageKeys.cookies,
     defaultCookies,
   );
   const savedLocale = Lockr.get(LocalStorageKeys.locale, null);
-  const urlLocale = getWindowUrlLocale();
-  const translationsCache =
-    urlLocale === savedLocale
-      ? Lockr.get(
-          `${LocalStorageKeys.translations}-${urlLocale || savedLocale}`,
-          null,
-        )
-      : null;
   const mobileView = !!new URLSearchParams(window.location.search).get(
     'mobile-view',
   );
-  const isCacheValid =
-    cachedConstants && translationsCache && urlLocale === savedLocale;
   return {
-    config: {
-      locales: [],
-      routes: [],
-      ...(cachedConstants || {}),
-      locale: savedLocale,
-      configLoaded: isCacheValid ? ConfigLoaded.Loaded : ConfigLoaded.Loading,
-      cookies: savedCookieSettings,
-      showPageLoader: true,
-      domLoaded: false,
-      mobileView,
-    },
-    translations: translationsCache,
-    cacheValid: !!isCacheValid,
+    locales: [],
+    routes: [],
+    locale: savedLocale,
+    configLoaded: ConfigLoaded.Loading,
+    cookies: savedCookieSettings,
+    showPageLoader: true,
+    domLoaded: false,
+    mobileView,
   };
 };
 const affiliatesStorageId = 'affiliates';

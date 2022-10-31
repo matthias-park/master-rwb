@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { PRERENDER_HEADER, BASIC_AUTH, LOCALE_REGEX } from '../constants';
+import { BASIC_AUTH, FRANCHISE_CONFIG, LOCALE_REGEX } from '../constants';
 import auth from 'basic-auth';
 import { getRailsConstants, isReqResourceFile } from '../utils';
 import { matchPath } from 'react-router-dom';
@@ -31,9 +31,9 @@ const basicAuth = async (req: Request, res: Response, next: NextFunction) => {
             path: route.path,
             exact: route.exact ?? true,
           }) &&
-          !!BASIC_AUTH?.mobileViewExcludedPages?.[req.franchise.name]?.includes(
-            route.name,
-          ),
+          !!BASIC_AUTH?.mobileViewExcludedPages?.[
+            FRANCHISE_CONFIG.name
+          ]?.includes(route.name),
       )
     ) {
       req.singleLoadPage = true;
@@ -41,9 +41,7 @@ const basicAuth = async (req: Request, res: Response, next: NextFunction) => {
     }
   }
   if (
-    !req.franchise.basicAuthEnabled ||
-    req.franchise.excludeBasicAuthFiles?.includes(req.url) ||
-    req.header(PRERENDER_HEADER) ||
+    FRANCHISE_CONFIG.excludeBasicAuthFiles?.includes(req.url) ||
     !BASIC_AUTH ||
     !BASIC_AUTH.users ||
     !BASIC_AUTH.whitelistedIp ||

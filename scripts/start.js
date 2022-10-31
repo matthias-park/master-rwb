@@ -41,6 +41,11 @@ if (!checkRequiredFiles([paths.appDevHtml, paths.appIndexJs])) {
 const DEFAULT_PORT = config.get('port') || 3800;
 const HOST = process.env.HOST || '0.0.0.0';
 
+// Warn and crash if required files are missing
+if (!checkRequiredFiles([paths.appDevHtml])) {
+  process.exit(1);
+}
+
 if (process.env.HOST) {
   console.log(
     chalk.cyan(

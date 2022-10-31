@@ -9,18 +9,18 @@ module.exports = {
       ],
       sbTechUrl: 'https://gnogaz-fe-uat-sandbox.strivegaming.us',
       xtremepush: 'https://us.webpu.sh/6MCTOZTZCr1IsiPan9ce90gdq4Og2mvk/sdk.js',
-      redis: {
-        host: '192.168.155.41',
-        port: 6379,
-        db: 12,
-        prefix: 'reactNodeTest-',
-        password: 'gmRK3vRLvEFejcFnN',
-      },
       basicAuthEnabled: true,
       componentSettings: {
         v2Auth: 'wss://ws-gnogaz-uat.strivegaming.us',
       },
     },
+  },
+  redis: {
+    host: '192.168.155.41',
+    port: 6379,
+    db: 12,
+    prefix: 'reactNodeTest-',
+    password: 'gmRK3vRLvEFejcFnN',
   },
   port: 3800,
 };
