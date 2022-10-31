@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useI18n } from '../../../hooks/useI18n';
 import {
   StyledBonusInputWrp,
@@ -27,11 +27,15 @@ import Table from 'react-bootstrap/Table';
 import useLocalStorage from '../../../hooks/useLocalStorage';
 import DateFilter from '../components/account-settings/DateFilter';
 import { sortAscending, setDateTime } from '../../../utils/index';
+import { ComponentSettings } from '../../../constants';
+import TablePagination from '../../strive/components/account-settings/TablePagination';
 
 interface BonusCardProps {
   bonusData: {
     title: string;
     amount: string;
+    boostPercentage: number;
+    boostedOdds: number;
     validTo: string;
     rolloverUsed: number;
     rolloverAmount: number;
@@ -49,6 +53,8 @@ interface BonusCardListProps {
   title: string;
   items: any[];
   mutate: () => any;
+  paginate?: boolean;
+  searchBar?: boolean;
 }
 
 enum BonusStatus {
@@ -344,29 +350,110 @@ const BonusCard = ({ bonusData, mutateBonuses, isActive }: BonusCardProps) => {
   );
 };
 
-const BonusCardList = ({ title, items, mutate }: BonusCardListProps) => {
+const BonusSearchInput = ({ setSearchValue }) => {
+  const { t } = useI18n();
+  const [value, setValue] = useState('');
+  return (
+    <Form className="w-100">
+      <Form.Group className="d-flex flex-nowrap align-items-center">
+        <Form.Control
+          className="py-4"
+          placeholder={t('search')}
+          onChange={e => {
+            if (e.target.value.length === 0) setSearchValue(null);
+            setValue(e.target.value);
+          }}
+        />
+        <LoadingButton
+          className="ml-1 py-4"
+          onClick={() => setSearchValue(value)}
+        >
+          {t('search')}
+        </LoadingButton>
+      </Form.Group>
+    </Form>
+  );
+};
+
+const BonusCardList = ({
+  title,
+  items,
+  mutate,
+  paginate = false,
+  searchBar = false,
+}: BonusCardListProps) => {
+  const itemCount = 8;
+  const [searchValue, setSearchValue] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageDetails, setPageDetails] = useState({
+    firstItemIndex: 0,
+    lastItemIndex: itemCount - 1,
+  });
+
+  const totalPages = useMemo(() => {
+    return Math.round(items.length / itemCount) || 1;
+  }, [items]);
+
+  useEffect(() => {
+    setPageDetails(() => {
+      if (currentPage === 1) {
+        return {
+          firstItemIndex: 0,
+          lastItemIndex: itemCount - 1,
+        };
+      }
+      return {
+        firstItemIndex: (currentPage - 1) * itemCount + 1,
+        lastItemIndex: (currentPage - 1) * itemCount + itemCount,
+      };
+    });
+  }, [currentPage]);
+
   return (
     <StyledBonusCardList className="fade-in">
       <h5 className="title">{title}</h5>
-      <div className="list">
-        {items?.map(bonus => (
-          <BonusCard
-            bonusData={{
-              title: bonus.Name,
-              validTo: bonus.ValidTo,
-              amount: bonus.Amount ?? bonus.BonusCampaignAwardAmount,
-              rolloverUsed: bonus.TotalRollover - bonus.RolloverAmountLeft,
-              rolloverAmount: bonus.TotalRollover,
-              engine: bonus.Engine,
-              usageId: bonus.UsageId,
-              count: bonus?.Count,
-              canActivate: bonus.CanActivate,
-              canCancel: bonus.CanCancel,
-            }}
-            mutateBonuses={mutate}
-            isActive={bonus.IsActive}
-          />
-        ))}
+      <div className="list d-flex flex-wrap">
+        {searchBar && <BonusSearchInput setSearchValue={setSearchValue} />}
+        {items?.map((bonus, index) => {
+          if (!bonus.Name.includes(searchValue || '') && searchBar) return null;
+          if (
+            (index < pageDetails.firstItemIndex ||
+              index > pageDetails.lastItemIndex) &&
+            searchValue === null &&
+            paginate
+          )
+            return null;
+          return (
+            <BonusCard
+              bonusData={{
+                title: bonus.Name,
+                validTo: bonus.ValidTo,
+                amount: bonus.Amount ?? bonus.BonusCampaignAwardAmount,
+                boostPercentage: bonus.BoostPercentage,
+                boostedOdds: bonus.BoostOdds,
+                rolloverUsed: bonus.TotalRollover - bonus.RolloverAmountLeft,
+                rolloverAmount: bonus.TotalRollover,
+                engine: bonus.Engine,
+                usageId: bonus.UsageId,
+                count: bonus?.Count,
+                canActivate: bonus.CanActivate,
+                canCancel: bonus.CanCancel,
+              }}
+              mutateBonuses={mutate}
+              isActive={bonus.IsActive}
+            />
+          );
+        })}
+        {paginate && searchValue === null && (
+          <div className="w-100 d-flex justify-content-center">
+            <TablePagination
+              data={items}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          </div>
+        )}
       </div>
     </StyledBonusCardList>
   );
@@ -470,6 +557,8 @@ const BonusesPage = () => {
           )}
           {!!queueBonuses.length && (
             <BonusCardList
+              searchBar={ComponentSettings?.bonuses.queueBonuses.searchBar}
+              paginate={ComponentSettings?.bonuses.queueBonuses.paginate}
               title={t('queue_bonuses_title')}
               items={queueBonuses}
               mutate={mutate}

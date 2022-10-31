@@ -58,6 +58,18 @@ export const StyledBonusCardList = styled.div`
       grid-template-columns: repeat(1, 1fr);
     }
   }
+  .page-link {
+    color: ${props => props.theme.colors.brand.text};
+    background-color: ${props =>
+      props.theme.colors.container || props.theme.colors.white.main};
+  }
+  .page-item.active {
+    .page-link {
+      background-color: ${props => props.theme.colors.primary.main};
+      border-color: ${props => props.theme.colors.primary.main};
+      color: ${props => props.theme.colors.white.main};
+    }
+  }
 `;
 
 export const StyledBonusCard = styled.div`

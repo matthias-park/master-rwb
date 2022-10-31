@@ -44,5 +44,11 @@ module.exports = {
     header: {
       needsBurger: true,
     },
+    bonuses: {
+      queueBonuses: {
+        paginate: true,
+        searchBar: true,
+      },
+    },
   },
 };

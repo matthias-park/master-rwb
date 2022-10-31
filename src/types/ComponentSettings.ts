@@ -20,4 +20,14 @@ export interface ComponentSettings {
   header?: {
     needsBurger?: boolean;
   };
+  transactions: {
+    needsOverviewTable?: boolean;
+  };
+  bonuses: {
+    queueBonuses: {
+      paginate: boolean;
+      searchBar: boolean;
+    };
+  };
+  completeRegistration?: boolean;
 }
