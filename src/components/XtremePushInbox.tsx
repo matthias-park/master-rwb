@@ -185,6 +185,7 @@ const XtremePushInbox = ({ className }: Props) => {
       const init = () => {
         setXtremePushReady(true);
         window.xtremepush('set', 'email', user.email);
+        window.xtremepush('set', 'user_id', user.id);
         window.xtremepush(
           'inbox',
           'badge',
@@ -209,6 +210,22 @@ const XtremePushInbox = ({ className }: Props) => {
                 if (xtremePushReadyTimeout.current)
                   clearTimeout(xtremePushReadyTimeout.current);
                 init();
+                if (window.safari !== undefined) {
+                  const permission = window.xtremepush('push', 'permission');
+                  // const views = JSON.parse(
+                  //   localStorage.getItem('xtremepush.data') || '{}',
+                  // )?.page_views;
+                  // const sendPush = views % 55 === 0 || views === 1;
+                  if (
+                    (permission === 'default' || !permission) &&
+                    permission !== 'unavailable' &&
+                    permission !== 'denied'
+                  ) {
+                    window.xtremepush('event', 'User Gesture');
+                  }
+                } else {
+                  window.xtremepush('push', 'auto_prompt', true);
+                }
               });
             }, 500);
           })
