@@ -30,4 +30,8 @@ export interface ComponentSettings {
     };
   };
   completeRegistration?: boolean;
+  communicationPreferences: {
+    mobilePref: boolean;
+    endPointVerison: string;
+  };
 }

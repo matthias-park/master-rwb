@@ -51,5 +51,9 @@ module.exports = {
         searchBar: true,
       },
     },
+    communicationPreferences: {
+      mobilePref: true,
+      endPointVerison: 'v2',
+    }
   },
 };
