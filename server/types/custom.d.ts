@@ -8,6 +8,27 @@ export interface RedisCache {
   password?: string;
 }
 
+export interface AndroidAppLink {
+  relation: string[];
+  target: {
+    namespace: string;
+    package_name: string;
+    sha256_cert_fingerprints: string;
+  };
+}
+
+export interface AppleAppLinks {
+  webCredentials: {
+    appLinks: {
+      details: {
+        appIds: string[];
+        components: [{ [key: string]: string }];
+      };
+    };
+    apps: string[];
+  };
+}
+
 export interface FranchiseConfig {
   name: string;
   domains: {
@@ -19,6 +40,11 @@ export interface FranchiseConfig {
   basicAuthEnabled: boolean;
   excludeBasicAuthFiles?: string[];
   redis?: RedisCache;
+  appLinks?: {
+    apple: AppleAppLinks;
+    android: AndroidAppLink[];
+  };
+  fbDomainVerification?: string;
   gtmId?: string;
   kambi?: unknown;
   sbTechUrl?: string;
