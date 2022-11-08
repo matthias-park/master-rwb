@@ -159,6 +159,11 @@ declare module 'styled-components' {
       bgColor?: string;
       color?: string;
     };
+    cookies: {
+      nav: {
+        backgroundColor: string;
+      };
+    };
     translationLink: {
       textDecoration: string;
       color: string;

@@ -131,14 +131,7 @@ const GeoComplyModal = () => {
     }
   }, [hideLivechat]);
 
-  const message =
-    useInternalTranslations ||
-    (!errorMessage && errorCode) ||
-    ErrorCodesInternalTranslations.includes(errorCode || 0)
-      ? errorCode != null
-        ? jsxT(`geo_comply_error_${errorCode}`)
-        : ''
-      : errorMessage;
+  const errorMessage = !!errorCode && jsxT(`geo_comply_error_${errorCode}`);
 
   const openLivechat = () => {
     setHideLivechat(prevState => !prevState);
@@ -157,14 +150,13 @@ const GeoComplyModal = () => {
             show={
               activeModal === ComponentName.GeoComplyModal &&
               errorCode != null &&
-              !!message &&
               !shouldModalHide
             }
             hideCallback={() => hideModal()}
             className="pb-5"
           >
             <h2 className="mb-2 modal-title">{t('geo_comply_app_title')}</h2>
-            <p className="mb-3">{message}</p>
+            <p className="mb-3">{errorMessage}</p>
             <DownloadLinks errorCode={errorCode} isDesktop={isDesktop} />
           </GenericModal>
         ))}
@@ -187,7 +179,7 @@ const GeoComplyModal = () => {
                 className="mobile-livechat__buttons"
                 onClick={openLivechat}
               >
-                <i className={`icon icon-gcg-livechat`}></i>
+                <i className={`icon icon-${Config.name}-questions`}></i>
                 {unreadIndicator > 0 && (
                   <span id="unread-indicator">{unreadIndicator}</span>
                 )}
