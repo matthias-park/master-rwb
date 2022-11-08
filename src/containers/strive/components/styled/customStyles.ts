@@ -565,6 +565,138 @@ const customStyles = css`
     }
   }
 
+  .mobileApp-nav {
+    position: fixed;
+    display: flex;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999999;
+    background-color: ${props =>
+      props.theme.cookies?.nav?.backgroundColor ||
+      props.theme.colors.brand.light};
+    color: ${props => props.theme.colors.gray.custom_200};
+    padding: 20px 115px 14px 115px;
+    box-shadow: 0 0px 12px ${props => rgba(props.theme.colors.white.main, 0.2)};
+    ${mediaBreakpointDown('xl')} {
+      padding: 20px 45px 14px 45px;
+    }
+    ${mediaBreakpointDown('sm')} {
+      padding: 20px 30px 14px 30px;
+    }
+    ${mediaBreakpointDown('xs')} {
+      flex-direction: column;
+    }
+    ${mediaBreakpointUp('xxxl')} {
+      margin: auto;
+      margin: 0 -${props => props.theme.spacing.bodyPadding}px;
+    }
+    &__icon {
+      font-size: 25px;
+      margin-right: 15px;
+      ${mediaBreakpointDown('xs')} {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+      }
+    }
+    &__body {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      &-text {
+        font-size: 14px;
+        line-height: 1.4;
+        a {
+          color: ${props => props.theme.colors.gray.custom_200};
+          text-decoration: underline;
+        }
+      }
+      ${mediaBreakpointDown('xs')} {
+        // margin-left: 35px;
+        // margin-bottom: 10px;
+      }
+    }
+    &__buttons {
+      margin-left: 35px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: center;
+      align-content: center;
+      flex-direction: column;
+      ${mediaBreakpointUp('sm')} {
+        margin-left: auto;
+        padding-left: 30px;
+        flex-direction: row;
+      }
+      .btn.btn-sm {
+        display: inline-block;
+        min-width: 100%;
+        padding-top: 6px;
+        padding-bottom: 6px;
+        margin: 5px 0;
+        max-height: 34px;
+        white-space: nowrap;
+        ${mediaBreakpointUp('sm')} {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
+  .mobile-livechat {
+    position: fixed;
+    right: 5px;
+    bottom: 80px;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: ${props => props.theme.colors.primary.main};
+    &__show {
+      z-index: 9999999;
+    }
+    &__hide {
+      z-index: -9999999;
+    }
+    &__buttons {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      background-color: ${props => props.theme.colors.primary.main};
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .icon {
+        font-size: 25px;
+        color: white;
+        ${mediaBreakpointDown('xs')} {
+          position: absolute;
+          top: 20px;
+          left: 20px;
+        }
+      }
+      #unread-indicator {
+        background-color: ${props =>
+          props.theme.colors.danger.main || '#cc3333'};
+        color: white;
+        text-align: center;
+        font-size: 12px;
+        line-height: 1.7;
+        border-radius: 50%;
+        min-width: 20px;
+        height: 20px;
+        font-weight: 600;
+        margin-left: 30px;
+        margin-bottom: 20px;
+      }
+    }
+  }
+
   .notification-message {
     position: fixed;
     display: flex;
@@ -843,6 +975,26 @@ const customStyles = css`
     display: flex;
     justify-content: center;
     align-items: center;
+    color: ${props => props.theme.colors.primary.main};
+    &:hover {
+      color: ${props => props.theme.colors.primary.main};
+    }
+    &:active {
+      text-decoration: underline;
+    }
+    .icon-appleinc,
+    .icon-android {
+      margin-right: 0.5rem;
+      margin-bottom: 0.1rem;
+    }
+  }
+  .mobile-app-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid ${props => props.theme.colors.primary.main};
+    border-radius: 8px;
+    padding: 10px;
     color: ${props => props.theme.colors.primary.main};
     &:hover {
       color: ${props => props.theme.colors.primary.main};
