@@ -74,7 +74,6 @@ app.use('/server/*', (_, res) => {
 app.use(middleware.localeDetect);
 
 app.get('/robots.txt', getRobots);
-
 app.get('/sitemap.xml', getSitemap);
 
 app.use(middleware.routeExistCheck);
