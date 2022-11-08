@@ -164,7 +164,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "start:server": "cross-env NODE_APP_INSTANCE=desertDiamond NODE_ENV=production ts-node --project server/tsconfig.json server/index.ts",
+    "start:server": "cross-env NODE_ENV=production NODE_APP_INSTANCE=desertDiamond ts-node --project server/tsconfig.json server/index.ts",
     "build": "node scripts/build.js && npm run build:server",
     "build:server": "tsc --build server/tsconfig.json",
     "build:production": "NODE_ENV=production npm run build",

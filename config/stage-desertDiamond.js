@@ -1,6 +1,13 @@
 module.exports = {
   franchises: {
     desertDiamond: {
+      basicAuthEnabled: true,
+      domains: [
+        {
+          hostname: 'ddm-fe.strivegaming.us',
+          api: 'https://ddmapi-dev.strivegaming.us',
+        },
+      ],
       appLinks: {
         apple: {
           webCredentials: {
@@ -102,6 +109,5 @@ module.exports = {
       },
     },
   },
-  sentryDsn:
-    'https://5c1d5814ea0d42c2a323b15b1310491b@o1137508.ingest.sentry.io/6190258',
+  port: 3811,
 };
