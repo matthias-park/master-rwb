@@ -319,6 +319,28 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                           />
                         );
                       })}
+                  {/* In Desert Diamond, this will show support menu on table and mobile size, without sign_in */}
+                  {Franchise.desertDiamond &&
+                    !tabletWidth &&
+                    needsBurger &&
+                    !user.logged_in &&
+                    sidebars &&
+                    sidebars[0][7].name === 'help_and_support' && (
+                      <UserMenuLink
+                        key={`${sidebars[0][7].link}-${sidebars[0][7].name}`}
+                        icon={sidebars[0][7].icon}
+                        link={sidebars[0][7].link}
+                        name={t(sidebars[0][7].name)}
+                        children={
+                          sidebars[0][7].children
+                            ? sidebars[0][7].children.filter(
+                                child => child.name !== 'document_center_link',
+                              )
+                            : null
+                        }
+                        setShowDropdown={showUserMenu}
+                      />
+                    )}
                   {sidebars &&
                     user.logged_in &&
                     sidebars[0].map(link => (

@@ -12,6 +12,9 @@ const PageColumnFooter = () => {
   const { t } = useI18n();
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
   const { enableModal } = useModal();
+  const { sidebars } = useConfig(
+    (prev, next) => !!prev.sidebars === !!next.sidebars,
+  );
 
   if (!footer) {
     return null;
@@ -115,6 +118,17 @@ const PageColumnFooter = () => {
             <Link to={link.link}>{t(link.title_symbol)}</Link>
           </span>
         ))}
+        {/* In Desert Diamond, add help and support links in footer without a doucment center link */}
+        {Franchise.desertDiamond &&
+          sidebars &&
+          sidebars[0][7].name === 'help_and_support' &&
+          sidebars[0][7].children?.map((child, i) =>
+            child.name === 'document_center_link' ? null : (
+              <span key={`${child.link}_${i}`} className="footer-links__link">
+                <Link to={child.link}>{t(child.name)}</Link>
+              </span>
+            ),
+          )}
       </div>
 
       <div className="footer-item footer-note">{t('copyright_text')}</div>
