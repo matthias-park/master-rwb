@@ -81,8 +81,7 @@ module.exports = {
                   },
                   {
                     '/': '/$(lang)/account/profile/tax-information',
-                    comment:
-                      'Matches any URL whose path starts with tax path',
+                    comment: 'Matches any URL whose path starts with tax path',
                   },
                   {
                     '/': '/$(lang)/account/profile/document-center',
@@ -92,7 +91,7 @@ module.exports = {
                 ],
               },
             ],
-        }
+          },
         },
         android: [
           {

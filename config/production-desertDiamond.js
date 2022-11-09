@@ -74,8 +74,7 @@ module.exports = {
                   },
                   {
                     '/': '/$(lang)/account/profile/tax-information',
-                    comment:
-                      'Matches any URL whose path starts with tax path',
+                    comment: 'Matches any URL whose path starts with tax path',
                   },
                   {
                     '/': '/$(lang)/account/profile/document-center',
@@ -84,12 +83,6 @@ module.exports = {
                   },
                 ],
               },
-            ],
-        },
-          webCredentials: {
-            apps: [
-              '346TY947DH.com.strivegaming.desertDiamondApp',
-              'TM75T75K7R.com.desertdiamond.desertdiamondsports',
             ],
           },
         },
