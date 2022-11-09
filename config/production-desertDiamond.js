@@ -3,10 +3,16 @@ module.exports = {
     desertDiamond: {
       appLinks: {
         apple: {
-          appLinks: {
+          webcredentials: {
+            apps: [
+              '346TY947DH.com.strivegaming.desertDiamondApp',
+              'TM75T75K7R.com.desertdiamond.desertdiamondsports',
+            ],
+          },
+          applinks: {
             details: [
               {
-                appIds: [
+                appIDs: [
                   '346TY947DH.com.strivegaming.desertDiamondApp',
                   'TM75T75K7R.com.desertdiamond.desertdiamondsports',
                 ],
@@ -79,7 +85,7 @@ module.exports = {
                 ],
               },
             ],
-          },
+        },
           webCredentials: {
             apps: [
               '346TY947DH.com.strivegaming.desertDiamondApp',
