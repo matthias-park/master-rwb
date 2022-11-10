@@ -4,19 +4,17 @@ module.exports = {
       appLinks: {
         apple: {
           webcredentials: {
-            apps: [
-              '346TY947DH.com.strivegaming.desertDiamondApp',
-              'TM75T75K7R.com.desertdiamond.desertdiamondsports',
-            ],
+            apps: ['TM75T75K7R.com.desertdiamond.desertdiamondsports'],
           },
           applinks: {
             details: [
               {
-                appIDs: [
-                  '346TY947DH.com.strivegaming.desertDiamondApp',
-                  'TM75T75K7R.com.desertdiamond.desertdiamondsports',
-                ],
+                appIDs: ['TM75T75K7R.com.desertdiamond.desertdiamondsports'],
                 components: [
+                  {
+                    '/': '/$(lang)/',
+                    comment: 'Matches any URL whose path is root to launch app',
+                  },
                   {
                     '/': '/$(lang)/reset-password/*',
                     comment:
