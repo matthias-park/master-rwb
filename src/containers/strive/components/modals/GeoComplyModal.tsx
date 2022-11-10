@@ -19,24 +19,18 @@ const franchiseHasApp = [
   FranchiseNames.DesertDiamond,
 ].includes(Config.name);
 
-const DownloadLinks = ({ errorCode, isDesktop }) => {
+const DownloadLinks = ({ errorCode }) => {
   const { t } = useI18n();
   if (isIOS && franchiseHasApp) {
     return (
-      <Link
-        to={t('ios_app_link')}
-        className={isDesktop ? 'geocomply-app-link' : 'mobile-app-link'}
-      >
+      <Link to={t('ios_app_link')} className={'mobile-app-link'}>
         <i className={`icon icon-appleinc`}></i>
         {t('geocomply_ios_download')}
       </Link>
     );
   } else if (isAndroid && franchiseHasApp) {
     return (
-      <Link
-        to={t('android_app_link')}
-        className={isDesktop ? 'geocomply-app-link' : 'mobile-app-link'}
-      >
+      <Link to={t('android_app_link')} className={'mobile-app-link'}>
         <i className={`icon icon-android`}></i>
         {t('geocomply_android_download')}
       </Link>
@@ -157,7 +151,7 @@ const GeoComplyModal = () => {
           >
             <h2 className="mb-2 modal-title">{t('geo_comply_app_title')}</h2>
             <p className="mb-3">{errorMessage}</p>
-            <DownloadLinks errorCode={errorCode} isDesktop={isDesktop} />
+            <DownloadLinks errorCode={errorCode} />
           </GenericModal>
         ))}
       {!isDesktop && franchiseHasApp && (
@@ -166,7 +160,7 @@ const GeoComplyModal = () => {
             <h3 className="mobileApp-nav__body-title">
               {t('geo_comply_app_title')}
             </h3>
-            <DownloadLinks errorCode={errorCode} isDesktop={isDesktop} />
+            <DownloadLinks errorCode={errorCode} />
           </div>
           {isZendesk && (
             <div
