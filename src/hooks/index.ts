@@ -26,21 +26,7 @@ export const useRoutePath = (
   }, [routes]);
 };
 
-export const useIsRouteActive = (
-  props: string | { path?: string; id?: PagesName },
-) => {
-  const currentPath = useCurrentRoute();
-  if (!currentPath) return false;
-  if (typeof props === 'object') {
-    return currentPath.id === props.id || currentPath.path === props.path;
-  }
-  if (typeof props === 'string') {
-    return currentPath.name === props;
-  }
-  return false;
-};
-
-export const useCurrentRoute = () => {
+export const useIsRouteActive = (pathName: string) => {
   const { routes } = useConfig(
     (prev, next) => prev.routes.length === next.routes.length,
   );
@@ -57,5 +43,5 @@ export const useCurrentRoute = () => {
       }),
     [routes, pathname, hash],
   );
-  return pathInfo;
+  return pathInfo?.name === pathName;
 };

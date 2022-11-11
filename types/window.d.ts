@@ -28,7 +28,6 @@ export declare global {
         enableOddsFormatSelector?: boolean;
         fallbackLocale?: string;
         vaixScript?: string;
-        historyRouting?: boolean;
       };
       sbTechUrl?: string;
       zendesk?: string;

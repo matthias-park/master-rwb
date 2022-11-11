@@ -41,9 +41,8 @@ const PageLayout = ({ children }) => {
       sidebars?.find(sidebar =>
         sidebar.some(
           link =>
-            !link.onlyLink &&
-            (pathname.includes(link.link) ||
-              link.children?.some(link => pathname.includes(link.link))),
+            pathname.includes(link.link) ||
+            link.children?.some(link => pathname.includes(link.link)),
         ),
       ),
     [sidebars, pathname, user.loading],
