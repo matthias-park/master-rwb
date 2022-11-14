@@ -20,7 +20,7 @@ import {
   showKambiSportsbook,
 } from '../utils/uiUtils';
 import { useAuth } from '../hooks/useAuth';
-import { usePrevious, useRoutePath } from '../hooks';
+import { useCurrentRoute, usePrevious, useRoutePath } from '../hooks';
 import { useDispatch } from 'react-redux';
 import { setBalance } from '../state/reducers/user';
 import Lockr from 'lockr';
@@ -38,6 +38,14 @@ interface KambiContext {
   setRetailMode: (retail: boolean) => void;
   setRendered: (rendered: boolean) => void;
   setKambiMaintenance: (maintenance: boolean) => void;
+}
+
+if (Config.kambi?.historyRouting && window.location.hash) {
+  const rootLocation = window.location.href
+    .replace(window.location.hash, '')
+    .replace(/\/$/, '');
+  const kambiPath = `/${window.location.hash.replace('#', '')}`;
+  window.location.replace(`${rootLocation}${kambiPath}`);
 }
 
 const kambiContext = createContext<KambiContext>({
@@ -85,7 +93,8 @@ export const KambiProvider = ({ children }) => {
     loggedIn: false,
     retries: 0,
   });
-  const { hash, key: locationKey } = useLocation();
+  const { pathname, hash, key: locationKey } = useLocation();
+  const activeRoute = useCurrentRoute();
   useEffect(() => {
     window['ga-disable-UA-45067452-1'] = !cookies.analytics;
     window['ga-disable-UA-45067452-4'] = !cookies.analytics;
@@ -157,10 +166,21 @@ export const KambiProvider = ({ children }) => {
   ]);
 
   useEffectSkipInitial(() => {
-    if (api && locationKey && rendered) {
-      api.navigateClient(hash || 'home', 'sportsbook');
+    if (
+      [PagesName.SportsPage, PagesName.SportsPlayRetailPage].includes(
+        activeRoute?.id || 0,
+      ) &&
+      api &&
+      locationKey &&
+      rendered
+    ) {
+      api.navigateClient(
+        (Config.kambi?.historyRouting ? pathname : hash) || 'home',
+        'sportsbook',
+      );
     }
-  }, [hash, !!api]);
+  }, [pathname, hash, !!api]);
+
   useEffect(() => {
     if (showKambi) {
       showKambiSportsbook();
@@ -200,6 +220,7 @@ interface SetCustomerSettingsProps {
   setKambiUserLoggedIn: (loggedIn: boolean) => void;
   setKambiMaintenance: () => void;
   locale: string;
+  rootPath: string;
 }
 
 interface KambiSportsbookProps {
@@ -237,6 +258,7 @@ const setCustomerSettings = ({
   setKambiUserLoggedIn,
   setKambiMaintenance,
   locale,
+  rootPath,
 }: SetCustomerSettingsProps) => {
   const kambiErrorId = 'kambi-error-reload';
   window.customerSettings = {
@@ -321,6 +343,8 @@ const setCustomerSettings = ({
     hideHeader: true,
     enableOddsFormatSelector: Config.kambi?.enableOddsFormatSelector,
     enableMyBetsHarmonization: true,
+    enablePushState: Config.kambi?.historyRouting,
+    routeRoot: Config.kambi?.historyRouting ? rootPath : undefined,
   };
 };
 
@@ -395,9 +419,11 @@ const kambiId = 'KambiBC';
 
 const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
   const context = useContext(kambiContext);
-  const { locale, domLoaded } = useConfig(
+  const { locale, domLoaded, routes } = useConfig(
     (prev, next) =>
-      prev.locale === next.locale && prev.domLoaded === next.domLoaded,
+      prev.locale === next.locale &&
+      prev.domLoaded === next.domLoaded &&
+      prev.routes.length === next.routes.length,
   );
   const prevLocale = usePrevious(locale);
   const dispatch = useDispatch();
@@ -440,6 +466,16 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
       ) {
         kambiLock.current = true;
         getSBParams(locale, user.id?.toString(), retail).then(kambiConfig => {
+          const pathName = retail
+            ? 'nav_link_sports_play_retail'
+            : 'nav_link_sports';
+          const rootPath =
+            routes.find(
+              route =>
+                [PagesName.SportsPage, PagesName.SportsPlayRetailPage].includes(
+                  route.id,
+                ) && route.name === pathName,
+            )?.path || window.location.pathname;
           setCustomerSettings({
             getApiBalance: kambiConfig?.getApiBalance,
             updateBalance: (balance: number) => dispatch(setBalance(balance)),
@@ -458,6 +494,7 @@ const KambiSportsbook = ({ retail }: { retail?: boolean }) => {
             },
             setKambiUserLoggedIn: context.setKambiUserLoggedIn,
             locale,
+            rootPath: `${locale}${rootPath}`,
           });
           const kambiContainer = document.createElement('div');
           kambiContainer.id = 'KambiBC';

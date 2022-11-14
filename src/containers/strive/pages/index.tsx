@@ -8,6 +8,9 @@ import Spinner from 'react-bootstrap/Spinner';
 import ErrorBoundary from '../../ErrorBoundary';
 import { useI18n } from '../../../hooks/useI18n';
 import * as Sentry from '@sentry/react';
+import { NavigationRoute } from '../../../types/api/PageConfig';
+import { useCurrentRoute } from '../../../hooks';
+import { useAuth } from '../../../hooks/useAuth';
 
 const AsyncPage = (pageName: string) =>
   loadable(
@@ -62,16 +65,43 @@ export const COMPONENT_PAGES = {
   [PagesName.BonusesPage]: AsyncPage('bonusesPage'),
 };
 
+interface CombinedRoutes extends NavigationRoute {
+  routes: string[];
+}
+
 const Routes = () => {
   const { jsxT } = useI18n();
+  const { user } = useAuth();
   const { routes, locale } = useConfig(
     (prev, next) => prev.routes.length === next.routes.length,
   );
   const { pathname } = useLocation();
+  const currentRoute = useCurrentRoute();
   const localeSelectRoute = useMemo(
     () => routes.find(route => route.id === PagesName.LocaleSelectPage)?.path,
     [routes],
   );
+  const formattedRoutes = useMemo(() => {
+    return routes.reduce((obj: CombinedRoutes[], route) => {
+      const pageIndex = obj.findIndex(
+        page => page.id === route.id && !page.redirectTo,
+      );
+      if (
+        pageIndex !== -1 &&
+        !route.redirectTo &&
+        (!route.protected || user.logged_in)
+      ) {
+        obj[pageIndex].routes.push(route.path);
+        if (route.exact != null) {
+          obj[pageIndex].exact = route.exact;
+        }
+      } else {
+        obj.push({ ...route, routes: [route.path] });
+      }
+      return obj;
+    }, []);
+  }, [routes.length, user.logged_in]);
+
   if (
     pathname === window.location.pathname &&
     pathname !== localeSelectRoute &&
@@ -80,15 +110,15 @@ const Routes = () => {
     return null;
   return (
     <ErrorBoundary
-      key={pathname}
+      key={currentRoute?.id || pathname}
       fallback={
         <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
           <h1 className="mb-4 text-center">{jsxT('page_error_fallback')}</h1>
         </main>
       }
     >
-      <Switch key={pathname}>
-        {routes.map(route => {
+      <Switch key={currentRoute?.id || pathname}>
+        {formattedRoutes.map(route => {
           if (locale && route.id === PagesName.LocaleSelectPage) {
             return null;
           }
@@ -112,9 +142,9 @@ const Routes = () => {
           const RouteEl = route.protected ? ProtectedRoute : Route;
           return (
             <RouteEl
-              key={`${route.id}-${route.path}`}
+              key={`${route.id}-${route.routes.length}`}
               exact={route.exact ?? true}
-              path={route.path}
+              path={route.routes}
               component={Page}
               sensitive
             />
