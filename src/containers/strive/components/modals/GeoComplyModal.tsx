@@ -24,14 +24,14 @@ const DownloadLinks = ({ errorCode }) => {
   if (isIOS && franchiseHasApp) {
     return (
       <Link to={t('ios_app_link')} className={'mobile-app-link'}>
-        <i className={`icon icon-appleinc`}></i>
+        {/* <i className={`icon icon-appleinc`}></i> */}
         {t('geocomply_ios_download')}
       </Link>
     );
   } else if (isAndroid && franchiseHasApp) {
     return (
       <Link to={t('android_app_link')} className={'mobile-app-link'}>
-        <i className={`icon icon-android`}></i>
+        {/* <i className={`icon icon-android`}></i> */}
         {t('geocomply_android_download')}
       </Link>
     );
