@@ -14,6 +14,8 @@ import getRobots from './routes/robots';
 import getSitemap from './routes/sitemap';
 import expressStaticGzip from 'express-static-gzip';
 import compression from 'compression';
+import getAndroidAssetLinks from './routes/androidAssetLinks';
+import getAppleAppSiteAssociation from './routes/appleAppSiteAssociation';
 
 const port: number = config.get('port') || 3800;
 const app = express();
@@ -75,6 +77,8 @@ app.use(middleware.localeDetect);
 
 app.get('/robots.txt', getRobots);
 app.get('/sitemap.xml', getSitemap);
+app.get('/.well-known/apple-app-site-association', getAppleAppSiteAssociation);
+app.get('/.well-known/assetlinks.json', getAndroidAssetLinks);
 
 app.use(middleware.routeExistCheck);
 app.get('/api/get-ip', (req, res) => {
