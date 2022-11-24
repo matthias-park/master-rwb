@@ -115,7 +115,7 @@ const GeoComplyModal = () => {
   }, [errorCode]);
 
   useEffect(() => {
-    if (isZendesk && !isDesktop) {
+    if (isZendesk && !isDesktop && window.zE) {
       if (hideLivechat) {
         window.zE('messenger:set', 'zIndex', -9999999);
       } else {
