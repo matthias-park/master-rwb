@@ -43,6 +43,10 @@ export interface ComponentSettings {
     needsOverviewTable?: boolean;
   };
   bonuses: {
+    activeBonuses: {
+      paginate: boolean;
+      searchBar: boolean;
+    };
     queueBonuses: {
       paginate: boolean;
       searchBar: boolean;

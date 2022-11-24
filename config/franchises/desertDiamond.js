@@ -60,6 +60,10 @@ module.exports = {
       needsBurger: true,
     },
     bonuses: {
+      activeBonuses: {
+        paginate: true,
+        searchBar: true,
+      },
       queueBonuses: {
         paginate: true,
         searchBar: true,
