@@ -82,7 +82,7 @@ const GeoComplyModal = () => {
       )?.id === PagesName.ResetPasswordPage,
     [routes, pathname],
   );
-  if (isZendesk) {
+  if (isZendesk && window.zE) {
     window.zE('messenger:on', 'unreadMessages', count => {
       populateUnreadIndicator(count);
     });
