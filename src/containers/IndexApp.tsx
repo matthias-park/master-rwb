@@ -96,6 +96,18 @@ const indexApp = getChildren => {
             Sentry.captureMessage(e);
           });
       }
+      if (
+        Config.fullStory &&
+        !(store.getState() as RootState).config.mobileView
+      ) {
+        import('../utils/uiUtils')
+          .then(({ injectFullstoryScript }) => {
+            injectFullstoryScript();
+          })
+          .catch(e => {
+            Sentry.captureMessage(e);
+          });
+      }
     });
     const children = getChildren(store);
     ReactDOM.render(
