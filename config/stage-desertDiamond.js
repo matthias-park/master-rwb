@@ -98,7 +98,7 @@ module.exports = {
               namespace: 'android_app',
               package_name: 'com.ddiamond.app',
               sha256_cert_fingerprints: [
-                'BA:80:F5:74:1D:F1:38:D4:C0:12:6C:EB:D2:76:B0:1B:1A:49:09:36:A0:7F:41:A0:3B:4A:81:28:88:E6:E3:1D',
+                'EA:B8:2F:06:FD:C5:73:E4:99:7C:01:41:8D:2D:9F:20:82:8E:48:E8:B8:F7:EA:1C:A3:74:07:95:89:E1:94:FC ',
               ],
             },
           },
