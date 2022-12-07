@@ -32,7 +32,6 @@ export declare global {
       };
       sbTechUrl?: string;
       zendesk?: string;
-      fullStory?: boolean;
       smartyStreets?: string;
       tgLabSb?: {
         id: number;
