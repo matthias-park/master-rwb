@@ -23,6 +23,7 @@ module.exports = {
   smartyStreets: '108064515683753034',
   xtremepush: 'https://us.webpu.sh/8UCYTGU9kjyxCCgQtCqROPz24HI_2FvA/sdk.js',
   zendesk: '35d43606-f8bf-4f03-8b8b-6aa6b7690498',
+  fullStory: true,
   appleAppMeta: 'app-id=1599512297',
   iconSizes: ['70', '144', '150', '192', '512'],
   fbDomainVerification: 'o66579dq5m385gvckustltakqw3xp5',
