@@ -96,10 +96,7 @@ const indexApp = getChildren => {
             Sentry.captureMessage(e);
           });
       }
-      if (
-        Config.fullStory &&
-        !(store.getState() as RootState).config.mobileView
-      ) {
+      if (Config.fullStory) {
         import('../utils/uiUtils')
           .then(({ injectFullstoryScript }) => {
             injectFullstoryScript();
