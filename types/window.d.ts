@@ -33,6 +33,7 @@ export declare global {
       sbTechUrl?: string;
       zendesk?: string;
       fullStory?: boolean;
+      leverageMedia?: boolean;
       smartyStreets?: string;
       tgLabSb?: {
         id: number;

@@ -7,6 +7,7 @@ import { Config, DevEnv } from '../constants';
 import createStoreAsync, { RootState } from '../state';
 import StateProvider from './StateProvider';
 import { setDomLoaded } from '../state/reducers/config';
+import * as uiUtils from '../utils/uiUtils';
 
 if (!DevEnv && Config.sentryDsn) {
   Sentry.init({
@@ -97,13 +98,10 @@ const indexApp = getChildren => {
           });
       }
       if (Config.fullStory) {
-        import('../utils/uiUtils')
-          .then(({ injectFullstoryScript }) => {
-            injectFullstoryScript();
-          })
-          .catch(e => {
-            Sentry.captureMessage(e);
-          });
+        uiUtils.injectFullstoryScript();
+      }
+      if (Config.leverageMedia) {
+        uiUtils.injectLeverageMediaScript();
       }
     });
     const children = getChildren(store);

@@ -205,6 +205,29 @@ export const injectFullstoryScript = () => {
   document.head.appendChild(scriptTag);
 };
 
+export const injectLeverageMediaScript = () => {
+  const key = window.__config__.leverageMedia;
+  if (!key) return;
+  const scriptTag = document.createElement('script');
+  scriptTag.id = 'lm-snippet';
+  scriptTag.type = 'text/javascript';
+  scriptTag.text = `var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+  var u="app.leveragemedia.io/";
+  _paq.push(['setTrackerUrl', u+'matomo.php']);
+  _paq.push(['setSiteId', '1205']);
+  var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+  g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();`;
+  scriptTag.onerror = e => {
+    Sentry.captureEvent(e);
+  };
+  document.head.appendChild(scriptTag);
+};
+
 export const injectTrackerScript = (
   url: string,
   id?: number | string,
