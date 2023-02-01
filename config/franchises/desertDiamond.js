@@ -22,7 +22,7 @@ module.exports = {
   geoComplyKey: 'ShzolMaAK',
   smartyStreets: '108064515683753034',
   xtremepush: 'https://us.webpu.sh/8UCYTGU9kjyxCCgQtCqROPz24HI_2FvA/sdk.js',
-  zendesk: '35d43606-f8bf-4f03-8b8b-6aa6b7690498',
+  zendesk: 'ca06421f-4795-449d-905a-f3f4a7bb6f58',
   fullStory: true,
   appleAppMeta: 'app-id=1599512297',
   iconSizes: ['70', '144', '150', '192', '512'],
