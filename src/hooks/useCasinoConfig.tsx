@@ -163,25 +163,17 @@ export const CasinoConfigProvider = props => {
   const loginPath = useRoutePath(PagesName.LoginPage, true);
   const casinoPath = useRoutePath(PagesName.CasinoPage);
   const liveCasinoPath = useRoutePath(PagesName.LiveCasinoPage);
-  const { data: categoriesData, error: categoriesError } = useApi<any>(
-    '/restapi/v1/casino/categories',
-  );
-  const { data: providersData, error: providersError } = useApi<any>(
+  const { data: categoriesData } = useApi<any>('/restapi/v1/casino/categories');
+  const { data: providersData } = useApi<any>(
     '/restapi/v1/casino/custom_providers',
   );
-  const { data: liveCategoriesData, error: liveCategoriesError } = useApi<any>(
+  const { data: liveCategoriesData } = useApi<any>(
     '/restapi/v1/casino/live_categories',
   );
-  const {
-    data: favouriteGamesData,
-    error: favouriteGamesDataError,
-    mutate: favouriteGamesDataMutate,
-  } = useApi<any>(user.logged_in ? '/restapi/v1/casino/favourite_games' : '');
-  const {
-    data: recentGamesData,
-    error: recentGamesDataError,
-    mutate: recentGamesDataMutate,
-  } = useApi<any>(
+  const { data: favouriteGamesData, mutate: favouriteGamesDataMutate } = useApi<
+    any
+  >(user.logged_in ? '/restapi/v1/casino/favourite_games' : '');
+  const { data: recentGamesData, mutate: recentGamesDataMutate } = useApi<any>(
     user.logged_in ? '/restapi/v1/casino/recent_casino_games' : '',
   );
   const [params, setParams] = useState<{

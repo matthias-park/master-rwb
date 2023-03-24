@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { SettingsField } from '../../../../types/api/user/ProfileSettings';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
@@ -249,6 +249,7 @@ const FormFields = ({
                             translation: 'limit_month_over_744',
                           },
                         };
+                        // eslint-disable-next-line
                         const valid = Object.keys(data).some(period => {
                           if (field.id.includes(period)) {
                             translation = data[period].translation;
@@ -398,6 +399,7 @@ const SettingsForm = (props: SettingProps) => {
     setResponse && setResponse(null);
     body = Object.entries(body).reduce(
       (acc, [k, v]) => (
+        // eslint-disable-next-line
         !v ? (formLimitsKeys.includes(k) ? (acc[k] = 0) : acc) : (acc[k] = v),
         acc
       ),

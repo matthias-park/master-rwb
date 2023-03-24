@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useI18n } from '../../../hooks/useI18n';
 import { postApi } from '../../../utils/apiUtils';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';

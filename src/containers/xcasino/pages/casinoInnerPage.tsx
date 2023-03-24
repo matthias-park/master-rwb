@@ -147,6 +147,7 @@ const CasinoInnerPage = () => {
               </div>
             )}
             <iframe
+              title="casino-inner__body-wrp-iframe"
               ref={iframeRef}
               onLoad={() => setIframeLoaded(true)}
               className="casino-inner__body-wrp-iframe"

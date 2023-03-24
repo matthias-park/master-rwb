@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { WritableDraft } from '@reduxjs/toolkit/node_modules/immer/dist/internal';
-import { RailsApiResponseFallback } from '../../constants';
 import RailsApiResponse from '../../types/api/RailsApiResponse';
 import TgLabSb from '../../types/TgLabSb';
 import { getApi } from '../../utils/apiUtils';

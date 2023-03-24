@@ -29,7 +29,7 @@ const TermsAndConditionsModal = () => {
   });
   const { handleSubmit, formState, watch } = formMethods;
   const watchTncCheckbox = watch('tnc_checkbox');
-  const [apiResponse, setApiResponse] = useState<{
+  const [, setApiResponse] = useState<{
     success: boolean;
     msg: string;
   } | null>(null);

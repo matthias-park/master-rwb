@@ -1,5 +1,4 @@
-import styled, { css } from 'styled-components';
-import { mediaBreakpointDown } from './breakpoints';
+import styled from 'styled-components';
 
 export const FullBanner = styled.div`
   margin-top: 10px;

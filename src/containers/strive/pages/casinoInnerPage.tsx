@@ -188,6 +188,7 @@ const CasinoInnerPage = () => {
             </div>
           )}
           <iframe
+            title="unique"
             width="100%"
             height="100%"
             ref={iframeRef}

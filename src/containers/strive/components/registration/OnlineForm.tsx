@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import { useI18n } from '../../../../hooks/useI18n';
 import { animateScroll as scroll } from 'react-scroll';
 import { useFormContext } from 'react-hook-form';
-import { FormFieldValidation, Franchise, Config } from '../../../../constants';
+import { FormFieldValidation, Franchise } from '../../../../constants';
 import { OnlineFormBlock } from '../../../../types/RegistrationBlock';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import LoadingButton from '../../../../components/LoadingButton';

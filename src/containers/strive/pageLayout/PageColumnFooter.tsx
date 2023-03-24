@@ -3,15 +3,13 @@ import { StyledColumnFooter } from '../components/styled/StyledColumnFooter';
 import { useConfig } from '../../../hooks/useConfig';
 import { useI18n } from '../../../hooks/useI18n';
 import Link from '../../../components/Link';
-import { Franchise, Config, ComponentName } from '../../../constants';
+import { Franchise, Config } from '../../../constants';
 import SessionTimer from '../../../components/SessionTimer';
 import clsx from 'clsx';
-import { useModal } from '../../../hooks/useModal';
 
 const PageColumnFooter = () => {
   const { t } = useI18n();
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
-  const { enableModal } = useModal();
   const { sidebars } = useConfig(
     (prev, next) => !!prev.sidebars === !!next.sidebars,
   );
@@ -57,8 +55,8 @@ const PageColumnFooter = () => {
       {Franchise.desertDiamond && (
         <div className="footer-item footer-image-text">
           <div className="footer-image-text__images">
-            <img src="/assets/images/footer/gaming-department.png" />
-            <img src="/assets/images/footer/responsible-gaming.png" />
+            <img alt="" src="/assets/images/footer/gaming-department.png" />
+            <img alt="" src="/assets/images/footer/responsible-gaming.png" />
           </div>
           <p>{t('gaming_department_note')}</p>
         </div>
@@ -68,7 +66,12 @@ const PageColumnFooter = () => {
           {t('play_anywhere')}
           <div className="footer-info__section-block">
             {footer?.rowFooterApps?.map((app, i) => (
-              <a target="_blank" key={`${app.link}_${i}`} href={app.link}>
+              <a
+                target="_blank"
+                rel="noreferrer"
+                key={`${app.link}_${i}`}
+                href={app.link}
+              >
                 <img
                   alt="android"
                   src={

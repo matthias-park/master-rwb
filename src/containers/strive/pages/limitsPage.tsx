@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useI18n } from '../../../hooks/useI18n';
 import Accordion from 'react-bootstrap/Accordion';
 import Spinner from 'react-bootstrap/Spinner';
@@ -435,10 +435,10 @@ type LimitsHistoryData = {
 
 const timeLimits = ['GambleTimeLimit', 'SessionTimeLimit'];
 const LimitsHistory = ({ limitsData }) => {
-  const { t, jsxT } = useI18n();
+  const { t } = useI18n();
   const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, error, mutate } = useApi<RailsApiResponse<LimitsHistoryData>>(
+  const { data, mutate } = useApi<RailsApiResponse<LimitsHistoryData>>(
     formatUrl(`/restapi/v1/user/limits_history`, {
       page_size: 10,
       page_number: currentPage,
@@ -535,7 +535,7 @@ const questionItems = [
 ];
 
 const LimitsPage = () => {
-  const { t, jsxT } = useI18n();
+  const { jsxT } = useI18n();
   const { data, error, mutate } = useApi<any>(
     '/restapi/v1/user/profile/play_limits',
   );

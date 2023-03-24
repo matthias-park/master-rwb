@@ -6,7 +6,7 @@ import { ComponentName } from '../../../../constants';
 import { useHistory } from 'react-router';
 
 const MaxBalanceModal = () => {
-  const { activeModal, enableModal, disableModal } = useModal();
+  const { activeModal, disableModal } = useModal();
   const history = useHistory();
   const closeModal = () => disableModal(ComponentName.MaxBalanceModal);
 

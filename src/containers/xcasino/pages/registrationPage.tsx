@@ -25,7 +25,7 @@ const RegistrationPage = () => {
   } = useCompleteRegistration();
   const { t } = useI18n();
   const [filteredLimits, setFilteredLimits] = useState<Object | null>(null);
-  const [apiBankError, setApiBankErr] = useState('');
+  const [, setApiBankErr] = useState('');
   const { data, mutate, error } = useApi<any>(
     '/railsapi/v1/user/profile/play_limits',
   );
@@ -61,7 +61,7 @@ const RegistrationPage = () => {
     type?: string;
   } | null>(null);
 
-  const [limitResponse_, setLimitResponse] = useState<{
+  const [, setLimitResponse] = useState<{
     success: boolean;
     msg: string;
   } | null>(null);

@@ -27,7 +27,7 @@ const Banner = ({ zone, images }: BannerProps) => {
           <Spinner animation="border" variant="white" className="mx-auto" />
         </div>
       ) : images?.length === 1 ? (
-        <img src={images[0].image} />
+        <img alt="" src={images[0].image} />
       ) : (
         <Swiper
           spaceBetween={15}
@@ -40,7 +40,7 @@ const Banner = ({ zone, images }: BannerProps) => {
           {(data?.Data || images)?.map((banner, i) => (
             <SwiperSlide>
               <Link to={banner?.link || '#'}>
-                <img key={`${banner.image}_${i}`} src={banner.image} />
+                <img alt="" key={`${banner.image}_${i}`} src={banner.image} />
               </Link>
             </SwiperSlide>
           ))}

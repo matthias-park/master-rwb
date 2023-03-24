@@ -1,11 +1,11 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import LeftSidebar from './LeftSidebar';
 import Footer from './Footer';
 import { isDesktop } from 'react-device-detect';
 import clsx from 'clsx';
 import ErrorBoundary from '../../ErrorBoundary';
 import { useConfig } from '../../../hooks/useConfig';
-import { matchPath, useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { ConfigLoaded } from '../../../types/Config';
 import NotFoundPage from '../pages/notFoundPage';
 import BankingNav from '../components/BankingNav';
@@ -19,7 +19,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
   const { pathname } = useLocation();
   const history = useHistory();
   const showSb = useSelector((state: RootState) => state.tgLabSb.show);
-  const { locale, configLoaded } = useConfig((prev, next) => {
+  const { configLoaded } = useConfig((prev, next) => {
     const configLoaded = prev.configLoaded === next.configLoaded;
     const localeEqual = prev.locale === next.locale;
     return configLoaded && localeEqual;

@@ -48,7 +48,11 @@ const CasinoGameInfoModal = () => {
         <i className="icon-close custom-modal__close" onClick={hideModal} />
         <Modal.Body>
           <div className="info-header">
-            <img className="info-header__img" src={selectedGame?.image}></img>
+            <img
+              alt=""
+              className="info-header__img"
+              src={selectedGame?.image}
+            ></img>
             <div className="info-header__title">
               <h4>{selectedGame?.name}</h4>
               <small>{`${t(`provider_name_${providerSlug}`)} | ${
@@ -133,6 +137,7 @@ const CasinoGameInfoModal = () => {
               </div>
               {selectedGame?.volatility && (
                 <img
+                  alt=""
                   src={`/assets/images/casino/volatility-${selectedGame.volatility}.png`}
                   className="volatility"
                 ></img>

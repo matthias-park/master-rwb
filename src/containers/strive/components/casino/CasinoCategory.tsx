@@ -13,7 +13,7 @@ import { Config } from '../../../../constants';
 import { forceCheck } from 'react-lazyload';
 
 const CasinoCategory = () => {
-  const { t, jsxT } = useI18n();
+  const { jsxT } = useI18n();
   const {
     casinoType,
     activeCategory,

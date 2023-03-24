@@ -4,7 +4,6 @@ import {
   fetchUserBalance,
   removeUserData,
   setBalance,
-  setBalances,
   setLogin,
   setUser,
 } from '../reducers/user';
