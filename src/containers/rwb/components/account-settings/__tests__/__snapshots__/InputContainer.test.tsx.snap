@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`default matches snapshot 1`] = `
+<div
+  className="input-container mb-4"
+>
+  <p
+    className="input-container__title text-14 mb-2"
+    data-testid="title"
+  >
+    titlePlaceholder
+  </p>
+  <div
+    className="w-100 form-group"
+  >
+    <input
+      className="input-container__input form-control"
+      data-testid="input"
+      inputMode="numeric"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseUp={[Function]}
+      type="text"
+      value="€ "
+    />
+  </div>
+  <button
+    className="btn btn-primary"
+    data-testid="button"
+    disabled={true}
+    loading={false}
+    onClick={[Function]}
+    type="button"
+  >
+    buttonPlaceholder
+  </button>
+</div>
+`;
+
+exports[`with spinner matches snapshot 1`] = `
+<div
+  className="input-container mb-4"
+>
+  <p
+    className="input-container__title text-14 mb-2"
+    data-testid="title"
+  >
+    titlePlaceholder
+  </p>
+  <div
+    className="w-100 form-group"
+  >
+    <input
+      className="input-container__input form-control"
+      data-testid="input"
+      inputMode="numeric"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseUp={[Function]}
+      type="text"
+      value="€ "
+    />
+  </div>
+  <button
+    className="btn btn-primary"
+    data-testid="button"
+    disabled={true}
+    loading={true}
+    onClick={[Function]}
+    type="button"
+  >
+    <span
+      aria-hidden="true"
+      className="mr-1 spinner-border spinner-border-sm"
+      data-testid="spinner"
+      role="status"
+    />
+    buttonPlaceholder
+  </button>
+</div>
+`;
