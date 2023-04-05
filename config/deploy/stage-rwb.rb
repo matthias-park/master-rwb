@@ -7,7 +7,7 @@ set :nvm_type, :user
 set :nvm_node, 'v15.4.0'
 set :nvm_map_bins, %w{node npm pm2}
 set :build_env, 'stage'
-set :app_instance, 'resortsWorldBet'
+set :app_instance, 'rwb'
 
 append :linked_dirs, 'node_modules'
 set :keep_releases, 1
