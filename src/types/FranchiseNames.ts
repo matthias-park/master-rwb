@@ -10,6 +10,7 @@ export enum FranchiseNames {
 }
 export enum FranchiseThemes {
   Bnl = 'bnl',
+  Rwb = 'rwb',
   Strive = 'strive',
   Xcasino = 'xcasino',
   XcasinoCom = 'xcasinoCom',
