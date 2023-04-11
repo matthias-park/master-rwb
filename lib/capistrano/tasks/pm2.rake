@@ -7,7 +7,7 @@ namespace :pm2 do
       ['next-web', 'next-web-test', 'next-web-stage', 'next-web-fork-deploy'].each do |role|
         on roles(role) do
           within current_path do
-            execute :pm2, :reload, 'ecosystem.config.js', '--only', role, '--env', fetch(:build_env)
+            execute :pm2, :restart, 'ecosystem.config.js', '--only', "next-web-#{fetch(:build_env)}-#{fetch(:app_instance)}", '--env', fetch(:build_env)
           end
         end
       end
