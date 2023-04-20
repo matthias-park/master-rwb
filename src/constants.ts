@@ -481,6 +481,8 @@ export const REGEX_EXPRESSION = {
 export const VALIDATIONS = {
   usa_post_code: value => REGEX_EXPRESSION.USA_POST_CODE.test(value),
   city: value => REGEX_EXPRESSION.CITY.test(value.trim()),
+  length_limitation: (value, min, max) =>
+    value.length > min && value.length < max,
   name: (value: string = '') =>
     (!!value.trim().length &&
       REGEX_EXPRESSION.LETTERS_WITH_SEPERATORS.test(value.trim())) ||

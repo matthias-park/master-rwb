@@ -256,6 +256,7 @@ const TextInput = ({
         onBlur?.();
         field.onBlur();
         !maskedInput && field.onChange(e);
+        field.onChange?.(e.target.value.trimStart().trimEnd());
         hasFocus.current = false;
       }}
       onFocus={() => {

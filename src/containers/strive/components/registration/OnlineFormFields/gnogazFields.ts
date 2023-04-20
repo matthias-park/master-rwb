@@ -29,14 +29,18 @@ export const blocks = (
           autoComplete: 'given-name',
           type: 'text',
           required: true,
-          validate: value => VALIDATIONS.name(value) || t('field_only_letters'),
+          validate: value =>
+            VALIDATIONS.length_limitation(value, 1, 29) ||
+            t('field_only_letters'),
         },
         {
           id: 'lastname',
           autoComplete: 'family-name',
           type: 'text',
           required: true,
-          validate: value => VALIDATIONS.name(value) || t('field_only_letters'),
+          validate: value =>
+            VALIDATIONS.length_limitation(value, 1, 29) ||
+            t('field_only_letters'),
         },
         {
           id: 'gender',

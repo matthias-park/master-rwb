@@ -42,7 +42,6 @@ const FormField = ({
   useEffect(() => {
     if (field.type === 'checkbox' && field.checked) setValue(field.id, true);
   }, []);
-
   switch (field.type) {
     case 'checkbox': {
       return Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon ? (
