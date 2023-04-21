@@ -10,9 +10,6 @@ import clsx from 'clsx';
 const PageColumnFooter = () => {
   const { t } = useI18n();
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
-  const { sidebars } = useConfig(
-    (prev, next) => !!prev.sidebars === !!next.sidebars,
-  );
 
   if (!footer) {
     return null;
