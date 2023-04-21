@@ -547,8 +547,8 @@ const BonusesPage = () => {
         <>
           {!!activeBonuses.length && (
             <BonusCardList
-              searchBar={ComponentSettings?.bonuses.activeBonuses.searchBar}
-              paginate={ComponentSettings?.bonuses.activeBonuses.paginate}
+              searchBar={ComponentSettings?.bonuses?.activeBonuses?.searchBar}
+              paginate={ComponentSettings?.bonuses?.activeBonuses?.paginate}
               title={t('active_bonuses_title')}
               items={activeBonuses}
               mutate={mutate}
