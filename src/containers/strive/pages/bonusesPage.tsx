@@ -472,10 +472,7 @@ const BonusesPage = () => {
     msg: string;
   } | null>(null);
   const validBonuses = useMemo(
-    () =>
-      data?.Data.filter(
-        bonus => !bonus.IsVoided && new Date(bonus.validTo) > new Date(),
-      ) || [],
+    () => data?.Data.filter(bonus => !bonus.IsVoided) || [],
     [data],
   );
   const voidedBonuses = useMemo(
