@@ -16,6 +16,7 @@ export interface ComponentSettings {
     GeoComply: boolean;
     PlayerDisabled: boolean;
     limits: boolean;
+    DepositThreshold?: boolean;
   };
   header?: {
     needsBurger?: boolean;

@@ -46,6 +46,7 @@ const userWebsocketMiddleware: Middleware = storeApi => next => action => {
             }
             case 'bonus_wallet_changed':
             case 'balance_changed': {
+              mutate('/restapi/v1/user/status');
               if (ComponentSettings?.useBalancesEndpoint) {
                 storeApi.dispatch(fetchUserBalance() as any);
               } else if (wsData.data) {

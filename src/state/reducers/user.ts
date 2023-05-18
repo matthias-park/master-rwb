@@ -120,6 +120,7 @@ export const userSlice = createSlice({
         needsSync: true,
         name: action.payload.Login,
         registration_id: action.payload.registration_id,
+        deposit_threshold_amounts: action.payload.deposit_threshold_amount,
       };
     },
     setLogout: () => {

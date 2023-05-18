@@ -26,6 +26,9 @@ const LoadableResponsibleGamblingModal = loadable(
 const LoadableGeoComplyModal = loadable(
   () => import('./components/modals/GeoComplyModal'),
 );
+const LoadableDepositThresholdModal = loadable(
+  () => import('./components/modals/DepositThresholdModal'),
+);
 const LoadableCookiePolicyModal = loadable(
   () => import('./components/modals/CookiePolicyModal'),
 );
@@ -72,6 +75,9 @@ const Modals = () => {
       <LoadableTermsAndConditionsModal />
       {ComponentSettings?.modals.ResponsibleGambling && (
         <LoadableResponsibleGamblingModal />
+      )}
+      {ComponentSettings?.modals.DepositThreshold && (
+        <LoadableDepositThresholdModal />
       )}
       <ValidationFailedModal />
       {usaOnlyBrand && <W9WinningsModal />}
