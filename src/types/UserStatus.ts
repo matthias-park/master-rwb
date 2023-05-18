@@ -15,6 +15,7 @@ export interface NET_USER {
   token?: string;
   total_deposit_count?: number;
   registration_id?: number;
+  deposit_threshold_amount?: number;
   PlayerLoginRes?: {
     RegistrationId: number;
   };
@@ -66,6 +67,7 @@ export interface UserStatus {
   authentication_enabled?: boolean;
   total_deposit_count?: number;
   registration_id?: number | null;
+  deposit_threshold_amount?: number;
 }
 
 export interface UserBankAccount {

@@ -39,9 +39,11 @@ export enum ComponentName {
   W9WinningsModal = 'w9WinningsModal',
   PageBackdrop = 'pageBackdrop',
   PromoClaimModal = 'promoClaimModal',
+  DepositThresholdModal = 'depositThresholdModal',
 }
 
 export const ModalPriority = {
+  [ComponentName.DepositThresholdModal]: 1,
   [ComponentName.TermsAndConditionsModal]: 1,
   [ComponentName.W9WinningsModal]: 3,
   [ComponentName.ValidationFailedModal]: 2,
