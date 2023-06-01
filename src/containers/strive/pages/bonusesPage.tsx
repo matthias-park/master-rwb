@@ -156,9 +156,7 @@ const BonusHistoryTable = ({ bonuses }) => {
                             </strong>
                             <strong>
                               <NumberFormat
-                                value={
-                                  bonus.Amount ?? bonus.BonusCampaignAwardAmount
-                                }
+                                value={bonus.BonusCampaignAwardAmount}
                                 thousandSeparator
                                 displayType={'text'}
                                 prefix={user.currency}
