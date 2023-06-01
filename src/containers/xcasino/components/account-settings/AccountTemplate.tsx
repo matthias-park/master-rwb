@@ -18,6 +18,7 @@ const AccountPageTemplate = ({
   children,
 }: AccountPageTemplateProps) => {
   const { t } = useI18n();
+  // eslint-disable-next-line
   const isHtml = /<(\/)?(\w)*(\d)?\>/.test(String(text));
   return (
     <Main title={t('account_pages_title')} icon="icon-account">

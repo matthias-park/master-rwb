@@ -29,6 +29,16 @@ module.exports = {
       GeoComply: true,
       PlayerDisabled: true,
     },
+    register: {
+      requiredValidations: {
+        needsLength: 7,
+        needsLowerCase: true,
+        needsUpperase: true,
+        needsNumbers: true,
+        needsSpecialCharacters: true,
+        needsEmail: true,
+      },
+    },
   },
   seoTitleSeparator: ' | ',
 };

@@ -97,6 +97,10 @@ export enum PagesName {
   TaxPage = 43,
   CasinoGameInfoPage = 44,
   BonusesPage = 45,
+  BettingShopsPage = 46,
+  BettingShopInnerPage = 47,
+  ChalklinePage = 49,
+  BspotPackagesPage = 50,
 }
 
 export enum FormFieldValidation {
@@ -505,18 +509,51 @@ export const VALIDATIONS = {
   },
   bank_account: (value: string = '') =>
     REGEX_EXPRESSION.BANK_IBAN.test(value.trim()),
-  password: (value: string = '', validationsRequired: number = 3) => {
-    if (value.includes(' ')) return false;
-    const valueValid = value.length > 7;
-    const hasLowerCase = /[a-z]/.test(value);
-    const hasUpperCase = /[A-Z]/.test(value);
-    const hasNumbers = /\d/.test(value);
-    const hasSpecialCharacters = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+  password: (
+    value: string = '',
+    requiredValidations: RequiredValidations = {
+      needsLength: 7,
+      needsLowerCase: true,
+      needsUpperase: true,
+      needsNumbers: true,
+      needsSpecialCharacters: false,
+      needsEmail: false,
+    },
+    email: string = '',
+  ): boolean => {
+    const {
+      needsLength,
+      needsLowerCase,
+      needsUpperase,
+      needsNumbers,
+      needsSpecialCharacters,
+      needsEmail,
+    } = requiredValidations;
+    if (value.includes(' ') || value.length <= needsLength) return false;
+    //ADG Validation does not allow first three characters of an email in a password.
+    const adgPasswordValidation = (): boolean => {
+      if (needsEmail) {
+        return (
+          email.length > 0 &&
+          email.toString().toLowerCase().slice(0, 3) !==
+            value.toString().toLowerCase().slice(0, 3)
+        );
+      } else {
+        return true;
+      }
+    };
+    const hasLowerCase = !needsLowerCase || /[a-z]/.test(value);
+    const hasUpperCase = !needsUpperase || /[A-Z]/.test(value);
+    const hasNumbers = !needsNumbers || /\d/.test(value);
+    const hasSpecialCharacters =
+      !needsSpecialCharacters || /[!@#$%^&*(),.?":{}|<>]/.test(value);
+    const hasEmail = !needsEmail || adgPasswordValidation();
     return (
-      valueValid &&
-      [hasLowerCase, hasUpperCase, hasNumbers, hasSpecialCharacters].filter(
-        Boolean,
-      ).length >= validationsRequired
+      hasLowerCase &&
+      hasUpperCase &&
+      hasNumbers &&
+      hasSpecialCharacters &&
+      hasEmail
     );
   },
   validDateFormat: (dayjs: any, value: string = '') => {
@@ -561,4 +598,13 @@ export enum CustomWindowEvents {
 export enum LocalStorageKeys {
   locale = 'userLocale',
   cookies = 'cookiesSettings',
+}
+
+interface RequiredValidations {
+  needsLength: number;
+  needsLowerCase: boolean;
+  needsUpperase: boolean;
+  needsNumbers: boolean;
+  needsSpecialCharacters: boolean;
+  needsEmail: boolean;
 }

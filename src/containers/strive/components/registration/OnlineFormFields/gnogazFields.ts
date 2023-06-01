@@ -1,16 +1,14 @@
 import {
   FormFieldValidation,
   franchiseDateFormat,
-  RailsApiResponseFallback,
   VALIDATIONS,
-  Franchise,
+  ComponentSettings,
 } from '../../../../../constants';
 import RailsApiResponse from '../../../../../types/api/RailsApiResponse';
 import { API_VALIDATIONS, getApi } from '../../../../../utils/apiUtils';
 import dayjs from 'dayjs';
 import Province from '../../../../../types/api/Province';
 import { OnlineFormBlock } from '../../../../../types/RegistrationBlock';
-import * as Sentry from '@sentry/react';
 
 // @ts-ignore
 const smartyStreetsEnabled = !!window.__config__.smartyStreets;
@@ -19,7 +17,9 @@ export const blocks = (
   t: any,
   setValidation: any,
   validateRepeat: any,
+  watch: any,
 ): OnlineFormBlock[] => {
+  const { requiredValidations } = ComponentSettings?.register!;
   return [
     {
       title: 'personal_info',
@@ -218,7 +218,11 @@ export const blocks = (
           triggerId: 'repeat_password',
           required: true,
           validate: value => {
-            const valid = VALIDATIONS.password(value, Franchise.gnogaz ? 4 : 3);
+            const valid = VALIDATIONS.password(
+              value,
+              requiredValidations,
+              watch('email'),
+            );
             setValidation(
               'password',
               valid ? FormFieldValidation.Valid : FormFieldValidation.Invalid,

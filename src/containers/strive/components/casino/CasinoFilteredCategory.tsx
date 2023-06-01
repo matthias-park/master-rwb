@@ -20,7 +20,7 @@ const CasinoFilteredCategory = ({
   title: string;
   icon: string;
 }) => {
-  const { t, jsxT } = useI18n();
+  const { jsxT } = useI18n();
   const {
     casinoType,
     setParams,

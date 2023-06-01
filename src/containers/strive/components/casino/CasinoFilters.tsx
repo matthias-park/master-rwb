@@ -136,7 +136,7 @@ const MultiFilterDropdown = ({
   };
 
   const onToggleHandler = (isOpen, e, metadata) => {
-    if (metadata.source != 'select') {
+    if (metadata.source !== 'select') {
       setShow(isOpen);
     }
   };

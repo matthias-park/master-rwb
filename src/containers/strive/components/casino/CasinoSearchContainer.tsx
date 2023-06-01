@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import CasinoSearch from './CasinoSearch';
 import CasinoGame from './CasinoGame';
 import { StyledCasinoSearchContainer } from '../styled/casinoStyles';
 import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
 import { useI18n } from '../../../../hooks/useI18n';
-import { Game } from '../../../../types/api/Casino';
 import Spinner from 'react-bootstrap/Spinner';
 
 const CasinoSearchContainer = () => {

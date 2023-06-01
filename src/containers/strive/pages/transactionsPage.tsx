@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import DatePicker from 'react-datepicker';
+import React, { useState, useEffect } from 'react';
 import { formatUrl } from '../../../utils/apiUtils';
 import { useI18n } from '../../../hooks/useI18n';
 import { useAuth } from '../../../hooks/useAuth';
 import dayjs, { Dayjs } from 'dayjs';
 import clsx from 'clsx';
 import 'react-datepicker/dist/react-datepicker.css';
-import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
@@ -16,7 +14,7 @@ import useApi from '../../../hooks/useApi';
 import useLocalStorage from '../../../hooks/useLocalStorage';
 import BalancesContainer from '../components/account-settings/BalancesContainer';
 import TablePagination from '../components/account-settings/TablePagination';
-import { Franchise, franchiseDateFormat } from '../../../constants';
+import { Franchise } from '../../../constants';
 import NumberFormat from 'react-number-format';
 import DateFilter from '../components/account-settings/DateFilter';
 

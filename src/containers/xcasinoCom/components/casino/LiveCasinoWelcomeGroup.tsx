@@ -10,10 +10,10 @@ import clsx from 'clsx';
 const LiveCasinoWelcomeGroup = () => {
   const { t } = useI18n();
   const desktopWidth1200 = useDesktopWidth(1200);
-  const { data: categories, error: categoriesError } = useApi<any>(
+  const { data: categories } = useApi<any>(
     '/restapi/v1/casino/live_categories',
   );
-  const { data: games, error: gamesError } = useApi<any>(
+  const { data: games } = useApi<any>(
     !!categories
       ? `/restapi/v1/casino/live_categories/${categories.Data[0].id}/games`
       : '',

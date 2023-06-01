@@ -74,7 +74,7 @@ const CasinoGameInfoPage = () => {
           <div className="casino-game-info">
             <div className="casino-game-info_header">
               <div className="current-game">
-                <img className="current-game__image" src={data.image} />
+                <img alt="" className="current-game__image" src={data.image} />
               </div>
               <div className="current-game__description">
                 <div className="current-game__description-header">

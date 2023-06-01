@@ -3,7 +3,7 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { FormProvider, useForm } from 'react-hook-form';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import LoadingButton from '../../../../components/LoadingButton';
-import { ComponentName, PagesName, VALIDATIONS } from '../../../../constants';
+import { ComponentName, VALIDATIONS } from '../../../../constants';
 import useGTM from '../../../../hooks/useGTM';
 import { useI18n } from '../../../../hooks/useI18n';
 import { useModal } from '../../../../hooks/useModal';
@@ -13,7 +13,6 @@ import { useParams, useHistory } from 'react-router-dom';
 import { postApi } from '../../../../utils/apiUtils';
 import ForgotPasswordResponse from '../../../../types/api/user/ForgotPassword';
 import CustomAlert from '../CustomAlert';
-import { useRoutePath } from '../../../../hooks';
 import { enableModal } from '../../../../state/reducers/modals';
 
 const ResetPasswordModal = () => {

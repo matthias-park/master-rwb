@@ -25,7 +25,6 @@ import { useAuth } from '../../../../hooks/useAuth';
 import CustomAlert from '../CustomAlert';
 import CustomSelectInput from '../../../../components/customFormInputs/CustomSelectInput';
 import { useHistory } from 'react-router';
-import { replaceStringTagsReact } from '../../../../utils/reactUtils';
 
 const PersonalDetailsForm = ({ formState, apiError }) => {
   const { t, jsxT } = useI18n();

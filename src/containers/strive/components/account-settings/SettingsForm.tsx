@@ -364,10 +364,8 @@ const FormFields = ({
                         if (value) {
                           if (isNewPassword)
                             return (
-                              VALIDATIONS.password(
-                                value,
-                                Franchise.desertDiamond ? 4 : 3,
-                              ) || t('register_password_weak')
+                              VALIDATIONS.password(value) ||
+                              t('register_password_weak')
                             );
                           if (field.id === 'phone_number')
                             return (
@@ -533,6 +531,7 @@ const SettingsForm = (props: SettingProps) => {
     setResponse && setResponse(null);
     body = Object.entries(body).reduce(
       (acc, [k, v]) => (
+        // eslint-disable-next-line
         !v ? (formLimitsKeys.includes(k) ? (acc[k] = 0) : acc) : (acc[k] = v),
         acc
       ),

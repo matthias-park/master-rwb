@@ -211,7 +211,6 @@ const BonusCard = ({ bonusData, mutateBonuses, isActive }: BonusCardProps) => {
     rolloverAmount,
     engine,
     usageId,
-    count,
     canActivate,
     canCancel,
   } = bonusData;
