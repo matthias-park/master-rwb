@@ -1,0 +1,50 @@
+stages:
+  - test
+  - build_image
+  - publish_image
+
+services:
+  - docker:dind
+
+include:
+  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
+  - template: Jobs/SAST.gitlab-ci.yml
+  - template: Jobs/Code-Quality.gitlab-ci.yml
+
+publish_production_image:
+  stage: build_image
+  image: docker:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(develop|master)-(rwb)$/
+  before_script:
+    - echo -n $PACKAGES_DEPLOY_TOKEN | docker login -u $PACKAGES_DEPLOY_USER --password-stdin $PACKAGES_REPOSITORY_URL
+  script:
+    - docker pull $PACKAGES_REPOSITORY_URL/client-${CI_COMMIT_REF_SLUG}:latest|| true
+    - >
+      docker build  
+      --pull
+      --cache-from $PACKAGES_REPOSITORY_URL/client-${CI_COMMIT_REF_SLUG}:latest
+      --label "org.opencontainers.image.created=$CI_JOB_STARTED_AT"
+      --label "org.opencontainers.image.revision=$CI_COMMIT_SHA"
+      --label "org.opencontainers.image.source=$CI_PROJECT_URL"
+      --label "org.opencontainers.image.title=$CI_PROJECT_TITLE"
+      --label "org.opencontainers.image.url=$CI_PROJECT_URL"
+      --label "org.opencontainers.image.vendor=Strive Gaming"
+      --label "org.opencontainers.image.version=$CI_COMMIT_REF_NAME"
+      --tag $PACKAGES_REPOSITORY_URL/client-${CI_COMMIT_REF_SLUG}:$CI_COMMIT_SHORT_SHA 
+      .
+    - docker push $PACKAGES_REPOSITORY_URL/client-${CI_COMMIT_REF_SLUG}:$CI_COMMIT_SHORT_SHA
+push_latest_image:
+  stage: publish_image
+  image: docker:latest
+  variables:
+    GIT_STRATEGY: none
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^(master)-(rwb)$/
+      when: always
+  before_script:
+    - echo -n $PACKAGES_DEPLOY_TOKEN | docker login -u $PACKAGES_DEPLOY_USER --password-stdin $PACKAGES_REPOSITORY_URL
+  script:
+    - docker pull $PACKAGES_REPOSITORY_URL/client-${CI_COMMIT_REF_SLUG}:$CI_COMMIT_SHORT_SHA
+    - docker tag $PACKAGES_REPOSITORY_URL/client-${CI_COMMIT_REF_SLUG}:$CI_COMMIT_SHORT_SHA $PACKAGES_REPOSITORY_URL/client-${CI_COMMIT_REF_SLUG}:latest
+    - docker push $PACKAGES_REPOSITORY_URL/client-${CI_COMMIT_REF_SLUG}:latest
