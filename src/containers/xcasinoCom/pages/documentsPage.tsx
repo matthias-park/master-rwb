@@ -76,12 +76,14 @@ export const FilePicker = ({
   const resetUpload = () => {
     setFileInputRefs(
       data?.documents?.reduce(
+        // eslint-disable-next-line
         (prev, document) => ((prev[document.id] = createRef()), prev),
         {},
       ),
     );
     setFilesLength(
       data?.documents?.reduce(
+        // eslint-disable-next-line
         (prev, document) => ((prev[document.id] = 0), prev),
         {},
       ),
@@ -213,6 +215,7 @@ export const FilePicker = ({
 
     const updatedFileRefs = Object.entries(fileInputRefs).reduce(
       (prev, [key, value]) => {
+        // eslint-disable-next-line
         return key === id ? prev : (prev[key] = value), prev;
       },
       {},

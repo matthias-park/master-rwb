@@ -39,9 +39,13 @@ export enum ComponentName {
   W9WinningsModal = 'w9WinningsModal',
   PageBackdrop = 'pageBackdrop',
   PromoClaimModal = 'promoClaimModal',
+  DepositThresholdModal = 'depositThresholdModal',
+  QuestionsKBAModal = 'questionKBAModal',
+  LimitsReaffirmationModal = 'limitsReaffirmationModal',
 }
 
 export const ModalPriority = {
+  [ComponentName.DepositThresholdModal]: 1,
   [ComponentName.TermsAndConditionsModal]: 1,
   [ComponentName.W9WinningsModal]: 3,
   [ComponentName.ValidationFailedModal]: 2,
@@ -97,6 +101,7 @@ export enum PagesName {
   TaxPage = 43,
   CasinoGameInfoPage = 44,
   BonusesPage = 45,
+  RegisterActivationPage = 47,
 }
 
 export enum FormFieldValidation {
@@ -469,9 +474,7 @@ export const REGEX_EXPRESSION = {
   LETTERS_WITH_SEPERATORS: /^((?:[ '-]*)[\p{L}]+(?:[ '-]*))*$/iu,
   EMAIL: /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/i,
   PHONE_NUMBER_NORMALIZE: /\s|\.|\/|[(][0-9][)]?|^0+/g,
-  BANK_IBAN: Franchise.xCasino
-    ? /^NL[0-9]{2}[A-z0-9]{4}[0-9]{10}$/g
-    : /^(BE)[0-9]{2}([ ]?[0-9]{4}){3}$/g,
+  BANK_IBAN: /^(BE)[0-9]{2}([ ]?[0-9]{4}){3}$/g,
   PHONE_NUMBER: usaOnlyBrand ? /^\+?[1-9]\d{9,10}$/ : /^\+?[1-9]\d{1,14}$/,
   PO_BOX_ADDRESS: /\b(?:p\.?\s*o\.?|post\s+office)(\s+)?(?:box|[0-9]*)?\b/i,
   CITY: /^[0-z\u0080-\u024F '.-]{2,}$/,
@@ -481,6 +484,8 @@ export const REGEX_EXPRESSION = {
 export const VALIDATIONS = {
   usa_post_code: value => REGEX_EXPRESSION.USA_POST_CODE.test(value),
   city: value => REGEX_EXPRESSION.CITY.test(value.trim()),
+  lengthLimitation: (value, min, max) =>
+    value.length > min && value.length < max,
   name: (value: string = '') =>
     (!!value.trim().length &&
       REGEX_EXPRESSION.LETTERS_WITH_SEPERATORS.test(value.trim())) ||
@@ -529,6 +534,16 @@ export const VALIDATIONS = {
     const age = dayjs(value, franchiseDateFormat).add(21, 'year');
     return dayjs().isAfter(age);
   },
+  overApprovedAge: (
+    dayjs: any,
+    value: string = '',
+    approvedAge: number = 21,
+  ) => {
+    if (!value) return false;
+    const age = dayjs(value, franchiseDateFormat).add(approvedAge, 'year');
+    return dayjs().isAfter(age);
+  },
+
   isAlpha: value => /^[a-zA-Z]*$/.test(value),
   isNotPoBox: (value: string = '') =>
     !REGEX_EXPRESSION.PO_BOX_ADDRESS.test(value),

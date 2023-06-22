@@ -103,7 +103,6 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const { sidebars, header } = useConfig();
   const depositRoute = useRoutePath(PagesName.DepositPage, true);
   const homeRoute = useRoutePath(PagesName.HomePage, true);
-  const desktopWidth = useDesktopWidth(1199);
   const tabletWidth = useDesktopWidth(991);
 
   const showUserMenu = isOpen => {

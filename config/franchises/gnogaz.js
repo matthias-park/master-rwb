@@ -30,5 +30,11 @@ module.exports = {
       PlayerDisabled: true,
     },
   },
+  header: {
+    geoComplyStatusAlert: true,
+  },
+  geoComply: {
+    checkOnLogin: true,
+  },
   seoTitleSeparator: ' | ',
 };

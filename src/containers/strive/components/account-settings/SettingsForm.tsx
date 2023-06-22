@@ -533,6 +533,7 @@ const SettingsForm = (props: SettingProps) => {
     setResponse && setResponse(null);
     body = Object.entries(body).reduce(
       (acc, [k, v]) => (
+        // eslint-disable-next-line
         !v ? (formLimitsKeys.includes(k) ? (acc[k] = 0) : acc) : (acc[k] = v),
         acc
       ),

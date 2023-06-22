@@ -2,6 +2,7 @@ import UserBalances from './api/user/Balances';
 import CanPlayStatus from './api/user/CanPlayStatus';
 
 export interface NET_USER {
+  activation_code: string | null;
   PlayerId: number;
   Login: string;
   Email: string;
@@ -15,6 +16,7 @@ export interface NET_USER {
   token?: string;
   total_deposit_count?: number;
   registration_id?: number;
+  deposit_threshold_amount?: number;
   PlayerLoginRes?: {
     RegistrationId: number;
   };
@@ -31,6 +33,8 @@ export enum KYC_VALIDATOR_STATUS {
   NotAllowed = 4,
   ShouldUpdatePersonalDataLimitedAttempts = 5,
   ShouldUploadDocumentForKyc = 6,
+  ForceDocument = 8,
+  ShouldAnswerKBA = 9,
 }
 export enum BGC_VALIDATOR_STATUS {
   OK = 0,
@@ -66,6 +70,7 @@ export interface UserStatus {
   authentication_enabled?: boolean;
   total_deposit_count?: number;
   registration_id?: number | null;
+  deposit_threshold_amount?: number;
 }
 
 export interface UserBankAccount {

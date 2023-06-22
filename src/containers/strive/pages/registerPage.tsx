@@ -18,6 +18,7 @@ import {
   Franchise,
   usaOnlyBrand,
   Config,
+  ComponentSettings,
 } from '../../../constants';
 import { useAuth } from '../../../hooks/useAuth';
 import RedirectNotFound from '../../../components/RedirectNotFound';
@@ -169,7 +170,9 @@ const RegisterPage = () => {
         sessionStorage.removeItem(localStorageSaveKey);
         dispatch(setRegistered(res.Data));
         updateUser(true);
-        geoComply?.trigger('register');
+        if (ComponentSettings?.geoComply?.checkOnLogin) {
+          geoComply?.trigger('register');
+        }
         sendDataToGTM({
           'tglab.user.GUID': res.Data.PlayerId,
           event: 'ConfirmedRegistration',

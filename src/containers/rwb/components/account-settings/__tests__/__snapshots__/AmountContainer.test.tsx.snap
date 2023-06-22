@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<div
+  className="amount-container mb-4"
+>
+  <small
+    className="amount-container__text"
+    data-testid="amount-title"
+  >
+    test title
+  </small>
+  <h2
+    className="amount-container__amount"
+    data-testid="amount-amount"
+  >
+    3,043.74 €
+  </h2>
+  <i
+    className="amount-container__icon icon-tooltip"
+    data-testid="amount-tooltip"
+    onBlur={[Function]}
+    onFocus={[Function]}
+    onMouseOut={[Function]}
+    onMouseOver={[Function]}
+  />
+</div>
+`;

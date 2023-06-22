@@ -1,0 +1,10 @@
+.form-group {
+  &.success,
+  &.has-error {
+    .form-select {
+      + .form-group__icons {
+        right: 10px;
+      }
+    }
+  }
+}

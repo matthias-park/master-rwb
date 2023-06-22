@@ -1,6 +1,11 @@
 export interface ComponentSettings {
   v2Auth?: string;
   userIdleTimeout?: number;
+  showTimedOutPlayerBanner: boolean;
+  showValidatorStatusBanner?: boolean;
+  register: {
+    multiStepForm: boolean;
+  };
   login?: {
     loginCookiesAccept?: boolean;
     emailLogin?: boolean;
@@ -16,9 +21,17 @@ export interface ComponentSettings {
     GeoComply: boolean;
     PlayerDisabled: boolean;
     limits: boolean;
+    DepositThreshold?: boolean;
+    KBAQuestions?: boolean;
   };
   header?: {
     needsBurger?: boolean;
+    geoComplyStatusAlert?: boolean;
+    needsCompanyLogo?: boolean;
+  };
+  geoComply?: {
+    checkOnLogin?: boolean;
+    checkOnCasinoGame?: boolean;
   };
   transactions: {
     needsOverviewTable?: boolean;

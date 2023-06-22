@@ -17,7 +17,6 @@ import dayjs from 'dayjs';
 import clsx from 'clsx';
 import { sortAscending } from '../../../utils';
 import MaxBalanceTable from '../components/MaxBalanceTable';
-import RailsApiResponse from '../../../types/api/RailsApiResponse';
 
 export const TimeoutRow = ({
   limitType,
@@ -329,7 +328,7 @@ export const LimitTable = ({
 
 const limitTypeOrder = ['Day', 'Week', 'Month'];
 const LimitsPage = () => {
-  const { t, jsxT } = useI18n();
+  const { t } = useI18n();
   const { data, error, mutate } = useApi<any>(
     '/restapi/v1/user/profile/play_limits',
   );

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useI18n } from '../../../hooks/useI18n';
 import QuestionsContainer from '../components/account-settings/QuestionsContainer';
 import HelpBlock from '../components/HelpBlock';

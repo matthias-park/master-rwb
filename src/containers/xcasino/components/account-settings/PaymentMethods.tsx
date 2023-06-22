@@ -55,7 +55,7 @@ const PaymentMethod = ({
       />
       <label ref={paymentContainer} className="w-100" htmlFor={acc?.id}>
         <span className="payments-select__item-card">
-          <img src={acc?.icon} />
+          <img alt="" src={acc?.icon} />
         </span>
         <div className="payments-select__item-info">
           {acc?.title && (

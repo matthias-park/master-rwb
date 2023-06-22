@@ -113,9 +113,14 @@ const CasinoGameSidebar = () => {
                 onClick={closeSidebar}
               ></i>
             </div>
-            <img className="game-sidebar__img" src={selectedGame.image}></img>
+            <img
+              className="game-sidebar__img"
+              alt=""
+              src={selectedGame.image}
+            ></img>
             <div className="game-sidebar__header-menu">
               <img
+                alt=""
                 src={gameProvider?.image}
                 className="game-sidebar__header-menu-item"
               ></img>

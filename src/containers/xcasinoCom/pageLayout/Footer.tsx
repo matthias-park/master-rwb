@@ -22,9 +22,9 @@ const Footer = () => {
   const { t } = useI18n();
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
   const { providers } = useCasinoConfig();
-  const { data: infoPagesData, error: infoPagesError } = useApi<
-    RailsApiResponse<GameInfoPages>
-  >('/restapi/v1/casino/info_pages');
+  const { data: infoPagesData } = useApi<RailsApiResponse<GameInfoPages>>(
+    '/restapi/v1/casino/info_pages',
+  );
   const infoPagesByProvider = useMemo(() => {
     return providers?.reduce((acc: any, current) => {
       const providerInfoPages = infoPagesData?.Data?.filter(

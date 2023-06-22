@@ -1,7 +1,6 @@
 import {
   FormFieldValidation,
   franchiseDateFormat,
-  RailsApiResponseFallback,
   VALIDATIONS,
   Franchise,
 } from '../../../../../constants';
@@ -10,7 +9,6 @@ import { API_VALIDATIONS, getApi } from '../../../../../utils/apiUtils';
 import dayjs from 'dayjs';
 import Province from '../../../../../types/api/Province';
 import { OnlineFormBlock } from '../../../../../types/RegistrationBlock';
-import * as Sentry from '@sentry/react';
 
 // @ts-ignore
 const smartyStreetsEnabled = !!window.__config__.smartyStreets;

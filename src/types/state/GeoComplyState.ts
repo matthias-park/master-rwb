@@ -1,7 +1,9 @@
 export interface LocalStorageState {
   id: number;
   ip: string;
-  nextGeoCheck: string;
+  nextGeoCheck?: string;
+  geoError?: number | null;
+  retryCount?: number;
 }
 
 interface GeoComplyState {
@@ -21,5 +23,7 @@ interface GeoComplyState {
   userIp: string | null;
   savedState: LocalStorageState | null;
   geoValidationInProgress: boolean;
+  retryCount: number;
+  userLoggedIn: boolean;
 }
 export default GeoComplyState;

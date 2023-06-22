@@ -89,6 +89,7 @@ interface Props {
   required?: boolean;
   defaultValue?: string;
   validate?: () => boolean;
+  onSelectAddress?: () => void;
 }
 
 const fakeFieldId = 'temp_field_autocomplete_address';
@@ -98,6 +99,7 @@ const AutocompleteSmartyStreets = ({
   required,
   defaultValue,
   validate,
+  onSelectAddress,
 }: Props) => {
   const { setValue } = useFormContext();
   const { t } = useI18n();
@@ -184,6 +186,7 @@ const AutocompleteSmartyStreets = ({
       autoComplete(formatInputValue(item), false, true);
     } else {
       fillDataFields(item);
+      onSelectAddress?.();
     }
   };
   const onInputHandler = (value: string) => {

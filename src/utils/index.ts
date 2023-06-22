@@ -85,6 +85,7 @@ export const clearUserLocalStorage = () => {
     'geocomplyRetryCount',
     'winnings-refresh-tracker',
     'userCompanyId',
+    'geoComplyValidation',
     'constantsCache',
     'translationsCache',
   ];

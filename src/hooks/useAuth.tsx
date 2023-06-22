@@ -62,6 +62,10 @@ class StatusResponseError {
   }
 }
 
+enum LoginStatus {
+  ActivationNeeded = 9,
+}
+
 export const AuthProvider = ({ ...props }: AuthProviderProps) => {
   const retryCount = useRef(0);
   const sendDataToGTM = useGTM();
@@ -164,7 +168,9 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
       password,
       pin,
     }).catch((res: RailsApiResponse<null>) => res);
-    if (res.Success) {
+    const activationNeeded =
+      (res?.Data as NET_USER)?.Code === LoginStatus.ActivationNeeded;
+    if (res.Success && !activationNeeded) {
       if ((res.Data as TwoFactorAuth).authentication_required) {
         return {
           success: res.Success,
@@ -179,7 +185,7 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
       });
       dispatch(setLogin(data));
       mutate();
-    } else if ((res.Data as NET_USER)?.PlayerLoginRes?.RegistrationId) {
+    } else if (activationNeeded) {
       const data = res.Data as NET_USER;
       dispatch(setLogin(data));
       return {
@@ -208,9 +214,10 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
     !!window.__config__.componentSettings?.userIdleTimeout && user.logged_in,
     signout,
   );
-  const updateUser = (forceUpdate: boolean = false) => {
+  const updateUser = async (forceUpdate: boolean = false) => {
     if ((!error && !retryCount.current && user.logged_in) || forceUpdate) {
-      mutate();
+      await mutate();
+      return;
     }
   };
   const value: UserAuth = {

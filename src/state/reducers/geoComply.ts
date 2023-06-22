@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 import Lockr from 'lockr';
-import { Config, ProdEnv } from '../../constants';
+import { ComponentSettings, Config, ProdEnv } from '../../constants';
 import { GeoComplyErrorCodes } from '../../types/GeoComply';
 import GeoComplyState, {
   LocalStorageState,
 } from '../../types/state/GeoComplyState';
-import { setLogin } from './user';
+import { setLogin, setRegistered } from './user';
 import * as Sentry from '@sentry/react';
 
 const localStorageId = 'geoComplyValidation';
+const localStorageRetryCountId = 'geoComplyRetryCount';
 
 const initialState: GeoComplyState = {
   isReady: false,
@@ -28,25 +29,28 @@ const initialState: GeoComplyState = {
   userIp: Config.ip,
   savedState: Lockr.get<LocalStorageState | null>(localStorageId, null),
   geoValidationInProgress: false,
+  retryCount: Lockr.get(localStorageRetryCountId, 0),
+  userLoggedIn: false,
 };
 
 const saveStateToLocalStorage = (state: GeoComplyState) => {
+  if (!state.userId || !state.userIp) return;
+  const savedGeoError = state.savedState?.geoError;
+  state.savedState = {
+    id: state.userId,
+    ip: state.userIp,
+  };
   if (state.isGeoAllowed) {
-    if (state.userId && state.userIp && state.revalidateIn) {
-      state.savedState = {
-        id: state.userId,
-        ip: state.userIp,
-        nextGeoCheck: dayjs()
-          .add(Number(state.revalidateIn), 'second')
-          .toJSON(),
-      };
-      Lockr.set(localStorageId, state.savedState);
+    if (state.revalidateIn) {
+      state.savedState.nextGeoCheck = dayjs()
+        .add(Number(state.revalidateIn), 'second')
+        .toJSON();
     }
     state.error = null;
   } else {
-    state.savedState = null;
-    Lockr.rm(localStorageId);
+    state.savedState.geoError = state.error || savedGeoError;
   }
+  Lockr.set(localStorageId, state.savedState);
 };
 const restoreStateFromLocalStorage = (state: GeoComplyState) => {
   const { savedState } = state;
@@ -69,7 +73,7 @@ const restoreStateFromLocalStorage = (state: GeoComplyState) => {
         message: `validation restored from cache, valid ${state.revalidateIn} seconds`,
         level: Sentry.Severity.Log,
       });
-    } else if (!state.validationReason) {
+    } else if (!state.validationReason && !savedState.geoError) {
       Sentry.addBreadcrumb({
         category: 'geocomply',
         type: 'navigation',
@@ -80,7 +84,7 @@ const restoreStateFromLocalStorage = (state: GeoComplyState) => {
         ? 'expired cache validation'
         : 'ip change';
     }
-  } else if (!state.validationReason) {
+  } else if (!state.validationReason && !state.userLoggedIn) {
     Sentry.addBreadcrumb({
       category: 'geocomply',
       type: 'navigation',
@@ -144,6 +148,9 @@ export const geoComplySlice = createSlice({
       state.validationReason = null;
       state.revalidateIn = revalidateIn || null;
       state.geoValidationInProgress = false;
+      if (isGeoAllowed) {
+        state.error = null;
+      }
       saveStateToLocalStorage(state);
     },
     setUserId: (state, action: PayloadAction<number>) => {
@@ -162,10 +169,18 @@ export const geoComplySlice = createSlice({
     setValidationReason: (state, action: PayloadAction<string>) => {
       if (!state.validationReason) {
         state.validationReason = action.payload;
+        Lockr.rm(localStorageId);
       }
+    },
+    clearValidation: state => {
+      state.validationReason = null;
+      state.geoValidationInProgress = false;
+      state.geoInProgress = false;
+      Lockr.rm(localStorageId);
     },
     resetState: state => {
       Lockr.rm(localStorageId);
+      Lockr.rm(localStorageRetryCountId);
       return {
         ...state,
         isConnecting: false,
@@ -179,6 +194,7 @@ export const geoComplySlice = createSlice({
         validationReason: null,
         savedState: null,
         geoValidationInProgress: false,
+        retryCount: 0,
       };
     },
     setUserIp: (state, action: PayloadAction<string>) => {
@@ -188,12 +204,21 @@ export const geoComplySlice = createSlice({
       state.userIp = action.payload;
     },
     initGeo: () => {},
+    setRetryCount: (state, action: PayloadAction<number>) => {
+      state.retryCount = action.payload;
+      Lockr.set(localStorageRetryCountId, state.retryCount);
+      saveStateToLocalStorage(state);
+    },
   },
   extraReducers: {
     [setLogin.toString()]: state => {
-      if (!!window.__config__.geoComplyKey) {
+      if (!!Config.geoComplyKey && ComponentSettings?.geoComply?.checkOnLogin) {
         state.validationReason = 'login';
       }
+      state.userLoggedIn = true;
+    },
+    [setRegistered.toString()]: state => {
+      state.userLoggedIn = true;
     },
   },
 });
@@ -212,6 +237,8 @@ export const {
   setValidationReason,
   connectToGeo,
   setUserIp,
+  setRetryCount,
+  clearValidation,
 } = geoComplySlice.actions;
 
 export default geoComplySlice.reducer;

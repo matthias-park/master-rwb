@@ -8,7 +8,7 @@ import { useUIConfig } from '../../../hooks/useUIConfig';
 import ErrorBoundary from '../../ErrorBoundary';
 import { useI18n } from '../../../hooks/useI18n';
 import useGTM from '../../../hooks/useGTM';
-import { PagesName, Franchise } from '../../../constants';
+import { PagesName, Franchise, ComponentSettings } from '../../../constants';
 import { ConfigLoaded } from '../../../types/Config';
 import NotFoundPage from '../pages/notFoundPage';
 import { useAuth } from '../../../hooks/useAuth';
@@ -110,7 +110,7 @@ const PageLayout = ({ children }) => {
       <ErrorBoundary>
         <PageHeader />
       </ErrorBoundary>
-      {user.logged_in && (Franchise.gnogaz || Franchise.desertDiamond) && (
+      {user.logged_in && !!ComponentSettings?.header?.geoComplyStatusAlert && (
         <LoadableGeoComplyAlert />
       )}
       {sidebar ? (

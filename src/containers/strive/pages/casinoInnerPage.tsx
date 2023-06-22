@@ -12,7 +12,11 @@ import { postApi } from '../../../utils/apiUtils';
 import { useRoutePath } from '../../../hooks';
 import { useCasinoConfig } from '../../../hooks/useCasinoConfig';
 import useDesktopWidth from '../../../hooks/useDesktopWidth';
-import { PagesName, ComponentName } from '../../../constants';
+import {
+  PagesName,
+  ComponentName,
+  ComponentSettings,
+} from '../../../constants';
 import clsx from 'clsx';
 import debounce from 'lodash.debounce';
 import { StyledCasinoInnerPage } from '../components/styled/casinoStyles';
@@ -21,11 +25,31 @@ import { useModal } from '../../../hooks/useModal';
 import NumberFormat from 'react-number-format';
 import { useAuth } from '../../../hooks/useAuth';
 import Button from 'react-bootstrap/Button';
+import loadable from '@loadable/component';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../state';
+
+const LoadableGeoComplyAlert = loadable(
+  () => import('../components/header/GeoComplyAlert'),
+);
 
 const CasinoInnerPage = () => {
   const { user } = useAuth();
   const location: any = useLocation();
   const history = useHistory();
+  const showGeoComplyAlert = useSelector((state: RootState) => {
+    if (
+      !state.user.logged_in ||
+      !ComponentSettings?.header?.geoComplyStatusAlert
+    ) {
+      return false;
+    }
+    return (
+      state.geoComply.geoInProgress ||
+      !!state.geoComply.error ||
+      !!state.geoComply.savedState?.geoError
+    );
+  });
   const { id, gameId, name, provider, demo } = location.state;
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
@@ -173,6 +197,7 @@ const CasinoInnerPage = () => {
             </span>
           </div>
         </div>
+        {showGeoComplyAlert && <LoadableGeoComplyAlert />}
         <div className="iframe-wrp">
           {!iframeLoaded && (
             <div className="d-flex my-3 mh-50vh justify-content-center">
@@ -188,6 +213,7 @@ const CasinoInnerPage = () => {
             </div>
           )}
           <iframe
+            title="unique"
             width="100%"
             height="100%"
             ref={iframeRef}

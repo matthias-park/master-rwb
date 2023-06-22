@@ -35,13 +35,18 @@ const SelectInput = ({
     rules: {
       ...rules,
       validate: value => {
-        if (value === '-1' && rules.required) return rules.required;
+        if ((value === '-1' || !value) && rules.required) return rules.required;
         return rules.validate?.(value);
       },
     },
   });
   const [selectValues, setSelectValues] = useState<SelectValue[] | null>(null);
   const { ref, ...fieldWithoutRef } = field;
+  const isValid =
+    !fieldState.invalid &&
+    !fieldState.isValidating &&
+    fieldState.isDirty &&
+    field.value !== '-1';
 
   useEffect(() => {
     if (typeof values === 'function') {
@@ -68,6 +73,7 @@ const SelectInput = ({
       className={clsx(
         fieldState.error && 'has-error',
         fieldState.error?.message && 'with-message',
+        isValid && 'success',
         className,
       )}
     >

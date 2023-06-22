@@ -15,6 +15,10 @@ switch (franchiseTheme) {
     import(`./containers/xcasinoCom`);
     break;
   }
+  case FranchiseThemes.Rwb: {
+    import(`./containers/rwb`);
+    break;
+  }
   case FranchiseThemes.Strive:
   default: {
     import(`./containers/strive`);

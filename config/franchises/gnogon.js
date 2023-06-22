@@ -9,6 +9,7 @@ module.exports = {
   theme: 'strive',
   themeSettings: require('./themeSettings/gnogon'),
   dateFormat: 'MM-DD-YYYY',
+  geoComplyKey: '5YZkkL4ADJ',
   casino: true,
   componentSettings: {
     userIdleTimeout: 30,
@@ -27,6 +28,10 @@ module.exports = {
     },
     header: {
       needsBurger: true,
+      geoComplyStatusAlert: true,
+    },
+    geoComply: {
+      checkOnCasinoGame: true,
     },
   },
 };

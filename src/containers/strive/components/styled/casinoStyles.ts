@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { mediaBreakpointDown } from './breakpoints';
 import { Config } from '../../../../constants';
 import { FullBanner } from './Banner';
@@ -743,6 +743,9 @@ export const StyledCasinoInnerPage = styled.div`
       i {
         font-size: 26px;
       }
+    }
+    .custom-alert.full-screen {
+      margin: 0 !important;
     }
   }
 `;

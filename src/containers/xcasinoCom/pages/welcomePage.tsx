@@ -1,6 +1,5 @@
 import React, { useMemo, useEffect } from 'react';
 import CasinoGroupSlider from '../components/casino/CasinoGroupSlider';
-import BlockLinksSlider from '../components/BlockLinksSlider';
 import { ComponentName } from '../../../constants';
 import { useModal } from '../../../hooks/useModal';
 import Banner from '../components/Banner';

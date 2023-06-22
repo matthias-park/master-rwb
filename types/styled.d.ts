@@ -106,10 +106,36 @@ declare module 'styled-components' {
       settingsMarginTop: number;
     };
     buttons: {
-      borderRadius: number;
-      fontSize: number;
+      borderRadius?: number;
+      fontSize?: number;
+      fontStyle?: string;
       color?: string;
       transform?: string;
+      primary?: {
+        color?: string;
+        bgColor?: string;
+        hover?: {
+          bgColor?: string;
+          borderColor?: string;
+        };
+      };
+      secondary?: {
+        bgColor?: string;
+        bgHoverColor?: string;
+        color?: string;
+        hover?: {
+          color?: string;
+          bgColor?: string;
+          borderColor?: string;
+        };
+      };
+      outlineLight?: {
+        focus?: {
+          bgColor?: string;
+          bgHoverColor?: string;
+          color?: string;
+        };
+      };
       primaryBgColor?: string;
       primaryBgHoverColor?: string;
       secondaryBgColor?: string;
@@ -141,12 +167,36 @@ declare module 'styled-components' {
       logoSizeMobile?: number;
       logoPosition?: string;
       borderBottom?: string;
+      bgImg?: string;
+      bgColor?: string;
+      boxShadow?: string;
       topOffset?: number;
       backgroundMobile?: string;
       marginBottom?: number;
       navHeightMobile?: number;
       navFontSize?: number;
       needsHamburger?: boolean;
+      height: string | number;
+      padding: string | number;
+      links: {
+        color: string;
+        fontStyle: string;
+        active: {
+          borderBottomColor: string;
+        };
+      };
+      breakpoints: {
+        xl: {
+          padding: string;
+        };
+        lg: {
+          padding: string;
+        };
+        xs: {
+          height: string;
+          padding: string;
+        };
+      };
     };
     footer: {
       listColor: string;
@@ -184,6 +234,7 @@ declare module 'styled-components' {
       boxShadow?: string;
       titleWeight: number;
       bgColor?: string;
+      color?: string;
     };
     login: {
       bgImgTop?: string;
@@ -210,6 +261,14 @@ declare module 'styled-components' {
       blockTitlePaddingBottom?: number;
       bgColor?: string;
       blockBgColor?: string;
+      carousel?: {
+        prevButton?: {
+          color?: string;
+        };
+        indicators?: {
+          color?: string;
+        };
+      };
     };
     inputs: {
       border: string;

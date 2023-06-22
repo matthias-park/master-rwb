@@ -235,7 +235,7 @@ const TextInput = ({
     !fieldState.error &&
     validation !== FormFieldValidation.Invalid &&
     (validation === FormFieldValidation.Valid ||
-      (!fieldState.isValidating && fieldState.isTouched));
+      (!fieldState.isValidating && fieldState.isDirty));
   const inputAs = useMemo(() => {
     if (maskedInput) return NumberFormat;
     if (textArea) return 'textarea';

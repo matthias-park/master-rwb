@@ -1,0 +1,27 @@
+.limits-reaffirmation-modal {
+  .limits {
+    padding: 0;
+    margin: 0;
+    &__limit {
+      display: flex;
+      align-items: center;
+      list-style-type: none;
+      margin-bottom: 10px;
+      &-info {
+        display: flex;
+        flex-direction: column;
+        margin-right: 30px;
+        small {
+          white-space: nowrap;
+        }
+      }
+      &-actions {
+        display: flex;
+        .btn {
+          min-width: 85px;
+          padding: 10px 15px;
+        }
+      }
+    }
+  }
+}

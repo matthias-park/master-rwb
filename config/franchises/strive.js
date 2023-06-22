@@ -38,4 +38,7 @@ module.exports = {
       PlayerDisabled: true,
     },
   },
+  geoComply: {
+    checkOnLogin: true,
+  },
 };

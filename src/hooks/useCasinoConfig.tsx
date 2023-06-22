@@ -25,8 +25,16 @@ import useEffectSkipInitial from './useEffectSkipInitial';
 import { useAuth } from './useAuth';
 import { useHistory } from 'react-router-dom';
 import { useModal } from './useModal';
-import { ComponentName, Franchise, PagesName } from '../constants';
+import {
+  ComponentName,
+  Franchise,
+  PagesName,
+  ComponentSettings,
+} from '../constants';
 import { useRoutePath } from './index';
+import { RootState } from '../state';
+import { useDispatch, useSelector } from 'react-redux';
+import { setValidationReason } from '../state/reducers/geoComply';
 
 type CasinoConfig = {
   categories: Category[];
@@ -160,28 +168,34 @@ export const CasinoConfigProvider = props => {
   const { enableModal } = useModal();
   const history = useHistory();
   const location = useLocation();
+  const dispatch = useDispatch();
+  const geoComplyValidationNeeded = useSelector((state: RootState) => {
+    if (
+      !state.user.logged_in ||
+      !ComponentSettings?.geoComply?.checkOnCasinoGame
+    ) {
+      return false;
+    }
+    return (
+      (state.geoComply.error || state.geoComply.savedState?.geoError) == null &&
+      !state.geoComply.isGeoAllowed &&
+      state.geoComply.isConnected
+    );
+  });
   const loginPath = useRoutePath(PagesName.LoginPage, true);
   const casinoPath = useRoutePath(PagesName.CasinoPage);
   const liveCasinoPath = useRoutePath(PagesName.LiveCasinoPage);
-  const { data: categoriesData, error: categoriesError } = useApi<any>(
-    '/restapi/v1/casino/categories',
-  );
-  const { data: providersData, error: providersError } = useApi<any>(
+  const { data: categoriesData } = useApi<any>('/restapi/v1/casino/categories');
+  const { data: providersData } = useApi<any>(
     '/restapi/v1/casino/custom_providers',
   );
-  const { data: liveCategoriesData, error: liveCategoriesError } = useApi<any>(
+  const { data: liveCategoriesData } = useApi<any>(
     '/restapi/v1/casino/live_categories',
   );
-  const {
-    data: favouriteGamesData,
-    error: favouriteGamesDataError,
-    mutate: favouriteGamesDataMutate,
-  } = useApi<any>(user.logged_in ? '/restapi/v1/casino/favourite_games' : '');
-  const {
-    data: recentGamesData,
-    error: recentGamesDataError,
-    mutate: recentGamesDataMutate,
-  } = useApi<any>(
+  const { data: favouriteGamesData, mutate: favouriteGamesDataMutate } = useApi<
+    any
+  >(user.logged_in ? '/restapi/v1/casino/favourite_games' : '');
+  const { data: recentGamesData, mutate: recentGamesDataMutate } = useApi<any>(
     user.logged_in ? '/restapi/v1/casino/recent_casino_games' : '',
   );
   const [params, setParams] = useState<{
@@ -248,6 +262,9 @@ export const CasinoConfigProvider = props => {
 
   const loadGame = (gameData, demo = false) => {
     if (user.logged_in || demo) {
+      if (!demo && geoComplyValidationNeeded) {
+        dispatch(setValidationReason('load casino game'));
+      }
       history.push(`/casino/game/${gameData?.slug}`, {
         id: gameData?.id,
         gameId: gameData?.game_id,

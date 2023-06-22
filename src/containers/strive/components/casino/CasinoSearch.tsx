@@ -7,7 +7,7 @@ import { Config } from '../../../../constants';
 import { SearchActions } from '../../../../types/api/Casino';
 
 const CasinoSearch = () => {
-  const { searchData, setSearchData } = useCasinoConfig();
+  const { setSearchData } = useCasinoConfig();
 
   useEffect(() => {
     setSearchData({ type: SearchActions.SetValue, payload: '' });

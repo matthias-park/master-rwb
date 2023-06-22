@@ -45,7 +45,6 @@ export const COMPONENT_PAGES = {
   [PagesName.RequiredDocuments]: AsyncPage('documentsPage'),
   [PagesName.DepositPage]: AsyncPage('depositPage'),
   [PagesName.WithdrawalPage]: AsyncPage('withdrawalPage'),
-  [PagesName.GameRoundsPage]: AsyncPage('gameRoundsPage'),
   [PagesName.VerifyAccountPage]: AsyncPage('verifyAccountPage'),
   [PagesName.RewardsDashboardPage]: AsyncPage('rewardsDashboardPage'),
   [PagesName.RedeemRewardsPage]: AsyncPage('redeemRewardsPage'),

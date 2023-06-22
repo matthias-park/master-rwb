@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useI18n } from '../../../hooks/useI18n';
 import CustomToggleCheck from '../components/CustomToggleCheck';
 import Spinner from 'react-bootstrap/Spinner';
