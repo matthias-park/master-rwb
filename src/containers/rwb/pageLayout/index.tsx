@@ -19,7 +19,6 @@ import { useAuth } from '../../../hooks/useAuth';
 import loadable from '@loadable/component';
 import { useModal } from '../../../hooks/useModal';
 import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
-import CanPlayStatus from '../../../types/api/user/CanPlayStatus';
 import { useRoutePath } from '../../../hooks';
 
 const LoadablePageColumnFooter = loadable(() => import('./PageColumnFooter'));
@@ -128,7 +127,6 @@ const PageLayout = ({ children }) => {
   if (configLoaded === ConfigLoaded.Loaded && !locale) {
     return children;
   }
-  const userSuspended = user.canPlay === CanPlayStatus.TimeOut;
 
   return (
     <div className="page-wrp">

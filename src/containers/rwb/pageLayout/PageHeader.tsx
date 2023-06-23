@@ -22,7 +22,6 @@ interface UserBlockProps {
   mobile: boolean;
   needsBurger?: boolean;
 }
-
 const UserBlock = ({ mobile, needsBurger }: UserBlockProps) => {
   const { t } = useI18n();
   const { user, signout } = useAuth();

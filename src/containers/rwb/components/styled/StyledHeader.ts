@@ -43,7 +43,6 @@ export const StyledLogo = styled(Link)<{ mobile?: boolean }>`
           }
         `}
 `;
-
 export const StyledCollapseWrp = styled(Navbar.Collapse)`
   flex-direction: column;
   -ms-overflow-style: none;
