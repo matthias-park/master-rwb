@@ -473,6 +473,11 @@ const formStyles = css`
     .custom-file-input {
       z-index: 1;
     }
+    .custom-file-label::after {
+      background-color: ${props => props.theme.buttons.primary?.bgColor};
+      color: ${props => props.theme.buttons.primaryColor};
+      font-style: ${props => props.theme.header.links.fontStyle};
+    }
     .custom-file-label:after {
       position: relative;
       top: -10px;

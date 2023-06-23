@@ -182,7 +182,25 @@ const ContactUsPage = () => {
       {!!data && (
         <h1 className="account-settings__title">{jsxT(data.title)}</h1>
       )}
-      <p className="account-settings__sub-text">{jsxT('contact_form_text')}</p>
+      {/* <p className="account-settings__sub-text">{jsxT('contact_form_text')}</p> */}
+      <div className="outer-info-block mb-3">
+        <div className="contact_info">
+          <div className="row">
+            <div className="col-sm text-center">
+              <i className="icon-rwb-phone"></i>
+              {jsxT('contact_page_phone')}
+            </div>
+            <div className="col-sm text-center">
+              <i className="icon-rwb-mail"></i>
+              {jsxT('contact_page_email')}
+            </div>
+            <div className="col-sm text-center">
+              <i className="icon-rwb-clock"></i>
+              {jsxT('contact_page_hours')}
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="outer-info-block">
         {!!data && <ContactUsForm data={data} />}
       </div>
