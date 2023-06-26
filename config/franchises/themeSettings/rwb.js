@@ -10,7 +10,7 @@ const pallete = {
 
 module.exports = {
   buttons: {
-    borderRadius: 50,
+    borderRadius: 24,
     fontSize: 14,
     fontStyle: 'italic',
     color: '#1B2C5B',
@@ -24,9 +24,9 @@ module.exports = {
       },
     },
     secondary: {
-      bgColor: pallete.gray,
+      bgColor: pallete.red,
       bgHoverColor: pallete.gray,
-      color: pallete.darkBlue,
+      color: pallete.white,
       hover: {
         bgColor: pallete.lightGray,
         borderColor: pallete.lightGray,
@@ -278,7 +278,9 @@ module.exports = {
     width: 330,
     backgroundColor: '#fff',
     subItemBgColor: '#fff',
-    itemIconColor: '#888',
+    itemIconColor: pallete.red,
+    loginColor: pallete.blue,
+    infoBackgroundColor: pallete.darkBlue,
   },
   settingsMenu: {
     fontSize: 14,

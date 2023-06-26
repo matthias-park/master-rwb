@@ -3,7 +3,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { useUIConfig } from '../../../../hooks/useUIConfig';
 import {
   ComponentName,
-  Franchise,
   PagesName,
   Config,
   ComponentSettings,
@@ -22,6 +21,7 @@ import Button from 'react-bootstrap/Button';
 import useDesktopWidth from '../../../../hooks/useDesktopWidth';
 import NumberFormat from 'react-number-format';
 import { sortAscending } from '../../../../utils/index';
+import dayjs from 'dayjs';
 
 const LoadableXtremePush = loadable(
   () => import('../../../../components/XtremePushInbox'),
@@ -65,11 +65,6 @@ const UserMenuLink = ({
                     className="user-menu__list-sub-item"
                     onClick={() => setShowDropdown(false)}
                   >
-                    {(Franchise.desertDiamond ||
-                      Franchise.gnogaz ||
-                      Franchise.gnogon) && (
-                      <i className="user-menu__list-item-icon icon-tooltip invisible mr-3"></i>
-                    )}
                     {t(childLink.name)}
                   </Link>
                 ))}
@@ -102,7 +97,6 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const { backdrop } = useUIConfig();
   const { sidebars, header } = useConfig();
   const depositRoute = useRoutePath(PagesName.DepositPage, true);
-  const homeRoute = useRoutePath(PagesName.HomePage, true);
   const tabletWidth = useDesktopWidth(991);
 
   const showUserMenu = isOpen => {
@@ -177,9 +171,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                     className="pl-3 pr-1"
                   >
                     <span className="text-capitalize">
-                      {Franchise.gnogaz ? (
-                        t('my_account_btn')
-                      ) : user.first_name ? (
+                      {user.first_name ? (
                         `${t('hello')} ${user.first_name}`
                       ) : (
                         <LoadingSpinner show={true} small className="mr-0" />
@@ -215,39 +207,38 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
             data-display="static"
           >
             <div className="user-menu-wrp">
-              <ul className="user-menu__list">
-                {user.logged_in && (
-                  <div className="pt-2">
-                    {Franchise.desertDiamond ||
-                    Franchise.gnogaz ||
-                    Franchise.gnogon ? (
-                      <Dropdown.Item as="div" className="my-2 px-0">
-                        <Link
-                          to={depositRoute}
-                          className={clsx('btn btn-primary text-14 w-100')}
-                        >
-                          {t('deposit_link')}
-                        </Link>
-                      </Dropdown.Item>
-                    ) : (
-                      <Dropdown.Item as="div" className="mt-3">
-                        <Link
-                          to={depositRoute}
-                          className={clsx(
-                            'btn btn-outline-brand btn-lg text-14 px-3',
+              {user.logged_in && (
+                <div className="pt-2 user-menu__info">
+                  <div className="row mx-1 my-3">
+                    <div className="col">
+                      <span className="user-menu__info-title mb-3">
+                        {user.name}
+                      </span>
+                    </div>
+                    <div className="w-100"></div>
+                    <div className="col">
+                      <Link
+                        to={depositRoute}
+                        className={clsx(
+                          'btn btn-secondary btn-lg text-16 font-italic btn-block',
+                        )}
+                      >
+                        {t('deposit_link')}
+                      </Link>
+                      <div className="w-100"></div>
+                      <div className="col">
+                        <span className="user-menu__info-login mt-3">
+                          Last Login:
+                          {dayjs(user.last_login_at).format(
+                            'YYYY-MM-DD hh:mm A',
                           )}
-                        >
-                          <i
-                            className={clsx(
-                              `icon-${window.__config__.name}-card`,
-                            )}
-                          ></i>
-                          {t('deposit_link')}
-                        </Link>
-                      </Dropdown.Item>
-                    )}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                )}
+                </div>
+              )}
+              <ul className="user-menu__list">
                 <Accordion>
                   {!tabletWidth &&
                     needsBurger &&
@@ -260,11 +251,8 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                         const isDublicate = sidebars?.[0].some(
                           sidebarLink => sidebarLink.link === linkPath,
                         );
-                        const excludeSports =
-                          Franchise.gnogon && linkPath === homeRoute;
                         if (
                           !link.path ||
-                          excludeSports ||
                           (user.logged_in &&
                             (isDublicate || linkPath === depositRoute))
                         )
@@ -280,28 +268,6 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                           />
                         );
                       })}
-                  {/* In Desert Diamond, this will show support menu on table and mobile size, without sign_in */}
-                  {Franchise.desertDiamond &&
-                    !tabletWidth &&
-                    needsBurger &&
-                    !user.logged_in &&
-                    sidebars &&
-                    sidebars[0][7].name === 'help_and_support' && (
-                      <UserMenuLink
-                        key={`${sidebars[0][7].link}-${sidebars[0][7].name}`}
-                        icon={sidebars[0][7].icon}
-                        link={sidebars[0][7].link}
-                        name={t(sidebars[0][7].name)}
-                        children={
-                          sidebars[0][7].children
-                            ? sidebars[0][7].children.filter(
-                                child => child.name !== 'document_center_link',
-                              )
-                            : null
-                        }
-                        setShowDropdown={showUserMenu}
-                      />
-                    )}
                   {sidebars &&
                     user.logged_in &&
                     sidebars[0].map(link => (
@@ -317,29 +283,22 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 </Accordion>
               </ul>
               {user.logged_in && (
-                <div
-                  className="user-menu__list-item-link user-menu__list-item-link--no-divider px-0 cursor-pointer"
-                  onClick={onLogoutClick}
-                >
-                  <LoadingSpinner
-                    show={loggingOut}
-                    small
-                    className="mr-n2 ml-4"
-                  />
-                  {(Franchise.desertDiamond ||
-                    Franchise.gnogaz ||
-                    Franchise.gnogon) && (
-                    <i
-                      className={clsx(
-                        'icon-desertDiamond-logout',
-                        'user-menu__list-item-icon ml-4 mr-3',
-                      )}
-                    ></i>
-                  )}
-                  <div className={clsx(Franchise.strive && 'ml-4')}>
-                    {t('logout')}
+                <ul className="user-menu__list">
+                  <div
+                    className="user-menu__list-item-link user-menu__list-item-link--no-divider cursor-pointer"
+                    onClick={onLogoutClick}
+                  >
+                    <LoadingSpinner
+                      show={loggingOut}
+                      small
+                      className="mr-n2 ml-4"
+                    />
+                    <div className=" d-flex align-items-center">
+                      <i className="icon-gnogaz-logout user-menu__list-item-icon mr-3"></i>
+                      {t('logout')}
+                    </div>
                   </div>
-                </div>
+                </ul>
               )}
             </div>
           </Dropdown.Menu>

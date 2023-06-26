@@ -212,6 +212,8 @@ export const StyledHeaderNav = styled.ul<{
             &.show {
               .nav-icon {
                 transform: rotate(180deg);
+                background-color: ${props =>
+                  props.theme.userMenu.infoBackgroundColor};
               }
             }
             .dropdown-menu {
@@ -436,6 +438,31 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
       display: none;
     }
   }
+  .user-menu__info {
+    margin: 0 -20px;
+    padding: 0 10px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: ${props => props.theme.userMenu.infoBackgroundColor};
+    &-title {
+      font-weight: 600;
+      font-size: 22px;
+      display: flex;
+      justify-content: flex-start;
+      color: ${props => props.theme.userMenu.backgroundColor};
+    }
+    &-login {
+      display: flex;
+      justify-content: center;
+      color: ${props => props.theme.userMenu.loginColor};
+      font-size: 14px;
+    }
+    button {
+      align-self: center;
+    }
+  }
   .user-menu__list {
     padding-left: 0;
     margin-bottom: 0;
@@ -533,7 +560,8 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-bottom: 8px solid ${props => props.theme.userMenu.backgroundColor};
+    border-bottom: 8px solid
+      ${props => props.theme.userMenu.infoBackgroundColor};
     border-radius: 2px;
     ${mediaBreakpointDown('lg')} {
       right: 5%;

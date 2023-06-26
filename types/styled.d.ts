@@ -344,12 +344,14 @@ declare module 'styled-components' {
     userMenu: {
       boxShadow: string;
       borderRadius: number;
+      infoBackgroundColor: string;
       itemBorder: string;
       itemWeight: number;
       itemTransform?: string;
       itemFontSize: number;
       itemHeight: number;
       itemIconColor?: string;
+      loginColor: string;
       width: number;
       backgroundColor: string;
       subItemBgColor: string;
