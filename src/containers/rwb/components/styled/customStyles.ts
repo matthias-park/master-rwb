@@ -1061,6 +1061,17 @@ const customStyles = css`
     padding: 25px 30px;
     box-shadow: ${props => props.theme.boxShadow.generic};
   }
+  .required-document-block {
+    &__title {
+      font-weight: 600;
+      font-size: 18px;
+      &__example {
+        font-weight: 400;
+        font-size: 14px;
+        color: ${props => props.theme.documents.exampleTextColor};
+      }
+    }
+  }
   .info-block {
     background-color: ${props =>
       props.theme.registration?.blockBgColor || props.theme.colors.gray[100]};

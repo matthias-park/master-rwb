@@ -501,5 +501,8 @@ declare module 'styled-components' {
       editHoverBgColor?: string;
       labelBgColor?: string;
     };
+    documents: {
+      exampleTextColor?: string;
+    };
   }
 }

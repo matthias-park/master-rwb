@@ -130,7 +130,7 @@ module.exports = {
     brand: {
       main: '#000',
       light: '#444',
-      text: '#1B2C5B',
+      text: pallete.darkBlue,
       hover: '#bfbfbf',
     },
     secondary: {
@@ -420,5 +420,8 @@ module.exports = {
     barBgColor: '#444',
     editHoverBgColor: '#444',
     labelBgColor: '#444',
+  },
+  documents: {
+    exampleTextColor: pallete.blue,
   },
 };
