@@ -113,13 +113,14 @@ const buttonStyles = css`
   }
 
   .btn-light {
-    color: ${props => props.theme.colors.brand.light};
+    color: ${props => props.theme.colors.brand.text} !important;
+    background-color: ${props => props.theme.colors.brand.light} !important;
     &:active,
     &:focus {
-      color: ${props => props.theme.colors.brand.light};
+      color: ${props => props.theme.colors.primary.main};
     }
     &:hover {
-      background-color: ${props => props.theme.colors.brand.light} !important;
+      background-color: ${props => props.theme.colors.primary.main} !important;
       color: ${props => props.theme.colors.white.main} !important;
     }
   }

@@ -11,6 +11,23 @@ const LoadableIframe = loadable(
   () => import('../components/ComponentFromString/Iframe'),
 );
 
+export const exists = (element: any) => {
+  const type = typeof element;
+  if (type === 'undefined' || element === null) {
+    return false;
+  } else if (Array.isArray(element)) {
+    return element.length !== 0;
+  } else if (type === 'object') {
+    return Object.keys(element).length !== 0;
+  } else if (type === 'number') {
+    return element !== 0;
+  } else if (type === 'string') {
+    return element.length !== 0;
+  } else {
+    return false;
+  }
+};
+
 export const convertStylesStringToObject = stringStyles =>
   typeof stringStyles === 'string'
     ? stringStyles.split(';').reduce((acc, style) => {

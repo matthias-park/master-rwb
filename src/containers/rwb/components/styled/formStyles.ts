@@ -65,7 +65,6 @@ const formStyles = css`
       &:disabled {
         background-color: ${props =>
           props.theme.inputs.disabled.backgroundColor};
-        border: ${props => props.theme.inputs.disabled.border};
         color: ${props => props.theme.inputs.disabled.color};
         + label {
           color: ${props => props.theme.inputs.disabled.color};

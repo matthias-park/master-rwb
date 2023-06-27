@@ -62,9 +62,8 @@ module.exports = {
     iconColor: '#555555',
     placeholderColor: pallete.blue,
     disabled: {
-      border: '1px solid #4A4A4A',
-      backgroundColor: '#fff',
-      color: '#666',
+      backgroundColor: '#D1D5DB',
+      color: '#909090',
     },
     invalid: {
       backgroundColor: pallete.offWhite,
@@ -129,7 +128,7 @@ module.exports = {
     },
     brand: {
       main: '#000',
-      light: '#444',
+      light: pallete.gray,
       text: pallete.darkBlue,
       hover: '#bfbfbf',
     },
@@ -146,7 +145,7 @@ module.exports = {
     },
     info: '#52ADF5',
     footer: {
-      bottomText: '#778CA6',
+      bottomText: pallete.blue,
     },
     body: pallete.offWhite,
     lightSpacer: '#CCD2DE',

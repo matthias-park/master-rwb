@@ -292,12 +292,12 @@ const accountSettingsStyles = css`
   .personal-info-block {
     margin-top: 25px;
     &__title {
-      color: ${props => props.theme.colors.secondary.light};
-      border-bottom: 1px solid ${props => props.theme.colors.lightSpacer};
+      color: ${props => props.theme.colors.footer.bottomText};
+      font-style: italic;
       padding-bottom: 8px;
       text-transform: uppercase;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 600;
     }
     ${mediaBreakpointDown('xs')} {
       margin-top: 15px;
