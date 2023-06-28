@@ -2,7 +2,7 @@ import {
   FormFieldValidation,
   franchiseDateFormat,
   VALIDATIONS,
-  Franchise,
+  ComponentSettings,
 } from '../../../../../constants';
 import RailsApiResponse from '../../../../../types/api/RailsApiResponse';
 import { API_VALIDATIONS, getApi } from '../../../../../utils/apiUtils';
@@ -17,7 +17,9 @@ export const blocks = (
   t: any,
   setValidation: any,
   validateRepeat: any,
+  watch: any,
 ): OnlineFormBlock[] => {
+  const { requiredValidations } = ComponentSettings?.register!;
   return [
     {
       title: 'personal_info',
@@ -209,7 +211,8 @@ export const blocks = (
           validate: value => {
             const valid = VALIDATIONS.password(
               value,
-              Franchise.desertDiamond ? 4 : 3,
+              requiredValidations,
+              watch('email'),
             );
             setValidation(
               'password',

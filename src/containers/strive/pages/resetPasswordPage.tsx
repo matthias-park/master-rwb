@@ -9,14 +9,15 @@ import ForgotPasswordResponse from '../../../types/api/user/ForgotPassword';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
 import LoadingButton from '../../../components/LoadingButton';
-import { VALIDATIONS, Franchise, PagesName } from '../../../constants';
+import { VALIDATIONS, Franchise, ComponentSettings, PagesName } from '../../../constants';
 import TextInput from '../../../components/customFormInputs/TextInput';
 import RedirectNotFound from '../../../components/RedirectNotFound';
 import { useHistory } from 'react-router-dom';
 import { useRoutePath } from '../../../hooks';
 
 const ForgotPasswordPage = () => {
-  const { code } = useParams<{ code?: string }>();
+  const { code, email } = useParams<{ code?: string; email?: string }>();
+  const { requiredValidations } = ComponentSettings?.register!;
   const formMethods = useForm({
     mode: 'onBlur',
   });
@@ -96,11 +97,12 @@ const ForgotPasswordPage = () => {
                 required: `${t('reset_password_field')} ${t(
                   'reset_password_field_required',
                 )}`,
-                validate: value =>
-                  VALIDATIONS.password(
-                    value,
-                    Franchise.desertDiamond || Franchise.gnogaz ? 4 : 3,
-                  ) || t('register_password_weak'),
+                validate: value => {
+                  return (
+                    VALIDATIONS.password(value, requiredValidations, email) ||
+                    t('register_password_weak')
+                  );
+                },
               }}
               onBlur={() =>
                 watch('repeat_password') && trigger('repeat_password')
@@ -118,13 +120,12 @@ const ForgotPasswordPage = () => {
                 required: `${t('reset_password_field')} ${t(
                   'reset_password_field_required',
                 )}`,
-                validate: value =>
-                  (value === watch('password') &&
-                    VALIDATIONS.password(
-                      value,
-                      Franchise.desertDiamond || Franchise.gnogaz ? 4 : 3,
-                    )) ||
-                  t('reset_password_need_match_password'),
+                validate: value => {
+                  return (
+                    VALIDATIONS.password(value, requiredValidations, email) ||
+                    t('register_password_weak')
+                  );
+                },
               }}
               id="repeat_password"
               autoComplete="new-password"

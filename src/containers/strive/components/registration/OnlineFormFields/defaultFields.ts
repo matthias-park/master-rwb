@@ -2,8 +2,8 @@ import {
   FormFieldValidation,
   franchiseDateFormat,
   VALIDATIONS,
-  Franchise,
   usaOnlyBrand,
+  ComponentSettings,
 } from '../../../../../constants';
 import RailsApiResponse from '../../../../../types/api/RailsApiResponse';
 import { API_VALIDATIONS, getApi } from '../../../../../utils/apiUtils';
@@ -18,7 +18,9 @@ export const defaultBlocks = (
   t: any,
   setValidation: any,
   validateRepeat: any,
+  watch: any,
 ): OnlineFormBlock[] => {
+  const { requiredValidations } = ComponentSettings?.register!;
   return [
     {
       title: 'personal_info',
@@ -212,10 +214,7 @@ export const defaultBlocks = (
           triggerId: 'repeat_password',
           required: true,
           validate: value => {
-            const valid = VALIDATIONS.password(
-              value,
-              Franchise.desertDiamond ? 4 : 3,
-            );
+            const valid = VALIDATIONS.password(value, requiredValidations);
             setValidation(
               'password',
               valid ? FormFieldValidation.Valid : FormFieldValidation.Invalid,

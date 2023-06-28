@@ -174,11 +174,12 @@ const OnlineForm = (props: Props) => {
   const setValidation = (id: string, status: FormFieldValidation) =>
     setValidationForms(prev => ({ ...prev, [id]: status }));
   const validateRepeat = (id: string, value: string) => {
-    const isEqual =
-      id === 'email'
-        ? value.toLocaleLowerCase() === watch(id, '').toLocaleLowerCase()
-        : value === watch(id, '');
-    return isEqual || t(`register_need_match_${id}`);
+    // make valide functions for some fields;
+    if (id === 'email') {
+      return value.toLocaleLowerCase() === watch(id, '').toLocaleLowerCase();
+    } else {
+      return value === watch(id, '');
+    }
   };
   const triggerRepeat = (id: string) => {
     return watch(id, '') !== '' && trigger(id);
@@ -191,17 +192,16 @@ const OnlineForm = (props: Props) => {
     return reset();
   };
 
-  const [fields, setFields] = useState<OnlineFormBlock[]>([]);
+  const [fields, setFields] = useState<OnlineFormBlock[] | any>([]);
   useEffect(() => {
     import(`./OnlineFormFields/${window.__config__.name}Fields`)
       .then(module => {
-        setFields(module.blocks(t, setValidation, validateRepeat));
+        setFields(module.blocks(t, setValidation, validateRepeat, watch));
       })
       .catch(() => {
-        setFields(defaultBlocks(t, setValidation, validateRepeat));
+        setFields(defaultBlocks(t, setValidation, validateRepeat, watch));
       });
   }, []);
-
   return (
     <div className="reg-form">
       <h1 className="reg-form__title">{jsxT('register_title')}</h1>
