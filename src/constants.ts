@@ -532,7 +532,8 @@ export const VALIDATIONS = {
     if (value.includes(' ') || value.length <= needsLength) return false;
     //ADG Validation does not allow first three characters of an email in a password.
     const adgPasswordValidation = (): boolean => {
-      if (needsEmail) {
+      if (needsEmail && !!email) {
+        // !!email fixes the case where a player enters their password before email in registration
         return (
           email.length > 0 &&
           email.toString().toLowerCase().slice(0, 3) !==
