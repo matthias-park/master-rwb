@@ -50,6 +50,7 @@ export interface FranchiseConfig {
   sbTechUrl?: string;
   smartyStreets?: string;
   zendesk?: string;
+  leverageMedia?: boolean;
   googleRecaptchaKey?: string;
   geoComplyKey?: string;
   xtremepush?: string;
