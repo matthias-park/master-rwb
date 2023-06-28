@@ -9,7 +9,7 @@ import ForgotPasswordResponse from '../../../types/api/user/ForgotPassword';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import useGTM from '../../../hooks/useGTM';
 import LoadingButton from '../../../components/LoadingButton';
-import { VALIDATIONS, Franchise, ComponentSettings, PagesName } from '../../../constants';
+import { VALIDATIONS, ComponentSettings, PagesName } from '../../../constants';
 import TextInput from '../../../components/customFormInputs/TextInput';
 import RedirectNotFound from '../../../components/RedirectNotFound';
 import { useHistory } from 'react-router-dom';
