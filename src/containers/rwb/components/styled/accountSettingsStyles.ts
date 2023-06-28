@@ -737,6 +737,9 @@ const accountSettingsStyles = css`
       &__pref {
         &-title {
           font-weight: ${props => props.theme.fonts.weight.bold};
+          font-size: 12px;
+          color: ${props => props.theme.communicationPrefs.title.color};
+          font-style: italic;
         }
         &-text {
           font-size: 12px;
@@ -760,6 +763,9 @@ const accountSettingsStyles = css`
           &:not(:first-of-type) {
             border-top: none;
           }
+          font-weight: ${props => props.theme.fonts.weight.bold};
+          font-size: 16px;
+          color: ${props => props.theme.communicationPrefs.colors};
         }
       }
       li:not(:first-of-type) {

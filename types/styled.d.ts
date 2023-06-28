@@ -229,6 +229,9 @@ declare module 'styled-components' {
         backgroundColor: string;
         border: string;
       };
+      title?: {
+        color: string;
+      };
     };
     pageInnerContainer: {
       boxShadow?: string;

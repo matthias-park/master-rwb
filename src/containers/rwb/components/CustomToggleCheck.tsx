@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { useI18n } from '../../../hooks/useI18n';
 import { useFormContext } from 'react-hook-form';
-import { Franchise } from '../../../constants';
 
 const CustomToggleCheck = React.forwardRef(
   (
@@ -21,7 +19,6 @@ const CustomToggleCheck = React.forwardRef(
     },
     ref: any,
   ) => {
-    const { t } = useI18n();
     const [isInvalid, setIsInvalid] = useState(false);
     const [toggleCount, setToggleCount] = useState(0);
     const formContext = useFormContext();
@@ -66,24 +63,6 @@ const CustomToggleCheck = React.forwardRef(
               readOnly
             ></input>
             <span className="toggle-check__slider"></span>
-            {!(
-              Franchise.desertDiamond ||
-              Franchise.gnogaz ||
-              Franchise.gnogon
-            ) && (
-              <span className="toggle-check__checked">
-                {t('custom_checkbox_checked')}
-              </span>
-            )}
-            {!(
-              Franchise.desertDiamond ||
-              Franchise.gnogaz ||
-              Franchise.gnogon
-            ) && (
-              <span className="toggle-check__unchecked">
-                {t('custom_checkbox_unchecked')}
-              </span>
-            )}
           </div>
           {props.label && <p className="toggle-check__label">{props.label}</p>}
         </label>

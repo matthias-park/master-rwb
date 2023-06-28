@@ -38,7 +38,6 @@ const CommunicationPrefCard = ({
   return (
     <li className="communication-prefs__pref">
       <h6 className="communication-prefs__pref-title">{t(title)}</h6>
-      <p className="communication-prefs__pref-text">{t(subText)}</p>
       {fields.map(field => (
         <div className="communication-prefs__pref-item" key={field.id}>
           <span>{t(field.title)}</span>
@@ -129,9 +128,6 @@ const CommunicationPreferencesPage = () => {
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       <form onSubmit={handleSubmit(updateSettingsSubmit)}>
         <h1>{jsxT('communication_preferences_page_title')}</h1>
-        <p className="mb-4">
-          {jsxT('communication_preferences_page_sub_text')}
-        </p>
         {isDataLoading && (
           <div className="d-flex justify-content-center pt-4 pb-3">
             <Spinner animation="border" variant="black" className="mx-auto" />
@@ -143,7 +139,7 @@ const CommunicationPreferencesPage = () => {
           </h2>
         )}
         {!!data && (
-          <div className="communication-prefs-wrp">
+          <div className="communication-prefs-wrp mt-3">
             <CustomAlert
               show={!!apiResponse}
               variant={
@@ -162,7 +158,7 @@ const CommunicationPreferencesPage = () => {
                   {t('master_gdpr_setting_title')}
                 </h6>
                 <p className="communication-prefs__pref-text">
-                  {t('master_gdpr_setting_note')}
+                  {/* {t('master_gdpr_setting_note')} */}
                 </p>
                 <div className="communication-prefs__pref-item">
                   <span>{t('master_gdpr_setting_name')}</span>

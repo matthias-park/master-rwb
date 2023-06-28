@@ -170,7 +170,7 @@ module.exports = {
   fonts: {
     family: 'Roboto',
     weight: {
-      bold: 700,
+      bold: 600,
     },
     size: {
       lg: '18px',
@@ -219,10 +219,13 @@ module.exports = {
   },
   communicationPrefs: {
     bgColor: '#fff',
-    color: '#00205C',
+    color: pallete.darkBlue,
     items: {
       backgroundColor: '#fff',
       border: '1px solid #E5E7EB',
+    },
+    title: {
+      color: pallete.blue
     },
   },
   customFileInput: {
