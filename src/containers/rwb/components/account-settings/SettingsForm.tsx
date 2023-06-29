@@ -144,6 +144,23 @@ const FormFields = ({
         }, {}),
     [fields],
   );
+  const formattedRemainingLimit = (field: SettingsField) => {
+    for (let data of formData) {
+      if (field.id.includes(data.LimitType.toLowerCase())) {
+        return data.Formatting === 'currency'
+          ? 'Remain $' + data?.AmountLeft ?? 'Remain $' + data?.LimitAmount
+          : null;
+      }
+    }
+  };
+
+  const foramttedValidDate = (field: SettingsField) => {
+    for (let data of formData) {
+      if (field.id.includes(data.LimitType.toLowerCase())) {
+        return data.ResetTime;
+      }
+    }
+  };
 
   return (
     <div className="row">
@@ -353,124 +370,175 @@ const FormFields = ({
               ].includes(id);
               const isSSN = field.id === 'social_security_number';
               return (
-                <TextInput
-                  id={field.id}
-                  key={field.id}
-                  rules={
-                    !field.disabled &&
-                    !formDisabled && {
-                      required:
-                        !isDepositLossBetLimits &&
-                        !(isSSN && Franchise.desertDiamond) &&
-                        `${t(field.title)} ${t('settings_field_required')}`,
-                      validate: value => {
-                        if (value) {
-                          if (isNewPassword)
-                            return (
-                              VALIDATIONS.password(
-                                value,
-                                Franchise.desertDiamond ? 4 : 3,
-                              ) || t('register_password_weak')
-                            );
-                          if (field.id === 'phone_number')
-                            return (
-                              VALIDATIONS.phone(value) ||
-                              t('phone_number_invalid')
-                            );
-                          if (
-                            id === 'session_limit' &&
-                            field.id.includes('amount') &&
-                            value &&
-                            !isNaN(value)
-                          ) {
-                            const weekValue = watch('limit_amount_week');
-                            const monthValue = watch('limit_amount_month');
-                            if (field.id.includes('day')) {
-                              const numberValue = Number(value);
-                              if (
-                                weekValue &&
-                                Number(weekValue) < numberValue
-                              ) {
-                                return t('limit_day_over_week');
-                              } else if (numberValue > 24) {
-                                return t('limit_day_over_24');
+                <>
+                  <div className="row">
+                    <div className="col-sm">
+                      <TextInput
+                        id={field.id}
+                        key={field.id}
+                        rules={
+                          !field.disabled &&
+                          !formDisabled && {
+                            required:
+                              !isDepositLossBetLimits &&
+                              !(isSSN && Franchise.desertDiamond) &&
+                              `${t(field.title)} ${t(
+                                'settings_field_required',
+                              )}`,
+                            validate: value => {
+                              if (value) {
+                                if (isNewPassword)
+                                  return (
+                                    VALIDATIONS.password(
+                                      value,
+                                      Franchise.desertDiamond ? 4 : 3,
+                                    ) || t('register_password_weak')
+                                  );
+                                if (field.id === 'phone_number')
+                                  return (
+                                    VALIDATIONS.phone(value) ||
+                                    t('phone_number_invalid')
+                                  );
+                                if (
+                                  id === 'session_limit' &&
+                                  field.id.includes('amount') &&
+                                  value &&
+                                  !isNaN(value)
+                                ) {
+                                  const weekValue = watch('limit_amount_week');
+                                  const monthValue = watch(
+                                    'limit_amount_month',
+                                  );
+                                  if (field.id.includes('day')) {
+                                    const numberValue = Number(value);
+                                    if (
+                                      weekValue &&
+                                      Number(weekValue) < numberValue
+                                    ) {
+                                      return t('limit_day_over_week');
+                                    } else if (numberValue > 24) {
+                                      return t('limit_day_over_24');
+                                    }
+                                  } else if (field.id.includes('week')) {
+                                    trigger('limit_amount_day');
+                                    const numberValue = Number(value);
+                                    if (
+                                      monthValue &&
+                                      Number(monthValue) < numberValue
+                                    ) {
+                                      return t('limit_week_over_month');
+                                    } else if (numberValue > 168) {
+                                      return t('limit_week_over_week');
+                                    }
+                                  } else if (field.id.includes('month')) {
+                                    trigger('limit_amount_week');
+                                    const numberValue = Number(value);
+                                    if (numberValue > 744) {
+                                      return t('limit_month_over_month');
+                                    }
+                                  }
+                                }
+                                if (
+                                  ['first_name', 'last_name'].includes(field.id)
+                                ) {
+                                  return (
+                                    VALIDATIONS.name(value) ||
+                                    t('field_only_letters')
+                                  );
+                                }
+                                if (field.id === 'date_of_birth') {
+                                  if (
+                                    !value ||
+                                    !VALIDATIONS.validDateFormat(dayjs, value)
+                                  ) {
+                                    return t('date_of_birth_invalid');
+                                  }
+                                  return (
+                                    VALIDATIONS.over_21(dayjs, value) ||
+                                    t('date_of_birth_below_21')
+                                  );
+                                }
+                                if (field.id === 'social_security_number') {
+                                  return (
+                                    (value.length === 9 &&
+                                      !isNaN(parseInt(value))) ||
+                                    t('full_social_security_invalid')
+                                  );
+                                }
+                                return true;
                               }
-                            } else if (field.id.includes('week')) {
-                              trigger('limit_amount_day');
-                              const numberValue = Number(value);
-                              if (
-                                monthValue &&
-                                Number(monthValue) < numberValue
-                              ) {
-                                return t('limit_week_over_month');
-                              } else if (numberValue > 168) {
-                                return t('limit_week_over_week');
-                              }
-                            } else if (field.id.includes('month')) {
-                              trigger('limit_amount_week');
-                              const numberValue = Number(value);
-                              if (numberValue > 744) {
-                                return t('limit_month_over_month');
-                              }
-                            }
+                            },
                           }
-                          if (['first_name', 'last_name'].includes(field.id)) {
-                            return (
-                              VALIDATIONS.name(value) || t('field_only_letters')
-                            );
-                          }
-                          if (field.id === 'date_of_birth') {
-                            if (
-                              !value ||
-                              !VALIDATIONS.validDateFormat(dayjs, value)
-                            ) {
-                              return t('date_of_birth_invalid');
-                            }
-                            return (
-                              VALIDATIONS.over_21(dayjs, value) ||
-                              t('date_of_birth_below_21')
-                            );
-                          }
-                          if (field.id === 'social_security_number') {
-                            return (
-                              (value.length === 9 && !isNaN(parseInt(value))) ||
-                              t('full_social_security_invalid')
-                            );
-                          }
-                          return true;
                         }
-                      },
-                    }
-                  }
-                  defaultValue={(() => {
-                    if (
-                      usaOnlyBrand &&
-                      field.id === 'phone_number' &&
-                      ['+', '1'].includes(field.default?.charAt(0) || '')
-                    ) {
-                      field.default =
-                        field.default?.charAt(0) === '+'
-                          ? field.default.substring(2)
-                          : field.default.substring(1);
-                    }
-                    return field.default && translatableDefaultValues
-                      ? t(field.default.toString())
-                      : field.id === 'social_security_number'
-                      ? ''
-                      : field.default;
-                  })()}
-                  maskedInput={masketInput}
-                  disabled={field.disabled || formDisabled}
-                  title={t(field.title)}
-                  toggleVisibility={isPassword}
-                  type={field.type}
-                  autoComplete={
-                    isPassword
-                      ? `${isNewPassword ? 'new' : 'current'}-password`
-                      : 'nope'
-                  }
-                  disableCopyPaste={isPassword || isNewPassword}
-                />
+                        defaultValue={(() => {
+                          if (
+                            usaOnlyBrand &&
+                            field.id === 'phone_number' &&
+                            ['+', '1'].includes(field.default?.charAt(0) || '')
+                          ) {
+                            field.default =
+                              field.default?.charAt(0) === '+'
+                                ? field.default.substring(2)
+                                : field.default.substring(1);
+                          }
+                          return field.default && translatableDefaultValues
+                            ? t(field.default.toString())
+                            : field.id === 'social_security_number'
+                            ? ''
+                            : field.default;
+                        })()}
+                        maskedInput={masketInput}
+                        disabled={field.disabled || formDisabled}
+                        title={t(field.title)}
+                        toggleVisibility={isPassword}
+                        type={field.type}
+                        autoComplete={
+                          isPassword
+                            ? `${isNewPassword ? 'new' : 'current'}-password`
+                            : 'nope'
+                        }
+                        disableCopyPaste={isPassword || isNewPassword}
+                      />
+                    </div>
+                    {isDepositLossBetLimits && (
+                      <div className="col-sm">
+                        <TextInput
+                          id={field.id + '-remain'}
+                          key={field.id + '-remain'}
+                          rules={null}
+                          defaultValue={formattedRemainingLimit(field)}
+                          disabled={true}
+                          title="Remain"
+                          type={field.type}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  {isDepositLossBetLimits && (
+                    <>
+                      <div className="row">
+                        <pre className="text-14 pt-1 ml-3 mb-1">
+                          Requested limit:{' '}
+                        </pre>
+                        <p className="text-14 pt-1">
+                          {' '}
+                          {field.default && '$' + field.default}
+                        </p>
+                      </div>
+                      <div className="row">
+                        <pre className="text-14 pt-1 ml-3 mb-0">
+                          Valid form:{' '}
+                        </pre>
+                        <p className="text-14 pt-1 mb-0">
+                          {dayjs(foramttedValidDate(field)).format(
+                            'MMM,d,YYYY h:mmA',
+                          )}
+                        </p>
+                      </div>
+                      <hr></hr>
+                    </>
+                  )}
+                </>
               );
             }
           }

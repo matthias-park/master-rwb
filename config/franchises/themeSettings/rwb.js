@@ -225,7 +225,7 @@ module.exports = {
       border: '1px solid #E5E7EB',
     },
     title: {
-      color: pallete.blue
+      color: pallete.blue,
     },
   },
   customFileInput: {

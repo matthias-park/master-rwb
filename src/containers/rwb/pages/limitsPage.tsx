@@ -11,8 +11,6 @@ import { SettingsField } from '../../../types/api/user/ProfileSettings';
 import { useAuth } from '../../../hooks/useAuth';
 import dayjs from 'dayjs';
 import { LimitData } from '../../../types/api/user/Limits';
-import { franchiseDateFormat, Franchise } from '../../../constants';
-import { sortAscending } from '../../../utils';
 import clsx from 'clsx';
 import utc from 'dayjs/plugin/utc';
 import { formatUrl } from '../../../utils/apiUtils';
@@ -61,20 +59,13 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
   };
 
   return (
-    <Accordion
-      className={clsx(
-        (Franchise.gnogaz || Franchise.gnogon) &&
-          active &&
-          'info-container--active',
-        'info-container info-container--gray mb-3',
-      )}
-    >
+    <Accordion className="info-container info-container--gray mb-3">
       <div className="info-container__info pt-3">
         <div className="d-flex align-items-center">
           <p className="info-container__title pr-3">
             <b>{t(limitData.title)}</b>
           </p>
-          {!limitData.disabled && (
+          {limitData.disabled && (
             <Accordion.Toggle
               as="button"
               eventKey={limitData.id}
@@ -85,17 +76,15 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
                 }
               }}
               className={clsx(
-                'info-container__edit btn btn-sm px-3 ml-auto',
-                window.__config__.name === 'strive'
-                  ? 'btn-light'
-                  : 'btn-secondary',
+                'info-container__edit btn btn-lg px-3 ml-auto',
+                'btn-light',
               )}
             >
               {jsxT('timeout_edit')}
             </Accordion.Toggle>
           )}
         </div>
-        <p className="text-14 pt-1">{t(limitData.note)}</p>
+        {/* <p className="text-14 pt-1">{t(limitData.note)}</p> */}
       </div>
       <div className="info-container__text">
         <p className="text-gray-400 mb-0">
@@ -109,12 +98,9 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
               )}`
             : jsxT('timeout_unset')}
         </p>
-        {!limitData.disabled && (
+        {limitData.disabled && (
           <Accordion.Collapse eventKey={limitData.id}>
             <>
-              {window.__config__.name === 'strive' && (
-                <hr className="pt-1 mb-0"></hr>
-              )}
               <CustomAlert
                 show={!!apiResponse}
                 variant={
@@ -145,10 +131,8 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
   );
 };
 
-const limitTypeOrder = ['Day', 'Week', 'Month'];
 const LimitsCard = ({ limitData, mutate }: LimitProps) => {
   const { t } = useI18n();
-  const { user } = useAuth();
   const [active, setActive] = useState(false);
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
@@ -161,29 +145,20 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
     });
 
   return (
-    <Accordion
-      className={clsx(
-        (Franchise.gnogaz || Franchise.gnogon) &&
-          active &&
-          'info-container--active',
-        'info-container mb-3',
-      )}
-    >
+    <Accordion className="info-container mb-3">
       <div className="info-container__info pt-3">
         <div className="d-flex align-items-center">
           <p className="info-container__title pr-3">
             <b>{t(limitData.title)}</b>
           </p>
-          {!limitData.disabled && (
+          {limitData.disabled && (
             <Accordion.Toggle
               as="button"
               eventKey={limitData.id}
               onClick={() => setActive(!active)}
               className={clsx(
-                'info-container__edit btn btn-sm px-3 ml-auto',
-                window.__config__.name === 'strive'
-                  ? 'btn-light'
-                  : 'btn-secondary',
+                'info-container__edit btn btn-lg px-3 ml-auto',
+                'btn-light',
               )}
             >
               {t('limits_edit')}
@@ -193,212 +168,9 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
         <p className="text-14 pt-1">{t(limitData.note)}</p>
       </div>
       <div className="info-container__text">
-        {limitData.data?.length ? (
-          limitData.data
-            .sort((a, b) =>
-              sortAscending(
-                limitTypeOrder.indexOf(a.LimitType),
-                limitTypeOrder.indexOf(b.LimitType),
-              ),
-            )
-            .map((limit, i) => {
-              let formattedCurrentLimit: string | number | null = null;
-              let formattedFutureLimit: string | number | null = null;
-              switch (limit.Formatting) {
-                case 'hour': {
-                  const totalMinutes =
-                    limit.LimitAmount * 60 - (limit.AccumulatedDuration || 0);
-                  if (totalMinutes > 0) {
-                    const hours = Math.floor(totalMinutes / 60);
-                    const minutes = totalMinutes % 60;
-                    let hoursFormatting = hours.toString();
-                    if (!!minutes) {
-                      hoursFormatting += `:${
-                        minutes < 10 ? '0' : ''
-                      }${minutes}`;
-                    }
-                    formattedCurrentLimit = `${hoursFormatting} ${t(
-                      'limits_hours',
-                    )}`;
-                  } else {
-                    formattedCurrentLimit = `0 ${t('limits_hours')}`;
-                  }
-                  formattedFutureLimit = limit.FutureLimitAmount
-                    ? `${limit.FutureLimitAmount} ${t('limits_hours')}`
-                    : null;
-                  break;
-                }
-                case 'currency': {
-                  formattedCurrentLimit = limit.LimitAmount;
-                  formattedFutureLimit = limit.FutureLimitAmount
-                    ? limit.FutureLimitAmount
-                    : null;
-                  break;
-                }
-              }
-
-              let formattedUsedLimit: string | number | null = null;
-              if (limit.Formatting === 'currency') {
-                const used =
-                  limit.LimitAmount != null && limit.AmountLeft != null
-                    ? Number((limit.LimitAmount - limit.AmountLeft).toFixed(2))
-                    : null;
-                formattedUsedLimit = used || '0';
-              }
-              let formattedRemainingLimit: string | number | null =
-                limit.Formatting === 'currency'
-                  ? limit.AmountLeft ?? limit.LimitAmount
-                  : null;
-
-              let formattedFutureLimitFrom:
-                | string
-                | number
-                | null = limit.FutureLimitValidFrom
-                ? dayjs(limit.FutureLimitValidFrom).format(
-                    `${franchiseDateFormat} HH:mm`,
-                  )
-                : null;
-
-              const lastLimit = i + 1 === limitData.data?.length;
-              return (
-                <div>
-                  <p className="mt-1 play-limits-title">
-                    {t(`limit_type_${limit.LimitType.toLowerCase()}`)}
-                  </p>
-                  <ul className="list-unstyled mb-0 play-limits">
-                    <li className="play-limits__limit">
-                      <p className="play-limits__limit-title">
-                        {t('current_limit')}
-                      </p>
-                      <p
-                        className={clsx(
-                          'play-limits__limit-total',
-                          window.__config__.name === 'strive' && 'text-primary',
-                        )}
-                      >
-                        {limit.Formatting === 'currency' ? (
-                          <NumberFormat
-                            value={formattedCurrentLimit}
-                            displayType={'text'}
-                            thousandSeparator
-                            prefix={user.currency}
-                            decimalScale={2}
-                            fixedDecimalScale={true}
-                          />
-                        ) : (
-                          formattedCurrentLimit
-                        )}
-                      </p>
-                    </li>
-                    {formattedUsedLimit !== null && (
-                      <li className="play-limits__limit">
-                        <p className="play-limits__limit-title">
-                          {t('used_limit')}
-                        </p>
-                        <p className="play-limits__limit-total">
-                          {limit.Formatting === 'currency' ? (
-                            <NumberFormat
-                              value={formattedUsedLimit}
-                              displayType={'text'}
-                              thousandSeparator
-                              prefix={user.currency}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                            />
-                          ) : (
-                            formattedUsedLimit
-                          )}
-                        </p>
-                      </li>
-                    )}
-                    {formattedRemainingLimit != null && (
-                      <li className="play-limits__limit">
-                        <p className="play-limits__limit-title">
-                          {t('left_limit')}
-                        </p>
-                        <p className="play-limits__limit-total">
-                          {limit.Formatting === 'currency' ? (
-                            <NumberFormat
-                              value={formattedRemainingLimit}
-                              displayType={'text'}
-                              thousandSeparator
-                              prefix={user.currency}
-                              decimalScale={2}
-                              fixedDecimalScale={true}
-                            />
-                          ) : (
-                            formattedRemainingLimit
-                          )}
-                        </p>
-                      </li>
-                    )}
-                    {formattedFutureLimit != null && (
-                      <>
-                        <li className="play-limits__limit">
-                          <p className="play-limits__limit-title">
-                            {t('future_limit')}
-                          </p>
-                          <p
-                            className={clsx(
-                              'play-limits__limit-total',
-                              window.__config__.name === 'strive' &&
-                                'text-primary',
-                            )}
-                          >
-                            {limit.Formatting === 'currency' ? (
-                              <NumberFormat
-                                value={formattedFutureLimit}
-                                displayType={'text'}
-                                thousandSeparator
-                                prefix={user.currency}
-                                decimalScale={2}
-                                fixedDecimalScale={true}
-                              />
-                            ) : (
-                              formattedFutureLimit
-                            )}
-                          </p>
-                        </li>
-                        <li className="play-limits__limit">
-                          <p className="play-limits__limit-title">
-                            {t('future_from_limit')}
-                          </p>
-                          <p className="play-limits__limit-total">
-                            {formattedFutureLimitFrom}
-                          </p>
-                        </li>
-                      </>
-                    )}
-                  </ul>
-                  {limit.ValidTo &&
-                    !limit.FutureLimitAmount &&
-                    !limit.FutureLimitValidFrom && (
-                      <p
-                        className={clsx(
-                          'mt-1',
-                          lastLimit ? 'mb-0 pb-2' : 'pb-3',
-                        )}
-                      >
-                        {t('limit_valid_until')}{' '}
-                        <b>
-                          {dayjs(limit.ValidTo).format(
-                            `${franchiseDateFormat} HH:mm`,
-                          )}
-                        </b>
-                      </p>
-                    )}
-                </div>
-              );
-            })
-        ) : (
-          <p className="text-gray-400 mb-0">{t('limit_unset')}</p>
-        )}
-        {!limitData.disabled && (
+        {limitData.disabled && (
           <Accordion.Collapse eventKey={limitData.id}>
             <>
-              {window.__config__.name === 'strive' && (
-                <hr className="pt-1 mb-0"></hr>
-              )}
               <CustomAlert
                 show={!!apiResponse}
                 variant={
@@ -489,19 +261,19 @@ const LimitsHistory = ({ limitsData }) => {
                   return (
                     <tr key={index}>
                       <td>
-                        <strong className="heading-sm">{t('_date')}</strong>
+                        <p className="heading-sm">{t('_date')}</p>
                         {dayjs(new Date(limit.CreatedAt)).format('YYYY-MM-DD')}
                       </td>
                       <td>
-                        <strong className="heading-sm">{t('save')}</strong>
-                        <strong>
+                        <p className="heading-sm">{t('save')}</p>
+                        <p>
                           {t(limit.LimitTypeToString)}{' '}
                           {limit.LimitDurationToString &&
                             ` - ${t(limit.LimitDurationToString)}`}
-                        </strong>
+                        </p>
                       </td>
                       <td>
-                        <strong className="heading-sm">{t('amount')}</strong>
+                        <p className="heading-sm">{t('amount')}</p>
                         <div className="d-inline-flex align-items-center">
                           {timeLimits.includes(limit.LimitTypeToString) ? (
                             `${limit.Amount} ${t('hours')}`
@@ -545,19 +317,16 @@ const LimitsPage = () => {
     '/restapi/v3/user/profile/play_limits',
   );
   const isDataLoading = !data && !error;
-
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       <h1 className="account-settings__title">{jsxT('limits_page_title')}</h1>
-      <p className="account-settings__sub-text">
-        {jsxT('limits_page_sub_text')}
-      </p>
-      {window.__config__.name === 'strive' && (
-        <div className="play-responsible-block mb-3 px-2">
-          <i className={clsx(`icon-${window.__config__.name}-thumbs`)}></i>
-          {jsxT('play_responsible_block_link')}
+      <div className="info-container mb-3">
+        <div className="info-container__info pt-3">
+          <p className="account-settings__sub-text">
+            {jsxT('limits_page_sub_text')}
+          </p>
         </div>
-      )}
+      </div>
       {isDataLoading && (
         <div className="d-flex justify-content-center pt-4 pb-3">
           <Spinner animation="border" className="spinner-custom mx-auto" />

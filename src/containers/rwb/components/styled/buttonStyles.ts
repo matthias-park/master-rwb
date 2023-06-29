@@ -115,6 +115,8 @@ const buttonStyles = css`
   .btn-light {
     color: ${props => props.theme.colors.brand.text} !important;
     background-color: ${props => props.theme.colors.brand.light} !important;
+    font-size: 16px;
+    font-style: italic;
     &:active,
     &:focus {
       color: ${props => props.theme.colors.primary.main};
