@@ -135,9 +135,14 @@ const accountSettingsStyles = css`
       .balances-list__item {
         margin: 5px !important;
         padding: 12px;
-        flex-basis: 25%;
         background-color: #f3f4f7;
         border-radius: 8px;
+      }
+      li:nth-child(-n+2) {
+        flex-basis: calc(37.5% - 10px);
+      }
+      li {
+        flex-basis: calc(25% - 10px);
       }
     }
   }

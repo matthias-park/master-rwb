@@ -10,6 +10,7 @@ import BalancesContainer from '../components/account-settings/BalancesContainer'
 import NumberFormat from 'react-number-format';
 import DateFilter from '../components/account-settings/DateFilter';
 import { postApi } from '../../../utils/apiUtils';
+import { camelToSnakeCase } from '../../../utils/reactUtils';
 
 interface TransactionsSummary {
   InitialBalance: number;
@@ -90,28 +91,35 @@ const TransactionsSummaryPage = () => {
         {!isLoading && (
           <ul className="balances-list balances-list--cards">
             {!!data &&
-              Object.entries(data).map(([key, value]) => (
-                <li className="balances-list__item">
-                  <div className="balances-list__content">
-                    <span className="balances-list__content-title">
-                      {t(key.toString())}
-                    </span>
-                    <span className="balances-list__content-value">
-                      <NumberFormat
-                        value={Number(value)}
-                        thousandSeparator
-                        displayType={'text'}
-                        prefix={user.currency}
-                        decimalScale={2}
-                        fixedDecimalScale={true}
-                      />
-                    </span>
-                  </div>
-                  <i
-                    className={`icon-${window.__config__.name}-${key} balances-list__icon`}
-                  ></i>
-                </li>
-              ))}
+              Object.entries(data)
+                .filter(([key, value]) => !['Code', 'Message'].includes(key))
+                .map(([key, value]) => (
+                  <li className="balances-list__item">
+                    <div className="balances-list__content">
+                      <span className="balances-list__content-title">
+                        {t(
+                          `${camelToSnakeCase(
+                            key.toString().charAt(0).toLowerCase() +
+                              key.toString().slice(1),
+                          )}`,
+                        )}
+                      </span>
+                      <span className="balances-list__content-value">
+                        <NumberFormat
+                          value={Number(value)}
+                          thousandSeparator
+                          displayType={'text'}
+                          prefix={user.currency}
+                          decimalScale={2}
+                          fixedDecimalScale={true}
+                        />
+                      </span>
+                    </div>
+                    <i
+                      className={`icon-${window.__config__.name}-${key} balances-list__icon`}
+                    ></i>
+                  </li>
+                ))}
           </ul>
         )}
       </div>

@@ -92,3 +92,5 @@ export const snakeCase = str => {
     .map(x => x.toLowerCase())
     .join('_');
 };
+
+export const camelToSnakeCase = str => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
