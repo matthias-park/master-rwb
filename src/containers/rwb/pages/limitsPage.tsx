@@ -65,7 +65,7 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
           <p className="info-container__title pr-3">
             <b>{t(limitData.title)}</b>
           </p>
-          {limitData.disabled && (
+          {!limitData.disabled && (
             <Accordion.Toggle
               as="button"
               eventKey={limitData.id}
@@ -98,7 +98,7 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
               )}`
             : jsxT('timeout_unset')}
         </p>
-        {limitData.disabled && (
+        {!limitData.disabled && (
           <Accordion.Collapse eventKey={limitData.id}>
             <>
               <CustomAlert
@@ -151,7 +151,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
           <p className="info-container__title pr-3">
             <b>{t(limitData.title)}</b>
           </p>
-          {limitData.disabled && (
+          {!limitData.disabled && (
             <Accordion.Toggle
               as="button"
               eventKey={limitData.id}
@@ -168,7 +168,7 @@ const LimitsCard = ({ limitData, mutate }: LimitProps) => {
         <p className="text-14 pt-1">{t(limitData.note)}</p>
       </div>
       <div className="info-container__text">
-        {limitData.disabled && (
+        {!limitData.disabled && (
           <Accordion.Collapse eventKey={limitData.id}>
             <>
               <CustomAlert
