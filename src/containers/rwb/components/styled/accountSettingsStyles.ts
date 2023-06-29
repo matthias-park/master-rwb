@@ -130,6 +130,16 @@ const accountSettingsStyles = css`
         padding-bottom: 5px;
       }
     }
+    &--cards {
+      flex-wrap: wrap;
+      .balances-list__item {
+        margin: 5px !important;
+        padding: 12px;
+        flex-basis: 25%;
+        background-color: #f3f4f7;
+        border-radius: 8px;
+      }
+    }
   }
 
   .amount-container {
