@@ -69,7 +69,7 @@ const TransactionsSummaryPage = () => {
     <main className="container-fluid px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       <BalancesContainer />
       <h1 className="account-settings__title mb-4">
-        {t('transactions_page_title')}
+        {t('transactions_summary_page_title')}
       </h1>
       <div className="outer-info-block p-4 mb-4">
         <DateFilter
