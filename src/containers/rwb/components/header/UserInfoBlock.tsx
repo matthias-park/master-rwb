@@ -294,7 +294,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                       className="mr-n2 ml-4"
                     />
                     <div className=" d-flex align-items-center">
-                      <i className="icon-gnogaz-logout user-menu__list-item-icon mr-3"></i>
+                      <i className="icon-rwb-logout user-menu__list-item-icon mr-3"></i>
                       {t('logout')}
                     </div>
                   </div>
