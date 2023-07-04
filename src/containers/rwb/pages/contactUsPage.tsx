@@ -186,16 +186,16 @@ const ContactUsPage = () => {
       <div className="outer-info-block mb-3">
         <div className="contact_info">
           <div className="row">
-            <div className="col-sm text-center">
-              <i className="icon-rwb-phone"></i>
+            <div className="col-sm text-center align-items-center">
+              <i className="icon-rwb-phone mr-1"></i>
               {jsxT('contact_page_phone')}
             </div>
-            <div className="col-sm text-center">
-              <i className="icon-rwb-mail"></i>
+            <div className="col-sm text-center align-items-center">
+              <i className="icon-rwb-mail mr-1"></i>
               {jsxT('contact_page_email')}
             </div>
-            <div className="col-sm text-center">
-              <i className="icon-rwb-clock"></i>
+            <div className="col-sm text-center align-items-center">
+              <i className="icon-rwb-clock mr-1"></i>
               {jsxT('contact_page_hours')}
             </div>
           </div>

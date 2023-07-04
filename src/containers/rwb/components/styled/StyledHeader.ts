@@ -14,10 +14,10 @@ export const StyledNavToggler = styled(Navbar.Toggle)`
   border: none;
   border-radius: 0;
   .icon-${window.__config__.name}-menu {
-    color: ${props => props.theme.colors.white.main};
+    color: ${props => props.theme.colors.primary.hover} !important;
   }
   .icon-${window.__config__.name}-menu-close {
-    color: ${props => props.theme.colors.brand.light};
+    color: ${props => props.theme.colors.primary.hover} !important;
   }
   ${mediaBreakpointDown('xs')} {
     margin-left: 0px;
@@ -727,7 +727,7 @@ export const StyledRowHeader = styled('header')`
     cursor: pointer;
     i {
       font-size: 30px;
-      color: ${props => props.theme.colors.secondary.light};
+      color: ${props => props.theme.colors.primary.hover} important;
       transition: color 0.3s;
     }
     &:after {

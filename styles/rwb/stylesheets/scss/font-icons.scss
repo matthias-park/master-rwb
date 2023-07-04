@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('../fonts/icons/fonts/icomoon.eot?jv2j9t');
-  src:  url('../fonts/icons/fonts/icomoon.eot?jv2j9t#iefix') format('embedded-opentype'),
-    url('../fonts/icons/fonts/icomoon.ttf?jv2j9t') format('truetype'),
-    url('../fonts/icons/fonts/icomoon.woff?jv2j9t') format('woff'),
-    url('../fonts/icons/fonts/icomoon.svg?jv2j9t#icomoon') format('svg');
+  src:  url('../fonts/icons/fonts/icomoon.eot?1p6xf9');
+  src:  url('../fonts/icons/fonts/icomoon.eot?1p6xf9#iefix') format('embedded-opentype'),
+    url('../fonts/icons/fonts/icomoon.ttf?1p6xf9') format('truetype'),
+    url('../fonts/icons/fonts/icomoon.woff?1p6xf9') format('woff'),
+    url('../fonts/icons/fonts/icomoon.svg?1p6xf9#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -27,18 +27,10 @@
 .icon-android:before {
   content: "\eac0";
 }
-.icon-strive-check:before,
-.icon-strive-success:before,
 .icon-check:before,
 .icon-success:before {
   content: "\e952";
 }
-.icon-strive-date-navigation:before,
-.icon-mothership-date-navigation:before {
-  content: "\e953";
-}
-.icon-strive-exclamation:before,
-.icon-strive-danger:before,
 .icon-exclamation:before,
 .icon-danger:before,
 .icon-warning:before {
@@ -48,593 +40,220 @@
   content: "\e956";
   color: #27a9e0;
 }
-.icon-strive-mail:before,
-.icon-mothership-mail1:before {
-  content: "\e957";
-}
-.icon-strive-phone:before,
-.icon-mothership-phone:before {
-  content: "\e959";
-}
-.icon-strive-phone-mobile:before,
-.icon-mothership-phone-mobile:before {
-  content: "\e95a";
-}
-.icon-strive-questions:before,
-.icon-mothership-questions:before {
-  content: "\e95b";
-}
-.icon-strive-redirect:before,
-.icon-mothership-redirect:before,
 .icon-redirect {
   content: "\e95c";
 }
-.icon-strive-thumbs:before,
-.icon-mothership-thumbs:before {
-  content: "\e95f";
-}
-.icon-strive-tooltip:before,
-.icon-mothership-tooltip:before,
 .icon-tooltip:before {
   content: "\e960";
 }
-.icon-strive-account:before,
-.icon-mothership-account:before {
-  content: "\e961";
-}
-.icon-strive-add-action-1:before,
-.icon-mothership-add-action-1:before,
 .icon-add-action-1:before {
   content: "\e962";
 }
-.icon-strive-card:before,
-.icon-mothership-card:before {
-  content: "\e963";
-}
-.icon-strive-close:before,
-.icon-mothership-close:before,
-.icon-close:before {
-  content: "\e964";
-}
-.icon-strive-down:before,
-.icon-mothership-down:before {
-  content: "\e965";
-}
-.icon-strive-download:before,
-.icon-mothership-download:before,
-.icon-gnogaz-download:before {
+.icon-rwb-download:before {
   content: "\e966";
 }
-.icon-strive-favorite:before,
-.icon-mothership-favorite:before {
-  content: "\e967";
-}
-.icon-strive-last-bulletin:before,
-.icon-mothership-last-bulletin:before {
-  content: "\e968";
-}
-.icon-strive-left:before,
-.icon-mothership-left:before
 .icon-left:before {
   content: "\e969";
 }
-.icon-strive-menu:before,
-.icon-mothership-menu:before {
-  content: "\e96a";
-}
-.icon-strive-menu-close:before,
-.icon-mothership-menu-close:before {
-  content: "\e96b";
-}
-.icon-strive-reset:before,
-.icon-mothership-reset:before {
-  content: "\e96d";
-}
-.icon-strive-right:before,
-.icon-mothership-right:before,
 .icon-right:before {
   content: "\e96e";
 }
-.icon-strive-up:before,
-.icon-mothership-up:before {
-  content: "\e96f";
-}
-.icon-strive-add:before,
-.icon-mothership-add:before {
-  content: "\e970";
-}
-.icon-strive-arrow-label .path1:before,
-.icon-mothership-arrow-label .path1:before {
-  content: "\e971";
-  color: rgb(255, 255, 255);
-}
-.icon-strive-arrow-label .path2:before,
-.icon-mothership-arrow-label .path2:before {
-  content: "\e972";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-strive-calendar-d:before,
-.icon-mothership-calendar-d:before {
-  content: "\e973";
-}
-.icon-strive-calendar-m:before,
-.icon-mothership-calendar-m:before {
-  content: "\e974";
-}
-.icon-strive-delete:before,
-.icon-mothership-delete:before {
-  content: "\e975";
-}
-.icon-strive-down1:before,
-.icon-mothership-down1:before,
-.icon-gnogaz-down1:before,
-.icon-gnogon-down1:before {
+.icon-rwb-down1:before {
   content: "\e976";
 }
-.icon-strive-eye-off:before,
-.icon-mothership-eye-off:before,
 .icon-eye-off:before {
   content: "\e977";
 }
-.icon-strive-eye-on:before,
-.icon-mothership-eye-on:before
-.icon-eye-on:before {
-  content: "\e978";
-}
-.icon-strive-left1:before,
-.icon-mothership-left1:before {
-  content: "\e979";
-}
-.icon-strive-maximise:before,
-.icon-mothership-maximise:before {
-  content: "\e97a";
-}
-.icon-strive-right1:before,
-.icon-mothership-right1:before {
-  content: "\e97b";
-}
-.icon-strive-search-main:before,
-.icon-mothership-search-main:before {
-  content: "\e97c";
-}
-.icon-strive-search-nav:before,
-.icon-mothership-search-nav:before {
-  content: "\e97d";
-}
-.icon-strive-statistics:before,
-.icon-mothership-statistics:before {
-  content: "\e97e";
-}
-.icon-strive-stop1:before,
-.icon-mothership-stop1:before {
-  content: "\e97f";
-}
-.icon-strive-up1:before,
-.icon-mothership-up1:before {
-  content: "\e980";
-}
-.icon-strive-video:before,
-.icon-mothership-video:before {
-  content: "\e981";
-}
-.icon-strive-mail2:before,
-.icon-mothership-mail2:before {
-  content: "\e982";
-}
-.icon-strive-facebook:before,
-.icon-mothership-facebook:before {
-  content: "\e983";
-}
-.icon-strive-youtube:before,
-.icon-mothership-youtube:before {
-  content: "\e984";
-}
-.icon-strive-twitter:before,
-.icon-mothership-twitter:before {
-  content: "\e985";
-}
-.icon-strive-nsta:before,
-.icon-mothership-nsta:before {
-  content: "\e986";
-}
-.icon-strive-linkedin:before,
-.icon-mothership-linkedin:before,
 .icon-linkedin:before {
   content: "\e987";
 }
-.icon-strive-clock:before,
-.icon-mothership-clock:before {
-  content: "\e988";
-  color: #4c4c4c;
-}
-.icon-strive-cookies:before,
-.icon-mothership-cookies:before,
 .icon-cookies:before {
   content: "\e989";
 }
-.icon-desertDiamond-deposit:before {
-  content: "\e900";
-}
-.icon-desertDiamond-star:before,
-.icon-strive-bonus_balance:before,
-.icon-desertDiamond-bonus_balance:before {
-  content: "\e901";
-}
-.icon-desertDiamond-logout:before {
-  content: "\e902";
-}
-.icon-desertDiamond-promo:before {
-  content: "\e903";
-}
-.icon-desertDiamond-bell:before {
-  content: "\e904";
-}
-.icon-desertDiamond-mail2:before {
-  content: "\e905";
-}
-.icon-desertDiamond-phone:before {
-  content: "\e906";
-}
-.icon-desertDiamond-questions:before {
-  content: "\e907";
-}
-.icon-desertDiamond-documents:before {
-  content: "\e908";
-}
-.icon-desertDiamond-account:before {
-  content: "\e909";
-}
-.icon-desertDiamond-clock:before {
-  content: "\e90a";
-}
-.icon-desertDiamond-responsible:before {
-  content: "\e90b";
-}
-.icon-desertDiamond-up1:before {
-  content: "\e90c";
-}
-.icon-desertDiamond-down1:before {
-  content: "\e90d";
-}
-.icon-desertDiamond-eye-off:before {
-  content: "\e90e";
-}
-.icon-desertDiamond-eye-on:before {
-  content: "\e90f";
-}
-.icon-desertDiamond-left1:before {
-  content: "\e910";
-}
-.icon-desertDiamond-right1:before {
-  content: "\e911";
-}
-.icon-desertDiamond-left:before {
-  content: "\e912";
-}
-.icon-desertDiamond-download:before {
-  content: "\e913";
-}
-.icon-desertDiamond-down:before {
-  content: "\e914";
-}
-.icon-desertDiamond-lock:before,
-.icon-strive-locked_balance:before ,
-.icon-desertDiamond-locked_balance:before {
-  content: "\e915";
-}
-.icon-desertDiamond-exclamation:before,
-.icon-desertDiamond-danger:before {
-  content: "\e916";
-}
-.icon-desertDiamond-check:before,
-.icon-desertDiamond-success:before {
-  content: "\e917";
-}
-.icon-desertDiamond-close:before,
-.icon-close:before {
-  content: "\e918";
-}
-.icon-desertDiamond-calendar-m:before {
-  content: "\e919";
-}
-.icon-desertDiamond-linkedin:before {
-  content: "\e91a";
-}
-.icon-desertDiamond-nsta:before {
-  content: "\e91b";
-}
-.icon-desertDiamond-withdraw:before,
-.icon-strive-withdrawable_balance:before,
-.icon-desertDiamond-withdrawable_balance:before {
-  content: "\e91c";
-}
-.icon-desertDiamond-balance:before,
-.icon-strive-playable_balance:before,
-.icon-desertDiamond-playable_balance:before {
-  content: "\e91d";
-}
-.icon-strive-windows8:before,
-.icon-gnogaz-windows8:before,
-.icon-desertDiamond-windows8:before {
+.icon-rwb-windows8:before {
   content: "\e935";
 }
-.icon-appleinc:before,
-.icon-strive-appleinc:before,
-.icon-gnogaz-appleinc:before,
-.icon-desertDiamond-appleinc:before {
+.icon-rwb-appleinc:before {
   content: "\e936";
 }
-.icon-desertDiamond-plus:before,
-.icon-plus:before {
-  content: "\e93e";
-}
-.icon-desertDiamond-sports:before {
-  content: "\e93c";
-}
-.icon-gnogaz-youtube:before,
-.icon-gnogon-youtube:before {
+.icon-rwb-youtube:before {
   content: "\e91e";
 }
-.icon-gnogaz-account:before,
-.icon-gnogon-account:before {
+.icon-rwb-account:before {
   content: "\e91f";
 }
-.icon-gnogaz-responsible:before,
-.icon-gnogon-responsible:before {
+.icon-rwb-responsible:before {
   content: "\e920";
 }
-.icon-gnogaz-tooltip:before,
-.icon-gnogon-tooltip:before {
+.icon-rwb-tooltip:before {
   content: "\e921";
 }
-.icon-gnogaz-star:before,
-.icon-gnogon-star:before {
+.icon-rwb-star:before {
   content: "\e922";
 }
-.icon-gnogaz-twitter:before,
-.icon-gnogon-twitter:before {
+.icon-rwb-twitter:before {
   content: "\e923";
 }
-.icon-gnogaz-eye-on:before,
-.icon-gnogon-eye-on:before {
+.icon-rwb-eye-on:before {
   content: "\e924";
 }
-.icon-gnogaz-deposit:before,
-.icon-gnogon-deposit:before {
+.icon-rwb-deposit:before {
   content: "\e925";
 }
-.icon-gnogaz-mail2:before,
-.icon-gnogon-mail2:before {
+.icon-rwb-mail:before {
   content: "\e926";
 }
-.icon-gnogaz-phone:before,
-.icon-gnogon-phone:before {
+.icon-rwb-phone:before {
   content: "\e927";
 }
-.icon-gnogaz-logout:before,
-.icon-gnogon-logout:before {
+.icon-rwb-logout:before {
   content: "\e928";
 }
-.icon-gnogaz-nsta:before,
-.icon-gnogon-nsta:before {
+.icon-rwb-insta:before {
   content: "\e929";
 }
-.icon-gnogaz-bell:before,
-.icon-gnogon-bell:before {
+.icon-rwb-bell:before {
   content: "\e92a";
 }
-.icon-gnogaz-questions:before,
-.icon-gnogon-questions:before {
+.icon-rwb-questions:before {
   content: "\e92b";
 }
-.icon-gnogaz-clock:before,
-.icon-gnogon-clock:before {
+.icon-rwb-clock:before {
   content: "\e92c";
 }
-.icon-gnogaz-documents:before,
-.icon-gnogon-documents:before {
+.icon-rwb-documents:before {
   content: "\e92d";
 }
-.icon-gnogaz-facebook:before,
-.icon-gnogon-facebook:before {
+.icon-rwb-facebook:before {
   content: "\e92e";
 }
-.icon-gnogaz-eye-off:before,
-.icon-gnogon-eye-off:before {
+.icon-rwb-eye-off:before {
   content: "\e92f";
 }
-.icon-gnogon-promo:before,
-.icon-desertDiamond-promo:before,
-.icon-gnogaz-promo:before {
+
+.icon-rwb-promo:before {
   content: "\e930";
 }
-.icon-gnogaz-withdraw:before,
-.icon-gnogaz-withdrawable_balance:before,
-.icon-gnogon-withdraw:before,
-.icon-gnogon-withdrawable_balance:before {
+.icon-rwb-withdraw:before,
+.icon-rwb-withdrawable_balance:before,
+ {
   content: "\e931";
 }
-.icon-gnogaz-bonus_balance:before,
-.icon-gnogon-bonus_balance:before {
+.icon-rwb-bonus_balance:before {
   content: "\e932";
 }
-.icon-gnogaz-lock:before,
-.icon-gnogaz-locked_balance:before,
-.icon-gnogon-lock:before,
-.icon-gnogon-locked_balance:before {
+.icon-rwb-lock:before,
+.icon-rwb-locked_balance:before {
   content: "\e933";
 }
-.icon-gnogaz-balance:before,
-.icon-gnogaz-playable_balance:before,
-.icon-gnogon-balance:before,
-.icon-gnogon-playable_balance:before {
+.icon-rwb-balance:before,
+.icon-rwb-playable_balance:before {
   content: "\e934";
 }
-.icon-gnogaz-home:before,
-.icon-gnogon-home:before,
-.icon-strive-home:before,
-.icon-mothership-home:before {
+.icon-rwb-home:before {
   content: "\e937";
 }
-.icon-gnogaz-soon:before,
-.icon-gnogon-soon:before {
+.icon-rwb-soon:before {
   content: "\e938";
 }
-.icon-gnogaz-bets:before,
-.icon-gnogon-bets:before {
+.icon-rwb-bets:before {
   content: "\e939";
 }
-.icon-gnogaz-in-play:before,
-.icon-gnogon-in-play:before {
+.icon-rwb-in-play:before {
   content: "\e93a";
 }
-.icon-gnogaz-all:before,
-.icon-gnogon-all:before {
+.icon-rwb-all:before {
   content: "\e93b";
 }
-.icon-gnogaz-sports:before,
-.icon-gnogon-sports:before {
+.icon-rwb-sports:before {
   content: "\e93d";
 }
-.icon-gnogaz-plus:before,
-.icon-gnogon-plus:before {
+.icon-rwb-plus:before {
   content: "\e93f";
 }
-.icon-gnogaz-jackpot:before,
-.icon-gnogon-jackpot:before,
-.icon-mothership-jackpot:before {
+.icon-rwb-jackpot:before {
   content: "\e94b";
 }
-.icon-gnogaz-table-games:before,
-.icon-gnogon-table-games:before,
-.icon-mothership-table-gamest:before {
+.icon-rwb-table-games:before {
   content: "\e94a";
 }
-.icon-gnogaz-livedealer:before,
-.icon-gnogon-livedealer:before,
-.icon-mothership-livedealer:before {
+.icon-rwb-livedealer:before {
   content: "\e949";
 }
-.icon-gnogaz-megaways:before,
-.icon-gnogon-megaways:before,
-.icon-mothership-megaways:before {
+.icon-rwb-megaways:before {
   content: "\e948";
 }
-.icon-gnogaz-slots:before,
-.icon-gnogon-slots:before,
-.icon-mothership-slots:before {
+.icon-rwb-slots:before {
   content: "\e947";
 }
-.icon-gnogaz-top:before,
-.icon-gnogon-top:before,
-.icon-mothership-top:before {
+.icon-rwb-top:before {
   content: "\e946";
 }
-.icon-gnogaz-new:before,
-.icon-gnogon-new:before,
-.icon-mothership-new:before {
+.icon-rwb-new:before {
   content: "\e945";
 }
-.icon-gnogaz-featured:before,
-.icon-gnogon-featured:before,
-.icon-mothership-featured:before {
+.icon-rwb-featured:before {
   content: "\e944";
 }
-.icon-gnogaz-lobby:before,
-.icon-gnogon-lobby:before,
-.icon-mothership-lobby:before {
+.icon-rwb-lobby:before {
   content: "\e943";
 }
-.icon-gnogaz-casino:before,
-.icon-gnogon-casino:before,
-.icon-mothership-casino:before {
+.icon-rwb-casino:before {
   content: "\e942";
 }
-.icon-gnogaz-search:before,
-.icon-gnogon-search:before,
-.icon-mothership-search:before,
+.icon-rwb-search:before,
 .icon-search:before {
   content: "\e941";
 }
-.icon-gnogaz-full-screen:before,
-.icon-gnogon-full-screen:before,
-.icon-mothership-full-screen:before,
+.icon-rwb-full-screen:before,
 .icon-full-screen:before {
   content: "\e940";
 }
-.icon-gnogaz-favourite-on:before,
-.icon-gnogon-favourite-on:before,
-.icon-mothership-favourite-on:before,
+.icon-rwb-favourite-on:before,
 .icon-favourite-on:before {
   color: #DE3163;
   content: "\e94c";
 }
-.icon-gnogaz-favourite-off:before,
-.icon-gnogon-favourite-off:before,
-.icon-mothership-favourite-off:before,
+.icon-rwb-favourite-off:before,
 .icon-favourite-off:before {
   content: "\e94d";
 }
-.icon-gnogaz-filter:before,
-.icon-gnogon-filter:before,
-.icon-mothership-filter:before,
+.icon-rwb-filter:before,
 .icon-filter:before {
   content: "\e94e";
 }
-.icon-gnogaz-right:before,
-.icon-gnogon-right:before,
-.icon-mothership-right:before {
+.icon-rwb-right:before {
   content: "\e94f";
 }
 .icon-rwb-left:before,
-.icon-gnogaz-left:before,
-.icon-gnogon-left:before,
-.icon-mothership-left:before,
 .icon-left:before {
   content: "\e950";
 }
-.icon-desertDiamond-menu:before,
-.icon-gnogaz-menu:before,
-.icon-gnogon-menu:before,
-.icon-mothership-menu:before {
+.icon-rwb-menu:before {
   content: "\e951";
 }
-.icon-gnogaz-game-info .path1:before,
-.icon-gnogon-game-info .path1:before,
-.icon-mothership-game-info .path1:before {
+.icon-rwb-game-info .path1:before {
   content: "\e955";
   color: rgb(51, 51, 51);
 }
-.icon-gnogaz-game-info .path2:before,
-.icon-gnogon-game-info .path2:before,
-.icon-mothership-game-info .path2:before {
+.icon-rwb-game-info .path2:before {
   content: "\e958";
   margin-left: -1.03125em;
   color: rgb(255, 255, 255);
 }
-.icon-gnogaz-home1:before,
-.icon-gnogon-home1:before,
-.icon-mothership-home1:before {
+.icon-rwb-home1:before {
   content: "\e95d";
 }
-.icon-gnogaz-down:before,
-.icon-gnogon-down:before,
-.icon-mothership-down:before {
+.icon-rwb-down:before {
   content: "\e95e";
 }
-.icon-gnogaz-up:before,
-.icon-gnogon-up:before,
-.icon-mothership-up:before {
+.icon-rwb-up:before {
   content: "\e96c";
 }
-.icon-gnogaz-close:before,
-.icon-gnogon-close:before,
-.icon-mothership-close:before {
+.icon-rwb-close:before,
+.icon-close:before {
   content: "\e98a";
 }
-.icon-gnogaz-recent:before,
-.icon-gnogon-recent:before,
-.icon-mothership-recent:before {
+.icon-rwb-recent:before {
   content: "\e98b";
 }
