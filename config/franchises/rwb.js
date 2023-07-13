@@ -12,6 +12,7 @@ module.exports = {
   dateFormat: 'YYYY-MM-DD',
   smartyStreets: '108064517886631271',
   geoComplyKey: 'oQeVf0ojxN',
+  zendesk: 'a065ceaf-2ca9-436c-821b-37418041092d',
   casino: true,
   componentSettings: {
     userIdleTimeout: 30,
