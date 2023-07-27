@@ -64,6 +64,7 @@ export const COMPONENT_PAGES = {
   [PagesName.CasinoInnerPage]: AsyncPage('casinoInnerPage'),
   [PagesName.BonusesPage]: AsyncPage('bonusesPage'),
   [PagesName.RegisterActivationPage]: AsyncPage('registerActivationPage'),
+  [PagesName.CasinoBetsPage]: AsyncPage('casinoBetsPage'),
 };
 
 interface CombinedRoutes extends NavigationRoute {
