@@ -1191,6 +1191,7 @@ const customStyles = css`
       padding-left: ${(Franchise.gnogaz || Franchise.gnogon) && '170px'};
       border-radius: 0;
       z-index: 999;
+      top: -25px;
       ${mediaBreakpointDown('xl')} {
         margin-left: -${props => props.theme.spacing.bodyPaddingMedium}px !important;
         margin-right: -${props => props.theme.spacing.bodyPaddingMedium}px !important;
@@ -1198,13 +1199,19 @@ const customStyles = css`
       ${mediaBreakpointDown('lg')} {
         margin-left: -${props => props.theme.spacing.bodyPaddingSmall}px !important;
         margin-right: -${props => props.theme.spacing.bodyPaddingSmall}px !important;
+        margin-bottom: ${props =>
+          props.theme.spacing.bodyPaddingSmall}px !important;
         padding-left: ${(Franchise.gnogaz || Franchise.gnogon) && '16px'};
         padding-top: ${(Franchise.gnogaz || Franchise.gnogon) && '25px'};
+        top: -23px !important;
       }
       ${mediaBreakpointDown('md')} {
         padding-left: ${(Franchise.gnogaz || Franchise.gnogon) && '16px'};
         padding-top: ${(Franchise.gnogaz || Franchise.gnogon) && '16px'};
+        margin-bottom: ${props =>
+          props.theme.spacing.bodyPaddingSmall}px !important;
         margin-top: 0 !important;
+        top: 0px !important;
       }
     }
     &.top-spacing-0 {
