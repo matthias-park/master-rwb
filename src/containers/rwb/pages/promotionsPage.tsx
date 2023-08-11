@@ -132,17 +132,6 @@ const PromoItem = ({ item, variant }: { item: PostItem; variant?: string }) => {
         className="promotion-block__img"
         src={item.image.url || '/assets/images/promo/promo-front.png'}
       />
-      <div className="promotion-block__body">
-        {item.title && (
-          <h3 className="promotion-block__body-subtitle">{item.title}</h3>
-        )}
-        <h2 className="promotion-block__body-title">{item.page_title}</h2>
-        {item.button_text && (
-          <button className="promo-button promotion-block__body-button">
-            {item.button_text}
-          </button>
-        )}
-      </div>
     </PromoLinkEl>
   );
 };
@@ -351,6 +340,8 @@ const PromotionPage = ({ slug }: { slug: string }) => {
   const fallbackBannerImg = desktopWidth
     ? '/assets/images/promo/promo-inner-lg.png'
     : '/assets/images/promo/promo-inner-sm.png';
+
+  console.log('bannerImg', bannerImg, fallbackBannerImg);
 
   const promoTitle = data?.Data?.title;
   return (
