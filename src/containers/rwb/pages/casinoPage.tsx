@@ -19,7 +19,7 @@ const CasinoPage = () => {
   }, []);
 
   return (
-    <StyledCasinoPage>
+    <StyledCasinoPage className="styled-casino-page">
       <Banner zone={'welcome'} />
       <CasinoFilters />
       <CasinoLobby />

@@ -64,7 +64,7 @@ const TreeItem = ({
   if (route.emptyRoute && !route.children) return null;
 
   return (
-    <StyledSitemapItem>
+    <StyledSitemapItem className="styled-sitemap-item">
       {route.children && (
         <Accordion.Toggle
           className={clsx(
@@ -81,9 +81,11 @@ const TreeItem = ({
         ></Accordion.Toggle>
       )}
       {route.emptyRoute ? (
-        <StyledSitemapItemTitle>{route.name}</StyledSitemapItemTitle>
+        <StyledSitemapItemTitle className="styled-sitemap-item-title">
+          {route.name}
+        </StyledSitemapItemTitle>
       ) : (
-        <StyledSitemapItemTitle>
+        <StyledSitemapItemTitle className="styled-sitemap-item-title">
           {route.externalLink ? (
             <a href={route.externalLink} target="_blank" rel="noreferrer">
               {route.name}

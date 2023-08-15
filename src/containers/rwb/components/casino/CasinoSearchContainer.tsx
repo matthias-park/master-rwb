@@ -13,7 +13,7 @@ const CasinoSearchContainer = () => {
 
   if (!searchData.showSearch) return null;
   return (
-    <StyledCasinoSearchContainer>
+    <StyledCasinoSearchContainer className="styled-casino-search-container">
       <div className="search-container-wrp">
         <CasinoSearch />
         <div className="games-list-wrp">

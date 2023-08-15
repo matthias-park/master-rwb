@@ -63,7 +63,7 @@ export const CasinoGroupSlider = ({
   }, [currentGames]);
 
   return (
-    <StyledGroupSlider>
+    <StyledGroupSlider className="styled-group-slider">
       {name && (
         <div className="title-wrp">
           <i

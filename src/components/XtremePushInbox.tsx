@@ -69,7 +69,7 @@ const InboxBody = ({
   }
 
   return (
-    <StyledMessageList>
+    <StyledMessageList className="styled-message-list">
       {messageList.map(msg => {
         const setAsOpened = (open: 0 | 1 = 1, click: 0 | 1 = 0) => {
           window.xtremepush(
@@ -99,12 +99,13 @@ const InboxBody = ({
         const hasUrlLink = !!(msg.message.url || msg.message.deeplink);
         const content = (
           <StyledMessageContainer
+            className="styled-message-container"
             onClick={() => !hasUrlLink && setAsOpened(1, 1)}
           >
             {msg.message.icon && (
               <img alt="" src={msg.message.icon} width="100" />
             )}
-            <StyledMessageContent>
+            <StyledMessageContent className="styled-message-content">
               <div className="title">
                 {replaceStringTagsReact(msg.message.title)}
               </div>
@@ -118,7 +119,7 @@ const InboxBody = ({
           </StyledMessageContainer>
         );
         return (
-          <StyledInboxMessage key={msg.id}>
+          <StyledInboxMessage className="styled-inbox-message" key={msg.id}>
             {hasUrlLink ? (
               <Link
                 to={msg.message.url || msg.message.deeplink!}
@@ -256,7 +257,9 @@ const XtremePushInbox = ({ className }: Props) => {
       </Dropdown.Toggle>
       <Dropdown.Menu>
         <div>
-          <StyledInboxHeader>{t('xtremepush_header')}</StyledInboxHeader>
+          <StyledInboxHeader className="styled-inbox-header">
+            {t('xtremepush_header')}
+          </StyledInboxHeader>
           <InboxBody
             isLoading={isLoading}
             messageList={messageList}

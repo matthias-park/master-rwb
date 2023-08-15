@@ -68,7 +68,7 @@ const CasinoCategoryPage = () => {
   };
 
   return (
-    <StyledCasinoPage>
+    <StyledCasinoPage className="styled-casino-page">
       {isHardcodedCategory && hardcodedBanner && (
         <Banner images={[{ image: hardcodedBanner?.image }]} />
       )}

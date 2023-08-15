@@ -30,7 +30,7 @@ const PaymentAccountList = ({
   const [deletingAcc, setDeletingAcc] = useState(false);
   if (!accounts.length) return null;
   return (
-    <StyledRow>
+    <StyledRow className="styled-row">
       <SelectInput
         key={accounts.length}
         id={registerName}

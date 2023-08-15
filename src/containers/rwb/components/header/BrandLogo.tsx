@@ -17,7 +17,7 @@ const BrandLogo = ({ mobile }: BrandLogoProps) => {
   const homePageRoute = useRoutePath(PagesName.HomePage, true);
   const width = webpLogo ? (mobile ? 25 : 90) : mobile ? 90 : 200;
   return (
-    <StyledLogo mobile={mobile} to={homePageRoute}>
+    <StyledLogo className="styled-logo" mobile={mobile} to={homePageRoute}>
       <img
         alt="logo"
         src={`/assets/images/logo/logo${logoSuffix}.${

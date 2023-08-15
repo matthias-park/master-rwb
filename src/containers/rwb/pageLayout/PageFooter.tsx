@@ -37,7 +37,7 @@ const FooterHeader = () => {
   const { t } = useI18n();
   return (
     <div className="footer-pre pt-3 pb-0 pb-md-3">
-      <StyledFooterSessionBlock className="mb-2 mb-sm-0">
+      <StyledFooterSessionBlock className="styled-footer-session-block mb-2 mb-sm-0">
         <span className="session-block__text text-14">
           {t('time_spent_in_website')}
         </span>
@@ -46,10 +46,10 @@ const FooterHeader = () => {
           <SessionTimer />
         </span>
       </StyledFooterSessionBlock>
-      <StyledFooterPreTitle className="text-gray-100">
+      <StyledFooterPreTitle className="styled-footer-pre-title text-gray-100">
         {t('moderation_gamble')}
       </StyledFooterPreTitle>
-      <StyledFooterRestrictionBlock>
+      <StyledFooterRestrictionBlock className="styled-footer-restriction-block">
         <img
           loading="lazy"
           className="restrictions-block__img"
@@ -77,6 +77,7 @@ const FooterBottom = ({ data }: { data?: SubFooter }) => {
       className={clsx(
         'row no-gutters',
         isMobile && (isSports || isLive) && 'with-bottom-nav',
+        'styled-footer-sub',
       )}
     >
       <ul className="footer-sub__nav mr-auto">
@@ -115,7 +116,7 @@ const SocialSection = ({
   return (
     <>
       <section className="footer-social-block ml-auto pt-4 mt-0 mt-md-4 mt-lg-0 pt-lg-0">
-        <StyledSocialSection>
+        <StyledSocialSection className="styled-social-section">
           <h2 className="social__head-title">{t('footer_social_title')}</h2>
           <p className="social__title">{t('find_us_in_social')}</p>
           <p className="social__icons">
@@ -171,11 +172,11 @@ const SocialSection = ({
                 ))}
           </p>
         </StyledSocialSection>
-        <StyledFooterInfoText className="d-none d-xxl-flex align-items-end ml-3 mb-2">
+        <StyledFooterInfoText className="styled-footer-info-text d-none d-xxl-flex align-items-end ml-3 mb-2">
           <p>{jsxT('footer_info_text')}</p>
         </StyledFooterInfoText>
       </section>
-      <StyledFooterInfoText className="d-flex d-xxl-none mt-3 mb-2 mb-lg-0">
+      <StyledFooterInfoText className="styled-footer-info-text d-flex d-xxl-none mt-3 mb-2 mb-lg-0">
         <p>{jsxT('footer_info_text')}</p>
       </StyledFooterInfoText>
     </>
@@ -234,8 +235,8 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
                         rel="noreferrer"
                         className={
                           child.button
-                            ? 'btn btn-outline-light btn-sm my-3'
-                            : 'section-item__link'
+                            ? 'styled-section-item-external-link btn btn-outline-light btn-sm my-3'
+                            : 'styled-section-item-external-link section-item__link'
                         }
                       >
                         {t(child.name)}
@@ -247,8 +248,8 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
                         onClick={() => onGtmLinkClick(child.name)}
                         className={
                           child.button
-                            ? 'btn btn-outline-light btn-sm my-3'
-                            : 'section-item__link'
+                            ? 'styled-section-item-link btn btn-outline-light btn-sm my-3'
+                            : 'styled-section-item-link section-item__link'
                         }
                       >
                         {t(child.name)}
@@ -265,7 +266,7 @@ const SortedFooterLinks = ({ links }: { links?: FooterDataLink[] }): any => {
 const PageFooter = () => {
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
   return (
-    <StyledFooter>
+    <StyledFooter className="styled-footer">
       <div className="container-fluid">
         <FooterHeader />
         <div className="row footer-main pt-0 pt-md-4 pb-2 pb-lg-4 pt-lg-5">

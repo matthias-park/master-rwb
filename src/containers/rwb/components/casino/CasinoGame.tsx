@@ -30,7 +30,10 @@ const CasinoGame = ({ gameData }: CasinoGameProps) => {
   };
 
   return (
-    <StyledCasinoGame onClick={e => !tablet && showGameInfo(e)}>
+    <StyledCasinoGame
+      className="styled-casino-game"
+      onClick={e => !tablet && showGameInfo(e)}
+    >
       <div className="img-wrp">
         <LazyLoad
           height={'100%'}

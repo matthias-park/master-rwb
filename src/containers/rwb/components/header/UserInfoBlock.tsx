@@ -122,6 +122,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
             'menu-dropdown',
             !window.__config__.xtremepush && 'ml-auto',
             dropdownClasses,
+            'styled-header-user-menu',
           )}
           show={showDropdown}
           onToggle={isOpen => showUserMenu(isOpen)}

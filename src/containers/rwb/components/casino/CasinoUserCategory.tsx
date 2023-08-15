@@ -35,7 +35,7 @@ const CasinoUserCategory = () => {
   }, [favouriteGames.length, recentGames.length]);
 
   return (
-    <StyledCasinoCategory>
+    <StyledCasinoCategory className="styled-casino-category">
       <div className="title-wrp">
         {isFavouriteCategory && (
           <>

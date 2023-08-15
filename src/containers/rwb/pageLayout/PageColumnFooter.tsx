@@ -16,7 +16,7 @@ const PageColumnFooter = () => {
   }
 
   return (
-    <StyledColumnFooter>
+    <StyledColumnFooter className="styled-column-footer">
       <div className="footer-item footer-sub">
         <div className="footer-sub__section">
           {t('time_spent')}

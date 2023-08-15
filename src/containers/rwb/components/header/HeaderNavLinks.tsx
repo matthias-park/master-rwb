@@ -88,6 +88,7 @@ export const HeaderNavClassicLink = ({
   if (disableDropdown && !!path) {
     return (
       <StyledHeaderNavItemLink
+        className="styled-header-nav-item-link"
         onClick={() => {
           setNavExpanded(false);
           backdrop.hide();

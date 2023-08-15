@@ -335,6 +335,7 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
     if (customHtml.iframe)
       return (
         <StyledIframe
+          className="styled-iframe"
           title="Payment"
           allowTransparency
           onLoad={() => {

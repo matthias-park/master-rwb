@@ -44,7 +44,7 @@ const CasinoGameInfoModal = () => {
       centered={true}
       dialogClassName="mx-650"
     >
-      <StyledCasinoGameInfoModal>
+      <StyledCasinoGameInfoModal className="styled-casino-game-info-modal">
         <i className="icon-close custom-modal__close" onClick={hideModal} />
         <Modal.Body>
           <div className="info-header">

@@ -37,6 +37,7 @@ const GeocomplyAlert = () => {
     }
     return (
       <StyleRetryText
+        className="style-retry-text"
         onClick={() => {
           dispatch(setRetryCount(retryCount + 1));
           trigger?.('manual retry');

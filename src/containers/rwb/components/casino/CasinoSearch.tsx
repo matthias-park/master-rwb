@@ -22,7 +22,7 @@ const CasinoSearch = () => {
   const debouncedChangeHandler = debounce(setSearchQuery, 700);
 
   return (
-    <StyledCasinoSearch>
+    <StyledCasinoSearch className="styled-casino-search">
       <i className={clsx(`icon-search`)} />
       <input placeholder="Search Games" onChange={debouncedChangeHandler} />
       <i

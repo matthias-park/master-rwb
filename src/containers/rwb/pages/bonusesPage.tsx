@@ -97,7 +97,7 @@ const BonusHistoryTable = ({ bonuses }) => {
   };
 
   return (
-    <StyledBonusTable>
+    <StyledBonusTable className="styled-bonus-table">
       <div className="info-container mb-3">
         <div className="info-container__info pt-3">
           <div className="d-flex align-items-center">
@@ -256,7 +256,7 @@ const BonusCard = ({ bonusData, mutateBonuses, isActive }: BonusCardProps) => {
   };
 
   return (
-    <StyledBonusCard>
+    <StyledBonusCard className="styled-bonus-card">
       <div className="bonus-header">
         <span className="bonus-title">{title}</span>
         {canCancel && (
@@ -409,7 +409,7 @@ const BonusCardList = ({
   }, [currentPage]);
 
   return (
-    <StyledBonusCardList className="fade-in">
+    <StyledBonusCardList className="styled-bonus-card-list fade-in">
       <h5 className="title">{title}</h5>
       <div className="list d-flex flex-wrap">
         {searchBar && <BonusSearchInput setSearchValue={setSearchValue} />}
@@ -509,7 +509,7 @@ const BonusesPage = () => {
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
       <h1 className="account-settings__title">{jsxT('bonuses_page_title')}</h1>
 
-      <StyledBonusInputContainer>
+      <StyledBonusInputContainer className="styled-bonus-input-container">
         {apiResponse && (
           <CustomAlert
             show
@@ -522,7 +522,7 @@ const BonusesPage = () => {
         <p className="mb-3">{t('bonus_input_text')}</p>
         <FormProvider {...formMethods}>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <StyledBonusInputWrp>
+            <StyledBonusInputWrp className="styled-bonus-input-wrp">
               <TextInput
                 id="bonusCode"
                 rules={{ required: true }}

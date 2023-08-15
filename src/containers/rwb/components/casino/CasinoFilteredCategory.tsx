@@ -58,7 +58,7 @@ const CasinoFilteredCategory = ({
   }, [data]);
 
   return (
-    <StyledCasinoCategory>
+    <StyledCasinoCategory className="styled-casino-category">
       <div className="title-wrp">
         {title && icon && (
           <i className={clsx(`icon-${Config.name}-${icon}`, 'title-icon')} />

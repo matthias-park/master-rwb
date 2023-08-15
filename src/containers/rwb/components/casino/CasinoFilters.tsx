@@ -278,7 +278,7 @@ const CasinoFilters = () => {
 
   return (
     <>
-      <StyledCasinoFilters>
+      <StyledCasinoFilters className="styled-casino-filters">
         <div className="categories-wrp">
           <ul
             className="categories"
@@ -374,7 +374,9 @@ const CasinoFilters = () => {
           )}
         </div>
       </StyledCasinoFilters>
-      <StyledCasinoFiltersMenu className={clsx(showFilters && 'show')}>
+      <StyledCasinoFiltersMenu
+        className={clsx(showFilters && 'show', 'styled-casino-filters-menu')}
+      >
         <MultiFilterDropdown
           title={t('provider_filter_title')}
           filtersSelected={

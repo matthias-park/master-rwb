@@ -48,7 +48,7 @@ const CasinoCategory = () => {
   }, [data, activeCategory]);
 
   return (
-    <StyledCasinoCategory>
+    <StyledCasinoCategory className="styled-casino-category">
       <div className="title-wrp">
         {activeCategory && (
           <i

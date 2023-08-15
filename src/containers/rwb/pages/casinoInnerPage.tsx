@@ -177,7 +177,7 @@ const CasinoInnerPage = () => {
   };
 
   return (
-    <StyledCasinoInnerPage>
+    <StyledCasinoInnerPage className="styled-casino-inner-page">
       <div className="game">
         <div className="game-nav">
           <span className="game-button" onClick={closeGame}>
