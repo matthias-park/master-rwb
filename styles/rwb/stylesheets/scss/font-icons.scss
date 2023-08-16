@@ -24,6 +24,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-rwb-appleinc:before {
+  content: "\e900";
+}
+.icon-appleinc:before {
+  content: "\e901";
+}
+.icon-rwb-windows8:before {
+  content: "\e902";
+}
+.icon-windows8:before {
+  content: "\e903";
+}
 .icon-android:before {
   content: "\eac0";
 }
@@ -69,12 +81,6 @@
 }
 .icon-cookies:before {
   content: "\e989";
-}
-.icon-rwb-windows8:before {
-  content: "\e935";
-}
-.icon-rwb-appleinc:before {
-  content: "\e936";
 }
 .icon-rwb-youtube:before {
   content: "\e91e";

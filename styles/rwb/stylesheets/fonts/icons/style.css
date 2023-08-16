@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?1p6xf9');
-  src:  url('fonts/icomoon.eot?1p6xf9#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?1p6xf9') format('truetype'),
-    url('fonts/icomoon.woff?1p6xf9') format('woff'),
-    url('fonts/icomoon.svg?1p6xf9#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?8wodly');
+  src:  url('fonts/icomoon.eot?8wodly#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?8wodly') format('truetype'),
+    url('fonts/icomoon.woff?8wodly') format('woff'),
+    url('fonts/icomoon.svg?8wodly#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-rwb-appleinc:before {
+  content: "\e900";
+}
+.icon-appleinc:before {
+  content: "\e901";
+}
+.icon-rwb-windows8:before {
+  content: "\e902";
+}
+.icon-windows8:before {
+  content: "\e903";
+}
+.icon-android:before {
+  content: "\eac0";
+}
 .icon-rwb-youtube:before {
   content: "\e91e";
 }
@@ -193,7 +208,4 @@
 }
 .icon-rwb-recent:before {
   content: "\e98b";
-}
-.icon-android:before {
-  content: "\eac0";
 }

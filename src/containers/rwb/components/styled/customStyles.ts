@@ -1026,12 +1026,8 @@ const customStyles = css`
       &:hover {
         text-decoration: underline;
       }
-      .icon-gnogaz-windows8,
-      .icon-gnogaz-appleinc,
-      .icon-strive-windows8,
-      .icon-strive-appleinc,
-      .icon-desertDiamond-windows8,
-      .icon-desertDiamond-appleinc {
+      .icon-rwb-windows8,
+      .icon-rwb-appleinc {
         margin-right: 0.5rem;
         margin-bottom: 0.3rem;
         font-size: 16px;
