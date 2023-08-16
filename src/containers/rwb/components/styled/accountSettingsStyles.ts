@@ -88,14 +88,10 @@ const accountSettingsStyles = css`
       justify-content: flex-end;
       color: ${props => props.theme.colors.primary.main};
       font-size: 22px;
-      &.icon-strive-locked_balance,
-      &.icon-desertDiamond-locked_balance,
-      &.icon-gnogaz-locked_balance {
+      &.icon-rwb-locked_balance {
         font-size: 44px;
       }
-      &.icon-strive-playable_balance,
-      &.icon-desertDiamond-playable_balance,
-      &.icon-gnogaz-playable_balance {
+      &.icon-rwb-playable_balance {
         font-size: 20px;
       }
     }
