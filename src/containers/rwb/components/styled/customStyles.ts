@@ -1189,6 +1189,7 @@ const customStyles = css`
       padding-left: 170px;
       border-radius: 0;
       z-index: 999;
+      top: -25px;
       ${mediaBreakpointDown('xl')} {
         margin-left: -${props => props.theme.spacing.bodyPaddingMedium}px !important;
         margin-right: -${props => props.theme.spacing.bodyPaddingMedium}px !important;
@@ -1199,6 +1200,7 @@ const customStyles = css`
       }
       ${mediaBreakpointDown('md')} {
         margin-top: 0 !important;
+        top: 0px !important;
       }
     }
     &.top-spacing-0 {
