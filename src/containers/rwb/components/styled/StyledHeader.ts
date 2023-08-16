@@ -668,7 +668,7 @@ export const StyledRowHeader = styled('header')`
       &:before {
         content: '';
         position: absolute;
-        bottom: -37px;
+        bottom: -33px;
         border-bottom: 3px solid transparent;
         width: 100%;
         transition: border-bottom-color 0.3s;
