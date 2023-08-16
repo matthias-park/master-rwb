@@ -500,7 +500,7 @@ const customStyles = css`
     bottom: 0;
     z-index: 9999999;
     background-color: ${props => props.theme.colors.brand.light};
-    color: ${props => props.theme.colors.gray.custom_200};
+    color: ${props => props.theme.colors.brand.text};
     padding: 20px 115px 14px 115px;
     box-shadow: 0 0px 12px ${props => rgba(props.theme.colors.white.main, 0.2)};
     ${mediaBreakpointDown('xl')} {
@@ -530,7 +530,8 @@ const customStyles = css`
         font-size: 14px;
         line-height: 1.4;
         a {
-          color: ${props => props.theme.colors.gray.custom_200};
+          color: ${props =>
+            props.theme.translationLink && props.theme.translationLink.color};
           text-decoration: underline;
         }
       }
