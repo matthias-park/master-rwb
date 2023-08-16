@@ -7,7 +7,6 @@ import { useI18n } from '../../../../hooks/useI18n';
 import {
   franchiseDateFormat,
   VALIDATIONS,
-  Franchise,
   usaOnlyBrand,
 } from '../../../../constants';
 import SelectInput from '../../../../components/customFormInputs/SelectInput';
@@ -381,7 +380,7 @@ const FormFields = ({
                           !formDisabled && {
                             required:
                               !isDepositLossBetLimits &&
-                              !(isSSN && Franchise.desertDiamond) &&
+                              !isSSN &&
                               `${t(field.title)} ${t(
                                 'settings_field_required',
                               )}`,
@@ -389,10 +388,8 @@ const FormFields = ({
                               if (value) {
                                 if (isNewPassword)
                                   return (
-                                    VALIDATIONS.password(
-                                      value,
-                                      Franchise.desertDiamond ? 4 : 3,
-                                    ) || t('register_password_weak')
+                                    VALIDATIONS.password(value, 3) ||
+                                    t('register_password_weak')
                                   );
                                 if (field.id === 'phone_number')
                                   return (

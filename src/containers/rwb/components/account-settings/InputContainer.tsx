@@ -5,7 +5,6 @@ import LoadingButton from '../../../../components/LoadingButton';
 import { useForm, FormProvider } from 'react-hook-form';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import { useI18n } from '../../../../hooks/useI18n';
-import { Franchise } from '../../../../constants';
 import NumberFormat from 'react-number-format';
 interface Props {
   title: string;
@@ -100,15 +99,7 @@ const InputContainer = ({
       </p>
       <FormProvider {...formMethods}>
         <Form.Group className="d-flex flex-column w-100">
-          <div
-            className={clsx(
-              (Franchise.desertDiamond ||
-                Franchise.gnogaz ||
-                Franchise.gnogon) &&
-                'order-2',
-              'quick-amounts',
-            )}
-          >
+          <div className={clsx('quick-amounts')}>
             {quickAmounts.map(value => (
               <button
                 key={value}
@@ -160,9 +151,7 @@ const InputContainer = ({
             onEnterPress={() => handleSubmit()}
             clearDefaultValueOnFocus
             defaultValue={defaultValue.toString()}
-            customInputStyle={
-              Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
-            }
+            customInputStyle={false}
           />
         </Form.Group>
         {subText && <small className="mb-2">{subText}</small>}

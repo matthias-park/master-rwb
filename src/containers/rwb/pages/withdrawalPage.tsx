@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import AmountContainer from '../components/account-settings/AmountContainer';
 import InputContainer from '../components/account-settings/InputContainer';
 import { useI18n } from '../../../hooks/useI18n';
 import Spinner from 'react-bootstrap/Spinner';
@@ -23,8 +22,6 @@ import PaymentMethods from '../components/account-settings/PaymentMethods';
 import { useDispatch } from 'react-redux';
 import { addSymbols } from '../../../state/reducers/translations';
 import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
-import BalancesContainer from '../components/account-settings/BalancesContainer';
-import { Franchise } from '../../../constants';
 import clsx from 'clsx';
 
 interface WithdrawalRequestsProps {
@@ -44,22 +41,8 @@ const WithdrawalRequests = ({
     setCancelLoading(null);
   };
   return (
-    <div
-      className={clsx(
-        (Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon) &&
-          'outer-info-block mb-4',
-        'd-flex flex-column',
-      )}
-    >
-      <div
-        className={clsx(
-          !Franchise.desertDiamond &&
-            !Franchise.gnogaz &&
-            !Franchise.gnogon &&
-            'mb-4',
-          'table-container d-flex flex-column',
-        )}
-      >
+    <div className={clsx('d-flex flex-column')}>
+      <div className={clsx('mb-4', 'table-container d-flex flex-column')}>
         <Table>
           <thead>
             <tr>
@@ -257,17 +240,7 @@ const WithdrawalPage = () => {
       )}
       {data && (
         <>
-          {(Franchise.desertDiamond ||
-            Franchise.gnogaz ||
-            Franchise.gnogon) && <BalancesContainer />}
           <h1 className="account-settings__title mb-4">{data.Data.title}</h1>
-          {window.__config__.name === 'strive' && (
-            <AmountContainer
-              title={t('total_playable_amount')}
-              amount={user.balance!}
-              tooltip={t('playable_amount_tooltip')}
-            />
-          )}
           {alertMessage && (
             <CustomAlert show variant={alertMessage.variant}>
               {alertMessage.msg}
@@ -313,13 +286,7 @@ const WithdrawalPage = () => {
               disabled={!selectedBankAccount || !kycValidationOkay}
               currency={user.currency}
               quickAmounts={(() => {
-                if (Franchise.desertDiamond || Franchise.gnogon) {
-                  return [10, 20, 50, 100];
-                } else if (Franchise.gnogaz) {
-                  return [15, 20, 50, 100];
-                } else {
-                  return [];
-                }
+                return [];
               })()}
             />
           </div>

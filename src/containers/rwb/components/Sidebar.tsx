@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { useI18n } from '../../../hooks/useI18n';
 import Link from '../../../components/Link';
 import Accordion from 'react-bootstrap/Accordion';
-import { Franchise } from '../../../constants';
 
 interface Props {
   links: {
@@ -86,11 +85,6 @@ const Sidebar = ({ links }: Props) => {
                             className={clsx('sidebar-list__sub-item-link')}
                           >
                             <div className="d-flex align-items-center">
-                              {(Franchise.desertDiamond ||
-                                Franchise.gnogaz ||
-                                Franchise.gnogon) && (
-                                <i className="sidebar-list__item-title-icon icon-tooltip invisible mr-3"></i>
-                              )}
                               <div>{t(childLink.name)}</div>
                             </div>
                           </Link>

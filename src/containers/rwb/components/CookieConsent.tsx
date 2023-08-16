@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ComponentName, Franchise } from '../../../constants';
+import { ComponentName } from '../../../constants';
 import { useI18n } from '../../../hooks/useI18n';
 import { useModal } from '../../../hooks/useModal';
 import Button from 'react-bootstrap/Button';
@@ -38,11 +38,9 @@ const CookieConsent = () => {
     });
   };
 
-  useEffect(() => {
-    Franchise.gnogaz && handleAccept();
-  }, [cookies]);
+  useEffect(() => {}, [cookies]);
 
-  if (Franchise.gnogaz || cookies.accepted) return null;
+  if (cookies.accepted) return null;
   return (
     <nav
       className={clsx(

@@ -10,7 +10,6 @@ import Form from 'react-bootstrap/Form';
 import useApi from '../../../../hooks/useApi';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
 import PaymentMethods from '../../components/account-settings/PaymentMethods';
-import { Franchise } from '../../../../constants';
 import NumberFormat from 'react-number-format';
 import { postApi } from '../../../../utils/apiUtils';
 import PaymentAccountList from './PaymentAccount';
@@ -30,9 +29,7 @@ interface Props {
   className?: string;
 }
 
-const QUICK_AMOUNTS = Franchise.desertDiamond
-  ? [10, 25, 100, 200]
-  : [10, 20, 50, 100];
+const QUICK_AMOUNTS = [10, 20, 50, 100];
 
 const DepositForm = ({
   depositRequest,
@@ -187,11 +184,6 @@ const DepositForm = ({
     (!!bankAccountDataLoading && !!selectedBank?.prefill);
   return (
     <div className={clsx('input-container mb-4', className)}>
-      {(Franchise.strive || Franchise.mothership) && (
-        <div className="input-container__header d-flex align-items-center">
-          <h2 className="ml-3 mb-0">{t('deposit_input_container_title')}</h2>
-        </div>
-      )}
       <p data-testid="title" className="input-container__title text-14 mb-2">
         {t('select_amount')}
       </p>
@@ -204,15 +196,7 @@ const DepositForm = ({
       {banksData && (
         <FormProvider {...formMethods}>
           <div className="d-flex flex-column w-100">
-            <div
-              className={clsx(
-                (Franchise.desertDiamond ||
-                  Franchise.gnogaz ||
-                  Franchise.gnogon) &&
-                  'order-2',
-                'w-100 mt-2',
-              )}
-            >
+            <div className={clsx('w-100 mt-2')}>
               <LoadingSpinner
                 show={banksDataLoading}
                 className="d-block mx-auto mb-2 w-100"
@@ -270,15 +254,7 @@ const DepositForm = ({
               )}
             </div>
             <Form.Group className="d-flex flex-column w-100">
-              <div
-                className={clsx(
-                  (Franchise.desertDiamond ||
-                    Franchise.gnogaz ||
-                    Franchise.gnogon) &&
-                    'order-2',
-                  'quick-amounts',
-                )}
-              >
+              <div className={clsx('quick-amounts')}>
                 {QUICK_AMOUNTS.map(value => (
                   <button
                     key={value}
@@ -329,11 +305,7 @@ const DepositForm = ({
                 onEnterPress={() => handleSubmit()}
                 clearDefaultValueOnFocus
                 defaultValue={defaultValue.toString()}
-                customInputStyle={
-                  Franchise.desertDiamond ||
-                  Franchise.gnogaz ||
-                  Franchise.gnogon
-                }
+                customInputStyle={false}
               />
               <small className="my-2">
                 {selectedBank?.min_deposit != null && (
@@ -365,11 +337,7 @@ const DepositForm = ({
           <LoadingButton
             variant="primary"
             disabled={disableDepositButton}
-            className={clsx(
-              Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
-                ? 'mt-3'
-                : 'mx-auto my-2',
-            )}
+            className={clsx('mx-auto my-2')}
             onClick={handleSubmit}
             data-testid="button"
             loading={!!formState.isSubmitting || loading}

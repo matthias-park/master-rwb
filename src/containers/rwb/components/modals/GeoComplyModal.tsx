@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useI18n } from '../../../../hooks/useI18n';
-import { ComponentName, Config, PagesName } from '../../../../constants';
+import { ComponentName, PagesName } from '../../../../constants';
 import GenericModal from './GenericModal';
 import { useModal } from '../../../../hooks/useModal';
 import useGeoComply from '../../../../hooks/useGeoComply';
@@ -11,23 +11,17 @@ import { useConfig } from '../../../../hooks/useConfig';
 import { matchPath } from 'react-router-dom';
 import { isAndroid, isDesktop, isIOS } from 'react-device-detect';
 import Link from '../../../../components/Link';
-import { FranchiseNames } from '../../../../types/FranchiseNames';
-
-const franchiseHasApp = [
-  FranchiseNames.Gnogaz,
-  FranchiseNames.DesertDiamond,
-].includes(Config.name);
 
 const DownloadLinks = ({ errorCode }) => {
   const { t } = useI18n();
-  if (isIOS && franchiseHasApp) {
+  if (isIOS) {
     return (
       <Link to={t('ios_app_link')} className="geocomply-app-link">
         <i className={`icon icon-appleinc`}></i>
         {t('geocomply_ios_download')}
       </Link>
     );
-  } else if (isAndroid && franchiseHasApp) {
+  } else if (isAndroid) {
     return (
       <Link to={t('android_app_link')} className="geocomply-app-link">
         <i className={`icon icon-android`}></i>
@@ -113,16 +107,10 @@ const GeoComplyModal = () => {
       className="pb-5"
     >
       <h2 className="mb-2 modal-title">
-        {t(
-          isDesktop || !franchiseHasApp
-            ? 'geo_comply_modal_title'
-            : 'geo_comply_app_title',
-        )}
+        {t(isDesktop ? 'geo_comply_modal_title' : 'geo_comply_app_title')}
       </h2>
       <p className="mb-3">
-        {isDesktop || !franchiseHasApp
-          ? errorMessage
-          : jsxT('geo_comply_app_text')}
+        {isDesktop ? errorMessage : jsxT('geo_comply_app_text')}
       </p>
       <DownloadLinks errorCode={errorCode} />
     </GenericModal>

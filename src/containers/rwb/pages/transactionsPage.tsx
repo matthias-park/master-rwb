@@ -12,7 +12,6 @@ import useApi from '../../../hooks/useApi';
 import useLocalStorage from '../../../hooks/useLocalStorage';
 import BalancesContainer from '../components/account-settings/BalancesContainer';
 import TablePagination from '../components/account-settings/TablePagination';
-import { Franchise } from '../../../constants';
 import NumberFormat from 'react-number-format';
 import DateFilter from '../components/account-settings/DateFilter';
 import { getApi } from '../../../utils/apiUtils';
@@ -98,7 +97,7 @@ const TransactionOverviewTable = () => {
 
 const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
   const { user } = useAuth();
-  const { t, jsxT } = useI18n();
+  const { t } = useI18n();
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -122,7 +121,7 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
               <tr>
                 <th>{t('_date')}</th>
                 <th>{t('action')}</th>
-                {!Franchise.gnogaz && <th>{t('account')}</th>}
+                <th>{t('account')}</th>
                 <th>{t('amount')}</th>
               </tr>
             </thead>
@@ -138,12 +137,10 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
                       <strong className="heading-sm">{t('action')}</strong>
                       {t(transaction.title)}
                     </td>
-                    {!Franchise.gnogaz && (
-                      <td>
-                        <strong className="heading-sm">{t('account')}</strong>
-                        {transaction.account_number || '-'}
-                      </td>
-                    )}
+                    <td>
+                      <strong className="heading-sm">{t('account')}</strong>
+                      {transaction.account_number || '-'}
+                    </td>
                     <td>
                       <strong className="heading-sm">{t('amount')}</strong>
                       <span className={clsx(transaction.in && 'text-success')}>
@@ -170,11 +167,6 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />
-          {window.__config__.name === 'strive' && (
-            <div className="table-container__info">
-              {data && jsxT(data.time_limitation_notice)}
-            </div>
-          )}
         </div>
       ) : (
         <h2 className="mt-3 mb-5 text-center">{t('transactions_no_data')}</h2>
@@ -223,13 +215,7 @@ const TransactionsPage = () => {
         {t('transactions_page_title')}
       </h1>
       <TransactionOverviewTable />
-      <div
-        className={clsx(
-          Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon
-            ? 'outer-info-block p-4 mb-4'
-            : 'd-contents',
-        )}
-      >
+      <div className={clsx('d-contents')}>
         <DateFilter
           dateTo={dateTo}
           dateFrom={dateFrom}

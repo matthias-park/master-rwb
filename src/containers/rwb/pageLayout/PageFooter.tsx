@@ -55,8 +55,8 @@ const FooterHeader = () => {
           className="restrictions-block__img"
           alt=""
           src="/assets/images/restrictions/21-label.webp"
-          width={window.__config__.name === 'strive' ? '40' : '38'}
-          height={window.__config__.name === 'strive' ? '37' : '38'}
+          width={'38'}
+          height={'38'}
         />
         <span className="restrictions-block__text text-14">
           {t('minimum_age_disclaimer')}

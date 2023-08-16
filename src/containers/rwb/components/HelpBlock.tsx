@@ -3,7 +3,6 @@ import Link from '../../../components/Link';
 import { PagesName } from '../../../constants';
 import { useRoutePath } from '../../../hooks';
 import { useI18n } from '../../../hooks/useI18n';
-import { Franchise } from '../../../constants';
 
 const HelpBlock = ({
   title,
@@ -18,7 +17,6 @@ const HelpBlock = ({
   const faqPagePath = useRoutePath(PagesName.FaqPage);
   const contactUsPagePath = useRoutePath(PagesName.ContactUsPage);
 
-  if (Franchise.desertDiamond || Franchise.gnogaz) return null;
   return (
     <div className={`help-block ${className}`}>
       {title && <p className="help-block__title">{t(title)}</p>}

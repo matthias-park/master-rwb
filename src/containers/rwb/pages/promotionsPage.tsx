@@ -12,12 +12,7 @@ import { makeCollapsible } from '../../../utils/uiUtils';
 import clsx from 'clsx';
 import RedirectNotFound from '../../../components/RedirectNotFound';
 import { useRoutePath } from '../../../hooks';
-import {
-  PagesName,
-  Franchise,
-  ComponentName,
-  Config,
-} from '../../../constants';
+import { PagesName, ComponentName, Config } from '../../../constants';
 import { filterPromotionsList } from '../../../utils';
 import { Helmet } from 'react-helmet-async';
 import * as Sentry from '@sentry/react';
@@ -132,19 +127,17 @@ const PromoItem = ({ item, variant }: { item: PostItem; variant?: string }) => {
         className="promotion-block__img"
         src={item.image.url || '/assets/images/promo/promo-front.png'}
       />
-      {!(Franchise.gnogaz || Franchise.gnogon) && (
-        <div className="promotion-block__body">
-          {item.title && (
-            <h3 className="promotion-block__body-subtitle">{item.title}</h3>
-          )}
-          <h2 className="promotion-block__body-title">{item.page_title}</h2>
-          {item.button_text && (
-            <button className="promo-button promotion-block__body-button">
-              {item.button_text}
-            </button>
-          )}
-        </div>
-      )}
+      <div className="promotion-block__body">
+        {item.title && (
+          <h3 className="promotion-block__body-subtitle">{item.title}</h3>
+        )}
+        <h2 className="promotion-block__body-title">{item.page_title}</h2>
+        {item.button_text && (
+          <button className="promo-button promotion-block__body-button">
+            {item.button_text}
+          </button>
+        )}
+      </div>
     </PromoLinkEl>
   );
 };
@@ -390,24 +383,20 @@ const PromotionPage = ({ slug }: { slug: string }) => {
               onError={() => setPromoImageLoaded(true)}
               src={bannerImg || fallbackBannerImg}
             ></img>
-            {!(Franchise.gnogaz || Franchise.gnogon) && (
-              <div className="promo-bg-text">
-                {promoTitle && (
-                  <h3 className="promo-bg-text__subtitle">{promoTitle}</h3>
-                )}
-                <h2 className="promo-bg-text__title">
-                  {data?.Data?.page_title}
-                </h2>
-                {data?.Data.button_text && data?.Data.inner_page_button_link && (
-                  <Link
-                    to={data?.Data?.inner_page_button_link}
-                    className="promo-button promo-bg-text__button d-inline-block"
-                  >
-                    {data?.Data.button_text}
-                  </Link>
-                )}
-              </div>
-            )}
+            <div className="promo-bg-text">
+              {promoTitle && (
+                <h3 className="promo-bg-text__subtitle">{promoTitle}</h3>
+              )}
+              <h2 className="promo-bg-text__title">{data?.Data?.page_title}</h2>
+              {data?.Data.button_text && data?.Data.inner_page_button_link && (
+                <Link
+                  to={data?.Data?.inner_page_button_link}
+                  className="promo-button promo-bg-text__button d-inline-block"
+                >
+                  {data?.Data.button_text}
+                </Link>
+              )}
+            </div>
           </div>
           <div className="promotion-inner__body promo-container">
             <p className="promotion-inner__body-short">

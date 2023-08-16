@@ -15,7 +15,6 @@ import { useI18n } from '../../../hooks/useI18n';
 import {
   CustomWindowEvents,
   PagesName,
-  Franchise,
   ComponentName,
 } from '../../../constants';
 import CustomAlert from '../components/CustomAlert';
@@ -323,7 +322,7 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
         </>
       ),
     };
-  } else if ((Franchise.gnogaz || Franchise.desertDiamond) && validatorNotOk) {
+  } else if (validatorNotOk) {
     alertMessage = {
       variant: 'danger',
       msg: t('deposit_page_unverified_message'),
@@ -373,15 +372,6 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
           {jsxT('deposit_page_title')}
         </h1>
       )}
-      {(Franchise.strive || Franchise.mothership) && (
-        <>
-          <p className="mb-4">{jsxT('deposit_page_sub_text')}</p>
-          <div className="play-responsible-block mb-3 px-2">
-            <i className={clsx(`icon-${window.__config__.name}-thumbs`)}></i>
-            {jsxT('play_responsible_block_link')}
-          </div>
-        </>
-      )}
       {!depositForm && (
         <>
           <CustomAlert show={!!alertMessage} variant={alertMessage?.variant}>
@@ -405,7 +395,7 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
             user.validator_status ===
               KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataOnly ||
             depositStatus.depositStatus === DepositStatus.Pending ||
-            ((Franchise.gnogaz || Franchise.desertDiamond) && validatorNotOk)
+            validatorNotOk
           }
           loading={depositLoading && !depositForm}
           setApiError={(message: string | null) =>

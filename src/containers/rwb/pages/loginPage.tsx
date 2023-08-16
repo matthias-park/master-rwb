@@ -7,7 +7,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import LoginForm from '../components/LoginForm';
 import clsx from 'clsx';
 import { useModal } from '../../../hooks/useModal';
-import { ComponentName, Franchise } from '../../../constants';
+import { ComponentName } from '../../../constants';
 
 const LoginPage = () => {
   const { t } = useI18n();
@@ -37,13 +37,7 @@ const LoginPage = () => {
 
   return (
     <main className="page-container">
-      <div
-        className={clsx(
-          'page-inner page-inner--small login',
-          (Franchise.desertDiamond || Franchise.gnogaz || Franchise.gnogon) &&
-            'page-inner--bg',
-        )}
-      >
+      <div className={clsx('page-inner page-inner--small login')}>
         <h1
           className={`page-inner__title mb-${
             showLoginForm && location.state?.protectedRoute ? '3' : '5'
