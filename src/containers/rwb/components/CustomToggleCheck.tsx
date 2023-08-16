@@ -48,6 +48,7 @@ const CustomToggleCheck = React.forwardRef(
               'toggle-check',
               props.checked && 'toggle-check--checked',
               isInvalid && 'is-invalid',
+              props.id === 'disabled' && 'toggle-check--checked--disabled',
             )}
           >
             <input

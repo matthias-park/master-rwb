@@ -265,6 +265,9 @@ const customStyles = css`
           props.theme.toggleCheck.slider.checkedColor ||
           props.theme.colors.white.main};
       }
+      &--disabled {
+        opacity: 0.5;
+      }
     }
     &__unchecked {
       right: 20%;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useI18n } from '../../../../hooks/useI18n';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -33,7 +33,10 @@ const CookiePolicyModal = () => {
   const { pathname } = useLocation();
   const history = useHistory();
   const toggleCookie = (e: React.SyntheticEvent<EventTarget>, id: string) => {
-    setCookieSettings({ ...cookieSettings, [id]: !cookieSettings[id] });
+    setCookieSettings({
+      ...cookieSettings,
+      [id]: !cookieSettings[id],
+    });
   };
   const isChecked = (id: string): boolean => {
     return cookieSettings[id];
@@ -70,7 +73,7 @@ const CookiePolicyModal = () => {
     });
     return disableModal(ComponentName.CookiesModal);
   };
-
+  useEffect(() => {}, [cookieSettings]);
   return (
     <Modal centered show onHide={hideModal}>
       <Modal.Body className="custom-modal">
@@ -86,7 +89,10 @@ const CookiePolicyModal = () => {
                 <div className="cookies-accordion__card">
                   <div className="d-flex align-items-center">
                     {id === 'functional' ? (
-                      <i className="icon-check mx-3"></i>
+                      <CustomToggleCheck
+                        id="disabled"
+                        checked={true}
+                      ></CustomToggleCheck>
                     ) : (
                       <CustomToggleCheck
                         id="checkbox_all"
