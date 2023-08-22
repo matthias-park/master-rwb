@@ -18,7 +18,6 @@ export const StyledCasinoPage = styled.main`
     display: flex;
     align-items: center;
     aspect-ratio: 16 / 3.7;
-    height: 100%;
     margin-top: 0;
   }
 `;

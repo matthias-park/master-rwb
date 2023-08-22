@@ -621,7 +621,7 @@ export const StyledRowHeader = styled('header')`
         : 0}px;
     .header-logo {
       position: absolute;
-      top: calc(50% + ${props => props.theme.header.topOffset || 0}px);
+      top: 45px;
       left: ${props =>
         (props.theme.header.logoPosition === 'left' && '90px') || '50%'};
       transform: translateX(-50%) translateY(-50%);
@@ -635,7 +635,7 @@ export const StyledRowHeader = styled('header')`
       ${mediaBreakpointDown('xs')} {
         position: relative;
         width: 75px;
-        top: -14px;
+        top: 5px;
       }
     }
   }

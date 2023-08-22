@@ -184,7 +184,7 @@ module.exports = {
     borderBottom: 'none',
     boxShadow: '2px 4px 8px rgb(0 0 0 / 10%)',
     bgColor: pallete.white,
-    topOffset: 15,
+    topOffset: 1,
     marginBottom: 25,
     navHeightMobile: 0,
     height: 'unset',

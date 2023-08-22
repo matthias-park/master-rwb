@@ -107,7 +107,7 @@ const PageHeader = () => {
             src={`/assets/images/logo/header-logo.svg`}
           />
           <img
-            style={{ position: 'relative', left: '140px', top: '12px' }}
+            style={{ position: 'relative', left: '140px' }}
             alt="responsible-gaming"
             src={`/assets/images/footer/responsible-gaming.png`}
           />
