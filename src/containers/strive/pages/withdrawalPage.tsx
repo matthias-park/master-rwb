@@ -26,7 +26,7 @@ import { useDispatch } from 'react-redux';
 import { addSymbols } from '../../../state/reducers/translations';
 import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 import BalancesContainer from '../components/account-settings/BalancesContainer';
-import { Franchise } from '../../../constants';
+import { ComponentSettings, Franchise } from '../../../constants';
 import clsx from 'clsx';
 
 interface WithdrawalRequestsProps {
@@ -153,6 +153,14 @@ const WithdrawalPage = () => {
     setSelectedBankAccount,
   ] = useState<BankAccount | null>(null);
   const isDataLoading = !data && !error;
+  const userBalance = ComponentSettings?.useBalancesEndpoint
+    ? user.balances?.playable_balance
+    : user.balance;
+
+  useEffect(() => {
+    mutate();
+  }, [userBalance]);
+
   useEffect(() => {
     if (data?.Data.translations) {
       dispatch(
