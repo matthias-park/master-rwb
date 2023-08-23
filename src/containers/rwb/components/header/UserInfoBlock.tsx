@@ -133,7 +133,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 <Button
                   as={Link}
                   to={depositRoute}
-                  variant="secondary"
+                  variant="primary"
                   className="pr-2 pl-3"
                 >
                   {userBalance != null ? (
@@ -144,6 +144,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                       prefix={user.currency}
                       decimalScale={2}
                       fixedDecimalScale={true}
+                      className="font-italic font-weight-bold"
                     />
                   ) : (
                     <LoadingSpinner
@@ -180,7 +181,13 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                     </span>
                     <i
                       className={clsx(
-                        `icon-${window.__config__.name}-down1`,
+                        `icon-${window.__config__.name}-account`,
+                        'mx-1',
+                      )}
+                    ></i>
+                    <i
+                      className={clsx(
+                        `icon-${window.__config__.name}-down`,
                         'mx-1',
                       )}
                     ></i>
@@ -221,7 +228,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                       <Link
                         to={depositRoute}
                         className={clsx(
-                          'btn btn-secondary btn-lg text-16 font-italic btn-block',
+                          'btn btn-primary btn-lg text-16 font-italic btn-block',
                         )}
                       >
                         {t('deposit_link')}

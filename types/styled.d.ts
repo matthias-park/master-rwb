@@ -118,6 +118,11 @@ declare module 'styled-components' {
           bgColor?: string;
           borderColor?: string;
         };
+        active?: {
+          bgColor?: string;
+          borderColor?: string;
+          color?: string;
+        };
       };
       secondary?: {
         bgColor?: string;
@@ -127,6 +132,11 @@ declare module 'styled-components' {
           color?: string;
           bgColor?: string;
           borderColor?: string;
+        };
+        active?: {
+          bgColor?: string;
+          borderColor?: string;
+          color?: string;
         };
       };
       outlineLight?: {

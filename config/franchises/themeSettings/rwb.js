@@ -2,6 +2,7 @@ const pallete = {
   blue: '#596E95',
   darkBlue: '#00205C',
   red: '#D7182A',
+  burgundy: '#A92331',
   offWhite: '#EFF1F5',
   white: '#FFF',
   gray: '#CCD2DE',
@@ -16,21 +17,25 @@ module.exports = {
     color: '#1B2C5B',
     transform: 'uppercase',
     primary: {
-      color: '#00205C',
+      color: pallete.white,
       bgColor: pallete.red,
       hover: {
-        bgColor: pallete.pink,
-        borderColor: pallete.pink,
+        bgColor: pallete.red,
+        borderColor: pallete.red,
+      },
+      active: {
+        bgColor: pallete.burgundy,
+        borderColor: pallete.burgundy,
+        color: pallete.white,
       },
     },
     secondary: {
-      bgColor: pallete.red,
-      bgHoverColor: pallete.gray,
-      color: pallete.white,
-      hover: {
-        bgColor: pallete.lightGray,
-        borderColor: pallete.lightGray,
-        color: pallete.darkBlue,
+      bgColor: pallete.gray,
+      color: pallete.darkBlue,
+      active: {
+        bgColor: pallete.blue,
+        borderColor: pallete.blue,
+        color: pallete.white,
       },
     },
     paddingY: 10,
@@ -63,7 +68,7 @@ module.exports = {
     placeholderColor: pallete.blue,
     disabled: {
       backgroundColor: '#D1D5DB',
-      color: '#909090',
+      color: '#9CA3AF',
     },
     invalid: {
       backgroundColor: pallete.offWhite,

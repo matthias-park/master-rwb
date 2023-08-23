@@ -19,9 +19,12 @@ const buttonStyles = css`
       display: inline-flex;
       margin-right: 4px;
       vertical-align: top;
+      font-weight: 400;
+      font-size: 14px;
+      font-style: normal;
     }
     i {
-      font-size: 26px;
+      font-size: 24px;
       line-height: 14px;
       margin-right: 6px;
     }
@@ -70,29 +73,40 @@ const buttonStyles = css`
     &:active,
     &:focus {
       background-color: ${props =>
-        props.theme.buttons?.primary?.bgColor} !important;
-      color: ${props => props.theme.buttons?.primary?.color} !important;
+        props.theme.buttons?.primary?.active?.bgColor} !important;
+      color: ${props => props.theme.buttons?.primary?.active?.color} !important;
     }
-    &:hover {
-      background-color: ${props =>
-        props.theme.buttons.primary?.hover?.bgColor} !important;
-      border-color: ${props =>
-        props.theme.buttons.primary?.hover?.borderColor} !important;
+    i {
+      color: ${props => props.theme.buttons.primaryColor} !important;
     }
   }
   .btn-secondary {
     background-color: ${props => props.theme.buttons.secondary?.bgColor};
     border-color: ${props => props.theme.buttons.secondary?.bgColor};
     color: ${props => props.theme.buttons.secondary?.color};
+    &:hover {
+      background-color: ${props =>
+        props.theme.buttons.secondary?.bgColor} !important;
+      border-color: ${props =>
+        props.theme.buttons.secondary?.bgColor} !important;
+      color: ${props => props.theme.buttons.secondary?.color} !important;
+    }
     &.active,
-    &:hover,
     &:focus,
     &:active {
-      color: ${props => props.theme.buttons.secondary?.hover?.color} !important;
+      color: ${props =>
+        props.theme.buttons.secondary?.active?.color} !important;
       background-color: ${props =>
-        props.theme.buttons.secondary?.hover?.bgColor} !important;
+        props.theme.buttons.secondary?.active?.bgColor} !important;
       border-color: ${props =>
-        props.theme.buttons.secondary?.hover?.borderColor} !important;
+        props.theme.buttons.secondary?.active?.borderColor} !important;
+    }
+    icon-rwb-down {
+      color: #fff !important;
+    }
+    icon-rwb-account {
+      color: ${props =>
+        props.theme.buttons.secondary?.active?.bgColor} !important;
     }
   }
   .btn-outline-danger {
