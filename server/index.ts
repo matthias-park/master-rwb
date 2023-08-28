@@ -110,6 +110,7 @@ app.post('/api/set-locale', async (req, res) => {
     domain: req.hostname,
     expires,
     httpOnly: true,
+    secure: true,
   });
   return res.status(200).json({ success: true });
 });

@@ -42,6 +42,7 @@ const localeDetect = async (
       domain: req.hostname,
       expires,
       httpOnly: true,
+      secure: true,
     });
   }
   if (!localeUrlMatch && req.locale && !/^\/api/.test(req.path)) {
