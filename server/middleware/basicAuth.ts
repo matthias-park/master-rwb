@@ -5,16 +5,7 @@ import { getRailsConstants, isReqResourceFile } from '../utils';
 import { matchPath } from 'react-router-dom';
 
 const basicAuth = async (req: Request, res: Response, next: NextFunction) => {
-  if (
-    req.franchise.domains.some(domain =>
-      req
-        .header('referer')
-        ?.includes(
-          `${domain.hostname}/service-worker.js?name=${req.franchise.name}`,
-        ),
-    )
-  )
-    return next();
+  if (req.header('Service-Worker-Request') === 'true') return next();
   if (
     BASIC_AUTH &&
     BASIC_AUTH?.mobileViewExcludedPages &&

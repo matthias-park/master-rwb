@@ -1,23 +1,18 @@
+const franchiseEnvName = `next-web-${process.env.NODE_ENV}-${process.env.NODE_APP_INSTANCE}`;
+const path = process.env.NODE_PATH;
+
 module.exports = {
   apps: [
     {
-      name: 'next-web-stage',
+      name: franchiseEnvName,
       script: 'build/server/index.js',
-      cwd: '/home/tonybet/next-web/current',
-      pid_file: '/home/tonybet/next-web/current/pids/web.pid',
+      cwd: `${path}/current`,
+      pid_file: `${path}/pids/web.pid`,
       out_file: '/dev/null',
       error_file: '/dev/null',
       env_stage: {
         NODE_ENV: 'stage',
       },
-    },
-    {
-      name: 'next-web-test',
-      script: 'build/server/index.js',
-      cwd: '/home/tonybet/next-web-test/current',
-      pid_file: '/home/tonybet/next-web-test/current/pids/web.pid',
-      out_file: '/dev/null',
-      error_file: '/dev/null',
       env_testing: {
         NODE_ENV: 'testing',
       },
@@ -33,20 +28,6 @@ module.exports = {
       error_file: '/dev/null',
       env_production: {
         NODE_ENV: 'production',
-      },
-    },
-    {
-      name: 'next-web-fork-deploy',
-      script: 'build/server/index.js',
-      cwd: '/home/deploy/next-web/current',
-      pid_file: '/home/deploy/next-web/current/pids/web.pid',
-      out_file: '/dev/null',
-      error_file: '/dev/null',
-      env_production: {
-        NODE_ENV: 'production',
-      },
-      env_testing: {
-        NODE_ENV: 'testing',
       },
     },
   ],
