@@ -105,7 +105,7 @@ export const blocks = (t: any, setValidation: any, validateRepeat: any) => {
             required: false,
             validate: value => {
               if (!value) return true;
-              return VALIDATIONS.name(value) || t('field_only_letters')
+              return VALIDATIONS.name(value) || t('field_only_letters');
             },
           },
           {
@@ -138,14 +138,14 @@ export const blocks = (t: any, setValidation: any, validateRepeat: any) => {
             id: 'social_security_number',
             type: 'text',
             required: true,
-            validate: value =>
-              (!!value && value.length === 4 && !isNaN(parseInt(value))) ||
-              t('social_security_invalid'),
             inputFormatting: {
               format: '####',
-              mask: '_',
-              allowEmptyFormatting: true,
+              mask: '####'.replace(/[^1-9]/g, '').split(''),
+              useFormatted: false,
             },
+            validate: value =>
+              VALIDATIONS.exactLengh({ value: value, exactLength: 4 }) ||
+              t('social_security_invalid'),
           },
           {
             id: 'phone_number',
@@ -229,7 +229,7 @@ export const blocks = (t: any, setValidation: any, validateRepeat: any) => {
                   VALIDATIONS.usa_post_code(value) || t('post_code_invalid'),
                 type: 'text',
               },
-            ]
+            ],
           },
           {
             id: 'newsletter',

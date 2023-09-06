@@ -106,7 +106,7 @@ export const UncontrolledTextInput = React.forwardRef(
             getInputRef={ref}
             ref={ref}
             type={showPassword ? 'text' : props.type}
-            placeholder={props.title}
+            placeholder={''} // the placeholder being empty is mandatory for it to shrink as expected
             autoComplete={Franchise.strive ? 'off' : props.autoComplete}
             bsPrefix={
               props.customInputStyle && props.className ? 'custom-input' : ''
@@ -116,9 +116,9 @@ export const UncontrolledTextInput = React.forwardRef(
             }
             autoFocus={false}
           />
-          {/* <label htmlFor={props.id} className="text-14">
+          <label htmlFor={props.id} className="text-14">
             {props.title}
-          </label> */}
+          </label>
           <div data-testid="icons" className="form-group__icons">
             <LoadingSpinner
               small

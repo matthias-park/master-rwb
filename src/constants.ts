@@ -486,6 +486,15 @@ export const REGEX_EXPRESSION = {
 export const VALIDATIONS = {
   usa_post_code: value => REGEX_EXPRESSION.USA_POST_CODE.test(value),
   city: value => REGEX_EXPRESSION.CITY.test(value.trim()),
+  exactLengh: ({
+    value,
+    exactLength,
+  }: {
+    value: string;
+    exactLength: number;
+  }) => {
+    return value.trim().length === exactLength;
+  },
   lengthLimitation: (value, min, max) =>
     value.length > min && value.length < max,
   name: (value: string = '') =>
