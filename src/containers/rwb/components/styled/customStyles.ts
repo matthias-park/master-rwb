@@ -790,8 +790,21 @@ const customStyles = css`
         max-width: 450px;
       }
     }
-    ${mediaBreakpointDown('md')} {
+    @media only screen and (min-width: 1025px) {
+      min-height: 70vh;
+    }
+    @media only screen and (min-width: 769px) and (max-width: 1024px) {
       align-items: unset;
+      min-height: 50vh;
+    }
+    @media only screen and (min-width: 481px) and (max-width: 768px) {
+      min-height: 60vh;
+    }
+    @media only screen and (min-width: 375px) and (max-width: 480px) {
+      min-height: 70vh;
+    }
+    @media only screen and (max-width: 374px) {
+      min-height: 95vh;
     }
     .page-inner {
       width: 70%;
@@ -802,22 +815,42 @@ const customStyles = css`
         props.theme.pageInnerContainer.bgColor ||
         props.theme.colors.white.main};
       color: ${props => props.theme.pageInnerContainer.color || 'unset'};
-      box-shadow: ${props => props.theme.pageInnerContainer.boxShadow};
-      padding: 40px;
       margin: 40px 0;
-      border-radius: 4px;
+      border-radius: 8px;
       &__title {
         font-weight: ${props => props.theme.pageInnerContainer.titleWeight};
       }
       &.login {
+        position: relative;
         .page-inner__title {
           color: ${props => props.theme.login.titleColor};
+          width: 100%;
+          height: 204px;
+          border-radius: 12px;
+          position: relative;
+          z-index: 1;
+          @media only screen and (max-width: 480px) {
+            border-raidus: 0px !important;
+            -webkit-border-radius: 0px !important;
+            -moz-border-radius: 0px !important;
+            top: 0px;
+          }
+          @media only screen and (min-width: 481px) and (max-width: 768px) {
+            top: 30px;
+          }
+          @media only screen and (min-width: 769px) and (max-width: 1024px) {
+            top: 30px;
+          }
+          @media only screen and (min-width: 1025px) {
+            top: 0px;
+          }
         }
       }
       &--small {
         width: 35%;
         min-width: 350px;
         max-width: ${props => props.theme.pageContainer.smallMaxWidth}px;
+        border-radius: 12px;
       }
       &--top {
         align-self: flex-start;
@@ -825,8 +858,9 @@ const customStyles = css`
       &--bg {
         background-image: url(${props => props.theme.login.bgImgTop});
         background-repeat: no-repeat;
-        background-position: 200% -6%;
-        background-size: 75%;
+        min-height: 30vh;
+        width: 100%;
+        background-size: 100%;
       }
       ${mediaBreakpointDown('md')} {
         min-width: unset;
@@ -835,8 +869,9 @@ const customStyles = css`
         align-self: auto;
       }
       ${mediaBreakpointDown('sm')} {
-        padding: 25px;
         margin: 20px;
+        height: 25vh;
+        width: 100%;
       }
       ${mediaBreakpointDown('xs')} {
         margin: 0;

@@ -38,13 +38,11 @@ const LoginPage = () => {
   return (
     <main className="page-container">
       <div className={clsx('page-inner page-inner--small login')}>
-        <h1
-          className={`page-inner__title mb-${
-            showLoginForm && location.state?.protectedRoute ? '3' : '5'
-          }`}
-        >
-          {t('login_page_title')}
-        </h1>
+        <img
+          className="page-inner__title"
+          src="/assets/images/container-bg-img.png"
+          alt="login-bg"
+        />
         {user.loading && (
           <div className="d-flex justify-content-center pt-4 pb-3">
             <Spinner animation="border" className="spinner-custom mx-auto" />

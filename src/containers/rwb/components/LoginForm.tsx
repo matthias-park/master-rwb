@@ -46,6 +46,7 @@ const LoginForm = () => {
   const sendDataToGTM = useGTM();
   const { cookies } = useConfig();
   const { enableModal } = useModal();
+  const contactUsRoute = useRoutePath(PagesName.ContactUsPage, true);
   const forgotPasswordRoute = useRoutePath(PagesName.ForgotPasswordPage);
   const cancelTwoFactorAuth = () => {
     reset();
@@ -92,7 +93,7 @@ const LoginForm = () => {
   return (
     <FormProvider {...formMethods}>
       <Form
-        className="pb-4 mb-4 login-dropdown__menu-form"
+        className="mb-4 login-dropdown__menu-form"
         onSubmit={handleSubmit(onSubmit)}
       >
         <CustomAlert
@@ -177,7 +178,7 @@ const LoginForm = () => {
             !watchAllFields.password ||
             !!formState.errors[loginId]?.message
           }
-          className="btn btn-primary d-block mx-auto mt-4 px-5"
+          className="btn btn-primary d-block mx-auto mt-5 mb-3 px-5"
           type="submit"
           loading={formState.isSubmitting && !getNewPin}
         >
@@ -191,6 +192,28 @@ const LoginForm = () => {
             {t('login_cancel')}
           </Button>
         )}
+
+        <div className="login-dropdown__menu-form__contact-us">
+          <span className="login-dropdown__menu-form__contact-us__body">
+            {t('verification_contact_us_text')}
+          </span>
+          <span
+            className="login-dropdown__menu-form__contact-us__btn"
+            onClick={() => history.push(contactUsRoute)}
+          >
+            {t('verification_contact_us_btn')}
+          </span>
+        </div>
+        <div className="login-dropdown__menu-form__info">
+          <img
+            className="login-dropdown__menu-form__info__img"
+            alt="responsible-gaming"
+            src={`/assets/images/footer/responsible-gaming.png`}
+          />
+          <span className="login-dropdown__menu-form__info__text">
+            {t('verification_info_text')}
+          </span>
+        </div>
       </Form>
     </FormProvider>
   );

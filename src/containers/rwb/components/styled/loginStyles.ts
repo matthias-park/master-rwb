@@ -39,9 +39,14 @@ export const loginStyles = css`
         border-radius: 2px;
       }
       &-form {
+        padding: 36px 40px 10px 40px;
+        border-radius: 12px;
         border-bottom: ${props => props.theme.login.formBorderBottom};
         margin-bottom: ${props =>
           !props.theme.login.formBorderBottom && '0 !important'};
+        position: relative;
+        background-color: #fff;
+        z-index: 2;
         .btn {
           width: ${props => props.theme.login.buttonFullWidth && '100%'};
         }
@@ -50,11 +55,55 @@ export const loginStyles = css`
             font-size: 16px;
           }
         }
+        &__contact-us {
+          font-size: 16px;
+          line-height: 24px;
+          margin-bottom: 12px;
+          text-align: center;
+          &__body {
+            font-weight: 400;
+            margin-right: 8px;
+            color: #596e95;
+          }
+          &__btn {
+            font-weight: 500;
+            color: #d7182a;
+            cursor: pointer;
+          }
+        }
+        &__info {
+          display: flex;
+          &__img {
+            margin-right: 16px;
+            align-self: flext-start;
+          }
+          &__text {
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 16px;
+            text-align: left;
+            color: #596e95;
+          }
+        }
+        @media only screen and (max-width: 480px) {
+          top: -15px;
+        }
+        @media only screen and (min-width: 481px) and (max-width: 768px) {
+          top: -10px;
+        }
+        @media only screen and (min-width: 769px) and (max-width: 1024px) {
+          top: 10px;
+        }
+        @media only screen and (min-width: 1025px) {
+          top: -20px;
+        }
       }
       &-link {
         color: ${props =>
           props.theme.login.linkColor || props.theme.colors.brand.text};
         font-size: ${props => props.theme.login.linkFontSize}px !important;
+        font-weight: 500;
+        line-height: 24px;
         u {
           text-decoration: ${props => props.theme.login.linkDecoration};
         }

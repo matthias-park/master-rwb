@@ -49,7 +49,6 @@ export const registrationStyles = css`
     }
     &:not(.reg-block__small),
     &__small:after {
-      background-image: url(${props => props.theme.registration.bgImg});
       background-size: 75%;
       background-repeat: no-repeat;
     }
