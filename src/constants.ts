@@ -572,6 +572,7 @@ export const CONTENT_PAGES = [
 ];
 export const franchiseDateFormat = Config.dateFormat || 'YYYY-MM-DD';
 export const ComponentSettings = Config.componentSettings;
+export const ThemeSettings = Config.themeSettings;
 
 export enum CustomWindowEvents {
   ResetIdleTimer = 'resetIdleTimer',

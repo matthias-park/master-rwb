@@ -1,13 +1,12 @@
 import { css } from 'styled-components';
 import { mediaBreakpointDown } from './breakpoints';
-import { Config } from '../../../../constants';
 
 export const registrationStyles = css`
   .registration {
     margin: 0 -${props => props.theme.spacing.bodyPadding}px;
     padding: 40px 0;
     min-height: 600px;
-    color: #00205C;
+    color: #00205c;
     ${mediaBreakpointDown('xxlg')} {
       background-size: 100%;
     }
@@ -35,14 +34,18 @@ export const registrationStyles = css`
       props.theme.registration.bgColor || props.theme.colors.white.main};
     box-shadow: ${props => props.theme.registration.boxShadow};
     background-position: 200% -2%;
-    padding: 30px 40px 40px 40px;
     &__small {
       z-index: 1;
     }
     &__header-wrp {
-      .icon${Config.name}-left {
+      .icon-left1 {
         color: ${props => props.theme.registration.carousel?.prevButton?.color};
+        cursor: pointer;
       }
+    }
+    .icon-left1 {
+      color: #d7182a;
+      cursor: pointer;
     }
     &:not(.reg-block__small),
     &__small:after {
@@ -69,6 +72,128 @@ export const registrationStyles = css`
       right: -20px;
       transform: translateX(100%);
     }
+    .pinContainer {
+      width: 400px;
+      height: 48px;
+      gap: 8px;
+      display: flex;
+      justify-content: center;
+      margin: 12px 0px;
+      .pinInput {
+        width: 48px;
+        height: 48px;
+        padding: 0px 12px 0px 12px;
+        border-radius: 8px;
+        gap: 8px;
+        text-align: center;
+        background: #e6e9ef;
+        border: 1px solid #e6e9ef;
+        &:focus {
+          border: 1px solid #00205c;
+        }
+      }
+    }
+    .page-inner {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 24px;
+      font-size: 16px;
+      padding: 40px 40px 12px 40px;
+      &__title {
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 36px;
+        letter-spacing: 0em;
+        color: #00205c;
+        &__icon {
+          font-size: 64px;
+          color: #716f88;
+          margin-bottom: 24px;
+        }
+      }
+      &__sub-title {
+        width: 327px;
+        height: 48px;
+        font-weight: 400;
+        letter-spacing: 0px;
+        text-align: center;
+        color: #596e95;
+        margin-bottom: 12px;
+      }
+      &__resend-text {
+        font-weight: 400;
+        letter-spacing: 0px;
+        color: #596e95;
+        margin-right: 8px;
+      }
+      &__resend-btn {
+        font-weight: 500;
+        color: #d7182a;
+        cursor: pointer;
+      }
+      &__update-phone-text {
+        font-weight: 500;
+        color: #d7182a;
+        margin-bottom: 36px;
+        cursor: pointer;
+      }
+      .btn-verification {
+        width: 400px;
+        height: 48px;
+        padding: 0px 24px 0px 24px;
+        border-radius: 99px;
+        background: #d7182a;
+        margin-bottom: 16px;
+      }
+      &__contact-us {
+        font-size: 16px;
+        line-height: 24px;
+        margin-bottom: 12px;
+        &__body {
+          font-weight: 400;
+          margin-right: 8px;
+          color: #596e95;
+        }
+        &__btn {
+          font-weight: 500;
+          color: #d7182a;
+          cursor: pointer;
+        }
+      }
+      &__info {
+        display: flex;
+        &__img {
+          margin-right: 16px;
+          align-self: flext-start;
+        }
+        &__text {
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 16px;
+          text-align: left;
+          color: #596e95;
+        }
+      }
+      &__phone-update {
+        hdisplay: flex;
+        flex-direction: column;
+        margin: 12px 0px 48px 0px;
+        &__input {
+          width: 400px;
+          border: 1px;
+          mergin-bottom: 36px;
+        }
+        &__text {
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 24px;
+          color: #596e95;
+        }
+      }
+    }
+
     ${mediaBreakpointDown('lg')} {
       transform: none;
       left: 0;
