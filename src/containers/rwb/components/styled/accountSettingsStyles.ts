@@ -410,8 +410,9 @@ const accountSettingsStyles = css`
         top: 50%;
         transform: translateY(-50%);
         right: 0;
-        color: ${props => props.theme.colors.gray[500]};
-        font-size: 34px;
+        color: #596e95;
+        font-size: 24px;
+        padding-right: 8px;
         pointer-events: none;
       }
     }
@@ -431,15 +432,15 @@ const accountSettingsStyles = css`
     &__input-container {
       input {
         height: 36px;
-        max-width: 110px;
+        max-width: 148px;
         border: ${props => props.theme.dateFilter.dateInputBorder || 'none'};
-        border-radius: 4px;
+        border-radius: 8px;
         background-color: ${props => props.theme.dateFilter.dateInputBg};
         color: ${props => props.theme.dateFilter.dateInputColor};
-        font-size: 12px;
+        font-size: 14px;
         padding-top: 3px;
         padding-left: 8px;
-        padding-right: 30px;
+        padding-right: 28px;
         cursor: pointer;
       }
     }
@@ -457,12 +458,14 @@ const accountSettingsStyles = css`
     &__tab {
       border: none;
       background-color: ${props => props.theme.dateFilter.periodBgColor};
-      height: 100%;
+      height: 40px;
       font-size: 12px;
+      line-height: 18px;
+      font-style: italic;
       color: ${props =>
         props.theme.dateFilter.periodColor || 'rgba(0, 0, 0, 0.8)'};
-      font-weight: 500;
-      padding: 0 10px;
+      font-weight: 600;
+      padding: 6px 16px 8px;
       &--w-140 {
         width: 140px;
       }

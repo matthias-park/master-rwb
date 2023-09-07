@@ -111,7 +111,7 @@ const BonusHistoryTable = ({ bonuses }) => {
             dateTo={dateTo}
             dateFrom={dateFrom}
             updateUrl={updateDateValues}
-            className="pt-2"
+            className="p-3"
             withPeriods
           />
           {!filteredData ? (

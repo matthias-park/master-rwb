@@ -220,7 +220,7 @@ const TransactionsPage = () => {
           dateTo={dateTo}
           dateFrom={dateFrom}
           updateUrl={updateUrl}
-          className="pt-2"
+          className="p-3"
           withPeriods
         />
         <TransactionsTable

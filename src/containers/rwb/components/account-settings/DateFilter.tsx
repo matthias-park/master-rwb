@@ -23,7 +23,7 @@ const PeriodFilter = ({ dateTo, dateFrom, updateUrl }) => {
     updateUrl(dayjs().subtract(period, 'day'), dayjs());
 
   return (
-    <div className="account-tabs mb-sm-3">
+    <div className="account-tabs">
       {periods.map(period => {
         return (
           <button
@@ -83,7 +83,7 @@ const DateFilter = ({
 
   return (
     <div className={clsx('date-filter', className)}>
-      <div className="date-filter__picker-wrp mb-sm-3">
+      <div className="date-filter__picker-wrp">
         <DatePicker
           popperPlacement="bottom-start"
           selected={newDateFrom.toDate()}
@@ -103,8 +103,8 @@ const DateFilter = ({
           )}
         ></i>
       </div>
-      <span className="text-gray-400 mx-auto mx-sm-1 mb-sm-3">-</span>
-      <div className="date-filter__picker-wrp mb-sm-3">
+      <span className="text-gray-400 mx-auto mx-sm-1 font-weight-bold">-</span>
+      <div className="date-filter__picker-wrp">
         <DatePicker
           popperPlacement="bottom-start"
           minDate={newDateFrom.toDate()}
@@ -126,7 +126,7 @@ const DateFilter = ({
         ></i>
       </div>
       <Button
-        className="mt-3 mt-sm-0 ml-sm-2 mr-auto mb-sm-3 btn--small-radius"
+        className="mt-3 mt-sm-0 ml-sm-2 mr-auto btn--small-radius"
         variant="primary"
         disabled={disabledSearchBtn}
         onClick={() => {
