@@ -311,10 +311,53 @@ export const promotionsStyles = css`
       ${mediaBreakpointDown('xs')} {
         padding-top: 30px;
       }
+      &-title {
+        font-size: 24px;
+        color: ${props => props.theme.colors.brand.text};
+        margin-bottom: 16px;
+      }
       &-short {
-        font-size: 20px;
-        color: ${props => props.theme.colors.gray[400]};
+        font-size: 14px;
+        color: #1b2c5b;
+        margin-bottom: 53px;
+      }
+      &-caution {
+        font-size: 14px;
+        color: #596e95;
         margin-bottom: 24px;
+      }
+      &-divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        font-size: 16px;
+        color: #1b2c5b;
+        margin-bottom: 53px;
+        &::before,
+        &::after {
+          content: '';
+          flex: 1;
+          border-bottom: 1px solid #ccd2de;
+        }
+
+        &:not(:empty)::before {
+          margin-right: 0.625rem;
+        }
+
+        &:not(:empty)::after {
+          margin-left: 0.625rem;
+        }
+        i {
+          margin-right: 4px;
+          color: #d7182a;
+        }
+      }
+      &-list {
+        list-style-type: decimal;
+        li {
+          color: #1b2c5b;
+          font-size: 14px;
+        }
       }
       img {
         max-width: 100% !important;

@@ -399,6 +399,9 @@ const PromotionPage = ({ slug }: { slug: string }) => {
             </div>
           </div>
           <div className="promotion-inner__body promo-container">
+            <p className="promotion-inner__body-title">
+              {data?.Data?.page_title}
+            </p>
             <p className="promotion-inner__body-short">
               {data?.Data.short_description}
             </p>
@@ -414,6 +417,18 @@ const PromotionPage = ({ slug }: { slug: string }) => {
                 className="promo-inner__claim-btn mt-3"
               />
             )}
+            <div className="promotion-inner__body-divider">
+              <i className="icon-rwb-responsible"></i>
+              Terms and Conditions
+            </div>
+            <ul className="promotion-inner__body-list">
+              <li>{t('terms_and_condition_list1')}</li>
+              <li>{t('terms_and_condition_list2')}</li>
+              <li>{t('terms_and_condition_list3')}</li>
+            </ul>
+            <p className="promotion-inner__body-caution">
+              {t('terms_and_condition_list-caution')}
+            </p>
           </div>
           <PromotionsListBlock currentSlug={data?.Data.slug} />
         </div>
