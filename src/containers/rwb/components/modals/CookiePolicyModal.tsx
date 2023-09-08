@@ -7,6 +7,7 @@ import CustomToggleCheck from '../CustomToggleCheck';
 import {
   ComponentName,
   ComponentSettings,
+  ThemeSettings,
   PagesName,
 } from '../../../../constants';
 import { useModal } from '../../../../hooks/useModal';
@@ -17,9 +18,11 @@ import { Cookies } from '../../../../types/Config';
 import { useDispatch } from 'react-redux';
 import { setCookies } from '../../../../state/reducers/config';
 import { matchPath, useHistory, useLocation } from 'react-router';
+import clsx from 'clsx';
 
 const CookiePolicyModal = () => {
   const { jsxT } = useI18n();
+  const { icons: icon } = ThemeSettings!;
   const { cookies, routes } = useConfig(
     (prev, next) =>
       isEqual(prev.cookies, next.cookies) && isEqual(prev.routes, next.routes),
@@ -77,7 +80,10 @@ const CookiePolicyModal = () => {
   return (
     <Modal centered show onHide={hideModal}>
       <Modal.Body className="custom-modal">
-        <i className="icon-close custom-modal__close" onClick={hideModal}></i>
+        <i
+          className={clsx(icon?.close, 'custom-modal__close')}
+          onClick={hideModal}
+        ></i>
         <h2 className="mb-2">
           {jsxT('cookie_modal_title', { onClick: hideModal })}
         </h2>
@@ -126,11 +132,11 @@ const CookiePolicyModal = () => {
                       </div>
 
                       <i
-                        className={
-                          `${open === index.toString() ? 'open' : ''}` +
-                          ` icon-${window.__config__.name}-down1` +
-                          ' cookies-accordion__icon'
-                        }
+                        className={clsx(
+                          icon?.down,
+                          open === index.toString() && 'open',
+                          'cookies-accordion__icon',
+                        )}
                       ></i>
                     </Accordion.Toggle>
                   </div>

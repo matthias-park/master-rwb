@@ -4,8 +4,8 @@ import { useUIConfig } from '../../../../hooks/useUIConfig';
 import {
   ComponentName,
   PagesName,
-  Config,
   ComponentSettings,
+  ThemeSettings,
 } from '../../../../constants';
 import { useI18n } from '../../../../hooks/useI18n';
 import Link from '../../../../components/Link';
@@ -28,13 +28,13 @@ const LoadableXtremePush = loadable(
 );
 
 const UserMenuLink = ({
-  icon,
+  linkIcon,
   link,
   name,
   setShowDropdown,
   children,
 }: {
-  icon?: string;
+  linkIcon?: string;
   link: string;
   name: string;
   setShowDropdown: (value: boolean) => void;
@@ -51,8 +51,10 @@ const UserMenuLink = ({
             eventKey={name}
           >
             <span className="user-menu__list-item-link">
-              {icon && (
-                <i className={clsx(icon, 'user-menu__list-item-icon mr-3')}></i>
+              {linkIcon && (
+                <i
+                  className={clsx(linkIcon, 'user-menu__list-item-icon mr-3')}
+                ></i>
               )}
               {name}
             </span>
@@ -79,8 +81,10 @@ const UserMenuLink = ({
             onClick={() => setShowDropdown(false)}
             className="user-menu__list-item-link"
           >
-            {icon && (
-              <i className={clsx(icon, 'user-menu__list-item-icon mr-3')}></i>
+            {linkIcon && (
+              <i
+                className={clsx(linkIcon, 'user-menu__list-item-icon mr-3')}
+              ></i>
             )}
             {name}
           </Link>
@@ -98,6 +102,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const { sidebars, header } = useConfig();
   const depositRoute = useRoutePath(PagesName.DepositPage, true);
   const tabletWidth = useDesktopWidth(991);
+  const { icons: icon } = ThemeSettings!;
 
   const showUserMenu = isOpen => {
     setShowDropdown(isOpen);
@@ -154,7 +159,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                       className="mr-1"
                     />
                   )}
-                  <i className={clsx(`icon-${Config.name}-plus`, 'ml-2')}></i>
+                  <i className={clsx(icon?.plus, 'ml-2')}></i>
                 </Button>
                 {!!window.__config__.xtremepush ? (
                   <LoadableXtremePush className="mx-4" />
@@ -179,18 +184,8 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                         <LoadingSpinner show={true} small className="mr-0" />
                       )}
                     </span>
-                    <i
-                      className={clsx(
-                        `icon-${window.__config__.name}-account`,
-                        'mx-1',
-                      )}
-                    ></i>
-                    <i
-                      className={clsx(
-                        `icon-${window.__config__.name}-down`,
-                        'mx-1',
-                      )}
-                    ></i>
+                    <i className={clsx(icon?.account, 'm-1')}></i>
+                    <i className={clsx(icon?.down, 'mx-2 mb-1')}></i>
                   </Dropdown.Toggle>
                 )}
               </>
@@ -199,11 +194,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                 {(user.logged_in || needsBurger) && (
                   <Dropdown.Toggle as="span" className="mobile-user-menu">
                     <i
-                      className={clsx(
-                        `icon-${window.__config__.name}-${
-                          needsBurger ? 'menu' : 'account'
-                        }`,
-                      )}
+                      className={clsx(needsBurger ? icon?.menu : icon?.account)}
                     />
                   </Dropdown.Toggle>
                 )}
@@ -268,7 +259,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                         return (
                           <UserMenuLink
                             key={link.path}
-                            icon={`icon-${Config.name}-${link.icon}`}
+                            linkIcon={link.icon}
                             link={link.path}
                             name={t(link.name)}
                             children={null}
@@ -281,7 +272,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                     sidebars[0].map(link => (
                       <UserMenuLink
                         key={`${link.link}-${link.name}`}
-                        icon={link.icon}
+                        linkIcon={link.icon}
                         link={link.link}
                         name={t(link.name)}
                         children={link.children ? link.children : null}
@@ -302,7 +293,12 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                       className="mr-n2 ml-4"
                     />
                     <div className=" d-flex align-items-center">
-                      <i className="icon-rwb-logout user-menu__list-item-icon mr-3"></i>
+                      <i
+                        className={clsx(
+                          icon?.logout,
+                          'user-menu__list-item-icon mr-3',
+                        )}
+                      ></i>
                       {t('logout')}
                     </div>
                   </div>

@@ -9,7 +9,6 @@ import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import { Game } from '../../../../types/api/Casino';
 import { StyledCasinoCategory } from '../styled/casinoStyles';
 import clsx from 'clsx';
-import { Config } from '../../../../constants';
 
 const CasinoFilteredCategory = ({
   filter,
@@ -18,7 +17,7 @@ const CasinoFilteredCategory = ({
 }: {
   filter: (game: Game) => boolean | undefined;
   title: string;
-  icon: string;
+  icon?: string;
 }) => {
   const { jsxT } = useI18n();
   const {
@@ -60,9 +59,7 @@ const CasinoFilteredCategory = ({
   return (
     <StyledCasinoCategory className="styled-casino-category">
       <div className="title-wrp">
-        {title && icon && (
-          <i className={clsx(`icon-${Config.name}-${icon}`, 'title-icon')} />
-        )}
+        {title && icon && <i className={clsx(icon, 'title-icon')} />}
         <h5 className="title">{title}</h5>
       </div>
       {isDataLoading && (

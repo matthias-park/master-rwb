@@ -74,7 +74,7 @@ export const StyledColumnFooter = styled.div`
       align-items: center;
       padding-left: 35px;
       img {
-        margin-right: 15px;
+        margin: 0 10px;
       }
     }
     ${mediaBreakpointDown('md')} {
@@ -159,7 +159,7 @@ export const StyledColumnFooter = styled.div`
       }
     }
     &__section {
-      color: #596E95;
+      color: #596e95;
       ${mediaBreakpointDown('md')} {
         width: 100%;
         display: flex;
@@ -205,7 +205,7 @@ export const StyledColumnFooter = styled.div`
       a,
       span {
         cursor: pointer;
-        color: #596E95;
+        color: #596e95;
       }
     }
     span:not(:last-of-type) {

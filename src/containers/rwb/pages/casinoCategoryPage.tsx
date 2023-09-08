@@ -5,7 +5,7 @@ import CasinoFilteredCategory from '../components/casino/CasinoFilteredCategory'
 import { useCasinoConfig } from '../../../hooks/useCasinoConfig';
 import { useConfig } from '../../../hooks/useConfig';
 import { COMPONENT_PAGES } from './index';
-import { PagesName } from '../../../constants';
+import { PagesName, ThemeSettings } from '../../../constants';
 import { StyledCasinoPage } from '../components/styled/casinoStyles';
 import Banner from '../components/Banner';
 import CasinoFilters from '../components/casino/CasinoFilters';
@@ -15,6 +15,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useI18n } from '../../../hooks/useI18n';
 
 const CasinoCategoryPage = () => {
+  const { icons: icon } = ThemeSettings!;
   const { t } = useI18n();
   const { activeCategory } = useCasinoConfig();
   const { hardcodedCategoriesBanners } = useConfig();
@@ -51,7 +52,7 @@ const CasinoCategoryPage = () => {
           <CasinoFilteredCategory
             filter={game => game?.features?.includes('new')}
             title={t('new_category')}
-            icon="new"
+            icon={icon?.new as string}
           />
         );
       case 'featured':
@@ -59,7 +60,7 @@ const CasinoCategoryPage = () => {
           <CasinoFilteredCategory
             filter={game => game?.features?.includes('featured')}
             title={t('featured_category')}
-            icon="featured"
+            icon={icon?.featured as string}
           />
         );
       default:

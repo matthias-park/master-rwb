@@ -15,6 +15,8 @@ import { isValid as isDateValid } from 'date-fns';
 import dayjs from 'dayjs';
 import { useAuth } from '../../../hooks/useAuth';
 import { useCaptcha } from '../../../hooks/useGoogleRecaptcha';
+import { ThemeSettings } from '../../../constants';
+import clsx from 'clsx';
 
 const fieldValidations = {
   first_name: (value: string) =>
@@ -160,6 +162,7 @@ const ContactUsForm = ({
 };
 
 const ContactUsPage = () => {
+  const { icons: icon } = ThemeSettings!;
   const { jsxT } = useI18n();
   const { user } = useAuth();
   const { data, error, isValidating } = useApi<JSONFormPage>(
@@ -182,20 +185,19 @@ const ContactUsPage = () => {
       {!!data && (
         <h1 className="account-settings__title">{jsxT(data.title)}</h1>
       )}
-      {/* <p className="account-settings__sub-text">{jsxT('contact_form_text')}</p> */}
       <div className="outer-info-block mb-3">
         <div className="contact_info">
           <div className="row">
             <div className="col-sm text-center align-items-center">
-              <i className="icon-rwb-phone mr-1"></i>
+              <i className={clsx('mr-1', icon?.phone)}></i>
               {jsxT('contact_page_phone')}
             </div>
             <div className="col-sm text-center align-items-center">
-              <i className="icon-rwb-mail mr-1"></i>
+              <i className={clsx('mr-1', icon?.mail)}></i>
               {jsxT('contact_page_email')}
             </div>
             <div className="col-sm text-center align-items-center">
-              <i className="icon-rwb-clock mr-1"></i>
+              <i className={clsx('mr-1', icon?.clock)}></i>
               {jsxT('contact_page_hours')}
             </div>
           </div>

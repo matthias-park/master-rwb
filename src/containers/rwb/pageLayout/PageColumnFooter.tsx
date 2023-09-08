@@ -3,11 +3,12 @@ import { StyledColumnFooter } from '../components/styled/StyledColumnFooter';
 import { useConfig } from '../../../hooks/useConfig';
 import { useI18n } from '../../../hooks/useI18n';
 import Link from '../../../components/Link';
-import { Config } from '../../../constants';
 import SessionTimer from '../../../components/SessionTimer';
+import { ThemeSettings } from '../../../constants';
 import clsx from 'clsx';
 
 const PageColumnFooter = () => {
+  const { icons: icon } = ThemeSettings!;
   const { t, jsxT } = useI18n();
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
 
@@ -21,12 +22,15 @@ const PageColumnFooter = () => {
         <div className="footer-sub__section">
           {t('time_spent')}
           <span className="timer">
-            <i className={`icon-${Config.name}-clock mr-1`} />
+            <i className={clsx('mr-1', icon?.clock)} />
             <SessionTimer />
           </span>
         </div>
         <div className="footer-sub__section">
-          <img alt="21+" src={'/assets/images/footer/21-label.webp'} />
+          <img
+            alt="approved-age"
+            src={'/assets/images/footer/approved-age.svg'}
+          />
           {jsxT('gambling_problem_text')}
         </div>
       </div>

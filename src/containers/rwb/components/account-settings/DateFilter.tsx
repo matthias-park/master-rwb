@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useI18n } from '../../../../hooks/useI18n';
 import clsx from 'clsx';
-import { franchiseDateFormat } from '../../../../constants';
+import { franchiseDateFormat, ThemeSettings } from '../../../../constants';
 
 const periods = [7, 14, 30];
 const PeriodFilter = ({ dateTo, dateFrom, updateUrl }) => {
@@ -81,6 +81,7 @@ const DateFilter = ({
     );
   }, [validDate, dateFrom, newDateFrom, dateTo, newDateTo]);
 
+  const { icons: icon } = ThemeSettings!;
   return (
     <div className={clsx('date-filter', className)}>
       <div className="date-filter__picker-wrp">
@@ -96,12 +97,7 @@ const DateFilter = ({
           maxDate={dateTo.toDate()}
           customInput={<DatepickerInput />}
         />
-        <i
-          className={clsx(
-            `icon-${window.__config__.name}-calendar-m`,
-            'date-filter__picker-wrp-icon',
-          )}
-        ></i>
+        <i className={clsx(icon?.calendar, 'date-filter__picker-wrp-icon')}></i>
       </div>
       <span className="text-gray-400 mx-auto mx-sm-1 font-weight-bold">-</span>
       <div className="date-filter__picker-wrp">
@@ -118,12 +114,7 @@ const DateFilter = ({
           maxDate={dayjs().toDate()}
           customInput={<DatepickerInput />}
         />
-        <i
-          className={clsx(
-            `icon-${window.__config__.name}-calendar-m`,
-            'date-filter__picker-wrp-icon',
-          )}
-        ></i>
+        <i className={clsx(icon?.calendar, 'date-filter__picker-wrp-icon')}></i>
       </div>
       <Button
         className="mt-3 mt-sm-0 ml-sm-2 mr-auto btn--small-radius"

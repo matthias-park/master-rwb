@@ -1,5 +1,7 @@
 import { css } from 'styled-components';
 import { mediaBreakpointDown } from './breakpoints';
+import { ThemeSettings } from '../../../../constants';
+const { icons: icon } = ThemeSettings!;
 
 export const registrationStyles = css`
   .registration {
@@ -38,7 +40,7 @@ export const registrationStyles = css`
       z-index: 1;
     }
     &__header-wrp {
-      .icon-left1 {
+      .${icon?.left} {
         color: ${props => props.theme.registration.carousel?.prevButton?.color};
         cursor: pointer;
       }
@@ -371,7 +373,7 @@ export const registrationStyles = css`
         margin-bottom: 18px;
         &-icon {
           margin-right: 10px;
-          color: ${props => props.theme.colors.white.alt};
+          color: ${props => props.theme.colors.white};
           font-size: 28px;
           height: 20px;
           transform: translateY(-6px);

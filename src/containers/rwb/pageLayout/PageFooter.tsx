@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { iconName } from '../../../constants';
+import { ThemeSettings } from '../../../constants';
 import Dropdown from 'react-bootstrap/Dropdown';
 import useDesktopWidth from '../../../hooks/useDesktopWidth';
 import SessionTimer from '../../../components/SessionTimer';
@@ -35,13 +35,14 @@ import {
 
 const FooterHeader = () => {
   const { t } = useI18n();
+  const { icons: icon } = ThemeSettings!;
   return (
     <div className="footer-pre pt-3 pb-0 pb-md-3">
       <StyledFooterSessionBlock className="styled-footer-session-block mb-2 mb-sm-0">
         <span className="session-block__text text-14">
           {t('time_spent_in_website')}
         </span>
-        <i className={clsx(`icon-${window.__config__.name}-clock`)}></i>
+        <i className={clsx(icon?.clock)}></i>
         <span className="session-block__time text-14">
           <SessionTimer />
         </span>
@@ -112,6 +113,7 @@ const SocialSection = ({
 }) => {
   const { t, jsxT } = useI18n();
   const { ...webSocial } = social || {};
+  const { icons: icon } = ThemeSettings!;
 
   return (
     <>
@@ -129,18 +131,15 @@ const SocialSection = ({
                   return (
                     <Component
                       key={key}
+                      //@ts-ignore
                       to={!externalLink ? value : undefined}
                       href={externalLink ? value : undefined}
                       className="social__icons-link"
                       target={externalLink ? '_blank' : undefined}
                       rel={externalLink ? 'noreferrer' : undefined}
-                      aria-label={iconName[key] || key}
+                      aria-label={(icon?.[key] as string) || key}
                     >
-                      <i
-                        className={`icon-${window.__config__.name}-${
-                          iconName[key] || key
-                        }`}
-                      ></i>
+                      <i className={clsx(icon?.[key] || key)}></i>
                     </Component>
                   );
                 })}

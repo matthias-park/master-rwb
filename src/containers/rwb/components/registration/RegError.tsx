@@ -1,6 +1,7 @@
 import React from 'react';
 import CustomAlert from '../CustomAlert';
 import { useI18n } from '../../../../hooks/useI18n';
+import { ThemeSettings } from '../../../../constants';
 import clsx from 'clsx';
 
 const RegError = ({
@@ -11,6 +12,7 @@ const RegError = ({
   onClose: (msg: string | null) => void;
 }) => {
   const { t, jsxT } = useI18n();
+  const { icons: icon } = ThemeSettings!;
 
   return (
     <>
@@ -18,12 +20,7 @@ const RegError = ({
         className="d-flex align-items-center text-14 text-bold mb-3 cursor-pointer"
         onClick={() => onClose(null)}
       >
-        <i
-          className={clsx(
-            `icon-${window.__config__.name}-left`,
-            'h4 mb-1 ml-n2',
-          )}
-        ></i>
+        <i className={clsx(icon?.left, 'h4 mb-1 ml-n2')}></i>
         <u>
           <b>{t('registration_back')}</b>
         </u>

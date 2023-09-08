@@ -6,10 +6,11 @@ import { useParams, useLocation } from 'react-router-dom';
 import { useI18n } from '../../../../hooks/useI18n';
 import clsx from 'clsx';
 import { useRoutePath } from '../../../../hooks';
-import { PagesName } from '../../../../constants';
+import { PagesName, ThemeSettings } from '../../../../constants';
 
 const CasinoBottomNav = () => {
   const { t } = useI18n();
+  const { icons: icon } = ThemeSettings!;
   const location = useLocation();
   const { user } = useAuth();
   const { casinoType } = useCasinoConfig();
@@ -20,7 +21,7 @@ const CasinoBottomNav = () => {
     <ul className="bottom-nav">
       <Link to={`/${casinoType}`}>
         <li className={clsx('bottom-nav__item', isLobby && 'active')}>
-          <i className="icon-gnogon-home active"></i>
+          <i className={clsx('active', icon?.home)}></i>
           {t('bottom_casino_home')}
         </li>
       </Link>
@@ -33,7 +34,7 @@ const CasinoBottomNav = () => {
                 params.category === 'recent' && 'active',
               )}
             >
-              <i className="icon-gnogon-recent"></i>
+              <i className={clsx(icon?.recent)}></i>
               {t('bottom_casino_recent')}
             </li>
           </Link>
@@ -44,7 +45,7 @@ const CasinoBottomNav = () => {
                 params.category === 'favourite' && 'active',
               )}
             >
-              <i className="icon-gnogon-favourite-off"></i>
+              <i className={clsx(icon?.favorite)}></i>
               {t('bottom_casino_favourites')}
             </li>
           </Link>
@@ -57,7 +58,7 @@ const CasinoBottomNav = () => {
             params.category === 'new' && 'active',
           )}
         >
-          <i className="icon-gnogon-new"></i>
+          <i className={clsx(icon?.new)}></i>
           {t('bottom_casino_new')}
         </li>
       </Link>
@@ -68,7 +69,7 @@ const CasinoBottomNav = () => {
             params.category === 'featured' && 'active',
           )}
         >
-          <i className="icon-gnogon-featured"></i>
+          <i className={clsx(icon?.featured)}></i>
           {t('bottom_casino_featured')}
         </li>
       </Link>

@@ -1,6 +1,8 @@
 import { css } from 'styled-components';
 import { mediaBreakpointDown } from './breakpoints';
 import { rgba } from './mixins';
+import { ThemeSettings } from '../../../../constants';
+const { icons: icon } = ThemeSettings!;
 
 const accountSettingsStyles = css`
   .account-settings {
@@ -88,10 +90,7 @@ const accountSettingsStyles = css`
       justify-content: flex-end;
       color: ${props => props.theme.colors.primary.main};
       font-size: 22px;
-      &.icon-rwb-locked_balance {
-        font-size: 44px;
-      }
-      &.icon-rwb-playable_balance {
+      &.${icon?.playableBalance} {
         font-size: 20px;
       }
     }
@@ -325,7 +324,7 @@ const accountSettingsStyles = css`
     padding: 12px;
     width: 98%;
     text-align: center;
-    .icon-arrow-label {
+    .${icon?.arrowLabel} {
       position: absolute;
       top: -16px;
       right: -18px;
@@ -336,7 +335,7 @@ const accountSettingsStyles = css`
     ${mediaBreakpointDown('xs')} {
       margin-left: auto;
       padding-left: 30px;
-      .icon-arrow-label {
+      .${icon?.arrowLabel} {
         right: unset;
         left: -12px;
         transform: none;
@@ -746,7 +745,7 @@ const accountSettingsStyles = css`
         &-title {
           font-weight: ${props => props.theme.fonts.weight.bold};
           font-size: 12px;
-          color: ${props => props.theme.communicationPrefs.title.color};
+          color: ${props => props.theme.communicationPrefs.title?.color};
           font-style: italic;
         }
         &-text {
@@ -773,7 +772,7 @@ const accountSettingsStyles = css`
           }
           font-weight: ${props => props.theme.fonts.weight.bold};
           font-size: 16px;
-          color: ${props => props.theme.communicationPrefs.colors};
+          color: ${props => props.theme.communicationPrefs.color};
         }
       }
       li:not(:first-of-type) {

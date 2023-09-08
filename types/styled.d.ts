@@ -414,6 +414,7 @@ declare module 'styled-components' {
       boxShadow?: string;
       border?: string;
       borderRadius: number;
+      activeOutline: any;
     };
     settingsPage: {
       titleFontWeight: number;
@@ -518,6 +519,9 @@ declare module 'styled-components' {
     };
     documents: {
       exampleTextColor?: string;
+    };
+    icons?: {
+      [key: string]: string | { [key: string]: string };
     };
   }
 }

@@ -29,6 +29,7 @@ import clsx from 'clsx';
 import loadable from '@loadable/component';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../state';
+import { ThemeSettings } from '../../../constants';
 
 const LoadableGeoComplyAlert = loadable(
   () => import('../components/header/GeoComplyAlert'),
@@ -36,6 +37,7 @@ const LoadableGeoComplyAlert = loadable(
 
 const CasinoInnerPage = () => {
   const { t, jsxT } = useI18n();
+  const { icons: icon } = ThemeSettings!;
   const { user } = useAuth();
   const location: any = useLocation();
   const { slug } = useParams<{ slug?: string }>();
@@ -181,7 +183,7 @@ const CasinoInnerPage = () => {
       <div className="game">
         <div className="game-nav">
           <span className="game-button" onClick={closeGame}>
-            <i className={`icon-left`} />
+            <i className={clsx(icon?.left)} />
           </span>
           {tablet && (
             <div className="title-wrp">
@@ -204,7 +206,7 @@ const CasinoInnerPage = () => {
                   displayType={'text'}
                   prefix={user.currency}
                 />
-                <i className={clsx(`icon-plus`, 'ml-2')}></i>
+                <i className={clsx(icon?.plus, 'ml-2')}></i>
               </Button>
             )}
             {user.logged_in && (
@@ -225,7 +227,7 @@ const CasinoInnerPage = () => {
               </label>
             )}
             <span className="game-button" onClick={fullscreen}>
-              <i className={`icon-full-screen`} />
+              <i className={clsx(icon?.fullScreen)} />
             </span>
           </div>
         </div>

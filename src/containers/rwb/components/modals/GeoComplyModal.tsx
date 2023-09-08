@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useI18n } from '../../../../hooks/useI18n';
-import { ComponentName, PagesName } from '../../../../constants';
+import { ComponentName, PagesName, ThemeSettings } from '../../../../constants';
 import GenericModal from './GenericModal';
 import { useModal } from '../../../../hooks/useModal';
 import useGeoComply from '../../../../hooks/useGeoComply';
@@ -11,20 +11,22 @@ import { useConfig } from '../../../../hooks/useConfig';
 import { matchPath } from 'react-router-dom';
 import { isAndroid, isDesktop, isIOS } from 'react-device-detect';
 import Link from '../../../../components/Link';
+import clsx from 'clsx';
 
 const DownloadLinks = ({ errorCode }) => {
   const { t } = useI18n();
+  const { icons: icon } = ThemeSettings!;
   if (isIOS) {
     return (
       <Link to={t('ios_app_link')} className="geocomply-app-link">
-        <i className={`icon icon-appleinc`}></i>
+        <i className={clsx(icon?.appleLogo, 'icon')}></i>
         {t('geocomply_ios_download')}
       </Link>
     );
   } else if (isAndroid) {
     return (
       <Link to={t('android_app_link')} className="geocomply-app-link">
-        <i className={`icon icon-android`}></i>
+        <i className={clsx('icon', icon?.android)}></i>
         {t('geocomply_android_download')}
       </Link>
     );
@@ -35,11 +37,11 @@ const DownloadLinks = ({ errorCode }) => {
           href={t('geocomply_windows_download_link')}
           className="geocomply-link"
         >
-          <i className={`icon icon-${window.__config__.name}-windows8`}></i>
+          <i className={clsx('icon', icon?.windowsLogo)}></i>
           {t('geocomply_windows_download')}
         </a>
         <a href={t('geocomply_mac_download_link')} className="geocomply-link">
-          <i className={`icon icon-${window.__config__.name}-appleinc`}></i>
+          <i className={clsx('icon', icon?.appleLogo)}></i>
           {t('geocomply_mac_download')}
         </a>
       </div>

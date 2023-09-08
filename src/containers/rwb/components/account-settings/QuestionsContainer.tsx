@@ -1,6 +1,6 @@
 import React from 'react';
 import Accordion from 'react-bootstrap/Accordion';
-import { PagesName } from '../../../../constants';
+import { PagesName, ThemeSettings } from '../../../../constants';
 import { useRoutePath } from '../../../../hooks';
 import { useI18n } from '../../../../hooks/useI18n';
 import Link from '../../../../components/Link';
@@ -15,6 +15,7 @@ interface Props {
 }
 
 const QuestionItem = ({ item, index }) => {
+  const { icons: icon } = ThemeSettings!;
   const { t } = useI18n();
   return (
     <div className="questions-acr__item">
@@ -31,10 +32,7 @@ const QuestionItem = ({ item, index }) => {
         <p className="px-3 py-2 mb-0">{t(item.body)}</p>
       </Accordion.Collapse>
       <i
-        className={clsx(
-          `icon-${window.__config__.name}-down1`,
-          'questions-acr__item-icon events-none',
-        )}
+        className={clsx(icon?.down, 'questions-acr__item-icon events-none')}
       ></i>
     </div>
   );

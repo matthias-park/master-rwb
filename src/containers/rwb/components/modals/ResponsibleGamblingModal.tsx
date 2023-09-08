@@ -4,18 +4,18 @@ import GenericModal from './GenericModal';
 import { useI18n } from '../../../../hooks/useI18n';
 import Lockr from 'lockr';
 import { stringToMiliseconds } from '../../../../utils/index';
-import { ComponentName } from '../../../../constants';
+import { ComponentName, ThemeSettings } from '../../../../constants';
 import { useModal } from '../../../../hooks/useModal';
 import { useAuth } from '../../../../hooks/useAuth';
 import clsx from 'clsx';
 
 const ResponsibleGamblingModal = () => {
+  const { icons: icon } = ThemeSettings!;
   const { user } = useAuth();
   const { jsxT, t } = useI18n();
   const intervalRef = useRef(0);
   const { activeModal, enableModal, disableModal } = useModal();
   const modalActive = activeModal === ComponentName.ResponsibleGamblingModal;
-  console.log(modalActive, activeModal);
   useEffect(() => {
     const setModal = () => {
       enableModal(ComponentName.ResponsibleGamblingModal);
@@ -45,7 +45,7 @@ const ResponsibleGamblingModal = () => {
       className="text-center pb-4"
     >
       <div className="play-responsible-block mb-3 py-3 py-sm-1 pl-2 pr-4 pr-sm-2">
-        <i className={clsx(`icon-${window.__config__.name}-thumbs`)}></i>
+        <i className={clsx(icon?.thumbs)}></i>
         {jsxT('play_responsible_block_link', {
           onClick: hideModal,
         })}
@@ -55,18 +55,6 @@ const ResponsibleGamblingModal = () => {
       <Button onClick={hideModal} variant="primary" className="mx-auto mt-4">
         {t('responsible_gambling_close')}
       </Button>
-      {/* <div className="custom-modal__footer">
-        <div className="custom-modal__footer-bnl mx-auto">
-          <Link onClick={hideModal} to={responsibleGamingPath}>
-            <img
-              alt="bnl-restrictions"
-              height="45"
-              className="mr-2"
-              src={`/assets/images/restrictions/bnl-${locale}.svg`}
-            />
-          </Link>
-        </div>
-      </div> */}
     </GenericModal>
   );
 };

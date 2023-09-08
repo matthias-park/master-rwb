@@ -10,6 +10,7 @@ import { enterKeyPress } from '../../utils/uiUtils';
 import LoadingSpinner from '../LoadingSpinner';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 import NumberFormat from 'react-number-format';
+import { ThemeSettings } from '../../constants';
 
 interface Props {
   id: string;
@@ -87,6 +88,10 @@ export const UncontrolledTextInput = React.forwardRef(
       () => setShowPassword(prevValue => !prevValue),
       [],
     );
+
+    const { icons: icon } = ThemeSettings!;
+    const eyeOn = icon?.eyeOn || `icon-${Config.name}-eye-on`;
+    const eyeOff = icon?.eyeOff || `icon-${Config.name}-eye-off`;
     const tooltipRef = useRef(null);
     useOnClickOutside(tooltipRef, () => setShowTooltip(false));
     return (
@@ -139,7 +144,10 @@ export const UncontrolledTextInput = React.forwardRef(
               >
                 <i
                   ref={tooltipRef}
-                  className="icon-tooltip cursor-pointer"
+                  className={clsx(
+                    icon?.tooltip || 'icon-tooltip',
+                    'cursor-pointer',
+                  )}
                   onClick={() => setShowTooltip(!showTooltip)}
                   style={{ cursor: 'pointer' }}
                 />
@@ -148,19 +156,15 @@ export const UncontrolledTextInput = React.forwardRef(
             {props.toggleVisibility && showEye && (
               <i
                 className={clsx(
-                  `icon${
-                    window.__config__.theme === 'strive'
-                      ? `-${Config.name}`
-                      : ''
-                  }-eye-${showPassword ? 'on' : 'off'}`,
+                  showPassword ? eyeOn : eyeOff,
                   'show-password',
                   showPassword && 'show',
                 )}
                 onClick={togglePasswordVisibility}
               />
             )}
-            <i className="icon-check" />
-            <i className="icon-exclamation" />
+            <i className={clsx(icon?.check || 'icon-check')} />
+            <i className={clsx(icon?.exclamation || 'icon-exclamation')} />
           </div>
         </div>
         {!!props.errorMsg && (

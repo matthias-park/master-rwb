@@ -12,7 +12,12 @@ import { makeCollapsible } from '../../../utils/uiUtils';
 import clsx from 'clsx';
 import RedirectNotFound from '../../../components/RedirectNotFound';
 import { useRoutePath } from '../../../hooks';
-import { PagesName, ComponentName, Config } from '../../../constants';
+import {
+  ThemeSettings,
+  PagesName,
+  ComponentName,
+  Config,
+} from '../../../constants';
 import { filterPromotionsList } from '../../../utils';
 import { Helmet } from 'react-helmet-async';
 import * as Sentry from '@sentry/react';
@@ -310,6 +315,7 @@ const PromotionsListBlock = ({ currentSlug }) => {
 };
 
 const PromotionPage = ({ slug }: { slug: string }) => {
+  const { icons: icon } = ThemeSettings!;
   const { locale } = useConfig((prev, next) => prev.locale === next.locale);
   const { data, error } = useApi<RailsApiResponse<PostItem>>(
     [`/restapi/v1/content/promotion/${slug}?show_for=1`, locale],
@@ -359,7 +365,7 @@ const PromotionPage = ({ slug }: { slug: string }) => {
       />
       <Link to={'/promotions'}>
         <h1 className="account-settings__title d-flex align-items-center mb-3">
-          <i className="icon-desertDiamond-left1 mr-2"></i>
+          <i className={clsx('mr-2', icon?.left)}></i>
           {t('promotions_page_title')}
         </h1>
       </Link>

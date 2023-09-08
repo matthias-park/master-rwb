@@ -11,6 +11,8 @@ import NumberFormat from 'react-number-format';
 import DateFilter from '../components/account-settings/DateFilter';
 import { postApi } from '../../../utils/apiUtils';
 import { camelToSnakeCase } from '../../../utils/reactUtils';
+import { ThemeSettings } from '../../../constants';
+import clsx from 'clsx';
 
 interface TransactionsSummary {
   InitialBalance: number;
@@ -26,6 +28,7 @@ interface TransactionsSummary {
 
 const TransactionsSummaryPage = () => {
   const { user } = useAuth();
+  const { icons: icon } = ThemeSettings!;
   const { t } = useI18n();
   const [dateTo, setDateTo] = useLocalStorage('transactions-date-to', dayjs(), {
     valueAs: value => dayjs(value),
@@ -115,9 +118,7 @@ const TransactionsSummaryPage = () => {
                         />
                       </span>
                     </div>
-                    <i
-                      className={`icon-${window.__config__.name}-${key} balances-list__icon`}
-                    ></i>
+                    <i className={clsx(icon?.[key], 'balances-list__icon')}></i>
                   </li>
                 ))}
           </ul>

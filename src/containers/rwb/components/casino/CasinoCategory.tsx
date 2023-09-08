@@ -9,10 +9,11 @@ import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import { Game } from '../../../../types/api/Casino';
 import { StyledCasinoCategory } from '../styled/casinoStyles';
 import clsx from 'clsx';
-import { Config } from '../../../../constants';
+import { ThemeSettings } from '../../../../constants';
 import { forceCheck } from 'react-lazyload';
 
 const CasinoCategory = () => {
+  const { icons: icon } = ThemeSettings!;
   const { jsxT } = useI18n();
   const {
     casinoType,
@@ -51,12 +52,7 @@ const CasinoCategory = () => {
     <StyledCasinoCategory className="styled-casino-category">
       <div className="title-wrp">
         {activeCategory && (
-          <i
-            className={clsx(
-              `icon-${Config.name}-${activeCategory?.icon}`,
-              'title-icon',
-            )}
-          />
+          <i className={clsx(icon?.[activeCategory?.icon], 'title-icon')} />
         )}
         <h5 className="title">{activeCategory?.name}</h5>
       </div>

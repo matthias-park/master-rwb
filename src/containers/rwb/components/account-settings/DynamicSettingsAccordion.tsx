@@ -9,7 +9,7 @@ import Card from 'react-bootstrap/Card';
 import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import LoadingButton from '../../../../components/LoadingButton';
 import { useI18n } from '../../../../hooks/useI18n';
-import { VALIDATIONS } from '../../../../constants';
+import { VALIDATIONS, ThemeSettings } from '../../../../constants';
 import SelectInput from '../../../../components/customFormInputs/SelectInput';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 interface SettingProps {
@@ -68,6 +68,7 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
     [],
   );
 
+  const { icons: icon } = ThemeSettings!;
   return (
     <Card className="settings-card">
       <Card.Header
@@ -198,10 +199,7 @@ const DynamicSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
         </Card.Body>
       </Accordion.Collapse>
       <i
-        className={clsx(
-          `icon-${window.__config__.name}-down1`,
-          'settings-card__icon',
-        )}
+        className={clsx(icon?.down, 'settings-card__icon')}
         onClick={accordionOnClick}
       />{' '}
     </Card>

@@ -8,7 +8,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { Game } from '../../../../types/api/Casino';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import { StyledGroupSlider } from '../styled/casinoStyles';
-import { Config } from '../../../../constants';
+import { ThemeSettings } from '../../../../constants';
 import { Link } from 'react-router-dom';
 import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
 import SwiperCore, { Navigation } from 'swiper';
@@ -31,6 +31,7 @@ export const CasinoGroupSlider = ({
   className,
   games,
 }: CasinoGroupSliderProps) => {
+  const { icons: icon } = ThemeSettings!;
   const { t } = useI18n();
   const { casinoType } = useCasinoConfig();
   const { data, error } = useApi<RailsApiResponse<Game[]>>(
@@ -66,16 +67,11 @@ export const CasinoGroupSlider = ({
     <StyledGroupSlider className="styled-group-slider">
       {name && (
         <div className="title-wrp">
-          <i
-            className={clsx(
-              `icon-${Config.name}-${category?.icon}`,
-              'title-icon',
-            )}
-          />
+          <i className={clsx(icon?.[category?.icon || ''], 'title-icon')} />
           <h5 className="title">{name}</h5>
           <div className="navigation">
-            <i className={clsx(`icon-left`, `swiper-button-prev-${id}`)} />
-            <i className={clsx(`icon-right`, `swiper-button-next-${id}`)} />
+            <i className={clsx(icon?.left, `mb-2 swiper-button-prev-${id}`)} />
+            <i className={clsx(icon?.right, `mb-2 swiper-button-next-${id}`)} />
           </div>
           <Link
             to={`/${casinoType}/${category?.slug}`}

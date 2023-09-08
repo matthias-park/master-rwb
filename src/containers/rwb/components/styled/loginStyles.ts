@@ -1,5 +1,7 @@
 import { css } from 'styled-components';
 import { mediaBreakpointDown } from './breakpoints';
+import { ThemeSettings } from '../../../../constants';
+const { icons: icon } = ThemeSettings!;
 
 export const loginStyles = css`
   .login-dropdown {
@@ -108,7 +110,7 @@ export const loginStyles = css`
           text-decoration: ${props => props.theme.login.linkDecoration};
         }
       }
-      .icon-${window.__config__.name}-tooltip {
+      .${icon?.tooltip} {
         transform: translateY(-2px);
       }
       ${mediaBreakpointDown('lg')} {

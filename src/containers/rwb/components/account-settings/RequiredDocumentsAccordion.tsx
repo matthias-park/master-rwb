@@ -13,6 +13,7 @@ import { useI18n } from '../../../../hooks/useI18n';
 import LoadingButton from '../../../../components/LoadingButton';
 import TextInput from '../../../../components/customFormInputs/TextInput';
 import FileInput from '../../../../components/customFormInputs/FileInput';
+import { ThemeSettings } from '../../../../constants';
 import clsx from 'clsx';
 
 interface SettingProps {
@@ -24,6 +25,7 @@ const fileIds = ['image_id', 'image_residence', 'image_payment_proof'];
 
 const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
   const { t } = useI18n();
+  const { icons: icon } = ThemeSettings!;
   const currentEventKey = useContext(AccordionContext);
   const accordionOnClick = useAccordionToggle(form.id);
   const formMethods = useForm();
@@ -127,10 +129,7 @@ const RequiredDocumentsAccordion = ({ form, onSubmit }: SettingProps) => {
         </Card.Body>
       </Accordion.Collapse>
       <i
-        className={clsx(
-          `icon-${window.__config__.name}-down1`,
-          'settings-card__icon',
-        )}
+        className={clsx(icon?.down, 'settings-card__icon')}
         onClick={accordionOnClick}
       />
     </Card>

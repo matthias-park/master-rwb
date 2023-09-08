@@ -1,8 +1,9 @@
 import React from 'react';
 import Link from '../../../components/Link';
-import { PagesName } from '../../../constants';
+import { PagesName, ThemeSettings } from '../../../constants';
 import { useRoutePath } from '../../../hooks';
 import { useI18n } from '../../../hooks/useI18n';
+import clsx from 'clsx';
 
 const HelpBlock = ({
   title,
@@ -13,6 +14,7 @@ const HelpBlock = ({
   blocks: string[];
   className?: string;
 }) => {
+  const { icons: icon } = ThemeSettings!;
   const { t, jsxT } = useI18n();
   const faqPagePath = useRoutePath(PagesName.FaqPage);
   const contactUsPagePath = useRoutePath(PagesName.ContactUsPage);
@@ -29,7 +31,7 @@ const HelpBlock = ({
             className="help-block__body-item"
           >
             <span className="help-block__body-item-icon">
-              <i className={`icon-${window.__config__.name}-questions`}></i>
+              <i className={clsx(icon?.questions)}></i>
             </span>
             <div className="help-block__body-item-text">
               <p className="title">{jsxT('help_check_faq')}</p>
@@ -39,7 +41,7 @@ const HelpBlock = ({
         {blocks.includes('phone') && (
           <div className="help-block__body-item">
             <span className="help-block__body-item-icon">
-              <i className={`icon-${window.__config__.name}-phone`}></i>
+              <i className={clsx(icon?.phone)}></i>
             </span>
             <div className="help-block__body-item-text">
               <p className="title">{jsxT('help_call_us_number')}</p>
@@ -63,7 +65,7 @@ const HelpBlock = ({
             className="help-block__body-item"
           >
             <span className="help-block__body-item-icon">
-              <i className={`icon-${window.__config__.name}-mail2`}></i>
+              <i className={clsx(icon?.mail)}></i>
             </span>
             <div className="help-block__body-item-text">
               <p className="title">{jsxT('help_mail_title')}</p>

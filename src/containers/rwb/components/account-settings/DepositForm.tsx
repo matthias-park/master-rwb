@@ -16,6 +16,7 @@ import PaymentAccountList from './PaymentAccount';
 import BankDepositAccount from '../../../../types/api/deposits/account';
 import AvailableBanks from '../../../../types/api/user/AvailableBanks';
 import CheckboxInput from '../../../../components/customFormInputs/CheckboxInput';
+import { ThemeSettings } from '../../../../constants';
 interface Props {
   depositRequest: (
     inputValue: number,
@@ -58,6 +59,7 @@ const DepositForm = ({
     RailsApiResponse<AvailableBanks[]>
   >('/restapi/v1/user/available_banks');
   const banksDataLoading = !banksData && !banksError;
+  const { icons: icon } = ThemeSettings!;
   const { formState, watch, setValue, reset, register, trigger } = formMethods;
   const selectedBankId = watch('bank_id');
   const selectedBankAccountId = watch('AccountId');
@@ -343,7 +345,7 @@ const DepositForm = ({
             loading={!!formState.isSubmitting || loading}
           >
             <>
-              <i className="icon-lock1 text-brand mr-1"></i>
+              <i className={clsx(icon?.lock, 'text-brand mr-1')}></i>
               {t('deposit_btn')}
             </>
           </LoadingButton>

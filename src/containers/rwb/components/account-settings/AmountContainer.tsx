@@ -1,4 +1,5 @@
 import React from 'react';
+import { ThemeSettings } from '../../../../constants';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import clsx from 'clsx';
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const AmountContainer = ({ title, amount, tooltip }: Props) => {
+  const { icons: icon } = ThemeSettings!;
   return (
     <div className="amount-container mb-4">
       <small data-testid="amount-title" className="amount-container__text">
@@ -24,10 +26,7 @@ const AmountContainer = ({ title, amount, tooltip }: Props) => {
         >
           <i
             data-testid="amount-tooltip"
-            className={clsx(
-              `icon-${window.__config__.name}-tooltip`,
-              'amount-container__icon',
-            )}
+            className={clsx(icon?.tooltip, 'amount-container__icon')}
           />
         </OverlayTrigger>
       )}

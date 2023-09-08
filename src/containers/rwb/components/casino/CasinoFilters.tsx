@@ -3,7 +3,7 @@ import { snakeCase } from '../../../../utils/reactUtils';
 import clsx from 'clsx';
 import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
 import { useRoutePath } from '../../../../hooks';
-import { PagesName } from '../../../../constants';
+import { PagesName, ThemeSettings } from '../../../../constants';
 import Button from 'react-bootstrap/Button';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { useI18n } from '../../../../hooks/useI18n';
@@ -12,7 +12,6 @@ import {
   StyledCasinoFilters,
   StyledCasinoFiltersMenu,
 } from '../styled/casinoStyles';
-import { Config } from '../../../../constants';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
 import {
@@ -55,6 +54,7 @@ const FilterDropdown = ({
   activeItemId,
 }: FilterDropdownProps) => {
   const [show, setShow] = useState(false);
+  const { icons: icon } = ThemeSettings!;
 
   const removeFilter = e => {
     if (activeItemId) {
@@ -75,11 +75,7 @@ const FilterDropdown = ({
           {toggleTitle || ''}
           <span className="icon-wrp" onClick={e => removeFilter(e)}>
             <i
-              className={clsx(
-                `icon-${Config.name}-${
-                  !show && activeItemId ? 'plus' : 'down'
-                }`,
-              )}
+              className={clsx(!show && activeItemId ? icon?.plus : icon?.down)}
             />
           </span>
         </Dropdown.Toggle>
@@ -111,6 +107,7 @@ const MultiFilterDropdown = ({
   filtersSelected,
 }: MultiFilterDropdownProps) => {
   const { t } = useI18n();
+  const { icons: icon } = ThemeSettings!;
   const [show, setShow] = useState(false);
   const selectedItems = useMemo(
     () => (items ? items.filter(item => item.isChecked) : []),
@@ -140,7 +137,6 @@ const MultiFilterDropdown = ({
       setShow(isOpen);
     }
   };
-
   return (
     <Dropdown
       show={show}
@@ -156,11 +152,11 @@ const MultiFilterDropdown = ({
         >
           {toggleTitle}
           <span className="icon-wrp">
-            <i className={clsx(`icon-${Config.name}-down`)} />
+            <i className={clsx(icon?.down)} />
           </span>
           {!show && !!filtersSelected && (
             <span className="icon-wrp close-wrp" onClick={e => removeFilter(e)}>
-              <i className={clsx(`icon-${Config.name}-plus`)} />
+              <i className={clsx(icon?.down)} />
             </span>
           )}
         </Dropdown.Toggle>
@@ -208,6 +204,7 @@ const CasinoFilters = () => {
     filters,
     setFilters,
   } = useCasinoConfig();
+  const { icons: icon } = ThemeSettings!;
   const categoriesContainerRef = useRef<HTMLUListElement | null>(null);
   const [categoriesOverflow, setCategoriesOverflow] = useState(false);
   const params = useParams<{ category?: string; provider?: string }>();
@@ -292,7 +289,7 @@ const CasinoFilters = () => {
               )}
               onClick={() => linkToCategory(null)}
             >
-              <i className={clsx(`icon-${Config.name}-home`)} />
+              <i className={clsx(icon?.home)} />
               {t('casino_lobby_category')}
             </li>
             {categories?.map(category => (
@@ -304,7 +301,7 @@ const CasinoFilters = () => {
                 )}
                 onClick={() => linkToCategory(category)}
               >
-                <i className={clsx(`icon-${Config.name}-${category.icon}`)} />
+                <i className={clsx(category.icon)} />
                 {category.name}
               </li>
             ))}
@@ -317,7 +314,7 @@ const CasinoFilters = () => {
                 )}
                 onClick={() => linkToCategory(category)}
               >
-                <i className={clsx(`icon-${Config.name}-${category.slug}`)} />
+                <i className={clsx(icon?.[category.slug])} />
                 {t(`${category.slug}_category`)}
               </li>
             ))}
@@ -331,7 +328,7 @@ const CasinoFilters = () => {
                   )}
                   onClick={() => linkToCategory({ slug: 'recent' })}
                 >
-                  <i className={clsx(`icon-${Config.name}-recent`)} />
+                  <i className={clsx(icon?.recent)} />
                   {t('casino_recent_category')}
                 </li>
                 <li
@@ -341,14 +338,14 @@ const CasinoFilters = () => {
                   )}
                   onClick={() => linkToCategory({ slug: 'favourite' })}
                 >
-                  <i className={clsx(`icon-${Config.name}-favourite-off`)} />
+                  <i className={clsx(icon?.favorite)} />
                   {t('casino_favourite_category')}
                 </li>
               </>
             )}
           </ul>
           {categoriesOverflow && (
-            <i className={clsx(`icon-strive-right1`, 'scroll-more')}></i>
+            <i className={clsx(icon?.right, 'scroll-more')}></i>
           )}
         </div>
         <div className="search-wrp">
@@ -357,7 +354,7 @@ const CasinoFilters = () => {
             className="search-btn"
             onClick={() => setSearchData({ type: SearchActions.Show })}
           >
-            <i className={clsx(`icon-search`)}></i>
+            <i className={clsx(icon?.search)}></i>
             <span className="title">{t('search_title')}</span>
           </Button>
           {location.pathname !== lobbyPath && (
@@ -366,9 +363,7 @@ const CasinoFilters = () => {
               className={clsx('filter-btn', showFilters && 'open')}
               onClick={() => setShowFilters(prevState => !prevState)}
             >
-              <i
-                className={clsx(`icon-${showFilters ? 'close' : 'filter'}`)}
-              ></i>
+              <i className={clsx(showFilters ? icon?.close : icon?.filter)}></i>
               <span className="title">{t('filter_title')}</span>
             </Button>
           )}

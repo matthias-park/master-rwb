@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import LoadingButton from '../../../../components/LoadingButton';
 import { useI18n } from '../../../../hooks/useI18n';
 import { FormField } from './OnlineForm';
-import { Config } from '../../../../constants';
+import { ThemeSettings } from '../../../../constants';
 
 const MultiStepOnlineForm = ({
   fields,
@@ -22,7 +22,7 @@ const MultiStepOnlineForm = ({
     register,
     handleSubmit,
   } = useFormContext();
-
+  const { icons: icon } = ThemeSettings!;
   const [activeItem, setActiveItem] = useState(0);
   const onLastSlide = activeItem === fields.length - 1;
   const onFirstSlide = activeItem === 0;
@@ -72,10 +72,7 @@ const MultiStepOnlineForm = ({
         <>
           <div className="reg-form__header-wrp">
             {!onFirstSlide && (
-              <i
-                className={`icon-${Config.name}-left`}
-                onClick={handlePrevious}
-              ></i>
+              <i className={clsx(icon?.left)} onClick={handlePrevious}></i>
             )}
             <div>
               <h1 className="reg-form__title">{jsxT('register_title')}</h1>

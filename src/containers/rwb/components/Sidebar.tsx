@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { useI18n } from '../../../hooks/useI18n';
 import Link from '../../../components/Link';
 import Accordion from 'react-bootstrap/Accordion';
+import { ThemeSettings } from '../../../constants';
 
 interface Props {
   links: {
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const Sidebar = ({ links }: Props) => {
+  const { icons: icon } = ThemeSettings!;
   const { pathname } = useLocation();
   const { t } = useI18n();
   const [expandedGrouping, setExpandedGrouping] = useState('');
@@ -64,7 +66,7 @@ const Sidebar = ({ links }: Props) => {
                   {t(link.name)}
                   <i
                     className={clsx(
-                      `icon-${window.__config__.name}-down1`,
+                      icon?.down,
                       'ml-auto sidebar-list__item-icon',
                     )}
                   ></i>

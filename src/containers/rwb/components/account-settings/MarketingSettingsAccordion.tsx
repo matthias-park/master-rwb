@@ -12,6 +12,7 @@ import clsx from 'clsx';
 import Accordion from 'react-bootstrap/Accordion';
 import { useI18n } from '../../../../hooks/useI18n';
 import LoadingButton from '../../../../components/LoadingButton';
+import { ThemeSettings } from '../../../../constants';
 
 interface SettingProps {
   form: SettingsForm;
@@ -20,6 +21,7 @@ interface SettingProps {
 
 const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
   const { t } = useI18n();
+  const { icons: icon } = ThemeSettings!;
   const currentEventKey = useContext(AccordionContext);
   const accordionOnClick = useAccordionToggle(form.id);
   const { register, handleSubmit, formState } = useForm<any, any>({
@@ -172,7 +174,7 @@ const MarketingSettingsAccordion = ({ form, onSubmit }: SettingProps) => {
         </Card.Body>
       </Accordion.Collapse>
       <i
-        className="settings-card__icon icon-down1"
+        className={clsx('settings-card__icon', icon?.down)}
         onClick={accordionOnClick}
       />{' '}
     </Card>

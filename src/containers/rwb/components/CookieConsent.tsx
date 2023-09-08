@@ -9,6 +9,7 @@ import { useConfig } from '../../../hooks/useConfig';
 import { Cookies } from '../../../types/Config';
 import { useDispatch } from 'react-redux';
 import { setCookies } from '../../../state/reducers/config';
+import { ThemeSettings } from '../../../constants';
 import clsx from 'clsx';
 
 const CookieConsent = () => {
@@ -16,6 +17,7 @@ const CookieConsent = () => {
   const { jsxT, t } = useI18n();
   const sendDataToGTM = useGTM();
   const dispatch = useDispatch();
+  const { icons: icon } = ThemeSettings!;
   const { cookies } = useConfig((prev, next) =>
     isEqual(prev.cookies, next.cookies),
   );
@@ -48,7 +50,7 @@ const CookieConsent = () => {
         activeModal === ComponentName.CookiesModal && 'd-none',
       )}
     >
-      <i className="icon-cookies cookies-nav__icon"></i>
+      <i className={clsx(icon?.cookies, 'cookies-nav__icon')}></i>
       <div className="cookies-nav__body">
         <h3 className="cookies-nav__body-title">{t('cookies_nav_title')}</h3>
         <p className="cookies-nav__body-text">

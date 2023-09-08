@@ -5,7 +5,7 @@ import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
 import LazyLoad from 'react-lazyload';
 import { Game } from '../../../../types/api/Casino';
 import { StyledCasinoGame } from '../styled/casinoStyles';
-import { Config, ComponentName } from '../../../../constants';
+import { ThemeSettings, ComponentName } from '../../../../constants';
 import { useI18n } from '../../../../hooks/useI18n';
 import { useModal } from '../../../../hooks/useModal';
 import useDesktopWidth from '../../../../hooks/useDesktopWidth';
@@ -17,6 +17,7 @@ interface CasinoGameProps {
 }
 
 const CasinoGame = ({ gameData }: CasinoGameProps) => {
+  const { icons: icon } = ThemeSettings!;
   const { t } = useI18n();
   const { loadGame, setSelectedGame } = useCasinoConfig();
   const labels = gameData?.features?.filter(feature => feature !== 'big_image');
@@ -81,7 +82,7 @@ const CasinoGame = ({ gameData }: CasinoGameProps) => {
               {tablet && (
                 <div className="hover">
                   <span className="game-info-btn" onClick={showGameInfo}>
-                    <i className={clsx(`icon-${Config.name}-game-info`)}>
+                    <i className={clsx(icon?.gameInfo)}>
                       <span className="path1"></span>
                       <span className="path2"></span>
                     </i>

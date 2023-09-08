@@ -17,6 +17,7 @@ import {
   StyledSitemapItemTitle,
   StyledSitemapItemToggle,
 } from '../components/styled/StyledSitemap';
+import { ThemeSettings } from '../../../constants';
 
 interface SitemapListItem {
   path: string;
@@ -62,13 +63,14 @@ const TreeItem = ({
   setActive: (active: string | null) => void;
 }) => {
   if (route.emptyRoute && !route.children) return null;
+  const { icons: icon } = ThemeSettings!;
 
   return (
     <StyledSitemapItem className="styled-sitemap-item">
       {route.children && (
         <Accordion.Toggle
           className={clsx(
-            `icon-${window.__config__.name}-add`,
+            icon?.add,
             active === `key_${route.name}` && 'active',
           )}
           as={StyledSitemapItemToggle}

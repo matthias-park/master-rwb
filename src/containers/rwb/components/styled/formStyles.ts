@@ -1,4 +1,6 @@
 import { css } from 'styled-components';
+import { ThemeSettings } from '../../../../constants';
+const { icons: icon } = ThemeSettings!;
 
 const formStyles = css`
   .form-group {
@@ -126,19 +128,13 @@ const formStyles = css`
       font-size: 32px;
       border: 12px solid transparent;
       border-right: 0;
-      .icon-eye-off {
-        color: ${props =>
-          props.theme.inputs.iconColor || props.theme.colors.brand.light};
+      padding-bottom: 4px;
+      .${icon?.eyeOff}, .${icon?.eyeOn} {
+        margin-bottom: 11px;
         cursor: pointer;
+        color: ${props => props.theme.inputs.iconColor};
       }
-      .icon-desertDiamond-eye-off,
-      .icon-desertDiamond-eye-on,
-      .icon-gnogaz-eye-off,
-      .icon-gnogaz-eye-on {
-        font-size: 28px;
-        color: ${props => props.theme.colors.secondary.light};
-      }
-      .icon-check {
+      .${icon?.check} {
         display: none;
         color: ${props =>
           props.theme.inputs.circleIcons
@@ -147,7 +143,7 @@ const formStyles = css`
         background-color: ${props =>
           props.theme.inputs.circleIcons && props.theme.colors.success.main};
       }
-      .icon-exclamation {
+      .${icon?.exclamation} {
         display: none;
         color: ${props =>
           props.theme.inputs.circleIcons
@@ -156,8 +152,7 @@ const formStyles = css`
         background-color: ${props =>
           props.theme.inputs.circleIcons && props.theme.colors.danger.main};
       }
-      .icon-check,
-      .icon-exclamation {
+      .${icon?.check}, .${icon?.exclamation} {
         ${props =>
           props.theme.inputs.circleIcons &&
           `
@@ -165,7 +160,7 @@ const formStyles = css`
           height: 20px;
           margin: 0 10px;
           border-radius: 50%;
-          font-size: 16px;
+          font-size: 12px;
           justify-content: center;
           align-items: center;
         `}
@@ -199,7 +194,7 @@ const formStyles = css`
     &.success {
       .form-group__icons {
         right: 0;
-        .icon-check {
+        .${icon?.check} {
           display: inline-flex;
         }
       }
@@ -217,11 +212,10 @@ const formStyles = css`
       }
       .form-group__icons {
         right: 0;
-        .icon-exclamation {
+        .${icon?.exclamation} {
           display: inline-flex;
         }
-        .icon-eye-off,
-        .icon-eye-on {
+        .${icon?.eyeOff}, .${icon?.eyeOn} {
           position: relative;
           right: -6px;
         }

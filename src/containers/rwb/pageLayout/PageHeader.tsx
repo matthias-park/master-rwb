@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useConfig } from '../../../hooks/useConfig';
 import UserInfoBlock from '../components/header/UserInfoBlock';
 import { useUIConfig } from '../../../hooks/useUIConfig';
-import { ComponentName, Config } from '../../../constants';
+import { ComponentName } from '../../../constants';
 import clsx from 'clsx';
 import useDesktopWidth from '../../../hooks/useDesktopWidth';
 import { sortAscending } from '../../../utils/index';
@@ -141,9 +141,7 @@ const PageHeader = () => {
                     to={link.path}
                     onClick={() => onGtmLinkClick(link.name)}
                   >
-                    {link.icon && (
-                      <i className={`icon-${Config.name}-${link.icon}`} />
-                    )}
+                    {link.icon && <i className={link.icon} />}
                     {t(link.name)}
                   </Link>
                 </li>

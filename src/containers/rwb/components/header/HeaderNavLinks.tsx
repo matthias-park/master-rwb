@@ -16,6 +16,7 @@ import {
   StyledHeaderNavItem,
   StyledHeaderNavItemLink,
 } from '../styled/StyledHeader';
+import { ThemeSettings } from '../../../../constants';
 
 interface HeaderNavLinkProps {
   data: HeaderRoute;
@@ -32,6 +33,7 @@ export const HeaderNavClassicLink = ({
   setNavExpanded,
   toggleActive,
 }: HeaderNavLinkProps) => {
+  const { icons: icon } = ThemeSettings!;
   const { t } = useI18n();
   const { routes } = useConfig(
     (prev, next) => prev.routes.length === next.routes.length,
@@ -126,7 +128,7 @@ export const HeaderNavClassicLink = ({
           }}
         >
           {t(data.name)}
-          {data.externalLink && <i className="icon-redirect"></i>}
+          {data.externalLink && <i className={clsx(icon?.redirect)}></i>}
         </Dropdown.Toggle>
       ) : (
         <Dropdown.Toggle
@@ -138,9 +140,9 @@ export const HeaderNavClassicLink = ({
         >
           <span className="nav-link cursor-pointer">
             <span>{t(data.name)}</span>
-            {data.externalLink && <i className="icon-redirect"></i>}
+            {data.externalLink && <i className={clsx(icon?.redirect)}></i>}
           </span>
-          <i className="nav-icon icon-strive-down"></i>
+          <i className={clsx('nav-icon', icon?.down)}></i>
         </Dropdown.Toggle>
       )}
       <Dropdown.Menu>

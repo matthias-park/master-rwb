@@ -5,9 +5,13 @@ import { useAuth } from '../../../../hooks/useAuth';
 import NumberFormat from 'react-number-format';
 import { useDispatch } from 'react-redux';
 import { fetchUserBalance } from '../../../../state/reducers/user';
+import { ThemeSettings } from '../../../../constants';
+import { snakeToCamelCase } from '../../../../utils/reactUtils';
+import clsx from 'clsx';
 
 const BalancesContainer = () => {
   const { t } = useI18n();
+  const { icons: icon } = ThemeSettings!;
   const { user } = useAuth();
   const dispatch = useDispatch();
   const isBalancesLoading = user.balances == null;
@@ -41,7 +45,10 @@ const BalancesContainer = () => {
                 </span>
               </div>
               <i
-                className={`icon-${window.__config__.name}-${key} balances-list__icon`}
+                className={clsx(
+                  icon?.[snakeToCamelCase(key)],
+                  'balances-list__icon',
+                )}
               ></i>
             </li>
           ))}

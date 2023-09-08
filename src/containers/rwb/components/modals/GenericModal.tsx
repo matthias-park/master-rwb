@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
+import { ThemeSettings } from '../../../../constants';
 import clsx from 'clsx';
 
 interface Props {
@@ -20,6 +21,7 @@ const GenericModal = ({
   withoutClose,
   className,
 }: Props) => {
+  const { icons: icon } = ThemeSettings!;
   return (
     <Modal
       show={show}
@@ -32,7 +34,10 @@ const GenericModal = ({
       }}
     >
       {!withoutClose && (
-        <i className="icon-close custom-modal__close" onClick={hideCallback} />
+        <i
+          className={clsx(icon?.close, 'custom-modal__close')}
+          onClick={hideCallback}
+        />
       )}
       <Modal.Body className={clsx('custom-modal mt-2', className)}>
         {children}

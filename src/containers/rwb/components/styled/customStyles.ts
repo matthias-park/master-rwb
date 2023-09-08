@@ -3,6 +3,8 @@ import { mediaBreakpointDown, mediaBreakpointUp } from './breakpoints';
 import { textOverflow1 } from './mixins';
 import { rgba } from './mixins';
 import { scrollbarWidth } from './helpers';
+import { ThemeSettings } from '../../../../constants';
+const { icons: icon } = ThemeSettings!;
 
 const customStyles = css`
   *:focus {
@@ -456,7 +458,7 @@ const customStyles = css`
       @media (max-width: 400px) {
         padding-left: 10px;
       }
-      .icon-check {
+      .${icon?.check} {
         position: relative;
         color: ${props => props.theme.colors.white.main};
         font-size: 32px;
@@ -898,7 +900,7 @@ const customStyles = css`
         border: 2px solid ${props => props.theme.colors.gray[100]};
         font-size: 14px;
         line-height: 16px;
-        .icon-${window.__config__.name}-down1 {
+        .${icon?.down} {
           position: absolute;
           top: 50%;
           transform: translateY(-50%);
@@ -1021,8 +1023,7 @@ const customStyles = css`
     &:active {
       text-decoration: underline;
     }
-    .icon-appleinc,
-    .icon-android {
+    .${icon?.appleLogo}, .${icon?.androidLogo} {
       margin-right: 0.5rem;
       margin-bottom: 0.1rem;
     }
@@ -1041,8 +1042,7 @@ const customStyles = css`
     &:active {
       text-decoration: underline;
     }
-    .icon-appleinc,
-    .icon-android {
+    .${icon?.appleLogo}, .${icon?.androidLogo} {
       margin-right: 0.5rem;
       margin-bottom: 0.1rem;
     }
@@ -1061,8 +1061,7 @@ const customStyles = css`
       &:hover {
         text-decoration: underline;
       }
-      .icon-rwb-windows8,
-      .icon-rwb-appleinc {
+      .${icon?.windowsLogo}, .${icon?.appleLogo} {
         margin-right: 0.5rem;
         margin-bottom: 0.3rem;
         font-size: 16px;
@@ -1158,6 +1157,7 @@ const customStyles = css`
           ? rgba(props.theme.colors.danger.main, 0.2)
           : props.theme.colors.danger.main};
       .custom-alert__icon {
+        font-size: 12px;
         background-color: ${props =>
           props.theme.alert.invertedIconBg
             ? props.theme.alert.color
@@ -1174,6 +1174,7 @@ const customStyles = css`
           ? rgba(props.theme.colors.success.main, 0.2)
           : props.theme.colors.success.main};
       .custom-alert__icon {
+        font-size: 12px;
         background-color: ${props =>
           props.theme.alert.invertedIconBg
             ? props.theme.alert.color
@@ -1327,12 +1328,11 @@ const customStyles = css`
         margin-bottom: 8px;
         color: ${props => props.theme.colors.secondary.light};
         transition: color 0.3s;
-        &.icon-gnogaz-all,
-        &.icon-gnogaz-in-play {
+
+        &.${icon?.all}, &.${icon?.inPlay} {
           font-size: 27px;
         }
-        &.icon-gnogon-home,
-        &.icon-gnogon-new {
+        &.${icon?.home}, &.${icon?.new} {
           font-size: 20px;
         }
       }

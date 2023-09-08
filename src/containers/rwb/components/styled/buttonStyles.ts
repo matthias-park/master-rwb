@@ -1,5 +1,7 @@
 import { css } from 'styled-components';
 import { mediaBreakpointDown } from './breakpoints';
+import { ThemeSettings } from '../../../../constants';
+const { icons: icon } = ThemeSettings!;
 
 const buttonStyles = css`
   .btn {
@@ -101,10 +103,11 @@ const buttonStyles = css`
       border-color: ${props =>
         props.theme.buttons.secondary?.active?.borderColor} !important;
     }
-    icon-rwb-down {
-      color: #fff !important;
+    .${icon?.down} {
+      color: ${props =>
+        props.theme.buttons.secondary?.active?.bgColor} !important;
     }
-    icon-rwb-account {
+    .${icon?.account} {
       color: ${props =>
         props.theme.buttons.secondary?.active?.bgColor} !important;
     }

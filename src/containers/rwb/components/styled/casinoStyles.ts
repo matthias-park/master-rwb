@@ -1,8 +1,9 @@
 import styled, { keyframes } from 'styled-components';
 import { mediaBreakpointDown } from './breakpoints';
-import { Config } from '../../../../constants';
 import { FullBanner } from './Banner';
 import { rgba } from './mixins';
+import { ThemeSettings } from '../../../../constants';
+const { icons: icon } = ThemeSettings!;
 
 export const StyledCasinoPage = styled.main`
   padding: 0 10px;
@@ -320,7 +321,7 @@ export const StyledCasinoFilters = styled.div`
         margin-right: 0;
         font-size: 18px;
       }
-      .icon-gnogon-filter {
+      .${icon?.filter} {
         font-size: 26px;
       }
     }
@@ -364,7 +365,7 @@ export const StyledCasinoFilters = styled.div`
         .title {
           display: none;
         }
-        .icon-gnogon-filter {
+        .${icon?.filter} {
           font-size: 22px;
         }
       }
@@ -428,7 +429,7 @@ export const StyledCasinoFiltersMenu = styled.div`
           font-size: 25px;
           color: #888888;
         }
-        .icon-gnogon-plus {
+        .${icon?.plus} {
           color: ${props => props.theme.colors.primary.main};
           transform: rotate(45deg);
           font-size: 20px;
@@ -698,7 +699,7 @@ export const StyledCasinoInnerPage = styled.div`
       .game-buttons {
         display: flex;
         min-height: 100%;
-        .icon-${Config.name}-plus {
+        .${icon?.plus} {
           color: ${props => props.theme.colors.primary.main};
         }
       }

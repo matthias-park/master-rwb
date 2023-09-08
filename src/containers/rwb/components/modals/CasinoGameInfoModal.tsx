@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useI18n } from '../../../../hooks/useI18n';
-import { ComponentName } from '../../../../constants';
+import { ComponentName, ThemeSettings } from '../../../../constants';
 import { useModal } from '../../../../hooks/useModal';
 import { useAuth } from '../../../../hooks/useAuth';
 import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
@@ -9,9 +9,11 @@ import { StyledCasinoGameInfoModal } from '../styled/casinoStyles';
 import Button from 'react-bootstrap/Button';
 import NumberFormat from 'react-number-format';
 import { replaceStringTagsReact } from '../../../../utils/reactUtils';
+import clsx from 'clsx';
 
 const CasinoGameInfoModal = () => {
   const { t } = useI18n();
+  const { icons: icon } = ThemeSettings!;
   const {
     selectedGame,
     setSelectedGame,
@@ -45,7 +47,10 @@ const CasinoGameInfoModal = () => {
       dialogClassName="mx-650"
     >
       <StyledCasinoGameInfoModal className="styled-casino-game-info-modal">
-        <i className="icon-close custom-modal__close" onClick={hideModal} />
+        <i
+          className={clsx(icon?.close, 'custom-modal__close')}
+          onClick={hideModal}
+        />
         <Modal.Body>
           <div className="info-header">
             <img

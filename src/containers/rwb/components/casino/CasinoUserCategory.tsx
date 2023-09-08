@@ -6,10 +6,11 @@ import { useParams } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
 import { StyledCasinoCategory } from '../styled/casinoStyles';
 import clsx from 'clsx';
-import { Config } from '../../../../constants';
+import { ThemeSettings } from '../../../../constants';
 
 const CasinoUserCategory = () => {
   const { t, jsxT } = useI18n();
+  const { icons: icon } = ThemeSettings!;
   const {
     setParams,
     games,
@@ -39,18 +40,13 @@ const CasinoUserCategory = () => {
       <div className="title-wrp">
         {isFavouriteCategory && (
           <>
-            <i
-              className={clsx(
-                `icon-${Config.name}-favourite-off`,
-                'title-icon',
-              )}
-            />
+            <i className={clsx(icon?.favorite, 'title-icon')} />
             <h5 className="title">{t('favourite_games_title')}</h5>
           </>
         )}
         {isRecentCategory && (
           <>
-            <i className={clsx(`icon-${Config.name}-recent`, 'title-icon')} />
+            <i className={clsx(icon?.recent, 'title-icon')} />
             <h5 className="title">{t('recent_games_title')}</h5>
           </>
         )}

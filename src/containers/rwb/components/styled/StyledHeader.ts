@@ -5,7 +5,8 @@ import { fullBg } from './mixins';
 import Link from '../../../../components/Link';
 import { Dropdown } from 'react-bootstrap';
 import { rgba } from './mixins';
-import { Config } from '../../../../constants';
+import { ThemeSettings } from '../../../../constants';
+const { icons: icon } = ThemeSettings!;
 
 export const StyledNavToggler = styled(Navbar.Toggle)`
   display: flex;
@@ -13,10 +14,10 @@ export const StyledNavToggler = styled(Navbar.Toggle)`
   margin-left: 8px;
   border: none;
   border-radius: 0;
-  .icon-${window.__config__.name}-menu {
+  .${icon?.menu} {
     color: ${props => props.theme.colors.primary.hover} !important;
   }
-  .icon-${window.__config__.name}-menu-close {
+  .${icon?.menuClose} {
     color: ${props => props.theme.colors.primary.hover} !important;
   }
   ${mediaBreakpointDown('xs')} {
@@ -726,7 +727,6 @@ export const StyledRowHeader = styled('header')`
     align-items: center;
     cursor: pointer;
     i {
-      font-size: 30px;
       color: ${props => props.theme.colors.primary.hover} important;
       transition: color 0.3s;
     }
@@ -741,7 +741,7 @@ export const StyledRowHeader = styled('header')`
       }
     }
   }
-  .icon-${Config.name}-plus {
+  .${icon?.plus} {
     color: ${props => props.theme.colors.primary.main};
     font-size: 21px;
   }
@@ -854,7 +854,6 @@ const StyledHeader = styled(Navbar)`
       align-items: center;
       &-name {
         font-size: 13px;
-
         ${mediaBreakpointDown('lg')} {
           display: none;
         }
