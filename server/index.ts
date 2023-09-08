@@ -41,6 +41,7 @@ app.use(
   }),
 );
 app.use(helmet.noSniff());
+app.use(helmet.frameguard({ action: 'sameorigin' }));
 app.use(middleware.useragent);
 app.use((req, res, next) => {
   const { url } = req;
