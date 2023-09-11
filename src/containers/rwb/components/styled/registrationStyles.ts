@@ -1,6 +1,7 @@
 import { css } from 'styled-components';
-import { mediaBreakpointDown } from './breakpoints';
+import { mediaBreakpointDown, mediaBreakpointUp } from './breakpoints';
 import { ThemeSettings } from '../../../../constants';
+//@ts-ignore
 const { icons: icon } = ThemeSettings!;
 
 export const registrationStyles = css`
@@ -203,7 +204,7 @@ export const registrationStyles = css`
       width: 100%;
       border-radius: 0;
       box-shadow: none;
-      padding: 30px 22px;
+      padding: 0px;
     }
   }
 
@@ -291,13 +292,74 @@ export const registrationStyles = css`
           props.theme.registration.blockTitlePaddingBottom}px;
       }
     }
-    .carousel {
-      .carousel-indicators {
-        bottom: -10px;
+    &__header-wrp {
+      &__img {
+        width: 100%;
+        ${mediaBreakpointUp('sm')} {
+          border-top-right-radius: 8px;
+          border-top-left-radius: 8px;
+        }
       }
-      .carousel-indicators li {
-        background-color: ${props =>
-          props.theme.registration.carousel?.indicators?.color};
+      .${icon?.left} {
+        font-size: 40px;
+        margin-left: 12px;
+        cursor: pointer;
+        position: absolute;
+        background-color: transparent;
+        color: #fff;
+        top: -0.5%;
+      }
+    }
+    &__footer-wrp {
+      padding: 36px 40px 12px 40px;
+      .carousel {
+        .carousel-indicators {
+          top: -14rem;
+          max-height: 10px;
+          @media only screen and (max-width: 374px) {
+            top: -10rem;
+          }
+          @media only screen and (min-width: 375px) and (max-width: 480px) {
+            top: -11.5rem;
+          }
+        }
+        .carousel-indicators li {
+          background-color: ${props =>
+            props.theme.registration.carousel?.indicators?.color};
+          width: 10px;
+          height: 10px;
+          border-radius: 100%;
+        }
+      }
+      &__contact-us {
+        font-size: 16px;
+        line-height: 24px;
+        margin-bottom: 12px;
+        text-align: center;
+        &__body {
+          font-weight: 400;
+          margin-right: 8px;
+          color: #596e95;
+        }
+        &__btn {
+          font-weight: 500;
+          color: #d7182a;
+          cursor: pointer;
+        }
+      }
+      &__info {
+        display: flex;
+        &__img {
+          margin-right: 16px;
+          align-self: flext-start;
+        }
+        &__text {
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 16px;
+          text-align: left;
+          color: #596e95;
+        }
       }
     }
   }

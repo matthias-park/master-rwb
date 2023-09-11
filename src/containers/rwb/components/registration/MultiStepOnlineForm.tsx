@@ -5,7 +5,9 @@ import { useFormContext } from 'react-hook-form';
 import LoadingButton from '../../../../components/LoadingButton';
 import { useI18n } from '../../../../hooks/useI18n';
 import { FormField } from './OnlineForm';
-import { ThemeSettings } from '../../../../constants';
+import { PagesName, ThemeSettings } from '../../../../constants';
+import { useHistory } from 'react-router-dom';
+import { useRoutePath } from '../../../../hooks';
 
 const MultiStepOnlineForm = ({
   fields,
@@ -22,7 +24,10 @@ const MultiStepOnlineForm = ({
     register,
     handleSubmit,
   } = useFormContext();
-  const { icons: icon } = ThemeSettings!;
+
+  const history = useHistory();
+  const loginRoute = useRoutePath(PagesName.LoginPage);
+
   const [activeItem, setActiveItem] = useState(0);
   const onLastSlide = activeItem === fields.length - 1;
   const onFirstSlide = activeItem === 0;
@@ -66,6 +71,9 @@ const MultiStepOnlineForm = ({
     };
   }, [activeItem, fields, watch()]);
 
+  //@ts-ignore
+  const { icons: icon } = ThemeSettings!;
+
   return (
     <div className="reg-form">
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -74,17 +82,22 @@ const MultiStepOnlineForm = ({
             {!onFirstSlide && (
               <i className={clsx(icon?.left)} onClick={handlePrevious}></i>
             )}
-            <div>
-              <h1 className="reg-form__title">{jsxT('register_title')}</h1>
-              <p className="reg-form__sub-title">{jsxT('register_desc')}</p>
-            </div>
+            <img
+              className="reg-form__header-wrp__img"
+              src="/assets/images/container-bg-img.png"
+              alt="conainer-img"
+            />
           </div>
-          <span>
+          <div className="reg-form__footer-wrp">
             <Carousel
               wrap={false}
               indicators={true}
               controls={false}
               activeIndex={activeItem}
+              onSelect={eventKey => {
+                setActiveItem(eventKey);
+              }}
+              interval={null}
             >
               {fields.map(slide => (
                 <Carousel.Item>
@@ -151,13 +164,34 @@ const MultiStepOnlineForm = ({
                 }
               }}
               type={onLastSlide ? 'submit' : 'button'}
-              variant="primary w-100 rounded-pill"
+              variant="primary w-100 rounded-pill mt-5 mb-3"
               disabled={!steppedFormData.isValid}
               loading={formState.isSubmitting}
             >
               {t(onLastSlide ? 'register_submit_btn' : 'register_continue_btn')}
             </LoadingButton>
-          </span>
+            <div className="reg-form__footer-wrp__contact-us">
+              <span className="reg-form__footer-wrp__contact-us__body">
+                {t('login_contact_us_text')}
+              </span>
+              <span
+                className="reg-form__footer-wrp__contact-us__btn"
+                onClick={() => history.push(loginRoute)}
+              >
+                {t('login_contact_us_btn')}
+              </span>
+            </div>
+            <div className="reg-form__footer-wrp__info">
+              <img
+                className="reg-form__footer-wrp__info__img"
+                alt="responsible-gaming"
+                src={`/assets/images/footer/responsible-gaming.png`}
+              />
+              <span className="reg-form__footer-wrp__info__text">
+                {t('verification_info_text')}
+              </span>
+            </div>
+          </div>
         </>
       </Form>
     </div>

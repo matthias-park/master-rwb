@@ -103,7 +103,7 @@ module.exports = {
   },
   registration: {
     width: 480,
-    borderRadius: 4,
+    borderRadius: 8,
     boxShadow: '0px 4px 4px rgba(5, 27, 53, 0.1)',
     bgImg: '/assets/images/container-bg-img.png',
     titleWeight: 700,
@@ -119,10 +119,10 @@ module.exports = {
     left: 0,
     carousel: {
       prevButton: {
-        color: '#00205C',
+        color: pallete.white,
       },
       indicators: {
-        color: pallete.blue,
+        color: pallete.white,
       },
     },
   },
