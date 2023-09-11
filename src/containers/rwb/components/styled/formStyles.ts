@@ -169,7 +169,7 @@ const formStyles = css`
         margin-right: 4px;
       }
       .spinner-border {
-        margin: 8px;
+        margin: 8px 8px 11px 8px;
         &.ios {
           margin: 11px;
         }
