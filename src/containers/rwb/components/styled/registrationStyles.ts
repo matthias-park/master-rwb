@@ -178,6 +178,9 @@ export const registrationStyles = css`
           color: #596e95;
         }
       }
+      label {
+        line-height: 18px;
+      }
       &__phone-update {
         hdisplay: flex;
         flex-direction: column;
