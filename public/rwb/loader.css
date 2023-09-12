@@ -15,4 +15,14 @@
   height: 60px;
   margin: auto;
   transform: translateY(-14px);
+  animation: rotation 1s infinite linear;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
 }
