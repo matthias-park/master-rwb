@@ -481,7 +481,7 @@ module.exports = {
     deposit: 'icon-deposit',
     star: 'icon-star',
     logout: 'icon-logout',
-    promo: 'icon-promo-two',
+    promo: 'icon-promo',
     bell: 'icon-bell',
     documents: 'icon-documents',
     responsible: 'icon-responsible',

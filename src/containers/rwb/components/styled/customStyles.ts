@@ -1291,10 +1291,10 @@ const customStyles = css`
     align-items: center;
     bottom: 0;
     left: 0;
-    height: 70px;
+    height: 83px;
     width: 100%;
-    background-color: #000;
-    box-shadow: inset 0px 1px 0px rgb(184 184 184 / 25%);
+    background-color: #fff;
+    box-shadow: 2px -4px 8px 0px #0000001a;
     padding-left: 0;
     margin-bottom: 0;
     z-index: 3;
