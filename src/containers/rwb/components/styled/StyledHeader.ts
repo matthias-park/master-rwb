@@ -467,6 +467,11 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
   .user-menu__list {
     padding-left: 0;
     margin-bottom: 0;
+    &-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     &-item {
       position: relative;
       left: -20px;
@@ -492,7 +497,7 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
           bottom: 0;
           left: 50%;
           transform: translateX(-50%);
-          width: 100%;
+          width: 120%;
           border-bottom: ${props => props.theme.userMenu.itemBorder};
         }
         &:hover,
@@ -529,14 +534,13 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      height: 48px;
+      height: 45px;
       color: ${props => props.theme.colors.brand.text};
       font-weight: ${props => props.theme.userMenu.itemWeight};
       text-transform: ${props => props.theme.userMenu.itemTransform};
       font-size: ${props => props.theme.userMenu.itemFontSize}px;
       color: ${props => props.theme.colors.brand.text};
       background-color: ${props => props.theme.userMenu.subItemBgColor};
-      padding: 0 20px;
       &:not(:last-of-type):after {
         content: '';
         position: absolute;

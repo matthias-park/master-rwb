@@ -21,6 +21,8 @@ import NumberFormat from 'react-number-format';
 import { sortAscending } from '../../../../utils/index';
 import dayjs from 'dayjs';
 
+const { icons: icon } = ThemeSettings!;
+
 const LoadableXtremePush = loadable(
   () => import('../../../../components/XtremePushInbox'),
 );
@@ -48,25 +50,36 @@ const UserMenuLink = ({
             as="li"
             eventKey={name}
           >
-            <span className="user-menu__list-item-link">
-              {linkIcon && (
-                <i
-                  className={clsx(linkIcon, 'user-menu__list-item-icon mr-3')}
-                ></i>
-              )}
-              {name}
-            </span>
+            <div className="user-menu__list-wrapper">
+              <span className="user-menu__list-item-link">
+                {linkIcon && (
+                  <i
+                    className={clsx(linkIcon, 'user-menu__list-item-icon mr-3')}
+                  ></i>
+                )}
+                {name}
+              </span>
+              <i className={clsx(icon?.down, 'mr-3')}></i>
+            </div>
             <Accordion.Collapse eventKey={name}>
               <>
                 {children.map(childLink => (
-                  <Link
-                    key={childLink.link}
-                    to={childLink.link}
-                    className="user-menu__list-sub-item"
-                    onClick={() => setShowDropdown(false)}
-                  >
-                    {t(childLink.name)}
-                  </Link>
+                  <div className="user-menu__list-item-link">
+                    <i
+                      className={clsx(
+                        'icon-transparent',
+                        'user-menu__list-item-icon mr-3',
+                      )}
+                    ></i>
+                    <Link
+                      key={childLink.link}
+                      to={childLink.link}
+                      className="user-menu__list-sub-item"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      {t(childLink.name)}
+                    </Link>
+                  </div>
                 ))}
               </>
             </Accordion.Collapse>

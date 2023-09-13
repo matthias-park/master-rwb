@@ -31,20 +31,7 @@ noscript {
   font-size: 20px;
   vertical-align: middle;
 }
-.user-menu__list-item-link--toggler {
-  .user-menu__list-item-link:after {
-    font-family: "icomoon";
-    content: '\e976';
-    border: none;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 10px;
-    font-size: 28px;
-    color: #ccc;
-    cursor: pointer;
-  }
-}
+
 .icon-eye-off.show:before {
   content: '\e978';
 }
