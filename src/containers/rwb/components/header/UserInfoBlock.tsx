@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { useUIConfig } from '../../../../hooks/useUIConfig';
 import {
-  ComponentName,
   PagesName,
   ComponentSettings,
+  ComponentName,
   ThemeSettings,
 } from '../../../../constants';
 import { useI18n } from '../../../../hooks/useI18n';
@@ -21,6 +20,7 @@ import Button from 'react-bootstrap/Button';
 import useDesktopWidth from '../../../../hooks/useDesktopWidth';
 import NumberFormat from 'react-number-format';
 import { sortAscending } from '../../../../utils/index';
+import { useUIConfig } from '../../../../hooks/useUIConfig';
 import dayjs from 'dayjs';
 
 const LoadableXtremePush = loadable(

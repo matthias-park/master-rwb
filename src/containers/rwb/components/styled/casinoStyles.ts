@@ -32,13 +32,42 @@ const load = keyframes`
   }
 `;
 
+export const StyledCasinoGamePlaceholder = styled.div`
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  .img {
+    max-width: 100%;
+  }
+  .load {
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: -100%;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(200, 200, 200, 0.15) 50%,
+        transparent 100%
+      );
+      animation: ${load} 2s cubic-bezier(0.4, 0, 0.2, 1) 0.5s infinite;
+    }
+  }
+`;
+
 export const StyledCasinoGame = styled.div`
-  border-radius: 16px;
+  border-radius: 8px;
   overflow: hidden;
   .img-wrp {
     position: relative;
     height: 100%;
-    border-radius: 16px;
+    border-radius: 8px;
+    background-color: #333;
+    aspect-ratio: 5 / 3;
     overflow: hidden;
     .fade-appear {
       opacity: 0;
@@ -48,8 +77,8 @@ export const StyledCasinoGame = styled.div`
       transition: opacity 1000ms;
     }
     .img {
-      max-width: 100%;
-      transition: filter 0.3s;
+      width: 100%;
+      transition: all 0.3s;
     }
     .load {
       &:before {
@@ -129,20 +158,22 @@ export const StyledCasinoGame = styled.div`
       opacity: 0;
       transition: opacity 0.3s;
       .game-info-btn {
-        margin: 12px 5px 0 auto;
+        margin: 40px 5px 0 auto;
         cursor: pointer;
         i {
-          font-size: 28px;
+          font-size: 20px;
         }
       }
       .buttons-wrp {
         display: flex;
         flex-direction: column;
+        align-items: center;
         margin: auto;
         width: 65%;
         .btn {
-          width: 100%;
-          height: 40%;
+          width: 65%;
+          height: 25%;
+          font-size: 10px !important;
         }
       }
     }
@@ -159,52 +190,88 @@ export const StyledCasinoGame = styled.div`
 
 export const StyledGroupSlider = styled.div`
   margin-bottom: 40px;
+  padding: 0 9.8rem;
   .title-wrp {
     display: flex;
     align-items: center;
     margin-bottom: 16px;
     i {
       font-size: 26px;
-      margin-right: 10px;
     }
     .title-icon {
       color: ${props => props.theme.colors.primary.main};
     }
     .title {
-      font-size: 18px;
+      color: ${props => props.theme.colors.brand.text};
+      font-size: 24px;
+      font-style: italic;
       font-weight: 700;
+      line-height: 33px;
+      letter-spacing: 0em;
       margin-bottom: 0;
     }
     .navigation {
       display: flex;
-      margin-left: 16px;
+      justify-content: space-between;
+      margin-left: auto;
+      width: 81px;
+      height: 40px;
+      border-radius: 43px;
+      border: 1px;
+      padding: 2px 5px 0 5px;
+      background: linear-gradient(0deg, #e6e9ef, #e6e9ef),
+        linear-gradient(
+          0deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0.1)
+        );
+
       i {
         cursor: pointer;
-        color: #999;
+        color: #00205c;
         &.disabled {
           color: #444;
         }
       }
     }
     .all-games-link {
-      margin-left: auto;
-      color: ${props => props.theme.colors.primary.main};
+      color: ${props => props.theme.colors.brand.text};
       font-size: 14px;
+      font-style: italic;
+      font-weight: 600;
+      line-height: 16px;
+      letter-spacing: 0.5px;
+      margin-left: 24px;
     }
   }
+
   .games-group {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 16px;
+    grid-gap: 8px;
+    @media (min-width: 682px) {
+      grid-template-columns: repeat(5, 1fr);
+    }
+    .img-wrp {
+      cursor: pointer;
+    }
+    .wrp {
+      padding: 10px;
+      .swiper-wrapper {
+        display: flex;
+        flex-direction: column;
+      }
+    }
   }
-  .wrp {
+  ${mediaBreakpointDown('sm')} {
+    padding: 0px;
   }
 `;
 
 export const StyledCasinoFilters = styled.div`
   display: flex;
   align-items: center;
-  padding: 0 12px;
+  padding: 0 9.8rem;
   margin-top: 16px;
   margin-bottom: 46px;
   ${mediaBreakpointDown('sm')} {
@@ -219,24 +286,7 @@ export const StyledCasinoFilters = styled.div`
     justify-content: center;
     height: 100%;
     width: 100%;
-    margin-right: 10px;
     overflow: hidden;
-    &:after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      height: 100%;
-      width: 85px;
-      background: linear-gradient(
-        270deg,
-        rgba(239, 241, 245, 1) 10%,
-        rgba(239, 241, 245, 0) 85%
-      );
-      ${mediaBreakpointDown('sm')} {
-        width: 30px;
-      }
-    }
     .scroll-more {
       position: absolute;
       top: 50%;
@@ -263,18 +313,42 @@ export const StyledCasinoFilters = styled.div`
     overflow-x: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    gap: 8px;
     &::-webkit-scrollbar {
       display: none;
     }
+    .category-casino {
+      display: none;
+    }
+    .categories-item {
+      font-size: 12px;
+      font-style: italic;
+      font-weight: 600;
+      line-height: 16px;
+      letter-spacing: 0.5px;
+      padding-bottom: 11px;
+      .category-image {
+        border-radius: 2rem;
+        overflow: hidden;
+      }
+    }
+    .category-search {
+      width: 7rem;
+      padding-bottom: 0px;
+    }
     &-item {
       display: flex;
+      justify-content: center;
       flex-direction: column;
       align-items: center;
       list-style-type: none;
-      margin: 0 25px;
+      width: 10rem;
+      height: 5rem;
+      border-radius: 8px;
       font-size: 14px;
       white-space: nowrap;
       cursor: pointer;
+      background-color: #e6e9ef;
       i {
         font-size: 25px;
         margin-bottom: 10px;
@@ -286,18 +360,11 @@ export const StyledCasinoFilters = styled.div`
       }
       ${mediaBreakpointDown('sm')} {
         margin-left: 0;
-        margin-right: 25px;
         font-size: 12px;
+        flex: 0 0 18%;
         i {
           font-size: 18px;
         }
-      }
-    }
-    &-seperator {
-      background: radial-gradient(circle, #444 40%, rgba(0, 0, 0, 0) 130%);
-      width: 1px;
-      ${mediaBreakpointDown('sm')} {
-        padding-left: 15px;
       }
     }
   }
@@ -308,21 +375,18 @@ export const StyledCasinoFilters = styled.div`
     .btn {
       display: flex;
       flex-direction: column;
-      padding: 12px 5px;
       text-transform: capitalize;
       font-weight: 400;
       max-height: unset;
-      width: 90px;
+      width: 87px;
+      height: 87px;
       .title {
         margin-top: 10px;
         margin-right: 0;
       }
       i {
         margin-right: 0;
-        font-size: 18px;
-      }
-      .${icon?.filter} {
-        font-size: 26px;
+        font-size: 21px;
       }
     }
     .filter-btn {
@@ -341,23 +405,6 @@ export const StyledCasinoFilters = styled.div`
         height: 40px;
         i {
           font-size: 16px;
-        }
-      }
-      .search-btn {
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        width: unset;
-        padding: 0 15px;
-        flex-grow: 1;
-        .title {
-          margin-top: unset;
-          font-size: 14px;
-          color: #999;
-          text-transform: uppercase;
-        }
-        .title {
-          margin-left: 12px;
         }
       }
       .filter-btn {
@@ -533,12 +580,12 @@ export const StyledCasinoSearch = styled.div`
   display: flex;
   align-items: center;
   height: 56px;
-  background-color: #222222;
-  border-radius: 4px;
-  border: 1px solid #555555;
+  background-color: ${props => props.theme.inputs.backgroundColor};
+  border-radius: 30px;
+  border: 2px solid ${props => props.theme.inputs.color};
   font-size: 24px;
   input {
-    color: #fff;
+    color: ${props => props.theme.inputs.color};
     background-color: transparent;
     border: none;
     padding-left: 14px;
@@ -568,12 +615,16 @@ export const StyledCasinoSearchContainer = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1100;
+  background-color: ${props => props.theme.inputs.backgroundColor};
+  z-index: 1000;
   .search-container-wrp {
-    margin: 80px auto;
+    margin: 10rem auto;
     width: 80%;
     max-width: 1440px;
+    color: ${props => props.theme.colors.primary.main};
+    i {
+      color: ${props => props.theme.colors.primary.main};
+    }
   }
   .games-list-wrp {
     margin-top: 40px;
@@ -586,12 +637,13 @@ export const StyledCasinoSearchContainer = styled.div`
     .games-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
-      grid-gap: 24px;
+      // grid-template-columns: repeat(auto-fill, 1fr);
+      grid-gap: 8px;
     }
   }
   ${mediaBreakpointDown('sm')} {
     .search-container-wrp {
-      margin: 24px auto;
+      margin: 5rem auto;
       width: 92%;
     }
     .games-list-wrp {
@@ -607,7 +659,7 @@ export const StyledCasinoSearchContainer = styled.div`
   }
   ${mediaBreakpointDown('xs')} {
     .search-container-wrp {
-      margin: 24px auto;
+      margin: 5rem auto;
       width: 92%;
     }
     .games-list-wrp {
@@ -621,6 +673,7 @@ export const StyledCasinoSearchContainer = styled.div`
 export const StyledCasinoCategory = styled.div`
   margin-bottom: 100px;
   min-height: 50vh;
+  padding: 0 9.8rem;
   .title-wrp {
     display: flex;
     align-items: center;
@@ -641,7 +694,7 @@ export const StyledCasinoCategory = styled.div`
   .games-wrp {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
-    grid-gap: 24px;
+    grid-gap: 8px;
   }
   .empty-list {
     display: flex;
@@ -651,7 +704,18 @@ export const StyledCasinoCategory = styled.div`
     color: #999999;
     margin-top: 4%;
   }
+  ${mediaBreakpointDown('xl')} {
+    .games-wrp {
+      grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+    }
+  }
+  ${mediaBreakpointDown('lg')} {
+    .games-wrp {
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+    }
+  }
   ${mediaBreakpointDown('sm')} {
+    padding: 0px;
     .title {
       font-size: 16px;
     }

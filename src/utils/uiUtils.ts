@@ -261,3 +261,10 @@ export const injectTrackerScript = (
   scriptTag.defer = true;
   document.body.appendChild(scriptTag);
 };
+
+export const scrollContainerBy = (ref, amount) => {
+  ref?.current?.scrollTo({
+    left: ref?.current.scrollLeft + amount,
+    behavior: 'smooth',
+  });
+};

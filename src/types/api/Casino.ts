@@ -3,10 +3,12 @@ export type Category = {
   icon: string;
   id: number;
   name: string;
-  order_id?: number;
+  order_id: number;
   slug: string;
   translated_name?: string;
   image?: string;
+  desktop_banner?: string;
+  mobile_banner?: string;
 };
 
 export type Provider = {

@@ -19,7 +19,12 @@ SwiperCore.use([Navigation]);
 interface CasinoGroupSliderProps {
   id: number;
   name?: string;
-  category?: { id: number; slug: string; icon: string };
+  category?: {
+    id: number;
+    slug: string;
+    icon: string;
+    quantity: number | undefined;
+  };
   className?: string;
   games?: Game[];
 }
@@ -41,8 +46,10 @@ export const CasinoGroupSlider = ({
   );
   const isDataLoading = !data && !games && !error;
   const currentGames = data?.Data || games;
+  const frontPageQuantity = category?.quantity || 5;
   const gamesInGroups = useMemo(() => {
     let groupedGames: Game[][] = [];
+
     if (currentGames) {
       const featuredGames = currentGames?.filter(game =>
         game?.features?.includes('big_image'),
@@ -50,10 +57,17 @@ export const CasinoGroupSlider = ({
       const gamesWithoutFeatured = currentGames?.filter(
         game => !game?.features?.includes('big_image'),
       );
-      for (let i = 0; i <= currentGames.length; i = i + 4) {
-        if (featuredGames[i / 4])
-          groupedGames = [...groupedGames, [featuredGames[i / 4]]];
-        groupedGames = [...groupedGames, gamesWithoutFeatured.slice(i, i + 4)];
+      for (let i = 0; i <= currentGames.length; i = i + frontPageQuantity) {
+        if (featuredGames[i / frontPageQuantity])
+          groupedGames = [
+            ...groupedGames,
+            [featuredGames[i / frontPageQuantity]],
+          ];
+        if (gamesWithoutFeatured.length >= 1)
+          groupedGames = [
+            ...groupedGames,
+            gamesWithoutFeatured.slice(i, i + frontPageQuantity),
+          ];
       }
     }
     return groupedGames;
@@ -67,11 +81,11 @@ export const CasinoGroupSlider = ({
     <StyledGroupSlider className="styled-group-slider">
       {name && (
         <div className="title-wrp">
-          <i className={clsx(icon?.[category?.icon || ''], 'title-icon')} />
+          <i className={clsx(`icon-${category?.icon}`, 'title-icon')} />
           <h5 className="title">{name}</h5>
           <div className="navigation">
-            <i className={clsx(icon?.left, `mb-2 swiper-button-prev-${id}`)} />
-            <i className={clsx(icon?.right, `mb-2 swiper-button-next-${id}`)} />
+            <i className={clsx(icon?.left, `swiper-button-prev-${id}`)} />
+            <i className={clsx(icon?.right, `swiper-button-next-${id}`)} />
           </div>
           <Link
             to={`/${casinoType}/${category?.slug}`}
@@ -91,9 +105,9 @@ export const CasinoGroupSlider = ({
           <Swiper
             key={`${id}-${name}`}
             slidesOffsetAfter={0}
-            spaceBetween={16}
-            slidesPerView={2}
-            slidesPerGroup={2}
+            spaceBetween={8}
+            slidesPerView={1}
+            slidesPerGroup={1}
             grabCursor
             effect="slide"
             lazy={true}
@@ -104,19 +118,19 @@ export const CasinoGroupSlider = ({
             }}
             breakpoints={{
               '1920.98': {
-                slidesPerView: 7,
+                slidesPerView: 1,
               },
               '1600.98': {
-                slidesPerView: 6,
+                slidesPerView: 1,
               },
               '1366.98': {
-                slidesPerView: 5,
+                slidesPerView: 1,
               },
               '1200.98': {
-                slidesPerView: 5,
+                slidesPerView: 1,
               },
               '768.98': {
-                slidesPerView: 3,
+                slidesPerView: 1,
               },
             }}
           >

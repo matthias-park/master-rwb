@@ -6,7 +6,6 @@ import LazyLoad from 'react-lazyload';
 
 const CasinoLobby = () => {
   const { categories } = useCasinoConfig();
-
   return (
     <>
       {!categories && (
@@ -24,6 +23,7 @@ const CasinoLobby = () => {
               id: category.id,
               slug: category.slug,
               icon: category.icon,
+              quantity: category.front_page_quantity,
             }}
             className="expand-right"
           />

@@ -13,14 +13,17 @@ import CasinoSearchContainer from '../components/casino/CasinoSearchContainer';
 import CasinoBottomNav from '../components/casino/CasinoBottomNav';
 import { useLocation, useParams } from 'react-router-dom';
 import { useI18n } from '../../../hooks/useI18n';
+import { isMobile } from 'react-device-detect';
+import { Spinner } from 'react-bootstrap';
 
 const CasinoCategoryPage = () => {
   const { icons: icon } = ThemeSettings!;
   const { t } = useI18n();
-  const { activeCategory } = useCasinoConfig();
+  const { categories, activeCategory } = useCasinoConfig();
   const { hardcodedCategoriesBanners } = useConfig();
   const location: any = useLocation();
   const params = useParams<{ category?: string; providers?: string }>();
+  const isDataLoading = !categories;
   const hardcodedBanner = useMemo(
     () =>
       hardcodedCategoriesBanners?.find(
@@ -67,19 +70,57 @@ const CasinoCategoryPage = () => {
         return <CasinoCategory />;
     }
   };
+  const renderBanner = () => {
+    if (!activeCategory && params.category && !isHardcodedCategory)
+      return <Banner images={null} />;
+    if (
+      isHardcodedCategory &&
+      hardcodedBanner &&
+      hardcodedBanner?.desktop_banner
+    )
+      return (
+        <Banner
+          images={[
+            {
+              image: !isMobile
+                ? hardcodedBanner?.desktop_banner
+                : hardcodedBanner?.mobile_banner ||
+                  hardcodedBanner.desktop_banner,
+            },
+          ]}
+        />
+      );
+    if (activeCategory?.desktop_banner)
+      return (
+        <Banner
+          images={[
+            {
+              image: !isMobile
+                ? activeCategory.desktop_banner
+                : activeCategory?.mobile_banner ||
+                  activeCategory.desktop_banner,
+            },
+          ]}
+        />
+      );
+    return <Banner images={null} />;
+  };
 
   return (
     <StyledCasinoPage className="styled-casino-page">
-      {isHardcodedCategory && hardcodedBanner && (
-        <Banner images={[{ image: hardcodedBanner?.image }]} />
+      {isDataLoading ? (
+        <div className="d-flex mt-5 min-vh-70">
+          <Spinner animation="border" className="spinner-custom mx-auto" />
+        </div>
+      ) : (
+        <>
+          {renderBanner()}
+          {<CasinoFilters />}
+          {renderCategory()}
+          <CasinoSearchContainer />
+          <CasinoBottomNav />
+        </>
       )}
-      {activeCategory?.image && (
-        <Banner images={[{ image: activeCategory?.image }]} />
-      )}
-      <CasinoFilters />
-      {renderCategory()}
-      <CasinoSearchContainer />
-      <CasinoBottomNav />
     </StyledCasinoPage>
   );
 };

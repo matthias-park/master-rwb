@@ -69,7 +69,7 @@ const CasinoCategoryPage = () => {
 
   return (
     <StyledCasinoPage>
-      {isHardcodedCategory && hardcodedBanner && (
+      {isHardcodedCategory && hardcodedBanner?.image && (
         <Banner images={[{ image: hardcodedBanner?.image }]} />
       )}
       {activeCategory?.image && (

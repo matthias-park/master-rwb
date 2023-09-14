@@ -1,266 +1,88 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { snakeCase } from '../../../../utils/reactUtils';
+import React, { useRef, useEffect, useReducer } from 'react';
 import clsx from 'clsx';
 import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
 import { useRoutePath } from '../../../../hooks';
-import { PagesName, ThemeSettings } from '../../../../constants';
-import Button from 'react-bootstrap/Button';
+import { PagesName } from '../../../../constants';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { useI18n } from '../../../../hooks/useI18n';
 import { useAuth } from '../../../../hooks/useAuth';
-import {
-  StyledCasinoFilters,
-  StyledCasinoFiltersMenu,
-} from '../styled/casinoStyles';
+import { StyledCasinoFilters } from '../styled/casinoStyles';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
-import {
-  Provider,
-  FilterActions,
-  SearchActions,
-} from '../../../../types/api/Casino';
+import { SearchActions } from '../../../../types/api/Casino';
 import throttle from 'lodash.throttle';
+import { scrollContainerBy } from '../../../../utils/uiUtils';
+import { ThemeSettings } from '../../../../constants';
+import useDesktopWidth from '../../../../hooks/useDesktopWidth';
+import { sortAscending } from '../../../../utils';
 
-interface FilterDropdownProps {
-  title: string;
-  toggleTitle?: string;
-  resetFilter: () => void;
-  items: {
-    activeId: string | number;
-    name: string;
-    onClick: () => void;
-  }[];
-  activeItemId?: string | number | null;
+enum OverflowState {
+  Right = 1,
+  Left,
+  Unset,
 }
 
-interface MultiFilterDropdownProps {
-  title: string;
-  resetFilter: () => void;
-  filtersSelected?: number;
-  items:
-    | {
-        name: string;
-        isChecked: boolean;
-        onClick: () => void;
-      }[]
-    | false;
-}
-
-const FilterDropdown = ({
-  title,
-  toggleTitle,
-  resetFilter,
-  items,
-  activeItemId,
-}: FilterDropdownProps) => {
-  const [show, setShow] = useState(false);
-  const { icons: icon } = ThemeSettings!;
-
-  const removeFilter = e => {
-    if (activeItemId) {
-      e.stopPropagation();
-      resetFilter();
-    }
-  };
-
-  return (
-    <Dropdown className="filter-dropdown" onToggle={isOpen => setShow(isOpen)}>
-      <p className="filter-title">{title}</p>
-      <div className="filter-block">
-        <Dropdown.Toggle
-          as="div"
-          bsPrefix="filter-toggle"
-          className={clsx(!show && activeItemId && 'active')}
-        >
-          {toggleTitle || ''}
-          <span className="icon-wrp" onClick={e => removeFilter(e)}>
-            <i
-              className={clsx(!show && activeItemId ? icon?.plus : icon?.down)}
-            />
-          </span>
-        </Dropdown.Toggle>
-        <Dropdown.Menu flip={false} bsPrefix="filter-menu">
-          {items
-            ?.filter(item => item)
-            .map(
-              (item, i) =>
-                activeItemId !== item.activeId && (
-                  <Dropdown.Item
-                    key={`${item?.name}_${i}`}
-                    bsPrefix="menu-item"
-                    onClick={item?.onClick}
-                  >
-                    {item?.name}
-                  </Dropdown.Item>
-                ),
-            )}
-        </Dropdown.Menu>
-      </div>
-    </Dropdown>
-  );
+const overflowReducer = (state, action) => {
+  switch (action.type) {
+    case OverflowState.Right:
+      return { ...state, right: action.payload };
+    case OverflowState.Left:
+      return { ...state, left: action.payload };
+    case OverflowState.Unset:
+      return { right: false, left: false };
+    default:
+      return state;
+  }
 };
 
-const MultiFilterDropdown = ({
-  title,
-  resetFilter,
-  items,
-  filtersSelected,
-}: MultiFilterDropdownProps) => {
-  const { t } = useI18n();
-  const { icons: icon } = ThemeSettings!;
-  const [show, setShow] = useState(false);
-  const selectedItems = useMemo(
-    () => (items ? items.filter(item => item.isChecked) : []),
-    [items],
-  );
-  const toggleTitle = useMemo(() => {
-    if (selectedItems.length === 1) {
-      return selectedItems[0].name;
-    } else if (selectedItems.length) {
-      return `${t('filters_selected')} ${filtersSelected}`;
-    } else {
-      return t('filter_nothing_selected');
-    }
-  }, [selectedItems]);
-
-  useEffect(() => {
-    !filtersSelected && resetFilter();
-  }, [filtersSelected]);
-
-  const removeFilter = e => {
-    e.stopPropagation();
-    resetFilter();
-  };
-
-  const onToggleHandler = (isOpen, e, metadata) => {
-    if (metadata.source !== 'select') {
-      setShow(isOpen);
-    }
-  };
-  return (
-    <Dropdown
-      show={show}
-      className="filter-dropdown"
-      onToggle={(isOpen, e, metadata) => onToggleHandler(isOpen, e, metadata)}
-    >
-      <p className="filter-title">{title}</p>
-      <div className="filter-block">
-        <Dropdown.Toggle
-          as="div"
-          bsPrefix="filter-toggle"
-          className={clsx(!show && filtersSelected && 'active')}
-        >
-          {toggleTitle}
-          <span className="icon-wrp">
-            <i className={clsx(icon?.down)} />
-          </span>
-          {!show && !!filtersSelected && (
-            <span className="icon-wrp close-wrp" onClick={e => removeFilter(e)}>
-              <i className={clsx(icon?.down)} />
-            </span>
-          )}
-        </Dropdown.Toggle>
-        <Dropdown.Menu flip={false} bsPrefix="filter-menu">
-          {items &&
-            items
-              ?.filter(item => item)
-              .map((item, i) => (
-                <div
-                  key={`${item?.name}_${i}`}
-                  className="filter-item-wrp"
-                  onClick={item?.onClick}
-                >
-                  <Form.Check
-                    custom
-                    type="checkbox"
-                    checked={item?.isChecked}
-                    readOnly
-                  />
-                  <Dropdown.Item bsPrefix="menu-item">
-                    {item?.name}
-                  </Dropdown.Item>
-                </div>
-              ))}
-        </Dropdown.Menu>
-      </div>
-    </Dropdown>
-  );
-};
-
-const CasinoFilters = () => {
+const CategoriesFilter = ({ useSimpleFilters }) => {
   const { t } = useI18n();
   const { user } = useAuth();
-  const [showFilters, setShowFilters] = useState(false);
-  const {
-    casinoType,
-    categories,
-    setParams,
-    activeCategory,
-    orderBy,
-    setOrderBy,
-    setSearchData,
-    games,
-    providers,
-    filters,
-    setFilters,
-  } = useCasinoConfig();
-  const { icons: icon } = ThemeSettings!;
   const categoriesContainerRef = useRef<HTMLUListElement | null>(null);
-  const [categoriesOverflow, setCategoriesOverflow] = useState(false);
-  const params = useParams<{ category?: string; provider?: string }>();
+  const [categoriesOverflow, setCategoriesOverflow] = useReducer(
+    overflowReducer,
+    {
+      right: false,
+      left: false,
+    },
+  );
+  const { casinoType, categories, activeCategory } = useCasinoConfig();
   const history = useHistory();
   const location = useLocation();
+  const params = useParams<{ category?: string; provider?: string }>();
   const lobbyPath = useRoutePath(PagesName.CasinoPage);
-  const usedProviders = useMemo<Provider[]>(
-    () =>
-      games?.reduce((prev: any[], curr: any) => {
-        const isIncluded = prev.some(
-          provider => provider?.id === curr.provider?.id,
-        );
-        const providerItem = providers.find(
-          provider => provider.id === curr.provider.id,
-        );
-        return isIncluded ? prev : [...prev, providerItem];
-      }, []) || [],
-    [games, providers],
-  );
-  const usedGenres = useMemo<string[]>(() => {
-    const allGenres = games?.reduce(
-      (prev: string[], curr: any) => [...prev, curr.genre],
-      [],
-    );
-    return (
-      allGenres?.filter(
-        (item, index) => item && allGenres.indexOf(item) === index,
-      ) || []
-    );
-  }, [games]);
-  const usedThemes = useMemo<string[]>(() => {
-    const allThemes = games?.reduce(
-      (prev: string[], curr: any) => [...prev, curr.theme],
-      [],
-    );
-    return (
-      allThemes?.filter(
-        (item, index) => item && allThemes.indexOf(item) === index,
-      ) || []
-    );
-  }, [games]);
+  const tablet = useDesktopWidth(991);
+  const { setParams, setSearchData } = useCasinoConfig();
+  //@ts-ignore
+  const { icons: icon } = ThemeSettings!;
 
   useEffect(() => {
-    setParams(params);
-  }, []);
+    window.addEventListener('resize', throttleOverflowHandler);
+    return () => window.removeEventListener('resize', throttleOverflowHandler);
+  });
 
   useEffect(() => {
     checkCategoriesOverflow();
   }, [categories]);
 
+  useEffect(() => {
+    setParams(params);
+  }, []);
+
   const checkCategoriesOverflow = () => {
     const el = categoriesContainerRef.current;
-    if (el && el.offsetWidth + el.scrollLeft >= el.scrollWidth) {
-      setCategoriesOverflow(false);
+    if (el && Math.round(el.offsetWidth + el.scrollLeft) < el.scrollWidth) {
+      setCategoriesOverflow({ type: OverflowState.Right, payload: true });
     } else {
-      setCategoriesOverflow(true);
+      setCategoriesOverflow({ type: OverflowState.Right, payload: false });
+    }
+    if (el && el.scrollLeft !== 0) {
+      setCategoriesOverflow({ type: OverflowState.Left, payload: true });
+    } else {
+      setCategoriesOverflow({ type: OverflowState.Left, payload: false });
+    }
+    if (el && el.offsetWidth >= el.scrollWidth) {
+      setCategoriesOverflow({ type: OverflowState.Unset });
     }
   };
 
@@ -273,216 +95,125 @@ const CasinoFilters = () => {
     );
   };
 
-  return (
-    <>
-      <StyledCasinoFilters className="styled-casino-filters">
-        <div className="categories-wrp">
-          <ul
-            className="categories"
-            ref={categoriesContainerRef}
-            onScroll={throttleOverflowHandler}
+  return useSimpleFilters ? (
+    <div className="simple-casino-filters">
+      <Dropdown>
+        <Dropdown.Toggle className="simple-casino-filters__select">
+          {activeCategory?.name || t('casino_game_category')}
+          <i className={clsx(icon?.down)}></i>
+        </Dropdown.Toggle>
+        <Dropdown.Menu className="simple-casino-filters__menu">
+          {categories.map(category => {
+            return (
+              <Dropdown.Item
+                key={category.id}
+                onClick={() => linkToCategory(category)}
+                className="simple-casino-filters__menu-item"
+              >
+                {category.name}
+              </Dropdown.Item>
+            );
+          })}
+        </Dropdown.Menu>
+      </Dropdown>
+      <Form.Group className="simple-casino-filters__search">
+        <i className={clsx(icon?.search, 'icon')}></i>
+        <input
+          type="text"
+          placeholder={t('casino-game-search')}
+          className="simple-casino-filters__search-input"
+        />
+      </Form.Group>
+    </div>
+  ) : (
+    <div className="categories-wrp">
+      <ul
+        className="categories"
+        ref={categoriesContainerRef}
+        onScroll={throttleOverflowHandler}
+      >
+        {tablet && (
+          <li
+            className={clsx(
+              'categories-item',
+              `category-${lobbyPath.slice(1)}`,
+              location.pathname === lobbyPath && 'active',
+            )}
+            onClick={() => linkToCategory(null)}
           >
+            <i className={clsx(icon?.home)} />
+            {t('casino_lobby_category')}
+          </li>
+        )}
+        {categories
+          ?.sort((a, b) => sortAscending(a.order_id, b.order_id))
+          .map(category => (
+            <li
+              key={`${category?.id}`}
+              className={clsx(
+                'categories-item',
+                category.slug === activeCategory?.slug && 'active',
+              )}
+              onClick={() => linkToCategory(category)}
+            >
+              <img
+                className="category-image"
+                src={category.image}
+                alt="category-img"
+              />
+              {category.name}
+            </li>
+          ))}
+        {user.logged_in && tablet && (
+          <>
             <li
               className={clsx(
                 'categories-item',
-                location.pathname === lobbyPath && 'active',
+                params.category === 'favourite' && 'active',
               )}
-              onClick={() => linkToCategory(null)}
+              onClick={() => linkToCategory({ slug: 'favourite' })}
             >
-              <i className={clsx(icon?.home)} />
-              {t('casino_lobby_category')}
+              <i className={clsx(icon?.favorite)} />
+              {t('casino_favourite_category')}
             </li>
-            {categories?.map(category => (
-              <li
-                key={`${category?.id}`}
-                className={clsx(
-                  'categories-item',
-                  category.slug === activeCategory?.slug && 'active',
-                )}
-                onClick={() => linkToCategory(category)}
-              >
-                <i className={clsx(category.icon)} />
-                {category.name}
-              </li>
-            ))}
-            {[{ slug: 'new' }, { slug: 'featured' }].map(category => (
-              <li
-                key={category.slug}
-                className={clsx(
-                  'categories-item',
-                  params.category === category.slug && 'active',
-                )}
-                onClick={() => linkToCategory(category)}
-              >
-                <i className={clsx(icon?.[category.slug])} />
-                {t(`${category.slug}_category`)}
-              </li>
-            ))}
-            {user.logged_in && (
-              <>
-                <span className="categories-seperator"></span>
-                <li
-                  className={clsx(
-                    'categories-item',
-                    params.category === 'recent' && 'active',
-                  )}
-                  onClick={() => linkToCategory({ slug: 'recent' })}
-                >
-                  <i className={clsx(icon?.recent)} />
-                  {t('casino_recent_category')}
-                </li>
-                <li
-                  className={clsx(
-                    'categories-item',
-                    params.category === 'favourite' && 'active',
-                  )}
-                  onClick={() => linkToCategory({ slug: 'favourite' })}
-                >
-                  <i className={clsx(icon?.favorite)} />
-                  {t('casino_favourite_category')}
-                </li>
-              </>
-            )}
-          </ul>
-          {categoriesOverflow && (
-            <i className={clsx(icon?.right, 'scroll-more')}></i>
-          )}
+          </>
+        )}
+        <li
+          className={clsx('categories-item', 'category-search')}
+          onClick={() => setSearchData({ type: SearchActions.Show })}
+        >
+          <i className={clsx(icon?.search)}></i>
+          {t('search_title')}
+        </li>
+      </ul>
+      {categoriesOverflow.right && (
+        <div
+          className="scroll-right-wrp"
+          onClick={() => scrollContainerBy(categoriesContainerRef, 200)}
+        >
+          {/* <i className={clsx(icon?.right, 'scroll-more')}></i> */}
         </div>
-        <div className="search-wrp">
-          <Button
-            variant="secondary"
-            className="search-btn"
-            onClick={() => setSearchData({ type: SearchActions.Show })}
-          >
-            <i className={clsx(icon?.search)}></i>
-            <span className="title">{t('search_title')}</span>
-          </Button>
-          {location.pathname !== lobbyPath && (
-            <Button
-              variant={showFilters ? 'primary' : 'secondary'}
-              className={clsx('filter-btn', showFilters && 'open')}
-              onClick={() => setShowFilters(prevState => !prevState)}
-            >
-              <i className={clsx(showFilters ? icon?.close : icon?.filter)}></i>
-              <span className="title">{t('filter_title')}</span>
-            </Button>
-          )}
+      )}
+      {categoriesOverflow.left && (
+        <div
+          className="scroll-left-wrp"
+          onClick={() => scrollContainerBy(categoriesContainerRef, -200)}
+        >
+          {/* <i className={clsx(icon?.left, 'scroll-more')}></i> */}
         </div>
+      )}
+    </div>
+  );
+};
+
+const CasinoFilters = () => {
+  const useSimpleFilters = false;
+
+  return (
+    <>
+      <StyledCasinoFilters>
+        <CategoriesFilter useSimpleFilters={useSimpleFilters} />
       </StyledCasinoFilters>
-      <StyledCasinoFiltersMenu
-        className={clsx(showFilters && 'show', 'styled-casino-filters-menu')}
-      >
-        <MultiFilterDropdown
-          title={t('provider_filter_title')}
-          filtersSelected={
-            usedProviders.filter(provider =>
-              filters.providerFilterGroup.includes(provider),
-            ).length
-          }
-          resetFilter={() => setFilters({ type: FilterActions.ResetProvider })}
-          items={
-            usedProviders?.map(provider => ({
-              name: t(`provider_name_${provider.slug}`),
-              isChecked: filters.providerFilterGroup.some(
-                providerFilter => providerFilter.id === provider.id,
-              ),
-              onClick: () => {
-                filters.providerFilterGroup.some(
-                  providerFilter => providerFilter.id === provider.id,
-                )
-                  ? setFilters({
-                      type: FilterActions.RemoveProvider,
-                      payload: provider,
-                    })
-                  : setFilters({
-                      type: FilterActions.AddProvider,
-                      payload: provider,
-                    });
-              },
-            })) || []
-          }
-        />
-        <MultiFilterDropdown
-          title={t('genre_filter_title')}
-          filtersSelected={
-            usedGenres.filter(genre => filters.genreFilterGroup.includes(genre))
-              .length
-          }
-          resetFilter={() => setFilters({ type: FilterActions.ResetGenre })}
-          items={
-            usedGenres?.map(genre => ({
-              name: t(`genre_name_${snakeCase(genre)}`),
-              isChecked: filters.genreFilterGroup.some(
-                genreFilter => genreFilter === genre,
-              ),
-              onClick: () => {
-                filters.genreFilterGroup.some(
-                  genreFilter => genreFilter === genre,
-                )
-                  ? setFilters({
-                      type: FilterActions.RemoveGenre,
-                      payload: genre,
-                    })
-                  : setFilters({
-                      type: FilterActions.AddGenre,
-                      payload: genre,
-                    });
-              },
-            })) || []
-          }
-        />
-        <MultiFilterDropdown
-          title={t('theme_filter_title')}
-          filtersSelected={
-            usedThemes.filter(theme => filters.themeFilterGroup.includes(theme))
-              .length
-          }
-          resetFilter={() => setFilters({ type: FilterActions.ResetTheme })}
-          items={
-            usedThemes?.map(theme => ({
-              name: t(`theme_name_${snakeCase(theme)}`),
-              isChecked: filters.themeFilterGroup.some(
-                themeFilter => themeFilter === theme,
-              ),
-              onClick: () => {
-                filters.themeFilterGroup.some(
-                  themeFilter => themeFilter === theme,
-                )
-                  ? setFilters({
-                      type: FilterActions.RemoveTheme,
-                      payload: theme,
-                    })
-                  : setFilters({
-                      type: FilterActions.AddTheme,
-                      payload: theme,
-                    });
-              },
-            })) || []
-          }
-        />
-        <FilterDropdown
-          title={t('order_by')}
-          toggleTitle={
-            orderBy?.type
-              ? t(`order_type_${orderBy?.type}`)
-              : t('filter_nothing_selected')
-          }
-          resetFilter={() => setOrderBy(null)}
-          activeItemId={orderBy?.type}
-          items={[
-            {
-              activeId: 'asc',
-              name: t('order_by_AZ'),
-              onClick: () => setOrderBy({ attr: 'name', type: 'asc' }),
-            },
-            {
-              activeId: 'dsc',
-              name: t('order_by_ZA'),
-              onClick: () => setOrderBy({ attr: 'name', type: 'dsc' }),
-            },
-          ]}
-        />
-      </StyledCasinoFiltersMenu>
     </>
   );
 };

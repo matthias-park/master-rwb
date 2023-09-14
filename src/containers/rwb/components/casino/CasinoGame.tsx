@@ -4,8 +4,11 @@ import Button from 'react-bootstrap/Button';
 import { useCasinoConfig } from '../../../../hooks/useCasinoConfig';
 import LazyLoad from 'react-lazyload';
 import { Game } from '../../../../types/api/Casino';
-import { StyledCasinoGame } from '../styled/casinoStyles';
-import { ThemeSettings, ComponentName } from '../../../../constants';
+import {
+  StyledCasinoGame,
+  StyledCasinoGamePlaceholder,
+} from '../styled/casinoStyles';
+import { ComponentName, ThemeSettings } from '../../../../constants';
 import { useI18n } from '../../../../hooks/useI18n';
 import { useModal } from '../../../../hooks/useModal';
 import useDesktopWidth from '../../../../hooks/useDesktopWidth';
@@ -42,13 +45,15 @@ const CasinoGame = ({ gameData }: CasinoGameProps) => {
           debounce={200}
           once
           placeholder={
-            <div className="load">
-              <img
-                className="img"
-                src={'/assets/images/casino-game.png'}
-                alt=""
-              />
-            </div>
+            <StyledCasinoGamePlaceholder className="styled-casino-game-placeholder">
+              <div className="load">
+                <img
+                  className="img"
+                  src={'/assets/images/casino-game.png'}
+                  alt=""
+                />
+              </div>
+            </StyledCasinoGamePlaceholder>
           }
         >
           <CSSTransition

@@ -6,19 +6,27 @@ import { useConfig } from '../../../hooks/useConfig';
 import { FullBanner } from './styled/Banner';
 import useApi from '../../../hooks/useApi';
 import Link from '../../../components/Link';
-import 'swiper/swiper.scss';
+import clsx from 'clsx';
+import { ThemeSettings } from '../../../constants';
+import SwiperCore, { Pagination, Navigation, Autoplay } from 'swiper';
+import { isMobile } from 'react-device-detect';
+SwiperCore.use([Pagination, Navigation, Autoplay]);
 
 interface BannerProps {
   zone?: string;
-  images?: { image: string }[];
+  images?: { image: string }[] | null;
 }
 
 const Banner = ({ zone, images }: BannerProps) => {
   const { locale } = useConfig();
   const { data, error } = useApi<RailsApiResponse<any>>(
-    zone ? `/restapi/v1/content/banners/${zone}/${locale}` : null,
+    zone
+      ? `/restapi/v1/content/banners/${zone}/${locale}`
+      : `/restapi/v1/content/banners/welcome/${locale}`,
   );
   const isDataLoading = !data && !error && !images;
+  //@ts-ignore
+  const { icons: icon } = ThemeSettings!;
 
   return (
     <FullBanner className="fade-in">
@@ -29,22 +37,49 @@ const Banner = ({ zone, images }: BannerProps) => {
       ) : images?.length === 1 ? (
         <img alt="" src={images[0].image} />
       ) : (
-        <Swiper
-          spaceBetween={15}
-          slidesPerView={1}
-          slidesPerGroup={1}
-          loop
-          grabCursor
-          effect="slide"
-        >
-          {(data?.Data || images)?.map((banner, i) => (
-            <SwiperSlide>
-              <Link to={banner?.link || '#'}>
-                <img alt="" key={`${banner.image}_${i}`} src={banner.image} />
-              </Link>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <>
+          <Swiper
+            spaceBetween={16}
+            slidesPerView={1}
+            slidesPerGroup={1}
+            loop
+            grabCursor
+            effect="slide"
+            pagination={
+              !isMobile && {
+                clickable: true,
+                renderBullet: function (index, className) {
+                  return `<span class=${className}></span>`;
+                },
+              }
+            }
+            navigation={
+              !isMobile && {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+                disabledClass: 'disabled',
+              }
+            }
+            autoplay={{
+              delay: 10000,
+              disableOnInteraction: false,
+            }}
+          >
+            {(data?.Data || images)?.map((banner, i) => (
+              <SwiperSlide key={`${banner.image}_${i}`}>
+                <Link to={banner?.link || '#'}>
+                  <img alt="" key={`${banner.image}_${i}`} src={banner.image} />
+                </Link>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          {!isMobile && (
+            <div className="swiper-navigation">
+              <i className={clsx(icon?.left, 'swiper-button-prev')} />
+              <i className={clsx(icon?.right, 'swiper-button-next')} />
+            </div>
+          )}
+        </>
       )}
     </FullBanner>
   );

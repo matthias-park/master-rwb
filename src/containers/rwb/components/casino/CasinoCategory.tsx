@@ -11,7 +11,7 @@ import { StyledCasinoCategory } from '../styled/casinoStyles';
 import clsx from 'clsx';
 import { ThemeSettings } from '../../../../constants';
 import { forceCheck } from 'react-lazyload';
-
+import { isMobile } from 'react-device-detect';
 const CasinoCategory = () => {
   const { icons: icon } = ThemeSettings!;
   const { jsxT } = useI18n();
@@ -51,10 +51,12 @@ const CasinoCategory = () => {
   return (
     <StyledCasinoCategory className="styled-casino-category">
       <div className="title-wrp">
-        {activeCategory && (
-          <i className={clsx(icon?.[activeCategory?.icon], 'title-icon')} />
+        {activeCategory && !isMobile && (
+          <>
+            <i className={clsx(icon?.[activeCategory?.icon], 'title-icon')} />
+            <h5 className="title">{activeCategory?.name}</h5>
+          </>
         )}
-        <h5 className="title">{activeCategory?.name}</h5>
       </div>
       {isDataLoading && (
         <div className="d-flex my-3">
