@@ -3,7 +3,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import {
   PagesName,
   ComponentSettings,
-  ComponentName,
   ThemeSettings,
 } from '../../../../constants';
 import { useI18n } from '../../../../hooks/useI18n';
@@ -20,7 +19,6 @@ import Button from 'react-bootstrap/Button';
 import useDesktopWidth from '../../../../hooks/useDesktopWidth';
 import NumberFormat from 'react-number-format';
 import { sortAscending } from '../../../../utils/index';
-import { useUIConfig } from '../../../../hooks/useUIConfig';
 import dayjs from 'dayjs';
 
 const LoadableXtremePush = loadable(
@@ -98,7 +96,6 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
   const { t } = useI18n();
   const [loggingOut, setLoggingOut] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const { backdrop } = useUIConfig();
   const { sidebars, header } = useConfig();
   const depositRoute = useRoutePath(PagesName.DepositPage, true);
   const tabletWidth = useDesktopWidth(991);
@@ -106,13 +103,11 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
 
   const showUserMenu = isOpen => {
     setShowDropdown(isOpen);
-    backdrop.toggle(isOpen, [ComponentName.Header]);
   };
   const onLogoutClick = async () => {
     setLoggingOut(true);
     await handleLogout();
     setLoggingOut(false);
-    backdrop.hide();
     SWRCache.clear();
   };
   const userBalance = ComponentSettings?.useBalancesEndpoint
