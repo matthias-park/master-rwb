@@ -1223,7 +1223,7 @@ const customStyles = css`
       margin-right: -${props => props.theme.spacing.bodyPadding}px !important;
       margin-top: 0px !important;
       margin-bottom: 0px !important;
-      padding-left: 170px;
+      padding-left: 10px;
       border-radius: 0;
       z-index: 999;
       top: -25px;

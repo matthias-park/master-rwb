@@ -21,6 +21,7 @@ const CustomAlert = ({
         `custom-alert--${variant}`,
         className,
         fullScreen && 'full-screen',
+        'text-center',
       )}
     >
       <div className="custom-alert__icon">
