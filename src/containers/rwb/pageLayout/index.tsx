@@ -20,6 +20,7 @@ import loadable from '@loadable/component';
 import { useModal } from '../../../hooks/useModal';
 import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 import { useRoutePath } from '../../../hooks';
+import { isMobile, isTablet } from 'react-device-detect';
 
 const LoadablePageColumnFooter = loadable(() => import('./PageColumnFooter'));
 const LoadableGeoComplyAlert = loadable(
@@ -63,6 +64,7 @@ const PageLayout = ({ children }) => {
   const location = useLocation();
   const loginPage = useRoutePath(PagesName.LoginPage);
   const activationPage = useRoutePath(PagesName.RegisterActivationPage);
+  const casinoPage = useRoutePath(PagesName.CasinoPage);
 
   useEffect(() => {
     if (
@@ -177,7 +179,9 @@ const PageLayout = ({ children }) => {
           {configLoaded === ConfigLoaded.Loaded && children}
           {configLoaded === ConfigLoaded.Error && <NotFoundPage />}
           <ErrorBoundary>
-            <LoadablePageColumnFooter />
+            {!(isMobile && !isTablet && casinoPage) && (
+              <LoadablePageColumnFooter />
+            )}
           </ErrorBoundary>
         </>
       )}

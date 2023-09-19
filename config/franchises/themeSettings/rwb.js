@@ -153,7 +153,7 @@ module.exports = {
     footer: {
       bottomText: pallete.blue,
     },
-    body: pallete.offWhite,
+    body: pallete.white,
     lightSpacer: '#CCD2DE',
     container: '#fff',
   },
@@ -216,7 +216,9 @@ module.exports = {
     },
   },
   footer: {
-    listColor: '#fff',
+    color: pallete.blue,
+    bgColor: pallete.offWhite,
+    listColor: pallete.darkBlue,
     listTitleWeight: 700,
     timerBgColor: '#213956',
     subFooterHeight: 60,
