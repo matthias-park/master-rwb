@@ -18,27 +18,20 @@ const customStyles = css`
   html body {
     overflow-x: hidden;
     font-family: ${props => props.theme.fonts.family}, 'Myriad Pro', sans-serif;
-    padding: 0 ${props => props.theme.spacing.bodyPadding}px 0
-      ${props => props.theme.spacing.bodyPadding}px !important;
     &.modal-open {
       padding-right: ${props =>
         props.theme.spacing.bodyPadding + scrollbarWidth}px !important;
     }
     margin: auto;
-    background-color: ${props => props.theme.colors.body} !important;
     color: ${props => props.theme.colors.brand.text} !important;
     height: unset !important;
     ${mediaBreakpointDown('xl')} {
-      padding: 0 ${props => props.theme.spacing.bodyPaddingMedium}px 0
-        ${props => props.theme.spacing.bodyPaddingMedium}px !important;
       &.modal-open {
         padding-right: ${props =>
           props.theme.spacing.bodyPaddingMedium + scrollbarWidth}px !important;
       }
     }
     ${mediaBreakpointDown('lg')} {
-      padding: 0 ${props => props.theme.spacing.bodyPaddingSmall}px 0
-        ${props => props.theme.spacing.bodyPaddingSmall}px !important;
       &.modal-open {
         padding-right: ${props =>
           props.theme.spacing.bodyPaddingSmall + scrollbarWidth}px !important;
@@ -77,6 +70,23 @@ const customStyles = css`
     flex-direction: column;
     justify-content: space-between;
     min-height: 100%;
+    padding: 0 ${props => props.theme.spacing.bodyPadding}px 0
+      ${props => props.theme.spacing.bodyPadding}px !important;
+    ${mediaBreakpointDown('xl')} {
+      padding: 0 ${props => props.theme.spacing.bodyPaddingMedium}px 0
+        ${props => props.theme.spacing.bodyPaddingMedium}px !important;
+    }
+    ${mediaBreakpointDown('lg')} {
+      padding: 0 ${props => props.theme.spacing.bodyPaddingSmall}px 0
+        ${props => props.theme.spacing.bodyPaddingSmall}px !important;
+    }
+  }
+
+  .casino-bg {
+    background-color: ${props => props.theme.colors.container};
+  }
+  .default-bg {
+    background-color: ${props => props.theme.colors.body};
   }
 
   a {

@@ -159,7 +159,7 @@ module.exports = {
     footer: {
       bottomText: pallete.blue,
     },
-    body: pallete.white,
+    body: pallete.offWhite,
     lightSpacer: '#CCD2DE',
     container: '#fff',
   },

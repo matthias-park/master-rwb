@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useI18n } from '../../../hooks/useI18n';
 import { useHistory, useLocation } from 'react-router';
 import { useAuth } from '../../../hooks/useAuth';
 import { useConfig } from '../../../hooks/useConfig';
@@ -10,7 +9,6 @@ import { useModal } from '../../../hooks/useModal';
 import { ComponentName } from '../../../constants';
 
 const LoginPage = () => {
-  const { t } = useI18n();
   const { user } = useAuth();
   const { cookies } = useConfig();
   const { enableModal } = useModal();
@@ -48,14 +46,7 @@ const LoginPage = () => {
             <Spinner animation="border" className="spinner-custom mx-auto" />
           </div>
         )}
-        {showLoginForm && (
-          <>
-            {location.state?.protectedRoute && (
-              <p className="mb-4">{t('login_protected_route')}</p>
-            )}
-            <LoginForm />
-          </>
-        )}
+        {showLoginForm && <LoginForm />}
       </div>
     </main>
   );

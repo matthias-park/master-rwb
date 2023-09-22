@@ -585,7 +585,7 @@ export const StyledRowHeader = styled('header')`
   display: flex;
   justify-content: space-between;
   height: 90px;
-  background-color: ${props => props.theme.header.bgColor};
+  background-color: ${props => props.theme.header.bgColor} !important;
   margin-left: -${props => props.theme.spacing.bodyPadding}px;
   margin-right: -${props => props.theme.spacing.bodyPadding}px;
   margin-bottom: ${props => props.theme.header.marginBottom}px;

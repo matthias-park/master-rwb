@@ -20,7 +20,7 @@ import { useConfig } from '../../../hooks/useConfig';
 import { useModal } from '../../../hooks/useModal';
 import Button from 'react-bootstrap/Button';
 import useCountdownTicker from '../../../hooks/useCountdownTicker';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 const LoginForm = () => {
   const { t } = useI18n();
@@ -58,6 +58,10 @@ const LoginForm = () => {
   );
   const history = useHistory();
   const regActivationPage = useRoutePath(PagesName.RegisterActivationPage);
+  const location = useLocation<{
+    from?: string;
+    protectedRoute?: boolean;
+  } | null>();
 
   const onSubmit = async ({ username, email, password, pin }) => {
     if (ComponentSettings?.login?.loginCookiesAccept && !cookies.accepted) {
@@ -132,6 +136,13 @@ const LoginForm = () => {
           />
         ) : (
           <>
+            <div className="d-flex align-items-center flex-wrap">
+              {location.state?.protectedRoute && (
+                <p className="my-3 login-dropdown__menu-link">
+                  {t('login_protected_route')}
+                </p>
+              )}
+            </div>
             <TextInput
               rules={{
                 required: t('login_field_required'),

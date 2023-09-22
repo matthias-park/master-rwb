@@ -21,6 +21,7 @@ import { useModal } from '../../../hooks/useModal';
 import { KYC_VALIDATOR_STATUS } from '../../../types/UserStatus';
 import { useRoutePath } from '../../../hooks';
 import { isMobile, isTablet } from 'react-device-detect';
+import clsx from 'clsx';
 
 const LoadablePageColumnFooter = loadable(() => import('./PageColumnFooter'));
 const LoadableGeoComplyAlert = loadable(
@@ -131,7 +132,12 @@ const PageLayout = ({ children }) => {
   }
 
   return (
-    <div className="page-wrp">
+    <div
+      className={clsx(
+        'page-wrp',
+        route?.id === PagesName.CasinoPage ? 'casino-bg' : 'default-bg',
+      )}
+    >
       <ErrorBoundary>
         <PageHeader />
       </ErrorBoundary>
