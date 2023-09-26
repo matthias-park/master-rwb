@@ -465,6 +465,8 @@ export const StyledHeaderUserMenu = styled(Dropdown)`
     }
   }
   .user-menu__list {
+    display: flex;
+    align-items: center;
     padding-left: 0;
     margin-bottom: 0;
     &-wrapper {

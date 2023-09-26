@@ -295,11 +295,6 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                     className="user-menu__list-item-link user-menu__list-item-link--no-divider cursor-pointer"
                     onClick={onLogoutClick}
                   >
-                    <LoadingSpinner
-                      show={loggingOut}
-                      small
-                      className="mr-n2 ml-4"
-                    />
                     <div className=" d-flex align-items-center">
                       <i
                         className={clsx(
@@ -310,6 +305,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                       {t('logout')}
                     </div>
                   </div>
+                  <LoadingSpinner show={loggingOut} small className="mr-3" />
                 </ul>
               )}
             </div>
