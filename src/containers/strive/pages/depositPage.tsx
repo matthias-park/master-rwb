@@ -103,6 +103,23 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
     KYC_VALIDATOR_STATUS.ShouldUploadDocumentForKyc,
   ].includes(user.validator_status || 0);
 
+  const baseUrl = `${window.location.origin}/${locale}${depositBaseUrl}`;
+  const returnUrls = {
+    successUrl: `${baseUrl}/loading`,
+    cancelUrl: `${baseUrl}/cancel`,
+    errorUrl: `${baseUrl}/error`,
+    pendingUrl: `${baseUrl}/loading`,
+  };
+
+  useEffect(() => {
+    if (window.self !== window.top) {
+      const potentialReturnLocation = document.location.href // get redirect url from iframe
+      const location = document.location.href.split('?')[0] // remove all params
+      const returnUrlMatch = Object.values(returnUrls).includes(location)
+      if (window.top && returnUrlMatch) window.top.location.href = potentialReturnLocation
+    }
+  }, []);
+
   const handleRequestDeposit = useCallback(
     async (
       depositValue: number,
@@ -116,10 +133,10 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
       const depositParams: DepositRequest = {
         BankId: bankId,
         Amount: depositValue,
-        ReturnSuccessUrl: `${window.location.origin}${depositBaseUrl}/loading`,
-        ReturnCancelUrl: `${window.location.origin}${depositBaseUrl}/cancel`,
-        ReturnErrorUrl: `${window.location.origin}${depositBaseUrl}/error`,
-        ReturnPendingUrl: `${window.location.origin}${depositBaseUrl}/loading`,
+        ReturnSuccessUrl: returnUrls.successUrl,
+        ReturnCancelUrl: returnUrls.cancelUrl,
+        ReturnErrorUrl: returnUrls.errorUrl,
+        ReturnPendingUrl: returnUrls.pendingUrl,
         locale: 'en_US',
         AccountId: AccountId || null,
         AccountPrefillRequested: !!AccountId || AccountPrefillRequested,
@@ -139,7 +156,7 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
           depositStatus.setDepositId(response.Data.DepositRequestId, bankId);
         }
         if (response.Data?.InnerText && response.Data?.DepositRequestId) {
-          let htmlString = atob(response.Data.InnerText);
+          let htmlString = atob(response.Data.InnerText)
           const iframeHtml = htmlString.includes('window.onload');
           const handlePaymentEvent = (
             eventType: CustomWindowEvents,
