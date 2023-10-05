@@ -105,18 +105,20 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
 
   const baseUrl = `${window.location.origin}/${locale}${depositBaseUrl}`;
   const returnUrls = {
-    successUrl: `${baseUrl}/loading`,
-    cancelUrl: `${baseUrl}/cancel`,
-    errorUrl: `${baseUrl}/error`,
-    pendingUrl: `${baseUrl}/loading`,
+    success: `${baseUrl}/loading`,
+    cancel: `${baseUrl}/cancel`,
+    error: `${baseUrl}/error`,
+    pending: `${baseUrl}/loading`,
   };
 
   useEffect(() => {
     if (window.self !== window.top) {
-      const potentialReturnLocation = document.location.href // get redirect url from iframe
-      const location = document.location.href.split('?')[0] // remove all params
-      const returnUrlMatch = Object.values(returnUrls).includes(location)
-      if (window.top && returnUrlMatch) window.top.location.href = potentialReturnLocation
+      const potentialReturnUrl = document.location.href.split('?')[0]; // get redirect url from iframe and split off any url params
+      const returnUrlMatch = Object.values(returnUrls).includes(
+        potentialReturnUrl,
+      );
+      if (window.top && returnUrlMatch)
+        window.top.location.href = potentialReturnUrl;
     }
   }, []);
 
@@ -133,10 +135,10 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
       const depositParams: DepositRequest = {
         BankId: bankId,
         Amount: depositValue,
-        ReturnSuccessUrl: returnUrls.successUrl,
-        ReturnCancelUrl: returnUrls.cancelUrl,
-        ReturnErrorUrl: returnUrls.errorUrl,
-        ReturnPendingUrl: returnUrls.pendingUrl,
+        ReturnSuccessUrl: returnUrls.success,
+        ReturnCancelUrl: returnUrls.cancel,
+        ReturnErrorUrl: returnUrls.error,
+        ReturnPendingUrl: returnUrls.pending,
         locale: 'en_US',
         AccountId: AccountId || null,
         AccountPrefillRequested: !!AccountId || AccountPrefillRequested,
@@ -156,7 +158,7 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
           depositStatus.setDepositId(response.Data.DepositRequestId, bankId);
         }
         if (response.Data?.InnerText && response.Data?.DepositRequestId) {
-          let htmlString = atob(response.Data.InnerText)
+          let htmlString = atob(response.Data.InnerText);
           const iframeHtml = htmlString.includes('window.onload');
           const handlePaymentEvent = (
             eventType: CustomWindowEvents,
