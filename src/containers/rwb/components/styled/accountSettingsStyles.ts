@@ -258,6 +258,10 @@ const accountSettingsStyles = css`
       top: -7px;
       right: -9px;
       white-space: nowrap;
+      width: 113px;
+      height: 40px;
+      padding: 8px, 24px, 8px, 24px;
+      border-radius: 24px;
     }
     &--gray {
       background-color: ${props => props.theme.colors.gray.custom}-400;

@@ -118,6 +118,31 @@ const formStyles = css`
         font-size: 16px;
       }
     }
+    &__remain {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-radius: 8px;
+      background-color: #eff1f5;
+      font-weight: 400;
+      padding: 2px 13px;
+      &__title {
+        font-size: 12px;
+        line-height: 16px;
+        letter-spacing: 0.4px;
+        color: #596e95;
+        margin: auto;
+      }
+      &__value {
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.25px;
+        color: #00205c;
+        margin: auto;
+      }
+    }
     &__icons {
       position: absolute;
       top: 50%;

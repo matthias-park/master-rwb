@@ -7,6 +7,7 @@ const pallete = {
   offWhite: '#EFF1F5',
   white: '#FFF',
   gray: '#CCD2DE',
+  offGray: '#E6E9EF',
   green: '#14895F',
 };
 
@@ -54,7 +55,7 @@ module.exports = {
     padding: '10px 13px',
     fontSize: 16,
     height: 40,
-    backgroundColor: pallete.offWhite,
+    backgroundColor: pallete.offGray,
     color: pallete.blue,
     labelLeft: 20,
     labelTop: 10,

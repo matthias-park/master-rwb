@@ -144,19 +144,69 @@ const FormFields = ({
     [fields],
   );
   const formattedRemainingLimit = (field: SettingsField) => {
+    if (formData.length === 0) return null;
     for (let data of formData) {
-      if (field.id.includes(data.LimitType.toLowerCase())) {
-        return data.Formatting === 'currency'
-          ? 'Remain $' + data?.AmountLeft ?? 'Remain $' + data?.LimitAmount
-          : null;
+      if (field?.id && field.id.includes(data.LimitType.toLowerCase())) {
+        switch (data.Formatting) {
+          case 'currency': {
+            return '$' + data?.AmountLeft;
+          }
+          case 'hour': {
+            return data?.AccumulatedDuration + 'Hours';
+          }
+          case 'date': {
+            return data?.AmountLeft + 'Dates';
+          }
+          default: {
+            return (
+              data?.FutureLimitAmount ||
+              data?.AccumulatedDuration ||
+              data?.AmountLeft
+            );
+          }
+        }
+      }
+    }
+  };
+
+  const formattedRequestedLimit = (field: SettingsField, limit: any) => {
+    if (formData.length === 0 && limit) {
+      switch (id) {
+        case 'session_limit': {
+          return limit + 'Hours';
+        }
+        default: {
+          return '$' + limit;
+        }
+      }
+    }
+    for (let data of formData) {
+      if (field?.id && field.id.includes(data.LimitType.toLowerCase())) {
+        switch (data.Formatting) {
+          case 'currency': {
+            return '$' + data.LimitAmount;
+          }
+          case 'hour': {
+            return data.LimitAmount + 'Hours';
+          }
+          case 'date': {
+            return data.LimitAmount + 'Dates';
+          }
+          default: {
+            return data.LimitAmount;
+          }
+        }
       }
     }
   };
 
   const foramttedValidDate = (field: SettingsField) => {
+    if (formData.length === 0) return ' ';
     for (let data of formData) {
-      if (field.id.includes(data.LimitType.toLowerCase())) {
-        return data.ResetTime;
+      if (field?.id && field.id.includes(data.LimitType.toLowerCase())) {
+        return dayjs(foramttedValidDate(data.ResetTime)).format(
+          'MMM D, YYYY h:mmA',
+        );
       }
     }
   };
@@ -208,13 +258,11 @@ const FormFields = ({
                   value => !value || value === 'default' || value === '-1',
                 );
               }
-
               return (
                 <>
                   {field.value && field.value.id && (
                     <input type="hidden" {...register(field.value.id)}></input>
                   )}
-
                   <LoadingButton
                     key={field.id}
                     data-testid={field.id}
@@ -224,7 +272,7 @@ const FormFields = ({
                     }
                     disabled={isDisabled}
                     className="mt-2 mr-2"
-                    variant="primary"
+                    variant={isDeleteButton ? 'secondary' : 'primary'}
                     type="submit"
                     onClick={() =>
                       field.value &&
@@ -499,15 +547,18 @@ const FormFields = ({
                     </div>
                     {isDepositLossBetLimits && (
                       <div className="col-sm">
-                        <TextInput
+                        <span
                           id={field.id + '-remain'}
                           key={field.id + '-remain'}
-                          rules={null}
-                          defaultValue={formattedRemainingLimit(field)}
-                          disabled={true}
-                          title="Remain"
-                          type={field.type}
-                        />
+                          className="form-group__remain"
+                        >
+                          <p className="form-group__remain__title">
+                            {t('left_limit')}
+                          </p>
+                          <p className="form-group__remain__value">
+                            {formattedRemainingLimit(field) || '-'}
+                          </p>
+                        </span>
                       </div>
                     )}
                   </div>
@@ -518,18 +569,16 @@ const FormFields = ({
                           Requested limit:{' '}
                         </pre>
                         <p className="text-14 pt-1">
-                          {' '}
-                          {field.default && '$' + field.default}
+                          {formattedRequestedLimit(field, watch(field.id)) ||
+                            '-'}
                         </p>
                       </div>
                       <div className="row">
                         <pre className="text-14 pt-1 ml-3 mb-0">
-                          Valid form:{' '}
+                          Valid from:{' '}
                         </pre>
                         <p className="text-14 pt-1 mb-0">
-                          {dayjs(foramttedValidDate(field)).format(
-                            'MMM,d,YYYY h:mmA',
-                          )}
+                          {foramttedValidDate(field) || '-'}
                         </p>
                       </div>
                       <hr></hr>
