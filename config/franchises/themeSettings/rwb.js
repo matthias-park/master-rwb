@@ -40,6 +40,11 @@ module.exports = {
         color: pallete.white,
       },
     },
+    outlineLight: {
+      focus: {
+        color: pallete.darkBlue,
+      },
+    },
     paddingY: 10,
     maxHeight: 40,
     primaryBgColor: pallete.red,
