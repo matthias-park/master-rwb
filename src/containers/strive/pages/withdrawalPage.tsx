@@ -153,7 +153,6 @@ const WithdrawalPage = () => {
     setSelectedBankAccount,
   ] = useState<BankAccount | null>(null);
   const isDataLoading = !data && !error;
-  const [isSinglePaymentMethods, setIsSinglePaymentMethods] = useState(false);
   useEffect(() => {
     if (data?.Data.translations) {
       dispatch(
@@ -165,13 +164,6 @@ const WithdrawalPage = () => {
         ),
       );
     }
-    if (data?.Data.accounts?.length === 1) {
-      setIsSinglePaymentMethods(true);
-      setSelectedBankAccount(data.Data.accounts[0]);
-    } else {
-      setIsSinglePaymentMethods(false);
-    }
-    console.log('account data', data?.Data.accounts);
   }, [data]);
 
   const cancelRequest = useCallback(
@@ -289,7 +281,7 @@ const WithdrawalPage = () => {
             </CustomAlert>
           )}
           <div className="d-flex flex-column w-100">
-            {!!data.Data.accounts?.length && !isSinglePaymentMethods && (
+            {!!data.Data.accounts?.length && (
               <div className="input-container mb-4 py-3 px-4">
                 <h6 className="input-container__title text-14 mb-3">
                   {t('withdrawal_available_accounts')}
