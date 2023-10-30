@@ -199,6 +199,7 @@ export const promotionsStyles = css`
       display: flex;
       flex-direction: column;
       flex-grow: 1;
+      justify-content: space-between;
       padding: ${props => props.theme.promotions.cardPadding};
       &-title {
         font-size: 16px;
