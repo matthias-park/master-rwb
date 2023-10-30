@@ -97,7 +97,7 @@ module.exports = {
   pageInnerContainer: {
     boxShadow: '0px 2px 4px rgba(5, 27, 53, 0.1)',
     titleWeight: 700,
-    bgColor: 'transparent',
+    bgColor: pallete.white,
     color: '#000',
   },
   pageContainer: {

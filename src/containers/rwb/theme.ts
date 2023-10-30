@@ -2,17 +2,6 @@ import { DefaultTheme } from 'styled-components';
 import { Config } from '../../constants';
 import { mergeDeep } from '../../utils';
 
-const pallete = {
-  blue: '#596E95',
-  darkBlue: '#00205C',
-  red: '#D7182A',
-  offWhite: '#EFF1F5',
-  white: '#FFF',
-  gray: '#E4EBF3',
-  lightGray: '#F1F5F9',
-  pink: '#EB4F5E',
-};
-
 const theme: DefaultTheme = mergeDeep(
   {},
   {
@@ -68,7 +57,7 @@ const theme: DefaultTheme = mergeDeep(
         light: '#cff3e1',
       },
       brand: {
-        main: pallete.white,
+        main: 'white',
         light: '#444',
         text: '#fff',
         hover: '#bfbfbf',
@@ -300,11 +289,7 @@ const theme: DefaultTheme = mergeDeep(
     },
   } as DefaultTheme,
   Config.themeSettings,
-  {
-    checkBoxes: {
-      color: pallete.red,
-    },
-  },
+  {},
 );
 
 export default theme;

@@ -823,9 +823,7 @@ const customStyles = css`
       min-width: 850px;
       max-width: 1200px;
       align-self: center;
-      background-color: ${props =>
-        props.theme.pageInnerContainer.bgColor ||
-        props.theme.colors.white.main};
+      background-color: ${props => props.theme.pageInnerContainer.bgColor};
       color: ${props => props.theme.pageInnerContainer.color || 'unset'};
       margin: 40px 0;
       border-radius: 8px;
@@ -834,6 +832,7 @@ const customStyles = css`
       }
       &.login {
         position: relative;
+        padding: unset;
         .page-inner__title {
           color: ${props => props.theme.login.titleColor};
           width: 100%;
@@ -859,6 +858,7 @@ const customStyles = css`
         }
       }
       &--small {
+        padding: 40px;
         width: 35%;
         min-width: 350px;
         max-width: ${props => props.theme.pageContainer.smallMaxWidth}px;
