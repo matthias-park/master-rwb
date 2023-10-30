@@ -388,7 +388,9 @@ export const registrationStyles = css`
     }
   }
 
+  .reg-error,
   .reg-welcome {
+    padding: 36px 40px;
     &__title {
       margin-bottom: 10px;
     }

@@ -15,7 +15,7 @@ const RegError = ({
   const { icons: icon } = ThemeSettings!;
 
   return (
-    <>
+    <div className={'reg-error'}>
       <p
         className="d-flex align-items-center text-14 text-bold mb-3 cursor-pointer"
         onClick={() => onClose(null)}
@@ -39,7 +39,7 @@ const RegError = ({
         </h4>
         <p className="info-block__text">{jsxT('reg_error_info_block_text')}</p>
       </div>
-    </>
+    </div>
   );
 };
 
