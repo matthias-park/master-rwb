@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { useAuth } from '../../../hooks/useAuth';
 import { useConfig } from '../../../hooks/useConfig';
-import Spinner from 'react-bootstrap/Spinner';
 import LoginForm from '../components/LoginForm';
 import clsx from 'clsx';
 import { useModal } from '../../../hooks/useModal';
@@ -21,7 +20,8 @@ const LoginPage = () => {
   useEffect(() => {
     const fromPathname = location.state?.from;
     if (user.logged_in && !!user.id) history.push(fromPathname || '/');
-  }, [user.logged_in]);
+  }, [user.logged_in, history, location]);
+
   useEffect(() => {
     if (
       !cookies.accepted &&
@@ -31,8 +31,6 @@ const LoginPage = () => {
     }
   }, []);
 
-  const showLoginForm = !user.logged_in && !user.loading;
-
   return (
     <main className="page-container">
       <div className={clsx('page-inner page-inner--small login')}>
@@ -41,12 +39,7 @@ const LoginPage = () => {
           src="/assets/images/container-bg-img.png"
           alt="login-bg"
         />
-        {user.loading && (
-          <div className="d-flex justify-content-center pt-4 pb-3">
-            <Spinner animation="border" className="spinner-custom mx-auto" />
-          </div>
-        )}
-        {showLoginForm && <LoginForm />}
+        <LoginForm />
       </div>
     </main>
   );
