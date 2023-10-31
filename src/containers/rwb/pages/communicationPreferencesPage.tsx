@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import LoadingButton from '../../../components/LoadingButton';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import { postApi } from '../../../utils/apiUtils';
+import { Config } from '../../../constants';
 
 interface CommunicationPrefProps {
   title: string;
@@ -66,6 +67,7 @@ const CommunicationPreferencesPage = () => {
     '/restapi/v3/user/profile/communication_preferences',
   );
   const { watch, handleSubmit, formState, register, reset } = useForm();
+  const [newsLetterChecked, setNewsLetterChecked] = useState(false);
   const [checkboxValues, setCheckboxValues] = useState({});
   const [apiResponse, setApiResponse] = useState<{
     success: boolean;
@@ -100,7 +102,8 @@ const CommunicationPreferencesPage = () => {
     formBody: boolean = false,
   ): Promise<void> => {
     setApiResponse(null);
-    const newUrl = url.replace('https://rwbapi-dev.strivegaming.us', '');
+    const apiDomain = (Config as any)?.domains[0].api;
+    const newUrl = url.replace(apiDomain, '');
     const res = await postApi<RailsApiResponse<null>>(newUrl, body, {
       formData: formBody,
     }).catch((res: RailsApiResponse<null>) => res);
@@ -157,9 +160,6 @@ const CommunicationPreferencesPage = () => {
                 <h6 className="communication-prefs__pref-title">
                   {t('master_gdpr_setting_title')}
                 </h6>
-                <p className="communication-prefs__pref-text">
-                  {/* {t('master_gdpr_setting_note')} */}
-                </p>
                 <div className="communication-prefs__pref-item">
                   <span>{t('master_gdpr_setting_name')}</span>
                   <span className="ml-auto d-flex align-items-center">
@@ -167,6 +167,7 @@ const CommunicationPreferencesPage = () => {
                       id={'master_gdpr_setting'}
                       checked={someChecked}
                       onChange={e => {
+                        setNewsLetterChecked(true);
                         if (someChecked) {
                           setCheckboxValues(
                             allSettingIds.reduce((acc, curr) => {
@@ -201,7 +202,7 @@ const CommunicationPreferencesPage = () => {
             </div>
             <LoadingButton
               loading={formState.isSubmitting}
-              disabled={!formState.isDirty}
+              disabled={!formState.isDirty && !newsLetterChecked}
               className="mt-3"
               variant="primary"
               type="submit"
