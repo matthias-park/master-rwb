@@ -402,7 +402,7 @@ const FormFields = ({
                   };
                 }
               }
-              if (field.id === 'phone_number' && usaOnlyBrand) {
+              if (field.id === 'phone_number') {
                 masketInput = {
                   format: '(###) ###-####',
                   mask: '(###) ###-####'.replace(/[^1-9]/g, '').split(''),
