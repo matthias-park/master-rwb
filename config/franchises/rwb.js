@@ -9,7 +9,7 @@ module.exports = {
   ],
   theme: 'rwb',
   themeSettings: require('./themeSettings/rwb'),
-  dateFormat: 'YYYY-MM-DD',
+  dateFormat: 'MM-DD-YYYY',
   smartyStreets: '108064517886631271',
   geoComplyKey: 'oQeVf0ojxN',
   zendesk: 'a065ceaf-2ca9-436c-821b-37418041092d',
