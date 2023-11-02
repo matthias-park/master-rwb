@@ -27,6 +27,14 @@ module.exports = {
     },
     register: {
       multiStepForm: true,
+      requiredValidations: {
+        needsLength: 7,
+        needsLowerCase: true,
+        needsUpperase: true,
+        needsNumbers: true,
+        needsSpecialCharacters: true,
+        needsEmail: true,
+      },
       filterFormIDs: [
         'personal_account_check',
         'info_accuracy_check',

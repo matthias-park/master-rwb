@@ -12,9 +12,11 @@ import LoadingButton from '../../../components/LoadingButton';
 import { VALIDATIONS } from '../../../constants';
 import TextInput from '../../../components/customFormInputs/TextInput';
 import RedirectNotFound from '../../../components/RedirectNotFound';
+import { ComponentSettings } from '../../../constants';
 
 const ForgotPasswordPage = () => {
-  const { code } = useParams<{ code?: string }>();
+  const { code, email } = useParams<{ code?: string; email?: string }>();
+  const { requiredValidations } = ComponentSettings?.register!;
   const formMethods = useForm({
     mode: 'onBlur',
   });
@@ -70,7 +72,8 @@ const ForgotPasswordPage = () => {
                   'reset_password_field_required',
                 )}`,
                 validate: value =>
-                  VALIDATIONS.password(value, 3) || t('register_password_weak'),
+                  VALIDATIONS.password(value, requiredValidations, email) ||
+                  t('register_password_weak'),
               }}
               onBlur={() =>
                 watch('repeat_password') && trigger('repeat_password')
@@ -90,7 +93,7 @@ const ForgotPasswordPage = () => {
                 )}`,
                 validate: value =>
                   (value === watch('password') &&
-                    VALIDATIONS.password(value, 3)) ||
+                    VALIDATIONS.password(value, requiredValidations, email)) ||
                   t('reset_password_need_match_password'),
               }}
               id="repeat_password"

@@ -30,7 +30,7 @@ export const blocks = (
           type: 'text',
           required: true,
           validate: value =>
-            VALIDATIONS.length_limitation(value, 1, 29) ||
+            VALIDATIONS.lengthLimitation(value, 1, 29) ||
             t('field_only_letters'),
         },
         {
@@ -39,7 +39,7 @@ export const blocks = (
           type: 'text',
           required: true,
           validate: value =>
-            VALIDATIONS.length_limitation(value, 1, 29) ||
+            VALIDATIONS.lengthLimitation(value, 1, 29) ||
             t('field_only_letters'),
         },
         {

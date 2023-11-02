@@ -542,7 +542,7 @@ export const VALIDATIONS = {
       needsNumbers,
       needsSpecialCharacters,
       needsEmail,
-    } = requiredValidations;
+    } = requiredValidations || ComponentSettings?.register?.requiredValidations;
     if (value.includes(' ') || value.length <= needsLength) return false;
     //ADG Validation does not allow first three characters of an email in a password.
     const adgPasswordValidation = (): boolean => {

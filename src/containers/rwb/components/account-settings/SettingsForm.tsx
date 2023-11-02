@@ -436,7 +436,7 @@ const FormFields = ({
                               if (value) {
                                 if (isNewPassword)
                                   return (
-                                    VALIDATIONS.password(value, 3) ||
+                                    VALIDATIONS.password(value) ||
                                     t('register_password_weak')
                                   );
                                 if (field.id === 'phone_number')

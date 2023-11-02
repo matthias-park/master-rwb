@@ -1,11 +1,8 @@
 export interface ComponentSettings {
   v2Auth?: string;
   userIdleTimeout?: number;
-  showTimedOutPlayerBanner: boolean;
+  showTimedOutPlayerBanner?: boolean;
   showValidatorStatusBanner?: boolean;
-  register: {
-    multiStepForm: boolean;
-  };
   login?: {
     loginCookiesAccept?: boolean;
     emailLogin?: boolean;
@@ -14,6 +11,7 @@ export interface ComponentSettings {
   useBalancesEndpoint?: boolean;
   balancesContainer?: boolean;
   register?: {
+    multiStepForm?: boolean;
     filterFormIDs: string[];
     flipFormIDs: string[];
     parseMiddlename: boolean;
