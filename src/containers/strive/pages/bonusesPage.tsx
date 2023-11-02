@@ -156,9 +156,7 @@ const BonusHistoryTable = ({ bonuses }) => {
                             </strong>
                             <strong>
                               <NumberFormat
-                                value={
-                                  bonus.Amount ?? bonus.BonusCampaignAwardAmount
-                                }
+                                value={bonus.BonusCampaignAwardAmount}
                                 thousandSeparator
                                 displayType={'text'}
                                 prefix={user.currency}
@@ -549,6 +547,8 @@ const BonusesPage = () => {
         <>
           {!!activeBonuses.length && (
             <BonusCardList
+              searchBar={ComponentSettings?.bonuses?.activeBonuses?.searchBar}
+              paginate={ComponentSettings?.bonuses?.activeBonuses?.paginate}
               title={t('active_bonuses_title')}
               items={activeBonuses}
               mutate={mutate}

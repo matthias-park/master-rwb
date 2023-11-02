@@ -33,5 +33,15 @@ module.exports = {
     geoComply: {
       checkOnCasinoGame: true,
     },
+    register: {
+      requiredValidations: {
+        needsLength: 7,
+        needsLowerCase: true,
+        needsUpperase: true,
+        needsNumbers: true,
+        needsSpecialCharacters: true,
+        needsEmail: false,
+      },
+    },
   },
 };

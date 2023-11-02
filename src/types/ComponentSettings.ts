@@ -12,6 +12,25 @@ export interface ComponentSettings {
   };
   limitsOnAction?: string[];
   useBalancesEndpoint?: boolean;
+  balancesContainer?: boolean;
+  register?: {
+    filterFormIDs: string[];
+    flipFormIDs: string[];
+    parseMiddlename: boolean;
+    requiredValidations: {
+      needsLength: number;
+      needsLowerCase: boolean;
+      needsUpperase: boolean;
+      needsNumbers: boolean;
+      needsSpecialCharacters: boolean;
+      needsEmail: boolean;
+    };
+  };
+  assetsOnSportsPage?: {
+    useAssets?: boolean;
+    headerLogo?: string;
+  };
+  useRealityCheck?: boolean;
   modals: {
     TnC: boolean;
     ResponsibleGambling: boolean;
@@ -37,6 +56,10 @@ export interface ComponentSettings {
     needsOverviewTable?: boolean;
   };
   bonuses: {
+    activeBonuses?: {
+      paginate: boolean;
+      searchBar: boolean;
+    };
     queueBonuses: {
       paginate: boolean;
       searchBar: boolean;

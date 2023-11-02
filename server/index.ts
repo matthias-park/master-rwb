@@ -21,6 +21,11 @@ const port: number = config.get('port') || 3800;
 const app = express();
 
 app.set('trust proxy', true);
+app.use(function (req, res, next) {
+  res.removeHeader('x-powered-by');
+  res.removeHeader('server');
+  next();
+});
 app.use(cookieParser());
 app.use(express.json());
 app.use(
@@ -105,6 +110,8 @@ app.post('/api/set-locale', async (req, res) => {
     domain: req.hostname,
     expires,
     httpOnly: true,
+    secure: true,
+    sameSite: 'none',
   });
   return res.status(200).json({ success: true });
 });
