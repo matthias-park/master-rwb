@@ -89,7 +89,7 @@ export const navStyles = css`
       }
       &-title-icon {
         transform: none !important;
-        font-size: ${props => props.theme.settingsMenu.iconSize || 20}px;
+        font-size: ${props => props.theme.settingsMenu.iconSize}px;
         vertical-align: bottom;
         &:before {
           color: ${props => props.theme.settingsMenu.iconColor};

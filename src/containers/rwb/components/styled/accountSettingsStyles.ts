@@ -75,7 +75,7 @@ const accountSettingsStyles = css`
       flex-basis: 80%;
       &-title {
         font-size: 14px;
-        color: ${props => props.theme.balancesList?.titleColor || '#778ca6'};
+        color: ${props => props.theme.balancesList?.titleColor};
         margin-bottom: 5px;
       }
       &-value {

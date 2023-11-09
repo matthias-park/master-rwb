@@ -21,7 +21,7 @@ const PageColumnFooter = () => {
     return (
       <div className="footer-item footer-links">
         <div className="footer-links__image">
-          <img alt="rwb-logo" src={'/assets/images/logo/header-logo.svg'} />
+          <img alt="footer-logo" src={'/assets/images/logo/header-logo.png'} />
           {isMobile && (
             <>
               <div className="footer-info-timer">

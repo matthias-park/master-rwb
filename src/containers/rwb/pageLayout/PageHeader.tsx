@@ -104,10 +104,10 @@ const PageHeader = () => {
           <img
             alt="logo"
             className="header-logo"
-            src={`/assets/images/logo/header-logo.svg`}
+            src={`/assets/images/logo/header-logo.png`}
           />
           <img
-            style={{ position: 'relative', left: '140px' }}
+            className='responsible-gaming'
             alt="responsible-gaming"
             src={`/assets/images/footer/responsible-gaming.png`}
           />
@@ -117,7 +117,7 @@ const PageHeader = () => {
           <img
             alt="logo"
             className="header-logo-mobile"
-            src={`/assets/images/logo/logo-small.svg`}
+            src={`/assets/images/logo/logo-small.png`}
           />
         </Link>
       )}

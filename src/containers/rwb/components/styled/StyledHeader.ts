@@ -623,22 +623,24 @@ export const StyledRowHeader = styled('header')`
   .header-logo-wrp {
     display: flex;
     width: ${props =>
-      props.theme.header.logoPosition === 'left'
-        ? props.theme.header.logoSize || 300
-        : 0}px;
+      props.theme.header.logo.width};
     .header-logo {
       position: absolute;
       top: 45px;
-      left: ${props =>
-        (props.theme.header.logoPosition === 'left' && '90px') || '50%'};
+      left: ${props => props.theme.header.logo.left};
       transform: translateX(-50%) translateY(-50%);
-      width: ${props => props.theme.header.logoSize || 300}px;
+      width: ${props => props.theme.header.logo.width};
+    }
+    .responsible-gaming { 
+      position: relative;
+      left: ${props => props.theme.header.responsibleGamingLogo.left};
     }
   }
   .header-logo-mobile-wrp {
-    width: ${props => props.theme.header.logoSizeMobile || 35}px;
+    width: ${props => props.theme.header.logo.mobile.width};
+    margin: auto 0;
     .header-logo-mobile {
-      width: ${props => props.theme.header.logoSizeMobile || 35}px;
+      width: ${props => props.theme.header.logo.mobile.width};
       ${mediaBreakpointDown('xs')} {
         position: relative;
         width: 75px;

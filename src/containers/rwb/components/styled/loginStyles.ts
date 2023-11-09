@@ -65,7 +65,7 @@ export const loginStyles = css`
           &__body {
             font-weight: 400;
             margin-right: 8px;
-            color: #596e95;
+            color: ${props => props.theme.login.text.color};
           }
           &__btn {
             font-weight: 500;
@@ -77,6 +77,7 @@ export const loginStyles = css`
           display: flex;
           &__img {
             margin-right: 16px;
+            max-width: 32px;
             align-self: flext-start;
           }
           &__text {
@@ -84,7 +85,7 @@ export const loginStyles = css`
             font-weight: 400;
             line-height: 16px;
             text-align: left;
-            color: #596e95;
+            color: ${props => props.theme.login.text.color};
           }
         }
         @media only screen and (max-width: 480px) {

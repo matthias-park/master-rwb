@@ -237,7 +237,7 @@ const HeaderUserInfo = ({ user, handleLogout, dropdownClasses, isMobile }) => {
                         <span className="user-menu__info-login mt-3">
                           Last Login:
                           {dayjs(user.last_login_at).format(
-                            'YYYY-MM-DD hh:mm A',
+                            ' YYYY-MM-DD hh:mm A',
                           )}
                         </span>
                       </div>

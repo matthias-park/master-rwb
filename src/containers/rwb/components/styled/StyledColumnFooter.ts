@@ -132,7 +132,7 @@ export const StyledColumnFooter = styled.div`
         flex-direction: column;
         gap: 8px;
         img {
-          max-width: 100px;
+          max-width: 32px;
           margin-right: 30px;
         }
       }
@@ -217,7 +217,7 @@ export const StyledColumnFooter = styled.div`
       width: 100%;
     }
     &__section {
-      color: #596e95;
+      color: #7f7f7f;
       font-size: 12px;
       font-style: italic;
       font-weight: 600;
@@ -255,7 +255,7 @@ export const StyledColumnFooter = styled.div`
           width: 40px;
           height: 40px;
           border-radius: 50%;
-          background-color: ${props => props.theme.footer.iconsBg || '#222222'};
+          background-color: ${props => props.theme.footer.iconsBg};
           margin-top: 15px;
           i {
             font-size: 20px;
@@ -270,7 +270,7 @@ export const StyledColumnFooter = styled.div`
         font-weight: 400;
         line-height: 16px;
         letter-spacing: 0.4px;
-        color: #00205ca6;
+        color: ${props => props.theme.footer.timer.color};
         margin-bottom: 4px;
       }
       .timer {
@@ -317,7 +317,7 @@ export const StyledColumnFooter = styled.div`
         }
         i {
           margin-right: 8px;
-          color: ${props => props.theme.colors.primary.main};
+          color: ${props => props.theme.footer.links.icon.color};
         }
       }
       font-size: 16px;

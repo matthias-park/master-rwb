@@ -173,6 +173,16 @@ declare module 'styled-components' {
       };
     };
     header: {
+      logo: {
+        left: string;
+        width: string;
+        mobile: {
+          width: string;
+        }
+      }
+      responsibleGamingLogo: {
+        left: string;
+      }
       logoSize?: number;
       logoSizeMobile?: number;
       logoPosition?: string;
@@ -209,6 +219,14 @@ declare module 'styled-components' {
       };
     };
     footer: {
+      timer: {
+        color: string;
+      }
+      links: {
+        icon: {
+          color: string;
+        }
+      }
       listColor: string;
       listTitleWeight: number;
       timerBgColor?: string;
@@ -250,6 +268,9 @@ declare module 'styled-components' {
       color?: string;
     };
     login: {
+      text: {
+        color: string,
+      }
       bgImgTop?: string;
       linkDecoration?: string;
       linkColor?: string;
