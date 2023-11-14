@@ -102,8 +102,11 @@ const CommunicationPreferencesPage = () => {
     formBody: boolean = false,
   ): Promise<void> => {
     setApiResponse(null);
-    const apiDomain = (Config as any)?.domains[0].api;
-    const newUrl = url.replace(apiDomain, '');
+    let newUrl;
+    if (process.env.NODE_ENV === 'development') {
+      const apiDomain = (Config as any)?.domains[0].api;
+      newUrl = url.replace(apiDomain, '');
+    }
     const res = await postApi<RailsApiResponse<null>>(newUrl, body, {
       formData: formBody,
     }).catch((res: RailsApiResponse<null>) => res);
