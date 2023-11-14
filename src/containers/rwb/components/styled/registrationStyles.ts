@@ -353,6 +353,7 @@ export const registrationStyles = css`
       &__info {
         display: flex;
         &__img {
+          max-width: 32px;
           margin-right: 16px;
           align-self: flext-start;
         }
