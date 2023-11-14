@@ -126,7 +126,7 @@ export const FormField = ({
               required={field.items[0].required}
               fallback={<TextInput id={field.items[0].id} rules={{}} />}
               validate={field.items[0].validate}
-              onSelectAddress={() => setShowAddressFields(true)}
+              onInput={() => setShowAddressFields(true)}
             />
           )}
           {!useAddressAutocomplete && (

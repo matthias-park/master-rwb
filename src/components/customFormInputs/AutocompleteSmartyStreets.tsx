@@ -90,6 +90,7 @@ interface Props {
   defaultValue?: string;
   validate?: () => boolean;
   onSelectAddress?: () => void;
+  onInput?: () => void;
 }
 
 const fakeFieldId = 'temp_field_autocomplete_address';
@@ -100,6 +101,7 @@ const AutocompleteSmartyStreets = ({
   defaultValue,
   validate,
   onSelectAddress,
+  onInput,
 }: Props) => {
   const { setValue } = useFormContext();
   const { t } = useI18n();
@@ -190,6 +192,7 @@ const AutocompleteSmartyStreets = ({
     }
   };
   const onInputHandler = (value: string) => {
+    onInput?.();
     const valueLowerCaseTrim = value.toLowerCase().trim();
     const currentSelectionEqual =
       !!selectedValue.current &&
