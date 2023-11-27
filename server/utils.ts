@@ -102,6 +102,7 @@ const getWebConfig = (req: Request) => {
     sbTechUrl: FRANCHISE_CONFIG.sbTechUrl,
     smartyStreets: FRANCHISE_CONFIG.smartyStreets,
     zendesk: FRANCHISE_CONFIG.zendesk,
+    leverageMedia: FRANCHISE_CONFIG.leverageMedia,
     googleRecaptchaKey: FRANCHISE_CONFIG.googleRecaptchaKey,
     geoComplyKey: FRANCHISE_CONFIG.geoComplyKey,
     xtremepush: FRANCHISE_CONFIG.xtremepush,

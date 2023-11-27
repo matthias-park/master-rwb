@@ -48,6 +48,7 @@ interface Props {
   onEnterPress?: () => void;
   autoComplete?: string;
   customInputStyle?: boolean;
+  trim?: boolean;
 }
 
 interface UncontrolledProps extends FormControlProps {
@@ -200,6 +201,7 @@ const TextInput = ({
   autoComplete,
   customInputStyle,
   onChange,
+  trim,
 }: Props) => {
   const hasFocus = useRef<boolean>(false);
   const { field, fieldState } = useController({
@@ -260,6 +262,7 @@ const TextInput = ({
         onBlur?.();
         field.onBlur();
         !maskedInput && field.onChange(e);
+        if (trim) field.onChange?.(e.target.value.trimStart().trimEnd());
         hasFocus.current = false;
       }}
       onFocus={() => {

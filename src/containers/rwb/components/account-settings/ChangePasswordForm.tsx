@@ -135,7 +135,7 @@ const ChangePasswordForm = () => {
                   'reset_password_field_required',
                 )}`,
                 validate: value =>
-                  VALIDATIONS.password(value, 3) || t('register_password_weak'),
+                  VALIDATIONS.password(value) || t('register_password_weak'),
               }}
               onBlur={() =>
                 watch('repeat_password') && trigger('repeat_password')
@@ -154,7 +154,7 @@ const ChangePasswordForm = () => {
                 )}`,
                 validate: value =>
                   (value === watch('password') &&
-                    VALIDATIONS.password(value, 3)) ||
+                    VALIDATIONS.password(value)) ||
                   t('reset_password_need_match_password'),
               }}
               id="repeat_password"

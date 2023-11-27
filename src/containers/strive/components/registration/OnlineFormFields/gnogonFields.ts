@@ -1,8 +1,8 @@
 import {
+  ComponentSettings,
   FormFieldValidation,
   franchiseDateFormat,
   VALIDATIONS,
-  Franchise,
 } from '../../../../../constants';
 import RailsApiResponse from '../../../../../types/api/RailsApiResponse';
 import { API_VALIDATIONS, getApi } from '../../../../../utils/apiUtils';
@@ -12,7 +12,7 @@ import { OnlineFormBlock } from '../../../../../types/RegistrationBlock';
 
 // @ts-ignore
 const smartyStreetsEnabled = !!window.__config__.smartyStreets;
-
+const { requiredValidations } = ComponentSettings?.register!;
 export const blocks = (
   t: any,
   setValidation: any,
@@ -210,7 +210,7 @@ export const blocks = (
           triggerId: 'repeat_password',
           required: true,
           validate: value => {
-            const valid = VALIDATIONS.password(value, Franchise.gnogon ? 4 : 3);
+            const valid = VALIDATIONS.password(value, requiredValidations);
             setValidation(
               'password',
               valid ? FormFieldValidation.Valid : FormFieldValidation.Invalid,

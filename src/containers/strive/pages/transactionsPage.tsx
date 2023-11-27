@@ -44,6 +44,18 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
     setCurrentPage(1);
   }, [dateTo.format('YYYY-MM-DD'), dateFrom.format('YYYY-MM-DD')]);
 
+  const dateIsOutOfRange = dateString => {
+    const removeTime = date => {
+      return dayjs(dayjs(date).format('YYYY-MM-DD'));
+    };
+
+    const date = dayjs(removeTime(dateString));
+    const dateToDiff = date.diff(removeTime(dateTo), 'day');
+    const dateFromDiff = date.diff(removeTime(dateFrom), 'day');
+
+    return dateFromDiff < 0 || dateToDiff > 0;
+  };
+
   return (
     <div className="d-flex flex-column">
       {!data ? (
@@ -63,6 +75,7 @@ const TransactionsTable = ({ dateTo, dateFrom, data, updateUrl }) => {
             </thead>
             <tbody>
               {data.transactions.map((transaction, index) => {
+                if (dateIsOutOfRange(transaction.date)) return null;
                 return (
                   <tr key={index}>
                     <td>

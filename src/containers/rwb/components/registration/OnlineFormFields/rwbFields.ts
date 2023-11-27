@@ -58,7 +58,7 @@ export const blocks = (t: any, setValidation: any, validateRepeat: any) => {
             triggerId: 'repeat_password',
             required: true,
             validate: value => {
-              const valid = VALIDATIONS.password(value, 3);
+              const valid = VALIDATIONS.password(value);
               setValidation(
                 'password',
                 valid ? FormFieldValidation.Valid : FormFieldValidation.Invalid,

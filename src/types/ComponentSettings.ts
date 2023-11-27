@@ -1,17 +1,34 @@
 export interface ComponentSettings {
   v2Auth?: string;
   userIdleTimeout?: number;
-  showTimedOutPlayerBanner: boolean;
+  showTimedOutPlayerBanner?: boolean;
   showValidatorStatusBanner?: boolean;
-  register: {
-    multiStepForm: boolean;
-  };
   login?: {
     loginCookiesAccept?: boolean;
     emailLogin?: boolean;
   };
   limitsOnAction?: string[];
   useBalancesEndpoint?: boolean;
+  balancesContainer?: boolean;
+  register?: {
+    multiStepForm?: boolean;
+    filterFormIDs: string[];
+    flipFormIDs: string[];
+    parseMiddlename: boolean;
+    requiredValidations: {
+      needsLength: number;
+      needsLowerCase: boolean;
+      needsUpperase: boolean;
+      needsNumbers: boolean;
+      needsSpecialCharacters: boolean;
+      needsEmail: boolean;
+    };
+  };
+  assetsOnSportsPage?: {
+    useAssets?: boolean;
+    headerLogo?: string;
+  };
+  useRealityCheck?: boolean;
   modals: {
     TnC: boolean;
     ResponsibleGambling: boolean;
@@ -37,6 +54,10 @@ export interface ComponentSettings {
     needsOverviewTable?: boolean;
   };
   bonuses: {
+    activeBonuses?: {
+      paginate: boolean;
+      searchBar: boolean;
+    };
     queueBonuses: {
       paginate: boolean;
       searchBar: boolean;

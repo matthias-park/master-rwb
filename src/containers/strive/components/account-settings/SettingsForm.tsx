@@ -364,10 +364,8 @@ const FormFields = ({
                         if (value) {
                           if (isNewPassword)
                             return (
-                              VALIDATIONS.password(
-                                value,
-                                Franchise.desertDiamond ? 4 : 3,
-                              ) || t('register_password_weak')
+                              VALIDATIONS.password(value) ||
+                              t('register_password_weak')
                             );
                           if (field.id === 'phone_number')
                             return (

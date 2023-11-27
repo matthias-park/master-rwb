@@ -172,7 +172,7 @@ const ForgotPasswordPage = () => {
                       'reset_password_field_required',
                     )}`,
                     validate: value =>
-                      VALIDATIONS.password(value, 3) ||
+                      VALIDATIONS.password(value) ||
                       t('register_password_weak'),
                   }}
                   onBlur={() =>
@@ -192,7 +192,7 @@ const ForgotPasswordPage = () => {
                     )}`,
                     validate: value =>
                       (value === watch('password') &&
-                        VALIDATIONS.password(value, 3)) ||
+                        VALIDATIONS.password(value)) ||
                       t('reset_password_need_match_password'),
                   }}
                   id="repeat_password"
