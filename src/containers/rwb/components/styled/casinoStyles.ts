@@ -802,6 +802,7 @@ export const StyledCasinoInnerPage = styled.div`
       cursor: pointer;
       i {
         font-size: 26px;
+        color: white;
       }
     }
     .custom-alert.full-screen {
