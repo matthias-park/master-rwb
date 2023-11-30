@@ -113,6 +113,7 @@ const CommunicationPreferencesPage = () => {
     if (res.Success) {
       reset({ ...watch() });
     }
+    console.log('pref handleOnSubmit fired');
     setApiResponse({
       success: res.Success,
       msg: res.Message || t('api_response_failed'),
@@ -127,6 +128,7 @@ const CommunicationPreferencesPage = () => {
         return obj;
       }, {}),
     };
+    console.log('pref updateSettingsSubmit fired');
     return handleOnSubmit(data.action, body);
   }, [checkboxValues]);
 
