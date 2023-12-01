@@ -3,7 +3,7 @@ module.exports = {
   domains: [
     {
       hostname: 'rwb.local',
-      api: 'https://rwbapi-dev.strivegaming.us',
+      api: ' https://cms-uat-genting.strivegaming.dev',
       local: 'http://rwb.local:3000',
     },
   ],
