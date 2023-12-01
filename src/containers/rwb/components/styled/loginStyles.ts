@@ -75,9 +75,10 @@ export const loginStyles = css`
         }
         &__info {
           display: flex;
+          align-items: center;
           &__img {
             margin-right: 16px;
-            max-width: 32px;
+            max-width: 45px;
             align-self: flext-start;
           }
           &__text {
@@ -95,7 +96,7 @@ export const loginStyles = css`
           top: -10px;
         }
         @media only screen and (min-width: 769px) and (max-width: 1024px) {
-          top: 10px;
+          top: -18px;
         }
         @media only screen and (min-width: 1025px) {
           top: -20px;

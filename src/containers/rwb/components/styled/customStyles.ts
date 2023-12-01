@@ -810,10 +810,13 @@ const customStyles = css`
       min-height: 50vh;
     }
     @media only screen and (min-width: 481px) and (max-width: 768px) {
+      min-height: 65vh;
+    }
+    @media only screen and (min-width: 390px) and (max-width: 480px) {
       min-height: 60vh;
     }
-    @media only screen and (min-width: 375px) and (max-width: 480px) {
-      min-height: 70vh;
+    @media only screen and (min-width: 375px) and (max-width: 389px) {
+      min-height: 75vh;
     }
     @media only screen and (max-width: 374px) {
       min-height: 95vh;
@@ -829,33 +832,25 @@ const customStyles = css`
       border-radius: 8px;
       &__title {
         font-weight: ${props => props.theme.pageInnerContainer.titleWeight};
+        color: ${props => props.theme.login.titleColor};
+        width: 100%;
+        height: 204px;
+        border-radius: 12px;
+        position: relative;
+        z-index: 1;
+        @media only screen and (max-width: 480px) {
+          border-raidus: 0px !important;
+          -webkit-border-radius: 0px !important;
+          -moz-border-radius: 0px !important;
+          top: 0px;
+        }
+        @media only screen and (min-width: 1025px) {
+          top: 0px;
+        }
       }
       &.login {
         position: relative;
         padding: unset;
-        .page-inner__title {
-          color: ${props => props.theme.login.titleColor};
-          width: 100%;
-          height: 204px;
-          border-radius: 12px;
-          position: relative;
-          z-index: 1;
-          @media only screen and (max-width: 480px) {
-            border-raidus: 0px !important;
-            -webkit-border-radius: 0px !important;
-            -moz-border-radius: 0px !important;
-            top: 0px;
-          }
-          @media only screen and (min-width: 481px) and (max-width: 768px) {
-            top: 30px;
-          }
-          @media only screen and (min-width: 769px) and (max-width: 1024px) {
-            top: 30px;
-          }
-          @media only screen and (min-width: 1025px) {
-            top: 0px;
-          }
-        }
       }
       &--small {
         padding: 40px;
