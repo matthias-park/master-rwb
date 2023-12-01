@@ -466,7 +466,7 @@ const accountSettingsStyles = css`
       line-height: 18px;
       font-style: italic;
       color: ${props =>
-        props.theme.dateFilter.periodColor || 'rgba(0, 0, 0, 0.8)'};
+        props.theme.dateFilter.periodColor};
       font-weight: 600;
       padding: 6px 16px 8px;
       &--w-140 {
