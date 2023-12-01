@@ -17,7 +17,7 @@ module.exports = {
     borderRadius: 24,
     fontSize: 14,
     fontStyle: 'italic',
-    color: '#1B2C5B',
+    color: '#000000',
     transform: 'uppercase',
     primary: {
       color: pallete.white,
@@ -369,7 +369,7 @@ module.exports = {
     padding: '0',
     margin: '0',
     periodBgColor: pallete.gray,
-    periodColor: pallete.navy,
+    periodColor: pallete.black,
     periodActiveColor: pallete.white,
     periodBorderRadius: 76,
     borderColor: 'none',
