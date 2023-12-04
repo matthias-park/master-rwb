@@ -101,6 +101,7 @@ const CommunicationPreferencesPage = () => {
     body: any,
     formBody: boolean = false,
   ): Promise<void> => {
+    console.log('pref handleOnSubmit fired before API call');
     setApiResponse(null);
     let newUrl;
     if (process.env.NODE_ENV === 'development') {
@@ -109,11 +110,16 @@ const CommunicationPreferencesPage = () => {
     }
     const res = await postApi<RailsApiResponse<null>>(newUrl, body, {
       formData: formBody,
-    }).catch((res: RailsApiResponse<null>) => res);
+    })
+      .catch((res: RailsApiResponse<null>) => res)
+      .catch(error => {
+        console.error('Error in postApi:', error);
+        return error;
+      });
     if (res.Success) {
       reset({ ...watch() });
     }
-    console.log('pref handleOnSubmit fired');
+    console.log('pref handleOnSubmit fired after API call');
     setApiResponse({
       success: res.Success,
       msg: res.Message || t('api_response_failed'),
@@ -122,15 +128,16 @@ const CommunicationPreferencesPage = () => {
   };
 
   const updateSettingsSubmit = useCallback(() => {
-    const body = {
-      gdpr_config: Object.keys(checkboxValues).reduce((obj, key) => {
-        obj[key] = Number(checkboxValues[key]);
+    const body = Object.keys(checkboxValues).reduce(
+      (obj, key) => {
+        obj['gdpr_config'][key] = Number(checkboxValues[key]);
         return obj;
-      }, {}),
-    };
-    console.log('pref updateSettingsSubmit fired');
+      },
+      { gdpr_config: {} },
+    );
+    console.log('pref updateSettingsSubmit fired', body); // Log the body to check if it's as expected
     return handleOnSubmit(data.action, body);
-  }, [checkboxValues]);
+  }, [checkboxValues, handleOnSubmit, data.action]);
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
