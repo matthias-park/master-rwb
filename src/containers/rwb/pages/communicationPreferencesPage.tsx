@@ -128,16 +128,26 @@ const CommunicationPreferencesPage = () => {
   };
 
   const updateSettingsSubmit = useCallback(() => {
-    const body = Object.keys(checkboxValues).reduce(
+    const gdprConfig = Object.keys(checkboxValues).reduce(
       (obj, key) => {
         obj['gdpr_config'][key] = Number(checkboxValues[key]);
         return obj;
       },
       { gdpr_config: {} },
     );
+
+    gdprConfig['gdpr_config']['newsletter'] = Object.values(gdprConfig).every(
+      value => value === 1,
+    )
+      ? 1
+      : 0;
+    const body = {
+      gdpr_config: gdprConfig,
+    };
+
     console.log('pref updateSettingsSubmit fired', body); // Log the body to check if it's as expected
     return handleOnSubmit(data.action, body);
-  }, [checkboxValues, handleOnSubmit, data.action]);
+  }, [checkboxValues, handleOnSubmit, data?.action]);
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
