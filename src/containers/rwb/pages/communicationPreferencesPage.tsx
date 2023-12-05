@@ -101,9 +101,8 @@ const CommunicationPreferencesPage = () => {
     body: any,
     formBody: boolean = false,
   ): Promise<void> => {
-    console.log('pref handleOnSubmit fired before API call');
     setApiResponse(null);
-    let newUrl;
+    let newUrl = url;
     if (process.env.NODE_ENV === 'development') {
       const apiDomain = (Config as any)?.domains[0].api;
       newUrl = url.replace(apiDomain, '');
@@ -119,7 +118,6 @@ const CommunicationPreferencesPage = () => {
     if (res.Success) {
       reset({ ...watch() });
     }
-    console.log('pref handleOnSubmit fired after API call');
     setApiResponse({
       success: res.Success,
       msg: res.Message || t('api_response_failed'),
@@ -144,10 +142,8 @@ const CommunicationPreferencesPage = () => {
     const body = {
       gdpr_config: gdprConfig,
     };
-
-    console.log('pref updateSettingsSubmit fired', body); // Log the body to check if it's as expected
     return handleOnSubmit(data.action, body);
-  }, [checkboxValues, handleOnSubmit, data?.action]);
+  }, [checkboxValues]);
 
   return (
     <main className="container-fluid px-0 px-0 px-sm-4 pl-md-5 mb-4 pt-5">
