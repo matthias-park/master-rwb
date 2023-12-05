@@ -54,6 +54,7 @@ export interface FranchiseConfig {
   googleRecaptchaKey?: string;
   geoComplyKey?: string;
   xtremepush?: string;
+  wagerGames?: string;
   dateFormat?: string;
   componentSettings?: unknown;
   themeSettings?: unknown;

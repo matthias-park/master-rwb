@@ -172,6 +172,20 @@ export const injectZendeskScript = () => {
   document.body.appendChild(scriptTag);
 };
 
+export const injectWagerGamesScript = () => {
+  const url = window.__config__.wagerGames;
+  if (!url) return;
+  const scriptTag = document.createElement('script');
+  scriptTag.id = 'wg-snippet';
+  scriptTag.type = 'module';
+  scriptTag.defer = true;
+  scriptTag.src = url;
+  scriptTag.onerror = e => {
+    Sentry.captureEvent(e);
+  };
+  document.body.appendChild(scriptTag);
+};
+
 export const injectFullstoryScript = () => {
   const key = window.__config__.fullStory;
   if (!key) return;

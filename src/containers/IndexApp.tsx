@@ -97,6 +97,9 @@ const indexApp = getChildren => {
             Sentry.captureMessage(e);
           });
       }
+      if (Config.wagerGames) {
+        uiUtils.injectWagerGamesScript();
+      }
       if (Config.fullStory) {
         uiUtils.injectFullstoryScript();
       }
