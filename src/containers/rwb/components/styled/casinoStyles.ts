@@ -745,6 +745,7 @@ export const StyledCasinoInnerPage = styled.div`
       justify-content: space-between;
       background-color: ${props => props.theme.colors.black.main};
       padding: 18px 0;
+      margin-bottom: 15px;
       .title-wrp {
         position: absolute;
         top: 50%;
