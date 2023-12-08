@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useI18n } from '../../../../hooks/useI18n';
 import { useAuth } from '../../../../hooks/useAuth';
 import TextInput from '../../../../components/customFormInputs/TextInput';
@@ -90,6 +90,16 @@ const DepositForm = ({
     },
   );
   const bankAccountDataLoading = !bankAccountData && !bankAccountError;
+  const [isSingleBankAccount, setIsSingleBankAccount] = useState(false);
+  useEffect(() => {
+    if (banksData?.Data.length === 1) {
+      setIsSingleBankAccount(true);
+      setValue('bank_id', banksData.Data[0].bank_id);
+      setValue('AccountId', banksData.Data[0].id);
+    } else {
+      setIsSingleBankAccount(false);
+    }
+  }, [banksData]);
 
   const validateAmount = (value: string) => {
     if (!value) return true;
@@ -217,21 +227,23 @@ const DepositForm = ({
                 show={banksDataLoading}
                 className="d-block mx-auto mb-2 w-100"
               />
-              <PaymentMethods
-                data={banksData?.Data.map(acc => {
-                  return {
-                    id: acc.bank_id,
-                    value: acc.bank_id,
-                    icon: acc?.icon,
-                    title: acc.name,
-                    onChange: () => setValue('bank_id', acc.bank_id),
-                  };
-                })}
-                selected={selectedBankId}
-                registerName={'bank_id'}
-                registerOptions={{ required: t('bank_id_required') }}
-                register={register}
-              />
+              {!isSingleBankAccount && (
+                <PaymentMethods
+                  data={banksData?.Data.map(acc => {
+                    return {
+                      id: acc.bank_id,
+                      value: acc.bank_id,
+                      icon: acc?.icon,
+                      title: acc.name,
+                      onChange: () => setValue('bank_id', acc.bank_id),
+                    };
+                  })}
+                  selected={selectedBankId}
+                  registerName={'bank_id'}
+                  registerOptions={{ required: t('bank_id_required') }}
+                  register={register}
+                />
+              )}
               <small
                 data-testid="error"
                 className="d-block form-group__error-msg"
