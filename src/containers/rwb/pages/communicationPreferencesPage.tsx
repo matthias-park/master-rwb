@@ -39,24 +39,25 @@ const CommunicationPrefCard = ({
   return (
     <li className="communication-prefs__pref">
       <h6 className="communication-prefs__pref-title">{t(title)}</h6>
-      {fields.map(field => (
-        <div className="communication-prefs__pref-item" key={field.id}>
-          <span>{t(field.title)}</span>
-          <span className="ml-auto d-flex align-items-center">
-            <CustomToggleCheck
-              {...registerField(field.id)}
-              id={t(field.id)}
-              checked={values[field.id] === 1 ? true : false}
-              onClick={() =>
-                setValues({
-                  ...values,
-                  [field.id]: values[field.id] === 1 ? 0 : 1,
-                })
-              }
-            />
-          </span>
-        </div>
-      ))}
+      {Array.isArray(fields) &&
+        fields.map(field => (
+          <div className="communication-prefs__pref-item" key={field.id}>
+            <span>{t(field.title)}</span>
+            <span className="ml-auto d-flex align-items-center">
+              <CustomToggleCheck
+                {...registerField(field.id)}
+                id={t(field.id)}
+                checked={values[field.id]}
+                onClick={() => {
+                  setValues({
+                    ...values,
+                    [field.id]: values[field.id] === 1 ? 0 : 1,
+                  });
+                }}
+              />
+            </span>
+          </div>
+        ))}
     </li>
   );
 };
@@ -126,22 +127,11 @@ const CommunicationPreferencesPage = () => {
   };
 
   const updateSettingsSubmit = useCallback(() => {
-    const gdprConfig = Object.keys(checkboxValues).reduce(
-      (obj, key) => {
-        obj['gdpr_config'][key] = Number(checkboxValues[key]);
-        return obj;
-      },
-      { gdpr_config: {} },
-    );
-
-    gdprConfig['gdpr_config']['newsletter'] = Object.values(gdprConfig).every(
-      value => value === 1,
-    )
-      ? 1
-      : 0;
-    const body = {
-      gdpr_config: gdprConfig,
-    };
+    const body = Object.keys(checkboxValues).reduce((obj, key) => {
+      obj[key] = Number(checkboxValues[key]);
+      return obj;
+    }, {});
+    body['newsletter'] = Object.values(body).some(value => value === 1) ? 1 : 0;
     return handleOnSubmit(data.action, body);
   }, [checkboxValues]);
 
