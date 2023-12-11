@@ -257,11 +257,6 @@ export const blocks = (t: any, setValidation: any, validateRepeat: any) => {
             required: true,
           },
           {
-            id: 'not_a_key_employee',
-            type: 'checkbox',
-            required: true,
-          },
-          {
             id: 'terms_and_conditions',
             type: 'checkbox',
             required: true,
