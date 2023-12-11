@@ -855,6 +855,8 @@ const accountSettingsStyles = css`
       width: 100%;
       height: 75vh;
       border: none;
+      //Nuvei Iframe min-height for removing a scrollbar
+      min-height: 1000px;
     }
   }
 `;

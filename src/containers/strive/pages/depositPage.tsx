@@ -103,6 +103,25 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
     KYC_VALIDATOR_STATUS.ShouldUploadDocumentForKyc,
   ].includes(user.validator_status || 0);
 
+  const baseUrl = `${window.location.origin}/${locale}${depositBaseUrl}`;
+  const returnUrls = {
+    success: `${baseUrl}/loading`,
+    cancel: `${baseUrl}/cancel`,
+    error: `${baseUrl}/error`,
+    pending: `${baseUrl}/loading`,
+  };
+
+  useEffect(() => {
+    if (window.self !== window.top) {
+      const potentialReturnUrl = document.location.href.split('?')[0]; // get redirect url from iframe and split off any url params
+      const returnUrlMatch = Object.values(returnUrls).includes(
+        potentialReturnUrl,
+      );
+      if (window.top && returnUrlMatch)
+        window.top.location.href = potentialReturnUrl;
+    }
+  }, []);
+
   const handleRequestDeposit = useCallback(
     async (
       depositValue: number,
@@ -116,10 +135,10 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
       const depositParams: DepositRequest = {
         BankId: bankId,
         Amount: depositValue,
-        ReturnSuccessUrl: `${window.location.origin}${depositBaseUrl}/loading`,
-        ReturnCancelUrl: `${window.location.origin}${depositBaseUrl}/cancel`,
-        ReturnErrorUrl: `${window.location.origin}${depositBaseUrl}/error`,
-        ReturnPendingUrl: `${window.location.origin}${depositBaseUrl}/loading`,
+        ReturnSuccessUrl: returnUrls.success,
+        ReturnCancelUrl: returnUrls.cancel,
+        ReturnErrorUrl: returnUrls.error,
+        ReturnPendingUrl: returnUrls.pending,
         locale: 'en_US',
         AccountId: AccountId || null,
         AccountPrefillRequested: !!AccountId || AccountPrefillRequested,

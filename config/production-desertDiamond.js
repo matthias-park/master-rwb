@@ -1,6 +1,8 @@
 module.exports = {
   franchises: {
     desertDiamond: {
+      wagerGames:
+        'https://storage.googleapis.com/wager-static-assets/bundle/desertdiamond/production/bundle.js',
       appLinks: {
         apple: {
           webcredentials: {

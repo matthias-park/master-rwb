@@ -106,6 +106,7 @@ const getWebConfig = (req: Request) => {
     googleRecaptchaKey: FRANCHISE_CONFIG.googleRecaptchaKey,
     geoComplyKey: FRANCHISE_CONFIG.geoComplyKey,
     xtremepush: FRANCHISE_CONFIG.xtremepush,
+    wagerGames: FRANCHISE_CONFIG.wagerGames,
     dateFormat: FRANCHISE_CONFIG.dateFormat,
     componentSettings: FRANCHISE_CONFIG.componentSettings,
     themeSettings: FRANCHISE_CONFIG.themeSettings,

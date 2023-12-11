@@ -22,6 +22,7 @@ module.exports = {
   geoComplyKey: 'ShzolMaAK',
   smartyStreets: '108064515683753034',
   xtremepush: 'https://us.webpu.sh/8UCYTGU9kjyxCCgQtCqROPz24HI_2FvA/sdk.js',
+  wagerGames: 'https://storage.googleapis.com/wager-static-assets/bundle/desertdiamond/bundle.js',
   zendesk: 'ca06421f-4795-449d-905a-f3f4a7bb6f58',
   fullStory: true,
   leverageMedia: true,

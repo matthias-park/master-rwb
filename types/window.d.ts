@@ -32,6 +32,7 @@ export declare global {
       };
       sbTechUrl?: string;
       zendesk?: string;
+      wagerGames?: string;
       fullStory?: boolean;
       leverageMedia?: boolean;
       smartyStreets?: string;
