@@ -57,6 +57,12 @@ module.exports = {
       geoComplyStatusAlert: true,
       needsCompanyLogo: true,
     },
+    bonuses: {
+      queueBonuses: {
+        paginate: true,
+        searchBar: true,
+      },
+    },
     transactions: {
       needsOverviewTable: true,
     },
