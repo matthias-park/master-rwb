@@ -380,20 +380,6 @@ const PromotionPage = ({ slug }: { slug: string }) => {
               onError={() => setPromoImageLoaded(true)}
               src={bannerImg || fallbackBannerImg}
             ></img>
-            <div className="promo-bg-text">
-              {promoTitle && (
-                <h3 className="promo-bg-text__subtitle">{promoTitle}</h3>
-              )}
-              <h2 className="promo-bg-text__title">{data?.Data?.page_title}</h2>
-              {data?.Data.button_text && data?.Data.inner_page_button_link && (
-                <Link
-                  to={data?.Data?.inner_page_button_link}
-                  className="promo-button promo-bg-text__button d-inline-block"
-                >
-                  {data?.Data.button_text}
-                </Link>
-              )}
-            </div>
           </div>
           <div className="promotion-inner__body promo-container">
             <p className="promotion-inner__body-title">
