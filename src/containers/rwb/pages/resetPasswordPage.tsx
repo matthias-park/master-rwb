@@ -15,7 +15,7 @@ import RedirectNotFound from '../../../components/RedirectNotFound';
 import { ComponentSettings } from '../../../constants';
 
 const ForgotPasswordPage = () => {
-  const { code, email } = useParams<{ code?: string; email?: string }>();
+  const { code } = useParams<{ code?: string }>();
   const { requiredValidations } = ComponentSettings?.register!;
   const formMethods = useForm({
     mode: 'onBlur',
@@ -28,13 +28,14 @@ const ForgotPasswordPage = () => {
   const { t } = useI18n();
   const sendDataToGTM = useGTM();
 
-  const onSubmit = async ({ password }) => {
+  const onSubmit = async ({ password, email }) => {
     setApiResponse(null);
     const result = await postApi<RailsApiResponse<ForgotPasswordResponse>>(
-      `/restapi/v1/user/login/set_password`,
+      `/restapi/v2/user/login/set_password`,
       {
         new_password: password,
         reset_code: code!,
+        email: email,
       },
     ).catch((res: RailsApiResponse<null>) => res);
     if (result.Success) {
@@ -65,6 +66,16 @@ const ForgotPasswordPage = () => {
         <FormProvider {...formMethods}>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <TextInput
+              rules={{
+                required: t('reset_password_field_required'),
+                validate: async value =>
+                  VALIDATIONS.email(value) || t('reset_email_bad_format'),
+              }}
+              id="email"
+              type="email"
+              title={t('reset_password_email_field')}
+            />
+            <TextInput
               disableCopyPaste
               disabled={!!apiResponse?.success}
               rules={{
@@ -72,7 +83,7 @@ const ForgotPasswordPage = () => {
                   'reset_password_field_required',
                 )}`,
                 validate: value =>
-                  VALIDATIONS.password(value, requiredValidations, email) ||
+                  VALIDATIONS.password(value, requiredValidations) ||
                   t('register_password_weak'),
               }}
               onBlur={() =>
@@ -93,7 +104,7 @@ const ForgotPasswordPage = () => {
                 )}`,
                 validate: value =>
                   (value === watch('password') &&
-                    VALIDATIONS.password(value, requiredValidations, email)) ||
+                    VALIDATIONS.password(value, requiredValidations)) ||
                   t('reset_password_need_match_password'),
               }}
               id="repeat_password"

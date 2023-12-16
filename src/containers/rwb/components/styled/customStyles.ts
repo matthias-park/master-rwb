@@ -877,7 +877,7 @@ const customStyles = css`
       }
       ${mediaBreakpointDown('sm')} {
         margin: 20px;
-        height: 25vh;
+        height: 100%;
         width: 100%;
       }
       ${mediaBreakpointDown('xs')} {
