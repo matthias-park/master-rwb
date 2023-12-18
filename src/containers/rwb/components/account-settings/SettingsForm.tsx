@@ -211,6 +211,13 @@ const FormFields = ({
     }
   };
 
+  const isLimitForm = fields =>
+    fields.some(
+      obj =>
+        ('id' in obj && obj.id?.includes('limit')) ||
+        ('title' in obj && obj.title?.includes('limit')),
+    );
+
   return (
     <div className="row">
       <div data-testid="form-container" className="w-100 px-3 pt-3">
@@ -243,6 +250,10 @@ const FormFields = ({
                 isDisabled = !watchPassword;
               } else if (isDeleteButton) {
                 isDisabled = !formData.some(field => field.LimitAmount != null);
+              } else if (isDeleteButton) {
+                isDisabled = !formData.some(field => field.LimitAmount != null);
+              } else if (isLimitForm(fields)) {
+                isDisabled = !formState.isDirty;
               } else if (allowSubmit) {
                 isDisabled = !allowSubmit(watch());
               } else if (
