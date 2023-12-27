@@ -8,11 +8,13 @@ import { ThemeSettings } from '../../../constants';
 import clsx from 'clsx';
 import CurrentTimeTimer from '../../../components/CurrentTimeTimer';
 import { isMobile, isTablet } from 'react-device-detect';
+import { useAuth } from '../../../hooks/useAuth';
 
 const PageColumnFooter = () => {
   const { icons: icon } = ThemeSettings!;
   const { t } = useI18n();
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
+  const { user } = useAuth();
 
   if (!footer) {
     return null;
@@ -22,7 +24,7 @@ const PageColumnFooter = () => {
       <div className="footer-item footer-links">
         <div className="footer-links__image">
           <img alt="footer-logo" src={'/assets/images/logo/header-logo.png'} />
-          {isMobile && (
+          {isMobile && user.logged_in && (
             <>
               <div className="footer-info-timer">
                 <div className="footer-info-timer__current">
@@ -93,7 +95,7 @@ const PageColumnFooter = () => {
   const FooterInfo = () => {
     return (
       <div className="footer-item footer-info">
-        {!isMobile && (
+        {!isMobile && user.logged_in && (
           <>
             <div className="footer-info-timer">
               <div className="footer-info-timer__current">

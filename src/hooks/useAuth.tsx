@@ -23,6 +23,7 @@ import {
 } from '../state/reducers/user';
 import { RootState } from '../state';
 import useIdleTicker from './useIdleTicker';
+import Lockr from 'lockr';
 export interface UserAuth {
   user: UserStatus;
   signin: (
@@ -206,6 +207,7 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
     };
   };
   const signout = async () => {
+    if (Lockr.get('session_details')) Lockr.set('session_details', {});
     await getApi('/restapi/v1/user/logout').catch(err => err);
     dispatch(setLogout());
     return;
