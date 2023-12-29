@@ -794,6 +794,18 @@ export const StyledCasinoInnerPage = styled.div`
         }
       }
     }
+    .game-nav-left {
+      display: flex;
+      align-items: center;
+    }
+    .game-session-timer {
+      color: ${props => props.theme.footer.timer.color};
+      margin-top: 10px;
+    }
+    .${icon?.clock} {
+      color: ${props => props.theme.footer.timer.color};
+      margin-top: 10px;
+    }
     .game-button {
       display: flex;
       align-items: center;

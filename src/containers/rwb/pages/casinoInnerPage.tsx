@@ -30,6 +30,9 @@ import loadable from '@loadable/component';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../state';
 import { ThemeSettings } from '../../../constants';
+import SessionTimer from '../../../components/SessionTimer';
+import Lockr from 'lockr';
+import dayjs from 'dayjs';
 
 const LoadableGeoComplyAlert = loadable(
   () => import('../components/header/GeoComplyAlert'),
@@ -133,7 +136,9 @@ const CasinoInnerPage = () => {
     recentGamesDataMutate();
   };
 
+  const localStorageTimerKey = 'game-session-timer';
   const getLaunchUrl = async () => {
+    Lockr.set(localStorageTimerKey, dayjs());
     const res = await postApi<
       RailsApiResponse<{ url: string; html_base_64: any } | null>
     >('/restapi/v1/casino/launch_url', {
@@ -182,8 +187,17 @@ const CasinoInnerPage = () => {
     <StyledCasinoInnerPage className="styled-casino-inner-page">
       <div className="game">
         <div className="game-nav">
-          <span className="game-button" onClick={closeGame}>
-            <i className={clsx(icon?.left)} />
+          <span className="game-nav-left">
+            <span className="game-button" onClick={closeGame}>
+              <i className={clsx(icon?.left)} />
+            </span>
+            {!!gameData?.Data?.has_game_timer && iframeLoaded && (
+              <SessionTimer
+                needsClock
+                className="game-session-timer"
+                localStorageKey={localStorageTimerKey}
+              />
+            )}
           </span>
           {tablet && (
             <div className="title-wrp">
