@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import { mediaBreakpointDown } from './breakpoints';
 
-export const StyledColumnFooter = styled.div`
+interface StyledColumnFooterProps {
+  loggedIn: boolean;
+}
+
+export const StyledColumnFooter = styled.div<StyledColumnFooterProps>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -40,8 +44,11 @@ export const StyledColumnFooter = styled.div`
   }
   .footer-sub {
     display: grid;
-    grid-template-columns: 45% 55%;
+    grid-template-columns: ${props => props.loggedIn && '45% 55%'};
     border-bottom: 1px solid ${props => props.theme.colors.lightSpacer};
+    .age-restriction: {
+      margin-top: 15px;
+    }
     .timer {
       display: flex;
       align-items: center;
@@ -66,8 +73,12 @@ export const StyledColumnFooter = styled.div`
       display: flex;
       align-items: center;
       justify-self: flex-end;
-      border-right: 1px solid ${props => props.theme.colors.lightSpacer};
-      padding-right: 35px;
+      border-right: ${props =>
+        props.loggedIn && `1px solid ${props.theme.colors.lightSpacer}`};
+      padding-right: ${props => props.loggedIn && '35px'};
+      img {
+        margin-right: 15px;
+      }
     }
     div:nth-of-type(2) {
       display: flex;
@@ -90,7 +101,8 @@ export const StyledColumnFooter = styled.div`
         padding-bottom: 15px;
         margin-bottom: 15px;
         border-right: unset;
-        border-bottom: 1px solid ${props => props.theme.colors.lightSpacer};
+        border-bottom: ${props =>
+          props.loggedIn && `1px solid ${props.theme.colors.lightSpacer}`};
         text-align: center;
       }
       div:nth-of-type(2) {
