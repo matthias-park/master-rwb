@@ -17,6 +17,7 @@ import { formatUrl } from '../../../utils/apiUtils';
 import RailsApiResponse from '../../../types/api/RailsApiResponse';
 import TablePagination from '../components/account-settings/TablePagination';
 import NumberFormat from 'react-number-format';
+import { franchiseDateFormat } from '../../../constants';
 dayjs.extend(utc);
 
 interface LimitProps {
@@ -94,7 +95,7 @@ const TimeoutCard = ({ limitData, mutate }: LimitProps) => {
               : jsxT('timeout_unset')
             : disabledUntilDate && !isSelfExcluded
             ? `${t('player_disabled_until')}: ${disabledUntilDate.format(
-                'YYYY-MM-DD',
+                franchiseDateFormat,
               )}`
             : jsxT('timeout_unset')}
         </p>
@@ -262,7 +263,9 @@ const LimitsHistory = ({ limitsData }) => {
                     <tr key={index}>
                       <td>
                         <p className="heading-sm">{t('_date')}</p>
-                        {dayjs(new Date(limit.CreatedAt)).format('YYYY-MM-DD')}
+                        {dayjs(new Date(limit.CreatedAt)).format(
+                          franchiseDateFormat,
+                        )}
                       </td>
                       <td>
                         <p className="heading-sm">{t('save')}</p>

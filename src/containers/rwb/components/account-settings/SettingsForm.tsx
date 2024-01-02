@@ -16,9 +16,12 @@ import { useAuth } from '../../../../hooks/useAuth';
 import { postApi } from '../../../../utils/apiUtils';
 import RailsApiResponse from '../../../../types/api/RailsApiResponse';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import clsx from 'clsx';
 import { getApi } from '../../../../utils/apiUtils';
 import { injectTrackerScript } from '../../../../utils/uiUtils';
+
+dayjs.extend(utc);
 
 interface SettingProps {
   id: string;
@@ -149,13 +152,13 @@ const FormFields = ({
       if (field?.id && field.id.includes(data.LimitType.toLowerCase())) {
         switch (data.Formatting) {
           case 'currency': {
-            return '$' + data?.AmountLeft;
+            return user.currency + data?.AmountLeft;
           }
           case 'hour': {
-            return data?.AccumulatedDuration + 'Hours';
+            return data?.AccumulatedDuration + t('limits_hours');
           }
           case 'date': {
-            return data?.AmountLeft + 'Dates';
+            return data?.AmountLeft + t('limits_dates');
           }
           default: {
             return (
@@ -169,44 +172,59 @@ const FormFields = ({
     }
   };
 
-  const formattedRequestedLimit = (field: SettingsField, limit: any) => {
+  const formattedRequestedLimit = (
+    field: SettingsField,
+    limit: any,
+    fieldName: string,
+  ) => {
     if (formData.length === 0 && limit) {
       switch (id) {
         case 'session_limit': {
-          return limit + 'Hours';
+          return limit + t('limits_hours');
         }
         default: {
-          return '$' + limit;
+          return user.currency + limit;
         }
       }
     }
     for (let data of formData) {
-      if (field?.id && field.id.includes(data.LimitType.toLowerCase())) {
+      if (
+        field?.id &&
+        field.id.includes(data.LimitType.toLowerCase()) &&
+        data.FutureLimitAmount
+      ) {
+        const fieldData = data[fieldName];
         switch (data.Formatting) {
           case 'currency': {
-            return '$' + data.LimitAmount;
+            return user.currency + fieldData;
           }
           case 'hour': {
-            return data.LimitAmount + 'Hours';
+            return fieldData + t('limits_hours');
           }
           case 'date': {
-            return data.LimitAmount + 'Dates';
+            return fieldData + t('limits_dates');
           }
           default: {
-            return data.LimitAmount;
+            return fieldData;
           }
         }
       }
     }
   };
 
-  const foramttedValidDate = (field: SettingsField) => {
+  const foramttedValidDate = (field: SettingsField, fieldName: string) => {
     if (formData.length === 0) return ' ';
     for (let data of formData) {
-      if (field?.id && field.id.includes(data.LimitType.toLowerCase())) {
-        return dayjs(foramttedValidDate(data.ResetTime)).format(
-          'MMM D, YYYY h:mmA',
-        );
+      const fieldData = data[fieldName];
+      if (
+        field?.id &&
+        field.id.includes(data.LimitType.toLowerCase()) &&
+        data.FutureLimitValidFrom
+      ) {
+        return dayjs
+          .utc(fieldData)
+          .local()
+          .format(franchiseDateFormat + ' HH:mm');
       }
     }
   };
@@ -576,21 +594,43 @@ const FormFields = ({
                   {isDepositLossBetLimits && (
                     <>
                       <div className="row">
-                        <pre className="text-14 pt-1 ml-3 mb-1">
-                          Requested limit:{' '}
-                        </pre>
-                        <p className="text-14 pt-1">
-                          {formattedRequestedLimit(field, watch(field.id)) ||
-                            '-'}
-                        </p>
+                        <div className="col-sm">
+                          <pre className="d-inline text-14 pt-1 ml-3 mb-1">
+                            {t('requested_limit')}:{' '}
+                          </pre>
+                          <p className="d-inline text-14 pt-1">
+                            {formattedRequestedLimit(
+                              field,
+                              watch(field.id),
+                              'FutureLimitAmount',
+                            ) || '-'}
+                          </p>
+                        </div>
+                        <div className="col-sm">
+                          <pre className="d-inline text-14 pt-1 ml-3 mb-1">
+                            {t('current_limit')}:{' '}
+                          </pre>
+                          <p className="d-inline text-14 pt-1">
+                            {formattedRequestedLimit(
+                              field,
+                              watch(field.id),
+                              'LimitAmount',
+                            ) || '-'}
+                          </p>
+                        </div>
                       </div>
                       <div className="row">
-                        <pre className="text-14 pt-1 ml-3 mb-0">
-                          Valid from:{' '}
-                        </pre>
-                        <p className="text-14 pt-1 mb-0">
-                          {foramttedValidDate(field) || '-'}
-                        </p>
+                        <div className="col-sm">
+                          <pre className="d-inline text-14 pt-1 ml-3 mb-0">
+                            {t('valid_from')}:{' '}
+                          </pre>
+                          <p className="d-inline text-14 pt-1 mb-0">
+                            {foramttedValidDate(
+                              field,
+                              'FutureLimitValidFrom',
+                            ) || '-'}
+                          </p>
+                        </div>
                       </div>
                       <hr></hr>
                     </>
