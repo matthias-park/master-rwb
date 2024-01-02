@@ -28,7 +28,6 @@ const SessionTimer = ({
     const updateTimer = () => {
       const timeDiff = dayjs().diff(sessionDetails);
       setCurrentTimer(dayjs.duration(timeDiff).format('HH:mm:ss'));
-      console.log(localStorageKey, sessionDetails);
     };
     updateTimer();
     intervalRef.current = setInterval(updateTimer, 1000);

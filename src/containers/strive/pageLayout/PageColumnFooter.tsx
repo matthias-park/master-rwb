@@ -36,7 +36,7 @@ const PageColumnFooter = () => {
     <StyledColumnFooter loggedIn={user.logged_in}>
       <div className="footer-item footer-sub">
         <Timer />
-        <div className="footer-sub__section age-restriction">
+        <div className="footer-sub__section">
           <img
             alt="21+"
             src={

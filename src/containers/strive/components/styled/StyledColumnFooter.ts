@@ -46,9 +46,6 @@ export const StyledColumnFooter = styled.div<StyledColumnFooterProps>`
     display: grid;
     grid-template-columns: ${props => props.loggedIn && '45% 55%'};
     border-bottom: 1px solid ${props => props.theme.colors.lightSpacer};
-    .age-restriction: {
-      margin-top: 15px;
-    }
     .timer {
       display: flex;
       align-items: center;
