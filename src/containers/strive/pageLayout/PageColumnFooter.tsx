@@ -5,10 +5,27 @@ import { useI18n } from '../../../hooks/useI18n';
 import Link from '../../../components/Link';
 import { Franchise, Config } from '../../../constants';
 import SessionTimer from '../../../components/SessionTimer';
+import { useAuth } from '../../../hooks/useAuth';
 import clsx from 'clsx';
+
+const Timer = () => {
+  const { user } = useAuth();
+  const { t } = useI18n();
+  if (!user.logged_in) return null;
+  return (
+    <div className="footer-sub__section timer-wrp">
+      {t('time_spent')}
+      <span className="timer">
+        <i className={`icon-${Config.name}-clock mr-1`} />
+        <SessionTimer />
+      </span>
+    </div>
+  );
+};
 
 const PageColumnFooter = () => {
   const { t } = useI18n();
+  const { user } = useAuth();
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
 
   if (!footer) {
@@ -16,16 +33,10 @@ const PageColumnFooter = () => {
   }
 
   return (
-    <StyledColumnFooter>
+    <StyledColumnFooter loggedIn={user.logged_in}>
       <div className="footer-item footer-sub">
-        <div className="footer-sub__section">
-          {t('time_spent')}
-          <span className="timer">
-            <i className={`icon-${Config.name}-clock mr-1`} />
-            <SessionTimer />
-          </span>
-        </div>
-        <div className="footer-sub__section">
+        <Timer />
+        <div className="footer-sub__section age-restriction">
           <img
             alt="21+"
             src={

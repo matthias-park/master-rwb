@@ -3,7 +3,7 @@ module.exports = {
   domains: [
     {
       hostname: 'pdd.local',
-      api: 'https://ddmapi-dev.strivegaming.us',
+      api: 'https://cms-dev-az.strivegaming.dev/',
     },
   ],
   theme: 'strive',
