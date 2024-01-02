@@ -24,9 +24,10 @@ const SessionTimer = ({
     null,
   );
 
+  const backupSessionTimer = dayjs();
   useEffect(() => {
     const updateTimer = () => {
-      const timeDiff = dayjs().diff(sessionDetails);
+      const timeDiff = dayjs().diff(sessionDetails || backupSessionTimer);
       setCurrentTimer(dayjs.duration(timeDiff).format('HH:mm:ss'));
       console.log(localStorageKey, sessionDetails);
     };
