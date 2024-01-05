@@ -451,6 +451,12 @@ const formStyles = css`
     }
   }
 
+  .compliance-doc-link {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.4rem;
+  }
+
   .custom-radio {
     label {
       line-height: 1.5;

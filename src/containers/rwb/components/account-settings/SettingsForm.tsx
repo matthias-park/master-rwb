@@ -3,11 +3,13 @@ import { SettingsField } from '../../../../types/api/user/ProfileSettings';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import Form from 'react-bootstrap/Form';
 import LoadingButton from '../../../../components/LoadingButton';
+import CheckboxInput from '../../../../components/customFormInputs/CheckboxInput';
 import { useI18n } from '../../../../hooks/useI18n';
 import {
   franchiseDateFormat,
   VALIDATIONS,
   usaOnlyBrand,
+  ThemeSettings,
 } from '../../../../constants';
 import SelectInput from '../../../../components/customFormInputs/SelectInput';
 import TextInput from '../../../../components/customFormInputs/TextInput';
@@ -20,6 +22,7 @@ import utc from 'dayjs/plugin/utc';
 import clsx from 'clsx';
 import { getApi } from '../../../../utils/apiUtils';
 import { injectTrackerScript } from '../../../../utils/uiUtils';
+import Link from '../../../../components/Link';
 
 dayjs.extend(utc);
 
@@ -74,7 +77,8 @@ const FormFields = ({
   formDisabled,
 }: SettingProps) => {
   const { user } = useAuth();
-  const { t } = useI18n();
+  const { t, jsxT } = useI18n();
+  const { icons: icon } = ThemeSettings!;
   const showHiddenUsernameField = fields?.some(
     field => field.id === 'password',
   );
@@ -403,6 +407,47 @@ const FormFields = ({
                     title={t(field.title)}
                   />
                 )
+              );
+            }
+            case 'checkbox': {
+              const waiverTitle = field.id === 'compliance_waiver_1';
+              const acknowledgemntTitle =
+                field.id === 'compliance_knowledgment_1';
+              const selfExclusionAttachment =
+                field.id === 'compliance_knowledgment_3';
+              return (
+                <>
+                  {waiverTitle && (
+                    <span className="text-center">
+                      {jsxT('compliance_waiver_title')}
+                    </span>
+                  )}
+                  {acknowledgemntTitle && (
+                    <span className="text-center">
+                      {jsxT('compliance_knowledgment_title')}
+                    </span>
+                  )}
+                  <CheckboxInput
+                    id={field.id}
+                    key={field.id}
+                    title={jsxT(field.title)}
+                    defaultValue={false}
+                    rules={{
+                      required: `${t('self-exclusion_checkbox_required')}`,
+                    }}
+                    className="mb-4"
+                  />
+                  {selfExclusionAttachment && (
+                    <Link
+                      to={t('compliance_link')}
+                      className="compliance-doc-link"
+                      target="_blank"
+                    >
+                      <i className={clsx(icon?.download, 'icon')}></i>
+                      {t('self_exclusion_download')}
+                    </Link>
+                  )}
+                </>
               );
             }
             default: {
