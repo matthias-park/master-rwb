@@ -146,29 +146,57 @@ const FormFields = ({
         }, {}),
     [fields],
   );
+
+  const formatTime = (durationInMinutes: number) => {
+    const hours = Math.floor(durationInMinutes / 60);
+    const minutes = durationInMinutes % 60;
+
+    const hoursString =
+      hours > 0 ? `${hours} ${hours === 1 ? t('hour') : t('hours')}` : '';
+    const minutesString =
+      minutes > 0
+        ? `${minutes} ${minutes === 1 ? t('minute') : t('minutes')}`
+        : '';
+
+    // Combine hours and minutes with the proper spacing
+    const formattedTime = [hoursString, minutesString]
+      .filter(Boolean)
+      .join(' ');
+
+    return formattedTime;
+  };
   const formattedRemainingLimit = (field: SettingsField) => {
     if (formData.length === 0) return null;
-    for (let data of formData) {
-      if (field?.id && field.id.includes(data.LimitType.toLowerCase())) {
-        switch (data.Formatting) {
-          case 'currency': {
-            return user.currency + data?.AmountLeft;
-          }
-          case 'hour': {
-            return data?.AccumulatedDuration + t('limits_hours');
-          }
-          case 'date': {
-            return data?.AmountLeft + t('limits_dates');
-          }
-          default: {
-            return (
-              data?.FutureLimitAmount ||
-              data?.AccumulatedDuration ||
-              data?.AmountLeft
-            );
-          }
-        }
-      }
+    const matchingData = formData.find(
+      data => field?.id && field.id.includes(data.LimitType.toLowerCase()),
+    );
+
+    if (!matchingData) return null;
+
+    switch (matchingData.Formatting) {
+      case 'currency':
+        return (
+          matchingData?.AmountLeft && user.currency + matchingData.AmountLeft
+        );
+
+      case 'hour':
+        const remainMinutes =
+          (matchingData?.LimitAmount ?? 0) * 60 -
+          (matchingData?.AccumulatedDuration ?? 0);
+        return remainMinutes && formatTime(remainMinutes);
+
+      case 'date':
+        return (
+          matchingData?.AmountLeft &&
+          matchingData.AmountLeft + t('limits_dates')
+        );
+
+      default:
+        return (
+          matchingData?.AmountLeft ||
+          matchingData?.FutureLimitAmount ||
+          matchingData?.AccumulatedDuration
+        );
     }
   };
 
@@ -187,28 +215,23 @@ const FormFields = ({
         }
       }
     }
-    for (let data of formData) {
-      if (
-        field?.id &&
-        field.id.includes(data.LimitType.toLowerCase()) &&
-        data.FutureLimitAmount
-      ) {
-        const fieldData = data[fieldName];
-        switch (data.Formatting) {
-          case 'currency': {
-            return user.currency + fieldData;
-          }
-          case 'hour': {
-            return fieldData + t('limits_hours');
-          }
-          case 'date': {
-            return fieldData + t('limits_dates');
-          }
-          default: {
-            return fieldData;
-          }
-        }
-      }
+    const matchingData = formData.find(
+      data => field?.id && field.id.includes(data.LimitType.toLowerCase()),
+    );
+
+    if (!matchingData) return null;
+
+    const fieldData = matchingData[fieldName];
+
+    switch (matchingData.Formatting) {
+      case 'currency':
+        return fieldData && user.currency + fieldData;
+      case 'hour':
+        return fieldData && fieldData + t('limits_hours');
+      case 'date':
+        return fieldData && fieldData + t('limits_dates');
+      default:
+        return fieldData && fieldData;
     }
   };
 
