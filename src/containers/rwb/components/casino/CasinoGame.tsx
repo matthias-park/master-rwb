@@ -13,6 +13,7 @@ import { useI18n } from '../../../../hooks/useI18n';
 import { useModal } from '../../../../hooks/useModal';
 import useDesktopWidth from '../../../../hooks/useDesktopWidth';
 import { CSSTransition } from 'react-transition-group';
+import { useAuth } from '../../../../hooks/useAuth';
 
 interface CasinoGameProps {
   featured?: boolean;
@@ -21,6 +22,7 @@ interface CasinoGameProps {
 
 const CasinoGame = ({ gameData }: CasinoGameProps) => {
   const { icons: icon } = ThemeSettings!;
+  const { user } = useAuth();
   const { t } = useI18n();
   const { loadGame, setSelectedGame } = useCasinoConfig();
   const labels = gameData?.features?.filter(feature => feature !== 'big_image');
@@ -35,6 +37,7 @@ const CasinoGame = ({ gameData }: CasinoGameProps) => {
 
   return (
     <StyledCasinoGame
+      loggedIn={user.logged_in}
       className="styled-casino-game"
       onClick={e => !tablet && showGameInfo(e)}
     >
@@ -100,12 +103,14 @@ const CasinoGame = ({ gameData }: CasinoGameProps) => {
                     >
                       {t('play')}
                     </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={() => gameData && loadGame(gameData, true)}
-                    >
-                      {t('try')}
-                    </Button>
+                    {user.logged_in && (
+                      <Button
+                        variant="secondary"
+                        onClick={() => gameData && loadGame(gameData, true)}
+                      >
+                        {t('try')}
+                      </Button>
+                    )}
                   </div>
                 </div>
               )}

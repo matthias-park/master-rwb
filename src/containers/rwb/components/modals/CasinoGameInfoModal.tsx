@@ -46,7 +46,10 @@ const CasinoGameInfoModal = () => {
       centered={true}
       dialogClassName="mx-650"
     >
-      <StyledCasinoGameInfoModal className="styled-casino-game-info-modal">
+      <StyledCasinoGameInfoModal
+        loggedIn={user.logged_in}
+        className="styled-casino-game-info-modal"
+      >
         <i
           className={clsx(icon?.close, 'custom-modal__close')}
           onClick={hideModal}
@@ -149,12 +152,18 @@ const CasinoGameInfoModal = () => {
               )}
             </div>
             <div className="info-body__buttons">
-              <Button variant="primary" onClick={playGame}>
+              <Button
+                variant="primary"
+                className="info-body__button"
+                onClick={playGame}
+              >
                 {user.logged_in ? t('play') : t('play_logged_out')}
               </Button>
-              <Button variant="secondary" onClick={e => playGame(e, true)}>
-                {t('try')}
-              </Button>
+              {user.logged_in && (
+                <Button variant="secondary" onClick={e => playGame(e, true)}>
+                  {t('try')}
+                </Button>
+              )}
             </div>
             {selectedGame?.short_description && (
               <p className="info-body__description">

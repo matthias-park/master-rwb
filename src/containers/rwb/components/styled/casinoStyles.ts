@@ -59,7 +59,11 @@ export const StyledCasinoGamePlaceholder = styled.div`
   }
 `;
 
-export const StyledCasinoGame = styled.div`
+interface StyledCasinoGameProps {
+  loggedIn?: boolean;
+}
+
+export const StyledCasinoGame = styled.div<StyledCasinoGameProps>`
   border-radius: 8px;
   overflow: hidden;
   .img-wrp {
@@ -158,7 +162,7 @@ export const StyledCasinoGame = styled.div`
       opacity: 0;
       transition: opacity 0.3s;
       .game-info-btn {
-        margin: 40px 5px 0 auto;
+        ${props => props.loggedIn && `margin: 40px 5px 0 auto;`}
         cursor: pointer;
         i {
           font-size: 20px;
@@ -167,6 +171,7 @@ export const StyledCasinoGame = styled.div`
       .buttons-wrp {
         display: flex;
         flex-direction: column;
+        ${props => !props.loggedIn && `justify-content: center;`}
         align-items: center;
         margin: auto;
         width: 65%;
@@ -824,7 +829,11 @@ export const StyledCasinoInnerPage = styled.div`
   }
 `;
 
-export const StyledCasinoGameInfoModal = styled.div`
+interface StyledCasinoGameInfoProps {
+  loggedIn?: boolean;
+}
+
+export const StyledCasinoGameInfoModal = styled.div<StyledCasinoGameInfoProps>`
   .modal-body {
     ${mediaBreakpointDown('xs')} {
       padding: 25px 15px;
@@ -907,7 +916,7 @@ export const StyledCasinoGameInfoModal = styled.div`
     }
     &__buttons {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      ${props => props.loggedIn && `grid-template-columns: repeat(2, 1fr);`}
       grid-gap: 10px;
       ${mediaBreakpointDown('xs')} {
         grid-template-columns: unset;
