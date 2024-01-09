@@ -1,6 +1,7 @@
 export interface ComponentSettings {
   v2Auth?: string;
   userIdleTimeout?: number;
+  sessionReminderTime?: number;
   showTimedOutPlayerBanner?: boolean;
   showValidatorStatusBanner?: boolean;
   login?: {

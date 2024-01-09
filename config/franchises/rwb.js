@@ -16,6 +16,7 @@ module.exports = {
   casino: true,
   componentSettings: {
     userIdleTimeout: 30,
+    sessionReminderTime: 30,
     v2Auth: 'wss://ws-uat-genting.strivegaming.dev',
     useBalancesEndpoint: true,
     showTimedOutPlayerBanner: true,

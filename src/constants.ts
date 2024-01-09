@@ -42,6 +42,7 @@ export enum ComponentName {
   DepositThresholdModal = 'depositThresholdModal',
   QuestionsKBAModal = 'questionKBAModal',
   LimitsReaffirmationModal = 'limitsReaffirmationModal',
+  SessionReminderModal = 'sessionReminderModal',
 }
 
 export const ModalPriority = {

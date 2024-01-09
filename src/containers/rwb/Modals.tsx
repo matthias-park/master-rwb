@@ -48,6 +48,9 @@ const LoadableDynamicKBAQuestionsModal = loadable(
 const LoadableLimitsReaffirmationModal = loadable(
   () => import('./components/modals/LimitsReaffirmationModal'),
 );
+const LoadableSessionReminderModal = loadable(
+  () => import('./components/modals/SessionReminderModal'),
+);
 
 const addBankAccountSubmit = async data => {
   removeFalsyFromObject(data);
@@ -103,6 +106,7 @@ const Modals = () => {
         <LoadableDynamicKBAQuestionsModal />
       )}
       <LoadableLimitsReaffirmationModal />
+      <LoadableSessionReminderModal />
     </>
   );
 };
