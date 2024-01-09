@@ -276,9 +276,7 @@ export const CasinoConfigProvider = props => {
         'playCasino',
       ) && enableModal(ComponentName.LimitsModal);
     } else {
-      Franchise.xCasino
-        ? enableModal(ComponentName.LoginModal)
-        : history.push(loginPath);
+      history.push(`${loginPath}?message=casino_game_launch_attempt`);
     }
   };
 
