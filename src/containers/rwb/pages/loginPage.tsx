@@ -6,6 +6,7 @@ import LoginForm from '../components/LoginForm';
 import clsx from 'clsx';
 import { useModal } from '../../../hooks/useModal';
 import { ComponentName } from '../../../constants';
+import { useCasinoConfig } from '../../../hooks/useCasinoConfig';
 
 const LoginPage = () => {
   const { user } = useAuth();
@@ -16,10 +17,17 @@ const LoginPage = () => {
     protectedRoute?: boolean;
   } | null>();
   const history = useHistory();
+  const message = new URLSearchParams(location.search).get('message');
+  const { selectedGame, loadGame } = useCasinoConfig();
 
   useEffect(() => {
     const fromPathname = location.state?.from;
-    if (user.logged_in && !!user.id) history.push(fromPathname || '/');
+    if (user.logged_in && !!user.id) {
+      history.push(fromPathname || '/');
+      if (message && selectedGame) {
+        loadGame(selectedGame);
+      }
+    }
   }, [user.logged_in, history, location]);
 
   useEffect(() => {

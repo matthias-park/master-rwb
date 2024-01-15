@@ -330,7 +330,7 @@ export const CasinoConfigProvider = props => {
   ]);
 
   useEffect(() => {
-    setSelectedGame(null);
+    if (location.pathname !== loginPath) setSelectedGame(null);
     setSearchData({ type: SearchActions.Hide });
 
     location.pathname.includes(liveCasinoPath) &&
