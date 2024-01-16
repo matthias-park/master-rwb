@@ -74,10 +74,12 @@ const PageColumnFooter = () => {
         </div>
         <div className="footer-image-text">
           <div className="footer-image-text__images">
-            <img
-              alt="responsible-gaming"
-              src="/assets/images/footer/responsible-gaming.png"
-            />
+            <Link to={t('responsible_gaming_link')}>
+              <img
+                alt="responsible-gaming"
+                src="/assets/images/footer/responsible-gaming.png"
+              />
+            </Link>
             <img alt="21-label" src="/assets/images/footer/21-label.png" />
           </div>
           <div className="footer-image-text__text">
