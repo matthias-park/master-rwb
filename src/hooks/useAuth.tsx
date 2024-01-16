@@ -209,7 +209,7 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
     };
   };
   const signout = async () => {
-    if (Lockr.get('session_details')) Lockr.set('session_details', {});
+    if (Lockr.get('session_details')) Lockr.rm('session_details');
     await getApi('/restapi/v1/user/logout').catch(err => err);
     dispatch(setLogout());
     return;
