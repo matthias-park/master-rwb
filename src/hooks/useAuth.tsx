@@ -24,6 +24,7 @@ import {
 import { RootState } from '../state';
 import useIdleTicker from './useIdleTicker';
 import Lockr from 'lockr';
+import dayjs from 'dayjs';
 export interface UserAuth {
   user: UserStatus;
   signin: (
@@ -200,6 +201,7 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
         event: 'LoginFailed',
       });
     }
+    Lockr.set('session_details', dayjs());
     return {
       success: res.Success,
       message: res.Message,

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import useLocalStorage from '../hooks/useLocalStorage';
 import { ThemeSettings } from '../constants';
 import clsx from 'clsx';
 import Lockr from 'lockr';
@@ -22,24 +21,28 @@ const SessionTimer = ({
   const { icons: icon } = ThemeSettings!;
   const intervalRef = useRef<number | null>(null);
   const [currentTimer, setCurrentTimer] = useState<string>('00:00:00');
-  const [sessionDetails] = useLocalStorage<null | Dayjs>(
+  const sessionDetails = Lockr.get(
     localStorageKey || 'session_details',
-    null,
-  );
+  ) as string;
 
   useEffect(() => {
-    if (!user.logged_in) return;
+    if (!sessionDetails) Lockr.set('session_details', dayjs());
     const updateTimer = () => {
-      if (!sessionDetails) {
-        Lockr.set('session_details', dayjs());
-      }
-      const timeDiff = dayjs().diff(sessionDetails);
+      const latestSessionDetails = Lockr.get(
+        localStorageKey || 'session_details',
+      ) as string;
+      const timeDiff = dayjs().diff(latestSessionDetails);
       setCurrentTimer(dayjs.duration(timeDiff).format('HH:mm:ss'));
     };
     updateTimer();
     intervalRef.current = setInterval(updateTimer, 1000);
-    return () => clearInterval(intervalRef.current as number);
-  }, [sessionDetails]);
+    console.log('testing unmount outside if');
+    return () => {
+      console.log('testing unmount outside if');
+      clearInterval(intervalRef.current as number);
+      if (!user.logged_in) Lockr.rm('session_details');
+    };
+  }, []);
 
   if (!user.logged_in) return null;
   return (
