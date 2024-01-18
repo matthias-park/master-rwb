@@ -31,6 +31,7 @@ const ValidationFailedModal = () => {
     KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataOnly,
     KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataLimitedAttempts,
     KYC_VALIDATOR_STATUS.ShouldUploadDocumentForKyc,
+    KYC_VALIDATOR_STATUS.ForceDocument,
   ].includes(user.validator_status || 0);
   const { data, mutate } = useApi<RailsApiResponse<KycAttempts | null>>(
     user.logged_in && validatorNotOk ? '/restapi/v1/user/kyc_attempts' : null,
@@ -53,17 +54,33 @@ const ValidationFailedModal = () => {
 
   if (!modalActive) return null;
   const { attempts, max_attempts } = data?.Data || {};
-  const allowPersonalInfoBtn =
-    user.validator_status ===
-      KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataLimitedAttempts &&
-    attempts != null &&
-    max_attempts != null &&
-    attempts < max_attempts;
-  const allowDocumentUploadBtn =
-    user.validator_status === KYC_VALIDATOR_STATUS.ShouldUploadDocumentForKyc &&
-    attempts != null &&
-    max_attempts != null &&
-    attempts >= max_attempts;
+  const allowBtnValidator = (
+    status: KYC_VALIDATOR_STATUS | undefined,
+    editInfo: boolean,
+  ): boolean => {
+    // editInfo => To distinguish between personInfoBtn and DocumentUploadBtn.
+    // If the status's value allows to edit a personal info, such as 5, the editInfo value will be true. Otherwise, it's false.
+
+    const isValidEdit =
+      attempts != null && max_attempts != null && attempts < max_attempts;
+    const isValidUpload =
+      attempts != null && max_attempts != null && attempts >= max_attempts;
+
+    switch (status) {
+      case KYC_VALIDATOR_STATUS.ShouldUpdatePersonalDataLimitedAttempts: {
+        return editInfo && isValidEdit;
+      }
+      case KYC_VALIDATOR_STATUS.ShouldUploadDocumentForKyc: {
+        return !editInfo && isValidUpload;
+      }
+      case KYC_VALIDATOR_STATUS.ForceDocument: {
+        return !editInfo;
+      }
+      default: {
+        return false;
+      }
+    }
+  };
   return (
     <GenericModal
       show
@@ -81,11 +98,11 @@ const ValidationFailedModal = () => {
             onClick={hideModal}
             className={clsx(
               'btn btn-primary mt-3 mt-sm-4 px-4',
-              !allowPersonalInfoBtn && 'disabled',
+              !allowBtnValidator(user.validator_status, true) && 'disabled',
             )}
           >
             {t('validation_failed_profile_link')}{' '}
-            {data?.Data?.attempts != null ? (
+            {attempts != null ? (
               `${attempts}/${max_attempts}`
             ) : (
               <LoadingSpinner small show className="ml-2" />
@@ -96,7 +113,7 @@ const ValidationFailedModal = () => {
             onClick={hideModal}
             className={clsx(
               'btn btn-primary mt-2 mt-sm-4 px-4 ml-sm-1',
-              !allowDocumentUploadBtn && 'disabled',
+              !allowBtnValidator(user.validator_status, false) && 'disabled',
             )}
           >
             {t('validation_failed_documents_link')}
