@@ -191,7 +191,7 @@ const CasinoInnerPage = () => {
             <span className="game-button" onClick={closeGame}>
               <i className={clsx(icon?.left)} />
             </span>
-            {!!gameData?.Data?.has_game_timer && iframeLoaded && (
+            {!gameData?.Data?.has_game_timer && iframeLoaded && (
               <SessionTimer
                 needsClock
                 className="game-session-timer"
