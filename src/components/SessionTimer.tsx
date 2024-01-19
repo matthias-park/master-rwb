@@ -25,7 +25,6 @@ const SessionTimer = ({
     localStorageKey || 'session_details',
   ) as string;
 
-  const backupSessionTimer = dayjs();
   useEffect(() => {
     if (!sessionDetails) Lockr.set('session_details', dayjs());
     const updateTimer = () => {
@@ -37,9 +36,7 @@ const SessionTimer = ({
     };
     updateTimer();
     intervalRef.current = setInterval(updateTimer, 1000);
-    console.log('testing unmount outside if');
     return () => {
-      console.log('testing unmount outside if');
       clearInterval(intervalRef.current as number);
       if (!user.logged_in) Lockr.rm('session_details');
     };

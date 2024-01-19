@@ -138,7 +138,11 @@ const CasinoInnerPage = () => {
 
   const localStorageTimerKey = 'game-session-timer';
   const getLaunchUrl = async () => {
-    Lockr.set(localStorageTimerKey, dayjs());
+    const sessionTracker = Lockr.get('key');
+    if (sessionTracker !== location.key) {
+      Lockr.set('key', location.key);
+      Lockr.set(localStorageTimerKey, dayjs());
+    }
     const res = await postApi<
       RailsApiResponse<{ url: string; html_base_64: any } | null>
     >('/restapi/v1/casino/launch_url', {
@@ -183,6 +187,7 @@ const CasinoInnerPage = () => {
     }
   };
 
+  const showTimer = !gameData?.Data?.has_game_timer && iframeLoaded;
   return (
     <StyledCasinoInnerPage className="styled-casino-inner-page">
       <div className="game">
@@ -191,7 +196,7 @@ const CasinoInnerPage = () => {
             <span className="game-button" onClick={closeGame}>
               <i className={clsx(icon?.left)} />
             </span>
-            {!gameData?.Data?.has_game_timer && iframeLoaded && (
+            {showTimer && (
               <SessionTimer
                 needsClock
                 className="game-session-timer"
