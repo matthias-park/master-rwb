@@ -163,12 +163,6 @@ export const blocks = (t: any, setValidation: any, validateRepeat: any) => {
               useFormatted: false,
             },
           },
-          {
-            id: 'multifactor_required',
-            type: 'checkbox',
-            required: true,
-            checked: true,
-          },
         ],
       },
     ],
