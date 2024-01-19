@@ -178,11 +178,11 @@ declare module 'styled-components' {
         width: string;
         mobile: {
           width: string;
-        }
-      }
+        };
+      };
       responsibleGamingLogo: {
         left: string;
-      }
+      };
       logoSize?: number;
       logoSizeMobile?: number;
       logoPosition?: string;
@@ -221,12 +221,12 @@ declare module 'styled-components' {
     footer: {
       timer: {
         color: string;
-      }
+      };
       links: {
         icon: {
           color: string;
-        }
-      }
+        };
+      };
       listColor: string;
       listTitleWeight: number;
       timerBgColor?: string;
@@ -269,8 +269,8 @@ declare module 'styled-components' {
     };
     login: {
       text: {
-        color: string,
-      }
+        color: string;
+      };
       bgImgTop?: string;
       linkDecoration?: string;
       linkColor?: string;
@@ -540,6 +540,9 @@ declare module 'styled-components' {
     };
     documents: {
       exampleTextColor?: string;
+    };
+    casinoGame?: {
+      titleMainColor?: string;
     };
     icons?: {
       [key: string]: string | { [key: string]: string };

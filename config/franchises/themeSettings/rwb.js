@@ -461,6 +461,9 @@ module.exports = {
   documents: {
     exampleTextColor: pallete.darkGray,
   },
+  casinoGame: {
+    titleMainColor: "#fff"
+  },
   icons: {
     clock: 'icon-clock',
     check: 'icon-check',

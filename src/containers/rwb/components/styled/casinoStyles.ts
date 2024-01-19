@@ -760,6 +760,7 @@ export const StyledCasinoInnerPage = styled.div`
           font-size: 16px;
           font-weight: 700;
           margin-bottom: 0;
+          color: ${props => props.theme.casinoGame?.titleMainColor};
         }
         .title-sub {
           font-size: 14px;
