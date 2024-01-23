@@ -625,6 +625,9 @@ export enum CustomWindowEvents {
 export enum LocalStorageKeys {
   locale = 'userLocale',
   cookies = 'cookiesSettings',
+  sessionStart = 'sessionStart',
+  sessionAcceptanceCounter = 'reminderAcceptanceCount',
+  gameSessionTimer = 'gameSessionTimer',
 }
 
 interface RequiredValidations {

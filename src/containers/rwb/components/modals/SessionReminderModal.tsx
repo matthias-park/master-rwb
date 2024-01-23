@@ -1,74 +1,70 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useAuth } from '../../../../../src/hooks/useAuth';
+import React, { useEffect } from 'react';
 import { useI18n } from '../../../../hooks/useI18n';
-import { ComponentName, ComponentSettings } from '../../../../constants';
+import {
+  ComponentName,
+  ComponentSettings,
+  LocalStorageKeys,
+} from '../../../../constants';
 import GenericModal from './GenericModal';
 import { useModal } from '../../../../hooks/useModal';
 import LoadingButton from '../../../../components/LoadingButton';
-import useLocalStorage from '../../../../hooks/useLocalStorage';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import useSessionTimer from '../../../../hooks/useSessionTime';
+import { useAuth } from '../../../../hooks/useAuth';
+import Lockr from 'lockr';
 
 dayjs.extend(duration);
 
 const SessionReminderModal = () => {
   const { t } = useI18n();
+  const { activeModal, disableModal, enableModal } = useModal();
   const { user } = useAuth();
-  const {
-    activeModal,
-    disableModal,
-    enableModal,
-    allActiveModals,
-  } = useModal();
-  const hideModal = () => disableModal(ComponentName.SessionReminderModal);
-  const intervalRef = useRef<number | null>(null);
-  const [reminder, setReminder] = useState<number>(0);
-  const [sessionDetails] = useLocalStorage<null | Dayjs>(
-    'session_details',
-    null,
-  );
-  const sessionReminderConfig = ComponentSettings?.sessionReminderTime || 30;
+  const acceptanceCount = (Lockr.get(
+    LocalStorageKeys.sessionAcceptanceCounter,
+  ) || 1) as number;
+  const acceptanceDuration = acceptanceCount * 30;
+  const sessionReminderTime =
+    ComponentSettings?.sessionReminderTime || acceptanceDuration || 30;
+  const diff = useSessionTimer();
+  const reminder = Math.floor(diff?.asMinutes() as number);
 
-  const backupSessionTimer = dayjs();
-  useEffect(() => {
-    const updateTimer = () => {
-      const timeDuration = Math.floor(
-        dayjs
-          .duration(dayjs().diff(sessionDetails || backupSessionTimer))
-          .asMinutes(),
-      );
-      reminder < timeDuration && setReminder(timeDuration);
-    };
-    updateTimer();
-    intervalRef.current = setInterval(updateTimer, 60000);
-    return () => clearInterval(intervalRef.current as number);
-  }, [sessionDetails]);
+  const hideModal = () => {
+    Lockr.set(
+      LocalStorageKeys.sessionAcceptanceCounter,
+      acceptanceCount + 1 || 1,
+    );
+    disableModal(ComponentName.SessionReminderModal);
+  };
 
   useEffect(() => {
-    if (
-      user.logged_in &&
-      reminder !== 0 &&
-      reminder % sessionReminderConfig === 0 &&
-      !allActiveModals.includes(ComponentName.SessionReminderModal)
-    ) {
+    if (reminder >= sessionReminderTime) {
       enableModal(ComponentName.SessionReminderModal);
     }
-  }, [user.logged_in, reminder]);
+    return () => {
+      if (!user.logged_in && acceptanceDuration > reminder) {
+        Lockr.rm(LocalStorageKeys.sessionAcceptanceCounter);
+      }
+    };
+  }, [diff]);
 
   if (!(activeModal === ComponentName.SessionReminderModal) || !user.logged_in)
     return null;
+
   return (
     <GenericModal
       isCentered
       isStatic
-      withoutClose={false}
+      withoutClose={true}
       show
       hideCallback={() => hideModal()}
       className="pb-5"
     >
       <h2 className="mb-2 modal-title">{t('session_reminder_modal_title')}</h2>
       <p className="mb-3">
-        {`${t('session_reminder_modal_text')} ${reminder} ${t('minutes')}`}
+        {`${t('session_reminder_modal_text')} ${acceptanceDuration} ${t(
+          'minutes',
+        )}`}
       </p>
       <div className="d-flex justify-content-center">
         <LoadingButton

@@ -16,6 +16,7 @@ import {
   PagesName,
   ComponentName,
   ComponentSettings,
+  LocalStorageKeys,
 } from '../../../constants';
 import debounce from 'lodash.debounce';
 import { StyledCasinoInnerPage } from '../components/styled/casinoStyles';
@@ -136,12 +137,11 @@ const CasinoInnerPage = () => {
     recentGamesDataMutate();
   };
 
-  const localStorageTimerKey = 'game-session-timer';
   const getLaunchUrl = async () => {
     const sessionTracker = Lockr.get('key');
     if (sessionTracker !== location.key) {
       Lockr.set('key', location.key);
-      Lockr.set(localStorageTimerKey, dayjs());
+      Lockr.set(LocalStorageKeys.gameSessionTimer, dayjs());
     }
     const res = await postApi<
       RailsApiResponse<{ url: string; html_base_64: any } | null>
@@ -200,7 +200,7 @@ const CasinoInnerPage = () => {
               <SessionTimer
                 needsClock
                 className="game-session-timer"
-                localStorageKey={localStorageTimerKey}
+                localStorageKey={LocalStorageKeys.gameSessionTimer}
               />
             )}
           </span>

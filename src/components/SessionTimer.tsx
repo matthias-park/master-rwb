@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { ThemeSettings } from '../constants';
+import { LocalStorageKeys, ThemeSettings } from '../constants';
 import clsx from 'clsx';
-import Lockr from 'lockr';
-import { useAuth } from '../hooks/useAuth';
+import useSessionTimer from '../hooks/useSessionTime';
 
 dayjs.extend(duration);
 
@@ -15,34 +14,18 @@ const SessionTimer = ({
 }: {
   className?: string;
   needsClock?: boolean;
-  localStorageKey?: string;
+  localStorageKey?: LocalStorageKeys;
 }) => {
-  const { user } = useAuth();
   const { icons: icon } = ThemeSettings!;
-  const intervalRef = useRef<number | null>(null);
+  const diff = useSessionTimer(
+    localStorageKey || LocalStorageKeys.sessionStart,
+  );
   const [currentTimer, setCurrentTimer] = useState<string>('00:00:00');
-  const sessionDetails = Lockr.get(
-    localStorageKey || 'session_details',
-  ) as string;
 
   useEffect(() => {
-    if (!sessionDetails) Lockr.set('session_details', dayjs());
-    const updateTimer = () => {
-      const latestSessionDetails = Lockr.get(
-        localStorageKey || 'session_details',
-      ) as string;
-      const timeDiff = dayjs().diff(latestSessionDetails);
-      setCurrentTimer(dayjs.duration(timeDiff).format('HH:mm:ss'));
-    };
-    updateTimer();
-    intervalRef.current = setInterval(updateTimer, 1000);
-    return () => {
-      clearInterval(intervalRef.current as number);
-      if (!user.logged_in) Lockr.rm('session_details');
-    };
-  }, []);
+    setCurrentTimer(diff?.format('HH:mm:ss') || '00:00:00');
+  }, [diff]);
 
-  if (!user.logged_in) return null;
   return (
     <>
       {needsClock && <i className={clsx('mr-1', icon?.clock)} />}

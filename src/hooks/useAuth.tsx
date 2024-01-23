@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useRef,
 } from 'react';
-import { ComponentSettings, TestEnv } from '../constants';
+import { ComponentSettings, LocalStorageKeys, TestEnv } from '../constants';
 import RailsApiResponse from '../types/api/RailsApiResponse';
 import useApi from './useApi';
 import UserStatus, { NET_USER, TwoFactorAuth } from '../types/UserStatus';
@@ -201,7 +201,7 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
         event: 'LoginFailed',
       });
     }
-    Lockr.set('session_details', dayjs());
+    Lockr.set(LocalStorageKeys.sessionStart, dayjs());
     return {
       success: res.Success,
       message: res.Message,
@@ -209,7 +209,8 @@ export const AuthProvider = ({ ...props }: AuthProviderProps) => {
     };
   };
   const signout = async () => {
-    if (Lockr.get('session_details')) Lockr.rm('session_details');
+    if (Lockr.get(LocalStorageKeys.sessionStart))
+      Lockr.rm(LocalStorageKeys.sessionStart);
     await getApi('/restapi/v1/user/logout').catch(err => err);
     dispatch(setLogout());
     return;

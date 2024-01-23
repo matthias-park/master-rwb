@@ -8,9 +8,23 @@ import { ThemeSettings } from '../../../constants';
 import clsx from 'clsx';
 import CurrentTimeTimer from '../../../components/CurrentTimeTimer';
 import { isMobile, isTablet } from 'react-device-detect';
+import { useAuth } from '../../../hooks/useAuth';
+
+const { icons: icon } = ThemeSettings!;
+const Timer = () => {
+  const { user } = useAuth();
+  if (!user.logged_in) return null;
+  return (
+    <div className="footer-info-timer__session">
+      <span className="timer">
+        <i className={clsx('mr-1', icon?.clock)} />
+        <SessionTimer />
+      </span>
+    </div>
+  );
+};
 
 const PageColumnFooter = () => {
-  const { icons: icon } = ThemeSettings!;
   const { t } = useI18n();
   const { footer } = useConfig((prev, next) => !!prev.footer === !!next.footer);
 
@@ -28,12 +42,7 @@ const PageColumnFooter = () => {
                 <div className="footer-info-timer__current">
                   <CurrentTimeTimer timeFormat={'MM/DD/YYYY h:mmA z'} />
                 </div>
-                <div className="footer-info-timer__session">
-                  <span className="timer">
-                    <i className={clsx('mr-1', icon?.clock)} />
-                    <SessionTimer />
-                  </span>
-                </div>
+                <Timer />
               </div>
             </>
           )}
@@ -101,12 +110,7 @@ const PageColumnFooter = () => {
               <div className="footer-info-timer__current">
                 <CurrentTimeTimer timeFormat={'MM/DD/YYYY h:mmA z'} />
               </div>
-              <div className="footer-info-timer__session">
-                <span className="timer">
-                  <i className={clsx('mr-1', icon?.clock)} />
-                  <SessionTimer />
-                </span>
-              </div>
+              <Timer />
             </div>
           </>
         )}
