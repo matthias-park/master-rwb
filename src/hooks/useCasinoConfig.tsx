@@ -271,6 +271,7 @@ export const CasinoConfigProvider = props => {
         name: gameData?.name,
         provider: gameData?.provider.name,
         demo: demo,
+        hasGameTimer: gameData?.has_game_timer,
       });
       window.__config__.componentSettings?.limitsOnAction?.includes(
         'playCasino',

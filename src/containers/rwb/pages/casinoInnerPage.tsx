@@ -59,7 +59,8 @@ const CasinoInnerPage = () => {
       !!state.geoComply.savedState?.geoError
     );
   });
-  const { id, gameId, name, provider, demo } = location.state || {};
+  const { id, gameId, name, provider, demo, hasGameTimer } =
+    location.state || {};
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const iframeRef = useRef<
     | (HTMLIFrameElement & {
@@ -187,7 +188,7 @@ const CasinoInnerPage = () => {
     }
   };
 
-  const showTimer = !gameData?.Data?.has_game_timer && iframeLoaded;
+  const showTimer = !hasGameTimer && iframeLoaded;
   return (
     <StyledCasinoInnerPage className="styled-casino-inner-page">
       <div className="game">
