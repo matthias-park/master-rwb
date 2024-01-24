@@ -241,7 +241,7 @@ const useDepositResponseStatus = () => {
       if (bankId) setBankId(bankId);
     },
     startCheckingStatus: () => {
-      history.push(`${depositBaseUrl}/loading`);
+      history.replace(`${depositBaseUrl}/loading`);
     },
     error,
     depositStatus,
