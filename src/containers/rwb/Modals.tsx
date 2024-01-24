@@ -106,7 +106,9 @@ const Modals = () => {
         <LoadableDynamicKBAQuestionsModal />
       )}
       <LoadableLimitsReaffirmationModal />
-      <LoadableSessionReminderModal />
+      {ComponentSettings?.modals?.SessionReminder && (
+        <LoadableSessionReminderModal />
+      )}
     </>
   );
 };

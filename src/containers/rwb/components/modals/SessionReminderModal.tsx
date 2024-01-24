@@ -25,7 +25,7 @@ const SessionReminderModal = () => {
   ) || 1) as number;
   const acceptanceDuration = acceptanceCount * 30;
   const sessionReminderTime =
-    ComponentSettings?.sessionReminderTime || acceptanceDuration || 30;
+    acceptanceDuration || ComponentSettings?.sessionReminderTime || 30;
   const diff = useSessionTimer();
   const reminder = Math.floor(diff?.asMinutes() as number);
 

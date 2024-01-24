@@ -52,6 +52,7 @@ module.exports = {
       PlayerDisabled: true,
       DepositThreshold: true,
       KBAQuestions: true,
+      SessionReminder: true,
     },
     header: {
       needsBurger: true,

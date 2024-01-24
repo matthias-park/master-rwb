@@ -41,6 +41,7 @@ export interface ComponentSettings {
     limits: boolean;
     DepositThreshold?: boolean;
     KBAQuestions?: boolean;
+    SessionReminder?: boolean;
   };
   header?: {
     needsBurger?: boolean;
