@@ -313,7 +313,14 @@ const DepositPage = ({ depositForm }: { depositForm?: boolean }) => {
     const depositSuccess = isDepositStatusSuccess(depositStatus.depositStatus);
     alertMessage = {
       variant: depositSuccess ? 'success' : 'danger',
-      msg: <>{depositStatus.message}</>,
+      msg: (
+        <>
+          {depositStatus.message}
+          <div>
+            <u>{depositSuccess ? jsxT('cta_bet_now') : jsxT('cta_deposit')}</u>
+          </div>
+        </>
+      ),
     };
   } else if (validatorNotOk) {
     alertMessage = {
